@@ -11,7 +11,7 @@ import SwiftUI
 struct PDB_ViewerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
         }
     }
 }

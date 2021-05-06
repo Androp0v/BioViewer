@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C4187E332642E0C2009E2CBA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E322642E0C2009E2CBA /* MainView.swift */; };
+		C4187E362642FA7A009E2CBA /* ImportDroppedFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFiles.swift */; };
 		C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */; };
-		C44FC0742641AF1B00459E01 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0732641AF1B00459E01 /* ContentView.swift */; };
+		C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0732641AF1B00459E01 /* ProteinView.swift */; };
 		C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FC0752641AF1E00459E01 /* Assets.xcassets */; };
 		C44FC0792641AF1E00459E01 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FC0782641AF1E00459E01 /* Preview Assets.xcassets */; };
 		C44FC0842641AF1E00459E01 /* PDB_ViewerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0832641AF1E00459E01 /* PDB_ViewerTests.swift */; };
 		C44FC08F2641AF1E00459E01 /* PDB_ViewerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC08E2641AF1E00459E01 /* PDB_ViewerUITests.swift */; };
+		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,9 +36,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C4187E322642E0C2009E2CBA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		C4187E352642FA7A009E2CBA /* ImportDroppedFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFiles.swift; path = "PDB Viewer/ImportDroppedFiles.swift"; sourceTree = SOURCE_ROOT; };
 		C44FC06E2641AF1B00459E01 /* PDB Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PDB Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDB_ViewerApp.swift; sourceTree = "<group>"; };
-		C44FC0732641AF1B00459E01 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C44FC0732641AF1B00459E01 /* ProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinView.swift; sourceTree = "<group>"; };
 		C44FC0752641AF1E00459E01 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C44FC0782641AF1E00459E01 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C44FC07A2641AF1E00459E01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,6 +50,8 @@
 		C44FC08A2641AF1E00459E01 /* PDB ViewerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PDB ViewerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC08E2641AF1E00459E01 /* PDB_ViewerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDB_ViewerUITests.swift; sourceTree = "<group>"; };
 		C44FC0902641AF1E00459E01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C44FC09E2641B0A200459E01 /* PDB Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "PDB Viewer.entitlements"; sourceTree = "<group>"; };
+		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C4187E342642E0CA009E2CBA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C4187E322642E0C2009E2CBA /* MainView.swift */,
+				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		C44FC0652641AF1B00459E01 = {
 			isa = PBXGroup;
 			children = (
@@ -95,9 +111,12 @@
 		C44FC0702641AF1B00459E01 /* PDB Viewer */ = {
 			isa = PBXGroup;
 			children = (
+				C44FC09E2641B0A200459E01 /* PDB Viewer.entitlements */,
 				C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */,
-				C44FC0732641AF1B00459E01 /* ContentView.swift */,
+				C4187E352642FA7A009E2CBA /* ImportDroppedFiles.swift */,
+				C4187E342642E0CA009E2CBA /* Views */,
 				C44FC0752641AF1E00459E01 /* Assets.xcassets */,
+				C483DC772641B82B009036A2 /* art.scnassets */,
 				C44FC07A2641AF1E00459E01 /* Info.plist */,
 				C44FC0772641AF1E00459E01 /* Preview Content */,
 			);
@@ -234,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C44FC0792641AF1E00459E01 /* Preview Assets.xcassets in Resources */,
+				C483DC782641B82B009036A2 /* art.scnassets in Resources */,
 				C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,8 +279,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C44FC0742641AF1B00459E01 /* ContentView.swift in Sources */,
+				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
+				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */,
+				C4187E362642FA7A009E2CBA /* ImportDroppedFiles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +439,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "PDB Viewer/PDB Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PDB Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
@@ -429,8 +452,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.raulmonton.PDB-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -439,6 +463,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "PDB Viewer/PDB Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PDB Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
@@ -451,8 +476,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.raulmonton.PDB-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
