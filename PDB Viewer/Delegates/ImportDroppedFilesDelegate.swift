@@ -54,6 +54,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
     func parseTextFile(rawText: String) {
 
         var atomArray = [simd_float3]()
+        var atomIdentifiers = [Int]()
 
         rawText.enumerateLines(invoking: { line, stop in
             // We're only interested in the lines that contain atom positions
@@ -72,10 +73,14 @@ class ImportDroppedFilesDelegate: DropDelegate {
                 else { return }
                 // Save atom position to array
                 atomArray.append(simd_float3(x,y,z))
+                // Retrieve atom element
+                let element = columns[2]
+                // Save atom element to array
+                atomIdentifiers.append( getAtomId(atomName: String(element)) )
             }
         })
 
-        sceneDelegate.addProtein(atoms: atomArray)
+        sceneDelegate.addProtein(atoms: atomArray, atomIdentifiers: atomIdentifiers)
 
     }
 

@@ -10,6 +10,7 @@
 		C4187E332642E0C2009E2CBA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E322642E0C2009E2CBA /* MainView.swift */; };
 		C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
 		C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
+		C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomType.swift */; };
 		C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */; };
 		C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0732641AF1B00459E01 /* ProteinView.swift */; };
 		C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FC0752641AF1E00459E01 /* Assets.xcassets */; };
@@ -42,6 +43,7 @@
 		C4187E322642E0C2009E2CBA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFilesDelegate.swift; path = "PDB Viewer/Delegates/ImportDroppedFilesDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMath.swift; sourceTree = "<group>"; };
+		C418BAFD2645B1210031C6F0 /* AtomType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomType.swift; sourceTree = "<group>"; };
 		C44FC06E2641AF1B00459E01 /* PDB Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PDB Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDB_ViewerApp.swift; sourceTree = "<group>"; };
 		C44FC0732641AF1B00459E01 /* ProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinView.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				C4B1F81E26457CF80035D739 /* LoadingProtein.swift */,
+				C418BAFD2645B1210031C6F0 /* AtomType.swift */,
 			);
 			path = "Data structures";
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */,
+				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
 				C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 			);

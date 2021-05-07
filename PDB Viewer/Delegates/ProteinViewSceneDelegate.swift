@@ -33,7 +33,6 @@ class ProteinViewSceneDelegate: NSObject, SCNSceneRendererDelegate {
 
     // MARK: - Protein loading
     private var proteinsToLoad: LoadingProtein?
-    private var atomGeometry: SCNGeometry?
     private var atomMaterial: SCNMaterial?
     private var proteinAxis: SCNNode?
 
@@ -41,10 +40,7 @@ class ProteinViewSceneDelegate: NSObject, SCNSceneRendererDelegate {
 
     /// Add protein to the current scene atom by atom.
     /// - Parameter atoms: Atom positions.
-    func addProtein(atoms: [simd_float3]) {
-
-        // Atom geometry
-        self.atomGeometry = SCNSphere(radius: 1)
+    func addProtein(atoms: [simd_float3], atomIdentifiers: [Int]) {
 
         // Atom material
         self.atomMaterial = SCNMaterial()
@@ -52,21 +48,29 @@ class ProteinViewSceneDelegate: NSObject, SCNSceneRendererDelegate {
         self.atomMaterial?.lightingModel = .blinn
         self.atomMaterial?.reflective.contents = UIColor.green
         self.atomMaterial?.reflective.intensity = 1
-        self.atomGeometry?.firstMaterial = atomMaterial
 
         self.proteinAxis = SCNNode()
         self.proteinAxis?.position = SCNVector3(0,0,0)
         scene?.rootNode.addChildNode(proteinAxis!)
 
         // Mark the protein as pending
-        self.proteinsToLoad = LoadingProtein(atoms: atoms)
+        self.proteinsToLoad = LoadingProtein(atoms: atoms, atomIdentifiers: atomIdentifiers)
         self.importObjects = true
 
         // Import protein to scene
         if importObjects {
             while self.proteinsToLoad?.state == .loading {
-                guard let newAtomPosition = self.proteinsToLoad?.getNextAtomPosition() else { break }
-                let newAtomNode = SCNNode(geometry: self.atomGeometry)
+
+                var newAtomPosition: simd_float3?
+                var newAtomId: Int?
+                (newAtomPosition, newAtomId) = self.proteinsToLoad?.getNextAtom() ?? (nil, nil)
+
+                guard let newAtomPosition = newAtomPosition else { return }
+                guard let newAtomId = newAtomId else { return }
+
+                let atomGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: newAtomId)))
+                atomGeometry.firstMaterial = self.atomMaterial
+                let newAtomNode = SCNNode(geometry: atomGeometry)
                 newAtomNode.position = SCNVector3(newAtomPosition)
                 self.proteinAxis?.addChildNode(newAtomNode)
             }

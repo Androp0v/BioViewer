@@ -18,27 +18,30 @@ struct LoadingProtein {
 
     private(set) var state: LoadState
     private var atoms: [simd_float3]
+    private var atomIdentifiers: [Int]
     private var atomCount: Int
     public var currentIndex: Int
 
-    init(atoms: [simd_float3]) {
+    init(atoms: [simd_float3], atomIdentifiers: [Int]) {
         self.state = .loading
         self.atoms = atoms
+        self.atomIdentifiers = atomIdentifiers
         self.atomCount = atoms.count
         self.currentIndex = 0
         normalizeAtomPositions(atoms: &self.atoms)
     }
 
-    mutating func getNextAtomPosition() -> simd_float3? {
+    mutating func getNextAtom() -> (simd_float3?, Int?) {
         guard currentIndex < atomCount else {
             self.state = .failed
-            return nil
+            return (nil, nil)
         }
-        let nextAtom = self.atoms[self.currentIndex]
+        let nextAtomPosition = self.atoms[self.currentIndex]
+        let nextAtomId = self.atomIdentifiers[self.currentIndex]
         self.currentIndex += 1
         if currentIndex >= atomCount {
             self.state = .loaded
         }
-        return nextAtom
+        return (nextAtomPosition, nextAtomId)
     }
 }
