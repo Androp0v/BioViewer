@@ -10,6 +10,9 @@ import SwiftUI
 struct MainView: View {
     var body: some View {
         NavigationView {
+
+            // Sidebar in master-detail mode, initial view
+            // in other modes
             List {
                 NavigationLink(
                     destination: ProteinView(),
@@ -18,9 +21,12 @@ struct MainView: View {
                 })
             }
             .listStyle(SidebarListStyle())
+            .navigationBarHidden(false)
+            .navigationTitle(Text("Menu"))
+
+            // Initial view in master-detail mode
             ProteinView()
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

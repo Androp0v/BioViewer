@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C4187E332642E0C2009E2CBA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E322642E0C2009E2CBA /* MainView.swift */; };
-		C4187E362642FA7A009E2CBA /* ImportDroppedFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFiles.swift */; };
+		C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
+		C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
 		C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */; };
 		C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0732641AF1B00459E01 /* ProteinView.swift */; };
 		C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FC0752641AF1E00459E01 /* Assets.xcassets */; };
@@ -16,6 +17,8 @@
 		C44FC0842641AF1E00459E01 /* PDB_ViewerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0832641AF1E00459E01 /* PDB_ViewerTests.swift */; };
 		C44FC08F2641AF1E00459E01 /* PDB_ViewerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC08E2641AF1E00459E01 /* PDB_ViewerUITests.swift */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
+		C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */; };
+		C4B1F81F26457CF80035D739 /* LoadingProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* LoadingProtein.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +40,8 @@
 
 /* Begin PBXFileReference section */
 		C4187E322642E0C2009E2CBA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		C4187E352642FA7A009E2CBA /* ImportDroppedFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFiles.swift; path = "PDB Viewer/ImportDroppedFiles.swift"; sourceTree = SOURCE_ROOT; };
+		C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFilesDelegate.swift; path = "PDB Viewer/Delegates/ImportDroppedFilesDelegate.swift"; sourceTree = SOURCE_ROOT; };
+		C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMath.swift; sourceTree = "<group>"; };
 		C44FC06E2641AF1B00459E01 /* PDB Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PDB Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDB_ViewerApp.swift; sourceTree = "<group>"; };
 		C44FC0732641AF1B00459E01 /* ProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinView.swift; sourceTree = "<group>"; };
@@ -52,6 +56,8 @@
 		C44FC0902641AF1E00459E01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C44FC09E2641B0A200459E01 /* PDB Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "PDB Viewer.entitlements"; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewSceneDelegate.swift; sourceTree = "<group>"; };
+		C4B1F81E26457CF80035D739 /* LoadingProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingProtein.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,7 +119,9 @@
 			children = (
 				C44FC09E2641B0A200459E01 /* PDB Viewer.entitlements */,
 				C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */,
-				C4187E352642FA7A009E2CBA /* ImportDroppedFiles.swift */,
+				C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */,
+				C4B1F82126457D1E0035D739 /* Delegates */,
+				C4B1F82026457D020035D739 /* Data structures */,
 				C4187E342642E0CA009E2CBA /* Views */,
 				C44FC0752641AF1E00459E01 /* Assets.xcassets */,
 				C483DC772641B82B009036A2 /* art.scnassets */,
@@ -147,6 +155,23 @@
 				C44FC0902641AF1E00459E01 /* Info.plist */,
 			);
 			path = "PDB ViewerUITests";
+			sourceTree = "<group>";
+		};
+		C4B1F82026457D020035D739 /* Data structures */ = {
+			isa = PBXGroup;
+			children = (
+				C4B1F81E26457CF80035D739 /* LoadingProtein.swift */,
+			);
+			path = "Data structures";
+			sourceTree = "<group>";
+		};
+		C4B1F82126457D1E0035D739 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */,
+				C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,10 +304,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
+				C4B1F81F26457CF80035D739 /* LoadingProtein.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */,
-				C4187E362642FA7A009E2CBA /* ImportDroppedFiles.swift in Sources */,
+				C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */,
+				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,11 +12,23 @@ import UniformTypeIdentifiers
 
 /// Class to handle importing dropped files into the SceneKit view.
 /// Should be able to read .pdb files.
-class ImportDroppedFiles: DropDelegate {
+class ImportDroppedFilesDelegate: DropDelegate {
+
+    // MARK: - Properties
+
+    private var sceneDelegate: ProteinViewSceneDelegate
+
+    // MARK: - Initialization
+
+    init(sceneDelegate: ProteinViewSceneDelegate) {
+        self.sceneDelegate = sceneDelegate
+    }
+
+    // MARK: - Handle drag & drop events
 
     func performDrop(info: DropInfo) -> Bool {
 
-        guard let itemProvider = info.itemProviders(for: [.data]).first else {
+        guard let itemProvider = info.itemProviders(for: [.data, .item, .fileURL]).first else {
             NSLog("No itemProvider available for the given type.")
             return false
         }
@@ -63,7 +75,8 @@ class ImportDroppedFiles: DropDelegate {
             }
         })
 
-        print(atomArray)
+        sceneDelegate.addProtein(atoms: atomArray)
+
     }
 
 }
