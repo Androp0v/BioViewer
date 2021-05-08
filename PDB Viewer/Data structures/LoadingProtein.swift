@@ -8,6 +8,8 @@
 import Foundation
 import simd
 
+/// Struct holding the contents of a protein that has not yet been completely loadad
+/// into SceneKit.
 struct LoadingProtein {
 
     public enum LoadState {
@@ -20,7 +22,7 @@ struct LoadingProtein {
     private var atoms: [simd_float3]
     private var atomIdentifiers: [Int]
     private var atomCount: Int
-    public var currentIndex: Int
+    private var currentIndex: Int
 
     init(atoms: [simd_float3], atomIdentifiers: [Int]) {
         self.state = .loading
@@ -31,6 +33,8 @@ struct LoadingProtein {
         normalizeAtomPositions(atoms: &self.atoms)
     }
 
+    /// Return the atoms in the protein one by one until the protein is loaded
+    /// - Returns: Atom position and atom identifier.
     mutating func getNextAtom() -> (simd_float3?, Int?) {
         guard currentIndex < atomCount else {
             self.state = .failed

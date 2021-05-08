@@ -25,6 +25,11 @@ struct ProteinView: View {
 
     init() {
 
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().isTranslucent = true
+        UINavigationBar.appearance().backgroundColor = .clear
+
         // Open SceneKit scene
         self.scene = SCNScene(named: "art.scnassets/ship.scn")!
 
@@ -59,24 +64,58 @@ struct ProteinView: View {
     }
 
     var body: some View {
-        VStack{
-            Rectangle()
-                .frame(height: 20)
-                .foregroundColor(Color(UIColor.systemBackground))
-            SceneView(
-                scene: scene,
-                pointOfView: cameraNode,
-                options: [
-                    .autoenablesDefaultLighting,
-                    .allowsCameraControl,
-                ],
-                delegate: sceneDelegate
-            )
-            .background(Color.black)
-            .onDrop(of: [.data], delegate: dropDelegate)
-            .navigationTitle("Protein view")
-            .navigationBarTitleDisplayMode(.inline)
+        ZStack {
+
+            // Most of the UI is here
+            VStack {
+                Rectangle()
+                    .frame(height: 24)
+                    .foregroundColor(Color(UIColor.systemBackground))
+                SceneView(
+                    scene: scene,
+                    pointOfView: cameraNode,
+                    options: [
+                        .autoenablesDefaultLighting,
+                        .allowsCameraControl,
+                    ],
+                    delegate: sceneDelegate
+                )
+                .background(Color.black)
+                .onDrop(of: [.data], delegate: dropDelegate)
+                .navigationTitle("")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            // TO-DO
+                            print("Inspector button tapped!")
+                        }) {
+                            if UIDevice.current.userInterfaceIdiom == .phone {
+                                Image(systemName: "gearshape")
+                            } else {
+                                Image(systemName: "sidebar.trailing")
+                            }
+                        }
+                    }
+                }
+                .edgesIgnoringSafeArea([.top, .bottom])
+            }
+
+            // Vertical stack to draw custom state bar on top of the navigation bar
+            VStack {
+                Spacer()
+                    .frame(height: 36)
+                ZStack {
+                    Color(UIColor.secondarySystemBackground)
+                    Text("Idle")
+                        .foregroundColor(Color(UIColor.secondaryLabel))
+                }
+                .frame(minWidth: 24, idealWidth: 600, maxWidth: 600, minHeight: 32, idealHeight: 32, maxHeight: 32, alignment: .center)
+                .cornerRadius(8)
+                Spacer()
+            }
             .edgesIgnoringSafeArea([.top, .bottom])
+
         }
     }
     
