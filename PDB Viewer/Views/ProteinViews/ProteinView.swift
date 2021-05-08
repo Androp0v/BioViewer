@@ -68,9 +68,11 @@ struct ProteinView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
+                // Future toolbar items will be here
                 Rectangle()
-                    .frame(height: 24)
+                    .frame(height: 8)
                     .foregroundColor(Color(UIColor.systemBackground))
+                // Main SceneKit view
                 SceneView(scene: scene,
                           pointOfView: cameraNode,
                           options: [.autoenablesDefaultLighting,

@@ -21,7 +21,7 @@ struct MainView: View {
                         Text("View protein structure")
                 })
                 NavigationLink(
-                    destination: ProteinView(),
+                    destination: SequenceView(),
                     label: {
                         Text("View sequence")
                 })
@@ -29,7 +29,6 @@ struct MainView: View {
             .listStyle( SidebarListStyle() )
             .navigationBarHidden(false)
             .navigationTitle(Text("Protein View"))
-
             // Initial view in master-detail mode
             ProteinView()
         }

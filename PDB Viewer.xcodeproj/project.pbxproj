@@ -11,6 +11,8 @@
 		C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
 		C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
 		C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomType.swift */; };
+		C440856026470A0700DC5009 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440855F26470A0700DC5009 /* SequenceView.swift */; };
+		C44085652647155C00DC5009 /* SequenceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085642647155C00DC5009 /* SequenceRow.swift */; };
 		C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */; };
 		C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0732641AF1B00459E01 /* ProteinView.swift */; };
 		C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FC0752641AF1E00459E01 /* Assets.xcassets */; };
@@ -44,6 +46,8 @@
 		C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFilesDelegate.swift; path = "PDB Viewer/Delegates/ImportDroppedFilesDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMath.swift; sourceTree = "<group>"; };
 		C418BAFD2645B1210031C6F0 /* AtomType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomType.swift; sourceTree = "<group>"; };
+		C440855F26470A0700DC5009 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
+		C44085642647155C00DC5009 /* SequenceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceRow.swift; sourceTree = "<group>"; };
 		C44FC06E2641AF1B00459E01 /* PDB Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PDB Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC0712641AF1B00459E01 /* PDB_ViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDB_ViewerApp.swift; sourceTree = "<group>"; };
 		C44FC0732641AF1B00459E01 /* ProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinView.swift; sourceTree = "<group>"; };
@@ -91,9 +95,35 @@
 			isa = PBXGroup;
 			children = (
 				C4187E322642E0C2009E2CBA /* MainView.swift */,
-				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
+				C44085632647153200DC5009 /* ProteinViews */,
+				C44085612647151A00DC5009 /* SequenceViews */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		C44085612647151A00DC5009 /* SequenceViews */ = {
+			isa = PBXGroup;
+			children = (
+				C44085622647152500DC5009 /* Rows */,
+				C440855F26470A0700DC5009 /* SequenceView.swift */,
+			);
+			path = SequenceViews;
+			sourceTree = "<group>";
+		};
+		C44085622647152500DC5009 /* Rows */ = {
+			isa = PBXGroup;
+			children = (
+				C44085642647155C00DC5009 /* SequenceRow.swift */,
+			);
+			path = Rows;
+			sourceTree = "<group>";
+		};
+		C44085632647153200DC5009 /* ProteinViews */ = {
+			isa = PBXGroup;
+			children = (
+				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
+			);
+			path = ProteinViews;
 			sourceTree = "<group>";
 		};
 		C44FC0652641AF1B00459E01 = {
@@ -309,6 +339,8 @@
 			files = (
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
 				C4B1F81F26457CF80035D739 /* LoadingProtein.swift in Sources */,
+				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
+				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* PDB_ViewerApp.swift in Sources */,
