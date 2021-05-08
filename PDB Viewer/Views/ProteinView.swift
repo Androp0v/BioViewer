@@ -63,28 +63,25 @@ struct ProteinView: View {
 
     }
 
-    var body: some View {
-        ZStack {
+    // MARK: - Body
 
-            // Most of the UI is here
+    var body: some View {
+        GeometryReader { geometry in
             VStack {
                 Rectangle()
                     .frame(height: 24)
                     .foregroundColor(Color(UIColor.systemBackground))
-                SceneView(
-                    scene: scene,
-                    pointOfView: cameraNode,
-                    options: [
-                        .autoenablesDefaultLighting,
-                        .allowsCameraControl,
-                    ],
-                    delegate: sceneDelegate
-                )
+                SceneView(scene: scene,
+                          pointOfView: cameraNode,
+                          options: [.autoenablesDefaultLighting,
+                                    .allowsCameraControl,],
+                          delegate: sceneDelegate)
                 .background(Color.black)
                 .onDrop(of: [.data], delegate: dropDelegate)
                 .navigationTitle("")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
+                    // Button to open right panel
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             // TO-DO
@@ -97,28 +94,26 @@ struct ProteinView: View {
                             }
                         }
                     }
+                    ToolbarItemGroup(placement: .principal) {
+                        // Status bar component
+                        Rectangle()
+                            .fill(Color(UIColor.secondarySystemBackground))
+                            .overlay(Text("Idle"))
+                            .cornerRadius(8)
+                            .frame(minWidth: 0,
+                                   idealWidth: geometry.size.width * 0.6,
+                                   maxWidth: geometry.size.width * 0.6,
+                                   minHeight: 32,
+                                   idealHeight: 32,
+                                   maxHeight: 32,
+                                   alignment: .center)
+                    }
                 }
                 .edgesIgnoringSafeArea([.top, .bottom])
             }
-
-            // Vertical stack to draw custom state bar on top of the navigation bar
-            VStack {
-                Spacer()
-                    .frame(height: 36)
-                ZStack {
-                    Color(UIColor.secondarySystemBackground)
-                    Text("Idle")
-                        .foregroundColor(Color(UIColor.secondaryLabel))
-                }
-                .frame(minWidth: 24, idealWidth: 600, maxWidth: 600, minHeight: 32, idealHeight: 32, maxHeight: 32, alignment: .center)
-                .cornerRadius(8)
-                Spacer()
-            }
-            .edgesIgnoringSafeArea([.top, .bottom])
-
         }
     }
-    
+
 }
 
 struct ProteinView_Previews: PreviewProvider {

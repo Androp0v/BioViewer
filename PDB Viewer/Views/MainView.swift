@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
+
     var body: some View {
         NavigationView {
 
@@ -17,12 +18,17 @@ struct MainView: View {
                 NavigationLink(
                     destination: ProteinView(),
                     label: {
-                        Text("View protein!")
+                        Text("View protein structure")
+                })
+                NavigationLink(
+                    destination: ProteinView(),
+                    label: {
+                        Text("View sequence")
                 })
             }
-            .listStyle(SidebarListStyle())
+            .listStyle( SidebarListStyle() )
             .navigationBarHidden(false)
-            .navigationTitle(Text("Menu"))
+            .navigationTitle(Text("Protein View"))
 
             // Initial view in master-detail mode
             ProteinView()
