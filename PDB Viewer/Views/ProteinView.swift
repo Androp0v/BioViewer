@@ -67,6 +67,7 @@ struct ProteinView: View {
                 scene: scene,
                 pointOfView: cameraNode,
                 options: [
+                    .autoenablesDefaultLighting,
                     .allowsCameraControl,
                 ],
                 delegate: sceneDelegate

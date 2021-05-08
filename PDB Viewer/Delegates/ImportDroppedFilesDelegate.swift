@@ -58,7 +58,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
         rawText.enumerateLines(invoking: { line, stop in
             // We're only interested in the lines that contain atom positions
-            if line.contains("ATOM") {
+            if line.starts(with: "ATOM") {
                 // Split the lines by column, in .pdb files x, y, z coordinates
                 // are on the 6, 7, 8 columns
                 let columns = line.split(separator: " ",

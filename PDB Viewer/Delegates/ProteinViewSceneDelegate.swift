@@ -29,7 +29,6 @@ class ProteinViewSceneDelegate: NSObject, SCNSceneRendererDelegate {
     // MARK: - I/O
 
     public let serialQueue = DispatchQueue(label: "I/O queue", qos: .userInitiated)
-    public var importObjects: Bool = false
 
     // MARK: - Protein loading
     private var proteinsToLoad: LoadingProtein?
@@ -42,38 +41,46 @@ class ProteinViewSceneDelegate: NSObject, SCNSceneRendererDelegate {
     /// - Parameter atoms: Atom positions.
     func addProtein(atoms: [simd_float3], atomIdentifiers: [Int]) {
 
-        // Atom material
-        self.atomMaterial = SCNMaterial()
-        self.atomMaterial?.diffuse.contents = UIColor.green
-        self.atomMaterial?.lightingModel = .blinn
-        self.atomMaterial?.reflective.contents = UIColor.green
-        self.atomMaterial?.reflective.intensity = 1
+        // Common atom material for all atoms
+        let atomMaterial = SCNMaterial()
+        atomMaterial.diffuse.contents = UIColor.green
+        atomMaterial.lightingModel = .blinn
+        atomMaterial.reflective.contents = UIColor.black
+        atomMaterial.reflective.intensity = 1
+        self.atomMaterial = atomMaterial
 
-        self.proteinAxis = SCNNode()
-        self.proteinAxis?.position = SCNVector3(0,0,0)
-        scene?.rootNode.addChildNode(proteinAxis!)
+        // Protein axis
+        let proteinAxis = SCNNode()
+        proteinAxis.position = SCNVector3(0,0,0)
+        scene?.rootNode.addChildNode(proteinAxis)
+        self.proteinAxis = proteinAxis
 
-        // Mark the protein as pending
+        // Mark the protein as pending loading
         self.proteinsToLoad = LoadingProtein(atoms: atoms, atomIdentifiers: atomIdentifiers)
-        self.importObjects = true
 
         // Import protein to scene
-        if importObjects {
-            while self.proteinsToLoad?.state == .loading {
+        while self.proteinsToLoad?.state == .loading {
 
-                var newAtomPosition: simd_float3?
-                var newAtomId: Int?
-                (newAtomPosition, newAtomId) = self.proteinsToLoad?.getNextAtom() ?? (nil, nil)
+            // Retrieve next atom from the LoadingProtein structure
+            var newAtomPosition: simd_float3?
+            var newAtomId: Int?
+            (newAtomPosition, newAtomId) = self.proteinsToLoad?.getNextAtom() ?? (nil, nil)
 
-                guard let newAtomPosition = newAtomPosition else { return }
-                guard let newAtomId = newAtomId else { return }
+            // Ignore atoms with invalid positions or IDs
+            guard let newAtomPosition = newAtomPosition else { return }
+            guard let newAtomId = newAtomId else { return }
 
-                let atomGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: newAtomId)))
-                atomGeometry.firstMaterial = self.atomMaterial
-                let newAtomNode = SCNNode(geometry: atomGeometry)
-                newAtomNode.position = SCNVector3(newAtomPosition)
-                self.proteinAxis?.addChildNode(newAtomNode)
-            }
+            // We need to generate the sphere for each atom because they don't
+            // allhave the same size
+            let atomGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: newAtomId)))
+            // Low segmentCount to improve performance
+            atomGeometry.segmentCount = 14
+            // Set the atom material to the common atom material
+            atomGeometry.firstMaterial = atomMaterial
+            // Add the new atom SCNNode to the scene
+            let newAtomNode = SCNNode(geometry: atomGeometry)
+            newAtomNode.position = SCNVector3(newAtomPosition)
+            self.proteinAxis?.addChildNode(newAtomNode)
         }
 
     }
