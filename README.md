@@ -1,5 +1,7 @@
 # Protein-Viewer
-Protein (.pdb) viewer for iPhone, iPad and Mac, using SwiftUI + SceneKit.
+Protein (.pdb, .cif and .fasta) viewer for iPhone, iPad and Mac, using SwiftUI + SceneKit.
+
+![ProteinView](ProteinView.png)
 
 ## Feature wish list
 - Open PDB, CIF and FASTA files.
