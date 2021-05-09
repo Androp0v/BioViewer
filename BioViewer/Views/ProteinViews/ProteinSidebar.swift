@@ -28,6 +28,11 @@ struct ProteinSidebar: View {
 
     var body: some View {
         ZStack {
+            // Options views go here
+            switch(selectedSegment) {
+                case 0: FileSegmentProtein()
+                default: Spacer()
+            }
             // Top segemented control to switch between options
             VStack (spacing: 0) {
                 ZStack {
@@ -47,8 +52,6 @@ struct ProteinSidebar: View {
                     .foregroundColor(Color(UIColor.separator))
                 Spacer()
             }
-            // Options views go here
-            // TO-DO
         }
         .background(Color(UIColor.secondarySystemBackground))
     }
