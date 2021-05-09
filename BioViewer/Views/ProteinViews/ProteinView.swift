@@ -64,54 +64,78 @@ struct ProteinView: View {
     }
 
     // MARK: - Body
+    @State var toggleSidebar = false
+    @State var toggleModalSidebar = false
 
     var body: some View {
         GeometryReader { geometry in
-            VStack {
+            VStack (spacing: 0) {
                 // Future toolbar items will be here
                 Rectangle()
                     .frame(height: 8)
                     .foregroundColor(Color(UIColor.systemBackground))
-                // Main SceneKit view
-                SceneView(scene: scene,
-                          pointOfView: cameraNode,
-                          options: [.autoenablesDefaultLighting,
-                                    .allowsCameraControl,],
-                          delegate: sceneDelegate)
-                .background(Color.black)
-                .onDrop(of: [.data], delegate: dropDelegate)
-                .navigationTitle("")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    // Button to open right panel
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            // TO-DO
-                            print("Inspector button tapped!")
-                        }) {
-                            if UIDevice.current.userInterfaceIdiom == .phone {
-                                Image(systemName: "gearshape")
-                            } else {
-                                Image(systemName: "sidebar.trailing")
-                            }
-                        }
-                    }
-                    ToolbarItemGroup(placement: .principal) {
-                        // Status bar component
-                        Rectangle()
-                            .fill(Color(UIColor.secondarySystemBackground))
-                            .overlay(Text("Idle"))
-                            .cornerRadius(8)
-                            .frame(minWidth: 0,
-                                   idealWidth: geometry.size.width * 0.6,
-                                   maxWidth: geometry.size.width * 0.6,
-                                   minHeight: 32,
-                                   idealHeight: 32,
-                                   maxHeight: 32,
-                                   alignment: .center)
+                // Separator
+                Rectangle()
+                    .frame(height: 0.5)
+                    .foregroundColor(Color(UIColor.opaqueSeparator))
+                // Main view here (including sidebar)
+                HStack (spacing: 0) {
+                    // Main SceneKit view
+                    SceneView(scene: scene,
+                              pointOfView: cameraNode,
+                              options: [.autoenablesDefaultLighting,
+                                        .allowsCameraControl,],
+                              delegate: sceneDelegate)
+                    .background(Color.black)
+                    .onDrop(of: [.data], delegate: dropDelegate)
+                    .edgesIgnoringSafeArea([.top, .bottom])
+                    // Sidebar
+                    if toggleSidebar {
+                        ProteinSidebar()
+                            .frame(width: 300)
+                            .edgesIgnoringSafeArea([.horizontal, .bottom])
                     }
                 }
-                .edgesIgnoringSafeArea([.top, .bottom])
+            }
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                // Button to open right panel
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if UIDevice.current.userInterfaceIdiom == .phone
+                        || geometry.size.width < 600 {
+                        Button(action: {
+                            toggleModalSidebar.toggle()
+                        }) {
+                            Image(systemName: "gearshape")
+                        }
+                        .sheet(isPresented: $toggleModalSidebar, content: {
+                            ProteinSidebar()
+                        })
+                    } else {
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.2)){
+                                toggleSidebar.toggle()
+                            }
+                        }) {
+                            Image(systemName: "sidebar.trailing")
+                        }
+                    }
+                }
+                ToolbarItemGroup(placement: .principal) {
+                    // Status bar component
+                    Rectangle()
+                        .fill(Color(UIColor.secondarySystemBackground))
+                        .overlay(Text("Idle"))
+                        .cornerRadius(8)
+                        .frame(minWidth: 0,
+                               idealWidth: geometry.size.width * 0.6,
+                               maxWidth: geometry.size.width * 0.6,
+                               minHeight: 32,
+                               idealHeight: 32,
+                               maxHeight: 32,
+                               alignment: .center)
+                }
             }
         }
     }

@@ -13,6 +13,7 @@
 		C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomType.swift */; };
 		C440856026470A0700DC5009 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440855F26470A0700DC5009 /* SequenceView.swift */; };
 		C44085652647155C00DC5009 /* SequenceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085642647155C00DC5009 /* SequenceRow.swift */; };
+		C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085662647ECE500DC5009 /* ProteinSidebar.swift */; };
 		C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0712641AF1B00459E01 /* BioViewerApp.swift */; };
 		C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0732641AF1B00459E01 /* ProteinView.swift */; };
 		C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FC0752641AF1E00459E01 /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 		C418BAFD2645B1210031C6F0 /* AtomType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomType.swift; sourceTree = "<group>"; };
 		C440855F26470A0700DC5009 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
 		C44085642647155C00DC5009 /* SequenceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceRow.swift; sourceTree = "<group>"; };
+		C44085662647ECE500DC5009 /* ProteinSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSidebar.swift; sourceTree = "<group>"; };
 		C44FC06E2641AF1B00459E01 /* BioViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BioViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC0712641AF1B00459E01 /* BioViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerApp.swift; sourceTree = "<group>"; };
 		C44FC0732641AF1B00459E01 /* ProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
+				C44085662647ECE500DC5009 /* ProteinSidebar.swift */,
 			);
 			path = ProteinViews;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
+				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
@@ -514,7 +518,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.raulmonton.PDB-Viewer";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.BioViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
@@ -538,7 +542,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.raulmonton.PDB-Viewer";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.BioViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
