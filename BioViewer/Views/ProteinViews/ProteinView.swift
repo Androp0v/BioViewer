@@ -81,14 +81,21 @@ struct ProteinView: View {
                 // Main view here (including sidebar)
                 HStack (spacing: 0) {
                     // Main SceneKit view
-                    SceneView(scene: scene,
-                              pointOfView: cameraNode,
-                              options: [.autoenablesDefaultLighting,
-                                        .allowsCameraControl,],
-                              delegate: sceneDelegate)
-                    .background(Color.black)
-                    .onDrop(of: [.data], delegate: dropDelegate)
-                    .edgesIgnoringSafeArea([.top, .bottom])
+                    ZStack {
+                        SceneView(scene: scene,
+                                  pointOfView: cameraNode,
+                                  options: [.autoenablesDefaultLighting,
+                                            .allowsCameraControl,],
+                                  delegate: sceneDelegate)
+                        .background(Color.black)
+                        .onDrop(of: [.data], delegate: dropDelegate)
+                        .edgesIgnoringSafeArea([.top, .bottom])
+                        VStack {
+                            Spacer()
+                            ProteinSequenceView()
+                                .padding()
+                        }
+                    }
                     // Sidebar
                     if toggleSidebar {
                         ProteinSidebar()
@@ -145,5 +152,6 @@ struct ProteinView: View {
 struct ProteinView_Previews: PreviewProvider {
     static var previews: some View {
         ProteinView()
+            .previewDevice("iPhone SE (2nd generation)")
     }
 }
