@@ -1,4 +1,4 @@
-# Protein-Viewer
+# BioViewer
 Protein (.pdb, .cif and .fasta) viewer for iPhone, iPad and Mac, using SwiftUI + SceneKit.
 
 ![ProteinView](ProteinView.png)
