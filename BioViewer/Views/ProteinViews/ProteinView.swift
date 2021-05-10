@@ -20,6 +20,11 @@ struct ProteinView: View {
 
     private var sceneBackgroundColorCancellable: AnyCancellable?
 
+    // UI constants
+    private enum Constants {
+        static let compactSequenceViewWidth: CGFloat = 32
+    }
+
     // MARK: - Initialization
 
     init() {
@@ -70,10 +75,15 @@ struct ProteinView: View {
 
     // MARK: - Body
 
+    // Sidebar
     @State var toggleSidebar = false
     @State var toggleModalSidebar = false
-    @State var toggleSequenceView = false
 
+    // Sequence view
+    @State var toggleSequenceView = true
+    @State var sequenceViewMaxWidth: CGFloat = .infinity
+
+    // Main view
     var body: some View {
         GeometryReader { geometry in
             VStack (spacing: 0) {
@@ -101,9 +111,7 @@ struct ProteinView: View {
                         .gesture(
                             TapGesture()
                                 .onEnded( {
-                                    withAnimation(.easeInOut(duration: 0.2)){
-                                        toggleSequenceView.toggle()
-                                    }
+                                    animateSequenceView()
                                 })
                         )
                         .edgesIgnoringSafeArea([.top, .bottom])
@@ -115,6 +123,7 @@ struct ProteinView: View {
                             if toggleSequenceView {
                                 ProteinSequenceView()
                                     .padding(.horizontal, 12)
+                                    .frame(minWidth: 32, maxWidth: sequenceViewMaxWidth)
                             }
                         }
                         .padding(.bottom, 12)
@@ -171,6 +180,29 @@ struct ProteinView: View {
             }
         }
         .environmentObject(sceneDelegate)
+    }
+
+    // MARK: - Private functions
+
+    /// Animate collapsing or inflating the sequence view widget
+    private func animateSequenceView() {
+        if toggleSequenceView == true {
+            // Collapse sequence view
+            withAnimation(.easeInOut(duration: 0.15)) {
+                sequenceViewMaxWidth = Constants.compactSequenceViewWidth
+            }
+            withAnimation(.easeInOut(duration: 0.05).delay(0.1)) {
+                toggleSequenceView.toggle()
+            }
+        } else {
+            // Inflate sequence view
+            withAnimation(.easeInOut(duration: 0.1)) {
+                toggleSequenceView.toggle()
+            }
+            withAnimation(.easeInOut(duration: 0.3)) {
+                sequenceViewMaxWidth = .infinity
+            }
+        }
     }
 
 }
