@@ -13,12 +13,22 @@ import UniformTypeIdentifiers
 struct ProteinView: View {
 
     // MARK: - Properties
-    private var scene: SCNScene
-    private var sceneDelegate: ProteinViewSceneDelegate
+    @State var scene: SCNScene
+    @State var sceneDelegate: ProteinViewSceneDelegate
     private var dropDelegate: ImportDroppedFilesDelegate
     private var cameraNode: SCNNode
 
     private var sceneBackgroundColorCancellable: AnyCancellable?
+
+    // MARK: - UI variables/constants
+
+    // Sidebar
+    @State var toggleSidebar = false
+    @State var toggleModalSidebar = false
+
+    // Sequence view
+    @State var toggleSequenceView = true
+    @State var sequenceViewMaxWidth: CGFloat = .infinity
 
     // UI constants
     private enum Constants {
@@ -29,20 +39,17 @@ struct ProteinView: View {
 
     init() {
 
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().isTranslucent = true
-        UINavigationBar.appearance().backgroundColor = .clear
-
         // Open SceneKit scene
-        self.scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        self.scene = scene
 
         // Setup scene delegate
-        self.sceneDelegate = ProteinViewSceneDelegate()
+        let sceneDelegate = ProteinViewSceneDelegate()
         sceneDelegate.scene = scene
+        self.sceneDelegate = sceneDelegate
 
         // Setup drop delegate
-        self.dropDelegate = ImportDroppedFilesDelegate(sceneDelegate: self.sceneDelegate)
+        self.dropDelegate = ImportDroppedFilesDelegate(sceneDelegate: sceneDelegate)
 
         // Setup camera
         self.cameraNode = SCNNode()
@@ -75,14 +82,6 @@ struct ProteinView: View {
 
     // MARK: - Body
 
-    // Sidebar
-    @State var toggleSidebar = false
-    @State var toggleModalSidebar = false
-
-    // Sequence view
-    @State var toggleSequenceView = true
-    @State var sequenceViewMaxWidth: CGFloat = .infinity
-
     // Main view
     var body: some View {
         GeometryReader { geometry in
@@ -101,11 +100,8 @@ struct ProteinView: View {
                     ZStack {
 
                         // Main scene view
-                        SceneView(scene: scene,
-                                  pointOfView: cameraNode,
-                                  options: [.autoenablesDefaultLighting,
-                                            .allowsCameraControl,],
-                                  delegate: sceneDelegate)
+                        ProteinSceneView(scene: $scene,
+                                         sceneDelegate: $sceneDelegate)
                         .background(sceneDelegate.sceneBackground)
                         .onDrop(of: [.data], delegate: dropDelegate)
                         .gesture(
@@ -163,7 +159,7 @@ struct ProteinView: View {
                         }
                     }
                 }
-                ToolbarItemGroup(placement: .principal) {
+                ToolbarItem(placement: .principal) {
                     // Status bar component
                     Rectangle()
                         .fill(Color(UIColor.secondarySystemBackground))

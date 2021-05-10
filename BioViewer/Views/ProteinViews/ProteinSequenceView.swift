@@ -14,8 +14,7 @@ struct ProteinSequenceView: View {
             ScrollView (.horizontal) {
                 HStack {
                     Text("MDSKGSSQKGSRLLLLLVVSNLLLCQGVVSTPVCPNGPGNCQVSLRDLFDRAVMVSHYIHDLSS")
-                        .padding(.leading, 36+8)
-                    Spacer()
+                        .padding(.horizontal, 36+8)
                 }
             }
             HStack {
