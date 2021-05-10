@@ -9,11 +9,13 @@ import Foundation
 import SceneKit
 import SwiftUI
 
-class ProteinViewSceneDelegate: NSObject, SCNSceneRendererDelegate {
+class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDelegate {
 
     // MARK: - Properties
 
     public var scene: SCNScene?
+    
+    @Published var sceneBackground: Color = Color.black
 
     private var maxTargetFrameDuration: Int {
         // Get desired maximum time per frame in nanoseconds

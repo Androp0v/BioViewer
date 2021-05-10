@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct AppearanceSegmentProtein: View {
+
+    @EnvironmentObject var sceneDelegate: ProteinViewSceneDelegate
+
     var body: some View {
             List {
                 // First section hast 64pt padding to account for the
                 // space under the segmented control.
                 Section(header: Text("General").padding(.top, 64)) {
-                    Text("Background color")
+                    ColorPickerRow(selectedColor: $sceneDelegate.sceneBackground)
                 }
 
                 Section(header: Text("Proteins")) {

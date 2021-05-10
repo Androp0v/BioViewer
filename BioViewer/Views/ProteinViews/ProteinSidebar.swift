@@ -19,14 +19,15 @@ private struct SidebarItem: View {
 struct ProteinSidebar: View {
 
     @State private var selectedSegment = 0
+    @EnvironmentObject var sceneDelegate: ProteinViewSceneDelegate
 
     var body: some View {
         ZStack {
             // Options views go here
             switch(selectedSegment) {
-                case 0: FileSegmentProtein()
-                case 1: AppearanceSegmentProtein()
-                default: Spacer()
+            case 0: FileSegmentProtein()
+            case 1: AppearanceSegmentProtein()
+            default: Spacer()
             }
             // Top segemented control to switch between options
             VStack (spacing: 0) {

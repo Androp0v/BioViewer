@@ -5,14 +5,11 @@
 //  Created by Raúl Montón Pinillos on 4/5/21.
 //
 
-import SwiftUI
-import SceneKit
-import UniformTypeIdentifiers
-
+import Combine
 import SwiftUI
 import SceneKit
 import UIKit
-
+import UniformTypeIdentifiers
 struct ProteinView: View {
 
     // MARK: - Properties
@@ -20,6 +17,8 @@ struct ProteinView: View {
     private var sceneDelegate: ProteinViewSceneDelegate
     private var dropDelegate: ImportDroppedFilesDelegate
     private var cameraNode: SCNNode
+
+    private var sceneBackgroundColorCancellable: AnyCancellable?
 
     // MARK: - Initialization
 
@@ -61,9 +60,15 @@ struct ProteinView: View {
         ambientLightNode.light!.color = UIColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
 
+        // Set scene background color (listening for changes)
+        sceneBackgroundColorCancellable = sceneDelegate.$sceneBackground.sink { [self] color in
+            self.scene.background.contents = UIColor(color)
+        }
+
     }
 
     // MARK: - Body
+
     @State var toggleSidebar = false
     @State var toggleModalSidebar = false
 
@@ -87,7 +92,7 @@ struct ProteinView: View {
                                   options: [.autoenablesDefaultLighting,
                                             .allowsCameraControl,],
                                   delegate: sceneDelegate)
-                        .background(Color.black)
+                        .background(sceneDelegate.sceneBackground)
                         .onDrop(of: [.data], delegate: dropDelegate)
                         .edgesIgnoringSafeArea([.top, .bottom])
                         VStack {
@@ -145,6 +150,7 @@ struct ProteinView: View {
                 }
             }
         }
+        .environmentObject(sceneDelegate)
     }
 
 }
