@@ -62,6 +62,7 @@ struct ProteinView: View {
 
         // Set scene background color (listening for changes)
         sceneBackgroundColorCancellable = sceneDelegate.$sceneBackground.sink { [self] color in
+            // This might reset the scene camera position, unsure why
             self.scene.background.contents = UIColor(color)
         }
 
@@ -71,6 +72,7 @@ struct ProteinView: View {
 
     @State var toggleSidebar = false
     @State var toggleModalSidebar = false
+    @State var toggleSequenceView = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -85,8 +87,10 @@ struct ProteinView: View {
                     .foregroundColor(Color(UIColor.opaqueSeparator))
                 // Main view here (including sidebar)
                 HStack (spacing: 0) {
-                    // Main SceneKit view
+                    // Main scene container
                     ZStack {
+
+                        // Main scene view
                         SceneView(scene: scene,
                                   pointOfView: cameraNode,
                                   options: [.autoenablesDefaultLighting,
@@ -94,19 +98,35 @@ struct ProteinView: View {
                                   delegate: sceneDelegate)
                         .background(sceneDelegate.sceneBackground)
                         .onDrop(of: [.data], delegate: dropDelegate)
+                        .gesture(
+                            TapGesture()
+                                .onEnded( {
+                                    withAnimation(.easeInOut(duration: 0.2)){
+                                        toggleSequenceView.toggle()
+                                    }
+                                })
+                        )
                         .edgesIgnoringSafeArea([.top, .bottom])
-                        VStack {
+
+                        // Scene controls
+                        VStack (spacing: 12) {
                             Spacer()
-                            ProteinSequenceView()
-                                .padding()
+                            ProteinCameraControlView()
+                            if toggleSequenceView {
+                                ProteinSequenceView()
+                                    .padding(.horizontal, 12)
+                            }
                         }
+                        .padding(.bottom, 12)
                     }
+
                     // Sidebar
                     if toggleSidebar {
                         ProteinSidebar()
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
                     }
+
                 }
             }
             .navigationTitle("")
