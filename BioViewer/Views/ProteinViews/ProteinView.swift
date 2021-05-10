@@ -27,7 +27,7 @@ struct ProteinView: View {
     @State var toggleModalSidebar = false
 
     // Sequence view
-    @State var toggleSequenceView = true
+    @State var toggleSequenceView = false
     @State var sequenceViewMaxWidth: CGFloat = .infinity
 
     // UI constants
@@ -100,16 +100,17 @@ struct ProteinView: View {
                     ZStack {
 
                         // Main scene view
-                        ProteinSceneView(scene: $scene,
+                        ProteinSceneView(parent: self,
+                                         scene: $scene,
                                          sceneDelegate: $sceneDelegate)
                         .background(sceneDelegate.sceneBackground)
                         .onDrop(of: [.data], delegate: dropDelegate)
-                        .gesture(
+                        /*.gesture(
                             TapGesture()
                                 .onEnded( {
                                     animateSequenceView()
                                 })
-                        )
+                        )*/
                         .edgesIgnoringSafeArea([.top, .bottom])
 
                         // Scene controls
@@ -176,6 +177,22 @@ struct ProteinView: View {
             }
         }
         .environmentObject(sceneDelegate)
+    }
+
+    // MARK: - Public functions
+    public func didTapScene(nodeHit: Bool) {
+        // If a node was hit and the sequence view widget is
+        // not shown, show it.
+        if nodeHit && toggleSequenceView == false {
+            animateSequenceView()
+            return
+        }
+        // If the view was tapped outside a node and the sequence
+        // view widget is shown, dismiss it.
+        if !nodeHit && toggleSequenceView == true {
+            animateSequenceView()
+            return
+        }
     }
 
     // MARK: - Private functions
