@@ -14,6 +14,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     // MARK: - Properties
 
     public var scene: SCNScene?
+    public var dataSource: ProteinViewDataSource?
     
     @Published var sceneBackground: Color = Color.black
 
@@ -33,7 +34,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     public let serialQueue = DispatchQueue(label: "I/O queue", qos: .userInitiated)
 
     // MARK: - Protein loading
-    private var proteinsToLoad: LoadingProtein?
+    private var proteinsToLoad: Protein?
     private var atomMaterial: SCNMaterial?
     private var proteinAxis: SCNNode?
 
@@ -58,7 +59,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         self.proteinAxis = proteinAxis
 
         // Mark the protein as pending loading
-        self.proteinsToLoad = LoadingProtein(atoms: atoms, atomIdentifiers: atomIdentifiers)
+        self.proteinsToLoad = Protein(atoms: atoms, atomIdentifiers: atomIdentifiers)
 
         // Import protein to scene
         while self.proteinsToLoad?.state == .loading {
@@ -83,6 +84,10 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             let newAtomNode = SCNNode(geometry: atomGeometry)
             newAtomNode.position = SCNVector3(newAtomPosition)
             self.proteinAxis?.addChildNode(newAtomNode)
+        }
+
+        if self.proteinsToLoad?.state == .loaded {
+            // TO-DO: Add protein to datasource
         }
 
     }

@@ -15,6 +15,7 @@ struct ProteinView: View {
     // MARK: - Properties
     @State var scene: SCNScene
     @State var sceneDelegate: ProteinViewSceneDelegate
+    @State var dataSource: ProteinViewDataSource
     private var dropDelegate: ImportDroppedFilesDelegate
     private var cameraNode: SCNNode
 
@@ -43,9 +44,14 @@ struct ProteinView: View {
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         self.scene = scene
 
+        // Setup datasource
+        let dataSource = ProteinViewDataSource()
+        self.dataSource = dataSource
+
         // Setup scene delegate
         let sceneDelegate = ProteinViewSceneDelegate()
         sceneDelegate.scene = scene
+        sceneDelegate.dataSource = dataSource
         self.sceneDelegate = sceneDelegate
 
         // Setup drop delegate
@@ -177,9 +183,14 @@ struct ProteinView: View {
             }
         }
         .environmentObject(sceneDelegate)
+        .environmentObject(dataSource)
     }
 
     // MARK: - Public functions
+    /// Called when the ProteinSceneView is tapped, to check if the protein sequence
+    /// view widget should be shown or not.
+    /// - Parameter nodeHit: Wether a node was tapped  (```true```) or
+    /// not (```false```).
     public func didTapScene(nodeHit: Bool) {
         // If a node was hit and the sequence view widget is
         // not shown, show it.

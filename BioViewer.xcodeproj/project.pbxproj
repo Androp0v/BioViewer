@@ -27,9 +27,10 @@
 		C45BAC432649550C00B36026 /* ColorPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC422649550C00B36026 /* ColorPickerRow.swift */; };
 		C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC4426497A3300B36026 /* ProteinCameraControlView.swift */; };
 		C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC462649A67000B36026 /* ProteinSceneView.swift */; };
+		C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 		C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */; };
-		C4B1F81F26457CF80035D739 /* LoadingProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* LoadingProtein.swift */; };
+		C4B1F81F26457CF80035D739 /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,9 +78,10 @@
 		C45BAC422649550C00B36026 /* ColorPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerRow.swift; sourceTree = "<group>"; };
 		C45BAC4426497A3300B36026 /* ProteinCameraControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinCameraControlView.swift; sourceTree = "<group>"; };
 		C45BAC462649A67000B36026 /* ProteinSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSceneView.swift; sourceTree = "<group>"; };
+		C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewDataSource.swift; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewSceneDelegate.swift; sourceTree = "<group>"; };
-		C4B1F81E26457CF80035D739 /* LoadingProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingProtein.swift; sourceTree = "<group>"; };
+		C4B1F81E26457CF80035D739 /* Protein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protein.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,7 +242,8 @@
 		C4B1F82026457D020035D739 /* Data structures */ = {
 			isa = PBXGroup;
 			children = (
-				C4B1F81E26457CF80035D739 /* LoadingProtein.swift */,
+				C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */,
+				C4B1F81E26457CF80035D739 /* Protein.swift */,
 				C418BAFD2645B1210031C6F0 /* AtomType.swift */,
 			);
 			path = "Data structures";
@@ -386,7 +389,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
-				C4B1F81F26457CF80035D739 /* LoadingProtein.swift in Sources */,
+				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */,
 				C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */,
@@ -400,6 +403,7 @@
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
 				C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */,
+				C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,

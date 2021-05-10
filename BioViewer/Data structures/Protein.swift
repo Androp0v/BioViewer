@@ -10,7 +10,7 @@ import simd
 
 /// Struct holding the contents of a protein that has not yet been completely loadad
 /// into SceneKit.
-struct LoadingProtein {
+struct Protein {
 
     public enum LoadState {
         case loading

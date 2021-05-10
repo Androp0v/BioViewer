@@ -61,13 +61,14 @@ struct ProteinSceneView: UIViewRepresentable {
     func handleTapOutside(gestureRecognizer: UITapGestureRecognizer) {
         let position = gestureRecognizer.location(in: sceneView)
         let hitResults = sceneView.hitTest(position, options: [:])
+        // TO-DO: This should return the node being hit so the proper part
+        // of the sequence can be shown in the protein sequence view widget
         if hitResults.count > 0 {
             parent.didTapScene(nodeHit: true)
         } else {
             parent.didTapScene(nodeHit: false)
         }
     }
-
 
 }
 
