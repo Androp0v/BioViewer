@@ -74,7 +74,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             guard let newAtomId = newAtomId else { return }
 
             // We need to generate the sphere for each atom because they don't
-            // allhave the same size
+            // all have the same size
             let atomGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: newAtomId)))
             // Low segmentCount to improve performance
             atomGeometry.segmentCount = 14

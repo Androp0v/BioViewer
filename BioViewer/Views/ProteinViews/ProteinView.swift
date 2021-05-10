@@ -67,15 +67,15 @@ struct ProteinView: View {
         // Create and add a light to the scene
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
-        lightNode.light!.type = .omni
+        lightNode.light?.type = .omni
         lightNode.position = SCNVector3(x: 0, y: 100, z: 0)
         scene.rootNode.addChildNode(lightNode)
 
         // Create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
-        ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = UIColor.darkGray
+        ambientLightNode.light?.type = .ambient
+        ambientLightNode.light?.color = UIColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
 
         // Set scene background color (listening for changes)

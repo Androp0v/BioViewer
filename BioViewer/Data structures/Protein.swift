@@ -12,17 +12,28 @@ import simd
 /// into SceneKit.
 struct Protein {
 
+    // MARK: - Properties
+
+    // States reflect wether or not the protein has been added
+    // to a SceneKit scene.
     public enum LoadState {
         case loading
         case loaded
         case failed
     }
-
     private(set) var state: LoadState
+
+    // Atomic positions (in Armstrongs)
     private var atoms: [simd_float3]
+    // Atom identifiers (C,H,F,O,N...) mapped to int values
     private var atomIdentifiers: [Int]
+    // Total number of atoms in the protein
     private var atomCount: Int
+    // Index of the last atom added to the scene (for .loading
+    // proteins).
     private var currentIndex: Int
+
+    // MARK: - Initialization
 
     init(atoms: [simd_float3], atomIdentifiers: [Int]) {
         self.state = .loading
@@ -32,6 +43,8 @@ struct Protein {
         self.currentIndex = 0
         normalizeAtomPositions(atoms: &self.atoms)
     }
+
+    // MARK: - Functions
 
     /// Return the atoms in the protein one by one until the protein is loaded
     /// - Returns: Atom position and atom identifier.

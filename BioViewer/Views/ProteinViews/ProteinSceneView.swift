@@ -58,11 +58,17 @@ struct ProteinSceneView: UIViewRepresentable {
 
     // MARK: - Private functions
 
+    /// Handle the tap in the ```ProteinSceneView``` struct, where ```sceneView```
+    /// is available.
     func handleTapOutside(gestureRecognizer: UITapGestureRecognizer) {
         let position = gestureRecognizer.location(in: sceneView)
         let hitResults = sceneView.hitTest(position, options: [:])
         // TO-DO: This should return the node being hit so the proper part
         // of the sequence can be shown in the protein sequence view widget
+        // TO-DO: This feels weird on-device because the atoms are tiny and
+        // taps may not exactly be on top of an atom. Consider sampling for
+        // close locations to the original tap for nearby atoms if no hit
+        // is registered.
         if hitResults.count > 0 {
             parent.didTapScene(nodeHit: true)
         } else {
