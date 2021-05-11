@@ -44,18 +44,16 @@ struct ProteinView: View {
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         self.scene = scene
 
-        // Setup datasource
-        let dataSource = ProteinViewDataSource()
-        self.dataSource = dataSource
-
-        // Setup scene delegate
+        // Setup scene delegate and datasource
         let sceneDelegate = ProteinViewSceneDelegate()
+        let dataSource = ProteinViewDataSource(sceneDelegate: sceneDelegate)
+        self.sceneDelegate = sceneDelegate
+        self.dataSource = dataSource
         sceneDelegate.scene = scene
         sceneDelegate.dataSource = dataSource
-        self.sceneDelegate = sceneDelegate
 
         // Setup drop delegate
-        self.dropDelegate = ImportDroppedFilesDelegate(sceneDelegate: sceneDelegate)
+        self.dropDelegate = ImportDroppedFilesDelegate(dataSource: dataSource)
 
         // Setup camera
         self.cameraNode = SCNNode()

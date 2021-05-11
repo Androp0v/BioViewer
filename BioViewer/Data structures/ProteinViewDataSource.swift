@@ -6,20 +6,49 @@
 //
 
 import Foundation
+import simd
 
 /// Handle all source data for a ```ProteinView``` that is not related to the
 /// scene nor the appearance, like the ```Protein``` objects that have been
 /// imported or computed values.
 class ProteinViewDataSource: ObservableObject {
 
-    private var proteins: [Protein] = [Protein]()
+    private(set) var proteins: [Protein] = [Protein]() {
+        // Run when a new protein is added to the datasource
+        didSet {
+            // Publishers need to be updated in the main queue
+            DispatchQueue.main.async {
+                self.proteinCount = self.proteins.count
+            }
+            // Sum all atom counts from all proteins in the datasource
+            var newTotalAtomCount = 0
+            for protein in self.proteins {
+                newTotalAtomCount += protein.atomCount
+            }
+            // Publishers need to be updated in the main queue
+            DispatchQueue.main.async {
+                self.totalAtomCount = newTotalAtomCount
+            }
+        }
+    }
+    private var sceneDelegate: ProteinViewSceneDelegate
+
+    @Published var proteinCount: Int = 0
+    @Published var totalAtomCount: Int = 0
+
+    init(sceneDelegate: ProteinViewSceneDelegate) {
+        self.sceneDelegate = sceneDelegate
+    }
 
     // MARK: - Public functions
 
     /// Add protein to a ```ProteinView``` datasource.
-    /// - Parameter protein: ```Protein``` object.
-    public func addProtein(protein: Protein) {
-        proteins.append(protein)
+    public func addProteinToDataSource(atoms: [simd_float3], atomIdentifiers: [Int], addToScene: Bool = false) {
+        var newProtein = Protein(atoms: atoms, atomIdentifiers: atomIdentifiers)
+        proteins.append(newProtein)
+        if addToScene {
+            sceneDelegate.addProteinToScene(protein: &newProtein)
+        }
     }
 
     /// Get the number of active proteins in a given ```ProteinView```.

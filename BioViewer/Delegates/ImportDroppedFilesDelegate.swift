@@ -16,12 +16,12 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
     // MARK: - Properties
 
-    private var sceneDelegate: ProteinViewSceneDelegate
+    private var dataSource: ProteinViewDataSource
 
     // MARK: - Initialization
 
-    init(sceneDelegate: ProteinViewSceneDelegate) {
-        self.sceneDelegate = sceneDelegate
+    init(dataSource: ProteinViewDataSource) {
+        self.dataSource = dataSource
     }
 
     // MARK: - Handle drag & drop events
@@ -59,11 +59,17 @@ class ImportDroppedFilesDelegate: DropDelegate {
         rawText.enumerateLines(invoking: { line, stop in
             // We're only interested in the lines that contain atom positions
             if line.starts(with: "ATOM") {
+
+                // The columns are usually formated badly, so negative numbers
+                // may be superposed, like "109.8 12.5-15.2" instead of the
+                // correct "109.8 12.5 -15.2".
+                let fixedLine = line.replacingOccurrences(of: "-", with: " -")
+
                 // Split the lines by column, in .pdb files x, y, z coordinates
-                // are on the 6, 7, 8 columns
-                let columns = line.split(separator: " ",
-                                         maxSplits: Int.max,
-                                         omittingEmptySubsequences: true)
+                // are on the 6, 7, 8 columns.
+                let columns = fixedLine.split(separator: " ",
+                                              maxSplits: Int.max,
+                                              omittingEmptySubsequences: true)
                 // Avoid index out of range errors
                 guard columns.count > 9 else { return }
                 // Retrieve x, y, z data
@@ -80,7 +86,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
             }
         })
 
-        sceneDelegate.addProtein(atoms: atomArray, atomIdentifiers: atomIdentifiers)
+        dataSource.addProteinToDataSource(atoms: atomArray, atomIdentifiers: atomIdentifiers, addToScene: true)
 
     }
 

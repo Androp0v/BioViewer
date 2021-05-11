@@ -41,8 +41,10 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     // MARK: - Functions
 
     /// Add protein to the current scene atom by atom.
-    /// - Parameter atoms: Atom positions.
-    func addProtein(atoms: [simd_float3], atomIdentifiers: [Int]) {
+    /// - Parameter protein: ```Protein``` object. Marked as ```inout```
+    /// so it doesn't get copied-on-write when ```getNextAtom()``` is called (which
+    /// will eventually set the ```Protein.state``` to ```true```).
+    func addProteinToScene(protein: inout Protein) {
 
         // Common atom material for all atoms
         let atomMaterial = SCNMaterial()
@@ -58,16 +60,13 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         scene?.rootNode.addChildNode(proteinAxis)
         self.proteinAxis = proteinAxis
 
-        // Mark the protein as pending loading
-        self.proteinsToLoad = Protein(atoms: atoms, atomIdentifiers: atomIdentifiers)
-
         // Import protein to scene
-        while self.proteinsToLoad?.state == .loading {
+        while protein.state == .loading {
 
             // Retrieve next atom from the LoadingProtein structure
             var newAtomPosition: simd_float3?
             var newAtomId: Int?
-            (newAtomPosition, newAtomId) = self.proteinsToLoad?.getNextAtom() ?? (nil, nil)
+            (newAtomPosition, newAtomId) = protein.getNextAtom()
 
             // Ignore atoms with invalid positions or IDs
             guard let newAtomPosition = newAtomPosition else { return }
@@ -84,10 +83,6 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             let newAtomNode = SCNNode(geometry: atomGeometry)
             newAtomNode.position = SCNVector3(newAtomPosition)
             self.proteinAxis?.addChildNode(newAtomNode)
-        }
-
-        if self.proteinsToLoad?.state == .loaded {
-            // TO-DO: Add protein to datasource
         }
 
     }
