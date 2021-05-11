@@ -15,10 +15,15 @@ struct FileSegmentProtein: View {
             List {
                 // First section hast 64pt padding to account for the
                 // space under the segmented control.
-                Section(header: Text("Loaded files").padding(.top, 64)) {
+                Section(header: Text("Loaded files").padding(.top, 64),
+                        content: {
                     Text("Number of proteins: \(dataSource.proteinCount)")
                     Text("Number of atoms: \(dataSource.totalAtomCount)")
-                }
+                    Button("Remove all", action: {
+                        // TO-DO: Remove all proteins from scene
+                    }).foregroundColor(Color.red)
+                })
+
             }
             .listStyle(GroupedListStyle())
     }

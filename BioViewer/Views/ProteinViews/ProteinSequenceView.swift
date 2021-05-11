@@ -10,23 +10,24 @@ import SwiftUI
 struct ProteinSequenceView: View {
     var body: some View {
         ZStack {
-            Color(UIColor.systemBackground)
+            VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
             ScrollView (.horizontal) {
                 HStack {
                     Text("MDSKGSSQKGSRLLLLLVVSNLLLCQGVVSTPVCPNGPGNCQVSLRDLFDRAVMVSHYIHDLSS")
+                        .foregroundColor(Color.white)
                         .padding(.horizontal, 36+8)
                 }
             }
             HStack {
                 ZStack {
-                    VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    VisualEffectView(effect: UIBlurEffect(style: .regular))
                         .frame(width: 36)
                     Text("5'")
                         .foregroundColor(.white)
                 }
                 Spacer()
                 ZStack {
-                    VisualEffectView(effect: UIBlurEffect(style: .dark))
+                    VisualEffectView(effect: UIBlurEffect(style: .regular))
                         .frame(width: 36)
                     Text("3'")
                         .foregroundColor(.white)
