@@ -57,7 +57,6 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         // Protein axis
         let proteinAxis = SCNNode()
         proteinAxis.position = SCNVector3(0,0,0)
-        scene?.rootNode.addChildNode(proteinAxis)
         self.proteinAxis = proteinAxis
 
         // Import protein to scene
@@ -76,7 +75,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             // all have the same size
             let atomGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: newAtomId)))
             // Low segmentCount to improve performance
-            atomGeometry.segmentCount = 14
+            atomGeometry.segmentCount = 8 //14
             // Set the atom material to the common atom material
             atomGeometry.firstMaterial = atomMaterial
             // Add the new atom SCNNode to the scene
@@ -84,6 +83,10 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             newAtomNode.position = SCNVector3(newAtomPosition)
             self.proteinAxis?.addChildNode(newAtomNode)
         }
+
+        // Make a flattened clone to reduce the number of draw calls at rendering
+        // time and improme fps.
+        scene?.rootNode.addChildNode(proteinAxis.flattenedClone())
 
     }
 

@@ -58,8 +58,8 @@ struct ProteinView: View {
         // Setup camera
         self.cameraNode = SCNNode()
         self.cameraNode.camera = SCNCamera()
-        self.cameraNode.position = SCNVector3(x: 0, y: 0, z: 100)
-        self.cameraNode.camera?.zFar = 1000
+        self.cameraNode.position = SCNVector3(x: 0, y: 0, z: 300)
+        self.cameraNode.camera?.zFar = 5000
         scene.rootNode.addChildNode(cameraNode)
 
         // Create and add a light to the scene
