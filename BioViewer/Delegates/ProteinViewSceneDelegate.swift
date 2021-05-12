@@ -35,7 +35,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
 
     // MARK: - Protein loading
     private var proteinsToLoad: Protein?
-    private var atomMaterial: SCNMaterial?
+    private var atomMaterialProvider: AtomMaterialProvider?
     private var proteinAxis: SCNNode?
 
     // MARK: - Functions
@@ -46,13 +46,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     /// will eventually set the ```Protein.state``` to ```true```).
     func addProteinToScene(protein: inout Protein) {
 
-        // Common atom material for all atoms
-        let atomMaterial = SCNMaterial()
-        atomMaterial.diffuse.contents = UIColor.green
-        atomMaterial.lightingModel = .blinn
-        atomMaterial.reflective.contents = UIColor.black
-        atomMaterial.reflective.intensity = 1
-        self.atomMaterial = atomMaterial
+        self.atomMaterialProvider = AtomMaterialProvider()
 
         // Protein axis
         let proteinAxis = SCNNode()
@@ -75,9 +69,20 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             // all have the same size
             let atomGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: newAtomId)))
             // Low segmentCount to improve performance
-            atomGeometry.segmentCount = 8 //14
+            atomGeometry.segmentCount = 14
             // Set the atom material to the common atom material
-            atomGeometry.firstMaterial = atomMaterial
+            switch newAtomId {
+            case AtomType.CARBON:
+                atomGeometry.firstMaterial = atomMaterialProvider?.carbonMaterial
+            case AtomType.NITROGEN:
+                atomGeometry.firstMaterial = atomMaterialProvider?.nitrogenMaterial
+            case AtomType.OXYGEN:
+                atomGeometry.firstMaterial = atomMaterialProvider?.oxygenMaterial
+            case AtomType.SULFUR:
+                atomGeometry.firstMaterial = atomMaterialProvider?.sulfurMaterial
+            default:
+                atomGeometry.firstMaterial = atomMaterialProvider?.defaultMaterial
+            }
             // Add the new atom SCNNode to the scene
             let newAtomNode = SCNNode(geometry: atomGeometry)
             newAtomNode.position = SCNVector3(newAtomPosition)

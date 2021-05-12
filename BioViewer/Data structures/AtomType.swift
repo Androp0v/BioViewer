@@ -12,6 +12,7 @@ struct AtomType {
     static let CARBON = 0
     static let NITROGEN = 1
     static let OXYGEN = 2
+    static let SULFUR = 3
 
     static let UNKNOWN = Int.max
 }
@@ -21,6 +22,7 @@ func getAtomId(atomName: String) -> Int {
     if atomName.first == "C" { return AtomType.CARBON }
     if atomName.first == "N" { return AtomType.NITROGEN }
     if atomName.first == "O" { return AtomType.OXYGEN }
+    if atomName.first == "S" { return AtomType.SULFUR }
     return AtomType.UNKNOWN
 }
 
@@ -32,6 +34,7 @@ func getAtomicRadius(atomType: Int) -> Float {
     case AtomType.CARBON: return 0.67
     case AtomType.NITROGEN: return 0.56
     case AtomType.OXYGEN: return 0.48
+    case AtomType.SULFUR: return 0.53
     default: return 1.0
     }
 }
