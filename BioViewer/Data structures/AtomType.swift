@@ -17,6 +17,7 @@ struct AtomType {
 }
 
 func getAtomId(atomName: String) -> Int {
+    // Look-up atom name and match it to internally used identifier
     if atomName.first == "C" { return AtomType.CARBON }
     if atomName.first == "N" { return AtomType.NITROGEN }
     if atomName.first == "O" { return AtomType.OXYGEN }

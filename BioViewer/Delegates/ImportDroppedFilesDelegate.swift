@@ -52,42 +52,8 @@ class ImportDroppedFilesDelegate: DropDelegate {
     // MARK: - Parse files
 
     func parseTextFile(rawText: String) {
-
-        var atomArray = [simd_float3]()
-        var atomIdentifiers = [Int]()
-
-        rawText.enumerateLines(invoking: { line, stop in
-            // We're only interested in the lines that contain atom positions
-            if line.starts(with: "ATOM") {
-
-                // The columns are usually formated badly, so negative numbers
-                // may be superposed, like "109.8 12.5-15.2" instead of the
-                // correct "109.8 12.5 -15.2".
-                let fixedLine = line.replacingOccurrences(of: "-", with: " -")
-
-                // Split the lines by column, in .pdb files x, y, z coordinates
-                // are on the 6, 7, 8 columns.
-                let columns = fixedLine.split(separator: " ",
-                                              maxSplits: Int.max,
-                                              omittingEmptySubsequences: true)
-                // Avoid index out of range errors
-                guard columns.count > 9 else { return }
-                // Retrieve x, y, z data
-                guard let x = Float(columns[6]),
-                      let y = Float(columns[7]),
-                      let z = Float(columns[8])
-                else { return }
-                // Save atom position to array
-                atomArray.append(simd_float3(x,y,z))
-                // Retrieve atom element
-                let element = columns[2]
-                // Save atom element to array
-                atomIdentifiers.append( getAtomId(atomName: String(element)) )
-            }
-        })
-
+        let (atomArray, atomIdentifiers) = parsePDB(rawText: rawText)
         dataSource.addProteinToDataSource(atoms: atomArray, atomIdentifiers: atomIdentifiers, addToScene: true)
-
     }
 
 }
