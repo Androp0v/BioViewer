@@ -10,18 +10,12 @@ import SwiftUI
 import SceneKit
 import UIKit
 import UniformTypeIdentifiers
+
 struct ProteinView: View {
 
     // MARK: - Properties
-    @State var scene: SCNScene
-    @State var sceneDelegate: ProteinViewSceneDelegate
-    @State var dataSource: ProteinViewDataSource
-    private var dropDelegate: ImportDroppedFilesDelegate
-    private var cameraNode: SCNNode
 
-    private var sceneBackgroundColorCancellable: AnyCancellable?
-
-    // MARK: - UI variables/constants
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     // Sidebar
     @State var toggleSidebar = false
@@ -34,54 +28,6 @@ struct ProteinView: View {
     // UI constants
     private enum Constants {
         static let compactSequenceViewWidth: CGFloat = 32
-    }
-
-    // MARK: - Initialization
-
-    init() {
-
-        // Open SceneKit scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        self.scene = scene
-
-        // Setup scene delegate and datasource
-        let sceneDelegate = ProteinViewSceneDelegate()
-        let dataSource = ProteinViewDataSource(sceneDelegate: sceneDelegate)
-        self.sceneDelegate = sceneDelegate
-        self.dataSource = dataSource
-        sceneDelegate.scene = scene
-        sceneDelegate.dataSource = dataSource
-
-        // Setup drop delegate
-        self.dropDelegate = ImportDroppedFilesDelegate(dataSource: dataSource)
-
-        // Setup camera
-        self.cameraNode = SCNNode()
-        self.cameraNode.camera = SCNCamera()
-        self.cameraNode.position = SCNVector3(x: 0, y: 0, z: 300)
-        self.cameraNode.camera?.zFar = 5000
-        scene.rootNode.addChildNode(cameraNode)
-
-        // Create and add a light to the scene
-        let lightNode = SCNNode()
-        lightNode.light = SCNLight()
-        lightNode.light?.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 100, z: 0)
-        scene.rootNode.addChildNode(lightNode)
-
-        // Create and add an ambient light to the scene
-        let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
-        ambientLightNode.light?.type = .ambient
-        ambientLightNode.light?.color = UIColor.darkGray
-        scene.rootNode.addChildNode(ambientLightNode)
-
-        // Set scene background color (listening for changes)
-        sceneBackgroundColorCancellable = sceneDelegate.$sceneBackground.sink { [self] color in
-            // This might reset the scene camera position, unsure why
-            self.scene.background.contents = UIColor(color)
-        }
-
     }
 
     // MARK: - Body
@@ -105,17 +51,11 @@ struct ProteinView: View {
 
                         // Main scene view
                         ProteinSceneView(parent: self,
-                                         scene: $scene,
-                                         sceneDelegate: $sceneDelegate)
-                        .background(sceneDelegate.sceneBackground)
-                        .onDrop(of: [.data], delegate: dropDelegate)
-                        /*.gesture(
-                            TapGesture()
-                                .onEnded( {
-                                    animateSequenceView()
-                                })
-                        )*/
-                        .edgesIgnoringSafeArea([.top, .bottom])
+                                         scene: $proteinViewModel.scene,
+                                         sceneDelegate: $proteinViewModel.sceneDelegate)
+                            .background(proteinViewModel.sceneDelegate.sceneBackground)
+                            .onDrop(of: [.data], delegate: proteinViewModel.dropDelegate)
+                            .edgesIgnoringSafeArea([.top, .bottom])
 
                         // Scene controls
                         VStack (spacing: 12) {
@@ -166,9 +106,7 @@ struct ProteinView: View {
                 }
                 ToolbarItem(placement: .principal) {
                     // Status bar component
-                    Rectangle()
-                        .fill(Color(UIColor.secondarySystemBackground))
-                        .overlay(Text("Idle"))
+                    StatusView()
                         .cornerRadius(8)
                         .frame(minWidth: 0,
                                idealWidth: geometry.size.width * 0.6,
@@ -180,8 +118,7 @@ struct ProteinView: View {
                 }
             }
         }
-        .environmentObject(sceneDelegate)
-        .environmentObject(dataSource)
+        .environmentObject(proteinViewModel)
     }
 
     // MARK: - Public functions

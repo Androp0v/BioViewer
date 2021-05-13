@@ -14,6 +14,8 @@
 		C41A0560264ACBF0006F551C /* InformationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A055F264ACBF0006F551C /* InformationRow.swift */; };
 		C41A0562264C2853006F551C /* ImportFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0561264C2853006F551C /* ImportFiles.swift */; };
 		C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */; };
+		C41A0566264C7B97006F551C /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0565264C7B97006F551C /* StatusView.swift */; };
+		C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
 		C440856026470A0700DC5009 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440855F26470A0700DC5009 /* SequenceView.swift */; };
 		C44085652647155C00DC5009 /* SequenceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085642647155C00DC5009 /* SequenceRow.swift */; };
 		C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085662647ECE500DC5009 /* ProteinSidebar.swift */; };
@@ -61,6 +63,8 @@
 		C41A055F264ACBF0006F551C /* InformationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationRow.swift; sourceTree = "<group>"; };
 		C41A0561264C2853006F551C /* ImportFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportFiles.swift; path = BioViewer/ImportFiles.swift; sourceTree = SOURCE_ROOT; };
 		C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomMaterialProvider.swift; sourceTree = "<group>"; };
+		C41A0565264C7B97006F551C /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
+		C41A0568264D5D58006F551C /* ProteinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewModel.swift; sourceTree = "<group>"; };
 		C440855F26470A0700DC5009 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
 		C44085642647155C00DC5009 /* SequenceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceRow.swift; sourceTree = "<group>"; };
 		C44085662647ECE500DC5009 /* ProteinSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSidebar.swift; sourceTree = "<group>"; };
@@ -126,6 +130,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		C41A0567264D5D47006F551C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C41A0568264D5D58006F551C /* ProteinViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		C44085612647151A00DC5009 /* SequenceViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +158,7 @@
 		C44085632647153200DC5009 /* ProteinViews */ = {
 			isa = PBXGroup;
 			children = (
+				C41A0567264D5D47006F551C /* ViewModels */,
 				C44085682648007100DC5009 /* Segments */,
 				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
 				C45BAC462649A67000B36026 /* ProteinSceneView.swift */,
@@ -168,6 +181,7 @@
 		C440856D26481FD800DC5009 /* UtilityViews */ = {
 			isa = PBXGroup;
 			children = (
+				C41A0565264C7B97006F551C /* StatusView.swift */,
 				C45BAC41264954FF00B36026 /* Rows */,
 				C440856E2648200500DC5009 /* VisualEffectView.swift */,
 			);
@@ -403,8 +417,10 @@
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */,
+				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
 				C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
+				C41A0566264C7B97006F551C /* StatusView.swift in Sources */,
 				C45BAC432649550C00B36026 /* ColorPickerRow.swift in Sources */,
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,

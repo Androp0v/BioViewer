@@ -16,7 +16,8 @@ struct MainView: View {
             // in other modes
             List {
                 NavigationLink(
-                    destination: ProteinView(),
+                    destination: ProteinView()
+                        .environmentObject(ProteinViewModel()),
                     label: {
                         Text("View protein structure")
                 })
@@ -30,7 +31,7 @@ struct MainView: View {
             .navigationBarHidden(false)
             .navigationTitle(Text("Protein View"))
             // Initial view in master-detail mode
-            ProteinView()
+            ProteinView().environmentObject(ProteinViewModel())
         }
     }
 }

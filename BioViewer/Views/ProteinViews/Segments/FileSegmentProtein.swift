@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FileSegmentProtein: View {
 
-    @EnvironmentObject var dataSource: ProteinViewDataSource
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     var body: some View {
             List {
@@ -17,11 +17,11 @@ struct FileSegmentProtein: View {
                 // space under the segmented control.
                 Section(header: Text("Loaded files").padding(.top, 64),
                         content: {
-                    Text("Number of proteins: \(dataSource.proteinCount)")
-                    Text("Number of atoms: \(dataSource.totalAtomCount)")
-                    Button("Remove all", action: {
-                        // TO-DO: Remove all proteins from scene
-                    }).foregroundColor(Color.red)
+                            Text("Number of proteins: \(proteinViewModel.dataSource.proteinCount)")
+                            Text("Number of atoms: \(proteinViewModel.dataSource.totalAtomCount)")
+                            Button("Remove all", action: {
+                                // TO-DO: Remove all proteins from scene
+                            }).foregroundColor(Color.red)
                 })
 
             }
