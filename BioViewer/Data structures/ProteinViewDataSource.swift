@@ -31,14 +31,11 @@ class ProteinViewDataSource: ObservableObject {
             }
         }
     }
-    private var sceneDelegate: ProteinViewSceneDelegate
+
+    public var proteinViewModel: ProteinViewModel?
 
     @Published var proteinCount: Int = 0
     @Published var totalAtomCount: Int = 0
-
-    init(sceneDelegate: ProteinViewSceneDelegate) {
-        self.sceneDelegate = sceneDelegate
-    }
 
     // MARK: - Public functions
 
@@ -47,7 +44,7 @@ class ProteinViewDataSource: ObservableObject {
         var newProtein = Protein(atoms: atoms, atomIdentifiers: atomIdentifiers)
         proteins.append(newProtein)
         if addToScene {
-            sceneDelegate.addProteinToScene(protein: &newProtein)
+            self.proteinViewModel?.sceneDelegate.addProteinToScene(protein: &newProtein)
         }
     }
 

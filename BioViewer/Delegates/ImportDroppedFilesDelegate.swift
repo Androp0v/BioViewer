@@ -16,13 +16,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
     // MARK: - Properties
 
-    private var dataSource: ProteinViewDataSource
-
-    // MARK: - Initialization
-
-    init(dataSource: ProteinViewDataSource) {
-        self.dataSource = dataSource
-    }
+    public var proteinViewModel: ProteinViewModel?
 
     // MARK: - Handle drag & drop events
 
@@ -52,8 +46,9 @@ class ImportDroppedFilesDelegate: DropDelegate {
     // MARK: - Parse files
 
     func parseTextFile(rawText: String) {
+        proteinViewModel?.statusUpdate(statusText: "Importing files")
         let (atomArray, atomIdentifiers) = parsePDB(rawText: rawText)
-        dataSource.addProteinToDataSource(atoms: atomArray, atomIdentifiers: atomIdentifiers, addToScene: true)
+        proteinViewModel?.dataSource.addProteinToDataSource(atoms: atomArray, atomIdentifiers: atomIdentifiers, addToScene: true)
     }
 
 }

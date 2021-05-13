@@ -36,14 +36,13 @@ class ProteinViewModel: ObservableObject {
 
         // Setup scene delegate and datasource
         let sceneDelegate = ProteinViewSceneDelegate()
-        let dataSource = ProteinViewDataSource(sceneDelegate: sceneDelegate)
+        let dataSource = ProteinViewDataSource()
         self.sceneDelegate = sceneDelegate
         self.dataSource = dataSource
         sceneDelegate.scene = scene
-        sceneDelegate.dataSource = dataSource
 
         // Setup drop delegate
-        self.dropDelegate = ImportDroppedFilesDelegate(dataSource: dataSource)
+        self.dropDelegate = ImportDroppedFilesDelegate()
 
         // Setup view status
         self.statusText = "Idle"
@@ -70,11 +69,40 @@ class ProteinViewModel: ObservableObject {
         ambientLightNode.light?.color = UIColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
 
-        // Set scene background color (listening for changes)
+        // Set scene background color (listening for changes). Can't be
+        // done through a @Published variable since we're interfacind
+        // with a UIKit view (SCNView).
         self.sceneBackgroundColorCancellable = sceneDelegate.$sceneBackground.sink { [weak self] color in
             // This might reset the scene camera position, unsure why
             self!.scene.background.contents = UIColor(color)
         }
 
+        // Pass reference to ProteinViewModel to delegates and datasources
+        self.dataSource.proteinViewModel = self
+        self.sceneDelegate.proteinViewModel = self
+        self.dropDelegate.proteinViewModel = self
+    }
+
+    // MARK: - Status handling
+
+    func statusUpdate(statusText: String) {
+        DispatchQueue.main.sync {
+            self.statusText = statusText
+            self.statusRunning = true
+        }
+    }
+
+    func statusProgress(progress: Float) {
+        DispatchQueue.main.sync {
+            self.progress = progress
+        }
+    }
+
+    func statusFinished() {
+        DispatchQueue.main.sync {
+            self.statusText = "Idle"
+            self.statusRunning = false
+            self.progress = nil
+        }
     }
 }

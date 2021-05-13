@@ -14,7 +14,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     // MARK: - Properties
 
     public var scene: SCNScene?
-    public var dataSource: ProteinViewDataSource?
+    public var proteinViewModel: ProteinViewModel?
     
     @Published var sceneBackground: Color = Color.black
 
@@ -92,6 +92,9 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         // Make a flattened clone to reduce the number of draw calls at rendering
         // time and improme fps.
         scene?.rootNode.addChildNode(proteinAxis.flattenedClone())
+
+        // File import finished
+        proteinViewModel?.statusFinished()
 
     }
 
