@@ -15,7 +15,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
 
     public var scene: SCNScene?
     public var proteinViewModel: ProteinViewModel?
-    
+
     @Published var sceneBackground: Color = Color.black
 
     private var maxTargetFrameDuration: Int {
@@ -46,6 +46,8 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     /// will eventually set the ```Protein.state``` to ```true```).
     func addProteinToScene(protein: inout Protein) {
 
+        guard let proteinViewModel = proteinViewModel else { return }
+
         self.atomMaterialProvider = AtomMaterialProvider()
 
         // Protein axis
@@ -57,9 +59,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         while protein.state == .loading {
 
             // Retrieve next atom from the LoadingProtein structure
-            var newAtomPosition: simd_float3?
-            var newAtomId: Int?
-            (newAtomPosition, newAtomId) = protein.getNextAtom()
+            let (newAtomPosition, newAtomId, progress) = protein.getNextAtom()
 
             // Ignore atoms with invalid positions or IDs
             guard let newAtomPosition = newAtomPosition else { return }
@@ -87,6 +87,15 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             let newAtomNode = SCNNode(geometry: atomGeometry)
             newAtomNode.position = SCNVector3(newAtomPosition)
             self.proteinAxis?.addChildNode(newAtomNode)
+
+            guard let progress = progress else { return }
+
+            // Update the UI only if significant changes to the progress have been
+            // made, here we require changes greater than 1%.
+            if progress - (proteinViewModel.progress ?? 0.0) > 0.01 || proteinViewModel.progress == nil {
+                proteinViewModel.statusProgress(progress: progress)
+            }
+
         }
 
         // Make a flattened clone to reduce the number of draw calls at rendering
@@ -94,7 +103,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         scene?.rootNode.addChildNode(proteinAxis.flattenedClone())
 
         // File import finished
-        proteinViewModel?.statusFinished()
+        proteinViewModel.statusFinished()
 
     }
 

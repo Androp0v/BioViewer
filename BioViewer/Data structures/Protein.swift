@@ -51,10 +51,10 @@ struct Protein {
 
     /// Return the atoms in the protein one by one until the protein is loaded
     /// - Returns: Atom position and atom identifier.
-    mutating func getNextAtom() -> (simd_float3?, Int?) {
+    mutating func getNextAtom() -> (simd_float3?, Int?, Float?) {
         guard currentIndex < atomCount else {
             self.state = .failed
-            return (nil, nil)
+            return (nil, nil, nil)
         }
         let nextAtomPosition = self.atoms[self.currentIndex]
         let nextAtomId = self.atomIdentifiers[self.currentIndex]
@@ -62,6 +62,7 @@ struct Protein {
         if currentIndex >= atomCount {
             self.state = .loaded
         }
-        return (nextAtomPosition, nextAtomId)
+        let percentLoaded = Float(currentIndex)/Float(atomCount)
+        return (nextAtomPosition, nextAtomId, percentLoaded)
     }
 }
