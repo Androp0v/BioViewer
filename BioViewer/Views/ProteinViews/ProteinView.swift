@@ -54,7 +54,7 @@ struct ProteinView: View {
                                          scene: $proteinViewModel.scene,
                                          sceneDelegate: $proteinViewModel.sceneDelegate)
                             .background(proteinViewModel.sceneDelegate.sceneBackground)
-                            .onDrop(of: [.data], delegate: proteinViewModel.dropDelegate)
+                            .onDrop(of: [.data, .item], delegate: proteinViewModel.dropDelegate)
                             .edgesIgnoringSafeArea([.top, .bottom])
 
                         // Scene controls
