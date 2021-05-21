@@ -40,11 +40,10 @@ class ProteinViewDataSource: ObservableObject {
     // MARK: - Public functions
 
     /// Add protein to a ```ProteinView``` datasource.
-    public func addProteinToDataSource(atoms: [simd_float3], atomIdentifiers: [Int], addToScene: Bool = false) {
-        var newProtein = Protein(atoms: atoms, atomIdentifiers: atomIdentifiers)
-        proteins.append(newProtein)
+    public func addProteinToDataSource(protein: inout Protein, addToScene: Bool = false) {
+        proteins.append(protein)
         if addToScene {
-            self.proteinViewModel?.sceneDelegate.addProteinToScene(protein: &newProtein)
+            self.proteinViewModel?.sceneDelegate.addProteinToScene(protein: &protein)
         }
     }
 
