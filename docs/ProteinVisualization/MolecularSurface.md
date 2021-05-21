@@ -1,7 +1,5 @@
 ---
-title: ABOUT PAGE
-layout: template
-filename: about.md
+title: Creating the molecular surface
 --- 
 
 # Creating the molecular surface
