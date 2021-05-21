@@ -16,6 +16,7 @@
 		C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */; };
 		C41A0566264C7B97006F551C /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0565264C7B97006F551C /* StatusView.swift */; };
 		C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
+		C41A056C265894AA006F551C /* MoleculeSurface.metal in Sources */ = {isa = PBXBuildFile; fileRef = C41A056B265894AA006F551C /* MoleculeSurface.metal */; };
 		C440856026470A0700DC5009 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440855F26470A0700DC5009 /* SequenceView.swift */; };
 		C44085652647155C00DC5009 /* SequenceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085642647155C00DC5009 /* SequenceRow.swift */; };
 		C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085662647ECE500DC5009 /* ProteinSidebar.swift */; };
@@ -65,6 +66,7 @@
 		C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomMaterialProvider.swift; sourceTree = "<group>"; };
 		C41A0565264C7B97006F551C /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		C41A0568264D5D58006F551C /* ProteinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewModel.swift; sourceTree = "<group>"; };
+		C41A056B265894AA006F551C /* MoleculeSurface.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MoleculeSurface.metal; sourceTree = "<group>"; };
 		C440855F26470A0700DC5009 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
 		C44085642647155C00DC5009 /* SequenceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceRow.swift; sourceTree = "<group>"; };
 		C44085662647ECE500DC5009 /* ProteinSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSidebar.swift; sourceTree = "<group>"; };
@@ -136,6 +138,14 @@
 				C41A0568264D5D58006F551C /* ProteinViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C41A056A2658948B006F551C /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				C41A056B265894AA006F551C /* MoleculeSurface.metal */,
+			);
+			path = Metal;
 			sourceTree = "<group>";
 		};
 		C44085612647151A00DC5009 /* SequenceViews */ = {
@@ -218,6 +228,7 @@
 				C4B1F82126457D1E0035D739 /* Delegates */,
 				C4B1F82026457D020035D739 /* Data structures */,
 				C4187E342642E0CA009E2CBA /* Views */,
+				C41A056A2658948B006F551C /* Metal */,
 				C44FC0752641AF1E00459E01 /* Assets.xcassets */,
 				C483DC772641B82B009036A2 /* art.scnassets */,
 				C44FC07A2641AF1E00459E01 /* Info.plist */,
@@ -415,6 +426,7 @@
 				C41A0562264C2853006F551C /* ImportFiles.swift in Sources */,
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
+				C41A056C265894AA006F551C /* MoleculeSurface.metal in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
