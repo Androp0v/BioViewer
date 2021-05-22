@@ -12,7 +12,7 @@ This spheres would be represented as a collection of points in the computer (we 
 
 ### Step 2
 
-For the molecular surface, we want the compute the surface that contains the points of the molecule that could be touched by a solvent molecule (it's outermost part, not the center). To do this, we need to compute something called the signed Euclidean Distance Transform, or sEDT, for all points inside a grid. That's because the points we want have something in common: they are all at the same distance from the SAS, equal to the radius of the probe, 1.4 Å.
+For the molecular surface, we want the compute the surface that contains the points of the molecule that could be touched by a solvent molecule (its **outermost** part, not the center). To do this, we need to compute something called the signed Euclidean Distance Transform, or sEDT, for all points inside a grid. That's because the points we want have something in common: they are all at the same distance from the SAS, equal to the radius of the probe, 1.4 Å.
 
 So we create a uniform 3D grid in the bounding box around the protein, and compute the signed Euclidean Distance Transformation to the SAS for all points in this 3D grid. That is, the distance between the grid point and the nearest sphere point from the SAS. The grid points at 1.4 Å from the SAS are the points that will make our molecular surface.
 

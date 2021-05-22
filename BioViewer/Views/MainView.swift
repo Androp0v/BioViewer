@@ -9,6 +9,10 @@ import SwiftUI
 
 struct MainView: View {
 
+    init() {
+        MetalScheduler.shared
+    }
+
     var body: some View {
         NavigationView {
 

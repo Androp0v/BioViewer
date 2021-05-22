@@ -35,6 +35,8 @@
 		C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC462649A67000B36026 /* ProteinSceneView.swift */; };
 		C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
+		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
+		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
 		C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */; };
 		C4B1F81F26457CF80035D739 /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
 /* End PBXBuildFile section */
@@ -92,6 +94,8 @@
 		C45BAC462649A67000B36026 /* ProteinSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSceneView.swift; sourceTree = "<group>"; };
 		C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewDataSource.swift; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
+		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
 		C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewSceneDelegate.swift; sourceTree = "<group>"; };
 		C4B1F81E26457CF80035D739 /* Protein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protein.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -143,6 +147,8 @@
 		C41A056A2658948B006F551C /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				C4A69AAE265936A2001C0490 /* MetalScheduler.swift */,
+				C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */,
 				C41A056B265894AA006F551C /* MoleculeSurface.metal */,
 			);
 			path = Metal;
@@ -427,6 +433,7 @@
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C41A056C265894AA006F551C /* MoleculeSurface.metal in Sources */,
+				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
@@ -438,6 +445,7 @@
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
+				C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C41A0560264ACBF0006F551C /* InformationRow.swift in Sources */,
