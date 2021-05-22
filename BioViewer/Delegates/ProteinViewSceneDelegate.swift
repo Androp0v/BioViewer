@@ -107,6 +107,38 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
 
     }
 
+    /// Add cloud of points to current scene from a ```UnsafeMutablePointer``` array
+    /// of ```simd_float3```.
+    func addPointCloud(points: UnsafeMutablePointer<simd_float3>, pointCount: Int) {
+        var vertices = [SCNVector3]()
+        var indexList = [CInt]()
+        for i in 0..<pointCount {
+            vertices.append( SCNVector3(points[i]) )
+            indexList.append(CInt(indexList.count))
+        }
+
+        let vertexSource = SCNGeometrySource(vertices: vertices)
+
+        let indexData  = Data(bytes: indexList, count: MemoryLayout<CInt>.size * indexList.count)
+        let indexElement = SCNGeometryElement(
+            data: indexData,
+            primitiveType: SCNGeometryPrimitiveType.point,
+            primitiveCount: pointCount,
+            bytesPerIndex: MemoryLayout<CInt>.size
+        )
+
+        indexElement.pointSize = 5
+        indexElement.minimumPointScreenSpaceRadius = 5
+        indexElement.maximumPointScreenSpaceRadius = 5
+
+        let cloud = SCNGeometry(sources: [vertexSource], elements: [indexElement])
+        cloud.firstMaterial?.isLitPerPixel = true
+
+        let newNode = SCNNode(geometry: cloud)
+        scene?.rootNode.addChildNode(newNode)
+
+    }
+
     // MARK: - Render loop
 
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {

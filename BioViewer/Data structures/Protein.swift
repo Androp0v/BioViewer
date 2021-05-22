@@ -10,7 +10,7 @@ import simd
 
 /// Struct holding the contents of a protein that has not yet been completely loadad
 /// into SceneKit.
-struct Protein {
+public struct Protein {
 
     // MARK: - State
 
@@ -37,9 +37,9 @@ struct Protein {
     public var atomCount: Int
 
     // Atomic positions (in Armstrongs)
-    private var atoms: [simd_float3]
+    public var atoms: ContiguousArray<simd_float3>
     // Atom identifiers (C,H,F,O,N...) mapped to int values
-    private var atomIdentifiers: [Int]
+    public var atomIdentifiers: [Int]
     // Index of the last atom added to the scene (for .loading
     // proteins).
     private var currentIndex: Int
@@ -49,7 +49,7 @@ struct Protein {
 
     init(atoms: [simd_float3], atomIdentifiers: [Int], sequence: [String]? = nil) {
         self.state = .loading
-        self.atoms = atoms
+        self.atoms = ContiguousArray<simd_float3>(atoms)
         self.atomIdentifiers = atomIdentifiers
         self.atomCount = atoms.count
         self.currentIndex = 0

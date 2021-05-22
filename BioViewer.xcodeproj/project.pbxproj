@@ -37,6 +37,7 @@
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
+		C4A69AB426598783001C0490 /* MolecularSurfaceSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB326598783001C0490 /* MolecularSurfaceSchedule.swift */; };
 		C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */; };
 		C4B1F81F26457CF80035D739 /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
 /* End PBXBuildFile section */
@@ -96,6 +97,7 @@
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
+		C4A69AB326598783001C0490 /* MolecularSurfaceSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MolecularSurfaceSchedule.swift; sourceTree = "<group>"; };
 		C4B1F81C2644B0210035D739 /* ProteinViewSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewSceneDelegate.swift; sourceTree = "<group>"; };
 		C4B1F81E26457CF80035D739 /* Protein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protein.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,8 +150,8 @@
 			isa = PBXGroup;
 			children = (
 				C4A69AAE265936A2001C0490 /* MetalScheduler.swift */,
+				C4A69AB226598768001C0490 /* MolecularSurface */,
 				C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */,
-				C41A056B265894AA006F551C /* MoleculeSurface.metal */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -276,6 +278,15 @@
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
 			);
 			path = Rows;
+			sourceTree = "<group>";
+		};
+		C4A69AB226598768001C0490 /* MolecularSurface */ = {
+			isa = PBXGroup;
+			children = (
+				C4A69AB326598783001C0490 /* MolecularSurfaceSchedule.swift */,
+				C41A056B265894AA006F551C /* MoleculeSurface.metal */,
+			);
+			path = MolecularSurface;
 			sourceTree = "<group>";
 		};
 		C4B1F82026457D020035D739 /* Data structures */ = {
@@ -455,6 +466,7 @@
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
+				C4A69AB426598783001C0490 /* MolecularSurfaceSchedule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

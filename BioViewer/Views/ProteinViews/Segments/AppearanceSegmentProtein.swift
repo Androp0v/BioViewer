@@ -17,6 +17,11 @@ struct AppearanceSegmentProtein: View {
                 // space under the segmented control.
                 Section(header: Text("General").padding(.top, 64)) {
                     ColorPickerRow(selectedColor: $proteinViewModel.sceneDelegate.sceneBackground)
+                    Button("Draw molecular surface", action: {
+                        let metalScheduler = MetalScheduler.shared
+                        metalScheduler.createSASPoints(protein: proteinViewModel.dataSource.proteins.first!,
+                                                       sceneDelegate: proteinViewModel.sceneDelegate)
+                    })
                 }
 
                 Section(header: Text("Proteins")) {
@@ -30,5 +35,6 @@ struct AppearanceSegmentProtein: View {
 struct AppearanceSegmentProtein_Previews: PreviewProvider {
     static var previews: some View {
         AppearanceSegmentProtein()
+            .environmentObject(ProteinViewModel())
     }
 }
