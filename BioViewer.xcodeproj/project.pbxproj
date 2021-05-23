@@ -36,8 +36,9 @@
 		C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
 		C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C357265A56CC00E66C3E /* SettingsView.swift */; };
 		C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C359265A57E900E66C3E /* BuyCoffeeView.swift */; };
-		C464C35C265A5A1D00E66C3E /* CoffeeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35B265A5A1D00E66C3E /* CoffeeRow.swift */; };
+		C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */; };
 		C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35D265A883C00E66C3E /* PickerRow.swift */; };
+		C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35F265B0CA900E66C3E /* CoffeeRow.swift */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
@@ -100,8 +101,9 @@
 		C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewDataSource.swift; sourceTree = "<group>"; };
 		C464C357265A56CC00E66C3E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C464C359265A57E900E66C3E /* BuyCoffeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyCoffeeView.swift; sourceTree = "<group>"; };
-		C464C35B265A5A1D00E66C3E /* CoffeeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeRow.swift; sourceTree = "<group>"; };
+		C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeTipRow.swift; sourceTree = "<group>"; };
 		C464C35D265A883C00E66C3E /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
+		C464C35F265B0CA900E66C3E /* CoffeeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeRow.swift; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
@@ -295,7 +297,8 @@
 			isa = PBXGroup;
 			children = (
 				C464C359265A57E900E66C3E /* BuyCoffeeView.swift */,
-				C464C35B265A5A1D00E66C3E /* CoffeeRow.swift */,
+				C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */,
+				C464C35F265B0CA900E66C3E /* CoffeeRow.swift */,
 			);
 			path = CoffeeViews;
 			sourceTree = "<group>";
@@ -484,9 +487,10 @@
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C41A0560264ACBF0006F551C /* InformationRow.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
-				C464C35C265A5A1D00E66C3E /* CoffeeRow.swift in Sources */,
+				C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */,
 				C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */,
 				C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */,
+				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,

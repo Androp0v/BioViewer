@@ -1,34 +1,57 @@
 //
-//  TipRowView.swift
+//  CoffeeRow.swift
 //  BioViewer
 //
-//  Created by Raúl Montón Pinillos on 23/5/21.
+//  Created by Raúl Montón Pinillos on 24/5/21.
 //
 
 import SwiftUI
 
 struct CoffeeRow: View {
-
-    @State var text: String
-    @State var price: String
-
     var body: some View {
         HStack {
-            Text(text)
             Spacer()
-            Button(price, action: {
-                // TO-DO: Handle in-app purchase
-            })
-            .foregroundColor(.blue)
-            // PlainButtonStyle() makes the list row not selectable,
-            // as we want.
-            .buttonStyle(PlainButtonStyle())
+            VStack {
+                Image("PlaceholderCoffee")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100, alignment: .center)
+                Text("Bought on 12/07/2021")
+                    .frame(width: 100, height: 32)
+                    .font(.caption)
+                    .foregroundColor(Color(UIColor.secondaryLabel))
+            }
+            Spacer()
+            VStack {
+                Image("PlaceholderCoffee")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100, alignment: .center)
+                Text("Bought on 12/07/2021")
+                    .frame(width: 100, height: 32)
+                    .font(.caption)
+                    .foregroundColor(Color(UIColor.secondaryLabel))
+            }
+            Spacer()
+            VStack {
+                Image("PlaceholderCoffee")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100, alignment: .center)
+                Text("Bought on 12/07/2021")
+                    .frame(width: 100, height: 32)
+                    .font(.caption)
+                    .foregroundColor(Color(UIColor.secondaryLabel))
+            }
+            Spacer()
         }
+        .padding(8)
     }
 }
 
-struct TipRowView_Previews: PreviewProvider {
+struct CoffeeRow_Previews: PreviewProvider {
     static var previews: some View {
-        CoffeeRow(text: "Small tip", price: "$0.99")
+        CoffeeRow()
+            .previewLayout(.sizeThatFits)
     }
 }

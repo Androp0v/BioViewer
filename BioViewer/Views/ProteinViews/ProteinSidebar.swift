@@ -64,7 +64,7 @@ struct ProteinSidebar: View {
             NavigationView {
                 ProteinSidebarContent()
                     .background(Color(UIColor.secondarySystemBackground))
-                    .navigationBarTitle("Options")
+                    .navigationBarTitle("Inspector")
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarItems(leading: Button("Close") {
                         toggleModalSidebar.toggle()

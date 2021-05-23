@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BuyCoffeeView: View {
 
+    // Used to present the view as a sheet
     @Binding var showingCoffeeView: Bool
 
     var body: some View {
@@ -18,19 +19,22 @@ struct BuyCoffeeView: View {
                     .padding()
                     .background(Color(UIColor.secondarySystemBackground))
                 List {
-                    Section(header: Text("Coffe options:")
-                                .padding(.horizontal),
-                            footer: Text("Thank you!")
-                                .padding(.horizontal),
-                            content:{
-                                CoffeeRow(text: "Tasty coffee pod",
+                    Section(header: Text("Coffe options:"),
+                            footer: Text("Thank you!"),
+                            content: {
+                                CoffeeTipRow(text: "Tasty coffee pod",
                                            price: "$0.99")
-                                CoffeeRow(text: "Nice caffeteria coffee",
+                                CoffeeTipRow(text: "Nice bar coffee",
                                            price: "$1.99")
-                                CoffeeRow(text: "Caramel Macchiato, Grande",
+                                CoffeeTipRow(text: "Caramel Macchiato",
                                            price: "$4.99")
-                                CoffeeRow(text: "Probably too expensive to be a coffee",
+                                CoffeeTipRow(text: "Caramel Macchiato + biscuits",
                                            price: "$9.99")
+                            })
+                    Section(header: Text("Purchased coffees:"),
+                            content: {
+                                CoffeeRow()
+                                    .listRowInsets(EdgeInsets())
                             })
                 }
                 .listStyle(InsetGroupedListStyle())
