@@ -53,12 +53,11 @@ struct AppearanceSegmentProtein: View {
                                    selectedColor: .constant(Color.red))
                     ColorPickerRow(title: "S atom color",
                                    selectedColor: .constant(Color.orange))
+                    ColorPickerRow(title: "Unknown atom color",
+                                   selectedColor: .constant(Color.gray))
                 })
             }
 
-            Section(header: Text("Proteins")) {
-                Text("Representation")
-            }
         }
         .listStyle(GroupedListStyle())
     }
