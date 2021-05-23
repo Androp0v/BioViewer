@@ -34,6 +34,9 @@
 		C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC4426497A3300B36026 /* ProteinCameraControlView.swift */; };
 		C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC462649A67000B36026 /* ProteinSceneView.swift */; };
 		C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
+		C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C357265A56CC00E66C3E /* SettingsView.swift */; };
+		C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C359265A57E900E66C3E /* BuyCoffeeView.swift */; };
+		C464C35C265A5A1D00E66C3E /* CoffeeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35B265A5A1D00E66C3E /* CoffeeRow.swift */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
@@ -94,6 +97,9 @@
 		C45BAC4426497A3300B36026 /* ProteinCameraControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinCameraControlView.swift; sourceTree = "<group>"; };
 		C45BAC462649A67000B36026 /* ProteinSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSceneView.swift; sourceTree = "<group>"; };
 		C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewDataSource.swift; sourceTree = "<group>"; };
+		C464C357265A56CC00E66C3E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C464C359265A57E900E66C3E /* BuyCoffeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyCoffeeView.swift; sourceTree = "<group>"; };
+		C464C35B265A5A1D00E66C3E /* CoffeeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeRow.swift; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
@@ -131,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				C4187E322642E0C2009E2CBA /* MainView.swift */,
+				C464C357265A56CC00E66C3E /* SettingsView.swift */,
 				C44085632647153200DC5009 /* ProteinViews */,
 				C44085612647151A00DC5009 /* SequenceViews */,
 				C440856D26481FD800DC5009 /* UtilityViews */,
@@ -202,6 +209,7 @@
 				C41A0565264C7B97006F551C /* StatusView.swift */,
 				C45BAC41264954FF00B36026 /* Rows */,
 				C440856E2648200500DC5009 /* VisualEffectView.swift */,
+				C464C356265A569800E66C3E /* CoffeeViews */,
 			);
 			path = UtilityViews;
 			sourceTree = "<group>";
@@ -278,6 +286,15 @@
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
 			);
 			path = Rows;
+			sourceTree = "<group>";
+		};
+		C464C356265A569800E66C3E /* CoffeeViews */ = {
+			isa = PBXGroup;
+			children = (
+				C464C359265A57E900E66C3E /* BuyCoffeeView.swift */,
+				C464C35B265A5A1D00E66C3E /* CoffeeRow.swift */,
+			);
+			path = CoffeeViews;
 			sourceTree = "<group>";
 		};
 		C4A69AB226598768001C0490 /* MolecularSurface */ = {
@@ -444,6 +461,7 @@
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C41A056C265894AA006F551C /* MoleculeSurface.metal in Sources */,
+				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */,
@@ -457,10 +475,12 @@
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */,
+				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C41A0560264ACBF0006F551C /* InformationRow.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
+				C464C35C265A5A1D00E66C3E /* CoffeeRow.swift in Sources */,
 				C4B1F81D2644B0210035D739 /* ProteinViewSceneDelegate.swift in Sources */,
 				C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,

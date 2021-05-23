@@ -30,6 +30,11 @@ struct MainView: View {
                     label: {
                         Text("View sequence")
                 })
+                NavigationLink(
+                    destination: SettingsView(),
+                    label: {
+                        Text("Settings")
+                })
             }
             .listStyle( SidebarListStyle() )
             .navigationBarHidden(false)
