@@ -19,7 +19,8 @@ struct AppearanceSegmentProtein: View {
                     ColorPickerRow(selectedColor: $proteinViewModel.sceneDelegate.sceneBackground)
                     Button("Draw molecular surface", action: {
                         let metalScheduler = MetalScheduler.shared
-                        metalScheduler.createSASPoints(protein: proteinViewModel.dataSource.proteins.first!,
+                        guard let protein = proteinViewModel.dataSource.proteins.first else { return }
+                        metalScheduler.createSASPoints(protein: protein,
                                                        sceneDelegate: proteinViewModel.sceneDelegate)
                     })
                 }

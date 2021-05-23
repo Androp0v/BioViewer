@@ -68,8 +68,16 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             // We need to generate the sphere for each atom because they don't
             // all have the same size
             let atomGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: newAtomId)))
-            // Low segmentCount to improve performance
-            atomGeometry.segmentCount = 14
+
+            // TO-DO: Make this dependant on RAM size
+            if protein.atomCount > 20000 {
+                // Low segmentCount to improve performance, avoid IOAF Error 11
+                // because too many geometries in scene.
+                atomGeometry.segmentCount = 8
+            } else {
+                atomGeometry.segmentCount = 14
+            }
+            
             // Set the atom material to the common atom material
             switch newAtomId {
             case AtomType.CARBON:
