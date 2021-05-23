@@ -51,9 +51,16 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         self.atomMaterialProvider = AtomMaterialProvider()
 
         // Protein axis
-        let proteinAxis = SCNNode()
+        var proteinAxis = SCNNode()
         proteinAxis.position = SCNVector3(0,0,0)
         self.proteinAxis = proteinAxis
+
+        // TO-DO: Create one single node per atom type
+        /*
+        let carbonGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: AtomType.CARBON)))
+        carbonGeometry.segmentCount = 8
+        let carbonNode = SCNNode(geometry: carbonGeometry)
+        */
 
         // Import protein to scene
         while protein.state == .loading {
@@ -93,6 +100,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
             }
             // Add the new atom SCNNode to the scene
             let newAtomNode = SCNNode(geometry: atomGeometry)
+            // TO-DO: let newAtomNode = carbonNode.clone()
             newAtomNode.position = SCNVector3(newAtomPosition)
             self.proteinAxis?.addChildNode(newAtomNode)
 
@@ -108,7 +116,8 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
 
         // Make a flattened clone to reduce the number of draw calls at rendering
         // time and improme fps.
-        scene?.rootNode.addChildNode(proteinAxis.flattenedClone())
+        proteinAxis = proteinAxis.flattenedClone()
+        scene?.rootNode.addChildNode(proteinAxis)
 
         // File import finished
         proteinViewModel.statusFinished()

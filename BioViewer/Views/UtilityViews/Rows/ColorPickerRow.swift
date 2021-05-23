@@ -9,11 +9,12 @@ import SwiftUI
 
 struct ColorPickerRow: View {
 
+    @State var title: String
     @Binding var selectedColor: Color
 
     var body: some View {
         HStack {
-            ColorPicker("Background color:",
+            ColorPicker(title,
                         selection: $selectedColor,
                         supportsOpacity: false)
         }
@@ -22,6 +23,6 @@ struct ColorPickerRow: View {
 
 struct ColorPickerRow_Previews: PreviewProvider {
     static var previews: some View {
-        ColorPickerRow(selectedColor: .constant(Color.black))
+        ColorPickerRow(title: "Selected color", selectedColor: .constant(Color.black))
     }
 }

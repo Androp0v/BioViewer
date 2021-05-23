@@ -16,7 +16,7 @@ private struct SidebarItem: View {
     }
 }
 
-struct ProteinSidebar: View {
+private struct ProteinSidebarContent: View {
 
     @State private var selectedSegment = 0
     @EnvironmentObject var sceneDelegate: ProteinViewSceneDelegate
@@ -53,8 +53,34 @@ struct ProteinSidebar: View {
     }
 }
 
+struct ProteinSidebar: View {
+
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @Binding var toggleModalSidebar: Bool
+
+    var body: some View {
+        if horizontalSizeClass == .compact {
+            NavigationView {
+                ProteinSidebarContent()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .navigationBarTitle("Options")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarItems(leading: Button("Close") {
+                        toggleModalSidebar.toggle()
+                    })
+                    .environmentObject(proteinViewModel)
+            }
+        } else {
+            ProteinSidebarContent()
+        }
+    }
+}
+
 struct ProteinSidebar_Previews: PreviewProvider {
     static var previews: some View {
-        ProteinSidebar()
+        ProteinSidebar(toggleModalSidebar: .constant(true))
+            .previewLayout(.sizeThatFits)
+            .environmentObject(ProteinViewModel())
     }
 }

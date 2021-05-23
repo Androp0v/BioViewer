@@ -72,7 +72,7 @@ struct ProteinView: View {
 
                     // Sidebar
                     if toggleSidebar {
-                        ProteinSidebar()
+                        ProteinSidebar(toggleModalSidebar: $toggleModalSidebar)
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
                     }
@@ -92,7 +92,7 @@ struct ProteinView: View {
                             Image(systemName: "gearshape")
                         }
                         .sheet(isPresented: $toggleModalSidebar, content: {
-                            ProteinSidebar()
+                            ProteinSidebar(toggleModalSidebar: $toggleModalSidebar)
                         })
                     } else {
                         Button(action: {
