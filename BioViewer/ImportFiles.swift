@@ -161,6 +161,7 @@ func parsePDB(rawText: String) -> Protein {
         }
     })
 
+    // Add element array contents into the contiguous array
     let totalCount = atomArrayComposition.totalCount
     atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
 
@@ -171,6 +172,8 @@ func parsePDB(rawText: String) -> Protein {
     atomArray.append(contentsOf: sulfurArray)
     atomArray.append(contentsOf: othersArray)
 
+    // Add atom identifiers codes in the right order (so atomArray[i] corresponds
+    // has an atomIdentifiers[i] identifier.
     atomIdentifiers.append(contentsOf: Array(repeating: AtomType.CARBON, count: atomArrayComposition.carbonCount))
     atomIdentifiers.append(contentsOf: Array(repeating: AtomType.NITROGEN, count: atomArrayComposition.nitrogenCount))
     atomIdentifiers.append(contentsOf: Array(repeating: AtomType.HYDROGEN, count: atomArrayComposition.hydrogenCount))

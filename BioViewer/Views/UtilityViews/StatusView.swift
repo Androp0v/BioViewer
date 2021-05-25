@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+public struct StatusViewConstants {
+    #if targetEnvironment(macCatalyst)
+    static let height: CGFloat = 24
+    static let cornerRadius: CGFloat = 6
+    #else
+    static let height: CGFloat = 32
+    static let cornerRadius: CGFloat = 8
+    #endif
+}
+
 struct StatusView: View {
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
@@ -21,15 +31,16 @@ struct StatusView: View {
                 Text("\(proteinViewModel.statusText)")
             }
             .padding(.horizontal, 8)
-            if proteinViewModel.statusRunning && proteinViewModel.progress != nil {
-                VStack {
+            if proteinViewModel.statusRunning {
+                VStack(spacing: 0) {
                     Spacer()
                     ProgressView(value: proteinViewModel.progress, total: 1.0)
                         .progressViewStyle(LinearProgressViewStyle())
                 }
             }
         }
-        .cornerRadius(8)
+        .frame(height: StatusViewConstants.height)
+        .cornerRadius(StatusViewConstants.cornerRadius)
     }
 
 }
@@ -38,5 +49,6 @@ struct StatusView_Previews: PreviewProvider {
     static var previews: some View {
         StatusView()
             .frame(width: 300, height: 32)
+            .environmentObject(ProteinViewModel())
     }
 }

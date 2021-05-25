@@ -9,7 +9,7 @@ import Foundation
 import simd
 
 /// Struct holding the contents of a protein.
-public struct Protein {
+public class Protein {
 
     // MARK: - State
 
@@ -71,7 +71,7 @@ public struct Protein {
 
     /// Return the atoms in the protein one by one until the protein is loaded
     /// - Returns: Atom position and atom identifier.
-    mutating func getNextAtom() -> (simd_float3?, Int?, Float?) {
+    func getNextAtom() -> (simd_float3?, Int?, Float?) {
         guard currentIndex < atomCount else {
             self.state = .failed
             return (nil, nil, nil)

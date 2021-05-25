@@ -26,7 +26,6 @@ struct FileSegmentProtein: View {
                             .foregroundColor(.red)
                             .disabled(proteinViewModel.proteinCount == 0)
                 })
-
             }
             .listStyle(GroupedListStyle())
     }

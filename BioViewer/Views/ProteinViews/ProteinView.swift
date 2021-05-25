@@ -112,13 +112,12 @@ struct ProteinView: View {
                 ToolbarItem(placement: .principal) {
                     // Status bar component
                     StatusView()
-                        .cornerRadius(8)
                         .frame(minWidth: 0,
                                idealWidth: geometry.size.width * 0.6,
                                maxWidth: geometry.size.width * 0.6,
-                               minHeight: 32,
-                               idealHeight: 32,
-                               maxHeight: 32,
+                               minHeight: StatusViewConstants.height,
+                               idealHeight: StatusViewConstants.height,
+                               maxHeight: StatusViewConstants.height,
                                alignment: .center)
                 }
             }
