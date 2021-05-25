@@ -118,7 +118,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         // Make a flattened clone to reduce the number of draw calls at rendering
         // time and improme fps.
         proteinAxis = proteinAxis.flattenedClone()
-        scene?.rootNode.addChildNode(proteinAxis)
+        proteinViewModel.proteinRootNode.addChildNode(proteinAxis)
 
         // File import finished
         proteinViewModel.statusFinished()

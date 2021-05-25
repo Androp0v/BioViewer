@@ -18,7 +18,7 @@ class ProteinViewDataSource: ObservableObject {
         didSet {
             // Publishers need to be updated in the main queue
             DispatchQueue.main.async {
-                self.proteinCount = self.proteins.count
+                self.proteinViewModel?.proteinCount = self.proteins.count
             }
             // Sum all atom counts from all proteins in the datasource
             var newTotalAtomCount = 0
@@ -27,15 +27,12 @@ class ProteinViewDataSource: ObservableObject {
             }
             // Publishers need to be updated in the main queue
             DispatchQueue.main.async {
-                self.totalAtomCount = newTotalAtomCount
+                self.proteinViewModel?.totalAtomCount = newTotalAtomCount
             }
         }
     }
 
     public var proteinViewModel: ProteinViewModel?
-
-    @Published var proteinCount: Int = 0
-    @Published var totalAtomCount: Int = 0
 
     // MARK: - Public functions
 
@@ -52,6 +49,10 @@ class ProteinViewDataSource: ObservableObject {
     /// ```ProteinView```, even if they are not currently being displayed.
     public func getNumberOfProteins() -> Int {
         return proteins.count
+    }
+
+    public func removeAllProteinsFromDatasource() {
+        proteins = []
     }
 
 }

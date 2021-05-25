@@ -57,7 +57,7 @@ struct ProteinView: View {
                             .edgesIgnoringSafeArea([.top, .bottom])
 
                         // Import view
-                        if proteinViewModel.dataSource.proteinCount == 0 {
+                        if proteinViewModel.proteinCount == 0 {
                             ProteinImportView()
                         }
 

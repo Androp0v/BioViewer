@@ -18,6 +18,7 @@ class ProteinViewModel: ObservableObject {
     var sceneBackgroundColorCancellable: AnyCancellable?
     var cameraNode: SCNNode
     var lightNode: SCNNode
+    var proteinRootNode: SCNNode
 
     @Published var dataSource: ProteinViewDataSource
 
@@ -27,6 +28,9 @@ class ProteinViewModel: ObservableObject {
     @Published var statusText: String
     @Published var statusRunning: Bool
     @Published var progress: Float?
+
+    @Published var proteinCount: Int = 0
+    @Published var totalAtomCount: Int = 0
 
     // MARK: - Initialization
 
@@ -74,6 +78,11 @@ class ProteinViewModel: ObservableObject {
         ambientLightNode.light?.color = UIColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
 
+        // Create protein node to attach proteins
+        self.proteinRootNode = SCNNode()
+        self.proteinRootNode.position = SCNVector3(x: 0, y: 0, z: 0)
+        scene.rootNode.addChildNode(proteinRootNode)
+
         // Set scene background color (listening for changes). Can't be
         // done through a @Published variable since we're interfacind
         // with a UIKit view (SCNView).
@@ -86,6 +95,17 @@ class ProteinViewModel: ObservableObject {
         self.dataSource.proteinViewModel = self
         self.sceneDelegate.proteinViewModel = self
         self.dropDelegate.proteinViewModel = self
+    }
+
+    // MARK: - Public functions
+
+    func removeAllProteins() {
+        // TO-DO: Handle proteins added to the datasource but not yet to
+        // the scene.
+        self.proteinRootNode.enumerateChildNodes( { node, _  in
+            node.removeFromParentNode()
+        })
+        self.dataSource.removeAllProteinsFromDatasource()
     }
 
     // MARK: - Status handling

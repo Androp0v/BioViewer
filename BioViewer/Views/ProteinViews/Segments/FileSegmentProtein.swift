@@ -17,11 +17,14 @@ struct FileSegmentProtein: View {
                 // space under the segmented control.
                 Section(header: Text("Loaded files").padding(.top, 64),
                         content: {
-                            Text("Number of proteins: \(proteinViewModel.dataSource.proteinCount)")
-                            Text("Number of atoms: \(proteinViewModel.dataSource.totalAtomCount)")
+                            Text("Number of proteins: \(proteinViewModel.proteinCount)")
+                            Text("Number of atoms: \(proteinViewModel.totalAtomCount)")
                             Button("Remove all", action: {
-                                // TO-DO: Remove all proteins from scene
-                            }).foregroundColor(Color.red)
+                                proteinViewModel.removeAllProteins()
+                            })
+                            .buttonStyle(PlainButtonStyle())
+                            .foregroundColor(.red)
+                            .disabled(proteinViewModel.proteinCount == 0)
                 })
 
             }
@@ -32,5 +35,6 @@ struct FileSegmentProtein: View {
 struct FileSegmentProtein_Previews: PreviewProvider {
     static var previews: some View {
         FileSegmentProtein()
+            .environmentObject(ProteinViewModel())
     }
 }
