@@ -108,6 +108,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
 
             // Update the UI only if significant changes to the progress have been
             // made, here we require changes greater than 1%.
+            // TO-DO use CADisplayLink
             if progress - (proteinViewModel.progress ?? 0.0) > 0.01 || proteinViewModel.progress == nil {
                 proteinViewModel.statusProgress(progress: progress)
             }

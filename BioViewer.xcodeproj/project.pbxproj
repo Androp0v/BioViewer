@@ -40,6 +40,7 @@
 		C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35D265A883C00E66C3E /* PickerRow.swift */; };
 		C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35F265B0CA900E66C3E /* CoffeeRow.swift */; };
 		C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C361265D311200E66C3E /* ProteinImportView.swift */; };
+		C464C365265D555100E66C3E /* 2OGM.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C464C364265D555100E66C3E /* 2OGM.pdb */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
@@ -106,6 +107,7 @@
 		C464C35D265A883C00E66C3E /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		C464C35F265B0CA900E66C3E /* CoffeeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeRow.swift; sourceTree = "<group>"; };
 		C464C361265D311200E66C3E /* ProteinImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportView.swift; sourceTree = "<group>"; };
+		C464C364265D555100E66C3E /* 2OGM.pdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2OGM.pdb; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				C4187E342642E0CA009E2CBA /* Views */,
 				C41A056A2658948B006F551C /* Metal */,
 				C44FC0752641AF1E00459E01 /* Assets.xcassets */,
+				C464C364265D555100E66C3E /* 2OGM.pdb */,
 				C483DC772641B82B009036A2 /* art.scnassets */,
 				C44FC07A2641AF1E00459E01 /* Info.plist */,
 				C44FC0772641AF1E00459E01 /* Preview Content */,
@@ -447,6 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C44FC0792641AF1E00459E01 /* Preview Assets.xcassets in Resources */,
+				C464C365265D555100E66C3E /* 2OGM.pdb in Resources */,
 				C483DC782641B82B009036A2 /* art.scnassets in Resources */,
 				C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */,
 			);
