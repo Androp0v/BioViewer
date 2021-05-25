@@ -40,8 +40,19 @@ fileprivate enum PDBConstants {
 
 func parsePDB(rawText: String) -> Protein {
 
-    var atomArray = [simd_float3]()
+    var atomArray = ContiguousArray<simd_float3>()
     var atomIdentifiers = [Int]()
+
+    // Make one atom array per common element
+    var carbonArray = [simd_float3]()
+    var nitrongenArray = [simd_float3]()
+    var hydrogenArray = [simd_float3]()
+    var oxygenArray = [simd_float3]()
+    var sulfurArray = [simd_float3]()
+    var othersArray = [simd_float3]()
+    var othersIDs = [Int]()
+
+    var atomArrayComposition = AtomArrayComposition()
 
     var sequenceArray = [String]()
     var sequenceIdentifiers = [Int]()
@@ -87,7 +98,19 @@ func parsePDB(rawText: String) -> Protein {
 
             }
 
+            // Retrieve atom element
+
+            let startElement = line.index(line.startIndex, offsetBy: PDBConstants.elementStart)
+            let endElement = line.index(line.startIndex, offsetBy: PDBConstants.elementEnd)
+            let rangeElement = startElement..<endElement
+
+            let elementString = line[rangeElement].replacingOccurrences(of: " ", with: "")
+
+            // Normalize atom element, might be of "UNKNOWN" type
+            let element = getAtomId(atomName: String(elementString))
+
             // Get atom coordinates
+
             let startX = line.index(line.startIndex, offsetBy: PDBConstants.xPositionStart)
             let endX = line.index(line.startIndex, offsetBy: PDBConstants.xPositionEnd)
             let rangeX = startX..<endX
@@ -111,25 +134,52 @@ func parsePDB(rawText: String) -> Protein {
                 return
             }
 
-            // Save atom position to array
+            // Save atom position to array based on element
 
-            atomArray.append(simd_float3(x,y,z))
+            switch element {
+            case AtomType.CARBON:
+                atomArrayComposition.carbonCount += 1
+                carbonArray.append(simd_float3(x,y,z))
+            case AtomType.NITROGEN:
+                atomArrayComposition.nitrogenCount += 1
+                nitrongenArray.append(simd_float3(x,y,z))
+            case AtomType.HYDROGEN:
+                atomArrayComposition.hydrogenCount += 1
+                hydrogenArray.append(simd_float3(x,y,z))
+            case AtomType.OXYGEN:
+                atomArrayComposition.oxygenCount += 1
+                oxygenArray.append(simd_float3(x,y,z))
+            case AtomType.SULFUR:
+                atomArrayComposition.sulfurCount += 1
+                sulfurArray.append(simd_float3(x,y,z))
+            default:
+                atomArrayComposition.othersCount += 1
+                othersArray.append(simd_float3(x,y,z))
+                othersIDs.append(element)
+            }
 
-            // Retrieve atom element next
-
-            let startElement = line.index(line.startIndex, offsetBy: PDBConstants.elementStart)
-            let endElement = line.index(line.startIndex, offsetBy: PDBConstants.elementEnd)
-            let rangeElement = startElement..<endElement
-
-            let element = line[rangeElement].replacingOccurrences(of: " ", with: "")
-
-            // Save atom element to array, might be of "UNKNOWN" type
-
-            atomIdentifiers.append( getAtomId(atomName: String(element)) )
         }
     })
 
-    return Protein(atoms: atomArray,
+    let totalCount = atomArrayComposition.totalCount
+    atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
+
+    atomArray.append(contentsOf: carbonArray)
+    atomArray.append(contentsOf: nitrongenArray)
+    atomArray.append(contentsOf: hydrogenArray)
+    atomArray.append(contentsOf: oxygenArray)
+    atomArray.append(contentsOf: sulfurArray)
+    atomArray.append(contentsOf: othersArray)
+
+    atomIdentifiers.append(contentsOf: Array(repeating: AtomType.CARBON, count: atomArrayComposition.carbonCount))
+    atomIdentifiers.append(contentsOf: Array(repeating: AtomType.NITROGEN, count: atomArrayComposition.nitrogenCount))
+    atomIdentifiers.append(contentsOf: Array(repeating: AtomType.HYDROGEN, count: atomArrayComposition.hydrogenCount))
+    atomIdentifiers.append(contentsOf: Array(repeating: AtomType.OXYGEN, count: atomArrayComposition.oxygenCount))
+    atomIdentifiers.append(contentsOf: Array(repeating: AtomType.SULFUR, count: atomArrayComposition.sulfurCount))
+    atomIdentifiers.append(contentsOf: othersIDs)
+
+    return Protein(atoms: &atomArray,
+                   atomArrayComposition: &atomArrayComposition,
                    atomIdentifiers: atomIdentifiers,
                    sequence: sequenceArray)
 }

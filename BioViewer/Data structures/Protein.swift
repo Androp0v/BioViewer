@@ -8,8 +8,7 @@
 import Foundation
 import simd
 
-/// Struct holding the contents of a protein that has not yet been completely loadad
-/// into SceneKit.
+/// Struct holding the contents of a protein.
 public struct Protein {
 
     // MARK: - State
@@ -28,18 +27,28 @@ public struct Protein {
     // Total number of residues in the protein sequence
     public var resCount: Int?
 
-    // Sequence
+    // Sequence (i.e. ["ALA", "GLC", "TRY"])
     private var sequence: [String]?
+
 
     // MARK: - Atoms
 
-    // Total number of atoms in the protein
+    // Number of atoms in the protein
     public var atomCount: Int
 
-    // Atomic positions (in Armstrongs)
+    // Atomic positions (in Armstrongs). ContiguousArray is faster
+    // than array since we don't need to add new atoms after its
+    // creation. Also has easier conversion to MTLBuffer.
+    //
+    // Stored in C,N,H,O,S,X order (X for others).
     public var atoms: ContiguousArray<simd_float3>
-    // Atom identifiers (C,H,F,O,N...) mapped to int values
+
+    // Number of atoms of each element
+    public var atomArrayComposition: AtomArrayComposition
+
+    // Atom identifiers (C,N,H,O,S...) mapped to int values
     public var atomIdentifiers: [Int]
+
     // Index of the last atom added to the scene (for .loading
     // proteins).
     private var currentIndex: Int
@@ -47,9 +56,10 @@ public struct Protein {
 
     // MARK: - Initialization
 
-    init(atoms: [simd_float3], atomIdentifiers: [Int], sequence: [String]? = nil) {
+    init(atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [Int], sequence: [String]? = nil) {
         self.state = .loading
-        self.atoms = ContiguousArray<simd_float3>(atoms)
+        self.atoms = atoms
+        self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers
         self.atomCount = atoms.count
         self.currentIndex = 0
