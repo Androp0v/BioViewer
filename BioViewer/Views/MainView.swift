@@ -38,7 +38,7 @@ struct MainView: View {
             }
             .listStyle( SidebarListStyle() )
             .navigationBarHidden(false)
-            .navigationTitle(Text("Protein View"))
+            .navigationTitle(Text("BioViewer"))
             // Initial view in master-detail mode
             ProteinView().environmentObject(ProteinViewModel())
         }

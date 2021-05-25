@@ -39,6 +39,7 @@
 		C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */; };
 		C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35D265A883C00E66C3E /* PickerRow.swift */; };
 		C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35F265B0CA900E66C3E /* CoffeeRow.swift */; };
+		C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C361265D311200E66C3E /* ProteinImportView.swift */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
@@ -104,6 +105,7 @@
 		C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeTipRow.swift; sourceTree = "<group>"; };
 		C464C35D265A883C00E66C3E /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		C464C35F265B0CA900E66C3E /* CoffeeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeRow.swift; sourceTree = "<group>"; };
+		C464C361265D311200E66C3E /* ProteinImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportView.swift; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 			children = (
 				C41A0567264D5D47006F551C /* ViewModels */,
 				C44085682648007100DC5009 /* Segments */,
+				C464C363265D361300E66C3E /* ImportProteins */,
 				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
 				C45BAC462649A67000B36026 /* ProteinSceneView.swift */,
 				C44085662647ECE500DC5009 /* ProteinSidebar.swift */,
@@ -301,6 +304,14 @@
 				C464C35F265B0CA900E66C3E /* CoffeeRow.swift */,
 			);
 			path = CoffeeViews;
+			sourceTree = "<group>";
+		};
+		C464C363265D361300E66C3E /* ImportProteins */ = {
+			isa = PBXGroup;
+			children = (
+				C464C361265D311200E66C3E /* ProteinImportView.swift */,
+			);
+			path = ImportProteins;
 			sourceTree = "<group>";
 		};
 		C4A69AB226598768001C0490 /* MolecularSurface */ = {
@@ -479,6 +490,7 @@
 				C45BAC432649550C00B36026 /* ColorPickerRow.swift in Sources */,
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
+				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */,

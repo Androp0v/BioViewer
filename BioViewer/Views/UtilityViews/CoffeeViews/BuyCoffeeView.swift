@@ -15,7 +15,7 @@ struct BuyCoffeeView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                Text("Hello there! You can buy me a coffee if you want to, to contribute supporting BioViewer.")
+                Text("Hello there! You can buy me a coffee if you want to and contribute supporting BioViewer.")
                     .padding()
                     .background(Color(UIColor.secondarySystemBackground))
                 List {

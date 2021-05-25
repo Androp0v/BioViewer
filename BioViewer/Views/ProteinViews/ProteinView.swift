@@ -54,8 +54,12 @@ struct ProteinView: View {
                                          scene: $proteinViewModel.scene,
                                          sceneDelegate: $proteinViewModel.sceneDelegate)
                             .background(proteinViewModel.sceneDelegate.sceneBackground)
-                            .onDrop(of: [.data, .item], delegate: proteinViewModel.dropDelegate)
                             .edgesIgnoringSafeArea([.top, .bottom])
+
+                        // Import view
+                        if proteinViewModel.dataSource.proteinCount == 0 {
+                            ProteinImportView()
+                        }
 
                         // Scene controls
                         VStack (spacing: 12) {
@@ -69,6 +73,7 @@ struct ProteinView: View {
                         }
                         .padding(.bottom, 12)
                     }
+                    .onDrop(of: [.data, .item], delegate: proteinViewModel.dropDelegate)
 
                     // Sidebar
                     if toggleSidebar {
@@ -170,5 +175,6 @@ struct ProteinView_Previews: PreviewProvider {
     static var previews: some View {
         ProteinView()
             .previewDevice("iPhone SE (2nd generation)")
+            .environmentObject(ProteinViewModel())
     }
 }
