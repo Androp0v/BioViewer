@@ -11,7 +11,7 @@ fileprivate struct ImportRowView: View {
 
     @State var title: String
     @State var imageName: String
-    var action: Int
+    var action: ProteinImportView.ImportAction
     var parent: ProteinImportView
 
     var body: some View {
@@ -34,54 +34,80 @@ fileprivate struct ImportRowView: View {
 struct ProteinImportView: View {
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @State var willLoadProtein: Bool = false
+
+    public enum ImportAction {
+        case importFile
+        case downloadFromRCSB
+        case downloadFromURL
+        case sampleProtein
+    }
 
     var body: some View {
         VStack(spacing: 32) {
             ImportRowView(title: "Import files",
                           imageName: "square.and.arrow.down",
-                          action: 0,
+                          action: ImportAction.importFile,
                           parent: self)
             ImportRowView(title: "Download from RCSB",
                           imageName: "arrow.down.doc",
-                          action: 1,
+                          action: ImportAction.downloadFromRCSB,
                           parent: self)
             ImportRowView(title: "Download from URL",
                           imageName: "link",
-                          action: 2,
+                          action: ImportAction.downloadFromURL,
                           parent: self)
             ImportRowView(title: "Sample protein",
                           imageName: "puzzlepiece",
-                          action: 3,
+                          action: ImportAction.sampleProtein,
                           parent: self)
         }
         .frame(alignment: .leading)
     }
 
-    public func launchImportAction(action: Int) {
+    public func launchImportAction(action: ImportAction) {
+
+        // Avoid user tapping a load action twice before the first one is loaded
+        guard willLoadProtein == false else { return }
+
         switch action {
-        case 0:
+        case .importFile:
             // Import from file
             fatalError()
-        case 1:
+        case .downloadFromRCSB:
             // Download from RCSB
+            // TO-DO
             fatalError()
-        case 2:
+        case .downloadFromURL:
             // Download from URL
+            // TO-DO
             fatalError()
-        case 3:
+        case .sampleProtein:
             // Import sample protein
+            // Disable import actions while processing this action
+            willLoadProtein = true
+            // Dispatch on background queue, file loading can be slow
             DispatchQueue.global(qos: .utility).async {
-                guard let proteinSampleFile = Bundle.main.url(forResource: "2OGM", withExtension: "pdb") else { return }
-                guard let proteinData = try? Data(contentsOf: proteinSampleFile) else { return }
+                guard let proteinSampleFile = Bundle.main.url(forResource: "2OGM", withExtension: "pdb") else {
+                    failedToLoad()
+                    return
+                }
+                guard let proteinData = try? Data(contentsOf: proteinSampleFile) else {
+                    failedToLoad()
+                    return
+                }
                 proteinViewModel.statusUpdate(statusText: "Importing files")
                 var protein = parsePDB(rawText: String(decoding: proteinData, as: UTF8.self))
                 proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
             }
-        default:
-            // TO-DO
-            fatalError()
         }
+    }
 
+    private func failedToLoad() {
+        // Update state on the main queue
+        DispatchQueue.main.sync {
+            self.willLoadProtein = false
+        }
     }
 }
 
