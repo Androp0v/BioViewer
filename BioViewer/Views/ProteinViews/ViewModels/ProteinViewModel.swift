@@ -17,6 +17,7 @@ class ProteinViewModel: ObservableObject {
     @Published var sceneDelegate: ProteinViewSceneDelegate
     var sceneBackgroundColorCancellable: AnyCancellable?
     var cameraNode: SCNNode
+    var lightNode: SCNNode
 
     @Published var dataSource: ProteinViewDataSource
 
@@ -48,19 +49,23 @@ class ProteinViewModel: ObservableObject {
         self.statusText = "Idle"
         self.statusRunning = false
 
-        // Setup camera
+        // Setup camera node
         self.cameraNode = SCNNode()
-        self.cameraNode.camera = SCNCamera()
         self.cameraNode.position = SCNVector3(x: 0, y: 0, z: 300)
-        self.cameraNode.camera?.zFar = 5000
         scene.rootNode.addChildNode(cameraNode)
 
+        // Setup initial camera camera (will be hijacked by SceneKit
+        // because the option allowsCameraControl is set to true,
+        // generating a new camera in this position).
+        self.cameraNode.camera = SCNCamera()
+        self.cameraNode.camera?.zFar = 5000
+
         // Create and add a light to the scene
-        let lightNode = SCNNode()
-        lightNode.light = SCNLight()
-        lightNode.light?.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 300, z: 0)
-        scene.rootNode.addChildNode(lightNode)
+        self.lightNode = SCNNode()
+        self.lightNode.light = SCNLight()
+        self.lightNode.light?.type = .omni
+        self.lightNode.position = SCNVector3(x: 0, y: 300, z: 0)
+        self.cameraNode.addChildNode(self.lightNode)
 
         // Create and add an ambient light to the scene
         let ambientLightNode = SCNNode()

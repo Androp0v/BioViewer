@@ -27,6 +27,7 @@ struct ProteinSceneView: UIViewRepresentable {
         sceneView.scene = scene
         sceneView.delegate = self.sceneDelegate
         sceneView.allowsCameraControl = true
+        sceneView.pointOfView = parent.proteinViewModel.cameraNode
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator,
                                                    action: #selector(Coordinator.sceneViewTapRecognizer(gestureReconizer:)))
         sceneView.addGestureRecognizer(tapRecognizer)
@@ -41,9 +42,19 @@ struct ProteinSceneView: UIViewRepresentable {
 
     class Coordinator: NSObject {
         var control: ProteinSceneView
+        var povObserver: NSKeyValueObservation?
 
         init(_ control: ProteinSceneView) {
             self.control = control
+            let cameraController = control.sceneView.defaultCameraController
+            povObserver = cameraController.observe(\.pointOfView, options: [.new]) {  (cameraController, change) in
+                if let newPov = cameraController.pointOfView {
+                    // Whenever SceneKit creates a new pointOfView node and attaches
+                    // the camera to it, recover the camera light and attach it as well.
+                    control.parent.proteinViewModel.lightNode.removeFromParentNode()
+                    newPov.addChildNode(control.parent.proteinViewModel.lightNode)
+                }
+            }
         }
 
         func renderer(_ renderer: SCNSceneRenderer,
