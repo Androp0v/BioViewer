@@ -7,15 +7,23 @@
 
 import Foundation
 
-struct AtomType {
+enum AtomTypeEnum: CaseIterable {
+    case carbon
+    case nitrogen
+    case hydrogen
+    case oxygen
+    case sulfur
+    case others
+}
 
+struct AtomType {
     static let CARBON = 0
     static let NITROGEN = 1
     static let OXYGEN = 2
     static let SULFUR = 3
     static let HYDROGEN = 4
 
-    static let UNKNOWN = Int.max
+    static let UNKNOWN = -1
 }
 
 func getAtomId(atomName: String) -> Int {

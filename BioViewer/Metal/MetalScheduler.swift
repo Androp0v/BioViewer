@@ -58,54 +58,68 @@ class MetalScheduler {
     public func createSASPoints(protein: Protein, sceneDelegate: ProteinViewSceneDelegate) {
 
         metalDispatchQueue.sync {
-            // Check if the function needs to be compiled
-            if createSASPointsBundle.requiresCompilation(newFunctionParameters: nil) {
-                createSASPointsBundle.compile(functionName: "createSASPoints",
-                                              library: self.library,
-                                              device: self.device)
-            }
-
-            guard let pipelineState = createSASPointsBundle.pipelineState else {
-                return
-            }
-
-            // Make Metal command buffer
-            guard let buffer = queue?.makeCommandBuffer() else { return }
-
-            // Create threads and threadgroup sizes
-            let threadsPerArray = MTLSizeMake(protein.atomCount, 1, 1)
-            let groupsize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-
-            // Set Metal compute encoder and pipeline state
-            guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return }
-            computeEncoder.setComputePipelineState(pipelineState)
 
             // Populate buffers
             let atomPositionsBuffer = device.makeBuffer(
                 bytes: Array(protein.atoms),
                 length: protein.atomCount * MemoryLayout<simd_float3>.stride
             )
-
-            var atomRadius = [Float32]()
-            protein.atomIdentifiers.forEach { atomId in
-                atomRadius.append(getAtomicRadius(atomType: atomId))
-            }
-            let atomRadiusBuffer = device.makeBuffer(
-                bytes: atomRadius,
-                length: protein.atomCount * MemoryLayout<Float32>.stride
-            )
-
             let generatedSpherePositions = device.makeBuffer(
                 length: protein.atomCount * 12 * MemoryLayout<simd_float3>.stride
             )
 
-            // Set buffer contents
-            computeEncoder.setBuffer(atomPositionsBuffer, offset: 0, index: 0)
-            computeEncoder.setBuffer(atomRadiusBuffer, offset: 0, index: 1)
-            computeEncoder.setBuffer(generatedSpherePositions, offset: 0, index: 2)
+            // Make Metal command buffer
+            guard let buffer = queue?.makeCommandBuffer() else { return }
 
-            // Dispatch threads
-            computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupsize)
+            // Set Metal compute encoder and pipeline state
+            guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return }
+
+            // Iterate over each atom type
+            for atomSection in AtomSectionSequence(protein: protein) {
+                
+                // Set the apropiate radius and probe radius as function constants
+                var atomRadius = getAtomicRadius(atomType: atomSection.atomIdentifier)
+                var probeRadius: Float = 1.4
+
+                guard atomSection.length != 0 else { continue }
+
+                // Create the new MTLFunctionConstantValues parameters
+                let newFunctionParameters = MTLFunctionConstantValues()
+                newFunctionParameters.setConstantValue(&atomRadius, type: .float, index: 0)
+                newFunctionParameters.setConstantValue(&probeRadius, type: .float, index: 1)
+
+                // Check if the function needs to be compiled
+                if createSASPointsBundle.requiresCompilation(newFunctionParameters: newFunctionParameters) {
+                    createSASPointsBundle.compile(functionName: "createSASPoints",
+                                                  library: self.library,
+                                                  device: self.device,
+                                                  constantValues: newFunctionParameters)
+                }
+
+                guard let pipelineState = createSASPointsBundle.getPipelineState(functionParameters: newFunctionParameters) else {
+                    return
+                }
+
+                // Create threads and threadgroup sizes
+                let threadsPerArray = MTLSizeMake(atomSection.length, 1, 1)
+                let groupsize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
+
+                // Set compute pipeline state for current arguments
+                computeEncoder.setComputePipelineState(pipelineState)
+
+                // Set buffer contents
+                computeEncoder.setBuffer(atomPositionsBuffer,
+                                         offset: MemoryLayout<simd_float3>.stride * atomSection.startsAt,
+                                         index: 0)
+                /* computeEncoder.setBuffer(atomRadiusBuffer, offset: 0, index: 1) */
+                computeEncoder.setBuffer(generatedSpherePositions,
+                                         offset: MemoryLayout<simd_float3>.stride * 12 * atomSection.startsAt,
+                                         index: 1)
+
+                // Dispatch threads
+                computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupsize)
+
+            }
 
             // REQUIRED: End the compute encoder encoding and commit the buffer contents
             computeEncoder.endEncoding()
@@ -165,6 +179,7 @@ class MetalScheduler {
         // Dispatch the precompilation block on a .background thread, to use the efficiency
         // cores if possible.
         DispatchQueue(label: "Metal precompiler", qos: .background).async {
+            // TO-DO: Handle MTLFunctionConstants
             self.backgroundAtomicCompile(functionName: "createSASPoints",
                                          target: &self.createSASPointsBundle)
             self.backgroundAtomicCompile(functionName: "removeSASPointsInsideSolid",
