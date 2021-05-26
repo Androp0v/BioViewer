@@ -49,7 +49,7 @@ class AtomMaterialProvider {
         self.carbonMaterial.diffuse.contents = UIColor(red: 0, green: 1, blue: 0, alpha: 1.0)
         self.nitrogenMaterial.diffuse.contents = UIColor(red: 0, green: 0, blue: 1, alpha: 1.0)
         self.oxygenMaterial.diffuse.contents = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
-        self.oxygenMaterial.diffuse.contents = UIColor(red: 1, green: 0.368, blue: 0.074, alpha: 1.0)
+        self.sulfurMaterial.diffuse.contents = UIColor(red: 1, green: 0.368, blue: 0.074, alpha: 1.0)
         self.defaultMaterial.diffuse.contents = UIColor.gray
     }
 

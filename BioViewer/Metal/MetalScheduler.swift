@@ -61,6 +61,7 @@ class MetalScheduler {
 
             // Variables
             var probeRadius: Float = 1.4
+            let spherePoints: Int = 12
 
             // Populate buffers
             let atomPositionsBuffer = device.makeBuffer(
@@ -68,7 +69,7 @@ class MetalScheduler {
                 length: protein.atomCount * MemoryLayout<simd_float3>.stride
             )
             let generatedSpherePositions = device.makeBuffer(
-                length: protein.atomCount * 12 * MemoryLayout<simd_float3>.stride
+                length: protein.atomCount * spherePoints * MemoryLayout<simd_float3>.stride
             )
 
             // Make Metal command buffer
@@ -114,7 +115,7 @@ class MetalScheduler {
                                          offset: MemoryLayout<simd_float3>.stride * atomSection.startsAt,
                                          index: 0)
                 computeEncoder.setBuffer(generatedSpherePositions,
-                                         offset: MemoryLayout<simd_float3>.stride * 12 * atomSection.startsAt,
+                                         offset: MemoryLayout<simd_float3>.stride * spherePoints * atomSection.startsAt,
                                          index: 1)
 
                 // Dispatch threads
@@ -167,7 +168,7 @@ class MetalScheduler {
 
             // Create bitmask buffer
             let bitmaskBuffer = device.makeBuffer(
-                length: protein.atomCount * 12 * MemoryLayout<CBool>.stride
+                length: protein.atomCount * spherePoints * MemoryLayout<CBool>.stride
             )
 
             // Set buffer contents
@@ -185,7 +186,7 @@ class MetalScheduler {
                                      index: 3)
 
             // Create threads and threadgroup sizes
-            let threadsPerArray = MTLSizeMake(protein.atomCount * 12, 1, 1)
+            let threadsPerArray = MTLSizeMake(protein.atomCount * spherePoints, 1, 1)
             let groupsize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
 
             // Set compute pipeline state for current arguments
@@ -208,7 +209,7 @@ class MetalScheduler {
             guard let bitmask = bitmaskBuffer?.contents().assumingMemoryBound(to: CBool.self) else { return }
 
             sceneDelegate.addPointCloud(points: pointsSAS,
-                                        pointCount: protein.atomCount * 12,
+                                        pointCount: protein.atomCount * spherePoints,
                                         bitmask: bitmask)
         }
     }

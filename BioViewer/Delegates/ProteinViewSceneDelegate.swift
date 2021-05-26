@@ -129,8 +129,8 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     /// of ```simd_float3```.
     func addPointCloud(points: UnsafeMutablePointer<simd_float3>, pointCount: Int, bitmask: UnsafeMutablePointer<CBool>) {
         var vertices = [SCNVector3]()
-        var indexList = [CInt]()
-        var currentIndex: CInt = 0
+        var indexList = [Int32]()
+        var currentIndex: Int32 = 0
         for i in 0..<pointCount {
             if bitmask[i] == true {
                 vertices.append( SCNVector3(points[i]) )
@@ -141,12 +141,12 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
 
         let vertexSource = SCNGeometrySource(vertices: vertices)
 
-        let indexData  = Data(bytes: indexList, count: MemoryLayout<CInt>.size * indexList.count)
+        let indexData  = Data(bytes: indexList, count: MemoryLayout<Int32>.stride * indexList.count)
         let indexElement = SCNGeometryElement(
             data: indexData,
             primitiveType: SCNGeometryPrimitiveType.point,
             primitiveCount: Int(currentIndex),
-            bytesPerIndex: MemoryLayout<CInt>.size
+            bytesPerIndex: MemoryLayout<Int32>.size
         )
 
         indexElement.pointSize = 5

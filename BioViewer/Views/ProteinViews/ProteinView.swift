@@ -30,6 +30,8 @@ struct ProteinView: View {
         static let compactSequenceViewWidth: CGFloat = 32
     }
 
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
     // MARK: - Body
 
     // Main view
@@ -89,8 +91,7 @@ struct ProteinView: View {
             .toolbar {
                 // Button to open right panel
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    if UIDevice.current.userInterfaceIdiom == .phone
-                        || geometry.size.width < 600 {
+                    if horizontalSizeClass == .compact {
                         Button(action: {
                             toggleModalSidebar.toggle()
                         }) {

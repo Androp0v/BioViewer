@@ -68,7 +68,7 @@ class ProteinViewModel: ObservableObject {
         self.lightNode = SCNNode()
         self.lightNode.light = SCNLight()
         self.lightNode.light?.type = .omni
-        self.lightNode.position = SCNVector3(x: 0, y: 300, z: 0)
+        self.lightNode.position = SCNVector3(x: 300, y: 300, z: 0)
         self.cameraNode.addChildNode(self.lightNode)
 
         // Create and add an ambient light to the scene
