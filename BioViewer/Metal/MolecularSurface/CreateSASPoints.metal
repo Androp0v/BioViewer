@@ -27,8 +27,6 @@ kernel void createSASPoints(const device simd_float3 *atomPoints [[buffer(0)]],
 
     // Retrieve the radius and position of the atom
     const simd_float3 position = atomPoints[i];
-    //const float radius = atomRadii[i];
-    //const float probeRadius = 1.4;
     const int index = i * 12;
 
     // Assign unitary icosahedron points (generated in scripts/UnitaryIcosahedron.py)

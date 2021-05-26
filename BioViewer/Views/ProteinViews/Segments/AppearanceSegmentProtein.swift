@@ -34,8 +34,10 @@ struct AppearanceSegmentProtein: View {
                 Button("Draw molecular surface", action: {
                     let metalScheduler = MetalScheduler.shared
                     guard let protein = proteinViewModel.dataSource.proteins.first else { return }
-                    metalScheduler.createSASPoints(protein: protein,
-                                                   sceneDelegate: proteinViewModel.sceneDelegate)
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        metalScheduler.createSASPoints(protein: protein,
+                                                       sceneDelegate: proteinViewModel.sceneDelegate)
+                    }
                 })
 
             }

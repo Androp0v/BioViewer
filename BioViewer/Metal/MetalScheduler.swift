@@ -185,6 +185,10 @@ class MetalScheduler {
                                      offset: 0,
                                      index: 3)
 
+            // Kernel arguments
+            var atomCount: Int32 = Int32(protein.atomCount)
+            computeEncoder.setBytes(&atomCount, length: MemoryLayout<Int32>.stride, index: 4)
+
             // Create threads and threadgroup sizes
             let threadsPerArray = MTLSizeMake(protein.atomCount * spherePoints, 1, 1)
             let groupsize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
