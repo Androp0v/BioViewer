@@ -59,6 +59,9 @@ class MetalScheduler {
 
         metalDispatchQueue.sync {
 
+            // Variables
+            var probeRadius: Float = 1.4
+
             // Populate buffers
             let atomPositionsBuffer = device.makeBuffer(
                 bytes: Array(protein.atoms),
@@ -71,7 +74,7 @@ class MetalScheduler {
             // Make Metal command buffer
             guard let buffer = queue?.makeCommandBuffer() else { return }
 
-            // Set Metal compute encoder and pipeline state
+            // Set Metal compute encoder
             guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return }
 
             // Iterate over each atom type
@@ -79,7 +82,6 @@ class MetalScheduler {
                 
                 // Set the apropiate radius and probe radius as function constants
                 var atomRadius = getAtomicRadius(atomType: atomSection.atomIdentifier)
-                var probeRadius: Float = 1.4
 
                 guard atomSection.length != 0 else { continue }
 
@@ -111,7 +113,6 @@ class MetalScheduler {
                 computeEncoder.setBuffer(atomPositionsBuffer,
                                          offset: MemoryLayout<simd_float3>.stride * atomSection.startsAt,
                                          index: 0)
-                /* computeEncoder.setBuffer(atomRadiusBuffer, offset: 0, index: 1) */
                 computeEncoder.setBuffer(generatedSpherePositions,
                                          offset: MemoryLayout<simd_float3>.stride * 12 * atomSection.startsAt,
                                          index: 1)
@@ -121,8 +122,82 @@ class MetalScheduler {
 
             }
 
-            // REQUIRED: End the compute encoder encoding and commit the buffer contents
+            // REQUIRED: End the compute encoder encoding
             computeEncoder.endEncoding()
+
+            // Commit the buffer contents
+            buffer.commit()
+
+            // Wait until the computation is finished!
+            buffer.waitUntilCompleted()
+
+            // Remove generated points that are inside other spheres
+
+            // Make Metal command buffer
+            guard let buffer = queue?.makeCommandBuffer() else { return }
+
+            // Set Metal compute encoder
+            guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return }
+
+            // Create the new MTLFunctionConstantValues parameters
+            let newFunctionParameters = MTLFunctionConstantValues()
+            newFunctionParameters.setConstantValue(&probeRadius, type: .float, index: 0)
+
+            // Check if the function needs to be compiled
+            if removeSASPointsInsideSolidBundle.requiresCompilation(newFunctionParameters: newFunctionParameters) {
+                removeSASPointsInsideSolidBundle.compile(functionName: "removeSASPointsInsideSolid",
+                                                         library: self.library,
+                                                         device: self.device,
+                                                         constantValues: newFunctionParameters)
+            }
+
+            guard let pipelineState = removeSASPointsInsideSolidBundle.getPipelineState(functionParameters: newFunctionParameters) else {
+                return
+            }
+
+            // Create atomRadius buffer
+            var atomRadius = [Float32]()
+            protein.atomIdentifiers.forEach { atomId in
+                atomRadius.append(getAtomicRadius(atomType: atomId))
+            }
+            let atomRadiusBuffer = device.makeBuffer(
+                bytes: atomRadius,
+                length: protein.atomCount * MemoryLayout<Float32>.stride
+            )
+
+            // Create bitmask buffer
+            let bitmaskBuffer = device.makeBuffer(
+                length: protein.atomCount * 12 * MemoryLayout<CBool>.stride
+            )
+
+            // Set buffer contents
+            computeEncoder.setBuffer(atomPositionsBuffer,
+                                     offset: 0,
+                                     index: 0)
+            computeEncoder.setBuffer(atomRadiusBuffer,
+                                     offset: 0,
+                                     index: 1)
+            computeEncoder.setBuffer(generatedSpherePositions,
+                                     offset: 0,
+                                     index: 2)
+            computeEncoder.setBuffer(bitmaskBuffer,
+                                     offset: 0,
+                                     index: 3)
+
+            // Create threads and threadgroup sizes
+            let threadsPerArray = MTLSizeMake(protein.atomCount * 12, 1, 1)
+            let groupsize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
+
+            // Set compute pipeline state for current arguments
+            computeEncoder.setComputePipelineState(pipelineState)
+
+            // Dispatch threads
+            computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupsize)
+
+            // REQUIRED: End the compute encoder encoding
+            computeEncoder.endEncoding()
+
+            // Commit the buffer contents
             buffer.commit()
 
             // Wait until the computation is finished!
@@ -130,7 +205,11 @@ class MetalScheduler {
 
             // Add point cloud to scene
             guard let pointsSAS = generatedSpherePositions?.contents().assumingMemoryBound(to: simd_float3.self) else { return }
-            sceneDelegate.addPointCloud(points: pointsSAS, pointCount: protein.atomCount * 12)
+            guard let bitmask = bitmaskBuffer?.contents().assumingMemoryBound(to: CBool.self) else { return }
+
+            sceneDelegate.addPointCloud(points: pointsSAS,
+                                        pointCount: protein.atomCount * 12,
+                                        bitmask: bitmask)
         }
     }
 

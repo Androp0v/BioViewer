@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C4057407265E93E9008527D1 /* RemovePoints.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057406265E93E9008527D1 /* RemovePoints.metal */; };
 		C4187E332642E0C2009E2CBA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E322642E0C2009E2CBA /* MainView.swift */; };
 		C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
 		C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C4057406265E93E9008527D1 /* RemovePoints.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RemovePoints.metal; sourceTree = "<group>"; };
 		C4187E322642E0C2009E2CBA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFilesDelegate.swift; path = BioViewer/Delegates/ImportDroppedFilesDelegate.swift; sourceTree = SOURCE_ROOT; };
 		C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMath.swift; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A056B265894AA006F551C /* MoleculeSurface.metal */,
+				C4057406265E93E9008527D1 /* RemovePoints.metal */,
 			);
 			path = MolecularSurface;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
 				C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
+				C4057407265E93E9008527D1 /* RemovePoints.metal in Sources */,
 				C41A0566264C7B97006F551C /* StatusView.swift in Sources */,
 				C45BAC432649550C00B36026 /* ColorPickerRow.swift in Sources */,
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
