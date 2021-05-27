@@ -10,12 +10,12 @@ import SwiftUI
 struct AppearanceSegmentProtein: View {
 
     private enum ProteinVisualizationOption: Int {
-        case solidSpheres = 0
-        case surfaceAccessible = 1
+        case none = 0
+        case solidSpheres = 1
     }
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @State var selectedProteinVisualization: Int = ProteinVisualizationOption.solidSpheres.rawValue
+    @State private var selectedProteinVisualization: Int = ProteinVisualizationOption.solidSpheres.rawValue
 
     var body: some View {
         List {
@@ -28,17 +28,18 @@ struct AppearanceSegmentProtein: View {
 
                 PickerRow(optionName: "View protein as",
                           selectedVisualization: $selectedProteinVisualization,
-                          pickerOptions: ["Solid spheres",
-                                          "Solvent-accessible surface"])
+                          pickerOptions: ["None",
+                                          "Space-filling spheres"])
+                    .onChange(of: selectedProteinVisualization, perform: { value in
+                        // TO-DO: This is only working as a binary switch, not a picker.
+                        if value == ProteinVisualizationOption.none.rawValue {
+                            proteinViewModel.sceneDelegate.showProtein = false
+                        } else {
+                            proteinViewModel.sceneDelegate.showProtein = true
+                        }
+                    })
 
-                Button("Draw molecular surface", action: {
-                    let metalScheduler = MetalScheduler.shared
-                    guard let protein = proteinViewModel.dataSource.proteins.first else { return }
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        metalScheduler.createSASPoints(protein: protein,
-                                                       sceneDelegate: proteinViewModel.sceneDelegate)
-                    }
-                })
+                SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.sceneDelegate.showSurface)
 
             }
 

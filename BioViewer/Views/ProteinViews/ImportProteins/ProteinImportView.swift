@@ -9,8 +9,8 @@ import SwiftUI
 
 fileprivate struct ImportRowView: View {
 
-    @State var title: String
-    @State var imageName: String
+    var title: String
+    var imageName: String
     var action: ProteinImportView.ImportAction
     var parent: ProteinImportView
 

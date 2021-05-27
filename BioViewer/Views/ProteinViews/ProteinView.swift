@@ -18,12 +18,12 @@ struct ProteinView: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     // Sidebar
-    @State var toggleSidebar = false
-    @State var toggleModalSidebar = false
+    @State private var toggleSidebar = false
+    @State private var toggleModalSidebar = false
 
     // Sequence view
-    @State var toggleSequenceView = false
-    @State var sequenceViewMaxWidth: CGFloat = .infinity
+    @State private var toggleSequenceView = false
+    @State private var sequenceViewMaxWidth: CGFloat = .infinity
 
     // UI constants
     private enum Constants {

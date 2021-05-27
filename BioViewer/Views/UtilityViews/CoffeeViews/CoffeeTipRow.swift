@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CoffeeTipRow: View {
 
-    @State var text: String
-    @State var price: String
+    var text: String
+    var price: String
 
     var body: some View {
         HStack {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C4057407265E93E9008527D1 /* RemovePoints.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057406265E93E9008527D1 /* RemovePoints.metal */; };
 		C4057409265ED6CD008527D1 /* ComputeEDT.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057408265ED6CD008527D1 /* ComputeEDT.metal */; };
+		C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405740A265FF69A008527D1 /* SwitchRow.swift */; };
 		C4187E332642E0C2009E2CBA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E322642E0C2009E2CBA /* MainView.swift */; };
 		C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
 		C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
@@ -72,6 +73,7 @@
 /* Begin PBXFileReference section */
 		C4057406265E93E9008527D1 /* RemovePoints.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RemovePoints.metal; sourceTree = "<group>"; };
 		C4057408265ED6CD008527D1 /* ComputeEDT.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeEDT.metal; sourceTree = "<group>"; };
+		C405740A265FF69A008527D1 /* SwitchRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRow.swift; sourceTree = "<group>"; };
 		C4187E322642E0C2009E2CBA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFilesDelegate.swift; path = BioViewer/Delegates/ImportDroppedFilesDelegate.swift; sourceTree = SOURCE_ROOT; };
 		C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMath.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 			children = (
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
 				C41A055F264ACBF0006F551C /* InformationRow.swift */,
+				C405740A265FF69A008527D1 /* SwitchRow.swift */,
 				C464C35D265A883C00E66C3E /* PickerRow.swift */,
 			);
 			path = Rows;
@@ -490,6 +493,7 @@
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
 				C41A0562264C2853006F551C /* ImportFiles.swift in Sources */,
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
+				C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C455362A265D869D006D980B /* AtomArrayComposition.swift in Sources */,
 				C41A056C265894AA006F551C /* CreateSASPoints.metal in Sources */,

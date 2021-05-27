@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PickerRow: View {
 
-    @State var optionName: String
+    var optionName: String
     @Binding var selectedVisualization: Int
     @State var pickerOptions: [String]
 

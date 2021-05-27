@@ -17,6 +17,8 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
     public var proteinViewModel: ProteinViewModel?
 
     @Published var sceneBackground: Color = Color.black
+    @Published var showProtein: Bool = true
+    @Published var showSurface: Bool = false
 
     private var maxTargetFrameDuration: Int {
         // Get desired maximum time per frame in nanoseconds
@@ -54,13 +56,6 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         var proteinAxis = SCNNode()
         proteinAxis.position = SCNVector3(0,0,0)
         self.proteinAxis = proteinAxis
-
-        // TO-DO: Create one single node per atom type
-        /*
-        let carbonGeometry = SCNSphere(radius: CGFloat(getAtomicRadius(atomType: AtomType.CARBON)))
-        carbonGeometry.segmentCount = 8
-        let carbonNode = SCNNode(geometry: carbonGeometry)
-        */
 
         // Import protein to scene
         while protein.state == .loading {
@@ -157,8 +152,7 @@ class ProteinViewSceneDelegate: NSObject, ObservableObject, SCNSceneRendererDele
         cloud.firstMaterial?.isLitPerPixel = true
 
         let newNode = SCNNode(geometry: cloud)
-        scene?.rootNode.addChildNode(newNode)
-
+        proteinViewModel?.proteinSurfaceRootNode.addChildNode(newNode)
     }
 
     // MARK: - Render loop
