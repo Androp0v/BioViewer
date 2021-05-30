@@ -73,14 +73,15 @@ struct ProteinImportView: View {
         switch action {
         case .importFile:
             // Import from file
+            // TO-DO: Import form file
             fatalError()
         case .downloadFromRCSB:
             // Download from RCSB
-            // TO-DO
+            // TO-DO: Download from RCSB
             fatalError()
         case .downloadFromURL:
             // Download from URL
-            // TO-DO
+            // TO-DO: download from URL
             fatalError()
         case .sampleProtein:
             // Import sample protein

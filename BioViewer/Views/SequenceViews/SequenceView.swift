@@ -67,7 +67,7 @@ struct SequenceView: View {
                     // Button to open right panel
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-                            // TO-DO
+                            // TO-DO: Show inspector
                             print("Inspector button tapped!")
                         }) {
                             if UIDevice.current.userInterfaceIdiom == .phone {
