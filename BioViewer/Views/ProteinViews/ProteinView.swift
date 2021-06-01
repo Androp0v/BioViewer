@@ -52,16 +52,17 @@ struct ProteinView: View {
                     ZStack {
 
                         // Main scene view
-                        ProteinSceneView(parent: self,
-                                         scene: $proteinViewModel.scene,
-                                         sceneDelegate: $proteinViewModel.sceneDelegate)
+                        ProteinMetalView()
                             .background(proteinViewModel.sceneDelegate.sceneBackground)
                             .edgesIgnoringSafeArea([.top, .bottom])
 
                         // Import view
+                        // TO-DO: Uncomment
+                        /*
                         if proteinViewModel.proteinCount == 0 {
                             ProteinImportView()
                         }
+                        */
 
                         // Scene controls
                         VStack (spacing: 12) {
