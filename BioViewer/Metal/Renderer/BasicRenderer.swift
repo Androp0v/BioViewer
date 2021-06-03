@@ -22,6 +22,16 @@ class BasicRenderer: NSObject {
     // Render runtime variables
     var frame: Int = 0
 
+    // Descriptors
+    let renderPassDescriptor: MTLRenderPassDescriptor = {
+        let descriptor = MTLRenderPassDescriptor()
+        // colorAttachments[0] is the final drawable texture, set in draw()
+        // colorAttachments[1] is the depth texture
+        descriptor.colorAttachments[1].loadAction = .dontCare
+
+        return descriptor
+    }()
+
     // If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
     var getCurrentDrawable: (() -> CAMetalDrawable?)?
 
@@ -104,8 +114,7 @@ extension BasicRenderer: MTKViewDelegate {
             self.uniformBuffer.contents().copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
 
-        // Create render pass descriptor
-        let renderPassDescriptor = MTLRenderPassDescriptor()
+        // colorAttachments[0] is the final texture we draw onscreen
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
         renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0,

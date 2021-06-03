@@ -41,6 +41,7 @@
 		C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC4426497A3300B36026 /* ProteinCameraControlView.swift */; };
 		C45BAC472649A67000B36026 /* ProteinSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC462649A67000B36026 /* ProteinSceneView.swift */; };
 		C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
+		C46435622669313A00434CC6 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46435612669313A00434CC6 /* Camera.swift */; };
 		C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C357265A56CC00E66C3E /* SettingsView.swift */; };
 		C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C359265A57E900E66C3E /* BuyCoffeeView.swift */; };
 		C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */; };
@@ -54,7 +55,6 @@
 		C495B23E26654242004995C2 /* ProteinChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B23D26654242004995C2 /* ProteinChunk.swift */; };
 		C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
 		C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
-		C495B24726663E87004995C2 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24626663E87004995C2 /* Camera.swift */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
 		C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB326598783001C0490 /* AtomSectionIterator.swift */; };
@@ -121,6 +121,7 @@
 		C45BAC4426497A3300B36026 /* ProteinCameraControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinCameraControlView.swift; sourceTree = "<group>"; };
 		C45BAC462649A67000B36026 /* ProteinSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSceneView.swift; sourceTree = "<group>"; };
 		C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewDataSource.swift; sourceTree = "<group>"; };
+		C46435612669313A00434CC6 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		C464C357265A56CC00E66C3E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C464C359265A57E900E66C3E /* BuyCoffeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyCoffeeView.swift; sourceTree = "<group>"; };
 		C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeTipRow.swift; sourceTree = "<group>"; };
@@ -135,7 +136,6 @@
 		C495B24026662D9A004995C2 /* VertexTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexTypes.h; sourceTree = "<group>"; };
 		C495B24226663CF3004995C2 /* MatrixTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixTransform.swift; sourceTree = "<group>"; };
 		C495B24426663D2C004995C2 /* SIMDExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMDExtensions.swift; sourceTree = "<group>"; };
-		C495B24626663E87004995C2 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
 		C4A69AB326598783001C0490 /* AtomSectionIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSectionIterator.swift; sourceTree = "<group>"; };
@@ -372,6 +372,7 @@
 			isa = PBXGroup;
 			children = (
 				C495B2382663E195004995C2 /* BasicRenderer.swift */,
+				C46435612669313A00434CC6 /* Camera.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -388,7 +389,6 @@
 		C495B24126663CDA004995C2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				C495B24626663E87004995C2 /* Camera.swift */,
 				C495B24226663CF3004995C2 /* MatrixTransform.swift */,
 				C495B24426663D2C004995C2 /* SIMDExtensions.swift */,
 			);
@@ -590,6 +590,7 @@
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
+				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C405744C2663DC74008527D1 /* ProteinMetalViewController.swift in Sources */,
 				C41A0560264ACBF0006F551C /* InformationRow.swift in Sources */,
 				C4057409265ED6CD008527D1 /* ComputeEDT.metal in Sources */,
@@ -603,7 +604,6 @@
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
-				C495B24726663E87004995C2 /* Camera.swift in Sources */,
 				C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

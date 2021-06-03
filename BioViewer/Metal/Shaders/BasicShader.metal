@@ -38,6 +38,7 @@ vertex VertexOut basic_vertex(const device packed_float3* vertex_buffer [[ buffe
 
 // MARK: - Fragment function
 
+// [[stage_in]] uses the output from the basic_vertex vertex function
 fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     return half4(0.35 / (normalized_vertex.position.z + 0.3),
