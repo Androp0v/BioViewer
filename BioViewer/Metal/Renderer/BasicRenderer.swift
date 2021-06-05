@@ -21,6 +21,7 @@ class BasicRenderer: NSObject {
 
     // Render runtime variables
     var frame: Int = 0
+    var camera: Camera
 
     // Descriptors
     let renderPassDescriptor: MTLRenderPassDescriptor = {
@@ -75,7 +76,7 @@ class BasicRenderer: NSObject {
 
         var rotationMatrix = Transform.rotationMatrix(radians: Float.pi, axis: simd_float3(0.0, 1.0, 0.0))
         uniformBuffer = device.makeBuffer(bytes: &rotationMatrix,
-                                          length: MemoryLayout<simd_float4x4>.stride,
+                                          length: 3 * MemoryLayout<simd_float4x4>.stride,
                                           options: [])
 
         // Setup pipeline
@@ -92,6 +93,9 @@ class BasicRenderer: NSObject {
 
         // Setup command queue
         commandQueue = device.makeCommandQueue()
+
+        // Setup camera
+        self.camera = Camera.init(nearPlane: 0.1, farPlane: 100, focalLength: 85)
     }
 }
 
@@ -101,6 +105,10 @@ extension BasicRenderer: MTKViewDelegate {
     /// This will be called when the ProteinMetalView changes size
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         // TO-DO: Update G-Buffer texture size to match view size
+        self.camera.updateProjection(drawableSize: size)
+
+        // TO-DO: Enqueue draw calls so this doesn't drop the FPS
+        view.draw()
     }
 
     // This is called periodically to render the scene contents on display
@@ -110,8 +118,20 @@ extension BasicRenderer: MTKViewDelegate {
         guard let drawable = view.currentDrawable else { return }
 
         // Update uniforms buffer
-        withUnsafePointer(to: Transform.rotationMatrix(radians: 0.005 * Float(frame), axis: simd_float3(0,1,0))) {
-            self.uniformBuffer.contents().copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
+
+        withUnsafePointer(to: Transform.translationMatrix(simd_float3(0,0,10))) {
+            self.uniformBuffer.contents()
+                .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
+        }
+
+        withUnsafePointer(to: camera.projectionMatrix) {
+            self.uniformBuffer.contents().advanced(by: MemoryLayout<simd_float4x4>.stride)
+                .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
+        }
+
+        withUnsafePointer(to: Transform.rotationMatrix(radians: 0.005 * Float(frame), axis: simd_float3(1,0,0))) {
+            self.uniformBuffer.contents().advanced(by: 2 * MemoryLayout<simd_float4x4>.stride)
+                .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
 
         // colorAttachments[0] is the final texture we draw onscreen

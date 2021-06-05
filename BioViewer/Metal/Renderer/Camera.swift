@@ -29,6 +29,10 @@ struct Camera {
         self.farPlane = farPlane
         self.fieldOfView = fieldOfView
         self.focalLength = fullFrameDiagonal / ( 2 * tan( (fieldOfView * Float.pi / 180) / 2 ) )
+        projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
+                                                           1.0,
+                                                           nearPlane,
+                                                           farPlane)
     }
 
     /// Initialize the camera struct.
@@ -41,6 +45,10 @@ struct Camera {
         self.farPlane = farPlane
         self.fieldOfView = 2 * atan( fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
         self.focalLength = focalLength
+        projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
+                                                           1.0,
+                                                           nearPlane,
+                                                           farPlane)
     }
 
 
