@@ -29,20 +29,30 @@ vertex VertexOut basic_vertex(const device packed_float3* vertex_buffer [[ buffe
                               const device Uniforms& uniform_buffer [[ buffer(1) ]],
                               unsigned int vid [[ vertex_id ]]) {
 
+    // Initialize the returned element
     VertexOut normalized_vertex;
+
+    // Fetch the matrices
     simd_float4x4 model_view_matrix = uniform_buffer.model_view_matrix;
     simd_float4x4 projectionMatrix = uniform_buffer.projectionMatrix;
     simd_float4x4 rotation_matrix = uniform_buffer.rotation_matrix;
 
+    // Rotate the model in world space
     float4 rotated_model = rotation_matrix * float4(vertex_buffer[vid].x,
                                                     vertex_buffer[vid].y,
                                                     vertex_buffer[vid].z,
                                                     1.0);
+
+    // Transform the world space coordinates to eye space coordinates
     float4 eye_position = model_view_matrix * rotated_model;
 
+    // Transform the eye space coordinates to normalized device coordinates
     normalized_vertex.position = projectionMatrix * eye_position;
 
+    // Depth is computed in eye space coordinates, not normalized device coordinates
     normalized_vertex.depth = normalized_vertex.position.z;
+
+    // Return the processed vertex
     return normalized_vertex;
 }
 
@@ -50,6 +60,8 @@ vertex VertexOut basic_vertex(const device packed_float3* vertex_buffer [[ buffe
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
+
+    // Shade based on its depth value
     return half4(2.0 / ( (normalized_vertex.depth) - 8),
                  1.0 / ( (normalized_vertex.depth) - 8),
                  1.0 / ( (normalized_vertex.depth) - 8),
