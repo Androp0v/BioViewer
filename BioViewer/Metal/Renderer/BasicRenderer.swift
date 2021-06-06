@@ -16,8 +16,9 @@ class BasicRenderer: NSObject {
     var commandQueue: MTLCommandQueue!
 
     var vertexBuffer: MTLBuffer?
+    var atomTypeBuffer: MTLBuffer?
     var indexBuffer: MTLBuffer?
-    var uniformBuffer: MTLBuffer!
+    var uniformBuffer: MTLBuffer?
 
     // Render runtime variables
     var frame: Int = 0
@@ -75,8 +76,9 @@ class BasicRenderer: NSObject {
     }
 
     // MARK: - Public functions
-    func addBuffers(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    func addBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
         self.vertexBuffer = vertexBuffer
+        self.atomTypeBuffer = atomTypeBuffer
         self.indexBuffer = indexBuffer
     }
 }
@@ -103,7 +105,13 @@ extension BasicRenderer: MTKViewDelegate {
         guard let vertexBuffer = self.vertexBuffer else {
             return
         }
+        guard let atomTypeBuffer = self.atomTypeBuffer else {
+            return
+        }
         guard let indexBuffer = self.indexBuffer else {
+            return
+        }
+        guard let uniformBuffer = self.uniformBuffer else {
             return
         }
 
@@ -111,28 +119,29 @@ extension BasicRenderer: MTKViewDelegate {
         // TO-DO: Address directly instead of copying data on each frame
 
         withUnsafePointer(to: Transform.translationMatrix(simd_float3(0,0,600))) {
-            self.uniformBuffer.contents()
+            uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
 
         withUnsafePointer(to: camera.projectionMatrix) {
-            self.uniformBuffer.contents().advanced(by: MemoryLayout<simd_float4x4>.stride)
+            uniformBuffer.contents().advanced(by: MemoryLayout<simd_float4x4>.stride)
                 .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
 
         withUnsafePointer(to: Transform.rotationMatrix(radians: -0.001 * Float(frame), axis: simd_float3(0,1,0))) {
-            self.uniformBuffer.contents().advanced(by: 2 * MemoryLayout<simd_float4x4>.stride)
+            uniformBuffer.contents().advanced(by: 2 * MemoryLayout<simd_float4x4>.stride)
                 .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
 
         // Clear the depth texture (depth is in normalized device coordinates,
-        // where 1.0 is the maximum value).
+        // where 1.0 is the maximum/deepest value).
         view.clearDepth = 1.0
 
         // Depth state
+        // TO-DO: This can be moved out of the render loop
         let depthState = device.makeDepthStencilState(descriptor: depthDescriptor)
 
-        // colorAttachments[0] is the final texture we draw onscreen
+        // Attach textures. colorAttachments[0] is the final texture we draw onscreen
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
         renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0,
@@ -157,9 +166,12 @@ extension BasicRenderer: MTKViewDelegate {
         renderEncoder.setVertexBuffer(vertexBuffer,
                                       offset: 0,
                                       index: 0)
-        renderEncoder.setVertexBuffer(uniformBuffer,
+        renderEncoder.setVertexBuffer(atomTypeBuffer,
                                       offset: 0,
                                       index: 1)
+        renderEncoder.setVertexBuffer(uniformBuffer,
+                                      offset: 0,
+                                      index: 2)
 
         // Don't render back-facing triangles (cull them)
         renderEncoder.setCullMode(.back)

@@ -60,7 +60,7 @@ class MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createSphereModel(protein: Protein) -> (vertexData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createSphereModel(protein: Protein) -> (vertexData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         // Variables
         let spherePoints: Int = 12
@@ -69,6 +69,10 @@ class MetalScheduler {
         // Populate buffers
         let generatedVertexData = device.makeBuffer(
             length: protein.atomCount * spherePoints * MemoryLayout<simd_float3>.stride
+        )
+        let atomTypeData = device.makeBuffer(
+            bytes: protein.atomIdentifiers,
+            length: protein.atomCount * MemoryLayout<UInt8>.stride
         )
         let generatedIndexData = device.makeBuffer(
             length: protein.atomCount * sphereFaces * 3 * MemoryLayout<UInt32>.stride
@@ -135,7 +139,7 @@ class MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (generatedVertexData, generatedIndexData)
+        return (generatedVertexData, atomTypeData, generatedIndexData)
     }
 
     /// Create Solvent-Accessible Surface (SAS) for a given protein.

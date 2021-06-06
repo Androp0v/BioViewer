@@ -23,7 +23,7 @@ struct AtomType {
     static let OXYGEN: UInt8 = 3
     static let SULFUR: UInt8 = 4
 
-    static let UNKNOWN: UInt8 = UInt8.max
+    static let UNKNOWN: UInt8 = 5
 }
 
 func getAtomId(atomName: String) -> UInt8 {

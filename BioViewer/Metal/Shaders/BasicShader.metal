@@ -7,6 +7,7 @@
 
 #include <metal_stdlib>
 #include <simd/simd.h>
+#include "../Meshes/AtomProperties.h"
 
 using namespace metal;
 
@@ -14,6 +15,7 @@ using namespace metal;
 
 struct VertexOut{
     float4 position [[position]];
+    float4 color;
     float depth;
 };
 
@@ -26,11 +28,13 @@ struct Uniforms{
 // MARK: - Vertex function
 
 vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(0) ]],
-                              const device Uniforms& uniform_buffer [[ buffer(1) ]],
+                              const device uint8_t *atomType [[ buffer(1) ]],
+                              const device Uniforms& uniform_buffer [[ buffer(2) ]],
                               unsigned int vid [[ vertex_id ]]) {
 
-    // Initialize the returned element
+    // Initialize the returned VertexOut structure
     VertexOut normalized_vertex;
+    int verticesPerAtom = 12;
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = uniform_buffer.model_view_matrix;
@@ -49,6 +53,9 @@ vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(
     // Transform the eye space coordinates to normalized device coordinates
     normalized_vertex.position = projectionMatrix * eye_position;
 
+    // Color the atom based on the atom type
+    normalized_vertex.color = atomColor[ atomType[vid / verticesPerAtom] ];
+
     // Depth is computed in eye space coordinates, not normalized device coordinates
     normalized_vertex.depth = eye_position.z;
 
@@ -62,8 +69,8 @@ vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(
 fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     // Shade based on its depth value
-    return half4(250000 / pow(normalized_vertex.depth, 2),
-                 250000 / pow(normalized_vertex.depth, 2),
-                 250000 / pow(normalized_vertex.depth, 2),
+    return half4(normalized_vertex.color.r - pow(normalized_vertex.depth, 2) / 2000000,
+                 normalized_vertex.color.g - pow(normalized_vertex.depth, 2) / 2000000,
+                 normalized_vertex.color.b - pow(normalized_vertex.depth, 2) / 2000000,
                  1.0);
 }

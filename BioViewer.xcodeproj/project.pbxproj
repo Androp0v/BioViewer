@@ -387,9 +387,9 @@
 			isa = PBXGroup;
 			children = (
 				C495B23B266541A7004995C2 /* ProteinMesh.swift */,
-				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 				C495B23D26654242004995C2 /* ProteinChunk.swift */,
 				C44D055C266BB96600BAFDCD /* AtomProperties.h */,
+				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
