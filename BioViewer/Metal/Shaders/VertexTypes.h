@@ -11,5 +11,4 @@
 #include <simd/simd.h>
 
 
-
 #endif /* VertexTypes_h */

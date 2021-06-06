@@ -39,7 +39,14 @@ class ProteinViewDataSource: ObservableObject {
     /// Add protein to a ```ProteinView``` datasource.
     public func addProteinToDataSource(protein: inout Protein, addToScene: Bool = false) {
         proteins.append(protein)
-        if addToScene {
+        if addToScene && AppState.shared.useMetal {
+            let (vertexData, indexData) = MetalScheduler.shared.createSphereModel(protein: protein)
+            guard var vertexData = vertexData else { return }
+            guard var indexData = indexData else { return }
+            proteinViewModel?.metalRenderer.addBuffers(vertexBuffer: &vertexData, indexBuffer: &indexData)
+            // File import finished
+            proteinViewModel?.statusFinished()
+        } else {
             self.proteinViewModel?.sceneDelegate.addProteinToScene(protein: &protein)
         }
     }

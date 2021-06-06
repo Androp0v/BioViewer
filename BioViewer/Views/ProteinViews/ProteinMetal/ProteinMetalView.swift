@@ -13,8 +13,10 @@ struct ProteinMetalView: UIViewControllerRepresentable {
 
     typealias UIViewControllerType = ProteinMetalViewController
 
+    let proteinViewModel: ProteinViewModel
+
     func makeUIViewController(context: Context) -> ProteinMetalViewController {
-        return ProteinMetalViewController()
+        return ProteinMetalViewController(proteinViewModel: self.proteinViewModel)
     }
 
     func updateUIViewController(_ uiViewController: ProteinMetalViewController, context: Context) {
@@ -25,6 +27,6 @@ struct ProteinMetalView: UIViewControllerRepresentable {
 
 struct ProteinMetalView_Previews: PreviewProvider {
     static var previews: some View {
-        ProteinMetalView()
+        ProteinMetalView(proteinViewModel: ProteinViewModel())
     }
 }

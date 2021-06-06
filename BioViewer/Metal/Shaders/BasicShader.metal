@@ -25,7 +25,7 @@ struct Uniforms{
 
 // MARK: - Vertex function
 
-vertex VertexOut basic_vertex(const device packed_float3* vertex_buffer [[ buffer(0) ]],
+vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(0) ]],
                               const device Uniforms& uniform_buffer [[ buffer(1) ]],
                               unsigned int vid [[ vertex_id ]]) {
 
@@ -50,7 +50,7 @@ vertex VertexOut basic_vertex(const device packed_float3* vertex_buffer [[ buffe
     normalized_vertex.position = projectionMatrix * eye_position;
 
     // Depth is computed in eye space coordinates, not normalized device coordinates
-    normalized_vertex.depth = normalized_vertex.position.z;
+    normalized_vertex.depth = eye_position.z;
 
     // Return the processed vertex
     return normalized_vertex;
@@ -62,8 +62,8 @@ vertex VertexOut basic_vertex(const device packed_float3* vertex_buffer [[ buffe
 fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     // Shade based on its depth value
-    return half4(2.0 / ( (normalized_vertex.depth) - 8),
-                 1.0 / ( (normalized_vertex.depth) - 8),
-                 1.0 / ( (normalized_vertex.depth) - 8),
+    return half4(250000 / pow(normalized_vertex.depth, 2),
+                 250000 / pow(normalized_vertex.depth, 2),
+                 250000 / pow(normalized_vertex.depth, 2),
                  1.0);
 }

@@ -29,6 +29,8 @@
 		C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085692648008500DC5009 /* FileSegmentProtein.swift */; };
 		C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440856B26481E0300DC5009 /* ProteinSequenceView.swift */; };
 		C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440856E2648200500DC5009 /* VisualEffectView.swift */; };
+		C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44D0558266BAA6E00BAFDCD /* AppState.swift */; };
+		C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */ = {isa = PBXBuildFile; fileRef = C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */; };
 		C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0712641AF1B00459E01 /* BioViewerApp.swift */; };
 		C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0732641AF1B00459E01 /* ProteinView.swift */; };
 		C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FC0752641AF1E00459E01 /* Assets.xcassets */; };
@@ -102,6 +104,9 @@
 		C44085692648008500DC5009 /* FileSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSegmentProtein.swift; sourceTree = "<group>"; };
 		C440856B26481E0300DC5009 /* ProteinSequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProteinSequenceView.swift; path = BioViewer/Views/ProteinViews/ProteinSequenceView.swift; sourceTree = SOURCE_ROOT; };
 		C440856E2648200500DC5009 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		C44D0558266BAA6E00BAFDCD /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateAtomMesh.metal; sourceTree = "<group>"; };
+		C44D055C266BB96600BAFDCD /* AtomProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomProperties.h; sourceTree = "<group>"; };
 		C44FC06E2641AF1B00459E01 /* BioViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BioViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC0712641AF1B00459E01 /* BioViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerApp.swift; sourceTree = "<group>"; };
 		C44FC0732641AF1B00459E01 /* ProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinView.swift; sourceTree = "<group>"; };
@@ -298,6 +303,7 @@
 			children = (
 				C44FC09E2641B0A200459E01 /* BioViewer.entitlements */,
 				C44FC0712641AF1B00459E01 /* BioViewerApp.swift */,
+				C44D0558266BAA6E00BAFDCD /* AppState.swift */,
 				C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */,
 				C41A0561264C2853006F551C /* ImportFiles.swift */,
 				C4B1F82126457D1E0035D739 /* Delegates */,
@@ -381,7 +387,9 @@
 			isa = PBXGroup;
 			children = (
 				C495B23B266541A7004995C2 /* ProteinMesh.swift */,
+				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 				C495B23D26654242004995C2 /* ProteinChunk.swift */,
+				C44D055C266BB96600BAFDCD /* AtomProperties.h */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
@@ -585,6 +593,7 @@
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
+				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
@@ -602,6 +611,7 @@
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
 				C495B23E26654242004995C2 /* ProteinChunk.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
+				C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
 				C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */,
@@ -772,6 +782,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.BioViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -796,6 +807,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.BioViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

@@ -15,6 +15,16 @@ class ProteinMetalViewController: UIViewController {
 
     var renderView: MTKView!
     var renderDelegate: MTKViewDelegate?
+    var proteinViewModel: ProteinViewModel
+
+    init(proteinViewModel: ProteinViewModel) {
+        self.proteinViewModel = proteinViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View lifecycle
 
@@ -37,9 +47,11 @@ class ProteinMetalViewController: UIViewController {
             renderView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
 
         // Render delegate
-        self.renderDelegate = BasicRenderer(device: self.device)
+        self.renderDelegate = proteinViewModel.metalRenderer
         renderView.delegate = self.renderDelegate
 
+        // Create depth texture for view
+        renderView.depthStencilPixelFormat = .depth32Float
     }
 
 }

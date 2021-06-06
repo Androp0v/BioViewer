@@ -15,6 +15,7 @@ class ProteinViewModel: ObservableObject {
 
     @Published var scene: SCNScene
     @Published var sceneDelegate: ProteinViewSceneDelegate
+    @Published var metalRenderer: BasicRenderer
 
     var sceneBackgroundColorCancellable: AnyCancellable?
     var proteinToggleCancellable: AnyCancellable?
@@ -40,6 +41,12 @@ class ProteinViewModel: ObservableObject {
     // MARK: - Initialization
 
     init() {
+        // Setup Metal renderer
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            fatalError("Unable to create default Metal Device")
+        }
+        self.metalRenderer = BasicRenderer(device: device)
+
         // Open SceneKit scene
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         self.scene = scene

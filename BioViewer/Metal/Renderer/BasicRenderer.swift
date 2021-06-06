@@ -15,8 +15,8 @@ class BasicRenderer: NSObject {
     var pipelineState: MTLRenderPipelineState!
     var commandQueue: MTLCommandQueue!
 
-    var vertexBuffer: MTLBuffer!
-    var indexBuffer: MTLBuffer!
+    var vertexBuffer: MTLBuffer?
+    var indexBuffer: MTLBuffer?
     var uniformBuffer: MTLBuffer!
 
     // Render runtime variables
@@ -28,51 +28,24 @@ class BasicRenderer: NSObject {
         let descriptor = MTLRenderPassDescriptor()
         // colorAttachments[0] is the final drawable texture, set in draw()
         // colorAttachments[1] is the depth texture
-        descriptor.colorAttachments[1].loadAction = .dontCare
-
+        // descriptor.colorAttachments[1].loadAction = .dontCare
+        return descriptor
+    }()
+    let depthDescriptor: MTLDepthStencilDescriptor = {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = MTLCompareFunction.less
+        descriptor.isDepthWriteEnabled = true
         return descriptor
     }()
 
     // If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
     var getCurrentDrawable: (() -> CAMetalDrawable?)?
 
-    // Example vertex data (icosahedron)
-    var vertexData: [Float] = [
-        -0.5,  (1 + sqrt(5)) / 4, 0,
-        0.5,  (1 + sqrt(5)) / 4, 0,
-        -0.5, -(1 + sqrt(5)) / 4, 0,
-        0.5, -(1 + sqrt(5)) / 4, 0,
-
-        0, -0.5, (1 + sqrt(5)) / 4,
-        0,  0.5, (1 + sqrt(5)) / 4,
-        0, -0.5, -(1 + sqrt(5)) / 4,
-        0,  0.5, -(1 + sqrt(5)) / 4,
-
-        (1 + sqrt(5)) / 4, 0, -0.5,
-        (1 + sqrt(5)) / 4, 0,  0.5,
-        -(1 + sqrt(5)) / 4, 0, -0.5,
-        -(1 + sqrt(5)) / 4, 0,  0.5,
-    ]
-
-    // Example index data (icosahedron)
-    let indexData: [UInt32] = [0, 11, 5, 0, 5, 1, 0, 1, 7, 0, 7, 10, 0, 10, 11, 1, 5, 9, 5, 11, 4, 11, 10, 2, 10, 7, 6, 7, 1, 8, 3, 9, 4, 3, 4, 2, 3, 2, 6, 3, 6, 8, 3, 8, 9, 4, 9, 5, 2, 4, 11, 6, 2, 10, 8, 6, 7, 9, 8, 1]
-
     // MARK: - Initialization
 
     init(device: MTLDevice) {
 
         self.device = device
-
-        // Initialize buffers
-        let dataSizeVertices = vertexData.count * MemoryLayout<Float>.size*3
-        vertexBuffer = device.makeBuffer(bytes: vertexData,
-                                         length: dataSizeVertices,
-                                         options: [])
-
-        let dataSizeIndices = indexData.count * MemoryLayout<UInt32>.stride
-        indexBuffer = device.makeBuffer(bytes: indexData,
-                                        length: dataSizeIndices,
-                                        options: [])
 
         var rotationMatrix = Transform.rotationMatrix(radians: Float.pi, axis: simd_float3(0.0, 1.0, 0.0))
         uniformBuffer = device.makeBuffer(bytes: &rotationMatrix,
@@ -89,13 +62,22 @@ class BasicRenderer: NSObject {
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
 
+        // Specify the format of the depth texture
+        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
+
         pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
 
         // Setup command queue
         commandQueue = device.makeCommandQueue()
 
         // Setup camera
-        self.camera = Camera.init(nearPlane: 0.1, farPlane: 100, focalLength: 85)
+        self.camera = Camera.init(nearPlane: 0.1, farPlane: 3000, focalLength: 85)
+    }
+
+    // MARK: - Public functions
+    func addBuffers(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        self.vertexBuffer = vertexBuffer
+        self.indexBuffer = indexBuffer
     }
 }
 
@@ -117,9 +99,18 @@ extension BasicRenderer: MTKViewDelegate {
         // Retrieve current view drawable
         guard let drawable = view.currentDrawable else { return }
 
-        // Update uniforms buffer
+        // Assure buffers are loaded
+        guard let vertexBuffer = self.vertexBuffer else {
+            return
+        }
+        guard let indexBuffer = self.indexBuffer else {
+            return
+        }
 
-        withUnsafePointer(to: Transform.translationMatrix(simd_float3(0,0,10))) {
+        // Update uniforms buffer
+        // TO-DO: Address directly instead of copying data on each frame
+
+        withUnsafePointer(to: Transform.translationMatrix(simd_float3(0,0,600))) {
             self.uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
@@ -129,10 +120,17 @@ extension BasicRenderer: MTKViewDelegate {
                 .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
 
-        withUnsafePointer(to: Transform.rotationMatrix(radians: 0.005 * Float(frame), axis: simd_float3(1,0,0))) {
+        withUnsafePointer(to: Transform.rotationMatrix(radians: -0.001 * Float(frame), axis: simd_float3(0,1,0))) {
             self.uniformBuffer.contents().advanced(by: 2 * MemoryLayout<simd_float4x4>.stride)
                 .copyMemory(from: $0, byteCount: MemoryLayout<simd_float4x4>.stride)
         }
+
+        // Clear the depth texture (depth is in normalized device coordinates,
+        // where 1.0 is the maximum value).
+        view.clearDepth = 1.0
+
+        // Depth state
+        let depthState = device.makeDepthStencilState(descriptor: depthDescriptor)
 
         // colorAttachments[0] is the final texture we draw onscreen
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
@@ -141,13 +139,19 @@ extension BasicRenderer: MTKViewDelegate {
                                                                             green: 0.0,
                                                                             blue: 0.0,
                                                                             alpha: 1.0)
+        renderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
         // Create command buffer
         let commandBuffer = commandQueue.makeCommandBuffer()!
 
         // Create render command encoder
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
+
+        // Set pipeline state
         renderEncoder.setRenderPipelineState(pipelineState)
+
+        // Set depth state
+        renderEncoder.setDepthStencilState(depthState)
 
         // Add buffers to pipeline
         renderEncoder.setVertexBuffer(vertexBuffer,
@@ -162,10 +166,11 @@ extension BasicRenderer: MTKViewDelegate {
 
         // Draw primitives
         renderEncoder.drawIndexedPrimitives(type: .triangle,
-                                            indexCount: indexData.count,
+                                            indexCount: indexBuffer.length / MemoryLayout<UInt32>.stride,
                                             indexType: .uint32,
                                             indexBuffer: indexBuffer,
                                             indexBufferOffset: 0)
+
         renderEncoder.endEncoding()
 
         // Commit command buffer

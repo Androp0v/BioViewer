@@ -41,7 +41,7 @@ fileprivate enum PDBConstants {
 func parsePDB(rawText: String) -> Protein {
 
     var atomArray = ContiguousArray<simd_float3>()
-    var atomIdentifiers = [Int]()
+    var atomIdentifiers = [UInt8]()
 
     // Make one atom array per common element
     var carbonArray = [simd_float3]()
@@ -50,7 +50,7 @@ func parsePDB(rawText: String) -> Protein {
     var oxygenArray = [simd_float3]()
     var sulfurArray = [simd_float3]()
     var othersArray = [simd_float3]()
-    var othersIDs = [Int]()
+    var othersIDs = [UInt8]()
 
     var atomArrayComposition = AtomArrayComposition()
 
