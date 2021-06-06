@@ -20,7 +20,7 @@ kernel void createSphereModel(const device simd_float3 *atomPoints [[buffer(0)]]
     const simd_float3 position = atomPoints[i];
     const uint32_t index = i * 12;
     const uint32_t index_2 = i * 60;
-    const float radius = 1.5; // FIXME: atomType[atomType[i]];
+    const float radius = atomRadius[atomType[i]];
 
     // Assign unitary icosahedron points (generated in scripts/UnitaryIcosahedron.py)
     generatedVertices[index] = simd_float3(-0.5257311121191336, 0.85065080835204, 0.0) * radius + position;
