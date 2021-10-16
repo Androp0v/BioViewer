@@ -57,7 +57,7 @@ struct ProteinSidebar: View {
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @Binding var toggleModalSidebar: Bool
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         if horizontalSizeClass == .compact {
@@ -67,7 +67,7 @@ struct ProteinSidebar: View {
                     .navigationBarTitle("Inspector")
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarItems(leading: Button("Close") {
-                        toggleModalSidebar.toggle()
+                        dismiss()
                     })
                     .environmentObject(proteinViewModel)
             }
@@ -79,7 +79,7 @@ struct ProteinSidebar: View {
 
 struct ProteinSidebar_Previews: PreviewProvider {
     static var previews: some View {
-        ProteinSidebar(toggleModalSidebar: .constant(true))
+        ProteinSidebar()
             .previewLayout(.sizeThatFits)
             .environmentObject(ProteinViewModel())
     }

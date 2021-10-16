@@ -86,7 +86,7 @@ struct ProteinView: View {
 
                     // Sidebar
                     if toggleSidebar {
-                        ProteinSidebar(toggleModalSidebar: $toggleModalSidebar)
+                        ProteinSidebar()
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
                     }
@@ -104,9 +104,6 @@ struct ProteinView: View {
                         }) {
                             Image(systemName: "gearshape")
                         }
-                        .sheet(isPresented: $toggleModalSidebar, content: {
-                            ProteinSidebar(toggleModalSidebar: $toggleModalSidebar)
-                        })
                     } else {
                         Button(action: {
                             withAnimation(.easeInOut(duration: 0.2)){
@@ -117,6 +114,7 @@ struct ProteinView: View {
                         }
                     }
                 }
+                
                 ToolbarItem(placement: .principal) {
                     // Status bar component
                     StatusView()
@@ -129,6 +127,9 @@ struct ProteinView: View {
                                alignment: .center)
                 }
             }
+            .sheet(isPresented: $toggleModalSidebar, content: {
+                ProteinSidebar()
+            })
         }
         .environmentObject(proteinViewModel)
     }

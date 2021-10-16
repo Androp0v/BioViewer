@@ -13,7 +13,7 @@ t = ( 1.0 + np.sqrt(5.0) ) / 2.0
 icosahedronPoints.append( np.array( (-1, t, 0) ))
 icosahedronPoints.append( np.array( (1, t, 0) ))
 icosahedronPoints.append( np.array( (-1, -t, 0) ))
-icosahedronPoints.append( np.array( (1, t, 0) ))
+icosahedronPoints.append( np.array( (1, -t, 0) ))
 
 icosahedronPoints.append( np.array( (0, -1, t) ))
 icosahedronPoints.append( np.array( (0, 1, t) ))

@@ -12,5 +12,5 @@ class AppState {
     static let shared = AppState()
 
     // Use Metal or SceneKit for rendering proteins
-    var useMetal: Bool = true
+    var useMetal: Bool = false
 }
