@@ -19,7 +19,6 @@ private struct SidebarItem: View {
 private struct ProteinSidebarContent: View {
 
     @State private var selectedSegment = 0
-    @EnvironmentObject var sceneDelegate: ProteinViewSceneDelegate
 
     var body: some View {
         ZStack {

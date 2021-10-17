@@ -146,7 +146,7 @@ class MetalScheduler {
     /// - Parameters:
     ///   - protein: The protein whose SAS we want to visualize.
     ///   - sceneDelegate: The scene delegate.
-    public func createSASPoints(protein: Protein, sceneDelegate: ProteinViewSceneDelegate) {
+    public func createSASPoints(protein: Protein) {
 
         metalDispatchQueue.sync {
 
@@ -303,9 +303,7 @@ class MetalScheduler {
             guard let pointsSAS = generatedSpherePositions?.contents().assumingMemoryBound(to: simd_float3.self) else { return }
             guard let bitmask = bitmaskBuffer?.contents().assumingMemoryBound(to: CBool.self) else { return }
 
-            sceneDelegate.addPointCloud(points: pointsSAS,
-                                        pointCount: protein.atomCount * spherePoints,
-                                        bitmask: bitmask)
+            // TO-DO: add to metal view
         }
     }
 

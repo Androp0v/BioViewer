@@ -24,8 +24,11 @@ struct AppearanceSegmentProtein: View {
             Section(header: Text("General").padding(.top, 64)) {
 
                 ColorPickerRow(title: "Background color",
-                               selectedColor: $proteinViewModel.sceneDelegate.sceneBackground)
+                               selectedColor: $proteinViewModel.backgroundColor)
 
+                // FIXME:
+
+                /*
                 PickerRow(optionName: "View protein as",
                           selectedVisualization: $selectedProteinVisualization,
                           pickerOptions: ["None",
@@ -40,6 +43,7 @@ struct AppearanceSegmentProtein: View {
                     })
 
                 SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.sceneDelegate.showSurface)
+                */
 
             }
 

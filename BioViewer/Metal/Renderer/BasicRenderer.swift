@@ -7,6 +7,7 @@
 
 import Foundation
 import MetalKit
+import SwiftUI
 
 class BasicRenderer: NSObject {
 
@@ -23,6 +24,7 @@ class BasicRenderer: NSObject {
     // Render runtime variables
     var frame: Int = 0
     var camera: Camera
+    var backgroundColor: CGColor = Color.black.cgColor!
 
     // Descriptors
     let renderPassDescriptor: MTLRenderPassDescriptor = {
@@ -144,10 +146,10 @@ extension BasicRenderer: MTKViewDelegate {
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0,
-                                                                            green: 0.0,
-                                                                            blue: 0.0,
-                                                                            alpha: 1.0)
+        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: backgroundColor.components![0],
+                                                                            green: backgroundColor.components![1],
+                                                                            blue: backgroundColor.components![2],
+                                                                            alpha: backgroundColor.components![3])
         renderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
         // Create command buffer
