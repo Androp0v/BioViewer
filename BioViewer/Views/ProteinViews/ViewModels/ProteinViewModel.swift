@@ -7,7 +7,6 @@
 
 import Combine
 import Foundation
-import SceneKit
 import SwiftUI
 
 class ProteinViewModel: ObservableObject {
@@ -18,7 +17,7 @@ class ProteinViewModel: ObservableObject {
     @Published var backgroundColor: Color = .black {
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
-            metalRenderer.backgroundColor = newCGColor
+            metalRenderer.scene.backgroundColor = newCGColor
         }
     }
 

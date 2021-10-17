@@ -7,7 +7,7 @@
 
 #include <metal_stdlib>
 #include <simd/simd.h>
-#include "../Meshes/AtomProperties.h"
+#include "FrameData.h"
 
 using namespace metal;
 
@@ -19,17 +19,11 @@ struct VertexOut{
     float depth;
 };
 
-struct Uniforms{
-    simd_float4x4 model_view_matrix;
-    simd_float4x4 projectionMatrix;
-    simd_float4x4 rotation_matrix;
-};
-
 // MARK: - Vertex function
 
 vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(0) ]],
                               const device uint8_t *atomType [[ buffer(1) ]],
-                              const device Uniforms& uniform_buffer [[ buffer(2) ]],
+                              const device FrameData& frameData [[ buffer(2) ]],
                               unsigned int vid [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
@@ -37,9 +31,9 @@ vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(
     int verticesPerAtom = 12;
 
     // Fetch the matrices
-    simd_float4x4 model_view_matrix = uniform_buffer.model_view_matrix;
-    simd_float4x4 projectionMatrix = uniform_buffer.projectionMatrix;
-    simd_float4x4 rotation_matrix = uniform_buffer.rotation_matrix;
+    simd_float4x4 model_view_matrix = frameData.model_view_matrix;
+    simd_float4x4 projectionMatrix = frameData.projectionMatrix;
+    simd_float4x4 rotation_matrix = frameData.rotation_matrix;
 
     // Rotate the model in world space
     float4 rotated_model = rotation_matrix * float4(vertex_buffer[vid].x,
@@ -54,7 +48,7 @@ vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(
     normalized_vertex.position = projectionMatrix * eye_position;
 
     // Color the atom based on the atom type
-    normalized_vertex.color = atomColor[ atomType[vid / verticesPerAtom] ];
+    normalized_vertex.color = frameData.atomColor[ atomType[vid / verticesPerAtom] ];
 
     // Depth is computed in eye space coordinates, not normalized device coordinates
     normalized_vertex.depth = eye_position.z;
@@ -69,6 +63,7 @@ vertex VertexOut basic_vertex(const device simd_float3* vertex_buffer [[ buffer(
 fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     // Shade based on its depth value
+    // TO-DO: Improve with Phong shading instead of depth value shading
     return half4(normalized_vertex.color.r - pow(normalized_vertex.depth, 2) / 2000000,
                  normalized_vertex.color.g - pow(normalized_vertex.depth, 2) / 2000000,
                  normalized_vertex.color.b - pow(normalized_vertex.depth, 2) / 2000000,

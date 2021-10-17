@@ -56,6 +56,7 @@
 		C495B23E26654242004995C2 /* ProteinChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B23D26654242004995C2 /* ProteinChunk.swift */; };
 		C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
 		C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
+		C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D9D31271C469100E12E2F /* MetalScene.swift */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
 		C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB326598783001C0490 /* AtomSectionIterator.swift */; };
@@ -104,7 +105,6 @@
 		C440856E2648200500DC5009 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		C44D0558266BAA6E00BAFDCD /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateAtomMesh.metal; sourceTree = "<group>"; };
-		C44D055C266BB96600BAFDCD /* AtomProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomProperties.h; sourceTree = "<group>"; };
 		C44FC06E2641AF1B00459E01 /* BioViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BioViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FC0712641AF1B00459E01 /* BioViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerApp.swift; sourceTree = "<group>"; };
 		C44FC0732641AF1B00459E01 /* ProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinView.swift; sourceTree = "<group>"; };
@@ -138,6 +138,9 @@
 		C495B24026662D9A004995C2 /* VertexTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexTypes.h; sourceTree = "<group>"; };
 		C495B24226663CF3004995C2 /* MatrixTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixTransform.swift; sourceTree = "<group>"; };
 		C495B24426663D2C004995C2 /* SIMDExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMDExtensions.swift; sourceTree = "<group>"; };
+		C49D9D31271C469100E12E2F /* MetalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScene.swift; sourceTree = "<group>"; };
+		C49D9D33271C4A8C00E12E2F /* FrameData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameData.h; sourceTree = "<group>"; };
+		C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BioViewer-Bridging-Header.h"; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
 		C4A69AB326598783001C0490 /* AtomSectionIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSectionIterator.swift; sourceTree = "<group>"; };
@@ -181,8 +184,10 @@
 		C405744D2663DD4C008527D1 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				C49D9D33271C4A8C00E12E2F /* FrameData.h */,
 				C495B24026662D9A004995C2 /* VertexTypes.h */,
 				C405744E2663DD58008527D1 /* BasicShader.metal */,
+				C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -373,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				C495B2382663E195004995C2 /* BasicRenderer.swift */,
+				C49D9D31271C469100E12E2F /* MetalScene.swift */,
 				C46435612669313A00434CC6 /* Camera.swift */,
 			);
 			path = Renderer;
@@ -383,7 +389,6 @@
 			children = (
 				C495B23B266541A7004995C2 /* ProteinMesh.swift */,
 				C495B23D26654242004995C2 /* ProteinChunk.swift */,
-				C44D055C266BB96600BAFDCD /* AtomProperties.h */,
 				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 			);
 			path = Meshes;
@@ -496,6 +501,7 @@
 				TargetAttributes = {
 					C44FC06D2641AF1B00459E01 = {
 						CreatedOnToolsVersion = 12.5;
+						LastSwiftMigration = 1300;
 					};
 					C44FC07E2641AF1E00459E01 = {
 						CreatedOnToolsVersion = 12.5;
@@ -580,6 +586,7 @@
 				C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
 				C4057407265E93E9008527D1 /* RemovePoints.metal in Sources */,
+				C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */,
 				C41A0566264C7B97006F551C /* StatusView.swift in Sources */,
 				C45BAC432649550C00B36026 /* ColorPickerRow.swift in Sources */,
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
@@ -763,6 +770,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BioViewer/BioViewer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
@@ -782,6 +790,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/Metal/Shaders/BioViewer-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
@@ -792,6 +802,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BioViewer/BioViewer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
@@ -811,6 +822,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/Metal/Shaders/BioViewer-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};

@@ -10,7 +10,7 @@ import simd
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// Class to handle importing dropped files into the SceneKit view.
+/// Class to handle importing dropped files into the protein view.
 /// Should be able to read .pdb files.
 class ImportDroppedFilesDelegate: DropDelegate {
 
