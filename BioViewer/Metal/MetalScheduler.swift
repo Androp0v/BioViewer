@@ -68,7 +68,7 @@ class MetalScheduler {
 
         // Populate buffers
         let generatedVertexData = device.makeBuffer(
-            length: protein.atomCount * spherePoints * MemoryLayout<simd_float3>.stride
+            length: protein.atomCount * spherePoints * MemoryLayout<GeneratedVertex>.stride
         )
         let atomTypeData = device.makeBuffer(
             bytes: protein.atomIdentifiers,

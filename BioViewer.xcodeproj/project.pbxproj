@@ -141,6 +141,8 @@
 		C49D9D31271C469100E12E2F /* MetalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScene.swift; sourceTree = "<group>"; };
 		C49D9D33271C4A8C00E12E2F /* FrameData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameData.h; sourceTree = "<group>"; };
 		C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BioViewer-Bridging-Header.h"; sourceTree = "<group>"; };
+		C49D9D38271C6BEF00E12E2F /* AtomProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomProperties.h; sourceTree = "<group>"; };
+		C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedVertex.h; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
 		C4A69AB326598783001C0490 /* AtomSectionIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSectionIterator.swift; sourceTree = "<group>"; };
@@ -187,7 +189,6 @@
 				C49D9D33271C4A8C00E12E2F /* FrameData.h */,
 				C495B24026662D9A004995C2 /* VertexTypes.h */,
 				C405744E2663DD58008527D1 /* BasicShader.metal */,
-				C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -302,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				C44FC09E2641B0A200459E01 /* BioViewer.entitlements */,
+				C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */,
 				C44FC0712641AF1B00459E01 /* BioViewerApp.swift */,
 				C44D0558266BAA6E00BAFDCD /* AppState.swift */,
 				C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */,
@@ -389,6 +391,8 @@
 			children = (
 				C495B23B266541A7004995C2 /* ProteinMesh.swift */,
 				C495B23D26654242004995C2 /* ProteinChunk.swift */,
+				C49D9D38271C6BEF00E12E2F /* AtomProperties.h */,
+				C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */,
 				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 			);
 			path = Meshes;
@@ -790,7 +794,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/Metal/Shaders/BioViewer-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
@@ -822,7 +826,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/Metal/Shaders/BioViewer-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};

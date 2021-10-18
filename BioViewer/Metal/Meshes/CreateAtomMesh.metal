@@ -7,11 +7,12 @@
 
 #include <metal_stdlib>
 #include "AtomProperties.h"
+#include "GeneratedVertex.h"
 using namespace metal;
 
 kernel void createSphereModel(const device simd_float3 *atomPoints [[ buffer(0) ]],
                               const device uint8_t *atomType [[ buffer(1) ]],
-                              device simd_float3 *generatedVertices [[ buffer(2) ]],
+                              device GeneratedVertex *generatedVertices [[ buffer(2) ]],
                               device uint32_t *generatedIndices [[ buffer(3) ]],
                               uint i [[ thread_position_in_grid ]],
                               uint l [[ thread_position_in_threadgroup ]]) {
@@ -20,21 +21,36 @@ kernel void createSphereModel(const device simd_float3 *atomPoints [[ buffer(0) 
     const simd_float3 position = atomPoints[i];
     const uint32_t index = i * 12;
     const uint32_t index_2 = i * 60;
+    // TO-DO: Deprecate AtomProperties, single source of truth with FrameData
     const float radius = atomRadius[atomType[i]];
 
     // Assign unitary icosahedron points (generated in scripts/UnitaryIcosahedron.py)
-    generatedVertices[index] = simd_float3(-0.5257311121191336, 0.85065080835204, 0.0) * radius + position;
-    generatedVertices[index+1] = simd_float3(0.5257311121191336, 0.85065080835204, 0.0) * radius + position;
-    generatedVertices[index+2] = simd_float3(-0.5257311121191336, -0.85065080835204, 0.0) * radius + position;
-    generatedVertices[index+3] = simd_float3(0.5257311121191336, -0.85065080835204, 0.0) * radius + position;
-    generatedVertices[index+4] = simd_float3(0.0, -0.5257311121191336, 0.85065080835204) * radius + position;
-    generatedVertices[index+5] = simd_float3(0.0, 0.5257311121191336, 0.85065080835204) * radius + position;
-    generatedVertices[index+6] = simd_float3(0.0, -0.5257311121191336, -0.85065080835204) * radius + position;
-    generatedVertices[index+7] = simd_float3(0.0, 0.5257311121191336, -0.85065080835204) * radius + position;
-    generatedVertices[index+8] = simd_float3(0.85065080835204, 0.0, -0.5257311121191336) * radius + position;
-    generatedVertices[index+9] = simd_float3(0.85065080835204, 0.0, 0.5257311121191336) * radius + position;
-    generatedVertices[index+10] = simd_float3(-0.85065080835204, 0.0, -0.5257311121191336) * radius + position;
-    generatedVertices[index+11] = simd_float3(-0.85065080835204, 0.0, 0.5257311121191336) * radius + position;
+    generatedVertices[index].position = simd_float3(-0.5257311121191336, 0.85065080835204, 0.0) * radius + position;
+    generatedVertices[index+1].position = simd_float3(0.5257311121191336, 0.85065080835204, 0.0) * radius + position;
+    generatedVertices[index+2].position = simd_float3(-0.5257311121191336, -0.85065080835204, 0.0) * radius + position;
+    generatedVertices[index+3].position = simd_float3(0.5257311121191336, -0.85065080835204, 0.0) * radius + position;
+    generatedVertices[index+4].position = simd_float3(0.0, -0.5257311121191336, 0.85065080835204) * radius + position;
+    generatedVertices[index+5].position = simd_float3(0.0, 0.5257311121191336, 0.85065080835204) * radius + position;
+    generatedVertices[index+6].position = simd_float3(0.0, -0.5257311121191336, -0.85065080835204) * radius + position;
+    generatedVertices[index+7].position = simd_float3(0.0, 0.5257311121191336, -0.85065080835204) * radius + position;
+    generatedVertices[index+8].position = simd_float3(0.85065080835204, 0.0, -0.5257311121191336) * radius + position;
+    generatedVertices[index+9].position = simd_float3(0.85065080835204, 0.0, 0.5257311121191336) * radius + position;
+    generatedVertices[index+10].position = simd_float3(-0.85065080835204, 0.0, -0.5257311121191336) * radius + position;
+    generatedVertices[index+11].position = simd_float3(-0.85065080835204, 0.0, 0.5257311121191336) * radius + position;
+
+    // Assigns unitary normals
+    generatedVertices[index].normal = simd_float3(-0.5257311121191336, 0.85065080835204, 0.0);
+    generatedVertices[index+1].normal = simd_float3(0.5257311121191336, 0.85065080835204, 0.0);
+    generatedVertices[index+2].normal = simd_float3(-0.5257311121191336, -0.85065080835204, 0.0);
+    generatedVertices[index+3].normal = simd_float3(0.5257311121191336, -0.85065080835204, 0.0);
+    generatedVertices[index+4].normal = simd_float3(0.0, -0.5257311121191336, 0.85065080835204);
+    generatedVertices[index+5].normal = simd_float3(0.0, 0.5257311121191336, 0.85065080835204);
+    generatedVertices[index+6].normal = simd_float3(0.0, -0.5257311121191336, -0.85065080835204);
+    generatedVertices[index+7].normal = simd_float3(0.0, 0.5257311121191336, -0.85065080835204);
+    generatedVertices[index+8].normal = simd_float3(0.85065080835204, 0.0, -0.5257311121191336);
+    generatedVertices[index+9].normal = simd_float3(0.85065080835204, 0.0, 0.5257311121191336);
+    generatedVertices[index+10].normal = simd_float3(-0.85065080835204, 0.0, -0.5257311121191336);
+    generatedVertices[index+11].normal = simd_float3(-0.85065080835204, 0.0, 0.5257311121191336);
 
     // Assign index array (how the triangles are constructed)
     generatedIndices[index_2] = 0 + index;

@@ -3,3 +3,4 @@
 //
 
 #import "FrameData.h"
+#import "GeneratedVertex.h"
