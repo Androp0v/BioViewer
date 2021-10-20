@@ -72,17 +72,24 @@ fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     // Phong diffuse shading
     half3 sunRayDirection = normalize(half3(1, 1, 0.0));
+    half3 viewDirection = half3(0,0,-1);
     half reflectivity = 0.5;
+    half specularExponent = 10;
 
-    half3 returnColor = half3(normalized_vertex.color.r,
+    half3 shadedColor = half3(normalized_vertex.color.r,
                               normalized_vertex.color.g,
                               normalized_vertex.color.b);
 
+    // Add Phong diffuse component
+    shadedColor = shadedColor + dot(normalized_vertex.normal, sunRayDirection) * reflectivity;
 
-    returnColor = returnColor + dot(normalized_vertex.normal, sunRayDirection) * reflectivity;
+    // Add Phong specular component
 
-    return half4(returnColor.r,
-                 returnColor.g,
-                 returnColor.b,
+    half3 reflectedRay = 2 * dot(normalized_vertex.normal, sunRayDirection) * normalized_vertex.normal - sunRayDirection;
+    shadedColor = shadedColor + pow( dot(viewDirection, reflectedRay), specularExponent);
+
+    return half4(shadedColor.r,
+                 shadedColor.g,
+                 shadedColor.b,
                  normalized_vertex.color.a);
 }
