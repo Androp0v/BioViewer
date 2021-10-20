@@ -50,7 +50,6 @@
 		C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35F265B0CA900E66C3E /* CoffeeRow.swift */; };
 		C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C361265D311200E66C3E /* ProteinImportView.swift */; };
 		C464C365265D555100E66C3E /* 2OGM.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C464C364265D555100E66C3E /* 2OGM.pdb */; };
-		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
 		C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
 		C495B23C266541A7004995C2 /* ProteinMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B23B266541A7004995C2 /* ProteinMesh.swift */; };
 		C495B23E26654242004995C2 /* ProteinChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B23D26654242004995C2 /* ProteinChunk.swift */; };
@@ -131,7 +130,6 @@
 		C464C35F265B0CA900E66C3E /* CoffeeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeRow.swift; sourceTree = "<group>"; };
 		C464C361265D311200E66C3E /* ProteinImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportView.swift; sourceTree = "<group>"; };
 		C464C364265D555100E66C3E /* 2OGM.pdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2OGM.pdb; sourceTree = "<group>"; };
-		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C495B2382663E195004995C2 /* ProteinRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderer.swift; sourceTree = "<group>"; };
 		C495B23B266541A7004995C2 /* ProteinMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMesh.swift; sourceTree = "<group>"; };
 		C495B23D26654242004995C2 /* ProteinChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinChunk.swift; sourceTree = "<group>"; };
@@ -314,7 +312,6 @@
 				C41A056A2658948B006F551C /* Metal */,
 				C44FC0752641AF1E00459E01 /* Assets.xcassets */,
 				C464C364265D555100E66C3E /* 2OGM.pdb */,
-				C483DC772641B82B009036A2 /* art.scnassets */,
 				C44FC07A2641AF1E00459E01 /* Info.plist */,
 				C44FC0772641AF1E00459E01 /* Preview Content */,
 			);
@@ -544,7 +541,6 @@
 			files = (
 				C44FC0792641AF1E00459E01 /* Preview Assets.xcassets in Resources */,
 				C464C365265D555100E66C3E /* 2OGM.pdb in Resources */,
-				C483DC782641B82B009036A2 /* art.scnassets in Resources */,
 				C44FC0762641AF1E00459E01 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
