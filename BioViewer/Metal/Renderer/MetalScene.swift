@@ -15,6 +15,8 @@ class MetalScene {
 
     /// Camera used to render the scene
     var camera: Camera
+    /// Position of the camera used to render the scene
+    var cameraPosition: simd_float3
     /// Background color of the view
     var backgroundColor: CGColor
     /// Struct with data passed to the GPU shader
@@ -26,12 +28,13 @@ class MetalScene {
 
     init() {
         self.camera = Camera(nearPlane: 0.1, farPlane: 3000, fieldOfView: 85)
+        self.cameraPosition = simd_float3(0, 0, 300)
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()
         self.frame = 0
 
         // Setup initial values for FrameData
-        self.frameData.model_view_matrix = Transform.translationMatrix(simd_float3(0,0,300))
+        self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
                                                                   axis: simd_float3(0.0, 1.0, 0.0))
@@ -54,6 +57,7 @@ class MetalScene {
     // MARK: - Updates
 
     func update() {
+        self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                   axis: simd_float3(0,1,0))

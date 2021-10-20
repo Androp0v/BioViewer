@@ -51,7 +51,7 @@
 		C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C361265D311200E66C3E /* ProteinImportView.swift */; };
 		C464C365265D555100E66C3E /* 2OGM.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C464C364265D555100E66C3E /* 2OGM.pdb */; };
 		C483DC782641B82B009036A2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C483DC772641B82B009036A2 /* art.scnassets */; };
-		C495B2392663E195004995C2 /* BasicRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* BasicRenderer.swift */; };
+		C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
 		C495B23C266541A7004995C2 /* ProteinMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B23B266541A7004995C2 /* ProteinMesh.swift */; };
 		C495B23E26654242004995C2 /* ProteinChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B23D26654242004995C2 /* ProteinChunk.swift */; };
 		C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
@@ -132,7 +132,7 @@
 		C464C361265D311200E66C3E /* ProteinImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportView.swift; sourceTree = "<group>"; };
 		C464C364265D555100E66C3E /* 2OGM.pdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2OGM.pdb; sourceTree = "<group>"; };
 		C483DC772641B82B009036A2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
-		C495B2382663E195004995C2 /* BasicRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicRenderer.swift; sourceTree = "<group>"; };
+		C495B2382663E195004995C2 /* ProteinRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderer.swift; sourceTree = "<group>"; };
 		C495B23B266541A7004995C2 /* ProteinMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMesh.swift; sourceTree = "<group>"; };
 		C495B23D26654242004995C2 /* ProteinChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinChunk.swift; sourceTree = "<group>"; };
 		C495B24026662D9A004995C2 /* VertexTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexTypes.h; sourceTree = "<group>"; };
@@ -379,7 +379,7 @@
 		C495B2372663E189004995C2 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
-				C495B2382663E195004995C2 /* BasicRenderer.swift */,
+				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
 				C49D9D31271C469100E12E2F /* MetalScene.swift */,
 				C46435612669313A00434CC6 /* Camera.swift */,
 			);
@@ -575,7 +575,7 @@
 				C41A0562264C2853006F551C /* ImportFiles.swift in Sources */,
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
 				C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */,
-				C495B2392663E195004995C2 /* BasicRenderer.swift in Sources */,
+				C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C455362A265D869D006D980B /* AtomArrayComposition.swift in Sources */,
 				C41A056C265894AA006F551C /* CreateSASPoints.metal in Sources */,

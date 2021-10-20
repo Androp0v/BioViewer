@@ -71,7 +71,7 @@ vertex VertexOut basic_vertex(const device GeneratedVertex* vertex_buffer [[ buf
 fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     // Phong diffuse shading
-    half3 sunRayDirection = normalize(half3(1, 1, 0.0));
+    half3 sunRayDirection = normalize(half3(1, 1, 0));
     half3 viewDirection = half3(0,0,-1);
     half reflectivity = 0.5;
     half specularExponent = 10;

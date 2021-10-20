@@ -9,7 +9,7 @@ import Foundation
 import MetalKit
 import SwiftUI
 
-class BasicRenderer: NSObject {
+class ProteinRenderer: NSObject {
 
     // MARK: - Properties
 
@@ -87,7 +87,7 @@ class BasicRenderer: NSObject {
 }
 
 // MARK: - Drawing
-extension BasicRenderer: MTKViewDelegate {
+extension ProteinRenderer: MTKViewDelegate {
 
     /// This will be called when the ProteinMetalView changes size
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

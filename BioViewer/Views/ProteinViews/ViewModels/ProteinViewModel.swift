@@ -13,7 +13,7 @@ class ProteinViewModel: ObservableObject {
 
     // MARK: - Properties
 
-    @Published var metalRenderer: BasicRenderer
+    @Published var metalRenderer: ProteinRenderer
     @Published var backgroundColor: Color = .black {
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
@@ -40,7 +40,7 @@ class ProteinViewModel: ObservableObject {
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
         }
-        self.metalRenderer = BasicRenderer(device: device)
+        self.metalRenderer = ProteinRenderer(device: device)
 
         // Setup datasource
         let dataSource = ProteinViewDataSource()

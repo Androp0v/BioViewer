@@ -13,7 +13,7 @@ class ProteinMetalViewController: UIViewController {
 
     var device: MTLDevice!
 
-    var renderView: MTKView!
+    var renderedView: MTKView!
     var renderDelegate: MTKViewDelegate?
     var proteinViewModel: ProteinViewModel
 
@@ -37,21 +37,38 @@ class ProteinMetalViewController: UIViewController {
         self.device = device
 
         // Setup MTKView
-        renderView = MTKView(frame: view.frame, device: device)
-        renderView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(renderView)
+        renderedView = MTKView(frame: view.frame, device: device)
+        renderedView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(renderedView)
         NSLayoutConstraint.activate([
-            renderView.topAnchor.constraint(equalTo: view.topAnchor),
-            renderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            renderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            renderView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+            renderedView.topAnchor.constraint(equalTo: view.topAnchor),
+            renderedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            renderedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            renderedView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
 
         // Render delegate
         self.renderDelegate = proteinViewModel.metalRenderer
-        renderView.delegate = self.renderDelegate
+        renderedView.delegate = self.renderDelegate
 
         // Create depth texture for view
-        renderView.depthStencilPixelFormat = .depth32Float
+        renderedView.depthStencilPixelFormat = .depth32Float
+
+        // Add gesture recognition
+        renderedView.isUserInteractionEnabled = true
+
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
+        renderedView.addGestureRecognizer(pinchGesture)
+
+    }
+
+    // MARK: - Private functions
+
+    @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            // TO-DO: Proper zooming
+            self.proteinViewModel.metalRenderer.scene.cameraPosition.z = self.proteinViewModel.metalRenderer.scene.cameraPosition.z / Float(gestureRecognizer.scale)
+            gestureRecognizer.scale = 1.0
+       }
     }
 
 }
