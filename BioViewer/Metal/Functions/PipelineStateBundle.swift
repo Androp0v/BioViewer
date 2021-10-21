@@ -1,5 +1,5 @@
 //
-//  MTLCompiledFunction.swift
+//  PipelineStateBundle.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 22/5/21.
@@ -8,25 +8,29 @@
 import Foundation
 import Metal
 
-class MTLCompiledFunction {
+class PipelineStateBundle {
+
+    // MARK: - Properties
 
     var function: MTLFunction?
 
-    // MTLComputePipeline state for the function with no constant parameters
+    /// MTLComputePipeline state for the function with no constant parameters
     var pipelineStateNoOptions: MTLComputePipelineState?
 
-    // Cached dictionary of MTLComputePipeline objects for a given constant
-    // function parameter.
+    /// Cached dictionary of MTLComputePipeline objects for a given constant function parameter.
     var pipelineStates = Dictionary<MTLFunctionConstantValues, MTLComputePipelineState>()
 
+    // MARK: - Public functions
+
+    /// Retrieve the pipeline state for a given set of MTLFunctionConstantValues
     func getPipelineState(functionParameters: MTLFunctionConstantValues?) -> MTLComputePipelineState? {
         guard let functionParameters = functionParameters else { return pipelineStateNoOptions }
         return pipelineStates[functionParameters]
     }
 
-    /// Wether or not this MTLCompiledFunction needs to be compiled (because it has not
-    /// been compiled yet, or because the constant values have changed).
-    func requiresCompilation(newFunctionParameters: MTLFunctionConstantValues?) -> Bool {
+    /// Wether or not this PipelineStateBundle needs to be built (because it has not
+    /// been built yet, or because the constant values have changed).
+    func requiresBuilding(newFunctionParameters: MTLFunctionConstantValues?) -> Bool {
 
         // If the function does not exist we need to create it.
         if function == nil {
@@ -56,7 +60,7 @@ class MTLCompiledFunction {
         }
     }
 
-    func compile(functionName: String, library: MTLLibrary?, device: MTLDevice, constantValues: MTLFunctionConstantValues? = nil) {
+    func createPipelineState(functionName: String, library: MTLLibrary?, device: MTLDevice, constantValues: MTLFunctionConstantValues? = nil) {
 
         guard let library = library else { return }
 

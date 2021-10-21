@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */; };
+		C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */; };
+		C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */; };
 		C4057407265E93E9008527D1 /* RemovePoints.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057406265E93E9008527D1 /* RemovePoints.metal */; };
 		C4057409265ED6CD008527D1 /* ComputeEDT.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057408265ED6CD008527D1 /* ComputeEDT.metal */; };
 		C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405740A265FF69A008527D1 /* SwitchRow.swift */; };
@@ -57,9 +60,10 @@
 		C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
 		C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D9D31271C469100E12E2F /* MetalScene.swift */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
-		C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */; };
+		C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */; };
 		C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB326598783001C0490 /* AtomSectionIterator.swift */; };
 		C4B1F81F26457CF80035D739 /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
+		C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +84,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSphereModel.swift; sourceTree = "<group>"; };
+		C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSASPoints.swift; sourceTree = "<group>"; };
+		C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateImpostorSpheres.swift; sourceTree = "<group>"; };
 		C4057406265E93E9008527D1 /* RemovePoints.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RemovePoints.metal; sourceTree = "<group>"; };
 		C4057408265ED6CD008527D1 /* ComputeEDT.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeEDT.metal; sourceTree = "<group>"; };
 		C405740A265FF69A008527D1 /* SwitchRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRow.swift; sourceTree = "<group>"; };
@@ -142,9 +149,10 @@
 		C49D9D38271C6BEF00E12E2F /* AtomProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomProperties.h; sourceTree = "<group>"; };
 		C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedVertex.h; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
-		C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLCompiledFunction.swift; sourceTree = "<group>"; };
+		C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineStateBundle.swift; sourceTree = "<group>"; };
 		C4A69AB326598783001C0490 /* AtomSectionIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSectionIterator.swift; sourceTree = "<group>"; };
 		C4B1F81E26457CF80035D739 /* Protein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protein.swift; sourceTree = "<group>"; };
+		C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorSpheres.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +180,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C400E1FF2721ED5C004DFCA8 /* Functions */ = {
+			isa = PBXGroup;
+			children = (
+				C4A69AAE265936A2001C0490 /* MetalScheduler.swift */,
+				C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */,
+				C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */,
+				C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */,
+				C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */,
+			);
+			path = Functions;
+			sourceTree = "<group>";
+		};
 		C405744A2663DC4C008527D1 /* ProteinMetal */ = {
 			isa = PBXGroup;
 			children = (
@@ -218,9 +238,8 @@
 				C495B2372663E189004995C2 /* Renderer */,
 				C405744D2663DD4C008527D1 /* Shaders */,
 				C495B24126663CDA004995C2 /* Utilities */,
-				C4A69AAE265936A2001C0490 /* MetalScheduler.swift */,
+				C400E1FF2721ED5C004DFCA8 /* Functions */,
 				C4A69AB226598768001C0490 /* MolecularSurface */,
-				C4A69AB026594CB1001C0490 /* MTLCompiledFunction.swift */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -391,6 +410,7 @@
 				C49D9D38271C6BEF00E12E2F /* AtomProperties.h */,
 				C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */,
 				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
+				C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
@@ -578,6 +598,7 @@
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
 				C495B23C266541A7004995C2 /* ProteinMesh.swift in Sources */,
+				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
@@ -592,10 +613,11 @@
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
+				C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
-				C4A69AB126594CB1001C0490 /* MTLCompiledFunction.swift in Sources */,
+				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
@@ -604,7 +626,9 @@
 				C41A0560264ACBF0006F551C /* InformationRow.swift in Sources */,
 				C4057409265ED6CD008527D1 /* ComputeEDT.metal in Sources */,
 				C405744F2663DD58008527D1 /* BasicShader.metal in Sources */,
+				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
+				C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */,
 				C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */,
 				C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */,
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
