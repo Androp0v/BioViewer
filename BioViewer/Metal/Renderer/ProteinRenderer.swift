@@ -35,7 +35,7 @@ class ProteinRenderer: NSObject {
         let descriptor = MTLRenderPassDescriptor()
         // colorAttachments[0] is the final drawable texture, set in draw()
         // colorAttachments[1] is the depth texture
-        // descriptor.colorAttachments[1].loadAction = .dontCare
+        descriptor.colorAttachments[1].loadAction = .dontCare
         return descriptor
     }()
     let depthDescriptor: MTLDepthStencilDescriptor = {

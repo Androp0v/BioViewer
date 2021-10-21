@@ -63,8 +63,8 @@ class MetalScheduler {
     public func createSphereModel(protein: Protein) -> (vertexData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         // Variables
-        let spherePoints: Int = 12
-        let sphereFaces: Int = 20
+        let spherePoints: Int = 162
+        let sphereFaces: Int = 960
 
         // Populate buffers
         let generatedVertexData = device.makeBuffer(
@@ -152,7 +152,7 @@ class MetalScheduler {
 
             // Variables
             var probeRadius: Float = 1.4
-            let spherePoints: Int = 12
+            let spherePoints: Int = 162
 
             // Populate buffers
             let atomPositionsBuffer = device.makeBuffer(

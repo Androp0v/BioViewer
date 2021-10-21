@@ -30,7 +30,7 @@ vertex VertexOut basic_vertex(const device GeneratedVertex* vertex_buffer [[ buf
 
     // Initialize the returned VertexOut structure
     VertexOut normalized_vertex;
-    int verticesPerAtom = 12;
+    int verticesPerAtom = 162;
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -72,9 +72,9 @@ fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     // Phong diffuse shading
     half3 sunRayDirection = normalize(half3(1, 1, 0));
-    half3 viewDirection = half3(0,0,-1);
+    // half3 viewDirection = half3(0,0,-1);
     half reflectivity = 0.5;
-    half specularExponent = 10;
+    // half specularExponent = 10;
 
     half3 shadedColor = half3(normalized_vertex.color.r,
                               normalized_vertex.color.g,
@@ -85,8 +85,8 @@ fragment half4 basic_fragment(VertexOut normalized_vertex [[stage_in]]) {
 
     // Add Phong specular component
 
-    half3 reflectedRay = 2 * dot(normalized_vertex.normal, sunRayDirection) * normalized_vertex.normal - sunRayDirection;
-    shadedColor = shadedColor + pow( dot(viewDirection, reflectedRay), specularExponent);
+    // half3 reflectedRay = 2 * dot(normalized_vertex.normal, sunRayDirection) * normalized_vertex.normal - sunRayDirection;
+    // shadedColor = shadedColor + pow( dot(viewDirection, reflectedRay), specularExponent);
 
     return half4(shadedColor.r,
                  shadedColor.g,

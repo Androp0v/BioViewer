@@ -37,7 +37,7 @@ for i in range(len(icosahedronPoints)):
 if addRadiusAndPosition:
     # Print results ready to copy/paste in the Metal kernel function body
     for index, icosahedronVertex in enumerate(icosahedronPoints):
-        print("generatedVertices[i+" 
+        print("generatedVertices[index+" 
             + str(index) + "] = simd_float3("
             + str(icosahedronVertex[0]) + ", "
             + str(icosahedronVertex[1]) + ", "
