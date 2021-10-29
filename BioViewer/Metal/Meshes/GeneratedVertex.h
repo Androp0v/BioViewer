@@ -21,4 +21,14 @@ typedef struct {
 
 } GeneratedVertex;
 
+typedef struct {
+
+    /// Position of the vertex in world space
+    simd_float3 position;
+    
+    /// Position of the atomic center in world space
+    simd_float3 atomCenterPosition;
+
+} BillboardVertex;
+
 #endif /* GeneratedVertex_h */

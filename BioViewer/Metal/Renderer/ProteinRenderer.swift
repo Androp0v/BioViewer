@@ -10,14 +10,22 @@ import MetalKit
 import SwiftUI
 
 class ProteinRenderer: NSObject {
-
-    // MARK: - Properties
-
-    // Metal variables
+    
+    // MARK: - Metal variables
+    
+    /// GPU
     var device: MTLDevice
-    var pipelineState: MTLRenderPipelineState!
+    /// Pipeline state for the opaque geometry rendering
+    var opaqueRenderingPipelineState: MTLRenderPipelineState!
+    /// Pipeline state for the impostor geometry rendering (transparent at times)
+    var impostorRenderingPipelineState: MTLRenderPipelineState!
+    /// Depth state
+    var depthState: MTLDepthStencilState!
+    /// Command queue
     var commandQueue: MTLCommandQueue!
-
+    
+    // MARK: - Buffers
+    
     /// Used to pass the geometry vertex data to the shader
     var vertexBuffer: MTLBuffer?
     /// Used to pass the atomic type data to the shader (used for coloring, size...)
@@ -27,37 +35,41 @@ class ProteinRenderer: NSObject {
     /// Used to pass constant frame data to the shader
     var uniformBuffer: MTLBuffer?
 
-    // Render runtime variables
+    // MARK: - Runtime variables
+    
+    /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
     var scene = MetalScene()
+    
+    // If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
+    var getCurrentDrawable: (() -> CAMetalDrawable?)?
 
     // MARK: - Descriptors
-    let renderPassDescriptor: MTLRenderPassDescriptor = {
+    
+    let opaqueRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
         // colorAttachments[0] is the final drawable texture, set in draw()
         // colorAttachments[1] is the depth texture
         descriptor.colorAttachments[1].loadAction = .dontCare
         return descriptor
     }()
+    
+    let impostorRenderPassDescriptor: MTLRenderPassDescriptor = {
+        let descriptor = MTLRenderPassDescriptor()
+        // Load the depth of the already populated opaque geometry pass
+        descriptor.colorAttachments[1].loadAction = .load
+        return descriptor
+    }()
+    
     let depthDescriptor: MTLDepthStencilDescriptor = {
         let descriptor = MTLDepthStencilDescriptor()
         descriptor.depthCompareFunction = MTLCompareFunction.less
         descriptor.isDepthWriteEnabled = true
         return descriptor
     }()
-
-    // If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
-    var getCurrentDrawable: (() -> CAMetalDrawable?)?
-
-    // MARK: - Initialization
-
-    init(device: MTLDevice) {
-
-        self.device = device
-
-        uniformBuffer = device.makeBuffer(bytes: &self.scene.frameData,
-                                          length: MemoryLayout<FrameData>.stride,
-                                          options: [])
-
+    
+    // MARK: - Pipelines
+    
+    private func makeOpaqueRenderPipelineState(device: MTLDevice) {
         // Setup pipeline
         let defaultLibrary = device.makeDefaultLibrary()!
         let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
@@ -71,11 +83,47 @@ class ProteinRenderer: NSObject {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
 
-        pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        opaqueRenderingPipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+    }
+    
+    private func makeImpostorRenderPipelineState(device: MTLDevice) {
+        // Setup pipeline
+        let defaultLibrary = device.makeDefaultLibrary()!
+        let fragmentProgram = defaultLibrary.makeFunction(name: "impostor_fragment")
+        let vertexProgram = defaultLibrary.makeFunction(name: "impostor_vertex")
+
+        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+        pipelineStateDescriptor.vertexFunction = vertexProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+
+        // Specify the format of the depth texture
+        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
+
+        impostorRenderingPipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+    }
+    
+    // MARK: - Initialization
+
+    init(device: MTLDevice) {
+
+        self.device = device
+
+        uniformBuffer = device.makeBuffer(bytes: &self.scene.frameData,
+                                          length: MemoryLayout<FrameData>.stride,
+                                          options: [])
 
         // Setup command queue
         commandQueue = device.makeCommandQueue()
-
+        
+        super.init()
+        
+        // Create pipeline states
+        makeOpaqueRenderPipelineState(device: device)
+        makeImpostorRenderPipelineState(device: device)
+        
+        // Depth state
+        depthState = device.makeDepthStencilState(descriptor: depthDescriptor)
     }
 
     // MARK: - Public functions
@@ -118,59 +166,61 @@ extension ProteinRenderer: MTKViewDelegate {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
         }
-
+        
+        // MARK: - Opaque geometry pass
+        
         // Clear the depth texture (depth is in normalized device coordinates,
         // where 1.0 is the maximum/deepest value).
         view.clearDepth = 1.0
 
-        // Depth state
-        // TO-DO: This can be moved out of the render loop
-        let depthState = device.makeDepthStencilState(descriptor: depthDescriptor)
-
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        renderPassDescriptor.colorAttachments[0].texture = drawable.texture
-        renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: scene.backgroundColor.components![0],
-                                                                            green: scene.backgroundColor.components![1],
-                                                                            blue: scene.backgroundColor.components![2],
-                                                                            alpha: scene.backgroundColor.components![3])
-        renderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
+        opaqueRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
+        opaqueRenderPassDescriptor.colorAttachments[0].loadAction = .clear
+        opaqueRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: scene.backgroundColor.components![0],
+                                                                                  green: scene.backgroundColor.components![1],
+                                                                                  blue: scene.backgroundColor.components![2],
+                                                                                  alpha: scene.backgroundColor.components![3])
+        opaqueRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
         // Create command buffer
         let commandBuffer = commandQueue.makeCommandBuffer()!
 
         // Create render command encoder
-        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
+        let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: opaqueRenderPassDescriptor)!
 
         // Set pipeline state
-        renderEncoder.setRenderPipelineState(pipelineState)
+        renderCommandEncoder.setRenderPipelineState(opaqueRenderingPipelineState)
 
         // Set depth state
-        renderEncoder.setDepthStencilState(depthState)
+        renderCommandEncoder.setDepthStencilState(depthState)
 
         // Add buffers to pipeline
-        renderEncoder.setVertexBuffer(vertexBuffer,
-                                      offset: 0,
-                                      index: 0)
-        renderEncoder.setVertexBuffer(atomTypeBuffer,
-                                      offset: 0,
-                                      index: 1)
-        renderEncoder.setVertexBuffer(uniformBuffer,
-                                      offset: 0,
-                                      index: 2)
+        renderCommandEncoder.setVertexBuffer(vertexBuffer,
+                                             offset: 0,
+                                             index: 0)
+        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+                                             offset: 0,
+                                             index: 1)
+        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                             offset: 0,
+                                             index: 2)
 
         // Don't render back-facing triangles (cull them)
-        renderEncoder.setCullMode(.back)
+        renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        renderEncoder.drawIndexedPrimitives(type: .triangle,
-                                            indexCount: indexBuffer.length / MemoryLayout<UInt32>.stride,
-                                            indexType: .uint32,
-                                            indexBuffer: indexBuffer,
-                                            indexBufferOffset: 0)
+        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                   indexCount: indexBuffer.length / MemoryLayout<UInt32>.stride,
+                                                   indexType: .uint32,
+                                                   indexBuffer: indexBuffer,
+                                                   indexBufferOffset: 0)
 
-        renderEncoder.endEncoding()
-
+        renderCommandEncoder.endEncoding()
+        
+        // MARK: - Transparent geometry pass
+        // TO-DO: Impostor geometry
+        
+        // MARK: - Commit buffer
         // Commit command buffer
         commandBuffer.present(drawable)
         commandBuffer.commit()

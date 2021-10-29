@@ -64,6 +64,7 @@
 		C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB326598783001C0490 /* AtomSectionIterator.swift */; };
 		C4B1F81F26457CF80035D739 /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
 		C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
+		C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +154,7 @@
 		C4A69AB326598783001C0490 /* AtomSectionIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSectionIterator.swift; sourceTree = "<group>"; };
 		C4B1F81E26457CF80035D739 /* Protein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protein.swift; sourceTree = "<group>"; };
 		C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorSpheres.metal; sourceTree = "<group>"; };
+		C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorSphereShader.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +209,7 @@
 				C49D9D33271C4A8C00E12E2F /* FrameData.h */,
 				C495B24026662D9A004995C2 /* VertexTypes.h */,
 				C405744E2663DD58008527D1 /* BasicShader.metal */,
+				C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				C41A0562264C2853006F551C /* ImportFiles.swift in Sources */,
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
 				C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */,
+				C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */,
 				C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C455362A265D869D006D980B /* AtomArrayComposition.swift in Sources */,

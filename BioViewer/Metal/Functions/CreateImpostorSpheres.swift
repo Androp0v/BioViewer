@@ -9,6 +9,7 @@ import Foundation
 import Metal
 
 extension MetalScheduler {
+    
     /// Create vertex and index data for a protein given the atom positions.
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
