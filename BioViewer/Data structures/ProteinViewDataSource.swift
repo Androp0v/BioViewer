@@ -12,7 +12,8 @@ import simd
 /// scene nor the appearance, like the ```Protein``` objects that have been
 /// imported or computed values.
 class ProteinViewDataSource: ObservableObject {
-
+    
+    // MARK: - Properties
     private(set) var proteins: [Protein] = [Protein]() {
         // Run when a new protein is added to the datasource
         didSet {
@@ -40,13 +41,15 @@ class ProteinViewDataSource: ObservableObject {
     public func addProteinToDataSource(protein: inout Protein, addToScene: Bool = false) {
         proteins.append(protein)
         if addToScene {
+            // Generate a sphere mesh for each atom in the protein
             let (vertexData, atomTypeData, indexData) = MetalScheduler.shared.createSphereModel(protein: protein)
             guard var vertexData = vertexData else { return }
             guard var atomTypeData = atomTypeData else { return }
             guard var indexData = indexData else { return }
-            proteinViewModel?.metalRenderer.addBuffers(vertexBuffer: &vertexData,
-                                                       atomTypeBuffer: &atomTypeData,
-                                                       indexBuffer: &indexData)
+            // Pass the new mesh to the renderer
+            proteinViewModel?.renderer.addBuffers(vertexBuffer: &vertexData,
+                                                  atomTypeBuffer: &atomTypeData,
+                                                  indexBuffer: &indexData)
             // File import finished
             proteinViewModel?.statusFinished()
         }
@@ -61,6 +64,7 @@ class ProteinViewDataSource: ObservableObject {
 
     public func removeAllProteinsFromDatasource() {
         proteins = []
+        proteinViewModel?.renderer.removeBuffers()
     }
 
 }

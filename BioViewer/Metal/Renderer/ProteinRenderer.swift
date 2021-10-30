@@ -127,10 +127,19 @@ class ProteinRenderer: NSObject {
     }
 
     // MARK: - Public functions
+    
+    /// Adds the necessary buffers to display a protein in the renderer
     func addBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
         self.vertexBuffer = vertexBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.indexBuffer = indexBuffer
+    }
+    
+    /// Deallocates the MTLBuffers used to render a protein
+    func removeBuffers() {
+        self.vertexBuffer = nil
+        self.atomTypeBuffer = nil
+        self.indexBuffer = nil
     }
 }
 

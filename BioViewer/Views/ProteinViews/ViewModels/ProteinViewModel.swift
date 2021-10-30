@@ -13,11 +13,11 @@ class ProteinViewModel: ObservableObject {
 
     // MARK: - Properties
 
-    @Published var metalRenderer: ProteinRenderer
+    @Published var renderer: ProteinRenderer
     @Published var backgroundColor: Color = .black {
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
-            metalRenderer.scene.backgroundColor = newCGColor
+            renderer.scene.backgroundColor = newCGColor
         }
     }
 
@@ -38,7 +38,7 @@ class ProteinViewModel: ObservableObject {
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
         }
-        self.metalRenderer = ProteinRenderer(device: device)
+        self.renderer = ProteinRenderer(device: device)
 
         // Setup datasource
         let dataSource = ProteinViewDataSource()
@@ -58,7 +58,7 @@ class ProteinViewModel: ObservableObject {
     // MARK: - Public functions
 
     func removeAllProteins() {
-        // TO-DO
+        self.dataSource.removeAllProteinsFromDatasource()
     }
 
     // MARK: - Status handling

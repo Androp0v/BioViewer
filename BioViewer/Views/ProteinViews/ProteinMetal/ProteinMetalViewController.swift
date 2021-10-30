@@ -47,7 +47,7 @@ class ProteinMetalViewController: UIViewController {
             renderedView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
 
         // Render delegate
-        self.renderDelegate = proteinViewModel.metalRenderer
+        self.renderDelegate = proteinViewModel.renderer
         renderedView.delegate = self.renderDelegate
 
         // Create depth texture for view
@@ -66,7 +66,7 @@ class ProteinMetalViewController: UIViewController {
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             // TO-DO: Proper zooming
-            self.proteinViewModel.metalRenderer.scene.cameraPosition.z = self.proteinViewModel.metalRenderer.scene.cameraPosition.z / Float(gestureRecognizer.scale)
+            self.proteinViewModel.renderer.scene.cameraPosition.z = self.proteinViewModel.renderer.scene.cameraPosition.z / Float(gestureRecognizer.scale)
             gestureRecognizer.scale = 1.0
        }
     }
