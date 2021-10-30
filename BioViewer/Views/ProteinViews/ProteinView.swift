@@ -79,6 +79,7 @@ struct ProteinView: View {
                         ProteinSidebar()
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
+                            .transition(AnyTransition.move(edge: .trailing))
                     }
 
                 }
