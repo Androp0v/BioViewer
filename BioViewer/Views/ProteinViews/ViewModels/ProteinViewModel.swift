@@ -25,10 +25,8 @@ class ProteinViewModel: ObservableObject {
 
     let dropDelegate: ImportDroppedFilesDelegate
 
-    // Status properties
-    @Published var statusText: String
-    @Published var statusRunning: Bool
-    @Published var progress: Float?
+    // Reference to the status view model for updates
+    var statusViewModel: StatusViewModel
 
     @Published var proteinCount: Int = 0
     @Published var totalAtomCount: Int = 0
@@ -50,8 +48,7 @@ class ProteinViewModel: ObservableObject {
         self.dropDelegate = ImportDroppedFilesDelegate()
 
         // Setup view status
-        self.statusText = "Idle"
-        self.statusRunning = false
+        self.statusViewModel = StatusViewModel()
 
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dataSource.proteinViewModel = self
@@ -67,23 +64,17 @@ class ProteinViewModel: ObservableObject {
     // MARK: - Status handling
 
     func statusUpdate(statusText: String) {
-        DispatchQueue.main.sync {
-            self.statusText = statusText
-            self.statusRunning = true
-        }
+        self.statusViewModel.setStatusText(text: statusText)
+        self.statusViewModel.setRunningStatus(running: true)
     }
 
     func statusProgress(progress: Float) {
-        DispatchQueue.main.sync {
-            self.progress = progress
-        }
+        self.statusViewModel.setProgress(progress: progress)
     }
 
     func statusFinished() {
-        DispatchQueue.main.sync {
-            self.statusText = "Idle"
-            self.statusRunning = false
-            self.progress = nil
-        }
+        self.statusViewModel.setStatusText(text: "Idle")
+        self.statusViewModel.setRunningStatus(running: false)
+        self.statusViewModel.setProgress(progress: 0)
     }
 }

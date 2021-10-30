@@ -65,7 +65,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
             // If the file has a known .pdb extension, or we don't
             // know the extension, try opening it as a PDB file.
             proteinViewModel?.statusUpdate(statusText: "Importing files")
-            var protein = parsePDB(rawText: rawText)
+            var protein = parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
             proteinViewModel?.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
         } else {
             // TO-DO: Open other file types

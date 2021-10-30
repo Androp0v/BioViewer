@@ -88,7 +88,7 @@ struct ProteinImportView: View {
             // Disable import actions while processing this action
             willLoadProtein = true
             // Dispatch on background queue, file loading can be slow
-            DispatchQueue.global(qos: .utility).async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 guard let proteinSampleFile = Bundle.main.url(forResource: "2OGM", withExtension: "pdb") else {
                     failedToLoad()
                     return
@@ -98,7 +98,8 @@ struct ProteinImportView: View {
                     return
                 }
                 proteinViewModel.statusUpdate(statusText: "Importing files")
-                var protein = parsePDB(rawText: String(decoding: proteinData, as: UTF8.self))
+                let rawText = String(decoding: proteinData, as: UTF8.self)
+                var protein = parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
                 proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
             }
         }

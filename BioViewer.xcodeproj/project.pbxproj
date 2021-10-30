@@ -65,6 +65,7 @@
 		C4B1F81F26457CF80035D739 /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
 		C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
 		C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */; };
+		C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEAF272D58A400A60317 /* StatusViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,6 +156,7 @@
 		C4B1F81E26457CF80035D739 /* Protein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protein.swift; sourceTree = "<group>"; };
 		C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorSpheres.metal; sourceTree = "<group>"; };
 		C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorSphereShader.metal; sourceTree = "<group>"; };
+		C500EEAF272D58A400A60317 /* StatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A0565264C7B97006F551C /* StatusView.swift */,
+				C500EEAF272D58A400A60317 /* StatusViewModel.swift */,
 				C45BAC41264954FF00B36026 /* Rows */,
 				C440856E2648200500DC5009 /* VisualEffectView.swift */,
 				C464C356265A569800E66C3E /* CoffeeViews */,
@@ -623,6 +626,7 @@
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
+				C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,

@@ -38,7 +38,7 @@ fileprivate enum PDBConstants {
     static let elementEnd: Int = 78
 }
 
-func parsePDB(rawText: String) -> Protein {
+func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
 
     var atomArray = ContiguousArray<simd_float3>()
     var atomIdentifiers = [UInt8]()
@@ -58,8 +58,21 @@ func parsePDB(rawText: String) -> Protein {
     var sequenceIdentifiers = [Int]()
 
     var currentResId: Int = -1
+    
+    var currentLine: Int = 0
+    
+    let totalLineCount = rawText.reduce(into: 0) { (count, letter) in
+       if letter == "\n" {
+          count += 1
+       }
+    }
+    
+    var progress: Float {
+        return Float(currentLine) / Float(totalLineCount)
+    }
 
     rawText.enumerateLines(invoking: { line, stop in
+        currentLine += 1
         // We're only interested in the lines that contain atom positions
         if line.starts(with: "ATOM") {
 
@@ -159,6 +172,7 @@ func parsePDB(rawText: String) -> Protein {
             }
 
         }
+        proteinViewModel?.statusProgress(progress: progress)
     })
 
     // Add element array contents into the contiguous array

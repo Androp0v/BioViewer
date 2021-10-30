@@ -19,22 +19,22 @@ public struct StatusViewConstants {
 
 struct StatusView: View {
 
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @ObservedObject var statusViewModel: StatusViewModel
 
     var body: some View {
         ZStack {
             Color(UIColor.secondarySystemBackground)
             HStack (spacing: 8) {
-                if proteinViewModel.statusRunning {
+                if statusViewModel.statusRunning {
                     ProgressView()
                 }
-                Text("\(proteinViewModel.statusText)")
+                Text("\(statusViewModel.statusText)")
             }
             .padding(.horizontal, 8)
-            if proteinViewModel.statusRunning {
+            if statusViewModel.statusRunning {
                 VStack(spacing: 0) {
                     Spacer()
-                    ProgressView(value: proteinViewModel.progress, total: 1.0)
+                    ProgressView(value: statusViewModel.progress, total: 1.0)
                         .progressViewStyle(LinearProgressViewStyle())
                 }
             }
@@ -47,7 +47,7 @@ struct StatusView: View {
 
 struct StatusView_Previews: PreviewProvider {
     static var previews: some View {
-        StatusView()
+        StatusView(statusViewModel: StatusViewModel())
             .frame(width: 300, height: 32)
             .environmentObject(ProteinViewModel())
     }

@@ -107,7 +107,7 @@ struct ProteinView: View {
                 
                 ToolbarItem(placement: .principal) {
                     // Status bar component
-                    StatusView()
+                    StatusView(statusViewModel: proteinViewModel.statusViewModel)
                         .frame(minWidth: 0,
                                idealWidth: geometry.size.width * 0.6,
                                maxWidth: geometry.size.width * 0.6,
