@@ -172,6 +172,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
             }
 
         }
+        
         proteinViewModel?.statusProgress(progress: progress)
     })
 
