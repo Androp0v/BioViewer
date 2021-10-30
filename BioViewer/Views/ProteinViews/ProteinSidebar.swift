@@ -18,7 +18,7 @@ private struct SidebarItem: View {
 
 private struct ProteinSidebarContent: View {
 
-    @State private var selectedSegment = 0
+    @Binding var selectedSegment: Int
 
     var body: some View {
         ZStack {
@@ -57,11 +57,12 @@ struct ProteinSidebar: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @Environment(\.dismiss) var dismiss
+    @Binding var selectedSegment: Int
 
     var body: some View {
         if horizontalSizeClass == .compact {
             NavigationView {
-                ProteinSidebarContent()
+                ProteinSidebarContent(selectedSegment: $selectedSegment)
                     .background(Color(UIColor.secondarySystemBackground))
                     .navigationBarTitle("Inspector")
                     .navigationBarTitleDisplayMode(.inline)
@@ -71,14 +72,14 @@ struct ProteinSidebar: View {
                     .environmentObject(proteinViewModel)
             }
         } else {
-            ProteinSidebarContent()
+            ProteinSidebarContent(selectedSegment: $selectedSegment)
         }
     }
 }
 
 struct ProteinSidebar_Previews: PreviewProvider {
     static var previews: some View {
-        ProteinSidebar()
+        ProteinSidebar(selectedSegment: .constant(0))
             .previewLayout(.sizeThatFits)
             .environmentObject(ProteinViewModel())
     }

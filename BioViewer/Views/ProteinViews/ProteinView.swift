@@ -19,6 +19,7 @@ struct ProteinView: View {
     // Sidebar
     @State private var toggleSidebar = false
     @State private var toggleModalSidebar = false
+    @State private var selectedSidebarSegment = 0
 
     // Sequence view
     @State private var toggleSequenceView = false
@@ -35,6 +36,9 @@ struct ProteinView: View {
 
     // Main view
     var body: some View {
+        
+        let sidebar = ProteinSidebar(selectedSegment: $selectedSidebarSegment)
+        
         GeometryReader { geometry in
             VStack (spacing: 0) {
                 // Future toolbar items will be here
@@ -76,7 +80,7 @@ struct ProteinView: View {
 
                     // Sidebar
                     if toggleSidebar {
-                        ProteinSidebar()
+                        sidebar
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
                             .transition(AnyTransition.move(edge: .trailing))
@@ -119,7 +123,7 @@ struct ProteinView: View {
                 }
             }
             .sheet(isPresented: $toggleModalSidebar, content: {
-                ProteinSidebar()
+                sidebar
             })
         }
         .environmentObject(proteinViewModel)
