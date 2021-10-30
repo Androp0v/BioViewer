@@ -38,6 +38,7 @@ class ProteinMetalViewController: UIViewController {
 
         // Setup MTKView
         renderedView = MTKView(frame: view.frame, device: device)
+        renderedView.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
         renderedView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(renderedView)
         NSLayoutConstraint.activate([
