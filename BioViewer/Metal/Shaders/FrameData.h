@@ -20,6 +20,9 @@ typedef struct {
 
     /// Rotation matrix
     simd_float4x4 rotation_matrix;
+    
+    /// Inverse rotation matrix
+    simd_float4x4 inverse_rotation_matrix;
 
     /// Displayed atomic radii in hard-spheres visualization mode
     float atomRadius [6];

@@ -39,17 +39,28 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
-
+    simd_float4x4 inverse_rotation_matrix = frameData.inverse_rotation_matrix;
+    
     // Rotate the model in world space
-    float4 rotated_model = rotation_matrix * float4(vertex_buffer[vid].position.x,
-                                                    vertex_buffer[vid].position.y,
-                                                    vertex_buffer[vid].position.z,
-                                                    1.0);
     float4 rotated_atom_centers = rotation_matrix * float4(vertex_buffer[vid].atomCenter.x,
                                                            vertex_buffer[vid].atomCenter.y,
                                                            vertex_buffer[vid].atomCenter.z,
                                                            1.0);
 
+    // To rotate the billboards so they are facing the screen, first rotate them like the model,
+    // along the protein axis.
+    float4 rotated_model = rotation_matrix * float4(vertex_buffer[vid].position.x,
+                                                    vertex_buffer[vid].position.y,
+                                                    vertex_buffer[vid].position.z,
+                                                    1.0);
+    // Then translate the triangle to the origin of coordinates
+    rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
+    // Reverse the rotation by rotating in the oposite rotation along the billboard axis, NOT
+    // the protein axis.
+    rotated_model = inverse_rotation_matrix * rotated_model;
+    // Translate the triangles back to their positions, now that they're already rotated
+    rotated_model.xyz = rotated_model.xyz + rotated_atom_centers.xyz;
+    
     // Transform the world space coordinates to eye space coordinates
     float4 eye_position = model_view_matrix * rotated_model;
     

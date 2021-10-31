@@ -41,6 +41,8 @@ class MetalScene {
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
                                                                   axis: simd_float3(0.0, 1.0, 0.0))
+        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
+                                                                  axis: simd_float3(0.0, 1.0, 0.0)).inverse
 
         self.frameData.atomRadius.0 = 1.70 // Carbon
         self.frameData.atomRadius.1 = 1.55 // Nitrogen
@@ -63,11 +65,11 @@ class MetalScene {
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        // FIXME: Add rotation back
-        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                  axis: simd_float3(0,1,0))*/
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: 0,
+        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                   axis: simd_float3(0,1,0))
+        self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: 0,
+                                                                  axis: simd_float3(0,1,0))*/
         frame += 1
     }
     
