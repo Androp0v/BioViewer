@@ -29,7 +29,7 @@ class MetalScene {
     // MARK: - Initialization
 
     init() {
-        self.camera = Camera(nearPlane: 10, farPlane: 10000, focalLength: 200)
+        self.camera = Camera(nearPlane: 1, farPlane: 10000, focalLength: 200)
         self.cameraPosition = simd_float3(0, 0, 300)
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()
@@ -63,7 +63,10 @@ class MetalScene {
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
+        // FIXME: Add rotation back
+        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
+                                                                  axis: simd_float3(0,1,0))*/
+        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: 0,
                                                                   axis: simd_float3(0,1,0))
         frame += 1
     }

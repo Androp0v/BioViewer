@@ -33,12 +33,16 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Buffers
     
-    /// Used to pass the geometry vertex data to the shader
-    var vertexBuffer: MTLBuffer?
+    /// Used to pass the geometry vertex data to the shader when using a dense mesh
+    var opaqueVertexBuffer: MTLBuffer?
+    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader when using a dense mesh
+    var opaqueIndexBuffer: MTLBuffer?
+    /// Used to pass the geometry vertex data to the shader when using billboarding
+    var impostorVertexBuffer: MTLBuffer?
+    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
+    var impostorIndexBuffer: MTLBuffer?
     /// Used to pass the atomic type data to the shader (used for coloring, size...)
     var atomTypeBuffer: MTLBuffer?
-    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader
-    var indexBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader
     var uniformBuffers: [MTLBuffer]?
 
@@ -151,18 +155,25 @@ class ProteinRenderer: NSObject {
 
     // MARK: - Public functions
     
-    /// Adds the necessary buffers to display a protein in the renderer
-    func addBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
-        self.vertexBuffer = vertexBuffer
+    /// Adds the necessary buffers to display a protein in the renderer with a dense mesh
+    func addOpaqueBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        self.opaqueVertexBuffer = vertexBuffer
         self.atomTypeBuffer = atomTypeBuffer
-        self.indexBuffer = indexBuffer
+        self.opaqueIndexBuffer = indexBuffer
+    }
+    
+    /// Adds the necessary buffers to display a protein in the renderer using billboarding
+    func addBillboardingBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        self.impostorVertexBuffer = vertexBuffer
+        self.atomTypeBuffer = atomTypeBuffer
+        self.impostorIndexBuffer = indexBuffer
     }
     
     /// Deallocates the MTLBuffers used to render a protein
     func removeBuffers() {
-        self.vertexBuffer = nil
+        self.opaqueVertexBuffer = nil
         self.atomTypeBuffer = nil
-        self.indexBuffer = nil
+        self.opaqueIndexBuffer = nil
     }
 }
 
@@ -186,9 +197,7 @@ extension ProteinRenderer: MTKViewDelegate {
         guard let drawable = view.currentDrawable else { return }
         
         // Assure buffers are loaded
-        guard let vertexBuffer = self.vertexBuffer else { return }
         guard let atomTypeBuffer = self.atomTypeBuffer else { return }
-        guard let indexBuffer = self.indexBuffer else { return }
         guard let uniformBuffers = self.uniformBuffers else { return }
         
         // Wait until the inflight command buffer has completed its work
@@ -209,58 +218,115 @@ extension ProteinRenderer: MTKViewDelegate {
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
         }
         
-        // MARK: - Opaque geometry pass
+        // MARK: - Command buffer & depth
         
         // Clear the depth texture (depth is in normalized device coordinates,
         // where 1.0 is the maximum/deepest value).
         view.clearDepth = 1.0
-
-        // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        opaqueRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
-        opaqueRenderPassDescriptor.colorAttachments[0].loadAction = .clear
-        opaqueRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: scene.backgroundColor.components![0],
-                                                                                  green: scene.backgroundColor.components![1],
-                                                                                  blue: scene.backgroundColor.components![2],
-                                                                                  alpha: scene.backgroundColor.components![3])
-        opaqueRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
-
+        
         // Create command buffer
         let commandBuffer = commandQueue.makeCommandBuffer()!
+        
+        // MARK: - Opaque geometry pass
+        
+        if false {
+            // Ensure opaque buffers are loaded
+            guard let opaqueVertexBuffer = self.opaqueVertexBuffer else { return }
+            guard let opaqueIndexBuffer = self.opaqueIndexBuffer else { return }
+            
+            // Attach textures. colorAttachments[0] is the final texture we draw onscreen
+            opaqueRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
+            opaqueRenderPassDescriptor.colorAttachments[0].loadAction = .clear
+            opaqueRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: scene.backgroundColor.components![0],
+                                                                                      green: scene.backgroundColor.components![1],
+                                                                                      blue: scene.backgroundColor.components![2],
+                                                                                      alpha: scene.backgroundColor.components![3])
+            opaqueRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
-        // Create render command encoder
-        let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: opaqueRenderPassDescriptor)!
+            // Create render command encoder
+            let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: opaqueRenderPassDescriptor)!
 
-        // Set pipeline state
-        renderCommandEncoder.setRenderPipelineState(opaqueRenderingPipelineState)
+            // Set pipeline state
+            renderCommandEncoder.setRenderPipelineState(opaqueRenderingPipelineState)
 
-        // Set depth state
-        renderCommandEncoder.setDepthStencilState(depthState)
+            // Set depth state
+            renderCommandEncoder.setDepthStencilState(depthState)
 
-        // Add buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(vertexBuffer,
-                                             offset: 0,
-                                             index: 0)
-        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
-                                             offset: 0,
-                                             index: 1)
-        renderCommandEncoder.setVertexBuffer(uniformBuffer,
-                                             offset: 0,
-                                             index: 2)
+            // Add buffers to pipeline
+            renderCommandEncoder.setVertexBuffer(opaqueVertexBuffer,
+                                                 offset: 0,
+                                                 index: 0)
+            renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+                                                 offset: 0,
+                                                 index: 1)
+            renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                                 offset: 0,
+                                                 index: 2)
 
-        // Don't render back-facing triangles (cull them)
-        renderCommandEncoder.setCullMode(.back)
+            // Don't render back-facing triangles (cull them)
+            renderCommandEncoder.setCullMode(.back)
 
-        // Draw primitives
-        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                   indexCount: indexBuffer.length / MemoryLayout<UInt32>.stride,
-                                                   indexType: .uint32,
-                                                   indexBuffer: indexBuffer,
-                                                   indexBufferOffset: 0)
+            // Draw primitives
+            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                       indexCount: opaqueIndexBuffer.length / MemoryLayout<UInt32>.stride,
+                                                       indexType: .uint32,
+                                                       indexBuffer: opaqueIndexBuffer,
+                                                       indexBufferOffset: 0)
 
-        renderCommandEncoder.endEncoding()
+            renderCommandEncoder.endEncoding()
+        }
         
         // MARK: - Transparent geometry pass
-        // TO-DO: Impostor geometry
+        if true {
+            // Ensure opaque buffers are loaded
+            guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
+            guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
+            
+            // Attach textures. colorAttachments[0] is the final texture we draw onscreen
+            impostorRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
+            impostorRenderPassDescriptor.colorAttachments[0].loadAction = .clear
+            impostorRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: scene.backgroundColor.components![0],
+                                                                                      green: scene.backgroundColor.components![1],
+                                                                                      blue: scene.backgroundColor.components![2],
+                                                                                      alpha: scene.backgroundColor.components![3])
+            impostorRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
+
+            // Create render command encoder
+            let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor)!
+
+            // Set pipeline state
+            renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
+
+            // Set depth state
+            renderCommandEncoder.setDepthStencilState(depthState)
+
+            // Add buffers to pipeline
+            renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
+                                                 offset: 0,
+                                                 index: 0)
+            renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+                                                 offset: 0,
+                                                 index: 1)
+            renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                                 offset: 0,
+                                                 index: 2)
+            
+            renderCommandEncoder.setFragmentBuffer(uniformBuffer,
+                                                   offset: 0,
+                                                   index: 1)
+
+            // Don't render back-facing triangles (cull them)
+            renderCommandEncoder.setCullMode(.back)
+
+            // Draw primitives
+            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                       indexCount: impostorIndexBuffer.length / MemoryLayout<UInt32>.stride,
+                                                       indexType: .uint32,
+                                                       indexBuffer: impostorIndexBuffer,
+                                                       indexBufferOffset: 0)
+
+            renderCommandEncoder.endEncoding()
+        }
         
         // MARK: - Triple buffering
         

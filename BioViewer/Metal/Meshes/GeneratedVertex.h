@@ -26,8 +26,11 @@ typedef struct {
     /// Position of the vertex in world space
     simd_float3 position;
     
+    /// Position of the atom center in world space
+    simd_float3 atomCenter;
+    
     /// Position of the atomic center in world space
-    simd_float3 atomCenterPosition;
+    simd_float2 billboardMapping;
 
 } BillboardVertex;
 

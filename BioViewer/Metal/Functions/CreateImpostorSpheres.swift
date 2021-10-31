@@ -16,19 +16,19 @@ extension MetalScheduler {
     /// specifying how the triangles are constructed.
     public func createImpostorSpheres(protein: Protein) -> (vertexData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
-        let impostorVertexCount = 8
-        let impostorTriangleCount = 12
+        let impostorVertexCount = 4
+        let impostorTriangleCount = 2
 
         // Populate buffers
         let generatedVertexData = device.makeBuffer(
-            length: protein.atomCount * impostorVertexCount * MemoryLayout<GeneratedVertex>.stride
+            length: protein.atomCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
         )
         let atomTypeData = device.makeBuffer(
             bytes: protein.atomIdentifiers,
             length: protein.atomCount * MemoryLayout<UInt8>.stride
         )
         let generatedIndexData = device.makeBuffer(
-            length: protein.atomCount * impostorTriangleCount * MemoryLayout<UInt32>.stride
+            length: protein.atomCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
         )
 
         metalDispatchQueue.sync {
