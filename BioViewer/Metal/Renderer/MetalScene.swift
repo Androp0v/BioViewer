@@ -23,15 +23,18 @@ class MetalScene {
     var frameData: FrameData
     /// Frame count since the scene started
     var frame: Int
+    /// Scene's aspect ratio, determined by the MTKView it's displayed on
+    var aspectRatio: Float
 
     // MARK: - Initialization
 
     init() {
-        self.camera = Camera(nearPlane: 0.1, farPlane: 3000, fieldOfView: 85)
+        self.camera = Camera(nearPlane: 10, farPlane: 10000, focalLength: 200)
         self.cameraPosition = simd_float3(0, 0, 300)
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()
         self.frame = 0
+        self.aspectRatio = 1.0
 
         // Setup initial values for FrameData
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
@@ -56,11 +59,16 @@ class MetalScene {
 
     // MARK: - Updates
 
-    func update() {
+    func updateScene() {
+        self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                   axis: simd_float3(0,1,0))
         frame += 1
+    }
+    
+    func updateAspectRatio(aspectRatio: Float) {
+        self.aspectRatio = aspectRatio
     }
 }

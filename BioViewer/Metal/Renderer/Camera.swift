@@ -18,7 +18,9 @@ struct Camera {
     var fieldOfView: Float
     var focalLength: Float
     var projectionMatrix = simd_float4x4()
-
+    
+    // MARK: - Initialization
+    
     /// Initialize the camera struct.
     /// - Parameters:
     ///   - nearPlane: Closest plane in world coordinates.
@@ -51,7 +53,8 @@ struct Camera {
                                                            farPlane)
     }
 
-
+    // MARK: - Updates
+    
     /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
@@ -60,6 +63,29 @@ struct Camera {
         let aspectRatio = Float(drawableSize.width) / Float(drawableSize.height)
         projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
                                                            aspectRatio,
+                                                           nearPlane,
+                                                           farPlane)
+    }
+    
+    /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
+    /// view is displayed on.
+    /// - Parameter drawableSize: The size of the view the scene is rendered on.
+    mutating func updateProjection(aspectRatio: Float) {
+        let fieldOfViewRadians = fieldOfView * Float.pi / 180
+        projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
+                                                           aspectRatio,
+                                                           nearPlane,
+                                                           farPlane)
+    }
+    
+    /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
+    /// view is displayed on.
+    /// - Parameter drawableSize: The size of the view the scene is rendered on.
+    mutating func updateFocalLength(focalLength: Float, aspectRatio: Float) {
+        self.focalLength = focalLength
+        self.fieldOfView = 2 * atan( fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
+        projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
+                                                           1.0,
                                                            nearPlane,
                                                            farPlane)
     }

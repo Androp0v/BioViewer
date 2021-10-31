@@ -64,6 +64,12 @@ struct AppearanceSegmentProtein: View {
                                    selectedColor: .constant(Color.gray))
                 })
             }
+            
+            Section(header: Text("Focal distance"), content: {
+
+                SliderRow(focalLength: $proteinViewModel.cameraFocalLength)
+
+            })
 
         }
         .listStyle(GroupedListStyle())

@@ -20,6 +20,12 @@ class ProteinViewModel: ObservableObject {
             renderer.scene.backgroundColor = newCGColor
         }
     }
+    @Published var cameraFocalLength: Float = 200 {
+        didSet {
+            renderer.scene.camera.updateFocalLength(focalLength: cameraFocalLength,
+                                                    aspectRatio: renderer.scene.aspectRatio)
+        }
+    }
 
     @Published var dataSource: ProteinViewDataSource
 

@@ -28,7 +28,7 @@ class BioViewerTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let camera = Camera(nearPlane: 1, farPlane: 10, focalLength: 50)
+        let camera = Camera(nearPlane: 1, farPlane: 10, focalLength: 200)
         print(camera.focalLength)
     }
 

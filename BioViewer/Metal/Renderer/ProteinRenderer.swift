@@ -173,6 +173,7 @@ extension ProteinRenderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         // TO-DO: Update G-Buffer texture size to match view size
         self.scene.camera.updateProjection(drawableSize: size)
+        self.scene.aspectRatio = Float(size.width / size.height)
 
         // TO-DO: Enqueue draw calls so this doesn't drop the FPS
         view.draw()
@@ -200,12 +201,9 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // Update current frame index
         currentFrameIndex = (currentFrameIndex + 1) % maxBuffersInFlight
-        
-        // Update camera
-        scene.camera.updateProjection(drawableSize: view.drawableSize)
-        
+                
         // TO-DO: Address directly instead of copying data on each frame
-        self.scene.update()
+        self.scene.updateScene()
         withUnsafePointer(to: self.scene.frameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
