@@ -11,6 +11,9 @@ import SwiftUI
 
 class ProteinRenderer: NSObject {
     
+    // MARK: - Constants
+    let maxBuffersInFlight = 3
+    
     // MARK: - Metal variables
     
     /// GPU
@@ -23,6 +26,10 @@ class ProteinRenderer: NSObject {
     var depthState: MTLDepthStencilState!
     /// Command queue
     var commandQueue: MTLCommandQueue!
+    /// Used to signal that a new frame is ready to be computed by the CPU
+    var frameBoundarySemaphore: DispatchSemaphore!
+    /// Used to index the dynamic buffers
+    var currentFrameIndex: Int
     
     // MARK: - Buffers
     
@@ -33,7 +40,7 @@ class ProteinRenderer: NSObject {
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader
     var indexBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader
-    var uniformBuffer: MTLBuffer?
+    var uniformBuffers: [MTLBuffer]?
 
     // MARK: - Runtime variables
     
@@ -108,15 +115,31 @@ class ProteinRenderer: NSObject {
     init(device: MTLDevice) {
 
         self.device = device
-
-        uniformBuffer = device.makeBuffer(bytes: &self.scene.frameData,
-                                          length: MemoryLayout<FrameData>.stride,
-                                          options: [])
+        
+        // Initialize the uniforms triple buffering array
+        self.uniformBuffers = [MTLBuffer]()
 
         // Setup command queue
-        commandQueue = device.makeCommandQueue()
+        self.commandQueue = device.makeCommandQueue()
         
+        // Create frame boundary semaphore
+        self.frameBoundarySemaphore = DispatchSemaphore(value: maxBuffersInFlight)
+        self.currentFrameIndex = 0
+        
+        // Call super initializer
         super.init()
+        
+        // Add buffers to uniforms buffer array
+        for _ in 0..<maxBuffersInFlight {
+            let uniformBuffer = device.makeBuffer(bytes: &self.scene.frameData,
+                                                  length: MemoryLayout<FrameData>.stride,
+                                                  options: [])
+            guard let uniformBuffer = uniformBuffer else {
+                NSLog("Unable to create uniform buffer.")
+                continue
+            }
+            uniformBuffers?.append(uniformBuffer)
+        }
         
         // Create pipeline states
         makeOpaqueRenderPipelineState(device: device)
@@ -157,20 +180,32 @@ extension ProteinRenderer: MTKViewDelegate {
 
     // This is called periodically to render the scene contents on display
     func draw(in view: MTKView) {
-
+        
         // Retrieve current view drawable
         guard let drawable = view.currentDrawable else { return }
-
+        
         // Assure buffers are loaded
         guard let vertexBuffer = self.vertexBuffer else { return }
         guard let atomTypeBuffer = self.atomTypeBuffer else { return }
         guard let indexBuffer = self.indexBuffer else { return }
-        guard let uniformBuffer = self.uniformBuffer else { return }
+        guard let uniformBuffers = self.uniformBuffers else { return }
+        
+        // Wait until the inflight command buffer has completed its work
+        _ = frameBoundarySemaphore.wait(timeout: .distantFuture)
 
-        // Update uniforms buffer
+        // MARK: - Update uniforms buffer
+        
+        // Ensure the uniform buffer is loaded
+        let uniformBuffer = uniformBuffers[currentFrameIndex]
+        
+        // Update current frame index
+        currentFrameIndex = (currentFrameIndex + 1) % maxBuffersInFlight
+        
+        // Update camera
+        scene.camera.updateProjection(drawableSize: view.drawableSize)
+        
         // TO-DO: Address directly instead of copying data on each frame
         self.scene.update()
-
         withUnsafePointer(to: self.scene.frameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
@@ -229,9 +264,19 @@ extension ProteinRenderer: MTKViewDelegate {
         // MARK: - Transparent geometry pass
         // TO-DO: Impostor geometry
         
+        // MARK: - Triple buffering
+        
+        // Schedule a drawable presentation to occur after the GPU completes its work
+        commandBuffer.present(drawable)
+        
+        commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
+            // GPU work is complete, signal the semaphore to start the CPU work
+            guard let self = self else { return }
+            self.frameBoundarySemaphore.signal()
+        })
+        
         // MARK: - Commit buffer
         // Commit command buffer
-        commandBuffer.present(drawable)
         commandBuffer.commit()
     }
 
