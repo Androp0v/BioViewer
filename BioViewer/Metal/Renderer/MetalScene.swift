@@ -17,6 +17,8 @@ class MetalScene {
     var camera: Camera
     /// Position of the camera used to render the scene
     var cameraPosition: simd_float3
+    /// Rotation of the model applied by the user
+    var userModelRotationMatrix: simd_float4x4
     /// Background color of the view
     var backgroundColor: CGColor
     /// Struct with data passed to the GPU shader
@@ -31,6 +33,7 @@ class MetalScene {
     init() {
         self.camera = Camera(nearPlane: 1, farPlane: 10000, focalLength: 200)
         self.cameraPosition = simd_float3(0, 0, 300)
+        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0, axis: simd_float3(0,1,0))
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()
         self.frame = 0
@@ -65,11 +68,12 @@ class MetalScene {
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                  axis: simd_float3(0,1,0))
-        self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
+                                                                    axis: simd_float3(0,1,0))*/
         /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: 0,
                                                                   axis: simd_float3(0,1,0))*/
+        self.frameData.rotation_matrix = self.userModelRotationMatrix
+        self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
         frame += 1
     }
     

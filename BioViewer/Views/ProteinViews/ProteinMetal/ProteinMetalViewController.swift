@@ -56,9 +56,14 @@ class ProteinMetalViewController: UIViewController {
 
         // Add gesture recognition
         renderedView.isUserInteractionEnabled = true
-
+        
+        // MARK: - Gesture recognizers
+        
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
         renderedView.addGestureRecognizer(pinchGesture)
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
+        renderedView.addGestureRecognizer(panGesture)
 
     }
 
@@ -70,6 +75,16 @@ class ProteinMetalViewController: UIViewController {
             self.proteinViewModel.renderer.scene.cameraPosition.z = self.proteinViewModel.renderer.scene.cameraPosition.z / Float(gestureRecognizer.scale)
             gestureRecognizer.scale = 1.0
        }
+    }
+    
+    @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
+        if gestureRecognizer.state == .changed {
+            let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
+            let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+            // Revert the axis rotation before rotating through that axis
+            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedX, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(0,1,0,1)).xyz )
+            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedY, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(1,0,0,1)).xyz )
+        }
     }
 
 }
