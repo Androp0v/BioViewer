@@ -17,16 +17,16 @@ enum AtomTypeEnum: CaseIterable {
 }
 
 struct AtomType {
-    static let CARBON = 0
-    static let NITROGEN = 1
-    static let HYDROGEN = 2
-    static let OXYGEN = 3
-    static let SULFUR = 4
+    static let CARBON: UInt8 = 0
+    static let NITROGEN: UInt8 = 1
+    static let HYDROGEN: UInt8 = 2
+    static let OXYGEN: UInt8 = 3
+    static let SULFUR: UInt8 = 4
 
-    static let UNKNOWN = -1
+    static let UNKNOWN: UInt8 = 5
 }
 
-func getAtomId(atomName: String) -> Int {
+func getAtomId(atomName: String) -> UInt8 {
     // Look-up atom name and match it to internally used identifier
     if atomName.first == "C" { return AtomType.CARBON }
     if atomName.first == "N" { return AtomType.NITROGEN }
@@ -39,7 +39,7 @@ func getAtomId(atomName: String) -> Int {
 /// Return atom size in armstrongs based on the type
 /// - Parameter atomType: Atom type identifier, defined in AtomType.swift
 /// - Returns: Atomic radius (in armstrongs)
-func getAtomicRadius(atomType: Int) -> Float {
+func getAtomicRadius(atomType: UInt8) -> Float {
     switch atomType {
     case AtomType.CARBON: return 1.70 // 0.67
     case AtomType.NITROGEN: return 1.55 // 0.56

@@ -11,31 +11,43 @@ public struct StatusViewConstants {
     #if targetEnvironment(macCatalyst)
     static let height: CGFloat = 24
     static let cornerRadius: CGFloat = 6
+    static let statusTextSpinnerPadding: CGFloat = 2
     #else
     static let height: CGFloat = 32
     static let cornerRadius: CGFloat = 8
+    static let statusTextSpinnerPadding: CGFloat = 8
     #endif
 }
 
 struct StatusView: View {
 
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @ObservedObject var statusViewModel: StatusViewModel
 
     var body: some View {
         ZStack {
             Color(UIColor.secondarySystemBackground)
-            HStack (spacing: 8) {
-                if proteinViewModel.statusRunning {
+            HStack (spacing: 0) {
+                if statusViewModel.statusRunning {
                     ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        #if targetEnvironment(macCatalyst)
+                        // Spinner is weirdly big on Catalyst (Monterey)
+                        .scaleEffect(x: 0.4, y: 0.4)
+                        #endif
                 }
-                Text("\(proteinViewModel.statusText)")
+                Text("\(statusViewModel.statusText)")
+                    .padding(.leading, StatusViewConstants.statusTextSpinnerPadding)
             }
             .padding(.horizontal, 8)
-            if proteinViewModel.statusRunning {
+            if statusViewModel.statusRunning {
                 VStack(spacing: 0) {
                     Spacer()
-                    ProgressView(value: proteinViewModel.progress, total: 1.0)
+                    #if targetEnvironment(macCatalyst)
+                    MacLinearProgressView(value: statusViewModel.progress, total: 1.0)
+                    #else
+                    ProgressView(value: statusViewModel.progress, total: 1.0)
                         .progressViewStyle(LinearProgressViewStyle())
+                    #endif
                 }
             }
         }
@@ -47,7 +59,7 @@ struct StatusView: View {
 
 struct StatusView_Previews: PreviewProvider {
     static var previews: some View {
-        StatusView()
+        StatusView(statusViewModel: StatusViewModel())
             .frame(width: 300, height: 32)
             .environmentObject(ProteinViewModel())
     }

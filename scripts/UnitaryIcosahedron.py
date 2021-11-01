@@ -1,7 +1,7 @@
 import numpy as np
 
 # Program flags
-addRadiusAndPosition = False
+addRadiusAndPosition = True
 
 # Create empty list to store icosahedron points
 icosahedronPoints = []
@@ -13,7 +13,7 @@ t = ( 1.0 + np.sqrt(5.0) ) / 2.0
 icosahedronPoints.append( np.array( (-1, t, 0) ))
 icosahedronPoints.append( np.array( (1, t, 0) ))
 icosahedronPoints.append( np.array( (-1, -t, 0) ))
-icosahedronPoints.append( np.array( (1, t, 0) ))
+icosahedronPoints.append( np.array( (1, -t, 0) ))
 
 icosahedronPoints.append( np.array( (0, -1, t) ))
 icosahedronPoints.append( np.array( (0, 1, t) ))
@@ -37,7 +37,7 @@ for i in range(len(icosahedronPoints)):
 if addRadiusAndPosition:
     # Print results ready to copy/paste in the Metal kernel function body
     for index, icosahedronVertex in enumerate(icosahedronPoints):
-        print("generatedSpherePoints[i+" 
+        print("generatedVertices[index+" 
             + str(index) + "] = simd_float3("
             + str(icosahedronVertex[0]) + ", "
             + str(icosahedronVertex[1]) + ", "

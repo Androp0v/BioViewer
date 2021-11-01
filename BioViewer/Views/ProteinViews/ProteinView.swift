@@ -7,7 +7,6 @@
 
 import Combine
 import SwiftUI
-import SceneKit
 import UIKit
 import UniformTypeIdentifiers
 
@@ -20,6 +19,7 @@ struct ProteinView: View {
     // Sidebar
     @State private var toggleSidebar = false
     @State private var toggleModalSidebar = false
+    @State private var selectedSidebarSegment = 0
 
     // Sequence view
     @State private var toggleSequenceView = false
@@ -36,6 +36,9 @@ struct ProteinView: View {
 
     // Main view
     var body: some View {
+        
+        let sidebar = ProteinSidebar(selectedSegment: $selectedSidebarSegment)
+        
         GeometryReader { geometry in
             VStack (spacing: 0) {
                 // Future toolbar items will be here
@@ -52,10 +55,8 @@ struct ProteinView: View {
                     ZStack {
 
                         // Main scene view
-                        ProteinSceneView(parent: self,
-                                         scene: $proteinViewModel.scene,
-                                         sceneDelegate: $proteinViewModel.sceneDelegate)
-                            .background(proteinViewModel.sceneDelegate.sceneBackground)
+                        ProteinMetalView(proteinViewModel: proteinViewModel)
+                            .background(.black)
                             .edgesIgnoringSafeArea([.top, .bottom])
 
                         // Import view
@@ -79,9 +80,10 @@ struct ProteinView: View {
 
                     // Sidebar
                     if toggleSidebar {
-                        ProteinSidebar(toggleModalSidebar: $toggleModalSidebar)
+                        sidebar
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
+                            .transition(AnyTransition.move(edge: .trailing))
                     }
 
                 }
@@ -97,9 +99,6 @@ struct ProteinView: View {
                         }) {
                             Image(systemName: "gearshape")
                         }
-                        .sheet(isPresented: $toggleModalSidebar, content: {
-                            ProteinSidebar(toggleModalSidebar: $toggleModalSidebar)
-                        })
                     } else {
                         Button(action: {
                             withAnimation(.easeInOut(duration: 0.2)){
@@ -110,9 +109,10 @@ struct ProteinView: View {
                         }
                     }
                 }
+                
                 ToolbarItem(placement: .principal) {
                     // Status bar component
-                    StatusView()
+                    StatusView(statusViewModel: proteinViewModel.statusViewModel)
                         .frame(minWidth: 0,
                                idealWidth: geometry.size.width * 0.6,
                                maxWidth: geometry.size.width * 0.6,
@@ -122,6 +122,9 @@ struct ProteinView: View {
                                alignment: .center)
                 }
             }
+            .sheet(isPresented: $toggleModalSidebar, content: {
+                sidebar
+            })
         }
         .environmentObject(proteinViewModel)
     }

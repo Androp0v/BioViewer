@@ -47,7 +47,7 @@ public class Protein {
     public var atomArrayComposition: AtomArrayComposition
 
     // Atom identifiers (C,N,H,O,S...) mapped to int values
-    public var atomIdentifiers: [Int]
+    public var atomIdentifiers: [UInt8]
 
     // Index of the last atom added to the scene (for .loading
     // proteins).
@@ -56,7 +56,7 @@ public class Protein {
 
     // MARK: - Initialization
 
-    init(atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [Int], sequence: [String]? = nil) {
+    init(atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.state = .loading
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
@@ -71,7 +71,7 @@ public class Protein {
 
     /// Return the atoms in the protein one by one until the protein is loaded
     /// - Returns: Atom position and atom identifier.
-    func getNextAtom() -> (simd_float3?, Int?, Float?) {
+    func getNextAtom() -> (simd_float3?, UInt8?, Float?) {
         guard currentIndex < atomCount else {
             self.state = .failed
             return (nil, nil, nil)
