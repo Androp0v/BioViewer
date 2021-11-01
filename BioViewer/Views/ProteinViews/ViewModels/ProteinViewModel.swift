@@ -79,8 +79,7 @@ class ProteinViewModel: ObservableObject {
     }
 
     func statusFinished() {
-        self.statusViewModel.setStatusText(text: NSLocalizedString("Idle", comment: ""))
-        self.statusViewModel.setRunningStatus(running: false)
         self.statusViewModel.setProgress(progress: 0)
+        self.statusViewModel.setRunningStatus(running: false)
     }
 }

@@ -38,6 +38,7 @@ class StatusViewModel: ObservableObject {
                 self.displayLink = displayLink
             } else {
                 self.displayLink?.invalidate()
+                self.statusText = NSLocalizedString("Idle", comment: "")
             }
         }
     }
