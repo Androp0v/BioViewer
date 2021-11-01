@@ -21,9 +21,9 @@ struct AppearanceSegmentProtein: View {
         List {
             // First section hast 64pt padding to account for the
             // space under the segmented control.
-            Section(header: Text("General").padding(.top, 64)) {
+            Section(header: Text(NSLocalizedString("General", comment: "")).padding(.top, 64)) {
 
-                ColorPickerRow(title: "Background color",
+                ColorPickerRow(title: NSLocalizedString("Background color", comment: ""),
                                selectedColor: $proteinViewModel.backgroundColor)
 
                 // FIXME:
@@ -49,23 +49,23 @@ struct AppearanceSegmentProtein: View {
 
             if selectedProteinVisualization == ProteinVisualizationOption.solidSpheres.rawValue {
                 // TO-DO: Make picker actually change atom color
-                Section(header: Text("Solid spheres"), content: {
-                    ColorPickerRow(title: "C atom color",
+                Section(header: Text(NSLocalizedString("Solid spheres", comment: "")), content: {
+                    ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
                                    selectedColor: .constant(Color.green))
-                    ColorPickerRow(title: "H atom color",
+                    ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
                                    selectedColor: .constant(Color.gray))
-                    ColorPickerRow(title: "N atom color",
+                    ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
                                    selectedColor: .constant(Color.blue))
-                    ColorPickerRow(title: "O atom color",
+                    ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
                                    selectedColor: .constant(Color.red))
-                    ColorPickerRow(title: "S atom color",
+                    ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
                                    selectedColor: .constant(Color.orange))
-                    ColorPickerRow(title: "Unknown atom color",
+                    ColorPickerRow(title: NSLocalizedString("Unknown atom color", comment: ""),
                                    selectedColor: .constant(Color.gray))
                 })
             }
             
-            Section(header: Text("Focal distance"), content: {
+            Section(header: Text(NSLocalizedString("Focal distance", comment: "")), content: {
 
                 SliderRow(focalLength: $proteinViewModel.cameraFocalLength)
 

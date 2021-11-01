@@ -11,13 +11,13 @@ import QuartzCore
 class StatusViewModel: ObservableObject {
     
     // Published variables used by the UI
-    @Published private(set) var statusText: String = "Idle"
+    @Published private(set) var statusText: String = NSLocalizedString("Idle", comment: "")
     @Published private(set) var statusRunning: Bool = false
     @Published private(set) var progress: Float?
         
     // Internal variables that do not instantly trigger a UI redraw
     private var displayLink: CADisplayLink?
-    private var internalStatusText: String = "Idle"
+    private var internalStatusText: String = NSLocalizedString("Idle", comment: "")
     private var internalProgress: Float?
     
     @objc private func syncInternalAndUIStates() {

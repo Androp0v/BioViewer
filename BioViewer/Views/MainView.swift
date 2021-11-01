@@ -23,17 +23,17 @@ struct MainView: View {
                     destination: ProteinView()
                         .environmentObject(ProteinViewModel()),
                     label: {
-                        Text("View protein structure")
+                        Text(NSLocalizedString("View protein structure", comment: ""))
                 })
                 NavigationLink(
                     destination: SequenceView(),
                     label: {
-                        Text("View sequence")
+                        Text(NSLocalizedString("View sequence", comment: ""))
                 })
                 NavigationLink(
                     destination: SettingsView(),
                     label: {
-                        Text("Settings")
+                        Text(NSLocalizedString("Settings", comment: ""))
                 })
             }
             .listStyle( SidebarListStyle() )

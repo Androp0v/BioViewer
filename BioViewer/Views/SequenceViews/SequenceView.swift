@@ -81,7 +81,7 @@ struct SequenceView: View {
                         // Status bar component
                         Rectangle()
                             .fill(Color(UIColor.secondarySystemBackground))
-                            .overlay(Text("Idle"))
+                            .overlay(Text(NSLocalizedString("Idle", comment: "")))
                             .cornerRadius(8)
                             .frame(minWidth: 0,
                                    idealWidth: geometry.size.width * 0.6,

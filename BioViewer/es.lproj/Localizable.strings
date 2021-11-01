@@ -1,0 +1,65 @@
+/* 
+  Localizable.strings
+  BioViewer
+
+  Created by Raúl Montón Pinillos on 1/11/21.
+  
+*/
+
+"View protein structure" = "Ver estructura";
+
+"View sequence" = "Ver secuencia";
+
+"Settings" = "Ajustes";
+
+"Idle" = "Libre";
+
+"Close" = "Cerrar";
+
+"Import files" = "Importar archivos";
+
+"Download from RCSB" = "Descargar desde RCSB";
+
+"Download from URL" = "Descargar desde la URL";
+
+"Sample protein" = "Proteína de ejemplo";
+
+"Inspector" = "Inspector";
+
+"Loaded files" = "Archivos cargados";
+
+"Number of proteins: " = "Número de proteínas: ";
+
+"Number of atoms: " = "Número de átomos: ";
+
+"Remove all" = "Eliminar todos";
+
+"Background color" = "Color de fondo";
+
+"C atom color" = "Color átomos de C";
+
+"H atom color" = "Color átomos de H";
+
+"N atom color" = "Color átomos de N";
+
+"O atom color" = "Color átomos de O";
+
+"S atom color" = "Color átomos de S";
+
+"Unknown atom color" = "Resto de átomos";
+
+"Focal distance" = "Distancia focal";
+
+"Buy me a coffee ☕️" = "Cómprame un café ☕️";
+
+"Hello there! You can buy me a coffee if you want to and contribute supporting BioViewer." = "Hola! Puedes comprarme un café para contribuir al desarrollo de BioViewer.";
+
+"Tasty coffee pod" = "Cápsula de café";
+
+"Nice bar coffee" = "Café de cafetería";
+
+"Caramel Macchiato" = "Caramel Macchiato";
+
+"Caramel Macchiato + biscuits" = "Caramel Macchiato + galletas";
+
+"Purchased coffees:" = "Cafés comprados:";

@@ -64,9 +64,9 @@ struct ProteinSidebar: View {
             NavigationView {
                 ProteinSidebarContent(selectedSegment: $selectedSegment)
                     .background(Color(UIColor.secondarySystemBackground))
-                    .navigationBarTitle("Inspector")
+                    .navigationBarTitle(NSLocalizedString("Inspector", comment: ""))
                     .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarItems(leading: Button("Close") {
+                    .navigationBarItems(leading: Button(NSLocalizedString("Close", comment: "")) {
                         dismiss()
                     })
                     .environmentObject(proteinViewModel)

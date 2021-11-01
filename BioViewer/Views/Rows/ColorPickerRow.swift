@@ -23,6 +23,6 @@ struct ColorPickerRow: View {
 
 struct ColorPickerRow_Previews: PreviewProvider {
     static var previews: some View {
-        ColorPickerRow(title: "Selected color", selectedColor: .constant(Color.black))
+        ColorPickerRow(title: NSLocalizedString("Selected color", comment: ""), selectedColor: .constant(Color.black))
     }
 }

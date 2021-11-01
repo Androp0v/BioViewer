@@ -15,23 +15,24 @@ struct BuyCoffeeView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                Text("Hello there! You can buy me a coffee if you want to and contribute supporting BioViewer.")
+                Text(NSLocalizedString("Hello there! You can buy me a coffee if you want to and contribute supporting BioViewer.",
+                                       comment: ""))
                     .padding()
                     .background(Color(UIColor.secondarySystemBackground))
                 List {
-                    Section(header: Text("Coffe options:"),
-                            footer: Text("Thank you!"),
+                    Section(header: Text(NSLocalizedString("Coffee options: ", comment: "")),
+                            footer: Text(NSLocalizedString("Thank you!", comment: "")),
                             content: {
-                                CoffeeTipRow(text: "Tasty coffee pod",
+                                CoffeeTipRow(text: NSLocalizedString("Tasty coffee pod", comment: ""),
                                            price: "$0.99")
-                                CoffeeTipRow(text: "Nice bar coffee",
+                                CoffeeTipRow(text: NSLocalizedString("Nice bar coffee", comment: ""),
                                            price: "$1.99")
-                                CoffeeTipRow(text: "Caramel Macchiato",
+                                CoffeeTipRow(text: NSLocalizedString("Caramel Macchiato", comment: ""),
                                            price: "$4.99")
-                                CoffeeTipRow(text: "Caramel Macchiato + biscuits",
+                                CoffeeTipRow(text: NSLocalizedString("Caramel Macchiato + biscuits", comment: ""),
                                            price: "$9.99")
                             })
-                    Section(header: Text("Purchased coffees:"),
+                    Section(header: Text(NSLocalizedString("Purchased coffees:", comment: "")),
                             content: {
                                 CoffeeRow()
                                     .listRowInsets(EdgeInsets())
@@ -40,9 +41,9 @@ struct BuyCoffeeView: View {
                 .listStyle(InsetGroupedListStyle())
             }
             .background(Color(UIColor.secondarySystemBackground))
-            .navigationBarTitle("Buy me a coffee ☕️",
+            .navigationBarTitle(NSLocalizedString("Buy me a coffee ☕️", comment: ""),
                                 displayMode: .inline)
-            .navigationBarItems(leading: Button("Close", action: {
+            .navigationBarItems(leading: Button(NSLocalizedString("Close", comment: ""), action: {
                 showingCoffeeView.toggle()
             }))
         }

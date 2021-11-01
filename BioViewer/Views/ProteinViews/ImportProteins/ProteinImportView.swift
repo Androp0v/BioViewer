@@ -45,19 +45,19 @@ struct ProteinImportView: View {
 
     var body: some View {
         VStack(spacing: 32) {
-            ImportRowView(title: "Import files",
+            ImportRowView(title: NSLocalizedString("Import files", comment: ""),
                           imageName: "square.and.arrow.down",
                           action: ImportAction.importFile,
                           parent: self)
-            ImportRowView(title: "Download from RCSB",
+            ImportRowView(title: NSLocalizedString("Download from RCSB", comment: ""),
                           imageName: "arrow.down.doc",
                           action: ImportAction.downloadFromRCSB,
                           parent: self)
-            ImportRowView(title: "Download from URL",
+            ImportRowView(title: NSLocalizedString("Download from URL", comment: ""),
                           imageName: "link",
                           action: ImportAction.downloadFromURL,
                           parent: self)
-            ImportRowView(title: "Sample protein",
+            ImportRowView(title: NSLocalizedString("Sample protein", comment: ""),
                           imageName: "puzzlepiece",
                           action: ImportAction.sampleProtein,
                           parent: self)
@@ -97,7 +97,7 @@ struct ProteinImportView: View {
                     failedToLoad()
                     return
                 }
-                proteinViewModel.statusUpdate(statusText: "Importing files")
+                proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing files", comment: ""))
                 let rawText = String(decoding: proteinData, as: UTF8.self)
                 var protein = parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
                 proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)

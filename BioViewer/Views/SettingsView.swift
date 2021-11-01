@@ -13,8 +13,8 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Text("Settings")
-            Button("Buy me a coffee ☕️", action: {
+            Text(NSLocalizedString("Settings", comment: ""))
+            Button(NSLocalizedString("Buy me a coffee ☕️", comment: ""), action: {
                 showingCoffeeView.toggle()
             })
             .sheet(isPresented: $showingCoffeeView, content: {
