@@ -42,7 +42,8 @@ struct ProteinRCSBImportView: View {
                                 .onSubmit {
                                     self.focusedField = .none
                                     Task {
-                                        try await self.proteinRCSBImportViewModel.fetchPDBInfo(rcsbid: searchText)
+                                        try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
+                                        try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
                                     }
                                 }
                         }
@@ -57,7 +58,8 @@ struct ProteinRCSBImportView: View {
                 List {
                     if self.proteinRCSBImportViewModel.showRow {
                         ProteinRCSBRowView(title: $proteinRCSBImportViewModel.foundProteinName,
-                                           description: $proteinRCSBImportViewModel.foundProteinDescription)
+                                           description: $proteinRCSBImportViewModel.foundProteinDescription,
+                                           image: $proteinRCSBImportViewModel.foundProteinImage)
                             .onTapGesture {
                                 Task {
                                     guard let rcsbId = proteinRCSBImportViewModel.foundProteinName else { return }

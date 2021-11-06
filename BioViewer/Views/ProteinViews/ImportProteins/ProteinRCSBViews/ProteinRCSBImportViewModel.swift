@@ -15,7 +15,7 @@ class ProteinRCSBImportViewModel: ObservableObject {
     @Published var foundProteinName: String?
     @Published var foundProteinDescription: String?
     
-    func fetchPDBInfo(rcsbid: String) async throws {
+    func getPDBInfo(rcsbid: String) async throws {
         guard !rcsbid.isEmpty else {
             withAnimation {
                 showRow = false
@@ -23,31 +23,30 @@ class ProteinRCSBImportViewModel: ObservableObject {
             return
         }
         
-        guard let url = URL(string: RCSBEndpoint.getPDBInfo.rawValue + rcsbid) else {
-            fatalError()
-        }
-        let urlRequest = URLRequest(url: url)
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        
-        switch (response as? HTTPURLResponse)?.statusCode {
-        case 200:
-            break
-        case 404:
-            // TO-DO: Handle RCSB ID not found
-            print("Not found")
-            return
-        default:
-            return
-        }
-        
-        let pdbInfo = try JSONDecoder().decode(PDBInfo.self, from: data)
+        let pdbInfo = try await RCSBFetch.fetchPDBInfo(rcsbid: rcsbid)
         
         DispatchQueue.main.async {
-            self.foundProteinName = pdbInfo.entry.id
-            self.foundProteinDescription = pdbInfo.struct.title + "."
-            
             withAnimation {
+                self.foundProteinName = pdbInfo.entry.id
+                self.foundProteinDescription = pdbInfo.struct.title + "."
                 self.showRow = true
+            }
+        }
+    }
+    
+    func getPDBImage(rcsbid: String) async throws {
+        guard !rcsbid.isEmpty else {
+            withAnimation {
+                showRow = false
+            }
+            return
+        }
+        
+        let pdbImage = try await RCSBFetch.fetchPDBImage(rcsbid: rcsbid)
+        
+        DispatchQueue.main.async {
+            withAnimation {
+                self.foundProteinImage = pdbImage
             }
         }
     }
@@ -60,26 +59,11 @@ class ProteinRCSBImportViewModel: ObservableObject {
             return
         }
         
-        guard let url = URL(string: RCSBEndpoint.downloadPDBFile.rawValue + rcsbid + ".pdb1") else {
-            fatalError()
-        }
-        let urlRequest = URLRequest(url: url)
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        
-        switch (response as? HTTPURLResponse)?.statusCode {
-        case 200:
-            break
-        case 404:
-            // TO-DO: Handle RCSB ID not found
-            print("Not found")
-            return
-        default:
-            return
-        }
+        proteinViewModel.statusUpdate(statusText: NSLocalizedString("Downloading file", comment: ""))
+        let rawText = try await RCSBFetch.fetchPDBFile(rcsbid: rcsbid)
                 
         DispatchQueue.global(qos: .userInitiated).async {
-            proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing files", comment: ""))
-            let rawText = String(decoding: data, as: UTF8.self)
+            proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
             var protein = parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
             proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
         }

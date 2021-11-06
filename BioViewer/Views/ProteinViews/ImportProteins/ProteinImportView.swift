@@ -103,7 +103,7 @@ struct ProteinImportView: View {
                     failedToLoad()
                     return
                 }
-                proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing files", comment: ""))
+                proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
                 let rawText = String(decoding: proteinData, as: UTF8.self)
                 var protein = parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
                 proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
