@@ -26,7 +26,7 @@ struct StatusView: View {
     var body: some View {
         ZStack {
             Color(UIColor.secondarySystemBackground)
-            HStack (spacing: 0) {
+            HStack(spacing: 0) {
                 if statusViewModel.statusRunning {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())

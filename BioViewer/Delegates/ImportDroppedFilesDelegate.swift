@@ -41,7 +41,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
             let nameUTI = itemProvider.registeredTypeIdentifiers.first
 
             // Decode file extension if the data has a dynamic UTI type
-            var fileExtension: String? = nil
+            var fileExtension: String?
 
             if let nameUTI = nameUTI, nameUTI.starts(with: "dyn.a") {
                 fileExtension = self.decodeDynamicUTI(uti: nameUTI)

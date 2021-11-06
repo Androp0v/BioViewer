@@ -11,7 +11,7 @@ struct ProteinSequenceView: View {
     var body: some View {
         ZStack {
             VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
-            ScrollView (.horizontal) {
+            ScrollView(.horizontal) {
                 HStack {
                     Text("MDSKGSSQKGSRLLLLLVVSNLLLCQGVVSTPVCPNGPGNCQVSLRDLFDRAVMVSHYIHDLSS")
                         .foregroundColor(Color.white)

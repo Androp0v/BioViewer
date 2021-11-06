@@ -17,7 +17,8 @@ fileprivate struct ImportRowView: View {
     var body: some View {
         Button(action: {
             parent.launchImportAction(action: action)
-        }) {
+        },
+               label: {
             HStack(spacing: 10) {
                 Image(systemName: imageName)
                     .frame(width: 32, height: 32, alignment: .center)
@@ -26,10 +27,9 @@ fileprivate struct ImportRowView: View {
             }
             .font(.headline)
             .foregroundColor(.white)
-        }
+        })
     }
 }
-
 
 struct ProteinImportView: View {
 

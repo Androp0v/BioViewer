@@ -13,7 +13,6 @@ struct PickerRow: View {
     @Binding var selectedVisualization: Int
     @State var pickerOptions: [String]
 
-
     var body: some View {
         #if os(macOS)
         // On macOS, this uses the (beautiful) NSPopUpButton instead of

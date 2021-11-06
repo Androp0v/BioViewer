@@ -30,7 +30,6 @@ public class Protein {
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
     private var sequence: [String]?
 
-
     // MARK: - Atoms
 
     // Number of atoms in the protein
@@ -53,7 +52,6 @@ public class Protein {
     // proteins).
     private var currentIndex: Int
     
-
     // MARK: - Initialization
 
     init(atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {

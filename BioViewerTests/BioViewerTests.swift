@@ -17,7 +17,7 @@ class BioViewerTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         self.scheduler = MetalScheduler.shared
         let proteinSampleFile = Bundle.main.url(forResource: "2OGM", withExtension: "pdb")!
-        let proteinData = try! Data(contentsOf: proteinSampleFile)
+        let proteinData = try? Data(contentsOf: proteinSampleFile)
         self.protein = parsePDB(rawText: String(decoding: proteinData, as: UTF8.self))
     }
 

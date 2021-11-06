@@ -23,13 +23,13 @@ private struct ProteinSidebarContent: View {
     var body: some View {
         ZStack {
             // Options views go here
-            switch(selectedSegment) {
+            switch selectedSegment {
             case 0: FileSegmentProtein()
             case 1: AppearanceSegmentProtein()
             default: Spacer()
             }
             // Top segemented control to switch between options
-            VStack (spacing: 0) {
+            VStack(spacing: 0) {
                 ZStack {
                     VisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
                     Picker("Option", selection: $selectedSegment) {

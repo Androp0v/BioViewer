@@ -18,7 +18,7 @@ class PipelineStateBundle {
     var pipelineStateNoOptions: MTLComputePipelineState?
 
     /// Cached dictionary of MTLComputePipeline objects for a given constant function parameter.
-    var pipelineStates = Dictionary<MTLFunctionConstantValues, MTLComputePipelineState>()
+    var pipelineStates = [MTLFunctionConstantValues: MTLComputePipelineState]()
 
     // MARK: - Public functions
 

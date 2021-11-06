@@ -16,7 +16,7 @@ struct SequenceView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            VStack (spacing: 0) {
+            VStack(spacing: 0) {
                 // Future toolbar items will be here
                 Rectangle()
                     .frame(height: 8)
@@ -69,13 +69,14 @@ struct SequenceView: View {
                         Button(action: {
                             // TO-DO: Show inspector
                             print("Inspector button tapped!")
-                        }) {
+                        },
+                               label: {
                             if UIDevice.current.userInterfaceIdiom == .phone {
                                 Image(systemName: "gearshape")
                             } else {
                                 Image(systemName: "sidebar.trailing")
                             }
-                        }
+                        })
                     }
                     ToolbarItemGroup(placement: .principal) {
                         // Status bar component

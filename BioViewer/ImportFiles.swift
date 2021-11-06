@@ -8,7 +8,7 @@
 import Foundation
 import simd
 
-fileprivate enum PDBConstants {
+enum PDBConstants {
     // Expected line length of a properly formatted PDB file
     // (hard to think of such a mythical creature).
     static let expectedLineLenght: Int = 78
@@ -152,22 +152,22 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
             switch element {
             case AtomType.CARBON:
                 atomArrayComposition.carbonCount += 1
-                carbonArray.append(simd_float3(x,y,z))
+                carbonArray.append(simd_float3(x, y, z))
             case AtomType.NITROGEN:
                 atomArrayComposition.nitrogenCount += 1
-                nitrongenArray.append(simd_float3(x,y,z))
+                nitrongenArray.append(simd_float3(x, y, z))
             case AtomType.HYDROGEN:
                 atomArrayComposition.hydrogenCount += 1
-                hydrogenArray.append(simd_float3(x,y,z))
+                hydrogenArray.append(simd_float3(x, y, z))
             case AtomType.OXYGEN:
                 atomArrayComposition.oxygenCount += 1
-                oxygenArray.append(simd_float3(x,y,z))
+                oxygenArray.append(simd_float3(x, y, z))
             case AtomType.SULFUR:
                 atomArrayComposition.sulfurCount += 1
-                sulfurArray.append(simd_float3(x,y,z))
+                sulfurArray.append(simd_float3(x, y, z))
             default:
                 atomArrayComposition.othersCount += 1
-                othersArray.append(simd_float3(x,y,z))
+                othersArray.append(simd_float3(x, y, z))
                 othersIDs.append(element)
             }
 
@@ -200,10 +200,4 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
                    atomArrayComposition: &atomArrayComposition,
                    atomIdentifiers: atomIdentifiers,
                    sequence: sequenceArray)
-}
-
-// MARK: - Private functions
-fileprivate func getCleanSubstring(start: Int, end: Int, removeWhitespace: Bool = true) -> String {
-    // TO-DO
-    return ""
 }

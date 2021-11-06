@@ -9,7 +9,7 @@ import Foundation
 import simd
 
 func averagePosition(atoms: ContiguousArray<simd_float3>) -> simd_float3 {
-    var meanPosition = simd_float3(0,0,0)
+    var meanPosition = simd_float3.zero
     atoms.forEach({
         meanPosition += $0
     })

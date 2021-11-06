@@ -5,6 +5,8 @@
 //  Imported by Raúl Montón Pinillos on 1/6/21.
 //
 
+// swiftlint:disable all
+
 import Foundation
 import simd
 

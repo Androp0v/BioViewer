@@ -40,7 +40,7 @@ struct ProteinView: View {
         let sidebar = ProteinSidebar(selectedSegment: $selectedSidebarSegment)
         
         GeometryReader { geometry in
-            VStack (spacing: 0) {
+            VStack(spacing: 0) {
                 // Future toolbar items will be here
                 Rectangle()
                     .frame(height: 8)
@@ -50,7 +50,7 @@ struct ProteinView: View {
                     .frame(height: 0.5)
                     .foregroundColor(Color(UIColor.opaqueSeparator))
                 // Main view here (including sidebar)
-                HStack (spacing: 0) {
+                HStack(spacing: 0) {
                     // Main scene container
                     ZStack {
 
@@ -65,7 +65,7 @@ struct ProteinView: View {
                         }
 
                         // Scene controls
-                        VStack (spacing: 12) {
+                        VStack(spacing: 12) {
                             Spacer()
                             ProteinCameraControlView()
                             if toggleSequenceView {
@@ -96,17 +96,20 @@ struct ProteinView: View {
                     if horizontalSizeClass == .compact {
                         Button(action: {
                             toggleModalSidebar.toggle()
-                        }) {
+                        },
+                               label: {
                             Image(systemName: "gearshape")
-                        }
+                        })
                     } else {
                         Button(action: {
-                            withAnimation(.easeInOut(duration: 0.2)){
+                            withAnimation(.easeInOut(duration: 0.2)) {
                                 toggleSidebar.toggle()
                             }
-                        }) {
+                        },
+                               label: {
                             Image(systemName: "sidebar.trailing")
-                        }
+                        })
+                        
                     }
                 }
                 

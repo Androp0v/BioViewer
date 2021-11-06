@@ -41,7 +41,7 @@ class MetalScene {
     init() {
         self.camera = Camera(nearPlane: 1, farPlane: 10000, focalLength: 200)
         self.cameraPosition = simd_float3(0, 0, 300)
-        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0, axis: simd_float3(0,1,0))
+        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0, axis: simd_float3(0, 1, 0))
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()
         self.frame = 0
@@ -56,7 +56,7 @@ class MetalScene {
                                                                   axis: simd_float3(0.0, 1.0, 0.0)).inverse
         
         // Subscribe to changes in the camera properties
-        cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] didChange in
+        cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
             guard let self = self else { return }
             self.needsRedraw = true
         })

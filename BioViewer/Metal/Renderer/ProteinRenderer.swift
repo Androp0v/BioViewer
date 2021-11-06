@@ -94,7 +94,7 @@ class ProteinRenderer: NSObject {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
 
-        opaqueRenderingPipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        opaqueRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
     private func makeImpostorRenderPipelineState(device: MTLDevice) {
@@ -111,7 +111,7 @@ class ProteinRenderer: NSObject {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
 
-        impostorRenderingPipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        impostorRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
     // MARK: - Initialization
@@ -350,6 +350,5 @@ extension ProteinRenderer: MTKViewDelegate {
         // Commit command buffer
         commandBuffer.commit()
     }
-
 
 }

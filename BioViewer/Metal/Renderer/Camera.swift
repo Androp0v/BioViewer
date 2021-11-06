@@ -9,11 +9,11 @@ import Combine
 import CoreGraphics
 import simd
 
-fileprivate let fullFrameDiagonal: Float = 43.3 // mm
-
 // MARK: - Camera
 
 class Camera {
+    
+    private static let fullFrameDiagonal: Float = 43.3 // mm
     
     /// Whether the camera has changed its properties
     @Published var didChange = PassthroughSubject<Bool, Never>()
@@ -37,7 +37,7 @@ class Camera {
         self.nearPlane = nearPlane
         self.farPlane = farPlane
         self.fieldOfView = fieldOfView
-        self.focalLength = fullFrameDiagonal / ( 2 * tan( (fieldOfView * Float.pi / 180) / 2 ) )
+        self.focalLength = Camera.fullFrameDiagonal / ( 2 * tan( (fieldOfView * Float.pi / 180) / 2 ) )
         projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
                                                            1.0,
                                                            nearPlane,
@@ -52,7 +52,7 @@ class Camera {
     init(nearPlane: Float, farPlane: Float, focalLength: Float) {
         self.nearPlane = nearPlane
         self.farPlane = farPlane
-        self.fieldOfView = 2 * atan( fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
+        self.fieldOfView = 2 * atan( Camera.fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
         self.focalLength = focalLength
         projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
                                                            1.0,
@@ -92,7 +92,7 @@ class Camera {
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
     func updateFocalLength(focalLength: Float, aspectRatio: Float) {
         self.focalLength = focalLength
-        self.fieldOfView = 2 * atan( fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
+        self.fieldOfView = 2 * atan( Camera.fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
         projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
                                                            1.0,
                                                            nearPlane,

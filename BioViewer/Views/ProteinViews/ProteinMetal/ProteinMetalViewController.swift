@@ -72,7 +72,7 @@ class ProteinMetalViewController: UIViewController {
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             // TO-DO: Proper zooming
-            self.proteinViewModel.renderer.scene.cameraPosition.z = self.proteinViewModel.renderer.scene.cameraPosition.z / Float(gestureRecognizer.scale)
+            self.proteinViewModel.renderer.scene.cameraPosition.z /= Float(gestureRecognizer.scale)
             gestureRecognizer.scale = 1.0
        }
     }
@@ -82,8 +82,8 @@ class ProteinMetalViewController: UIViewController {
             let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
             let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
             // Revert the axis rotation before rotating through that axis
-            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedX, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(0,1,0,1)).xyz )
-            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedY, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(1,0,0,1)).xyz )
+            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedX, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz )
+            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedY, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz )
         }
     }
 
