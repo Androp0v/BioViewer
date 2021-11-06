@@ -45,7 +45,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
 
     // Make one atom array per common element
     var carbonArray = [simd_float3]()
-    var nitrongenArray = [simd_float3]()
+    var nitrogenArray = [simd_float3]()
     var hydrogenArray = [simd_float3]()
     var oxygenArray = [simd_float3]()
     var sulfurArray = [simd_float3]()
@@ -155,7 +155,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
                 carbonArray.append(simd_float3(x, y, z))
             case AtomType.NITROGEN:
                 atomArrayComposition.nitrogenCount += 1
-                nitrongenArray.append(simd_float3(x, y, z))
+                nitrogenArray.append(simd_float3(x, y, z))
             case AtomType.HYDROGEN:
                 atomArrayComposition.hydrogenCount += 1
                 hydrogenArray.append(simd_float3(x, y, z))
@@ -181,7 +181,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
     atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
 
     atomArray.append(contentsOf: carbonArray)
-    atomArray.append(contentsOf: nitrongenArray)
+    atomArray.append(contentsOf: nitrogenArray)
     atomArray.append(contentsOf: hydrogenArray)
     atomArray.append(contentsOf: oxygenArray)
     atomArray.append(contentsOf: sulfurArray)

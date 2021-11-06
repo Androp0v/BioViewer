@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-fileprivate struct ImportRowView: View {
+struct ImportRowView: View {
 
     var title: String
     var imageName: String
@@ -44,25 +44,28 @@ struct ProteinImportView: View {
     }
 
     var body: some View {
-        VStack(spacing: 32) {
-            ImportRowView(title: NSLocalizedString("Import files", comment: ""),
-                          imageName: "square.and.arrow.down",
-                          action: ImportAction.importFile,
-                          parent: self)
-            ImportRowView(title: NSLocalizedString("Download from RCSB", comment: ""),
-                          imageName: "arrow.down.doc",
-                          action: ImportAction.downloadFromRCSB,
-                          parent: self)
-            ImportRowView(title: NSLocalizedString("Download from URL", comment: ""),
-                          imageName: "link",
-                          action: ImportAction.downloadFromURL,
-                          parent: self)
-            ImportRowView(title: NSLocalizedString("Sample protein", comment: ""),
-                          imageName: "puzzlepiece",
-                          action: ImportAction.sampleProtein,
-                          parent: self)
+        ZStack {
+            Color.black
+            VStack(spacing: 32) {
+                ImportRowView(title: NSLocalizedString("Import files", comment: ""),
+                              imageName: "square.and.arrow.down",
+                              action: ImportAction.importFile,
+                              parent: self)
+                ImportRowView(title: NSLocalizedString("Download from RCSB", comment: ""),
+                              imageName: "arrow.down.doc",
+                              action: ImportAction.downloadFromRCSB,
+                              parent: self)
+                ImportRowView(title: NSLocalizedString("Download from URL", comment: ""),
+                              imageName: "link",
+                              action: ImportAction.downloadFromURL,
+                              parent: self)
+                ImportRowView(title: NSLocalizedString("Sample protein", comment: ""),
+                              imageName: "puzzlepiece",
+                              action: ImportAction.sampleProtein,
+                              parent: self)
+            }
+            .frame(alignment: .leading)
         }
-        .frame(alignment: .leading)
     }
 
     public func launchImportAction(action: ImportAction) {
