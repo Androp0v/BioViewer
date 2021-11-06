@@ -193,6 +193,9 @@ extension ProteinRenderer: MTKViewDelegate {
     // This is called periodically to render the scene contents on display
     func draw(in view: MTKView) {
         
+        // Check if the scene needs to be redrawn
+        guard scene.needsRedraw else { return }
+        
         // Retrieve current view drawable
         guard let drawable = view.currentDrawable else { return }
         

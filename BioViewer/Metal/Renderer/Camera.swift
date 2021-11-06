@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 3/6/21.
 //
 
+import Combine
 import CoreGraphics
 import simd
 
@@ -12,8 +13,14 @@ fileprivate let fullFrameDiagonal: Float = 43.3 // mm
 
 // MARK: - Camera
 
-struct Camera {
+class Camera {
+    
+    /// Whether the camera has changed its properties
+    @Published var didChange = PassthroughSubject<Bool, Never>()
+    
+    /// Near clipping plane of the camera view frustum
     var nearPlane: Float
+    /// Far clipping plane of the camera view frustum
     var farPlane: Float
     var fieldOfView: Float
     var focalLength: Float
@@ -58,35 +65,38 @@ struct Camera {
     /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
-    mutating func updateProjection(drawableSize: CGSize) {
+    func updateProjection(drawableSize: CGSize) {
         let fieldOfViewRadians = fieldOfView * Float.pi / 180
         let aspectRatio = Float(drawableSize.width) / Float(drawableSize.height)
         projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
                                                            aspectRatio,
                                                            nearPlane,
                                                            farPlane)
+        didChange.send(true)
     }
     
     /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
-    mutating func updateProjection(aspectRatio: Float) {
+    func updateProjection(aspectRatio: Float) {
         let fieldOfViewRadians = fieldOfView * Float.pi / 180
         projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
                                                            aspectRatio,
                                                            nearPlane,
                                                            farPlane)
+        didChange.send(true)
     }
     
     /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
-    mutating func updateFocalLength(focalLength: Float, aspectRatio: Float) {
+    func updateFocalLength(focalLength: Float, aspectRatio: Float) {
         self.focalLength = focalLength
         self.fieldOfView = 2 * atan( fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
         projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
                                                            1.0,
                                                            nearPlane,
                                                            farPlane)
+        didChange.send(true)
     }
 }
