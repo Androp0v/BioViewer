@@ -35,6 +35,7 @@ struct ProteinImportView: View {
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @State var willLoadProtein: Bool = false
+    @State var showRCSBImportSheet: Bool = false
 
     public enum ImportAction {
         case importFile
@@ -66,6 +67,9 @@ struct ProteinImportView: View {
             }
             .frame(alignment: .leading)
         }
+        .sheet(isPresented: $showRCSBImportSheet, onDismiss: nil, content: {
+            ProteinRCSBImportView()
+        })
     }
 
     public func launchImportAction(action: ImportAction) {
@@ -80,8 +84,7 @@ struct ProteinImportView: View {
             fatalError()
         case .downloadFromRCSB:
             // Download from RCSB
-            // TO-DO: Download from RCSB
-            fatalError()
+            showRCSBImportSheet.toggle()
         case .downloadFromURL:
             // Download from URL
             // TO-DO: download from URL

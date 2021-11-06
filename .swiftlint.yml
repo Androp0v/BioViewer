@@ -50,3 +50,5 @@ cyclomatic_complexity:
     warning: 15
     error: 25
 reporter: "xcode"
+type_name:
+  allowed_symbols: "_"
