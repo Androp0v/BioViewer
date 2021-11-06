@@ -227,6 +227,10 @@ extension ProteinRenderer: MTKViewDelegate {
         // Create command buffer
         let commandBuffer = commandQueue.makeCommandBuffer()!
         
+        // MARK: - Shadow Map pass
+        
+        // TO-DO
+        
         // MARK: - Opaque geometry pass
         
         if false {
