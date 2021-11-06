@@ -10,6 +10,19 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>BioViewer</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PDB</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.raulmonton.bioviewer.pdb</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -52,9 +65,34 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UTExportedTypeDeclarations</key>
-	<array/>
 	<key>UTImportedTypeDeclarations</key>
-	<array/>
+	<array>
+		<dict>
+			<key>UISupportsDocumentBrowser</key>
+			<false/>
+			<key>LSSupportsOpeningDocumentsInPlace</key>
+			<false/>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>PDB1</string>
+					<string>pdb1</string>
+					<string>PDB</string>
+					<string>pdb</string>
+				</array>
+			</dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PDB File</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
+			<key>UTTypeIdentifier</key>
+			<string>com.raulmonton.bioviewer.pdb</string>
+		</dict>
+	</array>
 </dict>
 </plist>

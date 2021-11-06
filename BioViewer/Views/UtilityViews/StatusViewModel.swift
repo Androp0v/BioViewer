@@ -38,7 +38,9 @@ class StatusViewModel: ObservableObject {
                 self.displayLink = displayLink
             } else {
                 self.internalStatusText = NSLocalizedString("Idle", comment: "")
-                self.displayLink?.invalidate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                    self.displayLink?.invalidate()
+                })
             }
         }
     }
