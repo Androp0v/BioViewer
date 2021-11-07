@@ -86,6 +86,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
     // MARK: - Dynamic UTI decoding
 
+    // FROM https://gist.github.com/jtbandes/19646e7457208ae9b1ad
     // There's no obvious way to recover the dropped file UTI for
     // pdb files other than reverse engineering how Apple generates
     // dynamic UTIs from file extensions.
