@@ -26,29 +26,49 @@ public struct StatusViewConstants {
 struct StatusView: View {
 
     @ObservedObject var statusViewModel: StatusViewModel
+    @State var showErrorPopover: Bool = false
     @State var showWarningPopover: Bool = false
 
     var body: some View {
         ZStack {
             Color(UIColor.secondarySystemBackground)
             HStack(spacing: 0) {
-                if !(statusViewModel.statusWarning.isEmpty) {
+                if !(statusViewModel.statusWarning.isEmpty) || !(statusViewModel.statusError ?? "").isEmpty {
                     Group {
-                        Button(action: {
-                            showWarningPopover.toggle()
-                        },
-                               label: {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .symbolRenderingMode(.multicolor)
-                                .padding(.horizontal, StatusViewConstants.warningButtonHorizontalPadding)
-                                .frame(maxHeight: .infinity)
-                                .background(Color(UIColor.secondarySystemBackground))
-                                .frame(width: 12, height: 12)
-                                .font(.system(size: StatusViewConstants.warningIconSize))
-                        })
-                            .popover(isPresented: $showWarningPopover) {
-                                StatusWarningPopover(statusViewModel: statusViewModel)
-                            }
+                        if !(statusViewModel.statusWarning.isEmpty) && (statusViewModel.statusError ?? "").isEmpty {
+                            // Show warnings only if there's no errors
+                            Button(action: {
+                                showWarningPopover.toggle()
+                            },
+                                   label: {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .symbolRenderingMode(.multicolor)
+                                    .padding(.horizontal, StatusViewConstants.warningButtonHorizontalPadding)
+                                    .frame(maxHeight: .infinity)
+                                    .background(Color(UIColor.secondarySystemBackground))
+                                    .frame(width: 12, height: 12)
+                                    .font(.system(size: StatusViewConstants.warningIconSize))
+                            })
+                                .popover(isPresented: $showWarningPopover) {
+                                    StatusWarningPopover(statusViewModel: statusViewModel)
+                                }
+                        } else if !(statusViewModel.statusError ?? "").isEmpty {
+                            Button(action: {
+                                showErrorPopover.toggle()
+                            },
+                                   label: {
+                                Image(systemName: "xmark.octagon.fill")
+                                    .symbolRenderingMode(.multicolor)
+                                    .padding(.horizontal, StatusViewConstants.warningButtonHorizontalPadding)
+                                    .frame(maxHeight: .infinity)
+                                    .background(Color(UIColor.secondarySystemBackground))
+                                    .frame(width: 12, height: 12)
+                                    .font(.system(size: StatusViewConstants.warningIconSize))
+                            })
+                                .popover(isPresented: $showErrorPopover) {
+                                    StatusErrorPopover(statusViewModel: statusViewModel)
+                                }
+                        }
                         Rectangle()
                             .padding(.vertical, 4)
                             .frame(width: 1)
@@ -58,6 +78,7 @@ struct StatusView: View {
                 }
                 if statusViewModel.statusRunning {
                     ProgressView()
+                        .padding(.leading, 8)
                         .progressViewStyle(CircularProgressViewStyle())
                         #if targetEnvironment(macCatalyst)
                         // Spinner is weirdly big on Catalyst (Monterey)

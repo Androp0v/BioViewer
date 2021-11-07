@@ -15,7 +15,8 @@ class StatusViewModel: ObservableObject {
     @Published private(set) var statusRunning: Bool = false
     @Published private(set) var progress: Float?
     
-    // Warning system
+    // Warning/Error system
+    @Published private(set) var statusError: String?
     @Published private(set) var statusWarning: [String] = []
         
     // Internal variables that do not instantly trigger a UI redraw
@@ -54,6 +55,12 @@ class StatusViewModel: ObservableObject {
         self.internalProgress = progress
     }
     
+    func setError(error: String) {
+        DispatchQueue.main.async {
+            self.statusError = error
+        }
+    }
+    
     func setWarning(warning: String) {
         guard internalStatusWarning.count < AppState.maxNumberOfWarnings else { return }
         self.internalStatusWarning.append(warning)
@@ -63,6 +70,12 @@ class StatusViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.internalStatusWarning = []
             self.statusWarning = []
+        }
+    }
+    
+    func removeAllErrors() {
+        DispatchQueue.main.async {
+            self.statusError = nil
         }
     }
 }

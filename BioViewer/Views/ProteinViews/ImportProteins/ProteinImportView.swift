@@ -108,6 +108,8 @@ struct ProteinImportView: View {
                 do {
                     var protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
                     proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+                } catch PDBParsingError.emptyAtomCount {
+                    proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
                 } catch {
                     proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
                 }

@@ -60,16 +60,26 @@ class ProteinRCSBImportViewModel: ObservableObject {
         }
         
         proteinViewModel.statusUpdate(statusText: NSLocalizedString("Downloading file", comment: ""))
-        let rawText = try await RCSBFetch.fetchPDBFile(rcsbid: rcsbid)
-                
-        DispatchQueue.global(qos: .userInitiated).async {
-            proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
-            do {
-                var protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
-                proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-            } catch {
-                proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
+        
+        do {
+            let rawText = try await RCSBFetch.fetchPDBFile(rcsbid: rcsbid)
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
+                do {
+                    var protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
+                    proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+                } catch PDBParsingError.emptyAtomCount {
+                    proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
+                } catch {
+                    proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
+                }
             }
+            
+        } catch RCSBError.notFound {
+            proteinViewModel.statusFinished(withError: NSLocalizedString("Error: PDB file not found", comment: ""))
+        } catch {
+            proteinViewModel.statusFinished(withError: NSLocalizedString("Error downloading file", comment: ""))
         }
     }
     
