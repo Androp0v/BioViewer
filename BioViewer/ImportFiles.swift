@@ -38,7 +38,11 @@ enum PDBConstants {
     static let elementEnd: Int = 78
 }
 
-func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
+enum PDBParsingError: Error {
+    case emptyAtomCount
+}
+
+func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Protein {
 
     var atomArray = ContiguousArray<simd_float3>()
     var atomIdentifiers = [UInt8]()
@@ -75,7 +79,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
         
     }
 
-    rawText.enumerateLines(invoking: { line, stop in
+    rawText.enumerateLines(invoking: { line, _ in
         
         currentLine += 1
         proteinViewModel?.statusProgress(progress: progress)
@@ -207,6 +211,10 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
     atomIdentifiers.append(contentsOf: Array(repeating: AtomType.OXYGEN, count: atomArrayComposition.oxygenCount))
     atomIdentifiers.append(contentsOf: Array(repeating: AtomType.SULFUR, count: atomArrayComposition.sulfurCount))
     atomIdentifiers.append(contentsOf: othersIDs)
+    
+    guard atomArray.count > 0 else {
+        throw PDBParsingError.emptyAtomCount
+    }
 
     return Protein(atoms: &atomArray,
                    atomArrayComposition: &atomArrayComposition,

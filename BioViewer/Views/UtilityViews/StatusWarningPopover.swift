@@ -17,17 +17,29 @@ struct StatusWarningPopover: View {
         @ObservedObject var statusViewModel: StatusViewModel
         
         var body: some View {
-            VStack {
-                Spacer()
-                    .frame(height: 4)
+            VStack(spacing: 0) {
+                if statusViewModel.statusWarning.count == AppState.maxNumberOfWarnings {
+                    Text(NSLocalizedString(
+                        "Too many warnings found. Showing only the first \(AppState.maxNumberOfWarnings).", comment: "")
+                    )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 18)
+                        .background {
+                            Color.orange
+                                .opacity(0.8)
+                        }
+                }
                 List {
                     ForEach(statusViewModel.statusWarning.reversed(), id: \.self) { warning in
                         Text(warning)
                             .listRowBackground(Color.clear)
                     }
                 }
+                Spacer()
+                    .frame(height: 4)
             }
-            .frame(minWidth: 300, minHeight: 200)
+            .frame(minWidth: 300, minHeight: 600)
             .background(.thinMaterial)
             .listStyle(.plain)
         }

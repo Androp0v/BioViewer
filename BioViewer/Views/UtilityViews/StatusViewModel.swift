@@ -58,4 +58,11 @@ class StatusViewModel: ObservableObject {
         guard internalStatusWarning.count < AppState.maxNumberOfWarnings else { return }
         self.internalStatusWarning.append(warning)
     }
+    
+    func removeAllWarnings() {
+        DispatchQueue.main.async {
+            self.internalStatusWarning = []
+            self.statusWarning = []
+        }
+    }
 }

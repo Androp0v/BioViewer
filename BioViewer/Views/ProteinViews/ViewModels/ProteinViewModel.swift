@@ -65,6 +65,7 @@ class ProteinViewModel: ObservableObject {
 
     func removeAllProteins() {
         self.dataSource.removeAllProteinsFromDatasource()
+        self.statusViewModel.removeAllWarnings()
     }
 
     // MARK: - Status handling
@@ -79,6 +80,12 @@ class ProteinViewModel: ObservableObject {
     }
 
     func statusFinished() {
+        self.statusViewModel.setProgress(progress: 0)
+        self.statusViewModel.setRunningStatus(running: false)
+    }
+    
+    func statusFinished(withError: String) {
+        // TO-DO
         self.statusViewModel.setProgress(progress: 0)
         self.statusViewModel.setRunningStatus(running: false)
     }
