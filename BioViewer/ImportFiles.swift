@@ -79,7 +79,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
         
     }
 
-    rawText.enumerateLines(invoking: { line, _ in
+    rawText.enumerateLines(invoking: { line, stop in
         
         currentLine += 1
         proteinViewModel?.statusProgress(progress: progress)

@@ -27,8 +27,17 @@ class ImportDroppedFilesDelegate: DropDelegate {
             NSLog("No itemProvider available for the given type.")
             return false
         }
-
-        guard let typeIdentifier = itemProvider.registeredTypeIdentifiers.first else {
+                
+        // Try to obtain the type identifier as one of the explicitly supported typeIdentifiers in BioViewer
+        var typeIdentifier = itemProvider.registeredTypeIdentifiers.first(where: { $0.starts(with: "com.raulmonton.bioviewer") })
+        
+        // Otherwise, try with whatever type is found
+        if typeIdentifier == nil {
+            typeIdentifier = itemProvider.registeredTypeIdentifiers.first
+        }
+        
+        // Ensure that a type has been found at all
+        guard let typeIdentifier = typeIdentifier else {
             NSLog("Item provider has no associated type identifier.")
             return false
         }
