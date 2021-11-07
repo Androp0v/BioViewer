@@ -20,6 +20,7 @@ enum RCSBEndpoint: String {
 }
 
 enum RCSBError: Error {
+    case malformedURL
     case notFound
     case internalServerError
     case unknown
@@ -44,8 +45,10 @@ struct PDBInfo: Decodable {
 class RCSBFetch {
     static func fetchPDBInfo(rcsbid: String) async throws  -> PDBInfo {
         
+        let rcsbid = rcsbid.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         guard let url = URL(string: RCSBEndpoint.getPDBInfo.rawValue + rcsbid) else {
-            fatalError()
+            throw RCSBError.malformedURL
         }
         let urlRequest = URLRequest(url: url)
         let (data, response) = try await URLSession.shared.data(for: urlRequest)

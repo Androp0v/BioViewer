@@ -11,7 +11,7 @@ import simd
 enum PDBConstants {
     // Expected line length of a properly formatted PDB file
     // (hard to think of such a mythical creature).
-    static let expectedLineLenght: Int = 78
+    static let expectedLineLength: Int = 78
 
     // Start and end of the residue name
     static let resNameStart: Int = 17
@@ -70,16 +70,22 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
     var progress: Float {
         return Float(currentLine) / Float(totalLineCount)
     }
+    
+    func updateProgress() {
+        
+    }
 
     rawText.enumerateLines(invoking: { line, stop in
+        
         currentLine += 1
+        proteinViewModel?.statusProgress(progress: progress)
+        
         // We're only interested in the lines that contain atom positions
         if line.starts(with: "ATOM") {
 
             // Check that the input line has the expected length (or more)
             // to avoid IndexOutOfRange exceptions.
-
-            guard line.count >= PDBConstants.expectedLineLenght else {
+            guard line.count >= PDBConstants.expectedLineLength else {
                 return
             }
 
@@ -92,23 +98,26 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
             let endResId = line.index(line.startIndex, offsetBy: PDBConstants.resIdEnd)
             let rangeResId = startResId..<endResId
 
-            guard let resId = Int( line[rangeResId].replacingOccurrences(of: " ", with: "") ) else { return }
+            if let resId = Int( line[rangeResId].replacingOccurrences(of: " ", with: "") ) {
+                // Avoid adding the residue id more than once
+                if currentResId != resId {
+                    currentResId = resId
+                    sequenceIdentifiers.append(resId)
 
-            // Avoid adding the residue id more than once
-            if currentResId != resId {
-                currentResId = resId
-                sequenceIdentifiers.append(resId)
+                    // Get residue name (ALA, GLN, LYS...) for current atom, now that we know it
+                    // belongs to a different residue than the last one.
 
-                // Get residue name (ALA, GLN, LYS...) for current atom, now that we know it
-                // belongs to a different residue than the last one.
+                    let startResName = line.index(line.startIndex, offsetBy: PDBConstants.resNameStart)
+                    let endResName = line.index(line.startIndex, offsetBy: PDBConstants.resNameEnd)
+                    let rangeResName = startResName..<endResName
 
-                let startResName = line.index(line.startIndex, offsetBy: PDBConstants.resNameStart)
-                let endResName = line.index(line.startIndex, offsetBy: PDBConstants.resNameEnd)
-                let rangeResName = startResName..<endResName
-
-                let resName = line[rangeResName].replacingOccurrences(of: " ", with: "")
-                sequenceArray.append(resName)
-
+                    let resName = line[rangeResName].replacingOccurrences(of: " ", with: "")
+                    sequenceArray.append(resName)
+                }
+            } else {
+                proteinViewModel?.statusViewModel.setWarning(warning:
+                    NSLocalizedString("Failed to identify residue ID for atom in line", comment: "") + " \(currentLine)."
+                )
             }
 
             // Retrieve atom element
@@ -144,6 +153,11 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
                   let y = Float( line[rangeY].replacingOccurrences(of: " ", with: "") ),
                   let z = Float( line[rangeZ].replacingOccurrences(of: " ", with: "") )
             else {
+                proteinViewModel?.statusViewModel.setWarning(warning:
+                    NSLocalizedString("Ignored atom in line", comment: "")
+                    + " \(currentLine)"
+                    + " due to invalid coordinates."
+                )
                 return
             }
 
@@ -172,8 +186,6 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) -> Protein {
             }
 
         }
-        
-        proteinViewModel?.statusProgress(progress: progress)
     })
 
     // Add element array contents into the contiguous array

@@ -82,4 +82,8 @@ class ProteinViewModel: ObservableObject {
         self.statusViewModel.setProgress(progress: 0)
         self.statusViewModel.setRunningStatus(running: false)
     }
+    
+    func statusWarning(warningText: String) {
+        
+    }
 }

@@ -34,6 +34,7 @@ struct ProteinRCSBImportView: View {
                                       prompt: Text(NSLocalizedString("Enter RCSB ID", comment: "")))
                                 .frame(height: 40)
                                 .focused($focusedField, equals: .field)
+                                .disableAutocorrection(true)
                                 .onAppear(perform: {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                         self.focusedField = .field

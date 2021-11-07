@@ -12,21 +12,50 @@ public struct StatusViewConstants {
     static let height: CGFloat = 24
     static let cornerRadius: CGFloat = 6
     static let statusTextSpinnerPadding: CGFloat = 2
+    static let warningButtonHorizontalPadding: CGFloat = 0
+    static let warningIconSize: CGFloat = 10
     #else
     static let height: CGFloat = 32
     static let cornerRadius: CGFloat = 8
     static let statusTextSpinnerPadding: CGFloat = 8
+    static let warningButtonHorizontalPadding: CGFloat = 8
+    static let warningIconSize: CGFloat = 14
     #endif
 }
 
 struct StatusView: View {
 
     @ObservedObject var statusViewModel: StatusViewModel
+    @State var showWarningPopover: Bool = false
 
     var body: some View {
         ZStack {
             Color(UIColor.secondarySystemBackground)
             HStack(spacing: 0) {
+                if !(statusViewModel.statusWarning.isEmpty) {
+                    Group {
+                        Button(action: {
+                            showWarningPopover.toggle()
+                        },
+                               label: {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .symbolRenderingMode(.multicolor)
+                                .padding(.horizontal, StatusViewConstants.warningButtonHorizontalPadding)
+                                .frame(maxHeight: .infinity)
+                                .background(Color(UIColor.secondarySystemBackground))
+                                .frame(width: 12, height: 12)
+                                .font(.system(size: StatusViewConstants.warningIconSize))
+                        })
+                            .popover(isPresented: $showWarningPopover) {
+                                StatusWarningPopover(statusViewModel: statusViewModel)
+                            }
+                        Rectangle()
+                            .padding(.vertical, 4)
+                            .frame(width: 1)
+                            .foregroundColor(Color(UIColor.opaqueSeparator))
+                            .opacity(0.5)
+                    }
+                }
                 if statusViewModel.statusRunning {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -36,18 +65,14 @@ struct StatusView: View {
                         #endif
                 }
                 Text("\(statusViewModel.statusText)")
-                    .padding(.leading, StatusViewConstants.statusTextSpinnerPadding)
+                    .padding(.leading, StatusViewConstants.statusTextSpinnerPadding + 8)
+                    .padding(.trailing, 8)
+                    .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal, 8)
             if statusViewModel.statusRunning {
                 VStack(spacing: 0) {
                     Spacer()
-                    #if targetEnvironment(macCatalyst)
-                    MacLinearProgressView(value: statusViewModel.progress, total: 1.0)
-                    #else
-                    ProgressView(value: statusViewModel.progress, total: 1.0)
-                        .progressViewStyle(LinearProgressViewStyle())
-                    #endif
+                    CustomLinearProgressView(value: statusViewModel.progress, total: 1.0)
                 }
             }
         }

@@ -10,5 +10,7 @@ import Foundation
 class AppState {
 
     static let shared = AppState()
-
+    
+    // MARK: - Configuration
+    static let maxNumberOfWarnings: Int = 20
 }

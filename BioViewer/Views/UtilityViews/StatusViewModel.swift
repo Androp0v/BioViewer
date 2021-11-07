@@ -14,15 +14,20 @@ class StatusViewModel: ObservableObject {
     @Published private(set) var statusText: String = NSLocalizedString("Idle", comment: "")
     @Published private(set) var statusRunning: Bool = false
     @Published private(set) var progress: Float?
+    
+    // Warning system
+    @Published private(set) var statusWarning: [String] = []
         
     // Internal variables that do not instantly trigger a UI redraw
     private var displayLink: CADisplayLink?
     private var internalStatusText: String = NSLocalizedString("Idle", comment: "")
     private var internalProgress: Float?
+    private var internalStatusWarning: [String] = []
     
     @objc private func syncInternalAndUIStates() {
         statusText = internalStatusText
         progress = internalProgress
+        statusWarning = internalStatusWarning
     }
     
     func setStatusText(text: String) {
@@ -47,5 +52,10 @@ class StatusViewModel: ObservableObject {
     
     func setProgress(progress: Float) {
         self.internalProgress = progress
+    }
+    
+    func setWarning(warning: String) {
+        guard internalStatusWarning.count < AppState.maxNumberOfWarnings else { return }
+        self.internalStatusWarning.append(warning)
     }
 }

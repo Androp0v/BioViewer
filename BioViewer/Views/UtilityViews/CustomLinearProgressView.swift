@@ -1,5 +1,5 @@
 //
-//  MacLinearProgressView.swift
+//  CustomLinearProgressView.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 30/10/21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MacLinearProgressView: View {
+struct CustomLinearProgressView: View {
     
     var value: Float?
     var total: Float
@@ -34,6 +34,6 @@ struct MacLinearProgressView: View {
 
 struct MacLinearProgressView_Previews: PreviewProvider {
     static var previews: some View {
-        MacLinearProgressView(value: 0.2, total: 1.0)
+        CustomLinearProgressView(value: 0.2, total: 1.0)
     }
 }
