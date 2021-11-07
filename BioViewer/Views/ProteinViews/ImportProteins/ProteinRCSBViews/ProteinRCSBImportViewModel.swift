@@ -23,14 +23,18 @@ class ProteinRCSBImportViewModel: ObservableObject {
             return
         }
         
-        let pdbInfo = try await RCSBFetch.fetchPDBInfo(rcsbid: rcsbid)
-        
-        DispatchQueue.main.async {
-            withAnimation {
-                self.foundProteinName = pdbInfo.entry.id
-                self.foundProteinDescription = pdbInfo.struct.title + "."
-                self.showRow = true
+        do {
+            let pdbInfo = try await RCSBFetch.fetchPDBInfo(rcsbid: rcsbid)
+            
+            DispatchQueue.main.sync {
+                withAnimation {
+                    self.foundProteinName = pdbInfo.entry.id
+                    self.foundProteinDescription = pdbInfo.struct.title + "."
+                    self.showRow = true
+                }
             }
+        } catch {
+            
         }
     }
     
