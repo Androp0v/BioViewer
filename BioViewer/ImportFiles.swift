@@ -12,6 +12,10 @@ enum PDBConstants {
     // Expected line length of a properly formatted PDB file
     // (hard to think of such a mythical creature).
     static let expectedLineLength: Int = 78
+    
+    // Spacing after the TITLE keyword in header until the start
+    // of the data.
+    static let titleKeywordLength: Int = 10
 
     // Start and end of the residue name
     static let resNameStart: Int = 17
@@ -46,6 +50,10 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
 
     var atomArray = ContiguousArray<simd_float3>()
     var atomIdentifiers = [UInt8]()
+    
+    // Protein file data
+    var pdbID: String?
+    var description: String?
 
     // Make one atom array per common element
     var carbonArray = [simd_float3]()
@@ -83,6 +91,28 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
         
         currentLine += 1
         proteinViewModel?.statusProgress(progress: progress)
+        
+        // Try to retrieve the protein info from the headers
+        // TO-DO: Do this in parallel with the ATOM decoding
+        if line.starts(with: "TITLE") {
+            var rawTitleLine = String(line.dropFirst(10))
+            
+            // Strip trailing newline
+            rawTitleLine = String(rawTitleLine.trimmingCharacters(in: .newlines))
+            
+            // Strip trailing whitespaces
+            while (rawTitleLine.last?.isWhitespace) ?? false {
+                rawTitleLine = String(rawTitleLine.dropLast())
+            }
+            
+            // Add to existing description or create a new one if empty
+            if description != nil {
+                description! += String(rawTitleLine)
+            } else {
+                description = String(rawTitleLine)
+                return
+            }
+        }
         
         // We're only interested in the lines that contain atom positions
         if line.starts(with: "ATOM") {
@@ -216,7 +246,9 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
         throw PDBParsingError.emptyAtomCount
     }
 
-    return Protein(atoms: &atomArray,
+    return Protein(pdbID: pdbID,
+                   description: description,
+                   atoms: &atomArray,
                    atomArrayComposition: &atomArrayComposition,
                    atomIdentifiers: atomIdentifiers,
                    sequence: sequenceArray)

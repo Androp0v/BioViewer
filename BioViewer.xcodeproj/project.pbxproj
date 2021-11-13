@@ -70,6 +70,7 @@
 		C500EEB4272DA57300A60317 /* SliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB3272DA57300A60317 /* SliderRow.swift */; };
 		C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D4273753E50002E089 /* StatusWarningPopover.swift */; };
 		C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */; };
+		C50D95D927400F6F0002E089 /* LongTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D827400F6F0002E089 /* LongTextRow.swift */; };
 		C53A118C2736D17500119BE6 /* ProteinRCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* ProteinRCSBImportView.swift */; };
 		C53A118F2736DD0D00119BE6 /* ProteinRCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* ProteinRCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* ProteinRCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* ProteinRCSBImportViewModel.swift */; };
@@ -171,6 +172,7 @@
 		C500EEB3272DA57300A60317 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C50D95D4273753E50002E089 /* StatusWarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWarningPopover.swift; sourceTree = "<group>"; };
 		C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusErrorPopover.swift; sourceTree = "<group>"; };
+		C50D95D827400F6F0002E089 /* LongTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongTextRow.swift; sourceTree = "<group>"; };
 		C53A118B2736D17500119BE6 /* ProteinRCSBImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRCSBImportView.swift; sourceTree = "<group>"; };
 		C53A118E2736DD0D00119BE6 /* ProteinRCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRCSBRowView.swift; sourceTree = "<group>"; };
 		C53A11902736DED200119BE6 /* ProteinRCSBImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRCSBImportViewModel.swift; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 			children = (
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
 				C41A055F264ACBF0006F551C /* InformationRow.swift */,
+				C50D95D827400F6F0002E089 /* LongTextRow.swift */,
 				C405740A265FF69A008527D1 /* SwitchRow.swift */,
 				C500EEB3272DA57300A60317 /* SliderRow.swift */,
 				C464C35D265A883C00E66C3E /* PickerRow.swift */,
@@ -688,6 +691,7 @@
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
+				C50D95D927400F6F0002E089 /* LongTextRow.swift in Sources */,
 				C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */,
 				C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,

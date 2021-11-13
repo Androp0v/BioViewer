@@ -21,27 +21,26 @@ private struct ProteinSidebarContent: View {
     @Binding var selectedSegment: Int
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             // Options views go here
             switch selectedSegment {
             case 0: FileSegmentProtein()
             case 1: AppearanceSegmentProtein()
             default: Spacer()
             }
-            // Top segemented control to switch between options
+            // Top segmented control to switch between options
             VStack(spacing: 0) {
-                ZStack {
-                    VisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
+                ZStack(alignment: .top) {
                     Picker("Option", selection: $selectedSegment) {
                         SidebarItem(image: "doc", tag: 0)
                         SidebarItem(image: "camera.filters", tag: 1)
                         SidebarItem(image: "function", tag: 2)
                         SidebarItem(image: "gearshape.2", tag: 3)
                     }
-                    .padding()
                     .pickerStyle(SegmentedPickerStyle())
+                    .padding(12)
                 }
-                .frame(height: 64)
+                .background(.thinMaterial)
                 Rectangle()
                     .frame(height: 0.5)
                     .foregroundColor(Color(UIColor.separator))

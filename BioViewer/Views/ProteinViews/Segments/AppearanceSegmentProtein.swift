@@ -21,7 +21,7 @@ struct AppearanceSegmentProtein: View {
         List {
             // First section hast 64pt padding to account for the
             // space under the segmented control.
-            Section(header: Text(NSLocalizedString("General", comment: "")).padding(.top, 64)) {
+            Section(header: Text(NSLocalizedString("General", comment: "")).padding(.top, 48)) {
 
                 ColorPickerRow(title: NSLocalizedString("Background color", comment: ""),
                                selectedColor: $proteinViewModel.backgroundColor)

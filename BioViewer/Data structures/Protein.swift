@@ -13,18 +13,24 @@ public class Protein {
 
     // MARK: - State
 
-    // States reflect wether or not the protein has been added
-    // to a SceneKit scene.
+    /// States reflect wether or not the protein has been added to a scene.
     public enum LoadState {
         case loading
         case loaded
         case failed
     }
     private(set) var state: LoadState
+    
+    // MARK: - Description
+    
+    /// PDB ID as in RCSB database.
+    public var pdbID: String?
+    /// Human-readable description of the protein.
+    public var description: String?
 
     // MARK: - Sequence
 
-    // Total number of residues in the protein sequence
+    /// Total number of residues in the protein sequence.
     public var resCount: Int?
 
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
@@ -32,30 +38,30 @@ public class Protein {
 
     // MARK: - Atoms
 
-    // Number of atoms in the protein
+    /// Number of atoms in the protein.
     public var atomCount: Int
 
-    // Atomic positions (in Armstrongs). ContiguousArray is faster
-    // than array since we don't need to add new atoms after its
-    // creation. Also has easier conversion to MTLBuffer.
-    //
-    // Stored in C,N,H,O,S,X order (X for others).
+    /// Atomic positions (in Armstrongs). ContiguousArray is faster than array since we
+    /// don't need to add new atoms after its creation. Also has easier conversion to MTLBuffer.
+    ///
+    /// Stored in C,N,H,O,S,X order (X for others).
     public var atoms: ContiguousArray<simd_float3>
 
-    // Number of atoms of each element
+    /// Number of atoms of each element.
     public var atomArrayComposition: AtomArrayComposition
 
-    // Atom identifiers (C,N,H,O,S...) mapped to int values
+    /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     public var atomIdentifiers: [UInt8]
 
-    // Index of the last atom added to the scene (for .loading
-    // proteins).
+    /// Index of the last atom added to the scene (for .loading proteins).
     private var currentIndex: Int
     
     // MARK: - Initialization
 
-    init(atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(pdbID: String?, description: String?, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.state = .loading
+        self.pdbID = pdbID
+        self.description = description
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers
