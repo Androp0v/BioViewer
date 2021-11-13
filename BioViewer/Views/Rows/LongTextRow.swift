@@ -13,16 +13,26 @@ struct LongTextRow: View {
     var longText: String?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            if longText != nil {
-                Text(longText ?? "")
+        if let longText = longText {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(longText)
                     .foregroundColor(Color(uiColor: UIColor.secondaryLabel))
             }
+            .frame(maxWidth: .infinity)
+        } else {
+            HStack(spacing: 4) {
+                Text(title)
+                    .multilineTextAlignment(.leading)
+                    .frame(alignment: .leading)
+                Text("-")
+                    .foregroundColor(Color(uiColor: UIColor.secondaryLabel))
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
 }
 

@@ -75,6 +75,7 @@
 		C53A118F2736DD0D00119BE6 /* ProteinRCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* ProteinRCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* ProteinRCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* ProteinRCSBImportViewModel.swift */; };
 		C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11922736F79900119BE6 /* RCSBRequest.swift */; };
+		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
 		C57303F4273022B300D5B0A6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C57303F6273022B300D5B0A6 /* Localizable.strings */; };
 		C57303F92730401E00D5B0A6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C57303F82730401E00D5B0A6 /* README.md */; };
 /* End PBXBuildFile section */
@@ -177,6 +178,7 @@
 		C53A118E2736DD0D00119BE6 /* ProteinRCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRCSBRowView.swift; sourceTree = "<group>"; };
 		C53A11902736DED200119BE6 /* ProteinRCSBImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRCSBImportViewModel.swift; sourceTree = "<group>"; };
 		C53A11922736F79900119BE6 /* RCSBRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRequest.swift; sourceTree = "<group>"; };
+		C572BD172740222800FF010D /* FileSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceView.swift; sourceTree = "<group>"; };
 		C57303F5273022B300D5B0A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F7273022F500D5B0A6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F82730401E00D5B0A6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -308,7 +310,7 @@
 		C44085682648007100DC5009 /* Segments */ = {
 			isa = PBXGroup;
 			children = (
-				C44085692648008500DC5009 /* FileSegmentProtein.swift */,
+				C572BD162740220900FF010D /* FileSegmentProtein */,
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
 			);
 			path = Segments;
@@ -501,6 +503,15 @@
 				C53A118E2736DD0D00119BE6 /* ProteinRCSBRowView.swift */,
 			);
 			path = ProteinRCSBViews;
+			sourceTree = "<group>";
+		};
+		C572BD162740220900FF010D /* FileSegmentProtein */ = {
+			isa = PBXGroup;
+			children = (
+				C44085692648008500DC5009 /* FileSegmentProtein.swift */,
+				C572BD172740222800FF010D /* FileSourceView.swift */,
+			);
+			path = FileSegmentProtein;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -718,6 +729,7 @@
 				C495B23E26654242004995C2 /* ProteinChunk.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
 				C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */,
+				C572BD182740222800FF010D /* FileSourceView.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
 				C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */,

@@ -72,6 +72,7 @@ struct AppearanceSegmentProtein: View {
             })
 
         }
+        .environment(\.defaultMinListHeaderHeight, 0)
         .listStyle(GroupedListStyle())
     }
 }

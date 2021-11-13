@@ -38,13 +38,13 @@ struct FileSegmentProtein: View {
                                 showFileSource.toggle()
                             })
                             .sheet(isPresented: $showFileSource, onDismiss: nil, content: {
-                                // TO-DO: Complete file source view
-                                Text("Long file source")
+                                FileSourceView(sourceText: proteinViewModel.dataSource.proteins.first?.sourceText)
                             })
                             .buttonStyle(DefaultButtonStyle())
                             .disabled(proteinViewModel.proteinCount == 0)
                 })
             }
+            .environment(\.defaultMinListHeaderHeight, 0)
             .listStyle(GroupedListStyle())
     }
 }
