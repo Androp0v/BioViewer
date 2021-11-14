@@ -17,7 +17,11 @@ struct ProteinView: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     // Sidebar
-    @State private var toggleSidebar = false
+    @State private var showSidebar = UserDefaults.standard.bool(forKey: "showSidebar") {
+        didSet {
+            UserDefaults.standard.set(showSidebar, forKey: "showSidebar")
+        }
+    }
     @State private var toggleModalSidebar = false
     @State private var selectedSidebarSegment = 0
 
@@ -79,7 +83,7 @@ struct ProteinView: View {
                     .onDrop(of: [.data, .item], delegate: proteinViewModel.dropDelegate)
 
                     // Sidebar
-                    if toggleSidebar {
+                    if showSidebar {
                         sidebar
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
@@ -103,7 +107,7 @@ struct ProteinView: View {
                     } else {
                         Button(action: {
                             withAnimation(.easeInOut(duration: 0.2)) {
-                                toggleSidebar.toggle()
+                                showSidebar.toggle()
                             }
                         },
                                label: {
