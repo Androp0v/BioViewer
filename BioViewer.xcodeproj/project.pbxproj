@@ -68,6 +68,15 @@
 		C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEAF272D58A400A60317 /* StatusViewModel.swift */; };
 		C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */; };
 		C500EEB4272DA57300A60317 /* SliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB3272DA57300A60317 /* SliderRow.swift */; };
+		C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405744B2663DC74008527D1 /* ProteinMetalViewController.swift */; };
+		C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */ = {isa = PBXBuildFile; fileRef = C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */; };
+		C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
+		C504C9C0274175DB002D4E6A /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
+		C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */; };
+		C504C9C2274175DF002D4E6A /* CreateSASPoints.metal in Sources */ = {isa = PBXBuildFile; fileRef = C41A056B265894AA006F551C /* CreateSASPoints.metal */; };
+		C504C9C3274175E2002D4E6A /* RemovePoints.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057406265E93E9008527D1 /* RemovePoints.metal */; };
+		C504C9C4274175E4002D4E6A /* ComputeEDT.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057408265ED6CD008527D1 /* ComputeEDT.metal */; };
+		C504C9C627418769002D4E6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C504C9C527418769002D4E6A /* Assets.xcassets */; };
 		C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D4273753E50002E089 /* StatusWarningPopover.swift */; };
 		C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */; };
 		C50D95D927400F6F0002E089 /* LongTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D827400F6F0002E089 /* LongTextRow.swift */; };
@@ -79,6 +88,28 @@
 		C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
 		C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1B2741386300FF010D /* FileSourceRow.swift */; };
 		C572BD1E27413AFB00FF010D /* FileSourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1D27413AFB00FF010D /* FileSourceViewModel.swift */; };
+		C572BD28274160C900FF010D /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C572BD27274160C900FF010D /* QuickLookThumbnailing.framework */; };
+		C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD2A274160C900FF010D /* ThumbnailProvider.swift */; };
+		C572BD2F274160C900FF010D /* ProteinThumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C572BD25274160C900FF010D /* ProteinThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C572BD352741653E00FF010D /* ImportFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0561264C2853006F551C /* ImportFiles.swift */; };
+		C572BD362741655700FF010D /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
+		C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
+		C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4553629265D869D006D980B /* AtomArrayComposition.swift */; };
+		C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
+		C572BD3A2741657B00FF010D /* AtomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomType.swift */; };
+		C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
+		C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
+		C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
+		C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D9D31271C469100E12E2F /* MetalScene.swift */; };
+		C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEAF272D58A400A60317 /* StatusViewModel.swift */; };
+		C572BD40274165F500FF010D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46435612669313A00434CC6 /* Camera.swift */; };
+		C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
+		C572BD422741660400FF010D /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
+		C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */; };
+		C572BD442741661300FF010D /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
+		C572BD452741663000FF010D /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44D0558266BAA6E00BAFDCD /* AppState.swift */; };
+		C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */; };
+		C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
 		C57303F4273022B300D5B0A6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C57303F6273022B300D5B0A6 /* Localizable.strings */; };
 		C57303F92730401E00D5B0A6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C57303F82730401E00D5B0A6 /* README.md */; };
 /* End PBXBuildFile section */
@@ -98,7 +129,28 @@
 			remoteGlobalIDString = C44FC06D2641AF1B00459E01;
 			remoteInfo = "PDB Viewer";
 		};
+		C572BD2D274160C900FF010D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C44FC0662641AF1B00459E01 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C572BD24274160C900FF010D;
+			remoteInfo = ProteinThumbnail;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C572BD34274160C900FF010D /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C572BD2F274160C900FF010D /* ProteinThumbnail.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSphereModel.swift; sourceTree = "<group>"; };
@@ -174,6 +226,7 @@
 		C500EEAF272D58A400A60317 /* StatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 		C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLinearProgressView.swift; sourceTree = "<group>"; };
 		C500EEB3272DA57300A60317 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
+		C504C9C527418769002D4E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C50D95D4273753E50002E089 /* StatusWarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWarningPopover.swift; sourceTree = "<group>"; };
 		C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusErrorPopover.swift; sourceTree = "<group>"; };
 		C50D95D827400F6F0002E089 /* LongTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongTextRow.swift; sourceTree = "<group>"; };
@@ -185,6 +238,11 @@
 		C572BD192741372600FF010D /* ProteinFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFileInfo.swift; sourceTree = "<group>"; };
 		C572BD1B2741386300FF010D /* FileSourceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceRow.swift; sourceTree = "<group>"; };
 		C572BD1D27413AFB00FF010D /* FileSourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceViewModel.swift; sourceTree = "<group>"; };
+		C572BD25274160C900FF010D /* ProteinThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ProteinThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C572BD27274160C900FF010D /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
+		C572BD2A274160C900FF010D /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
+		C572BD2C274160C900FF010D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C572BD30274160C900FF010D /* ProteinThumbnail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ProteinThumbnail.entitlements; sourceTree = "<group>"; };
 		C57303F5273022B300D5B0A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F7273022F500D5B0A6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F82730401E00D5B0A6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -209,6 +267,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C572BD22274160C900FF010D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C572BD28274160C900FF010D /* QuickLookThumbnailing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +408,8 @@
 				C44FC0702641AF1B00459E01 /* BioViewer */,
 				C44FC0822641AF1E00459E01 /* BioViewerTests */,
 				C44FC08D2641AF1E00459E01 /* BioViewerUITests */,
+				C572BD29274160C900FF010D /* ProteinThumbnail */,
+				C572BD26274160C900FF010D /* Frameworks */,
 				C44FC06F2641AF1B00459E01 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -352,6 +420,7 @@
 				C44FC06E2641AF1B00459E01 /* BioViewer.app */,
 				C44FC07F2641AF1E00459E01 /* BioViewerTests.xctest */,
 				C44FC08A2641AF1E00459E01 /* BioViewerUITests.xctest */,
+				C572BD25274160C900FF010D /* ProteinThumbnail.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -523,6 +592,25 @@
 			path = FileSegmentProtein;
 			sourceTree = "<group>";
 		};
+		C572BD26274160C900FF010D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C572BD27274160C900FF010D /* QuickLookThumbnailing.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C572BD29274160C900FF010D /* ProteinThumbnail */ = {
+			isa = PBXGroup;
+			children = (
+				C572BD30274160C900FF010D /* ProteinThumbnail.entitlements */,
+				C572BD2A274160C900FF010D /* ThumbnailProvider.swift */,
+				C504C9C527418769002D4E6A /* Assets.xcassets */,
+				C572BD2C274160C900FF010D /* Info.plist */,
+			);
+			path = ProteinThumbnail;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -534,10 +622,12 @@
 				C44FC06A2641AF1B00459E01 /* Sources */,
 				C44FC06B2641AF1B00459E01 /* Frameworks */,
 				C44FC06C2641AF1B00459E01 /* Resources */,
+				C572BD34274160C900FF010D /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C572BD2E274160C900FF010D /* PBXTargetDependency */,
 			);
 			name = BioViewer;
 			productName = "PDB Viewer";
@@ -580,13 +670,30 @@
 			productReference = C44FC08A2641AF1E00459E01 /* BioViewerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		C572BD24274160C900FF010D /* ProteinThumbnail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C572BD31274160C900FF010D /* Build configuration list for PBXNativeTarget "ProteinThumbnail" */;
+			buildPhases = (
+				C572BD21274160C900FF010D /* Sources */,
+				C572BD22274160C900FF010D /* Frameworks */,
+				C572BD23274160C900FF010D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ProteinThumbnail;
+			productName = ProteinThumbnail;
+			productReference = C572BD25274160C900FF010D /* ProteinThumbnail.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		C44FC0662641AF1B00459E01 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1250;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
 					C44FC06D2641AF1B00459E01 = {
@@ -600,6 +707,9 @@
 					C44FC0892641AF1E00459E01 = {
 						CreatedOnToolsVersion = 12.5;
 						TestTargetID = C44FC06D2641AF1B00459E01;
+					};
+					C572BD24274160C900FF010D = {
+						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
@@ -620,6 +730,7 @@
 				C44FC06D2641AF1B00459E01 /* BioViewer */,
 				C44FC07E2641AF1E00459E01 /* BioViewerTests */,
 				C44FC0892641AF1E00459E01 /* BioViewerUITests */,
+				C572BD24274160C900FF010D /* ProteinThumbnail */,
 			);
 		};
 /* End PBXProject section */
@@ -648,6 +759,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C572BD23274160C900FF010D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C504C9C627418769002D4E6A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -765,6 +884,41 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C572BD21274160C900FF010D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */,
+				C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */,
+				C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */,
+				C572BD362741655700FF010D /* Protein.swift in Sources */,
+				C572BD452741663000FF010D /* AppState.swift in Sources */,
+				C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */,
+				C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */,
+				C572BD442741661300FF010D /* MatrixTransform.swift in Sources */,
+				C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */,
+				C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */,
+				C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */,
+				C504C9C0274175DB002D4E6A /* BasicShader.metal in Sources */,
+				C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */,
+				C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */,
+				C572BD3A2741657B00FF010D /* AtomType.swift in Sources */,
+				C504C9C4274175E4002D4E6A /* ComputeEDT.metal in Sources */,
+				C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */,
+				C572BD352741653E00FF010D /* ImportFiles.swift in Sources */,
+				C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */,
+				C572BD422741660400FF010D /* ImportDroppedFilesDelegate.swift in Sources */,
+				C572BD40274165F500FF010D /* Camera.swift in Sources */,
+				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
+				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
+				C504C9C2274175DF002D4E6A /* CreateSASPoints.metal in Sources */,
+				C504C9C3274175E2002D4E6A /* RemovePoints.metal in Sources */,
+				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
+				C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */,
+				C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -777,6 +931,11 @@
 			isa = PBXTargetDependency;
 			target = C44FC06D2641AF1B00459E01 /* BioViewer */;
 			targetProxy = C44FC08B2641AF1E00459E01 /* PBXContainerItemProxy */;
+		};
+		C572BD2E274160C900FF010D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C572BD24274160C900FF010D /* ProteinThumbnail */;
+			targetProxy = C572BD2D274160C900FF010D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -914,6 +1073,7 @@
 		C44FC0942641AF1E00459E01 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -946,6 +1106,7 @@
 		C44FC0952641AF1E00459E01 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1060,6 +1221,70 @@
 			};
 			name = Release;
 		};
+		C572BD32274160C900FF010D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = ProteinThumbnail/ProteinThumbnail.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4ND4CZC2FK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProteinThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ProteinThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.ProteinThumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C572BD33274160C900FF010D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = ProteinThumbnail/ProteinThumbnail.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4ND4CZC2FK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProteinThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ProteinThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.ProteinThumbnail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1095,6 +1320,15 @@
 			buildConfigurations = (
 				C44FC09A2641AF1E00459E01 /* Debug */,
 				C44FC09B2641AF1E00459E01 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C572BD31274160C900FF010D /* Build configuration list for PBXNativeTarget "ProteinThumbnail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C572BD32274160C900FF010D /* Debug */,
+				C572BD33274160C900FF010D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

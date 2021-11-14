@@ -40,7 +40,7 @@ class MetalScene {
 
     init() {
         self.camera = Camera(nearPlane: 1, farPlane: 10000, focalLength: 200)
-        self.cameraPosition = simd_float3(0, 0, 300)
+        self.cameraPosition = simd_float3(0, 0, 1000)
         self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0, axis: simd_float3(0, 1, 0))
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()

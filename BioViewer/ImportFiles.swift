@@ -8,6 +8,8 @@
 import Foundation
 import simd
 
+// MARK: - PDB Constants
+
 enum PDBConstants {
     // Expected line length of a properly formatted PDB file
     // (hard to think of such a mythical creature).
@@ -42,9 +44,13 @@ enum PDBConstants {
     static let elementEnd: Int = 78
 }
 
+// MARK: - PDB Parsing Errors
+
 enum PDBParsingError: Error {
     case emptyAtomCount
 }
+
+// MARK: - PDB Parsing
 
 func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Protein {
 
@@ -52,7 +58,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
     var atomIdentifiers = [UInt8]()
     
     // Protein file data
-    var fileInfo = ProteinFileInfo()
+    let fileInfo = ProteinFileInfo()
 
     // Make one atom array per common element
     var carbonArray = [simd_float3]()
@@ -94,7 +100,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
         // Try to retrieve the protein info from the headers
         // TO-DO: Do this in parallel with the ATOM decoding
         if line.starts(with: "TITLE") {
-            var rawTitleLine = String(line.dropFirst(10))
+            var rawTitleLine = String(line.dropFirst(PDBConstants.titleKeywordLength))
             
             // Strip trailing newline
             rawTitleLine = String(rawTitleLine.trimmingCharacters(in: .newlines))

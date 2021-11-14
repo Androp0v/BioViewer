@@ -82,7 +82,9 @@ class ProteinRenderer: NSObject {
     
     private func makeOpaqueRenderPipelineState(device: MTLDevice) {
         // Setup pipeline
-        let defaultLibrary = device.makeDefaultLibrary()!
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
+            fatalError()
+        }
         let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
         let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
 
@@ -99,7 +101,9 @@ class ProteinRenderer: NSObject {
     
     private func makeImpostorRenderPipelineState(device: MTLDevice) {
         // Setup pipeline
-        let defaultLibrary = device.makeDefaultLibrary()!
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
+            fatalError()
+        }
         let fragmentProgram = defaultLibrary.makeFunction(name: "impostor_fragment")
         let vertexProgram = defaultLibrary.makeFunction(name: "impostor_vertex")
 
