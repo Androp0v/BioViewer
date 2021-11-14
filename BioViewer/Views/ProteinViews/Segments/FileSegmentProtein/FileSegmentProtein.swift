@@ -20,12 +20,6 @@ struct FileSegmentProtein: View {
                         content: {
                             Text(NSLocalizedString("Number of proteins: ", comment: "") + "\(proteinViewModel.proteinCount)")
                             Text(NSLocalizedString("Number of atoms: ", comment: "") + "\(proteinViewModel.totalAtomCount)")
-                            Button(NSLocalizedString("Remove all", comment: ""), action: {
-                                proteinViewModel.removeAllProteins()
-                            })
-                            .buttonStyle(PlainButtonStyle())
-                            .foregroundColor(.red)
-                            .disabled(proteinViewModel.proteinCount == 0)
                 })
                 
                 Section(header: Text(NSLocalizedString("File details", comment: "")),
@@ -45,6 +39,17 @@ struct FileSegmentProtein: View {
                                 FileSourceView(sourceViewModel: fileSourceViewModel)
                             })
                             .buttonStyle(DefaultButtonStyle())
+                            .disabled(proteinViewModel.proteinCount == 0)
+                })
+                
+                Section(header: Text(NSLocalizedString("Remove proteins", comment: "")),
+                        content: {
+                            
+                            Button(NSLocalizedString("Remove all", comment: ""), action: {
+                                proteinViewModel.removeAllProteins()
+                            })
+                            .buttonStyle(PlainButtonStyle())
+                            .foregroundColor(.red)
                             .disabled(proteinViewModel.proteinCount == 0)
                 })
             }

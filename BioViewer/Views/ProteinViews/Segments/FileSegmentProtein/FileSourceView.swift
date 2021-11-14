@@ -28,7 +28,7 @@ struct FileSourceView: View {
                             }
                     }
                 }
-                .listStyle(GroupedListStyle())
+                .listStyle(PlainListStyle())
                 .navigationTitle(NSLocalizedString("Source file", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading:
