@@ -21,14 +21,8 @@ public class Protein {
     }
     private(set) var state: LoadState
     
-    // MARK: - Description
-    
-    /// PDB ID as in RCSB database.
-    public var pdbID: String?
-    /// Human-readable description of the protein.
-    public var description: String?
-    /// Full source file text
-    public var sourceLines: [String]?
+    // MARK: - File properties
+    public var fileInfo: ProteinFileInfo
 
     // MARK: - Sequence
 
@@ -60,11 +54,9 @@ public class Protein {
     
     // MARK: - Initialization
 
-    init(pdbID: String?, description: String?, sourceLines: [String]?, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(fileInfo: ProteinFileInfo, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.state = .loading
-        self.pdbID = pdbID
-        self.description = description
-        self.sourceLines = sourceLines
+        self.fileInfo = fileInfo
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers

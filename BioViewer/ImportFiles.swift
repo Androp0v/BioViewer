@@ -52,8 +52,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
     var atomIdentifiers = [UInt8]()
     
     // Protein file data
-    var pdbID: String?
-    var description: String?
+    var fileInfo = ProteinFileInfo()
 
     // Make one atom array per common element
     var carbonArray = [simd_float3]()
@@ -72,7 +71,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
     var currentResId: Int = -1
     
     var currentLine: Int = 0
-    
+        
     let totalLineCount = rawText.reduce(into: 0) { (count, letter) in
        if letter == "\n" {
           count += 1
@@ -106,10 +105,10 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
             }
             
             // Add to existing description or create a new one if empty
-            if description != nil {
-                description! += String(rawTitleLine)
+            if fileInfo.description != nil {
+                fileInfo.description! += String(rawTitleLine)
             } else {
-                description = String(rawTitleLine)
+                fileInfo.description = String(rawTitleLine)
                 return
             }
         }
@@ -120,6 +119,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
             // Check that the input line has the expected length (or more)
             // to avoid IndexOutOfRange exceptions.
             guard line.count >= PDBConstants.expectedLineLength else {
+                fileInfo.warningIndices.append(currentLine)
                 return
             }
 
@@ -192,6 +192,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
                     + " \(currentLine)"
                     + " due to invalid coordinates."
                 )
+                fileInfo.warningIndices.append(currentLine)
                 return
             }
 
@@ -245,10 +246,10 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
     guard atomArray.count > 0 else {
         throw PDBParsingError.emptyAtomCount
     }
+    
+    fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
 
-    return Protein(pdbID: pdbID,
-                   description: description,
-                   sourceLines: rawText.components(separatedBy: .newlines),
+    return Protein(fileInfo: fileInfo,
                    atoms: &atomArray,
                    atomArrayComposition: &atomArrayComposition,
                    atomIdentifiers: atomIdentifiers,

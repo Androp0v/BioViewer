@@ -9,24 +9,26 @@ import SwiftUI
 
 struct FileSourceView: View {
     
-    var sourceLines: [String]?
+    @ObservedObject var sourceViewModel: FileSourceViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationView {
-            if let sourceLines = sourceLines {
-                ZStack {
-                    // TO-DO: This has terrible performance for big files
-                    List {
-                        ForEach(sourceLines, id: \.self) {
-                            Text($0)
-                                .font(.system(size: 9.5, design: .monospaced))
-                                .foregroundColor(.white)
-                                .listRowBackground(Color.black)
-                        }
+            if let loadedLines = sourceViewModel.loadedLines {
+                // TO-DO: This has terrible performance for big files
+                List {
+                    ForEach(loadedLines.indices, id: \.self) { lineIndex in
+                        FileSourceRow(lineNumber: lineIndex + 1,
+                                      line: loadedLines[lineIndex],
+                                      hasWarning: sourceViewModel.hasWarning(index: lineIndex))
+                            .onAppear {
+                                if sourceViewModel.shouldLoadMore(index: lineIndex) {
+                                    sourceViewModel.loadMore()
+                                }
+                            }
                     }
-                    .listStyle(InsetGroupedListStyle())
                 }
+                .listStyle(GroupedListStyle())
                 .navigationTitle(NSLocalizedString("Source file", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading:
@@ -54,8 +56,11 @@ struct FileSourceView: View {
 
 struct FileSourceView_Previews: PreviewProvider {
     static var previews: some View {
-        FileSourceView(sourceLines: ["HEADER    RIBOSOME                                07-JAN-07   XXXX \n",
-                                     "TITLE     THE CRYSTAL STRUCTURE OF THE LARGE RIBOSOMAL SUBUNIT FROM \n",
-                                     "TITLE    2 DEINOCOCCUS RADIODURANS COMPLEXED WITH THE PLEUROMUTILIN \n"])
+        FileSourceView(sourceViewModel: FileSourceViewModel(fileInfo: ProteinFileInfo(pdbID: nil,
+                                                                                      description: nil,
+                                                                                      sourceLines:
+            ["HEADER    RIBOSOME                                07-JAN-07   XXXX \n",
+             "TITLE     THE CRYSTAL STRUCTURE OF THE LARGE RIBOSOMAL SUBUNIT FROM \n",
+             "TITLE    2 DEINOCOCCUS RADIODURANS COMPLEXED WITH THE PLEUROMUTILIN \n"])))
     }
 }

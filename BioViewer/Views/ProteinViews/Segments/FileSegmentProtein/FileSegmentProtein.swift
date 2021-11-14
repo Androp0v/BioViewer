@@ -30,15 +30,19 @@ struct FileSegmentProtein: View {
                 
                 Section(header: Text(NSLocalizedString("File details", comment: "")),
                         content: {
+                    
+                            let protein = proteinViewModel.dataSource.proteins.first
+                    
                             Text(NSLocalizedString("PDB ID: ", comment: "")
-                                 + "\(proteinViewModel.dataSource.proteins.first?.pdbID ?? "-")")
+                                 + "\(protein?.fileInfo.pdbID ?? "-")")
                             LongTextRow(title: NSLocalizedString("Description: ", comment: ""),
-                                        longText: proteinViewModel.dataSource.proteins.first?.description)
+                                        longText: protein?.fileInfo.description)
                             Button(NSLocalizedString("View raw file", comment: ""), action: {
                                 showFileSource.toggle()
                             })
                             .sheet(isPresented: $showFileSource, onDismiss: nil, content: {
-                                FileSourceView(sourceLines: proteinViewModel.dataSource.proteins.first?.sourceLines)
+                                let fileSourceViewModel = FileSourceViewModel(fileInfo: protein?.fileInfo)
+                                FileSourceView(sourceViewModel: fileSourceViewModel)
                             })
                             .buttonStyle(DefaultButtonStyle())
                             .disabled(proteinViewModel.proteinCount == 0)
