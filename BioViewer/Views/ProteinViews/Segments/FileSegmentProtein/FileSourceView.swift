@@ -9,16 +9,16 @@ import SwiftUI
 
 struct FileSourceView: View {
     
-    var sourceText: String?
+    var sourceLines: [String]?
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationView {
-            if let sourceText = sourceText {
+            if let sourceLines = sourceLines {
                 ZStack {
                     // TO-DO: This has terrible performance for big files
                     List {
-                        ForEach(sourceText.components(separatedBy: .newlines), id: \.self) {
+                        ForEach(sourceLines, id: \.self) {
                             Text($0)
                                 .font(.system(size: 9.5, design: .monospaced))
                                 .foregroundColor(.white)
@@ -54,8 +54,8 @@ struct FileSourceView: View {
 
 struct FileSourceView_Previews: PreviewProvider {
     static var previews: some View {
-        FileSourceView(sourceText: "HEADER    RIBOSOME                                07-JAN-07   XXXX \n"
-                         + "TITLE     THE CRYSTAL STRUCTURE OF THE LARGE RIBOSOMAL SUBUNIT FROM \n"
-                         + "TITLE    2 DEINOCOCCUS RADIODURANS COMPLEXED WITH THE PLEUROMUTILIN \n")
+        FileSourceView(sourceLines: ["HEADER    RIBOSOME                                07-JAN-07   XXXX \n",
+                                     "TITLE     THE CRYSTAL STRUCTURE OF THE LARGE RIBOSOMAL SUBUNIT FROM \n",
+                                     "TITLE    2 DEINOCOCCUS RADIODURANS COMPLEXED WITH THE PLEUROMUTILIN \n"])
     }
 }

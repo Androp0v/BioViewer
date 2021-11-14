@@ -248,7 +248,7 @@ func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Pr
 
     return Protein(pdbID: pdbID,
                    description: description,
-                   sourceText: rawText,
+                   sourceLines: rawText.components(separatedBy: .newlines),
                    atoms: &atomArray,
                    atomArrayComposition: &atomArrayComposition,
                    atomIdentifiers: atomIdentifiers,

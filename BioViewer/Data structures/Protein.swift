@@ -28,7 +28,7 @@ public class Protein {
     /// Human-readable description of the protein.
     public var description: String?
     /// Full source file text
-    public var sourceText: String?
+    public var sourceLines: [String]?
 
     // MARK: - Sequence
 
@@ -60,11 +60,11 @@ public class Protein {
     
     // MARK: - Initialization
 
-    init(pdbID: String?, description: String?, sourceText: String?, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(pdbID: String?, description: String?, sourceLines: [String]?, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.state = .loading
         self.pdbID = pdbID
         self.description = description
-        self.sourceText = sourceText
+        self.sourceLines = sourceLines
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers

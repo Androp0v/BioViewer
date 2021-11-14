@@ -38,7 +38,7 @@ struct FileSegmentProtein: View {
                                 showFileSource.toggle()
                             })
                             .sheet(isPresented: $showFileSource, onDismiss: nil, content: {
-                                FileSourceView(sourceText: proteinViewModel.dataSource.proteins.first?.sourceText)
+                                FileSourceView(sourceLines: proteinViewModel.dataSource.proteins.first?.sourceLines)
                             })
                             .buttonStyle(DefaultButtonStyle())
                             .disabled(proteinViewModel.proteinCount == 0)
