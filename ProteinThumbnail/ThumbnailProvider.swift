@@ -56,6 +56,8 @@ class ThumbnailProvider: QLThumbnailProvider {
         }
         let thumbnail = UIImage(cgImage: cgThumbnail)
         
+        let thumbnailOverlay = UIImage(named: "OverlayPDB")
+        
         // Keep the ~3:4 aspect ratio of macOS/iOS document icons
         let thumbnailFrame = CGRect(x: 0.0,
                                     y: 0.0,
@@ -66,6 +68,8 @@ class ThumbnailProvider: QLThumbnailProvider {
         handler(QLThumbnailReply(contextSize: thumbnailFrame.size, currentContextDrawing: { () -> Bool in
             // Draw the thumbnail here.
             thumbnail.draw(in: thumbnailFrame)
+            // Draw the overlay here.
+            thumbnailOverlay?.draw(in: thumbnailFrame)
             // Return true if the thumbnail was successfully drawn inside this block.
             return true
         }), nil)
