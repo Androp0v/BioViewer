@@ -37,6 +37,8 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.reference</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
@@ -68,20 +70,10 @@
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
-			<key>UISupportsDocumentBrowser</key>
-			<false/>
 			<key>LSSupportsOpeningDocumentsInPlace</key>
 			<false/>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>PDB1</string>
-					<string>pdb1</string>
-					<string>PDB</string>
-					<string>pdb</string>
-				</array>
-			</dict>
+			<key>UISupportsDocumentBrowser</key>
+			<false/>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -92,6 +84,16 @@
 			<array/>
 			<key>UTTypeIdentifier</key>
 			<string>com.raulmonton.bioviewer.pdb</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>PDB1</string>
+					<string>pdb1</string>
+					<string>PDB</string>
+					<string>pdb</string>
+				</array>
+			</dict>
 		</dict>
 	</array>
 </dict>

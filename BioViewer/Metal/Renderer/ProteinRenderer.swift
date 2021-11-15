@@ -19,15 +19,15 @@ class ProteinRenderer: NSObject {
     /// GPU
     var device: MTLDevice
     /// Pipeline state for the opaque geometry rendering
-    var opaqueRenderingPipelineState: MTLRenderPipelineState!
+    var opaqueRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times)
-    var impostorRenderingPipelineState: MTLRenderPipelineState!
+    var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Depth state
-    var depthState: MTLDepthStencilState!
+    var depthState: MTLDepthStencilState?
     /// Command queue
-    var commandQueue: MTLCommandQueue!
+    var commandQueue: MTLCommandQueue?
     /// Used to signal that a new frame is ready to be computed by the CPU
-    var frameBoundarySemaphore: DispatchSemaphore!
+    var frameBoundarySemaphore: DispatchSemaphore
     /// Used to index the dynamic buffers
     var currentFrameIndex: Int
     
@@ -251,12 +251,20 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Command buffer & depth
         
+        guard let commandQueue = commandQueue else {
+            NSLog("Command queue is nil.")
+            return
+        }
+        
         // Clear the depth texture (depth is in normalized device coordinates,
         // where 1.0 is the maximum/deepest value).
         view.clearDepth = 1.0
         
         // Create command buffer
-        let commandBuffer = commandQueue.makeCommandBuffer()!
+        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+            NSLog("Unable to create command buffer.")
+            return
+        }
         
         // MARK: - Shadow Map pass
         
@@ -264,7 +272,7 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Opaque geometry pass
         
-        if false {
+        opaqueGeometryBlock: if false {
             // Ensure opaque buffers are loaded
             guard let opaqueVertexBuffer = self.opaqueVertexBuffer else { return }
             guard let opaqueIndexBuffer = self.opaqueIndexBuffer else { return }
@@ -272,16 +280,18 @@ extension ProteinRenderer: MTKViewDelegate {
             // Attach textures. colorAttachments[0] is the final texture we draw onscreen
             opaqueRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
             opaqueRenderPassDescriptor.colorAttachments[0].loadAction = .clear
-            opaqueRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: scene.backgroundColor.components![0],
-                                                                                      green: scene.backgroundColor.components![1],
-                                                                                      blue: scene.backgroundColor.components![2],
-                                                                                      alpha: scene.backgroundColor.components![3])
+            opaqueRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
             opaqueRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
             // Create render command encoder
-            let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: opaqueRenderPassDescriptor)!
+            guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: opaqueRenderPassDescriptor) else {
+                break opaqueGeometryBlock
+            }
 
             // Set pipeline state
+            guard let opaqueRenderingPipelineState = opaqueRenderingPipelineState else {
+                break opaqueGeometryBlock
+            }
             renderCommandEncoder.setRenderPipelineState(opaqueRenderingPipelineState)
 
             // Set depth state
@@ -312,7 +322,7 @@ extension ProteinRenderer: MTKViewDelegate {
         }
         
         // MARK: - Transparent geometry pass
-        if true {
+        transparentGeometryBlock: if true {
             // Ensure opaque buffers are loaded
             guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
             guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
@@ -320,14 +330,18 @@ extension ProteinRenderer: MTKViewDelegate {
             // Attach textures. colorAttachments[0] is the final texture we draw onscreen
             impostorRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
             impostorRenderPassDescriptor.colorAttachments[0].loadAction = .clear
-            // FIXME: Crash on grayscale colors (components![2] does not exist)
             impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
             impostorRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
             // Create render command encoder
-            let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor)!
+            guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
+                break transparentGeometryBlock
+            }
 
             // Set pipeline state
+            guard let impostorRenderingPipelineState = impostorRenderingPipelineState else {
+                break transparentGeometryBlock
+            }
             renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
 
             // Set depth state
