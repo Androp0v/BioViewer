@@ -42,7 +42,7 @@ class ProteinViewDataSource: ObservableObject {
         proteins.append(protein)
         if addToScene {
             
-            // FIXME:
+            // TO-DO: Opaque geometries
             /*
             // Generate a sphere mesh for each atom in the protein
             let (vertexData, atomTypeData, indexData) = MetalScheduler.shared.createSphereModel(protein: protein)
@@ -76,7 +76,8 @@ class ProteinViewDataSource: ObservableObject {
     public func getNumberOfProteins() -> Int {
         return proteins.count
     }
-
+    
+    /// Removes all proteins from the data source and the scene.
     public func removeAllProteinsFromDatasource() {
         proteins = []
         proteinViewModel?.renderer.removeBuffers()

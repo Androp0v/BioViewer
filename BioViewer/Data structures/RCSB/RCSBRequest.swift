@@ -16,15 +16,7 @@ enum RCSBRequestType: String {
 enum RCSBEndpoint: String {
     case getPDBInfo = "https://data.rcsb.org/rest/v1/core/entry/"
     case downloadPDBFile = "https://files.rcsb.org/download/"
-    case downloadPDBImage = "https://cdn.rcsb.org/images/structures/" // og/2ogm/2ogm_assembly-1.jpeg
-}
-
-enum RCSBError: Error {
-    case malformedURL
-    case notFound
-    case internalServerError
-    case unknown
-    case badImageData
+    case downloadPDBImage = "https://cdn.rcsb.org/images/structures/"
 }
 
 struct PDBInfo: Decodable {
@@ -71,7 +63,7 @@ class RCSBFetch {
     static func fetchPDBFile(rcsbid: String) async throws -> String {
         
         guard let url = URL(string: RCSBEndpoint.downloadPDBFile.rawValue + rcsbid + ".pdb1") else {
-            fatalError()
+            throw RCSBError.malformedURL
         }
         let urlRequest = URLRequest(url: url)
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
@@ -92,14 +84,15 @@ class RCSBFetch {
     }
     
     static func fetchPDBImage(rcsbid: String) async throws -> Image? {
-        // https://cdn.rcsb.org/images/structures/og/2ogm/2ogm_assembly-1.jpeg
-        // https://cdn.rcsb.org/images/structures/OG/2OGM/2OGM_assembly-1.jpeg
+        guard rcsbid.count >= 4 else {
+            throw RCSBError.invalidID
+        }
         let imageDirectory = (rcsbid as NSString).substring(with: NSRange(location: 1, length: 2)).lowercased() + "/"
         guard let url = URL(string: RCSBEndpoint.downloadPDBImage.rawValue
                             + imageDirectory
                             + rcsbid.lowercased()
                             + "/" + rcsbid.lowercased() + "_assembly-1.jpeg") else {
-            fatalError()
+            throw RCSBError.malformedURL
         }
         let urlRequest = URLRequest(url: url)
         let (data, response) = try await URLSession.shared.data(for: urlRequest)

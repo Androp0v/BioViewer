@@ -26,7 +26,7 @@ struct AppearanceSegmentProtein: View {
                 ColorPickerRow(title: NSLocalizedString("Background color", comment: ""),
                                selectedColor: $proteinViewModel.backgroundColor)
 
-                // FIXME:
+                // TO-DO:
 
                 /*
                 PickerRow(optionName: "View protein as",

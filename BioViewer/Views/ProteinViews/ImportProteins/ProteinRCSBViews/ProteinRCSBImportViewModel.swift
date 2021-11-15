@@ -10,10 +10,10 @@ import SwiftUI
 
 class ProteinRCSBImportViewModel: ObservableObject {
     
-    @Published var showRow: Bool = false
-    @Published var foundProteinImage: Image?
-    @Published var foundProteinName: String?
-    @Published var foundProteinDescription: String?
+    @Published private(set) var showRow: Bool = false
+    @Published private(set) var foundProteinImage: Image?
+    @Published private(set) var foundProteinName: String?
+    @Published private(set) var foundProteinDescription: String?
     
     func getPDBInfo(rcsbid: String) async throws {
         guard !rcsbid.isEmpty else {
@@ -26,14 +26,13 @@ class ProteinRCSBImportViewModel: ObservableObject {
         do {
             let pdbInfo = try await RCSBFetch.fetchPDBInfo(rcsbid: rcsbid)
             DispatchQueue.main.sync {
-                withAnimation {
-                    self.foundProteinName = pdbInfo.entry.id
-                    self.foundProteinDescription = pdbInfo.struct.title + "."
-                    self.showRow = true
-                }
+                self.objectWillChange.send()
+                self.showRow = true
+                self.foundProteinName = pdbInfo.entry.id
+                self.foundProteinDescription = pdbInfo.struct.title + "."
             }
-        } catch {
-            
+        } catch let error {
+            throw error
         }
     }
     
@@ -46,7 +45,7 @@ class ProteinRCSBImportViewModel: ObservableObject {
         }
         
         let pdbImage = try await RCSBFetch.fetchPDBImage(rcsbid: rcsbid)
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
             withAnimation {
                 self.foundProteinImage = pdbImage
             }

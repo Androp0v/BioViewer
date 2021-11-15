@@ -14,7 +14,7 @@ class ProteinMetalViewController: UIViewController {
     var device: MTLDevice!
 
     var renderedView: MTKView!
-    var renderDelegate: MTKViewDelegate?
+    weak var renderDelegate: MTKViewDelegate?
     var proteinViewModel: ProteinViewModel
 
     init(proteinViewModel: ProteinViewModel) {

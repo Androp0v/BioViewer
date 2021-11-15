@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ProteinRCSBRowView: View {
     
-    @Binding var title: String?
-    @Binding var description: String?
-    @Binding var image: Image?
+    var title: String?
+    var description: String?
+    var image: Image?
     
     var body: some View {
         HStack(alignment: .top) {
@@ -42,8 +42,8 @@ struct ProteinRCSBRowView: View {
 
 struct ProteinRCSBRowView_Previews: PreviewProvider {
     static var previews: some View {
-        ProteinRCSBRowView(title: .constant("2OGM"),
-                           description: .constant("The crystal structure of the large ribosomal subunit from Deinococcus radiodurans complexed with the pleuromutilin derivative SB-571519"),
-                           image: .constant(nil))
+        ProteinRCSBRowView(title: "2OGM",
+                           description: "The crystal structure of the large ribosomal subunit from Deinococcus radiodurans complexed with the pleuromutilin derivative SB-571519",
+                           image: nil)
     }
 }

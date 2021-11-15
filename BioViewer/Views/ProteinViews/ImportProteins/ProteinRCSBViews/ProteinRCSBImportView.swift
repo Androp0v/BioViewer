@@ -15,10 +15,18 @@ struct ProteinRCSBImportView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @FocusState private var focusedField: FocusField?
     @State var searchText: String = ""
+    @State var alertText: String = ""
+    @State var showingAlert: Bool = false
     
-    @ObservedObject private var proteinRCSBImportViewModel = ProteinRCSBImportViewModel()
+    @StateObject var proteinRCSBImportViewModel = ProteinRCSBImportViewModel()
+    
+    func showAlert(text: String) {
+        DispatchQueue.main.async {
+            self.alertText = text
+            self.showingAlert = true
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -32,19 +40,29 @@ struct ProteinRCSBImportView: View {
                             TextField("None",
                                       text: $searchText,
                                       prompt: Text(NSLocalizedString("Enter RCSB ID", comment: "")))
-                                .frame(height: 40)
-                                .focused($focusedField, equals: .field)
+                                .frame(maxHeight: .infinity)
                                 .disableAutocorrection(true)
-                                .onAppear(perform: {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        self.focusedField = .field
-                                    }
-                                })
+                                .alert(alertText, isPresented: $showingAlert) {
+                                    Button("OK", role: .cancel) { }
+                                }
                                 .onSubmit {
-                                    self.focusedField = .none
                                     Task {
-                                        try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
-                                        try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
+                                        await withThrowingTaskGroup(of: Void.self, body: { group in
+                                            group.addTask {
+                                                do {
+                                                    try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
+                                                } catch let error {
+                                                    await showAlert(text: error.localizedDescription)
+                                                }
+                                            }
+                                            group.addTask {
+                                                do {
+                                                    try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
+                                                } catch let error {
+                                                    await showAlert(text: error.localizedDescription)
+                                                }
+                                            }
+                                        })
                                     }
                                 }
                         }
@@ -55,12 +73,12 @@ struct ProteinRCSBImportView: View {
                     .cornerRadius(13)
                 }
                 .padding(.horizontal)
- 
+                
                 List {
                     if self.proteinRCSBImportViewModel.showRow {
-                        ProteinRCSBRowView(title: $proteinRCSBImportViewModel.foundProteinName,
-                                           description: $proteinRCSBImportViewModel.foundProteinDescription,
-                                           image: $proteinRCSBImportViewModel.foundProteinImage)
+                        ProteinRCSBRowView(title: proteinRCSBImportViewModel.foundProteinName,
+                                           description: proteinRCSBImportViewModel.foundProteinDescription,
+                                           image: proteinRCSBImportViewModel.foundProteinImage)
                             .onTapGesture {
                                 Task {
                                     guard let rcsbId = proteinRCSBImportViewModel.foundProteinName else { return }

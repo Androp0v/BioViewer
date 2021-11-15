@@ -80,7 +80,7 @@ struct ProteinView: View {
                         }
                         .padding(.bottom, 12)
                     }
-                    .onDrop(of: [.data, .item], delegate: proteinViewModel.dropDelegate)
+                    .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
 
                     // Sidebar
                     if showSidebar {

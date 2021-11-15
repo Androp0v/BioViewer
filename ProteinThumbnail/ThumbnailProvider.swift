@@ -101,7 +101,7 @@ extension MTLTexture {
 
         let selftureSize = self.width * self.height * 4
         let rowBytes = self.width * 4
-        let releaseMaskImagePixelData: CGDataProviderReleaseDataCallback = { (info: UnsafeMutableRawPointer?, data: UnsafeRawPointer, size: Int) -> () in
+        let releaseMaskImagePixelData: CGDataProviderReleaseDataCallback = { (_, _, _) -> Void in
             return
         }
         let provider = CGDataProvider(dataInfo: nil, data: pointer, size: selftureSize, releaseData: releaseMaskImagePixelData)

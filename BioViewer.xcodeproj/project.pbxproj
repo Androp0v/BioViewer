@@ -77,6 +77,7 @@
 		C504C9C3274175E2002D4E6A /* RemovePoints.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057406265E93E9008527D1 /* RemovePoints.metal */; };
 		C504C9C4274175E4002D4E6A /* ComputeEDT.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4057408265ED6CD008527D1 /* ComputeEDT.metal */; };
 		C504C9C627418769002D4E6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C504C9C527418769002D4E6A /* Assets.xcassets */; };
+		C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C504C9C7274294A7002D4E6A /* RCSBError.swift */; };
 		C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D4273753E50002E089 /* StatusWarningPopover.swift */; };
 		C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */; };
 		C50D95D927400F6F0002E089 /* LongTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D827400F6F0002E089 /* LongTextRow.swift */; };
@@ -227,6 +228,7 @@
 		C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLinearProgressView.swift; sourceTree = "<group>"; };
 		C500EEB3272DA57300A60317 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C504C9C527418769002D4E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C504C9C7274294A7002D4E6A /* RCSBError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBError.swift; sourceTree = "<group>"; };
 		C50D95D4273753E50002E089 /* StatusWarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWarningPopover.swift; sourceTree = "<group>"; };
 		C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusErrorPopover.swift; sourceTree = "<group>"; };
 		C50D95D827400F6F0002E089 /* LongTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongTextRow.swift; sourceTree = "<group>"; };
@@ -558,7 +560,7 @@
 				C418BAFD2645B1210031C6F0 /* AtomType.swift */,
 				C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */,
 				C4A69AB326598783001C0490 /* AtomSectionIterator.swift */,
-				C53A11922736F79900119BE6 /* RCSBRequest.swift */,
+				C504C9C9274294FE002D4E6A /* RCSB */,
 			);
 			path = "Data structures";
 			sourceTree = "<group>";
@@ -569,6 +571,15 @@
 				C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */,
 			);
 			path = Delegates;
+			sourceTree = "<group>";
+		};
+		C504C9C9274294FE002D4E6A /* RCSB */ = {
+			isa = PBXGroup;
+			children = (
+				C53A11922736F79900119BE6 /* RCSBRequest.swift */,
+				C504C9C7274294A7002D4E6A /* RCSBError.swift */,
+			);
+			path = RCSB;
 			sourceTree = "<group>";
 		};
 		C53A118D2736DCFA00119BE6 /* ProteinRCSBViews */ = {
@@ -836,6 +847,7 @@
 				C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
+				C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,

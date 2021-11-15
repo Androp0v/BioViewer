@@ -16,7 +16,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
     // MARK: - Properties
 
-    public var proteinViewModel: ProteinViewModel?
+    public weak var proteinViewModel: ProteinViewModel?
 
     // MARK: - Handle drag & drop events
 

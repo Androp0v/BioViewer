@@ -12,31 +12,39 @@ import SwiftUI
 class ProteinViewModel: ObservableObject {
 
     // MARK: - Properties
-
+    
+    /// Metal rendering engine.
     @Published var renderer: ProteinRenderer
+    /// Datasource to hold actual protein data.
+    @Published var dataSource: ProteinViewDataSource
+    /// Delegate to handle dropped files in view.
+    var dropHandler: ImportDroppedFilesDelegate
+    /// Reference to the status view model for updates.
+    var statusViewModel: StatusViewModel
+    
+    /// Total protein count in view.
+    @Published var proteinCount: Int = 0
+    /// Total atom count in view.
+    @Published var totalAtomCount: Int = 0
+    
+    // MARK: - Modified from the UI
+    
+    /// Scene background color.
     @Published var backgroundColor: Color = .black {
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
             renderer.scene.backgroundColor = newCGColor
         }
     }
+    
+    /// Scene's main camera focal length.
     @Published var cameraFocalLength: Float = 200 {
         didSet {
             renderer.scene.camera.updateFocalLength(focalLength: cameraFocalLength,
                                                     aspectRatio: renderer.scene.aspectRatio)
         }
     }
-
-    @Published var dataSource: ProteinViewDataSource
-
-    let dropDelegate: ImportDroppedFilesDelegate
-
-    // Reference to the status view model for updates
-    var statusViewModel: StatusViewModel
-
-    @Published var proteinCount: Int = 0
-    @Published var totalAtomCount: Int = 0
-
+    
     // MARK: - Initialization
 
     init() {
@@ -51,14 +59,14 @@ class ProteinViewModel: ObservableObject {
         self.dataSource = dataSource
 
         // Setup drop delegate
-        self.dropDelegate = ImportDroppedFilesDelegate()
+        self.dropHandler = ImportDroppedFilesDelegate()
 
         // Setup view status
         self.statusViewModel = StatusViewModel()
 
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dataSource.proteinViewModel = self
-        self.dropDelegate.proteinViewModel = self
+        self.dropHandler.proteinViewModel = self
     }
 
     // MARK: - Public functions
