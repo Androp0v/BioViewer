@@ -12,7 +12,7 @@ import SwiftUI
 class ProteinRenderer: NSObject {
     
     // MARK: - Constants
-    let maxBuffersInFlight = 3
+    var maxBuffersInFlight = 3
     
     // MARK: - Metal variables
     
@@ -51,9 +51,33 @@ class ProteinRenderer: NSObject {
     /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
     var scene = MetalScene()
     
-    // If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
+    /// If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
     var getCurrentDrawable: (() -> CAMetalDrawable?)?
-
+    
+    /// Get the MTLClearColor for the scene's background color. Defaults to black if color can't be retrieved.
+    func getBackgroundClearColor() -> MTLClearColor {
+        
+        // Convert color to RGB from other color spaces (i.e. grayscale) as MTLClearColor requires
+        // a RGBA value.
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let rgbaColor = scene.backgroundColor.converted(to: rgbColorSpace, intent: .defaultIntent, options: nil) else {
+            return MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+        }
+        
+        // We expect 4 color components in RGBA
+        guard rgbaColor.numberOfComponents == 4 else {
+            return MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+        }
+        guard let rgbaColorComponents = rgbaColor.components else {
+            return MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+        }
+        
+        return MTLClearColor(red: rgbaColorComponents[0],
+                             green: rgbaColorComponents[1],
+                             blue: rgbaColorComponents[2],
+                             alpha: rgbaColorComponents[3])
+    }
+    
     // MARK: - Descriptors
     
     let opaqueRenderPassDescriptor: MTLRenderPassDescriptor = {
@@ -296,10 +320,8 @@ extension ProteinRenderer: MTKViewDelegate {
             // Attach textures. colorAttachments[0] is the final texture we draw onscreen
             impostorRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
             impostorRenderPassDescriptor.colorAttachments[0].loadAction = .clear
-            impostorRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: scene.backgroundColor.components![0],
-                                                                                      green: scene.backgroundColor.components![1],
-                                                                                      blue: scene.backgroundColor.components![2],
-                                                                                      alpha: scene.backgroundColor.components![3])
+            // FIXME: Crash on grayscale colors (components![2] does not exist)
+            impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
             impostorRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
             // Create render command encoder
