@@ -46,7 +46,9 @@ struct AppearanceSegmentProtein: View {
                 */
 
             }
-
+            
+            // TO-DO: Enable changeable atom colors
+            /*
             if selectedProteinVisualization == ProteinVisualizationOption.solidSpheres.rawValue {
                 // TO-DO: Make picker actually change atom color
                 Section(header: Text(NSLocalizedString("Solid spheres", comment: "")), content: {
@@ -64,6 +66,7 @@ struct AppearanceSegmentProtein: View {
                                    selectedColor: .constant(Color.gray))
                 })
             }
+            */
             
             Section(header: Text(NSLocalizedString("Focal distance", comment: "")), content: {
 

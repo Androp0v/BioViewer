@@ -34,8 +34,11 @@ private struct ProteinSidebarContent: View {
                     Picker("Option", selection: $selectedSegment) {
                         SidebarItem(image: "doc", tag: 0)
                         SidebarItem(image: "camera.filters", tag: 1)
+                        // TO-DO: Add missing segments
+                        /*
                         SidebarItem(image: "function", tag: 2)
                         SidebarItem(image: "gearshape.2", tag: 3)
+                        */
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding(12)

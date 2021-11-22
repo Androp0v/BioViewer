@@ -25,6 +25,8 @@ struct MainView: View {
                     label: {
                         Text(NSLocalizedString("View protein structure", comment: ""))
                 })
+                // TO-DO: Add missing views
+                /*
                 NavigationLink(
                     destination: SequenceView(),
                     label: {
@@ -35,6 +37,7 @@ struct MainView: View {
                     label: {
                         Text(NSLocalizedString("Settings", comment: ""))
                 })
+                */
             }
             .listStyle( SidebarListStyle() )
             .navigationBarHidden(false)

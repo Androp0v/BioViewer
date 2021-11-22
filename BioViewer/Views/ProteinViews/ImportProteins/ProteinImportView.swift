@@ -36,6 +36,7 @@ struct ProteinImportView: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @State var willLoadProtein: Bool = false
     @State var showRCSBImportSheet: Bool = false
+    private var pickerHandler = DocumentPickerDelegate()
 
     public enum ImportAction {
         case importFile
@@ -43,11 +44,12 @@ struct ProteinImportView: View {
         case downloadFromURL
         case sampleProtein
     }
-
+    
     var body: some View {
         ZStack {
             Color.black
             VStack(spacing: 32) {
+                // TO-DO: Enable missing row
                 ImportRowView(title: NSLocalizedString("Import files", comment: ""),
                               imageName: "square.and.arrow.down",
                               action: ImportAction.importFile,
@@ -56,10 +58,12 @@ struct ProteinImportView: View {
                               imageName: "arrow.down.doc",
                               action: ImportAction.downloadFromRCSB,
                               parent: self)
+                /*
                 ImportRowView(title: NSLocalizedString("Download from URL", comment: ""),
                               imageName: "link",
                               action: ImportAction.downloadFromURL,
                               parent: self)
+                */
                 ImportRowView(title: NSLocalizedString("Sample protein", comment: ""),
                               imageName: "puzzlepiece",
                               action: ImportAction.sampleProtein,
@@ -80,15 +84,59 @@ struct ProteinImportView: View {
         switch action {
         case .importFile:
             // Import from file
-            // TO-DO: Import form file
-            fatalError()
+            let picker = DocumentPickerViewController(forOpeningContentTypes: [.pdbFiles], asCopy: false)
+            picker.delegate = pickerHandler
+            pickerHandler.onPick = { fileURL in
+                // Disable import actions while processing this action
+                willLoadProtein = true
+                // Dispatch on background queue, file loading can be slow
+                DispatchQueue.global(qos: .userInitiated).async {
+                    guard let proteinData = try? Data(contentsOf: fileURL) else {
+                        failedToLoad()
+                        return
+                    }
+                    proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
+                    let rawText = String(decoding: proteinData, as: UTF8.self)
+                    do {
+                        var protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
+                        proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+                    } catch PDBParsingError.emptyAtomCount {
+                        proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
+                        failedToLoad()
+                    } catch {
+                        proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
+                        failedToLoad()
+                    }
+                }
+            }
+            
+            // TO-DO: Improve how the current window is located. This is a hacky workaround.
+            for scene in UIApplication.shared.connectedScenes where scene.activationState == .foregroundActive {
+                guard let windowSceneDelegate = ((scene as? UIWindowScene)?.delegate as? UIWindowSceneDelegate) else {
+                    failedToLoad()
+                    return
+                }
+                guard let window = windowSceneDelegate.window else {
+                    failedToLoad()
+                    return
+                }
+                guard let rootViewController = window?.rootViewController else {
+                    failedToLoad()
+                    return
+                }
+                
+                rootViewController.present(picker, animated: true)
+            }
+            
         case .downloadFromRCSB:
             // Download from RCSB
             showRCSBImportSheet.toggle()
+            
         case .downloadFromURL:
             // Download from URL
             // TO-DO: download from URL
             fatalError()
+            
         case .sampleProtein:
             // Import sample protein
             // Disable import actions while processing this action
