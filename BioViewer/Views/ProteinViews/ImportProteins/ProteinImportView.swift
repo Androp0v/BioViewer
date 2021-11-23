@@ -102,11 +102,11 @@ struct ProteinImportView: View {
                                                                      fileExtension: fileURL.pathExtension,
                                                                      proteinViewModel: self.proteinViewModel)
                         proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                    } catch ImportError.emptyAtomCount {
-                        proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
+                    } catch let error as ImportError {
+                        proteinViewModel.statusFinished(importError: error)
                         failedToLoad()
                     } catch {
-                        proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
+                        proteinViewModel.statusFinished(importError: ImportError.unknownError)
                         failedToLoad()
                     }
                 }
@@ -160,10 +160,10 @@ struct ProteinImportView: View {
                                                                  fileExtension: "pdb",
                                                                  proteinViewModel: proteinViewModel)
                     proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                } catch ImportError.emptyAtomCount {
-                    proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
+                } catch let error as ImportError {
+                    proteinViewModel.statusFinished(importError: error)
                 } catch {
-                    proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
+                    proteinViewModel.statusFinished(importError: ImportError.unknownError)
                 }
             }
         }

@@ -24,6 +24,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
         guard let itemProvider = info.itemProviders(for: [.data,
                                                           .item]).first else {
+            self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
             NSLog("No itemProvider available for the given type.")
             return false
         }
@@ -38,13 +39,17 @@ class ImportDroppedFilesDelegate: DropDelegate {
         
         // Ensure that a type has been found at all
         guard let typeIdentifier = typeIdentifier else {
+            self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
             NSLog("Item provider has no associated type identifier.")
             return false
         }
 
         itemProvider.loadDataRepresentation(forTypeIdentifier: typeIdentifier) { data, error in
 
-            guard let data = data else { return }
+            guard let data = data else {
+                self.proteinViewModel?.statusFinished(importError: ImportError.unknownError)
+                return
+            }
 
             // Retrieve UTI name from the NSItemProvider
             let nameUTI = itemProvider.registeredTypeIdentifiers.first
@@ -64,12 +69,16 @@ class ImportDroppedFilesDelegate: DropDelegate {
             let rawFileText = String(decoding: data, as: UTF8.self)
 
             // Parse file
-            guard var protein = try? FileParser().parseTextFile(rawText: rawFileText,
-                                                                fileExtension: fileExtension,
-                                                                proteinViewModel: self.proteinViewModel) else {
-                return
+            do {
+                var protein = try FileParser().parseTextFile(rawText: rawFileText,
+                                                             fileExtension: fileExtension,
+                                                             proteinViewModel: self.proteinViewModel)
+                self.proteinViewModel?.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+            } catch let error as ImportError {
+                self.proteinViewModel?.statusFinished(importError: error)
+            } catch {
+                self.proteinViewModel?.statusFinished(importError: ImportError.unknownError)
             }
-            self.proteinViewModel?.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
         }
 
         return true

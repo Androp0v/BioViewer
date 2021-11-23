@@ -88,15 +88,19 @@ class ProteinViewModel: ObservableObject {
         self.statusViewModel.setProgress(progress: progress)
     }
 
-    func statusFinished() {
+    func statusFinished(action: StatusAction) {
         self.statusViewModel.setProgress(progress: 0)
         self.statusViewModel.setRunningStatus(running: false)
+        switch action {
+        case .importFile:
+            self.statusViewModel.removeImportError()
+        }
     }
     
-    func statusFinished(withError: String) {
+    func statusFinished(importError: ImportError) {
         self.statusViewModel.setProgress(progress: 0)
         self.statusViewModel.setRunningStatus(running: false)
-        self.statusViewModel.setError(error: withError)
+        self.statusViewModel.setImportError(error: importError)
     }
     
     func statusWarning(warningText: String) {

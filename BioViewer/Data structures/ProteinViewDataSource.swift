@@ -66,7 +66,7 @@ class ProteinViewDataSource: ObservableObject {
                                                               indexBuffer: &indexData)
             
             // File import finished
-            proteinViewModel?.statusFinished()
+            proteinViewModel?.statusFinished(action: StatusAction.importFile)
         }
     }
 

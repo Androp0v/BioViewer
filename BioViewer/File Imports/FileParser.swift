@@ -20,15 +20,15 @@ class FileParser {
             do {
                 let protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
                 return protein
-            } catch ImportError.emptyAtomCount {
-                proteinViewModel?.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
+            } catch let error as ImportError {
+                proteinViewModel?.statusFinished(importError: error)
                 throw ImportError.emptyAtomCount
             } catch {
-                proteinViewModel?.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
+                proteinViewModel?.statusFinished(importError: ImportError.unknownError)
                 throw ImportError.unknownError
             }
         } else {
-            proteinViewModel?.statusFinished(withError: NSLocalizedString("Unsupported file type", comment: ""))
+            proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
             throw ImportError.unknownFileType
         }
     }

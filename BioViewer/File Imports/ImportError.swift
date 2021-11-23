@@ -10,6 +10,8 @@ import Foundation
 enum ImportError: Error {
     case unknownFileType
     case emptyAtomCount
+    case notFound
+    case downloadError
     case unknownError
 }
 
@@ -20,6 +22,10 @@ extension ImportError: LocalizedError {
             return NSLocalizedString("Error: Unknown file type", comment: "")
         case .emptyAtomCount:
             return NSLocalizedString("Error: File does not contain any atom positions", comment: "")
+        case .notFound:
+            return NSLocalizedString("Error: File not found", comment: "")
+        case .downloadError:
+            return NSLocalizedString("Error downloading file", comment: "")
         case .unknownError:
             return NSLocalizedString("Error importing file", comment: "")
         }

@@ -8,8 +8,13 @@
 import Foundation
 import QuartzCore
 
+enum StatusAction {
+    case importFile
+}
+
 class StatusViewModel: ObservableObject {
     
+    // MARK: - UI properties
     // Published variables used by the UI
     @Published private(set) var statusText: String = NSLocalizedString("Idle", comment: "")
     @Published private(set) var statusRunning: Bool = false
@@ -18,13 +23,27 @@ class StatusViewModel: ObservableObject {
     // Warning/Error system
     @Published private(set) var statusError: String?
     @Published private(set) var statusWarning: [String] = []
-        
+    
+    // MARK: - Error types
+    private(set) var importError: ImportError? {
+        didSet {
+            guard let importError = importError else {
+                return
+            }
+            DispatchQueue.main.async {
+                self.statusError = importError.localizedDescription
+            }
+        }
+    }
+    
+    // MARK: - Internal properties
     // Internal variables that do not instantly trigger a UI redraw
     private var displayLink: CADisplayLink?
     private var internalStatusText: String = NSLocalizedString("Idle", comment: "")
     private var internalProgress: Float?
     private var internalStatusWarning: [String] = []
     
+    // MARK: - Functions
     @objc private func syncInternalAndUIStates() {
         statusText = internalStatusText
         progress = internalProgress
@@ -55,9 +74,15 @@ class StatusViewModel: ObservableObject {
         self.internalProgress = progress
     }
     
-    func setError(error: String) {
+    func setImportError(error: ImportError) {
+        self.importError = error
+    }
+    
+    func removeImportError() {
+        self.importError = nil
+        // FIXME: Handle different error types
         DispatchQueue.main.async {
-            self.statusError = error
+            self.statusError = nil
         }
     }
     

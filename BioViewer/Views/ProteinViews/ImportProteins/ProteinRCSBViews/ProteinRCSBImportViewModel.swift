@@ -72,17 +72,17 @@ class ProteinRCSBImportViewModel: ObservableObject {
                                                                  fileExtension: "pdb",
                                                                  proteinViewModel: proteinViewModel)
                     proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                } catch ImportError.emptyAtomCount {
-                    proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
+                } catch let error as ImportError {
+                    proteinViewModel.statusFinished(importError: error)
                 } catch {
-                    proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
+                    proteinViewModel.statusFinished(importError: ImportError.unknownError)
                 }
             }
             
         } catch RCSBError.notFound {
-            proteinViewModel.statusFinished(withError: NSLocalizedString("Error: PDB file not found", comment: ""))
+            proteinViewModel.statusFinished(importError: ImportError.notFound)
         } catch {
-            proteinViewModel.statusFinished(withError: NSLocalizedString("Error downloading file", comment: ""))
+            proteinViewModel.statusFinished(importError: ImportError.downloadError)
         }
     }
     
