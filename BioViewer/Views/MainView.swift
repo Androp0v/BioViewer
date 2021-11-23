@@ -14,14 +14,20 @@ struct MainView: View {
     }
 
     var body: some View {
+        
+        // Share view between default detail in master-detail mode and the same view
+        // pushed through navigation.
+        let proteinView = ProteinView()
+        let proteinViewModel = ProteinViewModel()
+        
         NavigationView {
 
             // Sidebar in master-detail mode, initial view
             // in other modes
             List {
                 NavigationLink(
-                    destination: ProteinView()
-                        .environmentObject(ProteinViewModel()),
+                    destination: proteinView
+                        .environmentObject(proteinViewModel),
                     label: {
                         Text(NSLocalizedString("View protein structure", comment: ""))
                 })
@@ -44,7 +50,7 @@ struct MainView: View {
             .navigationTitle(Text("BioViewer"))
             
             // Initial view in master-detail mode
-            ProteinView().environmentObject(ProteinViewModel())
+            proteinView.environmentObject(proteinViewModel)
         }
     }
 }
