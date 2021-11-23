@@ -67,7 +67,9 @@ struct ProteinView: View {
                         if proteinViewModel.proteinCount == 0 {
                             ProteinImportView()
                         }
-
+                        
+                        // TO-DO:
+                        /*
                         // Scene controls
                         VStack(spacing: 12) {
                             Spacer()
@@ -79,6 +81,7 @@ struct ProteinView: View {
                             }
                         }
                         .padding(.bottom, 12)
+                        */
                     }
                     .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
 
