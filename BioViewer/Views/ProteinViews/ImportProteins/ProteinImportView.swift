@@ -98,9 +98,11 @@ struct ProteinImportView: View {
                     proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
                     let rawText = String(decoding: proteinData, as: UTF8.self)
                     do {
-                        var protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
+                        var protein = try FileParser().parseTextFile(rawText: rawText,
+                                                                     fileExtension: fileURL.pathExtension,
+                                                                     proteinViewModel: self.proteinViewModel)
                         proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                    } catch PDBParsingError.emptyAtomCount {
+                    } catch ImportError.emptyAtomCount {
                         proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
                         failedToLoad()
                     } catch {
@@ -154,9 +156,11 @@ struct ProteinImportView: View {
                 proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
                 let rawText = String(decoding: proteinData, as: UTF8.self)
                 do {
-                    var protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
+                    var protein = try FileParser().parseTextFile(rawText: rawText,
+                                                                 fileExtension: "pdb",
+                                                                 proteinViewModel: proteinViewModel)
                     proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                } catch PDBParsingError.emptyAtomCount {
+                } catch ImportError.emptyAtomCount {
                     proteinViewModel.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
                 } catch {
                     proteinViewModel.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))

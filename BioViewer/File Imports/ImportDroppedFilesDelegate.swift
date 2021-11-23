@@ -48,49 +48,31 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
             // Retrieve UTI name from the NSItemProvider
             let nameUTI = itemProvider.registeredTypeIdentifiers.first
-
+            
             // Decode file extension if the data has a dynamic UTI type
             var fileExtension: String?
-
-            if let nameUTI = nameUTI, nameUTI.starts(with: "dyn.a") {
-                fileExtension = self.decodeDynamicUTI(uti: nameUTI)
+            
+            if let suggestedName = itemProvider.suggestedName {
+                fileExtension = (suggestedName as NSString).pathExtension
+            } else {
+                if let nameUTI = nameUTI, nameUTI.starts(with: "dyn.a") {
+                    fileExtension = self.decodeDynamicUTI(uti: nameUTI)
+                }
             }
 
             // Try to read the input file as a UTF-8 string
             let rawFileText = String(decoding: data, as: UTF8.self)
 
             // Parse file
-            self.parseTextFile(rawText: rawFileText, fileExtension: fileExtension)
+            guard var protein = try? FileParser().parseTextFile(rawText: rawFileText,
+                                                                fileExtension: fileExtension,
+                                                                proteinViewModel: self.proteinViewModel) else {
+                return
+            }
+            self.proteinViewModel?.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
         }
 
         return true
-    }
-
-    // MARK: - Parse files
-
-    func parseTextFile(rawText: String, fileExtension: String?) {
-
-        if fileExtension == "pdb"
-            || fileExtension == "PDB"
-            || fileExtension == "pdb1"
-            || fileExtension == "PDB1"
-            || fileExtension == nil {
-            // If the file has a known .pdb extension, or we don't
-            // know the extension, try opening it as a PDB file.
-            proteinViewModel?.statusUpdate(statusText: "Importing file")
-            do {
-                var protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
-                proteinViewModel?.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-            } catch PDBParsingError.emptyAtomCount {
-                proteinViewModel?.statusFinished(withError: NSLocalizedString("Error: No ATOM data found in file", comment: ""))
-            } catch {
-                proteinViewModel?.statusFinished(withError: NSLocalizedString("Error importing file", comment: ""))
-            }
-            
-        } else {
-            // TO-DO: Open other file types
-            fatalError("Not implemented!")
-        }
     }
 
     // MARK: - Dynamic UTI decoding
