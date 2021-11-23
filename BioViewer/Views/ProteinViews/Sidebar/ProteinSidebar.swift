@@ -26,6 +26,7 @@ private struct ProteinSidebarContent: View {
             switch selectedSegment {
             case 0: FileSegmentProtein()
             case 1: AppearanceSegmentProtein()
+            case 3: SettingsSegmentProtein()
             default: Spacer()
             }
             // Top segmented control to switch between options

@@ -91,6 +91,7 @@
 		C54066FB274D1CA600710CFC /* ParsePDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066F9274D1C7900710CFC /* ParsePDB.swift */; };
 		C5406700274D387200710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406701274D38C100710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
+		C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5406703274D656700710CFC /* SettingsSegmentProtein.swift */; };
 		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
 		C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
 		C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1B2741386300FF010D /* FileSourceRow.swift */; };
@@ -246,6 +247,7 @@
 		C54066ED274BBD6A00710CFC /* ProteinImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportViewModel.swift; sourceTree = "<group>"; };
 		C54066F9274D1C7900710CFC /* ParsePDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsePDB.swift; sourceTree = "<group>"; };
 		C54066FF274D387200710CFC /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
+		C5406703274D656700710CFC /* SettingsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSegmentProtein.swift; sourceTree = "<group>"; };
 		C572BD172740222800FF010D /* FileSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceView.swift; sourceTree = "<group>"; };
 		C572BD192741372600FF010D /* ProteinFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFileInfo.swift; sourceTree = "<group>"; };
 		C572BD1B2741386300FF010D /* FileSourceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceRow.swift; sourceTree = "<group>"; };
@@ -380,11 +382,10 @@
 			isa = PBXGroup;
 			children = (
 				C41A0567264D5D47006F551C /* ViewModels */,
-				C44085682648007100DC5009 /* Segments */,
+				C5406702274D651B00710CFC /* Sidebar */,
 				C464C363265D361300E66C3E /* ImportProteins */,
 				C405744A2663DC4C008527D1 /* ProteinMetal */,
 				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
-				C44085662647ECE500DC5009 /* ProteinSidebar.swift */,
 				C45BAC4426497A3300B36026 /* ProteinCameraControlView.swift */,
 				C440856B26481E0300DC5009 /* ProteinSequenceView.swift */,
 			);
@@ -396,6 +397,7 @@
 			children = (
 				C572BD162740220900FF010D /* FileSegmentProtein */,
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
+				C5406703274D656700710CFC /* SettingsSegmentProtein.swift */,
 			);
 			path = Segments;
 			sourceTree = "<group>";
@@ -612,6 +614,15 @@
 				C54066F9274D1C7900710CFC /* ParsePDB.swift */,
 			);
 			path = Parsers;
+			sourceTree = "<group>";
+		};
+		C5406702274D651B00710CFC /* Sidebar */ = {
+			isa = PBXGroup;
+			children = (
+				C44085682648007100DC5009 /* Segments */,
+				C44085662647ECE500DC5009 /* ProteinSidebar.swift */,
+			);
+			path = Sidebar;
 			sourceTree = "<group>";
 		};
 		C572BD162740220900FF010D /* FileSegmentProtein */ = {
@@ -852,6 +863,7 @@
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
 				C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */,
 				C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */,
+				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,
 				C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */,
 				C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* ProteinRCSBImportView.swift in Sources */,
