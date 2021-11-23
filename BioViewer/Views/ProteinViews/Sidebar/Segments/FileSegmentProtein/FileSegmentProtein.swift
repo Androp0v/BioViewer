@@ -20,8 +20,11 @@ struct FileSegmentProtein: View {
                             .padding(.top, 52)
                             .padding(.bottom, 4),
                         content: {
-                            Text(NSLocalizedString("Number of proteins: ", comment: "") + "\(proteinViewModel.proteinCount)")
-                            Text(NSLocalizedString("Number of atoms: ", comment: "") + "\(proteinViewModel.totalAtomCount)")
+                            Text(NSLocalizedString("Number of proteins: ", comment: "") +       "\(proteinViewModel.proteinCount)")
+                            InformationPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
+                                                  value: "\(proteinViewModel.totalAtomCount)",
+                                                  isDisabled: proteinViewModel.proteinCount == 0,
+                                                  content: { FileAtomElementPopover() })
                 })
                 
                 Section(header: Text(NSLocalizedString("File details", comment: ""))

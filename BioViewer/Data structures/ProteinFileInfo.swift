@@ -14,6 +14,8 @@ public class ProteinFileInfo {
     public var pdbID: String?
     /// Human-readable description of the protein.
     public var description: String?
+    /// Authors of the file.
+    public var authors: String?
     /// Full source file text
     public var sourceLines: [String]?
     
@@ -24,7 +26,7 @@ public class ProteinFileInfo {
     
     init() {}
     
-    init(pdbID: String?, description: String?, sourceLines: [String]?) {
+    init(pdbID: String?, description: String?, authors: String?, sourceLines: [String]?) {
         self.pdbID = pdbID
         self.description = description
         self.sourceLines = sourceLines
