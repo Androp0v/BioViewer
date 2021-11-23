@@ -9,6 +9,7 @@ import Combine
 import CoreGraphics
 import Foundation
 import simd
+import SwiftUI
 
 class MetalScene {
 
@@ -25,16 +26,42 @@ class MetalScene {
     var frame: Int
     
     /// Position of the camera used to render the scene
-    var cameraPosition: simd_float3 { didSet { needsRedraw = true} }
+    var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
     /// Rotation of the model applied by the user
     var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true} }
     /// Background color of the view
-    var backgroundColor: CGColor { didSet { needsRedraw = true} }
+    var backgroundColor: CGColor { didSet { needsRedraw = true } }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on
-    var aspectRatio: Float { didSet { needsRedraw = true} }
+    var aspectRatio: Float { didSet { needsRedraw = true } }
     
     /// Subscriber to camera changes
     var cameraChangedCancellable: AnyCancellable?
+    
+    // MARK: - Atom colors
+    
+    @Published var cAtomColor: Color = Color(.displayP3, red: 0.423, green: 0.733, blue: 0.235, opacity: 1.0) {
+        didSet { needsRedraw = true }
+    }
+    
+    @Published var hAtomColor: Color = Color(.displayP3, red: 0.517, green: 0.517, blue: 0.517, opacity: 1.0) {
+        didSet { needsRedraw = true }
+    }
+    
+    @Published var nAtomColor: Color = Color(.displayP3, red: 0.091, green: 0.148, blue: 0.556, opacity: 1.0) {
+        didSet { needsRedraw = true }
+    }
+    
+    @Published var oAtomColor: Color = Color(.displayP3, red: 1.000, green: 0.149, blue: 0.000, opacity: 1.0) {
+        didSet { needsRedraw = true }
+    }
+    
+    @Published var sAtomColor: Color = Color(.displayP3, red: 1.000, green: 0.780, blue: 0.349, opacity: 1.0) {
+        didSet { needsRedraw = true }
+    }
+    
+    @Published var unknownAtomColor: Color = Color(.displayP3, red: 0.517, green: 0.517, blue: 0.517, opacity: 1.0) {
+        didSet { needsRedraw = true }
+    }
 
     // MARK: - Initialization
 
@@ -88,15 +115,52 @@ class MetalScene {
                                                                     axis: simd_float3(0,1,0))*/
         self.frameData.rotation_matrix = self.userModelRotationMatrix
         self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+        updateColors()
         frame += 1
         needsRedraw = false
+    }
+    
+    // MARK: - Private
+    
+    private func updateColors() {
+        self.frameData.atomColor.0 = getSIMDColor(atomColor: cAtomColor.cgColor) ?? simd_float4.one
+        self.frameData.atomColor.1 = getSIMDColor(atomColor: nAtomColor.cgColor) ?? simd_float4.one
+        self.frameData.atomColor.2 = getSIMDColor(atomColor: hAtomColor.cgColor) ?? simd_float4.one
+        self.frameData.atomColor.3 = getSIMDColor(atomColor: oAtomColor.cgColor) ?? simd_float4.one
+        self.frameData.atomColor.4 = getSIMDColor(atomColor: sAtomColor.cgColor) ?? simd_float4.one
+        self.frameData.atomColor.5 = getSIMDColor(atomColor: unknownAtomColor.cgColor) ?? simd_float4.one
     }
     
     private func skipFrame() {
         frame += 1
     }
     
-    func updateAspectRatio(aspectRatio: Float) {
-        self.aspectRatio = aspectRatio
+    // MARK: - Utility functions
+    
+    private func getSIMDColor(atomColor: CGColor?) -> simd_float4? {
+        
+        guard let atomColor = atomColor else {
+            return nil
+        }
+
+        // Convert color to RGB from other color spaces (i.e. grayscale) as MTLClearColor requires
+        // a RGBA value.
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let rgbaColor = atomColor.converted(to: rgbColorSpace, intent: .defaultIntent, options: nil) else {
+            return nil
+        }
+        
+        // We expect 4 color components in RGBA
+        guard rgbaColor.numberOfComponents == 4 else {
+            return nil
+        }
+        guard let rgbaColorComponents = rgbaColor.components else {
+            return nil
+        }
+        
+        return simd_float4(Float(rgbaColorComponents[0]),
+                           Float(rgbaColorComponents[1]),
+                           Float(rgbaColorComponents[2]),
+                           Float(rgbaColorComponents[3]))
     }
 }

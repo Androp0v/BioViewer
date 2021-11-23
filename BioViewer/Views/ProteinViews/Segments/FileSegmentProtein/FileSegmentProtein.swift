@@ -16,13 +16,16 @@ struct FileSegmentProtein: View {
             List {
                 // First section hast 64pt padding to account for the
                 // space under the segmented control.
-                Section(header: Text(NSLocalizedString("Loaded file", comment: "")).padding(.top, 48),
+                Section(header: Text(NSLocalizedString("Loaded file", comment: ""))
+                            .padding(.top, 52)
+                            .padding(.bottom, 4),
                         content: {
                             Text(NSLocalizedString("Number of proteins: ", comment: "") + "\(proteinViewModel.proteinCount)")
                             Text(NSLocalizedString("Number of atoms: ", comment: "") + "\(proteinViewModel.totalAtomCount)")
                 })
                 
-                Section(header: Text(NSLocalizedString("File details", comment: "")),
+                Section(header: Text(NSLocalizedString("File details", comment: ""))
+                            .padding(.bottom, 4),
                         content: {
                     
                             let protein = proteinViewModel.dataSource.proteins.first
@@ -42,7 +45,8 @@ struct FileSegmentProtein: View {
                             .disabled(proteinViewModel.proteinCount == 0)
                 })
                 
-                Section(header: Text(NSLocalizedString("Remove proteins", comment: "")),
+                Section(header: Text(NSLocalizedString("Remove proteins", comment: ""))
+                            .padding(.bottom, 4),
                         content: {
                             
                             Button(NSLocalizedString("Remove all", comment: ""), action: {
