@@ -59,10 +59,6 @@ extension MetalScheduler {
                 return
             }
 
-            // Create threads and threadgroup sizes
-            let threadsPerArray = MTLSizeMake(protein.atomCount, 1, 1)
-            let groupsize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-
             // Set compute pipeline state for current arguments
             computeEncoder.setComputePipelineState(pipelineState)
 
@@ -79,9 +75,21 @@ extension MetalScheduler {
             computeEncoder.setBuffer(generatedIndexData,
                                      offset: 0,
                                      index: 3)
-
-            // Dispatch threads
-            computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupsize)
+            
+            // Schedule the threads
+            if device.supportsFamily(.apple3) {
+                // Create threads and threadgroup sizes
+                let threadsPerArray = MTLSizeMake(protein.atomCount, 1, 1)
+                let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
+                // Dispatch threads
+                computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
+            } else {
+                // LEGACY: Older devices do not support non-uniform threadgroup sizes
+                let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
+                let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(protein.atomCount) / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
+                // Dispatch threadgroups
+                computeEncoder.dispatchThreadgroups(threadGroupsPerGrid, threadsPerThreadgroup: groupSize)
+            }
 
             // REQUIRED: End the compute encoder encoding
             computeEncoder.endEncoding()
