@@ -12,6 +12,8 @@ struct PickerRow: View {
     var optionName: String
     @Binding var selectedOption: Int
     @State var pickerOptions: [String]
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
     var body: some View {
         #if os(macOS)
@@ -25,29 +27,43 @@ struct PickerRow: View {
         })
         .pickerStyle(MenuPickerStyle())
         #else
-        // This works great for compact size classes, where the sidebar
-        // is on its own NavigationView and pickers can navigate to a
-        // new screen with the selection.
-
-        // TO-DO: Custom picker for iPadOS non-compact sizes, as there's
-        // another NavigationView on the same view hierarchy and the
-        // whole screen transitions to the picker, which looks terrible.
-
-        Picker(optionName, selection: $selectedOption, content: {
-            ForEach(0..<pickerOptions.count) { index in
-                // SwiftUI detects selection by tag
-                Text(self.pickerOptions[index]).tag(index)
+        if horizontalSizeClass == .compact {
+            // This works great for compact size classes, where the sidebar
+            // is on its own NavigationView and pickers can navigate to a
+            // new screen with the selection.
+            Picker(optionName, selection: $selectedOption, content: {
+                ForEach(0..<pickerOptions.count) { index in
+                    // SwiftUI detects selection by tag
+                    Text(self.pickerOptions[index]).tag(index)
+                }
+            })
+            .pickerStyle(DefaultPickerStyle())
+        } else {
+            // Custom picker for iPadOS (default MenuPickerStyle on iPadOS
+            // does not show the option name no it's not very intuitive for
+            // our typical options).
+            HStack {
+                Text(optionName)
+                Spacer()
+                Picker(optionName, selection: $selectedOption, content: {
+                    ForEach(0..<pickerOptions.count) { index in
+                        // SwiftUI detects selection by tag
+                        Text(self.pickerOptions[index]).tag(index)
+                    }
+                })
+                .pickerStyle(MenuPickerStyle())
             }
-        })
-        .pickerStyle(DefaultPickerStyle())
+        }
         #endif
     }
 }
 
 struct PickerRow_Previews: PreviewProvider {
     static var previews: some View {
-        PickerRow(optionName: "Select one",
-                  selectedOption: .constant(0),
-                  pickerOptions: ["Option A", "Option B"])
+        List {
+            PickerRow(optionName: "Select one",
+                      selectedOption: .constant(0),
+                      pickerOptions: ["Option A", "Option B"])
+        }
     }
 }
