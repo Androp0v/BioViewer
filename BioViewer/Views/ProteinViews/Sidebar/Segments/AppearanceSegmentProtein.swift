@@ -8,22 +8,32 @@
 import SwiftUI
 
 struct AppearanceSegmentProtein: View {
-
-    private enum ProteinVisualizationOption: Int {
-        case none = 0
-        case solidSpheres = 1
+    
+    // MARK: - Properties
+    
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    
+    // MARK: - Picker properties
+    
+    @State private var selectedProteinVisualization: Int = ProteinVisualizationOption.solidSpheres
+    @State private var selectedColorByOption: Int = ProteinColorByOption.element
+    
+    private enum ProteinVisualizationOption {
+        static let none: Int = 0
+        static let solidSpheres: Int = 1
     }
     
-    private enum ColorByOption: Int {
-        case element = 0
-        case subunit = 1
+    private enum ProteinColorByOption {
+        static let element: Int = 0
+        static let subunit: Int = 1
     }
-
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @State private var selectedProteinVisualization: Int = ProteinVisualizationOption.solidSpheres.rawValue
-
+    
+    // MARK: - View
+    
     var body: some View {
         List {
+            
+            // MARK: - General section
             // First section hast 64pt padding to account for the
             // space under the segmented control.
             Section(header: Text(NSLocalizedString("General", comment: ""))
@@ -54,29 +64,54 @@ struct AppearanceSegmentProtein: View {
 
             }
             
-            if selectedProteinVisualization == ProteinVisualizationOption.solidSpheres.rawValue {
+            // MARK: - Color section
+            
+            if selectedProteinVisualization == ProteinVisualizationOption.solidSpheres {
                 Section(header: Text(NSLocalizedString("Color", comment: ""))
                             .padding(.bottom, 4), content: {
                     // TO-DO: Make picker actually change color scheme
                     PickerRow(optionName: "Color by",
-                              selectedOption: .constant(0),
+                              selectedOption: $selectedColorByOption,
                               pickerOptions: ["Element",
                                               "Subunit"])
-                    ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.renderer.scene.cAtomColor)
-                    ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.renderer.scene.hAtomColor)
-                    ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.renderer.scene.nAtomColor)
-                    ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.renderer.scene.oAtomColor)
-                    ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.renderer.scene.sAtomColor)
-                    ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
-                                   selectedColor: $proteinViewModel.renderer.scene.unknownAtomColor)
+                    if selectedColorByOption == ProteinColorByOption.element {
+                        ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
+                                       selectedColor: $proteinViewModel.renderer.scene.cAtomColor,
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
+                                       selectedColor: $proteinViewModel.renderer.scene.hAtomColor,
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
+                                       selectedColor: $proteinViewModel.renderer.scene.nAtomColor,
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
+                                       selectedColor: $proteinViewModel.renderer.scene.oAtomColor,
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
+                                       selectedColor: $proteinViewModel.renderer.scene.sAtomColor,
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
+                                       selectedColor: $proteinViewModel.renderer.scene.unknownAtomColor,
+                                       indent: true)
+                    } else {
+                        // TO-DO: Show real subunit list
+                        ColorPickerRow(title: NSLocalizedString("Subunit A", comment: ""),
+                                       selectedColor: .constant(.red),
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("Subunit B", comment: ""),
+                                       selectedColor: .constant(.black),
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("Subunit C", comment: ""),
+                                       selectedColor: .constant(.red),
+                                       indent: true)
+                        ColorPickerRow(title: NSLocalizedString("Subunit D", comment: ""),
+                                       selectedColor: .constant(.blue),
+                                       indent: true)
+                    }
                 })
             }
             
+            // MARK: - Camera section
             Section(header: Text(NSLocalizedString("Focal distance", comment: ""))
                         .padding(.bottom, 4), content: {
 
@@ -90,6 +125,7 @@ struct AppearanceSegmentProtein: View {
     }
 }
 
+// MARK: - SwiftUI Previews
 struct AppearanceSegmentProtein_Previews: PreviewProvider {
     static var previews: some View {
         AppearanceSegmentProtein()

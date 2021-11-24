@@ -9,11 +9,16 @@ import SwiftUI
 
 struct ColorPickerRow: View {
 
-    @State var title: String
+    var title: String
     @Binding var selectedColor: Color
+    var indent: Bool = false
 
     var body: some View {
         HStack {
+            if indent {
+                Spacer()
+                    .frame(width: 24)
+            }
             ColorPicker(title,
                         selection: $selectedColor,
                         supportsOpacity: false)
@@ -23,6 +28,8 @@ struct ColorPickerRow: View {
 
 struct ColorPickerRow_Previews: PreviewProvider {
     static var previews: some View {
-        ColorPickerRow(title: NSLocalizedString("Selected color", comment: ""), selectedColor: .constant(Color.black))
+        ColorPickerRow(title: NSLocalizedString("Selected color", comment: ""),
+                       selectedColor: .constant(Color.black),
+                       indent: false)
     }
 }

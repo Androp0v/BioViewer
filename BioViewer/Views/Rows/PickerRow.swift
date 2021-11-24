@@ -16,10 +16,10 @@ struct PickerRow: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
     var body: some View {
-        #if os(macOS)
+        #if targetEnvironment(macCatalyst)
         // On macOS, this uses the (beautiful) NSPopUpButton instead of
         // navigating to the option.
-        Picker(optionName, selection: $selectedVisualization, content: {
+        Picker(optionName, selection: $selectedOption, content: {
             ForEach(0..<pickerOptions.count) { index in
                 // SwiftUI detects selection by tag
                 Text(self.pickerOptions[index]).tag(index)
@@ -32,6 +32,8 @@ struct PickerRow: View {
             // is on its own NavigationView and pickers can navigate to a
             // new screen with the selection.
             Picker(optionName, selection: $selectedOption, content: {
+                // We don't use .animation() here since on iPhone this is
+                // presented on a different view (through navigation).
                 ForEach(0..<pickerOptions.count) { index in
                     // SwiftUI detects selection by tag
                     Text(self.pickerOptions[index]).tag(index)
@@ -45,7 +47,9 @@ struct PickerRow: View {
             HStack {
                 Text(optionName)
                 Spacer()
-                Picker(optionName, selection: $selectedOption, content: {
+                // We use .animation() here (iPadOS) but not on macOS because
+                // big animations are generally less used on macOS.
+                Picker(optionName, selection: $selectedOption.animation(), content: {
                     ForEach(0..<pickerOptions.count) { index in
                         // SwiftUI detects selection by tag
                         Text(self.pickerOptions[index]).tag(index)
