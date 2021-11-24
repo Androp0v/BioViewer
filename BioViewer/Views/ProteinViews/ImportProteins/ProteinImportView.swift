@@ -87,11 +87,17 @@ struct ProteinImportView: View {
             let picker = DocumentPickerViewController(forOpeningContentTypes: [.pdbFiles], asCopy: false)
             picker.delegate = pickerHandler
             pickerHandler.onPick = { fileURL in
+                // Access security scoped files (outside the sandbox)
+                guard fileURL.startAccessingSecurityScopedResource() else {
+                    failedToLoad()
+                    return
+                }
                 // Disable import actions while processing this action
                 willLoadProtein = true
                 // Dispatch on background queue, file loading can be slow
                 DispatchQueue.global(qos: .userInitiated).async {
                     guard let proteinData = try? Data(contentsOf: fileURL) else {
+                        fileURL.stopAccessingSecurityScopedResource()
                         failedToLoad()
                         return
                     }
@@ -102,11 +108,14 @@ struct ProteinImportView: View {
                                                                      fileExtension: fileURL.pathExtension,
                                                                      proteinViewModel: self.proteinViewModel)
                         proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+                        fileURL.stopAccessingSecurityScopedResource()
                     } catch let error as ImportError {
                         proteinViewModel.statusFinished(importError: error)
+                        fileURL.stopAccessingSecurityScopedResource()
                         failedToLoad()
                     } catch {
                         proteinViewModel.statusFinished(importError: ImportError.unknownError)
+                        fileURL.stopAccessingSecurityScopedResource()
                         failedToLoad()
                     }
                 }
