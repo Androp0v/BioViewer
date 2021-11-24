@@ -1,5 +1,5 @@
 //
-//  LongTextRow.swift
+//  InfoLongTextRow.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 13/11/21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LongTextRow: View {
+struct InfoLongTextRow: View {
     
     @State var title: String
     var longText: String?
@@ -38,6 +38,6 @@ struct LongTextRow: View {
 
 struct LongTextRow_Previews: PreviewProvider {
     static var previews: some View {
-        LongTextRow(title: "Description", longText: "Long text example")
+        InfoLongTextRow(title: "Description", longText: "Long text example")
     }
 }

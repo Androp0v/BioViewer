@@ -55,15 +55,9 @@ class ImportDroppedFilesDelegate: DropDelegate {
             let nameUTI = itemProvider.registeredTypeIdentifiers.first
             
             // Decode file extension if the data has a dynamic UTI type
-            var fileExtension: String?
             
-            if let suggestedName = itemProvider.suggestedName {
-                fileExtension = (suggestedName as NSString).pathExtension
-            } else {
-                if let nameUTI = nameUTI, nameUTI.starts(with: "dyn.a") {
-                    fileExtension = self.decodeDynamicUTI(uti: nameUTI)
-                }
-            }
+            let itemProviderType = itemProvider.registeredTypeIdentifiers.first
+            let fileExtension = (itemProviderType as NSString?)?.pathExtension
 
             // Try to read the input file as a UTF-8 string
             let rawFileText = String(decoding: data, as: UTF8.self)

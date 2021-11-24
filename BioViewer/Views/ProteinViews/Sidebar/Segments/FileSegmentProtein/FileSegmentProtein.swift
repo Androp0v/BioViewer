@@ -20,8 +20,9 @@ struct FileSegmentProtein: View {
                             .padding(.top, 52)
                             .padding(.bottom, 4),
                         content: {
-                            Text(NSLocalizedString("Number of proteins: ", comment: "") +       "\(proteinViewModel.proteinCount)")
-                            InformationPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
+                            InfoTextRow(text: NSLocalizedString("Number of proteins:", comment: ""),
+                                        value: "\(proteinViewModel.proteinCount)")
+                            InfoPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
                                                   value: "\(proteinViewModel.totalAtomCount)",
                                                   isDisabled: proteinViewModel.proteinCount == 0,
                                                   content: { FileAtomElementPopover() })
@@ -33,9 +34,9 @@ struct FileSegmentProtein: View {
                     
                             let protein = proteinViewModel.dataSource.proteins.first
                     
-                            Text(NSLocalizedString("PDB ID: ", comment: "")
-                                 + "\(protein?.fileInfo.pdbID ?? "-")")
-                            LongTextRow(title: NSLocalizedString("Description: ", comment: ""),
+                            InfoTextRow(text: NSLocalizedString("PDB ID:", comment: ""),
+                                        value: String(protein?.fileInfo.pdbID ?? "-"))
+                            InfoLongTextRow(title: NSLocalizedString("Description: ", comment: ""),
                                         longText: protein?.fileInfo.description)
                             Button(NSLocalizedString("View raw file", comment: ""), action: {
                                 showFileSource.toggle()

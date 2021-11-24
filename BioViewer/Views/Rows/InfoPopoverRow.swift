@@ -1,5 +1,5 @@
 //
-//  InformationRow.swift
+//  InfoPopoverRow.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 11/5/21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InformationPopoverRow<Content: View>: View {
+struct InfoPopoverRow<Content: View>: View {
     
     let label: String
     let value: String
@@ -34,6 +34,8 @@ struct InformationPopoverRow<Content: View>: View {
                    label: {
                 Image(systemName: "info.circle")
             })
+                .foregroundColor(Color.blue)
+                .buttonStyle(PlainButtonStyle())
                 .disabled(isDisabled)
                 .popover(isPresented: $buttonToggle) {
                     popoverView
@@ -45,7 +47,7 @@ struct InformationPopoverRow<Content: View>: View {
 struct InformationRow_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            InformationPopoverRow(label: "Número de átomos",
+            InfoPopoverRow(label: "Número de átomos",
                                   value: "58336",
                                   isDisabled: false,
                                   content: { FileAtomElementPopover() })

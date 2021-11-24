@@ -86,7 +86,7 @@ struct ProteinView: View {
                     .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
 
                     // Sidebar
-                    if showSidebar {
+                    if showSidebar && horizontalSizeClass != .compact {
                         sidebar
                             .frame(width: 300)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
@@ -116,7 +116,12 @@ struct ProteinView: View {
                                label: {
                             Image(systemName: "sidebar.trailing")
                         })
-                        
+                            .onAppear {
+                                if toggleModalSidebar {
+                                    toggleModalSidebar = false
+                                    showSidebar = true
+                                }
+                            }
                     }
                 }
                 
