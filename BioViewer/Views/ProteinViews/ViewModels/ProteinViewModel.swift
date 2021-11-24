@@ -24,6 +24,8 @@ class ProteinViewModel: ObservableObject {
     
     /// Total protein count in view.
     @Published var proteinCount: Int = 0
+    /// Total subunit count in view.
+    @Published var totalSubunitCount: Int = 0
     /// Total atom count in view.
     @Published var totalAtomCount: Int = 0
     

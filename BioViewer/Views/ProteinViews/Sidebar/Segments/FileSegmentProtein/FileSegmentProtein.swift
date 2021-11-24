@@ -22,6 +22,8 @@ struct FileSegmentProtein: View {
                         content: {
                             InfoTextRow(text: NSLocalizedString("Number of proteins:", comment: ""),
                                         value: "\(proteinViewModel.proteinCount)")
+                            InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
+                                        value: "\(proteinViewModel.totalSubunitCount)")
                             InfoPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
                                                   value: "\(proteinViewModel.totalAtomCount)",
                                                   isDisabled: proteinViewModel.proteinCount == 0,

@@ -10,7 +10,7 @@ import SwiftUI
 struct PickerRow: View {
 
     var optionName: String
-    @Binding var selectedVisualization: Int
+    @Binding var selectedOption: Int
     @State var pickerOptions: [String]
 
     var body: some View {
@@ -33,7 +33,7 @@ struct PickerRow: View {
         // another NavigationView on the same view hierarchy and the
         // whole screen transitions to the picker, which looks terrible.
 
-        Picker(optionName, selection: $selectedVisualization, content: {
+        Picker(optionName, selection: $selectedOption, content: {
             ForEach(0..<pickerOptions.count) { index in
                 // SwiftUI detects selection by tag
                 Text(self.pickerOptions[index]).tag(index)
@@ -47,7 +47,7 @@ struct PickerRow: View {
 struct PickerRow_Previews: PreviewProvider {
     static var previews: some View {
         PickerRow(optionName: "Select one",
-                  selectedVisualization: .constant(0),
+                  selectedOption: .constant(0),
                   pickerOptions: ["Option A", "Option B"])
     }
 }

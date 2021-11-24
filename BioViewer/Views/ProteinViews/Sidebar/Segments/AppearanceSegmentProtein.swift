@@ -13,6 +13,11 @@ struct AppearanceSegmentProtein: View {
         case none = 0
         case solidSpheres = 1
     }
+    
+    private enum ColorByOption: Int {
+        case element = 0
+        case subunit = 1
+    }
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @State private var selectedProteinVisualization: Int = ProteinVisualizationOption.solidSpheres.rawValue
@@ -50,9 +55,13 @@ struct AppearanceSegmentProtein: View {
             }
             
             if selectedProteinVisualization == ProteinVisualizationOption.solidSpheres.rawValue {
-                // TO-DO: Make picker actually change atom color
-                Section(header: Text(NSLocalizedString("Solid spheres", comment: ""))
+                Section(header: Text(NSLocalizedString("Color", comment: ""))
                             .padding(.bottom, 4), content: {
+                    // TO-DO: Make picker actually change color scheme
+                    PickerRow(optionName: "Color by",
+                              selectedOption: .constant(0),
+                              pickerOptions: ["Element",
+                                              "Subunit"])
                     ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
                                    selectedColor: $proteinViewModel.renderer.scene.cAtomColor)
                     ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),

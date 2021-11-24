@@ -21,6 +21,11 @@ class ProteinViewDataSource: ObservableObject {
             DispatchQueue.main.async {
                 self.proteinViewModel?.proteinCount = self.proteins.count
             }
+            // Sum all subunit counts from all proteins in the datasource
+            var newSubunitCount = 0
+            for protein in self.proteins {
+                newSubunitCount += protein.subunitCount
+            }
             // Sum all atom counts from all proteins in the datasource
             var newTotalAtomCount = 0
             for protein in self.proteins {
@@ -28,6 +33,7 @@ class ProteinViewDataSource: ObservableObject {
             }
             // Publishers need to be updated in the main queue
             DispatchQueue.main.async {
+                self.proteinViewModel?.totalSubunitCount = newSubunitCount
                 self.proteinViewModel?.totalAtomCount = newTotalAtomCount
             }
         }

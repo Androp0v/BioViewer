@@ -33,7 +33,10 @@ public class Protein {
     private var sequence: [String]?
 
     // MARK: - Atoms
-
+    
+    /// Number of subunits in the protein
+    public var subunitCount: Int
+    
     /// Number of atoms in the protein.
     public var atomCount: Int
 
@@ -48,40 +51,18 @@ public class Protein {
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     public var atomIdentifiers: [UInt8]
-
-    /// Index of the last atom added to the scene (for .loading proteins).
-    private var currentIndex: Int
     
     // MARK: - Initialization
 
-    init(fileInfo: ProteinFileInfo, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(fileInfo: ProteinFileInfo, subunitCount: Int, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.state = .loading
         self.fileInfo = fileInfo
+        self.subunitCount = subunitCount
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers
         self.atomCount = atoms.count
-        self.currentIndex = 0
         self.sequence = sequence
         normalizeAtomPositions(atoms: &self.atoms)
-    }
-
-    // MARK: - Functions
-
-    /// Return the atoms in the protein one by one until the protein is loaded
-    /// - Returns: Atom position and atom identifier.
-    func getNextAtom() -> (simd_float3?, UInt8?, Float?) {
-        guard currentIndex < atomCount else {
-            self.state = .failed
-            return (nil, nil, nil)
-        }
-        let nextAtomPosition = self.atoms[self.currentIndex]
-        let nextAtomId = self.atomIdentifiers[self.currentIndex]
-        self.currentIndex += 1
-        if currentIndex >= atomCount {
-            self.state = .loaded
-        }
-        let percentLoaded = Float(currentIndex)/Float(atomCount)
-        return (nextAtomPosition, nextAtomId, percentLoaded)
     }
 }

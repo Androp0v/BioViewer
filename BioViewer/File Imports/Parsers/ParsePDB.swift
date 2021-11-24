@@ -51,6 +51,8 @@ extension FileParser {
         var atomArray = ContiguousArray<simd_float3>()
         var atomIdentifiers = [UInt8]()
         
+        var subunitCount: Int = 0
+        
         // Protein file data
         let fileInfo = ProteinFileInfo()
 
@@ -113,6 +115,11 @@ extension FileParser {
                 }
             }
             
+            // Check if this line marks the end of a subunit
+            if line.starts(with: "TER") {
+                subunitCount += 1
+            }
+            
             // We're only interested in the lines that contain atom positions
             if line.starts(with: "ATOM") {
 
@@ -152,6 +159,7 @@ extension FileParser {
                     proteinViewModel?.statusViewModel.setWarning(warning:
                         NSLocalizedString("Failed to identify residue ID for atom in line", comment: "") + " \(currentLine)."
                     )
+                    fileInfo.warningIndices.append(currentLine)
                 }
 
                 // Retrieve atom element
@@ -247,9 +255,16 @@ extension FileParser {
             throw ImportError.emptyAtomCount
         }
         
+        if subunitCount == 0 {
+            proteinViewModel?.statusViewModel.setWarning(warning:
+                NSLocalizedString("No TER keyword found to mark the end of a chain, subunit count may be wrong", comment: "")
+            )
+        }
+        
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
 
         return Protein(fileInfo: fileInfo,
+                       subunitCount: subunitCount,
                        atoms: &atomArray,
                        atomArrayComposition: &atomArrayComposition,
                        atomIdentifiers: atomIdentifiers,

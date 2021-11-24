@@ -23,7 +23,7 @@ struct InfoPopoverRow<Content: View>: View {
     }
     
     var body: some View {
-        HStack {
+        HStack(spacing: 4) {
             Text(label)
             Text(value)
                 .foregroundColor(Color(uiColor: .secondaryLabel))
