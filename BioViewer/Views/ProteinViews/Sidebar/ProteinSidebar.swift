@@ -75,7 +75,10 @@ struct ProteinSidebar: View {
                     .environmentObject(proteinViewModel)
             }
         } else {
-            ProteinSidebarContent(selectedSegment: $selectedSegment)
+            HStack(spacing: 0) {
+                Divider()
+                ProteinSidebarContent(selectedSegment: $selectedSegment)
+            }
         }
     }
 }

@@ -42,6 +42,9 @@ struct AppearanceSegmentProtein: View {
 
                 ColorPickerRow(title: NSLocalizedString("Background color", comment: ""),
                                selectedColor: $proteinViewModel.backgroundColor)
+                // TO-DO: Enable depth cueing
+                SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""),
+                          toggledVariable: .constant(false))
 
                 // TO-DO:
 
