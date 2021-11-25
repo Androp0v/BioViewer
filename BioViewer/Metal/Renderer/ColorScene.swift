@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import simd
+import SwiftUI
 
 public enum ProteinColorByOption {
     static let element: Int = 0
@@ -25,7 +27,7 @@ extension MetalScene {
             self.frameData.atomColor.5 = getSIMDColor(atomColor: unknownAtomColor.cgColor) ?? simd_float4.one
         case ProteinColorByOption.subunit:
             // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FrameData, are imported in
-            // swift as tuples. To access its contents, we must use an unsafe pointer.
+            // Swift as tuples. To access its contents, we must use an unsafe pointer.
             let max_atom_colors = Mirror(reflecting: self.frameData.atomColor).children.count
             withUnsafeMutableBytes(of: &self.frameData.atomColor) { rawPtr -> Void in
                 for index in 0..<max_atom_colors {

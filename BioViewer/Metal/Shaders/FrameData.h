@@ -11,7 +11,7 @@
 #include <simd/simd.h>
 
 /// Maximum number of colours that can be passed down to the GPU using FrameData.
-#define MAX_ATOM_COLORS 40
+#define MAX_ATOM_COLORS 64
 
 typedef struct {
 
