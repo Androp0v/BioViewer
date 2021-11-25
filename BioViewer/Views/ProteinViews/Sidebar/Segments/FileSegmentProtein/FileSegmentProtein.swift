@@ -40,6 +40,8 @@ struct FileSegmentProtein: View {
                                         value: String(protein?.fileInfo.pdbID ?? "-"))
                             InfoLongTextRow(title: NSLocalizedString("Description: ", comment: ""),
                                         longText: protein?.fileInfo.description)
+                            InfoLongTextRow(title: NSLocalizedString("Authors: ", comment: ""),
+                                        longText: protein?.fileInfo.authors)
                             Button(NSLocalizedString("View raw file", comment: ""), action: {
                                 showFileSource.toggle()
                             })

@@ -102,6 +102,12 @@ struct FileAtomElementPopover: View {
             .padding(36)
             .frame(width: 250, height: 250)
             VStack {
+                VStack {
+                    Text("Number of atoms of each element")
+                        .font(.headline)
+                        .bold()
+                    Divider()
+                }
                 FileAtomElementRow(element: "Carbon")
                 FileAtomElementRow(element: "Hydrogen")
                 FileAtomElementRow(element: "Nitrogen")
@@ -109,7 +115,6 @@ struct FileAtomElementPopover: View {
                 FileAtomElementRow(element: "Sulfur")
                 FileAtomElementRow(element: "Others")
                 Divider()
-                    .padding(.horizontal, 24)
                 FileAtomElementRow(element: "Total", bold: true)
             }
             .padding(.bottom, 24)

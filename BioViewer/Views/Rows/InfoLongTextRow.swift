@@ -14,7 +14,7 @@ struct InfoLongTextRow: View {
     
     var body: some View {
         if let longText = longText {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)

@@ -11,7 +11,7 @@ import Foundation
 import simd
 import SwiftUI
 
-class MetalScene {
+class MetalScene: ObservableObject {
 
     // MARK: - Properties
     
@@ -29,10 +29,12 @@ class MetalScene {
     var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
     /// Rotation of the model applied by the user
     var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true} }
-    /// Background color of the view
-    var backgroundColor: CGColor { didSet { needsRedraw = true } }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on
     var aspectRatio: Float { didSet { needsRedraw = true } }
+    /// Background color of the view
+    var backgroundColor: CGColor { didSet { needsRedraw = true } }
+    /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
+    @Published var colorBy: Int { didSet { needsRedraw = true }}
     
     /// Subscriber to camera changes
     var cameraChangedCancellable: AnyCancellable?
@@ -81,6 +83,7 @@ class MetalScene {
                                                                   axis: simd_float3(0.0, 1.0, 0.0))
         self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
                                                                   axis: simd_float3(0.0, 1.0, 0.0)).inverse
+        self.colorBy = ProteinColorByOption.element
         
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
@@ -111,6 +114,7 @@ class MetalScene {
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
+        // TO-DO: Re-enable rotation when idle
         /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                     axis: simd_float3(0,1,0))*/
         self.frameData.rotation_matrix = self.userModelRotationMatrix
@@ -122,45 +126,7 @@ class MetalScene {
     
     // MARK: - Private
     
-    private func updateColors() {
-        self.frameData.atomColor.0 = getSIMDColor(atomColor: cAtomColor.cgColor) ?? simd_float4.one
-        self.frameData.atomColor.1 = getSIMDColor(atomColor: nAtomColor.cgColor) ?? simd_float4.one
-        self.frameData.atomColor.2 = getSIMDColor(atomColor: hAtomColor.cgColor) ?? simd_float4.one
-        self.frameData.atomColor.3 = getSIMDColor(atomColor: oAtomColor.cgColor) ?? simd_float4.one
-        self.frameData.atomColor.4 = getSIMDColor(atomColor: sAtomColor.cgColor) ?? simd_float4.one
-        self.frameData.atomColor.5 = getSIMDColor(atomColor: unknownAtomColor.cgColor) ?? simd_float4.one
-    }
-    
     private func skipFrame() {
         frame += 1
-    }
-    
-    // MARK: - Utility functions
-    
-    private func getSIMDColor(atomColor: CGColor?) -> simd_float4? {
-        
-        guard let atomColor = atomColor else {
-            return nil
-        }
-
-        // Convert color to RGB from other color spaces (i.e. grayscale) as MTLClearColor requires
-        // a RGBA value.
-        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-        guard let rgbaColor = atomColor.converted(to: rgbColorSpace, intent: .defaultIntent, options: nil) else {
-            return nil
-        }
-        
-        // We expect 4 color components in RGBA
-        guard rgbaColor.numberOfComponents == 4 else {
-            return nil
-        }
-        guard let rgbaColorComponents = rgbaColor.components else {
-            return nil
-        }
-        
-        return simd_float4(Float(rgbaColorComponents[0]),
-                           Float(rgbaColorComponents[1]),
-                           Float(rgbaColorComponents[2]),
-                           Float(rgbaColorComponents[3]))
     }
 }

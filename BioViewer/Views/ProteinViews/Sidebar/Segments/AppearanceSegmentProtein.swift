@@ -16,16 +16,10 @@ struct AppearanceSegmentProtein: View {
     // MARK: - Picker properties
     
     @State private var selectedProteinVisualization: Int = ProteinVisualizationOption.solidSpheres
-    @State private var selectedColorByOption: Int = ProteinColorByOption.element
     
     private enum ProteinVisualizationOption {
         static let none: Int = 0
         static let solidSpheres: Int = 1
-    }
-    
-    private enum ProteinColorByOption {
-        static let element: Int = 0
-        static let subunit: Int = 1
     }
     
     // MARK: - View
@@ -74,10 +68,10 @@ struct AppearanceSegmentProtein: View {
                             .padding(.bottom, 4), content: {
                     // TO-DO: Make picker actually change color scheme
                     PickerRow(optionName: "Color by",
-                              selectedOption: $selectedColorByOption,
+                              selectedOption: $proteinViewModel.renderer.scene.colorBy,
                               pickerOptions: ["Element",
                                               "Subunit"])
-                    if selectedColorByOption == ProteinColorByOption.element {
+                    if proteinViewModel.renderer.scene.colorBy == ProteinColorByOption.element {
                         ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
                                        selectedColor: $proteinViewModel.renderer.scene.cAtomColor,
                                        indent: true)

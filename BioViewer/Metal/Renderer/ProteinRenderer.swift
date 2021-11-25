@@ -323,6 +323,7 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Transparent geometry pass
         transparentGeometryBlock: if true {
+            
             // Ensure opaque buffers are loaded
             guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
             guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }

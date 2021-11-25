@@ -10,16 +10,6 @@ import simd
 
 /// Struct holding the contents of a protein.
 public class Protein {
-
-    // MARK: - State
-
-    /// States reflect wether or not the protein has been added to a scene.
-    public enum LoadState {
-        case loading
-        case loaded
-        case failed
-    }
-    private(set) var state: LoadState
     
     // MARK: - File properties
     public var fileInfo: ProteinFileInfo
@@ -31,11 +21,17 @@ public class Protein {
 
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
     private var sequence: [String]?
-
-    // MARK: - Atoms
+    
+    // MARK: - Subunits
     
     /// Number of subunits in the protein
+    // FIXME: REMOVE, use subunits.count instead
     public var subunitCount: Int
+    
+    /// List of all subunits in the protein
+    public var subunits: [ProteinSubunit]?
+
+    // MARK: - Atoms
     
     /// Number of atoms in the protein.
     public var atomCount: Int
@@ -55,7 +51,6 @@ public class Protein {
     // MARK: - Initialization
 
     init(fileInfo: ProteinFileInfo, subunitCount: Int, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
-        self.state = .loading
         self.fileInfo = fileInfo
         self.subunitCount = subunitCount
         self.atoms = atoms

@@ -15,6 +15,10 @@ enum PDBConstants {
     // (hard to think of such a mythical creature).
     static let expectedLineLength: Int = 78
     
+    // PDB ID location in HEADER record
+    static let pdbIdStart: Int = 62
+    static let pdbIdEnd: Int = 66
+    
     // Spacing after the TITLE keyword in header until the start
     // of the data.
     static let titleKeywordLength: Int = 10
@@ -93,6 +97,17 @@ extension FileParser {
             currentLine += 1
             proteinViewModel?.statusProgress(progress: progress)
             
+            // TO-DO: Do this in parallel with the ATOM decoding
+            if line.starts(with: "HEADER") {
+                let startPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIdStart)
+                let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIdEnd)
+                let rangePDBID = startPDBID..<endPDBID
+
+                let pdbIDString = line[rangePDBID].replacingOccurrences(of: " ", with: "")
+                
+                fileInfo.pdbID = pdbIDString
+            }
+            
             // Try to retrieve the protein info from the headers
             // TO-DO: Do this in parallel with the ATOM decoding
             if line.starts(with: "TITLE") {
@@ -111,6 +126,28 @@ extension FileParser {
                     fileInfo.description! += String(rawTitleLine)
                 } else {
                     fileInfo.description = String(rawTitleLine)
+                    return
+                }
+            }
+            
+            // Retrieve authors
+            // TO-DO: Do this in parallel with the ATOM decoding
+            if line.starts(with: "AUTHOR") {
+                var rawAuthorLine = String(line.dropFirst(PDBConstants.titleKeywordLength))
+                
+                // Strip trailing newline
+                rawAuthorLine = String(rawAuthorLine.trimmingCharacters(in: .newlines))
+                
+                // Strip trailing whitespaces
+                while (rawAuthorLine.last?.isWhitespace) ?? false {
+                    rawAuthorLine = String(rawAuthorLine.dropLast())
+                }
+                
+                // Add to existing description or create a new one if empty
+                if fileInfo.authors != nil {
+                    fileInfo.authors! += String(rawAuthorLine)
+                } else {
+                    fileInfo.authors = String(rawAuthorLine)
                     return
                 }
             }
