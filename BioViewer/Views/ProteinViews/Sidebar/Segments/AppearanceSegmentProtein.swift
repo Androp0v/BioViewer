@@ -37,8 +37,10 @@ struct AppearanceSegmentProtein: View {
                 ColorPickerRow(title: NSLocalizedString("Background color", comment: ""),
                                selectedColor: $proteinViewModel.backgroundColor)
                 // TO-DO: Enable depth cueing
+                /*
                 SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""),
                           toggledVariable: .constant(false))
+                */
 
                 // TO-DO:
 
@@ -66,7 +68,7 @@ struct AppearanceSegmentProtein: View {
             if selectedProteinVisualization == ProteinVisualizationOption.solidSpheres {
                 Section(header: Text(NSLocalizedString("Color", comment: ""))
                             .padding(.bottom, 4), content: {
-                    // TO-DO: Make picker actually change color scheme
+                    // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption
                     PickerRow(optionName: "Color by",
                               selectedOption: $proteinViewModel.renderer.scene.colorBy,
                               pickerOptions: ["Element",

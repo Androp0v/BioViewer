@@ -38,8 +38,8 @@ private struct ProteinSidebarContent: View {
                         // TO-DO: Add missing segments
                         /*
                         SidebarItem(image: "function", tag: 2)
-                        */
                         SidebarItem(image: "gearshape.2", tag: 3)
+                        */
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding(12)
