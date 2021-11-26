@@ -52,6 +52,27 @@ struct MainView: View {
             // Initial view in master-detail mode
             proteinView.environmentObject(proteinViewModel)
         }
+        // Open documents in view from other apps
+        .onOpenURL { fileURL in
+            // FIXME: Refactor all import paths to avoid code repetition
+            print(fileURL)
+            guard let proteinData = try? Data(contentsOf: fileURL) else {
+                return
+            }
+            proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
+            let rawText = String(decoding: proteinData, as: UTF8.self)
+            proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
+            do {
+                var protein = try FileParser().parseTextFile(rawText: rawText,
+                                                             fileExtension: "pdb",
+                                                             proteinViewModel: proteinViewModel)
+                proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+            } catch let error as ImportError {
+                proteinViewModel.statusFinished(importError: error)
+            } catch {
+                proteinViewModel.statusFinished(importError: ImportError.unknownError)
+            }
+        }
     }
 }
 

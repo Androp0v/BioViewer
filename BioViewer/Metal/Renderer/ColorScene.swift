@@ -63,7 +63,11 @@ extension MetalScene {
                 Color(.displayP3, red: 0/255, green: 177/255, blue: 228/255, opacity: 1),
                 Color(.displayP3, red: 199/255, green: 0/255, blue: 156/255, opacity: 1),
                 Color(.displayP3, red: 194/255, green: 104/255, blue: 1/255, opacity: 1),
-                Color(.displayP3, red: 27/255, green: 170/255, blue: 0/255, opacity: 1)
+                Color(.displayP3, red: 27/255, green: 170/255, blue: 0/255, opacity: 1),
+                Color(.displayP3, red: 0.917, green: 0.085, blue: 0.183, opacity: 1),
+                Color(.displayP3, red: 0.225, green: 0.129, blue: 0.650, opacity: 1),
+                Color(.displayP3, red: 0.894, green: 0.682, blue: 0.203, opacity: 1),
+                Color(.displayP3, red: 0.216, green: 0.945, blue: 0.657, opacity: 1)
             ]
         for index in 0..<fixedColorPalette.count {
             guard index < max_atom_colors else { return }

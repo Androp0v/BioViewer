@@ -144,4 +144,3 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     return output;
 }
-

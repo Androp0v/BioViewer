@@ -634,9 +634,9 @@
 		C54066F8274D1C6100710CFC /* File Imports */ = {
 			isa = PBXGroup;
 			children = (
+				C54066FC274D20BE00710CFC /* Parsers */,
 				C54066FF274D387200710CFC /* ImportError.swift */,
 				C41A0561264C2853006F551C /* FileParser.swift */,
-				C54066FC274D20BE00710CFC /* Parsers */,
 				C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */,
 			);
 			path = "File Imports";
