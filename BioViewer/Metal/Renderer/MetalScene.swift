@@ -36,7 +36,7 @@ class MetalScene: ObservableObject {
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     @Published var colorBy: Int { didSet { needsRedraw = true }}
     
-    /// Subscriber to camera changes
+    /// Subscriber to camera changes.
     var cameraChangedCancellable: AnyCancellable?
     
     // MARK: - Atom colors
@@ -62,6 +62,11 @@ class MetalScene: ObservableObject {
     }
     
     @Published var unknownAtomColor: Color = Color(.displayP3, red: 0.517, green: 0.517, blue: 0.517, opacity: 1.0) {
+        didSet { needsRedraw = true }
+    }
+    
+    // MARK: - Subunit colors
+    @Published var subunitColors: [Color] = [Color]() {
         didSet { needsRedraw = true }
     }
 

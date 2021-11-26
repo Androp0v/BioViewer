@@ -10,6 +10,7 @@ import simd
 import SwiftUI
 
 public enum ProteinColorByOption {
+    static let none: Int = -1
     static let element: Int = 0
     static let subunit: Int = 1
 }
@@ -46,6 +47,10 @@ extension MetalScene {
         default:
             break
         }
+    }
+    
+    func initSubunitColors() {
+        
     }
     
     // MARK: - Utility functions

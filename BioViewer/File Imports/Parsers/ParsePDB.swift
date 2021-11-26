@@ -50,16 +50,9 @@ enum PDBConstants {
 
 // MARK: - PDB Parsing
 extension FileParser {
-    func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Protein {
-
-        var atomArray = ContiguousArray<simd_float3>()
-        var atomIdentifiers = [UInt8]()
-        
-        var subunitCount: Int = 0
-        
-        // Protein file data
-        let fileInfo = ProteinFileInfo()
-
+    
+    private class ParsedSubunit {
+        var id: Int
         // Make one atom array per common element
         var carbonArray = [simd_float3]()
         var nitrogenArray = [simd_float3]()
@@ -68,14 +61,30 @@ extension FileParser {
         var sulfurArray = [simd_float3]()
         var othersArray = [simd_float3]()
         var othersIDs = [UInt8]()
-
         var atomArrayComposition = AtomArrayComposition()
+        
+        init(id: Int) {
+            self.id = id
+        }
+    }
+    
+    func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Protein {
+
+        var atomArray = ContiguousArray<simd_float3>()
+        var atomIdentifiers = [UInt8]()
+        var totalAtomArrayComposition = AtomArrayComposition()
+        // Initialize empty subunit
+        var subunits: [ParsedSubunit] = [ParsedSubunit(id: 0)]
+        
+        var subunitCount: Int = 0
+        
+        // Protein file data
+        let fileInfo = ProteinFileInfo()
 
         var sequenceArray = [String]()
         var sequenceIdentifiers = [Int]()
 
         var currentResId: Int = -1
-        
         var currentLine: Int = 0
             
         let totalLineCount = rawText.reduce(into: 0) { (count, letter) in
@@ -86,10 +95,6 @@ extension FileParser {
         
         var progress: Float {
             return Float(currentLine) / Float(totalLineCount)
-        }
-        
-        func updateProgress() {
-            
         }
 
         rawText.enumerateLines(invoking: { line, stop in
@@ -155,6 +160,7 @@ extension FileParser {
             // Check if this line marks the end of a subunit
             if line.starts(with: "TER") {
                 subunitCount += 1
+                subunits.append(ParsedSubunit(id: subunitCount))
             }
             
             // We're only interested in the lines that contain atom positions
@@ -245,48 +251,75 @@ extension FileParser {
 
                 switch element {
                 case AtomType.CARBON:
-                    atomArrayComposition.carbonCount += 1
-                    carbonArray.append(simd_float3(x, y, z))
+                    subunits.last?.atomArrayComposition.carbonCount += 1
+                    subunits.last?.carbonArray.append(simd_float3(x, y, z))
                 case AtomType.NITROGEN:
-                    atomArrayComposition.nitrogenCount += 1
-                    nitrogenArray.append(simd_float3(x, y, z))
+                    subunits.last?.atomArrayComposition.nitrogenCount += 1
+                    subunits.last?.nitrogenArray.append(simd_float3(x, y, z))
                 case AtomType.HYDROGEN:
-                    atomArrayComposition.hydrogenCount += 1
-                    hydrogenArray.append(simd_float3(x, y, z))
+                    subunits.last?.atomArrayComposition.hydrogenCount += 1
+                    subunits.last?.hydrogenArray.append(simd_float3(x, y, z))
                 case AtomType.OXYGEN:
-                    atomArrayComposition.oxygenCount += 1
-                    oxygenArray.append(simd_float3(x, y, z))
+                    subunits.last?.atomArrayComposition.oxygenCount += 1
+                    subunits.last?.oxygenArray.append(simd_float3(x, y, z))
                 case AtomType.SULFUR:
-                    atomArrayComposition.sulfurCount += 1
-                    sulfurArray.append(simd_float3(x, y, z))
+                    subunits.last?.atomArrayComposition.sulfurCount += 1
+                    subunits.last?.sulfurArray.append(simd_float3(x, y, z))
                 default:
-                    atomArrayComposition.othersCount += 1
-                    othersArray.append(simd_float3(x, y, z))
-                    othersIDs.append(element)
+                    subunits.last?.atomArrayComposition.othersCount += 1
+                    subunits.last?.othersArray.append(simd_float3(x, y, z))
+                    subunits.last?.othersIDs.append(element)
                 }
 
             }
         })
 
         // Add element array contents into the contiguous array
-        let totalCount = atomArrayComposition.totalCount
+        var totalCount: Int = 0
+        for subunit in subunits {
+            totalCount += subunit.atomArrayComposition.totalCount
+        }
         atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
-
-        atomArray.append(contentsOf: carbonArray)
-        atomArray.append(contentsOf: nitrogenArray)
-        atomArray.append(contentsOf: hydrogenArray)
-        atomArray.append(contentsOf: oxygenArray)
-        atomArray.append(contentsOf: sulfurArray)
-        atomArray.append(contentsOf: othersArray)
-
-        // Add atom identifiers codes in the right order (so atomArray[i] corresponds
-        // has an atomIdentifiers[i] identifier.
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.CARBON, count: atomArrayComposition.carbonCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.NITROGEN, count: atomArrayComposition.nitrogenCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.HYDROGEN, count: atomArrayComposition.hydrogenCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.OXYGEN, count: atomArrayComposition.oxygenCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.SULFUR, count: atomArrayComposition.sulfurCount))
-        atomIdentifiers.append(contentsOf: othersIDs)
+        
+        for subunit in subunits {
+            atomArray.append(contentsOf: subunit.carbonArray)
+            atomArray.append(contentsOf: subunit.nitrogenArray)
+            atomArray.append(contentsOf: subunit.hydrogenArray)
+            atomArray.append(contentsOf: subunit.oxygenArray)
+            atomArray.append(contentsOf: subunit.sulfurArray)
+            atomArray.append(contentsOf: subunit.othersArray)
+            
+            // Add atom identifiers codes in the right order (so atomArray[i] corresponds
+            // has an atomIdentifiers[i] identifier.
+            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.CARBON,
+                                                     count: subunit.atomArrayComposition.carbonCount))
+            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.NITROGEN,
+                                                     count: subunit.atomArrayComposition.nitrogenCount))
+            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.HYDROGEN,
+                                                     count: subunit.atomArrayComposition.hydrogenCount))
+            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.OXYGEN,
+                                                     count: subunit.atomArrayComposition.oxygenCount))
+            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.SULFUR,
+                                                     count: subunit.atomArrayComposition.sulfurCount))
+            atomIdentifiers.append(contentsOf: subunit.othersIDs)
+        }
+        
+        for subunit in subunits {
+            totalAtomArrayComposition += subunit.atomArrayComposition
+        }
+        
+        var subunitIndex = 0
+        var proteinSubunits = [ProteinSubunit]()
+        for subunit in subunits {
+            // The last 'parsed' subunit may be empty, discard it
+            guard subunit.atomArrayComposition.totalCount != 0 else {
+                continue
+            }
+            proteinSubunits.append(ProteinSubunit(id: subunit.id,
+                                                  atomCount: subunit.atomArrayComposition.totalCount,
+                                                  indexStart: subunitIndex))
+            subunitIndex += subunit.atomArrayComposition.totalCount
+        }
         
         guard atomArray.count > 0 else {
             throw ImportError.emptyAtomCount
@@ -302,8 +335,9 @@ extension FileParser {
 
         return Protein(fileInfo: fileInfo,
                        subunitCount: subunitCount,
+                       subunits: proteinSubunits,
                        atoms: &atomArray,
-                       atomArrayComposition: &atomArrayComposition,
+                       atomArrayComposition: &totalAtomArrayComposition,
                        atomIdentifiers: atomIdentifiers,
                        sequence: sequenceArray)
     }

@@ -48,7 +48,7 @@ file_length:
     ignore_comment_only_lines: true
 cyclomatic_complexity:
     warning: 15
-    error: 25
+    error: 250
 reporter: "xcode"
 type_name:
   allowed_symbols: "_"

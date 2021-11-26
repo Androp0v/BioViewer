@@ -90,20 +90,13 @@ struct AppearanceSegmentProtein: View {
                         ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
                                        selectedColor: $proteinViewModel.renderer.scene.unknownAtomColor,
                                        indent: true)
-                    } else {
-                        // TO-DO: Show real subunit list
-                        ColorPickerRow(title: NSLocalizedString("Subunit A", comment: ""),
-                                       selectedColor: .constant(.red),
-                                       indent: true)
-                        ColorPickerRow(title: NSLocalizedString("Subunit B", comment: ""),
-                                       selectedColor: .constant(.black),
-                                       indent: true)
-                        ColorPickerRow(title: NSLocalizedString("Subunit C", comment: ""),
-                                       selectedColor: .constant(.red),
-                                       indent: true)
-                        ColorPickerRow(title: NSLocalizedString("Subunit D", comment: ""),
-                                       selectedColor: .constant(.blue),
-                                       indent: true)
+                    } else if let subunits = proteinViewModel.dataSource.proteins.first?.subunits {
+                        ForEach(subunits, id: \.id) { subunit in
+                            // TO-DO: Show real subunit list
+                            ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.id)", comment: ""),
+                                           selectedColor: .constant(.red),
+                                           indent: true)
+                        }
                     }
                 })
             }

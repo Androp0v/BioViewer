@@ -25,7 +25,6 @@ public class Protein {
     // MARK: - Subunits
     
     /// Number of subunits in the protein
-    // FIXME: REMOVE, use subunits.count instead
     public var subunitCount: Int
     
     /// List of all subunits in the protein
@@ -50,9 +49,10 @@ public class Protein {
     
     // MARK: - Initialization
 
-    init(fileInfo: ProteinFileInfo, subunitCount: Int, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(fileInfo: ProteinFileInfo, subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.fileInfo = fileInfo
         self.subunitCount = subunitCount
+        self.subunits = subunits
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers

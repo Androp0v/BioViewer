@@ -9,6 +9,8 @@ import Foundation
 
 /// Struct holding the contents of a protein subunit.
 public class ProteinSubunit {
+    
+    public var id: Int
 
     // MARK: - Atoms
     
@@ -20,7 +22,8 @@ public class ProteinSubunit {
     
     // MARK: - Initialization
     
-    init(atomCount: Int, indexStart: Int) {
+    init(id: Int, atomCount: Int, indexStart: Int) {
+        self.id = id
         self.atomCount = atomCount
         self.indexStart = indexStart
     }
