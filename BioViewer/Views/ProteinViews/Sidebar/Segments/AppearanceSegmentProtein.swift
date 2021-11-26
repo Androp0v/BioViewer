@@ -93,8 +93,8 @@ struct AppearanceSegmentProtein: View {
                     } else if let subunits = proteinViewModel.dataSource.proteins.first?.subunits {
                         ForEach(subunits, id: \.id) { subunit in
                             // TO-DO: Show real subunit list
-                            ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.id)", comment: ""),
-                                           selectedColor: .constant(.red),
+                            ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
+                                           selectedColor: $proteinViewModel.renderer.scene.subunitColors[subunit.id],
                                            indent: true)
                         }
                     }

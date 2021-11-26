@@ -30,6 +30,11 @@ extension MetalScene {
             // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FrameData, are imported in
             // Swift as tuples. To access its contents, we must use an unsafe pointer.
             let max_atom_colors = Mirror(reflecting: self.frameData.atomColor).children.count
+            // Avoid index out of range errors later
+            guard subunitColors.count >= max_atom_colors else {
+                NSLog("Subunit color array is smaller than MAX_ATOM_COLORS, unable to color by subunit.")
+                return
+            }
             withUnsafeMutableBytes(of: &self.frameData.atomColor) { rawPtr -> Void in
                 for index in 0..<max_atom_colors {
                     guard let ptrAddress = rawPtr.baseAddress else {
@@ -37,7 +42,7 @@ extension MetalScene {
                     }
                     let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
                     // TO-DO:
-                    guard let simdColor = getSIMDColor(atomColor: CGColor.init(red: 1, green: 1, blue: 1, alpha: 1)) else {
+                    guard let simdColor = getSIMDColor(atomColor: subunitColors[index].cgColor) else {
                         NSLog("Unable to get SIMD color from CGColor for protein subunit coloring.")
                         return
                     }
@@ -50,10 +55,43 @@ extension MetalScene {
     }
     
     func initSubunitColors() {
-        
+        let max_atom_colors = Mirror(reflecting: self.frameData.atomColor).children.count
+        subunitColors = []
+        // Preselected color palette
+        let fixedColorPalette =
+            [
+                Color(.displayP3, red: 0/255, green: 177/255, blue: 228/255, opacity: 1),
+                Color(.displayP3, red: 199/255, green: 0/255, blue: 156/255, opacity: 1),
+                Color(.displayP3, red: 194/255, green: 104/255, blue: 1/255, opacity: 1),
+                Color(.displayP3, red: 27/255, green: 170/255, blue: 0/255, opacity: 1)
+            ]
+        for index in 0..<fixedColorPalette.count {
+            guard index < max_atom_colors else { return }
+            subunitColors.append(fixedColorPalette[index])
+        }
+        // If there are more subunits than colors in the preselected color palette, chose them
+        // at random.
+        for index in fixedColorPalette.count..<max_atom_colors {
+            subunitColors.append(randomColor())
+        }
     }
     
     // MARK: - Utility functions
+    
+    private func randomSIMDColor() -> simd_float4? {
+        let red = CGFloat.random(in: 0..<1)
+        let green = CGFloat.random(in: 0..<1)
+        let blue = CGFloat.random(in: 0..<1)
+        let cgColor = CGColor(red: red, green: green, blue: blue, alpha: 1.0)
+        return getSIMDColor(atomColor: cgColor)
+    }
+    
+    private func randomColor() -> Color {
+        let red = CGFloat.random(in: 0..<1)
+        let green = CGFloat.random(in: 0..<1)
+        let blue = CGFloat.random(in: 0..<1)
+        return Color(cgColor: CGColor(red: red, green: green, blue: blue, alpha: 1.0))
+    }
     
     private func getSIMDColor(atomColor: CGColor?) -> simd_float4? {
         

@@ -62,12 +62,14 @@ class ProteinViewDataSource: ObservableObject {
             */
             
             // Generate a billboard quad for each atom in the protein
-            let (vertexData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein)
+            let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein)
             guard var vertexData = vertexData else { return }
+            guard var subunitData = subunitData else { return }
             guard var atomTypeData = atomTypeData else { return }
             guard var indexData = indexData else { return }
             // Pass the new mesh to the renderer
             proteinViewModel?.renderer.addBillboardingBuffers(vertexBuffer: &vertexData,
+                                                              subunitBuffer: &subunitData,
                                                               atomTypeBuffer: &atomTypeData,
                                                               indexBuffer: &indexData)
             

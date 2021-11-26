@@ -23,8 +23,9 @@ struct ImpostorVertexOut{
 // MARK: - Vertex function
 
 vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                         const device uint8_t *atomType [[ buffer(1) ]],
-                                         const device FrameData& frameData [[ buffer(2) ]],
+                                         const device int16_t *subunitIndex [[ buffer(1) ]],
+                                         const device uint8_t *atomType [[ buffer(2) ]],
+                                         const device FrameData& frameData [[ buffer(3) ]],
                                          unsigned int vid [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
@@ -69,9 +70,14 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     
     // Transform the eye space coordinates to normalized device coordinates
     normalized_impostor_vertex.position = projectionMatrix * eye_position;
-
-    // Color the atom based on the atom type
-    normalized_impostor_vertex.color = frameData.atomColor[ atomType[vid / verticesPerAtom] ];
+    
+    if (frameData.colorBySubunit) {
+        // Color the atom based on the subunit type
+        normalized_impostor_vertex.color = frameData.atomColor[ subunitIndex[vid / verticesPerAtom] ];
+    } else {
+        // Color the atom based on the atom type
+        normalized_impostor_vertex.color = frameData.atomColor[ atomType[vid / verticesPerAtom] ];
+    }
 
     // Return the processed vertex
     return normalized_impostor_vertex;

@@ -41,6 +41,8 @@ class ProteinRenderer: NSObject {
     var impostorVertexBuffer: MTLBuffer?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
     var impostorIndexBuffer: MTLBuffer?
+    /// Used to pass the subunit index to the shader (used for coloring)
+    var subunitBuffer: MTLBuffer?
     /// Used to pass the atomic type data to the shader (used for coloring, size...)
     var atomTypeBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader
@@ -191,8 +193,9 @@ class ProteinRenderer: NSObject {
     }
     
     /// Adds the necessary buffers to display a protein in the renderer using billboarding
-    func addBillboardingBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    func addBillboardingBuffers(vertexBuffer: inout MTLBuffer, subunitBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
         self.impostorVertexBuffer = vertexBuffer
+        self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
     }
@@ -228,6 +231,7 @@ extension ProteinRenderer: MTKViewDelegate {
         guard let drawable = view.currentDrawable else { return }
         
         // Assure buffers are loaded
+        guard let subunitBuffer = self.subunitBuffer else { return }
         guard let atomTypeBuffer = self.atomTypeBuffer else { return }
         guard let uniformBuffers = self.uniformBuffers else { return }
         
@@ -324,7 +328,7 @@ extension ProteinRenderer: MTKViewDelegate {
         // MARK: - Transparent geometry pass
         transparentGeometryBlock: if true {
             
-            // Ensure opaque buffers are loaded
+            // Ensure transparent buffers are loaded
             guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
             guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
             
@@ -352,12 +356,15 @@ extension ProteinRenderer: MTKViewDelegate {
             renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
                                                  offset: 0,
                                                  index: 0)
-            renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+            renderCommandEncoder.setVertexBuffer(subunitBuffer,
                                                  offset: 0,
                                                  index: 1)
-            renderCommandEncoder.setVertexBuffer(uniformBuffer,
+            renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
                                                  offset: 0,
                                                  index: 2)
+            renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                                 offset: 0,
+                                                 index: 3)
             
             renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                    offset: 0,

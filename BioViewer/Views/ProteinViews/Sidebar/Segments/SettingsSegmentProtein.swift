@@ -19,8 +19,10 @@ struct SettingsSegmentProtein: View {
                         .padding(.top, 52)
                         .padding(.bottom, 4),
                     content: {
-
-                SwitchRow(title: "Smooth framerate", toggledVariable: .constant(true))
+                // TO-DO:
+                SwitchRow(title: "Show FPS", toggledVariable: .constant(false))
+                SwitchRow(title: "Average framerate", toggledVariable: .constant(false))
+                SwitchRow(title: "Prefer RCSB file info", toggledVariable: .constant(false))
             })
         }
         .environment(\.defaultMinListHeaderHeight, 0)

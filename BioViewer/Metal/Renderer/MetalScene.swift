@@ -34,7 +34,16 @@ class MetalScene: ObservableObject {
     /// Background color of the view
     var backgroundColor: CGColor { didSet { needsRedraw = true } }
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
-    @Published var colorBy: Int { didSet { needsRedraw = true }}
+    @Published var colorBy: Int {
+        didSet {
+            if colorBy == ProteinColorByOption.element {
+                self.frameData.colorBySubunit = 0 // False
+            } else {
+                self.frameData.colorBySubunit = 1 // True
+            }
+            needsRedraw = true
+        }
+    }
     
     /// Subscriber to camera changes.
     var cameraChangedCancellable: AnyCancellable?
@@ -88,6 +97,7 @@ class MetalScene: ObservableObject {
                                                                   axis: simd_float3(0.0, 1.0, 0.0))
         self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
                                                                   axis: simd_float3(0.0, 1.0, 0.0)).inverse
+        self.frameData.colorBySubunit = 0 // False
         self.colorBy = ProteinColorByOption.element
         
         // Subscribe to changes in the camera properties
@@ -110,6 +120,8 @@ class MetalScene: ObservableObject {
         self.frameData.atomColor.3 = simd_float4(1.000, 0.149, 0.000, 1.0) // Oxygen
         self.frameData.atomColor.4 = simd_float4(1.000, 0.780, 0.349, 1.0) // Sulfur
         self.frameData.atomColor.5 = simd_float4(0.517, 0.517, 0.517, 1.0) // Others
+        
+        initSubunitColors()
     }
 
     // MARK: - Updates

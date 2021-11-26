@@ -14,20 +14,35 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(protein: Protein) -> (vertexData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(protein: Protein) -> (vertexData: MTLBuffer?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         let impostorVertexCount = 4
         let impostorTriangleCount = 2
+        
+        // Create subunit data array
+        var subunitData = [Int16]()
+        guard let subunits = protein.subunits else {
+            NSLog("Unable to create subunit data array buffer: protein has no subunits")
+            return (nil, nil, nil, nil)
+        }
+        for index in 0..<protein.subunitCount {
+            subunitData.append(contentsOf: Array(repeating: Int16(index),
+                                                 count: subunits[index].atomCount))
+        }
 
         // Populate buffers
-        let generatedVertexData = device.makeBuffer(
+        let generatedVertexBuffer = device.makeBuffer(
             length: protein.atomCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
         )
-        let atomTypeData = device.makeBuffer(
+        let subunitBuffer = device.makeBuffer(
+            bytes: subunitData,
+            length: protein.atomCount * MemoryLayout<Int16>.stride
+        )
+        let atomTypeBuffer = device.makeBuffer(
             bytes: protein.atomIdentifiers,
             length: protein.atomCount * MemoryLayout<UInt8>.stride
         )
-        let generatedIndexData = device.makeBuffer(
+        let generatedIndexBuffer = device.makeBuffer(
             length: protein.atomCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
         )
 
@@ -69,10 +84,10 @@ extension MetalScheduler {
             computeEncoder.setBuffer(atomTypeBuffer,
                                      offset: 0,
                                      index: 1)
-            computeEncoder.setBuffer(generatedVertexData,
+            computeEncoder.setBuffer(generatedVertexBuffer,
                                      offset: 0,
                                      index: 2)
-            computeEncoder.setBuffer(generatedIndexData,
+            computeEncoder.setBuffer(generatedIndexBuffer,
                                      offset: 0,
                                      index: 3)
             
@@ -100,6 +115,6 @@ extension MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (generatedVertexData, atomTypeData, generatedIndexData)
+        return (generatedVertexBuffer, subunitBuffer, atomTypeBuffer, generatedIndexBuffer)
     }
 }
