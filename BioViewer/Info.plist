@@ -71,9 +71,9 @@
 	<array>
 		<dict>
 			<key>LSSupportsOpeningDocumentsInPlace</key>
-			<false/>
+			<true/>
 			<key>UISupportsDocumentBrowser</key>
-			<false/>
+			<true/>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
