@@ -14,6 +14,7 @@ class ProteinRCSBImportViewModel: ObservableObject {
     @Published private(set) var foundProteinImage: Image?
     @Published private(set) var foundProteinName: String?
     @Published private(set) var foundProteinDescription: String?
+    @Published private(set) var foundProteinAuthors: String?
     
     func getPDBInfo(rcsbid: String) async throws {
         guard !rcsbid.isEmpty else {
@@ -30,6 +31,7 @@ class ProteinRCSBImportViewModel: ObservableObject {
                 self.showRow = true
                 self.foundProteinName = pdbInfo.entry.id
                 self.foundProteinDescription = pdbInfo.struct.title + "."
+                self.foundProteinAuthors = pdbInfo.audit_author.map { $0.name }.joined(separator: ", ")
             }
         } catch let error {
             throw error

@@ -20,8 +20,14 @@ enum RCSBEndpoint: String {
 }
 
 struct PDBInfo: Decodable {
+    let audit_author: [PDBAuthor]
     let entry: Entry
     let `struct`: Struct
+    
+    struct PDBAuthor: Decodable {
+        let name: String
+        let pdbx_ordinal: Int
+    }
     
     struct Entry: Decodable {
         let id: String

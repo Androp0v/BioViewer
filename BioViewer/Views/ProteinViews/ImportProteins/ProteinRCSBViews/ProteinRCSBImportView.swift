@@ -78,6 +78,7 @@ struct ProteinRCSBImportView: View {
                     if self.proteinRCSBImportViewModel.showRow {
                         ProteinRCSBRowView(title: proteinRCSBImportViewModel.foundProteinName,
                                            description: proteinRCSBImportViewModel.foundProteinDescription,
+                                           authors: proteinRCSBImportViewModel.foundProteinAuthors,
                                            image: proteinRCSBImportViewModel.foundProteinImage)
                             .onTapGesture {
                                 Task {
