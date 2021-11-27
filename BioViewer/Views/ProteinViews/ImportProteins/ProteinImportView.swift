@@ -106,6 +106,7 @@ struct ProteinImportView: View {
                     do {
                         var protein = try FileParser().parseTextFile(rawText: rawText,
                                                                      fileExtension: fileURL.pathExtension,
+                                                                     fileInfo: nil,
                                                                      proteinViewModel: self.proteinViewModel)
                         proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
                         fileURL.stopAccessingSecurityScopedResource()
@@ -167,6 +168,7 @@ struct ProteinImportView: View {
                 do {
                     var protein = try FileParser().parseTextFile(rawText: rawText,
                                                                  fileExtension: "pdb",
+                                                                 fileInfo: nil,
                                                                  proteinViewModel: proteinViewModel)
                     proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
                 } catch let error as ImportError {

@@ -66,6 +66,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
             do {
                 var protein = try FileParser().parseTextFile(rawText: rawFileText,
                                                              fileExtension: fileExtension,
+                                                             fileInfo: nil,
                                                              proteinViewModel: self.proteinViewModel)
                 self.proteinViewModel?.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
             } catch let error as ImportError {

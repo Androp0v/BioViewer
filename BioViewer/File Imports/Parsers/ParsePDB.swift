@@ -68,7 +68,7 @@ extension FileParser {
         }
     }
     
-    func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?) throws -> Protein {
+    func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?, originalFileInfo: ProteinFileInfo? = nil) throws -> Protein {
 
         var atomArray = ContiguousArray<simd_float3>()
         var atomIdentifiers = [UInt8]()
@@ -79,7 +79,10 @@ extension FileParser {
         var subunitCount: Int = 0
         
         // Protein file data
-        let fileInfo = ProteinFileInfo()
+        let fileInfo = ProteinFileInfo(pdbID: originalFileInfo?.pdbID,
+                                       description: originalFileInfo?.description,
+                                       authors: originalFileInfo?.authors,
+                                       sourceLines: originalFileInfo?.sourceLines)
 
         var sequenceArray = [String]()
         var sequenceIdentifiers = [Int]()
@@ -104,6 +107,10 @@ extension FileParser {
             
             // TO-DO: Do this in parallel with the ATOM decoding
             if line.starts(with: "HEADER") {
+                guard originalFileInfo?.pdbID == nil else {
+                    // We already know the PDB ID, don't overwrite it
+                    return
+                }
                 let startPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIdStart)
                 let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIdEnd)
                 let rangePDBID = startPDBID..<endPDBID
@@ -116,6 +123,10 @@ extension FileParser {
             // Try to retrieve the protein info from the headers
             // TO-DO: Do this in parallel with the ATOM decoding
             if line.starts(with: "TITLE") {
+                guard originalFileInfo?.description == nil else {
+                    // We already know the protein description, don't overwrite it
+                    return
+                }
                 var rawTitleLine = String(line.dropFirst(PDBConstants.titleKeywordLength))
                 
                 // Strip trailing newline
@@ -138,6 +149,10 @@ extension FileParser {
             // Retrieve authors
             // TO-DO: Do this in parallel with the ATOM decoding
             if line.starts(with: "AUTHOR") {
+                guard originalFileInfo?.authors == nil else {
+                    // We already know the PDB authors, don't overwrite them
+                    return
+                }
                 var rawAuthorLine = String(line.dropFirst(PDBConstants.titleKeywordLength))
                 
                 // Strip trailing newline

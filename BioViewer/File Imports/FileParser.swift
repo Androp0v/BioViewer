@@ -10,7 +10,7 @@ import Foundation
 // MARK: - File parsing
 
 class FileParser {
-    func parseTextFile(rawText: String, fileExtension: String?, proteinViewModel: ProteinViewModel?) throws -> Protein {
+    func parseTextFile(rawText: String, fileExtension: String?, fileInfo: ProteinFileInfo?, proteinViewModel: ProteinViewModel?) throws -> Protein {
 
         if fileExtension == "pdb"
             || fileExtension == "PDB"
@@ -18,7 +18,7 @@ class FileParser {
             || fileExtension == "PDB1" {
             proteinViewModel?.statusUpdate(statusText: "Importing file")
             do {
-                let protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel)
+                let protein = try parsePDB(rawText: rawText, proteinViewModel: proteinViewModel, originalFileInfo: fileInfo)
                 return protein
             } catch let error as ImportError {
                 proteinViewModel?.statusFinished(importError: error)

@@ -70,8 +70,13 @@ class ProteinRCSBImportViewModel: ObservableObject {
             DispatchQueue.global(qos: .userInitiated).async {
                 proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
                 do {
+                    let fileInfo = ProteinFileInfo(pdbID: self.foundProteinName,
+                                                   description: self.foundProteinDescription,
+                                                   authors: self.foundProteinAuthors,
+                                                   sourceLines: nil)
                     var protein = try FileParser().parseTextFile(rawText: rawText,
                                                                  fileExtension: "pdb",
+                                                                 fileInfo: fileInfo,
                                                                  proteinViewModel: proteinViewModel)
                     proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
                 } catch let error as ImportError {

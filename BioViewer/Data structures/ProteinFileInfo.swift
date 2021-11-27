@@ -29,6 +29,7 @@ public class ProteinFileInfo {
     init(pdbID: String?, description: String?, authors: String?, sourceLines: [String]?) {
         self.pdbID = pdbID
         self.description = description
+        self.authors = authors
         self.sourceLines = sourceLines
     }
     
