@@ -72,7 +72,7 @@ struct ProteinImportView: View {
             .frame(alignment: .leading)
         }
         .sheet(isPresented: $showRCSBImportSheet, onDismiss: nil, content: {
-            ProteinRCSBImportView()
+            RCSBImportView(rcsbShowSheet: $showRCSBImportSheet)
         })
     }
 

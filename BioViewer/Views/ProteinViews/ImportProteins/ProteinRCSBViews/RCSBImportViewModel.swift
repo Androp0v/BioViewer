@@ -1,5 +1,5 @@
 //
-//  ProteinRCSBImportViewModel.swift
+//  RCSBImportViewModel.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 6/11/21.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class ProteinRCSBImportViewModel: ObservableObject {
+class RCSBImportViewModel: ObservableObject {
     
     @Published private(set) var showRow: Bool = false
     @Published private(set) var foundProteinImage: Image?

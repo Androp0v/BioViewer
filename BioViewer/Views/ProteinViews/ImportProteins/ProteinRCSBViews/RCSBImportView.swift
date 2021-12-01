@@ -1,5 +1,5 @@
 //
-//  ProteinRCSBImportView.swift
+//  RCSBImportView.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 6/11/21.
@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-struct ProteinRCSBImportView: View {
+struct RCSBImportView: View {
     
     enum FocusField: Hashable {
         case field
       }
     
-    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @Binding var rcsbShowSheet: Bool
     @State var searchText: String = ""
     @State var alertText: String = ""
     @State var showingAlert: Bool = false
     
-    @StateObject var proteinRCSBImportViewModel = ProteinRCSBImportViewModel()
+    @StateObject var proteinRCSBImportViewModel = RCSBImportViewModel()
     
     func showAlert(text: String) {
         DispatchQueue.main.async {
@@ -74,39 +74,40 @@ struct ProteinRCSBImportView: View {
                 }
                 .padding(.horizontal)
                 
-                List {
-                    if self.proteinRCSBImportViewModel.showRow {
-                        ProteinRCSBRowView(title: proteinRCSBImportViewModel.foundProteinName,
-                                           description: proteinRCSBImportViewModel.foundProteinDescription,
-                                           authors: proteinRCSBImportViewModel.foundProteinAuthors,
-                                           image: proteinRCSBImportViewModel.foundProteinImage)
-                            .onTapGesture {
-                                Task {
-                                    guard let rcsbId = proteinRCSBImportViewModel.foundProteinName else { return }
-                                    try await proteinRCSBImportViewModel.fetchPDBFile(rcsbid: rcsbId, proteinViewModel: proteinViewModel)
-                                }
-                                dismiss()
-                            }
+                if !searchText.isEmpty {
+                    List {
+                        if self.proteinRCSBImportViewModel.showRow {
+                            RCSBRowView(title: proteinRCSBImportViewModel.foundProteinName,
+                                        description: proteinRCSBImportViewModel.foundProteinDescription,
+                                        authors: proteinRCSBImportViewModel.foundProteinAuthors,
+                                        image: proteinRCSBImportViewModel.foundProteinImage,
+                                        rcsbShowSheet: $rcsbShowSheet)
+                        }
                     }
+                    .listStyle(.insetGrouped)
+                    .edgesIgnoringSafeArea(.all)
+                } else {
+                    RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
                 }
-                .listStyle(.insetGrouped)
-                .edgesIgnoringSafeArea(.all)
                 
             }
             .navigationTitle(NSLocalizedString("RCSB ID", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button(action: {
-                dismiss()
+                rcsbShowSheet = false
             },
                                                 label: {
                 Text("Close")
-            }))
+            }), trailing: NavigationLink(destination: RCSBSuggestionsView(rcsbShowSheet: $rcsbShowSheet)) {
+                Image(systemName: "lightbulb.circle")
+            })
         }
+        .environmentObject(proteinRCSBImportViewModel)
     }
 }
 
-struct ProteinRCSBImportView_Previews: PreviewProvider {
+struct RCSBImportView_Previews: PreviewProvider {
     static var previews: some View {
-        ProteinRCSBImportView()
+        RCSBImportView(rcsbShowSheet: .constant(true))
     }
 }

@@ -7,12 +7,17 @@
 
 import SwiftUI
 
-struct ProteinRCSBRowView: View {
+struct RCSBRowView: View {
     
     var title: String?
     var description: String?
     var authors: String?
     var image: Image?
+        
+    @Binding var rcsbShowSheet: Bool
+    
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var rcsbImportViewModel: RCSBImportViewModel
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)
@@ -62,16 +67,24 @@ struct ProteinRCSBRowView: View {
             .padding(.vertical, 8)
         }
         .listRowInsets(EdgeInsets())
+        .onTapGesture {
+            Task {
+                guard let rcsbid = title else { return }
+                try await rcsbImportViewModel.fetchPDBFile(rcsbid: rcsbid, proteinViewModel: proteinViewModel)
+            }
+            rcsbShowSheet = false
+        }
     }
 }
 
-struct ProteinRCSBRowView_Previews: PreviewProvider {
+struct RCSBRowView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            ProteinRCSBRowView(title: "2OGM",
-                               description: "The crystal structure of the large ribosomal subunit from Deinococcus radiodurans complexed with the pleuromutilin derivative SB-571519",
-                               authors: "Davidovich, C., Bashan, A., Auerbach-Nevo, T., Yonath, A.",
-                               image: nil)
+            RCSBRowView(title: "2OGM",
+                        description: "The crystal structure of the large ribosomal subunit from Deinococcus radiodurans complexed with the pleuromutilin derivative SB-571519",
+                        authors: "Davidovich, C., Bashan, A., Auerbach-Nevo, T., Yonath, A.",
+                        image: nil,
+                        rcsbShowSheet: .constant(true))
         }
     }
 }

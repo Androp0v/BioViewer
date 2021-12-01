@@ -1,0 +1,27 @@
+{
+  "sections": [
+      {
+        "sectionTitle": "Chaperone",
+        "sectionDescription": "chaperone_description",
+        "rowData": [
+            {
+              "rcsbid": "6MRC",
+              "description": "ADP-bound human mitochondrial Hsp60-Hsp10 football complex",
+              "authors": "Gomez-Llorente, Y., Jebara, F., Patra, M., Malik, R., Nissemblat, S., Azem, A., Hirsch, J.A., Ubarretxena-Belandia, I."
+            }
+          ]
+      },
+      {
+        "sectionTitle": "MHC",
+        "sectionDescription": "mhc_description",
+        "rowData": [
+            {
+              "rcsbid": "2XPG",
+              "description": "Crystal structure of a MHC class I-peptide complex",
+              "authors": "McMahon, R.M., Friis, L., Siebold, C., Friese, M.A., Fugger, L., Jones, E.Y."
+            }
+          ]
+      }
+    
+    ]
+}
