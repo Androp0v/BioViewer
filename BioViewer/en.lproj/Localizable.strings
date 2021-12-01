@@ -9,3 +9,5 @@
 "chaperone_description" = "Chaperones are proteins that assist protein folding. Some of them create pockets where newly synthesized proteins can fold without being affected by the hydrophilic interactions of aggregating to other proteins in the cytoplasm.";
 
 "mhc_description" = "Major Histocompatibility Complex (MHC) proteins are a group of surface proteins essential for the adaptive immune system. Their main function is to present antigens (either self or foreign) to the cells involved in the adaptive immune response.";
+
+"apoptosome_description" = "Apoptosomes are one of the protein groups that mediate programmed cell death (apoptosis).";

@@ -15,8 +15,8 @@ struct RCSBEmptyImportView: View {
         VStack {
             Image(systemName: "text.magnifyingglass")
                 .resizable()
-                .aspectRatio(contentMode: .fit)
                 .frame(width: 128, height: 128)
+                .aspectRatio(contentMode: .fit)
                 .foregroundColor(Color(uiColor: .tertiaryLabel))
             Spacer()
                 .frame(height: 16)

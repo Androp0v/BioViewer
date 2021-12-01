@@ -9,10 +9,6 @@ import SwiftUI
 
 struct MainView: View {
 
-    init() {
-        MetalScheduler.shared
-    }
-
     var body: some View {
         
         // Share view between default detail in master-detail mode and the same view

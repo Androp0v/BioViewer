@@ -14,6 +14,7 @@ struct RCSBImportView: View {
       }
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
+    // TO-DO: Make rcsbShowSheet an environmental variable
     @Binding var rcsbShowSheet: Bool
     @State var searchText: String = ""
     @State var alertText: String = ""

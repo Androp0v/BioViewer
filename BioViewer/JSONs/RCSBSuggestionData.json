@@ -21,7 +21,17 @@
               "authors": "McMahon, R.M., Friis, L., Siebold, C., Friese, M.A., Fugger, L., Jones, E.Y."
             }
           ]
+      },
+      {
+        "sectionTitle": "Apoptosome",
+        "sectionDescription": "apoptosome_description",
+        "rowData": [
+            {
+              "rcsbid": "3JBT",
+              "description": "Atomic structure of the Apaf-1 apoptosome",
+              "authors": "Zhou, M., Li, Y., Hu, Q., Bai, X., Huang, W., Yan, C., Scheres, S.H.W., Shi, Y."
+            }
+          ]
       }
-    
     ]
 }

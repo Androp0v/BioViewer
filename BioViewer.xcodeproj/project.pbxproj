@@ -88,7 +88,6 @@
 		C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
 		C515EFC3274FEA0900B6F7DB /* ColorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ColorScene.swift */; };
 		C515EFC4274FEA8400B6F7DB /* ColorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ColorScene.swift */; };
-		C53590FC2754DC2800F82B23 /* ToggableColorPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53590FB2754DC2800F82B23 /* ToggableColorPickerRow.swift */; };
 		C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* RCSBImportView.swift */; };
 		C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */; };
@@ -256,7 +255,6 @@
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
 		C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSubunit.swift; sourceTree = "<group>"; };
 		C515EFC2274FEA0900B6F7DB /* ColorScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScene.swift; sourceTree = "<group>"; };
-		C53590FB2754DC2800F82B23 /* ToggableColorPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggableColorPickerRow.swift; sourceTree = "<group>"; };
 		C53A118B2736D17500119BE6 /* RCSBImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportView.swift; sourceTree = "<group>"; };
 		C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRowView.swift; sourceTree = "<group>"; };
 		C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportViewModel.swift; sourceTree = "<group>"; };
@@ -515,7 +513,6 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
-				C53590FB2754DC2800F82B23 /* ToggableColorPickerRow.swift */,
 				C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */,
 				C515EFBD274E691800B6F7DB /* InfoTextRow.swift */,
 				C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */,
@@ -953,7 +950,6 @@
 				C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */,
 				C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
-				C53590FC2754DC2800F82B23 /* ToggableColorPickerRow.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C405744C2663DC74008527D1 /* ProteinMetalViewController.swift in Sources */,
 				C41A0560264ACBF0006F551C /* InfoPopoverRow.swift in Sources */,
@@ -1201,7 +1197,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
@@ -1211,7 +1207,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1236,7 +1232,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
@@ -1246,7 +1242,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";

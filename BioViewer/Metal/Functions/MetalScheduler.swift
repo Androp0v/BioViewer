@@ -74,8 +74,8 @@ class MetalScheduler {
         // thread with QoS = .background, to preserve battery.
         let newPipelineState = PipelineStateBundle()
         newPipelineState.createPipelineState(functionName: functionName,
-                                                library: self.library,
-                                                device: self.device)
+                                             library: self.library,
+                                             device: self.device)
         // Modify the MetalScheduler state synchronously, from the metalDispatchQueue,
         // which is the serial queue used to modify the state. This way, the modified
         // PipelineStateBundle is changed atomically, and no thread will read it in a
@@ -98,10 +98,13 @@ class MetalScheduler {
         // cores if possible.
         DispatchQueue(label: "Metal precompiler", qos: .background).async {
             // TO-DO: Handle MTLFunctionConstants
+            // FIXME: Crash on some devices
+            /*
             self.backgroundAtomicCompile(functionName: "createSASPoints",
                                          target: &self.createSASPointsBundle)
             self.backgroundAtomicCompile(functionName: "removeSASPointsInsideSolid",
                                          target: &self.removeSASPointsInsideSolidBundle)
+            */
         }
     }
 
