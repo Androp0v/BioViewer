@@ -12,7 +12,7 @@ struct RCSBEmptyImportView: View {
     @Binding var rcsbShowSheet: Bool
     
     var body: some View {
-        VStack {
+        VStack(spacing: 4) {
             Image(systemName: "text.magnifyingglass")
                 .resizable()
                 .frame(width: 128, height: 128)

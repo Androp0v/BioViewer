@@ -127,6 +127,9 @@
 		C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
 		C57303F4273022B300D5B0A6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C57303F6273022B300D5B0A6 /* Localizable.strings */; };
 		C57303F92730401E00D5B0A6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C57303F82730401E00D5B0A6 /* README.md */; };
+		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
+		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
+		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -276,6 +279,9 @@
 		C57303F5273022B300D5B0A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F7273022F500D5B0A6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F82730401E00D5B0A6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
+		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
+		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -417,6 +423,7 @@
 			children = (
 				C572BD162740220900FF010D /* FileSegmentProtein */,
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
+				C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */,
 				C5406703274D656700710CFC /* SettingsSegmentProtein.swift */,
 			);
 			path = Segments;
@@ -426,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A0565264C7B97006F551C /* StatusView.swift */,
+				C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */,
 				C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */,
 				C50D95D4273753E50002E089 /* StatusWarningPopover.swift */,
 				C500EEAF272D58A400A60317 /* StatusViewModel.swift */,
@@ -513,6 +521,7 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
+				C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */,
 				C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */,
 				C515EFBD274E691800B6F7DB /* InfoTextRow.swift */,
 				C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */,
@@ -925,6 +934,7 @@
 				C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
+				C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */,
 				C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */,
 				C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
@@ -954,6 +964,7 @@
 				C405744C2663DC74008527D1 /* ProteinMetalViewController.swift in Sources */,
 				C41A0560264ACBF0006F551C /* InfoPopoverRow.swift in Sources */,
 				C4057409265ED6CD008527D1 /* ComputeEDT.metal in Sources */,
+				C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */,
 				C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */,
 				C405744F2663DD58008527D1 /* BasicShader.metal in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
@@ -961,6 +972,7 @@
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
 				C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */,
 				C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */,
+				C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */,
 				C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */,
 				C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */,
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
