@@ -1,7 +1,7 @@
 # BioViewer
 Protein (.pdb, .cif and .fasta) viewer for iPhone, iPad and Mac, using SwiftUI + custom Metal engine.
 
-![ProteinView](ProteinView.png)
+![Mockup](Mockup.png)
 
 ## Implemented Metal optimizations
 - Dynamic data is updated using a triple buffering scheme (the dynamic uniform buffer *FrameData* of the next render passes is computed and populated on the CPU while a previous GPU render command encoder is still running).
