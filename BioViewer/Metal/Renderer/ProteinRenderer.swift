@@ -193,6 +193,7 @@ class ProteinRenderer: NSObject {
         self.opaqueVertexBuffer = vertexBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.opaqueIndexBuffer = indexBuffer
+        self.scene.needsRedraw = true
     }
     
     /// Adds the necessary buffers to display a protein in the renderer using billboarding
@@ -201,6 +202,7 @@ class ProteinRenderer: NSObject {
         self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
+        self.scene.needsRedraw = true
     }
     
     /// Deallocates the MTLBuffers used to render a protein
@@ -208,6 +210,7 @@ class ProteinRenderer: NSObject {
         self.opaqueVertexBuffer = nil
         self.atomTypeBuffer = nil
         self.opaqueIndexBuffer = nil
+        self.scene.needsRedraw = true
     }
 }
 
