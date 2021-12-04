@@ -66,26 +66,16 @@ class RCSBImportViewModel: ObservableObject {
         
         do {
             let rawText = try await RCSBFetch.fetchPDBFile(rcsbid: rcsbid)
-            
             DispatchQueue.global(qos: .userInitiated).async {
-                proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
-                do {
-                    let fileInfo = ProteinFileInfo(pdbID: self.foundProteinName,
-                                                   description: self.foundProteinDescription,
-                                                   authors: self.foundProteinAuthors,
-                                                   sourceLines: nil)
-                    var protein = try FileParser().parseTextFile(rawText: rawText,
-                                                                 fileExtension: "pdb",
-                                                                 fileInfo: fileInfo,
-                                                                 proteinViewModel: proteinViewModel)
-                    proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                } catch let error as ImportError {
-                    proteinViewModel.statusFinished(importError: error)
-                } catch {
-                    proteinViewModel.statusFinished(importError: ImportError.unknownError)
-                }
+                let fileInfo = ProteinFileInfo(pdbID: self.foundProteinName,
+                                               description: self.foundProteinDescription,
+                                               authors: self.foundProteinAuthors,
+                                               sourceLines: nil)
+                try? FileImporter.importFileFromRawText(rawText: rawText,
+                                                        proteinViewModel: proteinViewModel,
+                                                        fileInfo: fileInfo,
+                                                        fileExtension: "pdb")
             }
-            
         } catch RCSBError.notFound {
             proteinViewModel.statusFinished(importError: ImportError.notFound)
         } catch {

@@ -62,14 +62,7 @@ struct ProteinView: View {
                         ProteinMetalView(proteinViewModel: proteinViewModel)
                             .background(.black)
                             .edgesIgnoringSafeArea([.top, .bottom])
-
-                        // Import view
-                        if proteinViewModel.proteinCount == 0 {
-                            ProteinImportView()
-                        }
                         
-                        // TO-DO:
-                        /*
                         // Scene controls
                         VStack(spacing: 12) {
                             Spacer()
@@ -81,7 +74,12 @@ struct ProteinView: View {
                             }
                         }
                         .padding(.bottom, 12)
-                        */
+
+                        // Import view
+                        if proteinViewModel.proteinCount == 0 {
+                            ProteinImportView()
+                                .edgesIgnoringSafeArea(.bottom)
+                        }
                     }
                     .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
 

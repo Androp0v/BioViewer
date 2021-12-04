@@ -130,6 +130,7 @@
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
+		C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -282,6 +283,7 @@
 		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
+		C59D6A55275B939A00CCC941 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -659,6 +661,7 @@
 				C54066FF274D387200710CFC /* ImportError.swift */,
 				C41A0561264C2853006F551C /* FileParser.swift */,
 				C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */,
+				C59D6A55275B939A00CCC941 /* FileImporter.swift */,
 			);
 			path = "File Imports";
 			sourceTree = "<group>";
@@ -971,6 +974,7 @@
 				C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
 				C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */,
+				C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */,
 				C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */,
 				C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */,
 				C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */,

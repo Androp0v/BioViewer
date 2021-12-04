@@ -96,27 +96,11 @@ struct ProteinImportView: View {
                 willLoadProtein = true
                 // Dispatch on background queue, file loading can be slow
                 DispatchQueue.global(qos: .userInitiated).async {
-                    guard let proteinData = try? Data(contentsOf: fileURL) else {
-                        fileURL.stopAccessingSecurityScopedResource()
-                        failedToLoad()
-                        return
-                    }
-                    proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
-                    let rawText = String(decoding: proteinData, as: UTF8.self)
                     do {
-                        var protein = try FileParser().parseTextFile(rawText: rawText,
-                                                                     fileExtension: fileURL.pathExtension,
-                                                                     fileInfo: nil,
-                                                                     proteinViewModel: self.proteinViewModel)
-                        proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                        fileURL.stopAccessingSecurityScopedResource()
-                    } catch let error as ImportError {
-                        proteinViewModel.statusFinished(importError: error)
-                        fileURL.stopAccessingSecurityScopedResource()
-                        failedToLoad()
+                        try FileImporter.importFromFileURL(fileURL: fileURL,
+                                                           proteinViewModel: proteinViewModel,
+                                                           fileInfo: nil)
                     } catch {
-                        proteinViewModel.statusFinished(importError: ImportError.unknownError)
-                        fileURL.stopAccessingSecurityScopedResource()
                         failedToLoad()
                     }
                 }
@@ -155,26 +139,16 @@ struct ProteinImportView: View {
             willLoadProtein = true
             // Dispatch on background queue, file loading can be slow
             DispatchQueue.global(qos: .userInitiated).async {
-                guard let proteinSampleFile = Bundle.main.url(forResource: "2OGM", withExtension: "pdb") else {
+                guard let fileURL = Bundle.main.url(forResource: "2OGM", withExtension: "pdb") else {
                     failedToLoad()
                     return
                 }
-                guard let proteinData = try? Data(contentsOf: proteinSampleFile) else {
-                    failedToLoad()
-                    return
-                }
-                proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
-                let rawText = String(decoding: proteinData, as: UTF8.self)
                 do {
-                    var protein = try FileParser().parseTextFile(rawText: rawText,
-                                                                 fileExtension: "pdb",
-                                                                 fileInfo: nil,
-                                                                 proteinViewModel: proteinViewModel)
-                    proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
-                } catch let error as ImportError {
-                    proteinViewModel.statusFinished(importError: error)
+                    try FileImporter.importFromFileURL(fileURL: fileURL,
+                                                       proteinViewModel: proteinViewModel,
+                                                       fileInfo: nil)
                 } catch {
-                    proteinViewModel.statusFinished(importError: ImportError.unknownError)
+                    failedToLoad()
                 }
             }
         }
