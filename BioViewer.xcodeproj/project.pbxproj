@@ -132,6 +132,7 @@
 		C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F994E275E2C44001DE6D6 /* ColorPalettePopover.swift */; };
 		C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9950275E3686001DE6D6 /* ColorPalettePopoverRow.swift */; };
 		C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */; };
+		C57F9955275E3D29001DE6D6 /* WorkspaceHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
@@ -293,6 +294,7 @@
 		C57F994E275E2C44001DE6D6 /* ColorPalettePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettePopover.swift; sourceTree = "<group>"; };
 		C57F9950275E3686001DE6D6 /* ColorPalettePopoverRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettePopoverRow.swift; sourceTree = "<group>"; };
 		C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettes.swift; sourceTree = "<group>"; };
+		C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceHelp.swift; sourceTree = "<group>"; };
 		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
@@ -706,6 +708,7 @@
 			children = (
 				C44085692648008500DC5009 /* FileSegmentProtein.swift */,
 				C57F994A275DAA38001DE6D6 /* WorkspaceRow.swift */,
+				C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */,
 				C59D6A61275D902E00CCC941 /* FileRow.swift */,
 				C515EFBA274E313E00B6F7DB /* FileAtomElementPopover */,
 				C515EFB7274D9DE800B6F7DB /* FileSource */,
@@ -1012,6 +1015,7 @@
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
 				C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */,
 				C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */,
+				C57F9955275E3D29001DE6D6 /* WorkspaceHelp.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
 				C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */,
 				C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */,

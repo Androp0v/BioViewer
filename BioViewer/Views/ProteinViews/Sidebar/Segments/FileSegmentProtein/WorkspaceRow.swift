@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct WorkspaceRow: View {
+    
+    @State var showWorkspaceHelp: Bool = false
+    
     private enum Constants {
         #if targetEnvironment(macCatalyst)
         static let iconSize: CGFloat = 16
@@ -35,12 +38,15 @@ struct WorkspaceRow: View {
             Spacer()
             
             Button(action: {
-                // TO-DO
+                showWorkspaceHelp.toggle()
             }, label: {
                 Image(systemName: "questionmark.circle")
             })
                 .foregroundColor(.accentColor)
                 .buttonStyle(PlainButtonStyle())
+                .sheet(isPresented: $showWorkspaceHelp) {
+                    WorkspaceHelp()
+                }
         }
         .padding(.vertical, 8)
     }

@@ -11,3 +11,7 @@
 "mhc_description" = "Major Histocompatibility Complex (MHC) proteins are a group of surface proteins essential for the adaptive immune system. Their main function is to present antigens (either self or foreign) to the cells involved in the adaptive immune response.";
 
 "apoptosome_description" = "Apoptosomes are one of the protein groups that mediate programmed cell death (apoptosis).";
+
+"bioViewer_workspace_description" = "BioViewer workspace files are a type of container file that stores all the files you have on the view (PDBs, CIFs...) plus all the configuration options you have selected (color schemes, visualization type...).
+
+BioViewer workspace files also contain a thumbnail image of your structures, so you can identify the file at a glance without opening it.";
