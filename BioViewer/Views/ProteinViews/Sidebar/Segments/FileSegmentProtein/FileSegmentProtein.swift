@@ -16,10 +16,17 @@ struct FileSegmentProtein: View {
             List {
                 // First section hast 64pt padding to account for the
                 // space under the segmented control.
-                Section(header: Text(NSLocalizedString("Loaded file", comment: ""))
+                Section(header: Text(NSLocalizedString("Workspace", comment: ""))
                             .padding(.top, 52)
                             .padding(.bottom, 4),
                         content: {
+                            WorkspaceRow()
+                })
+                
+                Section(header: Text(NSLocalizedString("Loaded files", comment: ""))
+                            .padding(.bottom, 4),
+                        content: {
+                            // TO-DO
                             FileRow(filename: "TO-DO.pdb", size: "3.8 MB")
                 })
                     

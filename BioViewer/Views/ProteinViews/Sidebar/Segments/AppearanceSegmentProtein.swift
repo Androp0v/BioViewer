@@ -73,7 +73,9 @@ struct AppearanceSegmentProtein: View {
                               selectedOption: $proteinViewModel.renderer.scene.colorBy,
                               pickerOptions: ["Element",
                                               "Subunit"])
-                    ColorPaletteRow(indent: true)
+                    // TO-DO: Make it work
+                    ColorPaletteRow(indent: true,
+                                    colorPalette: ColorPalette(.default))
                     if proteinViewModel.renderer.scene.colorBy == ProteinColorByOption.element {
                         ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
                                        selectedColor: $proteinViewModel.renderer.scene.cAtomColor,

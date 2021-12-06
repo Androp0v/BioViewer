@@ -127,6 +127,11 @@
 		C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
 		C57303F4273022B300D5B0A6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C57303F6273022B300D5B0A6 /* Localizable.strings */; };
 		C57303F92730401E00D5B0A6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C57303F82730401E00D5B0A6 /* README.md */; };
+		C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F994A275DAA38001DE6D6 /* WorkspaceRow.swift */; };
+		C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F994C275E2BE0001DE6D6 /* ColorPaletteView.swift */; };
+		C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F994E275E2C44001DE6D6 /* ColorPalettePopover.swift */; };
+		C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9950275E3686001DE6D6 /* ColorPalettePopoverRow.swift */; };
+		C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
@@ -283,6 +288,11 @@
 		C57303F5273022B300D5B0A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F7273022F500D5B0A6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C57303F82730401E00D5B0A6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		C57F994A275DAA38001DE6D6 /* WorkspaceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceRow.swift; sourceTree = "<group>"; };
+		C57F994C275E2BE0001DE6D6 /* ColorPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteView.swift; sourceTree = "<group>"; };
+		C57F994E275E2C44001DE6D6 /* ColorPalettePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettePopover.swift; sourceTree = "<group>"; };
+		C57F9950275E3686001DE6D6 /* ColorPalettePopoverRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettePopoverRow.swift; sourceTree = "<group>"; };
+		C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettes.swift; sourceTree = "<group>"; };
 		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
@@ -441,6 +451,9 @@
 		C440856D26481FD800DC5009 /* UtilityViews */ = {
 			isa = PBXGroup;
 			children = (
+				C57F994C275E2BE0001DE6D6 /* ColorPaletteView.swift */,
+				C57F994E275E2C44001DE6D6 /* ColorPalettePopover.swift */,
+				C57F9950275E3686001DE6D6 /* ColorPalettePopoverRow.swift */,
 				C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */,
 				C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */,
 				C440856E2648200500DC5009 /* VisualEffectView.swift */,
@@ -608,6 +621,7 @@
 				C4B1F81E26457CF80035D739 /* Protein.swift */,
 				C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */,
 				C572BD192741372600FF010D /* ProteinFileInfo.swift */,
+				C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */,
 				C4553629265D869D006D980B /* AtomArrayComposition.swift */,
 				C418BAFD2645B1210031C6F0 /* AtomType.swift */,
 				C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */,
@@ -641,7 +655,6 @@
 			children = (
 				C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */,
 				C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */,
-				C59D6A61275D902E00CCC941 /* FileRow.swift */,
 			);
 			path = FileAtomElementPopover;
 			sourceTree = "<group>";
@@ -692,6 +705,8 @@
 			isa = PBXGroup;
 			children = (
 				C44085692648008500DC5009 /* FileSegmentProtein.swift */,
+				C57F994A275DAA38001DE6D6 /* WorkspaceRow.swift */,
+				C59D6A61275D902E00CCC941 /* FileRow.swift */,
 				C515EFBA274E313E00B6F7DB /* FileAtomElementPopover */,
 				C515EFB7274D9DE800B6F7DB /* FileSource */,
 			);
@@ -941,16 +956,19 @@
 				C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */,
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
+				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
 				C495B23C266541A7004995C2 /* ProteinObject.swift in Sources */,
 				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
+				C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
 				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
 				C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */,
 				C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */,
 				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,
+				C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */,
 				C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */,
 				C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */,
 				C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */,
@@ -969,6 +987,7 @@
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
 				C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */,
+				C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */,
 				C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */,
 				C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
@@ -992,6 +1011,7 @@
 				C405744F2663DD58008527D1 /* BasicShader.metal in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
 				C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */,
+				C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */,
 				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
 				C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */,
 				C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */,
