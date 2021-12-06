@@ -28,7 +28,11 @@ class ImportDroppedFilesDelegate: DropDelegate {
             NSLog("No itemProvider available for the given type.")
             return false
         }
-                
+        
+        guard let proteinViewModel = proteinViewModel else {
+            return false
+        }
+
         // Try to obtain the type identifier as one of the explicitly supported typeIdentifiers in BioViewer
         var typeIdentifier = itemProvider.registeredTypeIdentifiers.first(where: { $0.starts(with: "com.raulmonton.bioviewer") })
         
@@ -81,19 +85,12 @@ class ImportDroppedFilesDelegate: DropDelegate {
             let byteSize = (data as NSData).length
 
             // Parse file
-            do {
-                let proteinFile = try FileParser().parseTextFile(rawText: rawFileText,
-                                                                 fileName: fileName,
-                                                                 fileExtension: fileExtension,
-                                                                 byteSize: byteSize,
-                                                                 fileInfo: nil,
-                                                                 proteinViewModel: self.proteinViewModel)
-                self.proteinViewModel?.dataSource.addProteinFileToDataSource(proteinFile: proteinFile, addToScene: true)
-            } catch let error as ImportError {
-                self.proteinViewModel?.statusFinished(importError: error)
-            } catch {
-                self.proteinViewModel?.statusFinished(importError: ImportError.unknownError)
-            }
+            try? FileImporter.importFileFromRawText(rawText: rawFileText,
+                                                    proteinViewModel: proteinViewModel,
+                                                    fileInfo: nil,
+                                                    fileName: fileName,
+                                                    fileExtension: fileExtension,
+                                                    byteSize: byteSize)
         }
 
         return true

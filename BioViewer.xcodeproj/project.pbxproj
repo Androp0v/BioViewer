@@ -135,6 +135,7 @@
 		C57F9955275E3D29001DE6D6 /* WorkspaceHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */; };
 		C57F9958275E59D1001DE6D6 /* ProteinFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9957275E59D1001DE6D6 /* ProteinFile.swift */; };
 		C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9957275E59D1001DE6D6 /* ProteinFile.swift */; };
+		C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
@@ -678,11 +679,11 @@
 		C54066F8274D1C6100710CFC /* File Imports */ = {
 			isa = PBXGroup;
 			children = (
+				C59D6A55275B939A00CCC941 /* FileImporter.swift */,
+				C41A0561264C2853006F551C /* FileParser.swift */,
 				C54066FC274D20BE00710CFC /* Parsers */,
 				C54066FF274D387200710CFC /* ImportError.swift */,
-				C41A0561264C2853006F551C /* FileParser.swift */,
 				C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */,
-				C59D6A55275B939A00CCC941 /* FileImporter.swift */,
 			);
 			path = "File Imports";
 			sourceTree = "<group>";
@@ -1086,6 +1087,7 @@
 				C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */,
 				C504C9C0274175DB002D4E6A /* BasicShader.metal in Sources */,
 				C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */,
+				C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */,
 				C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */,
 				C572BD3A2741657B00FF010D /* AtomType.swift in Sources */,
 				C504C9C4274175E4002D4E6A /* ComputeEDT.metal in Sources */,
