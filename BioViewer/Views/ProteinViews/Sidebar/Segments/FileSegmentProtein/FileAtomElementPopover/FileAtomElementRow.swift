@@ -74,31 +74,31 @@ struct FileAtomElementRow: View {
         .onAppear {
             switch element.lowercased() {
             case "carbon":
-                self.atomCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.carbonCount
+                self.atomCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.carbonCount
                 self.elementColor = proteinViewModel.renderer.scene.cAtomColor
             case "hydrogen":
-                self.atomCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.hydrogenCount
+                self.atomCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.hydrogenCount
                 self.elementColor = proteinViewModel.renderer.scene.hAtomColor
             case "nitrogen":
-                self.atomCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.nitrogenCount
+                self.atomCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.nitrogenCount
                 self.elementColor = proteinViewModel.renderer.scene.nAtomColor
             case "oxygen":
-                self.atomCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.oxygenCount
+                self.atomCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.oxygenCount
                 self.elementColor = proteinViewModel.renderer.scene.oAtomColor
             case "sulfur":
-                self.atomCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.sulfurCount
+                self.atomCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.sulfurCount
                 self.elementColor = proteinViewModel.renderer.scene.sAtomColor
             case "others":
-                self.atomCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.othersCount
+                self.atomCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.othersCount
                 self.elementColor = proteinViewModel.renderer.scene.unknownAtomColor
             case "total":
-                self.atomCount = proteinViewModel.dataSource.proteins.first?.atomCount
+                self.atomCount = proteinViewModel.dataSource.files.first?.protein.atomCount
                 self.elementColor = .clear
             default:
                 self.atomCount = -1
                 self.elementColor = .clear
             }
-            self.totalAtom = proteinViewModel.dataSource.proteins.first?.atomCount
+            self.totalAtom = proteinViewModel.dataSource.files.first?.protein.atomCount
         }
     }
 }

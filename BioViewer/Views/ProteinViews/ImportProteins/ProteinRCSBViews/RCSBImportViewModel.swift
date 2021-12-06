@@ -74,6 +74,7 @@ class RCSBImportViewModel: ObservableObject {
                 try? FileImporter.importFileFromRawText(rawText: rawText,
                                                         proteinViewModel: proteinViewModel,
                                                         fileInfo: fileInfo,
+                                                        fileName: rcsbid,
                                                         fileExtension: "pdb")
             }
         } catch RCSBError.notFound {

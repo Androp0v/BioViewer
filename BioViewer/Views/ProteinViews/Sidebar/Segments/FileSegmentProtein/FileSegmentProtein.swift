@@ -23,12 +23,18 @@ struct FileSegmentProtein: View {
                             WorkspaceRow()
                 })
                 
-                Section(header: Text(NSLocalizedString("Loaded files", comment: ""))
-                            .padding(.bottom, 4),
-                        content: {
-                            // TO-DO
-                            FileRow(filename: "TO-DO.pdb", size: "3.8 MB")
-                })
+                if proteinViewModel.dataSource.files.count != 0 {
+                    if let file = proteinViewModel.dataSource.files.first {
+                        Section(header: Text(NSLocalizedString("Loaded files", comment: ""))
+                                    .padding(.bottom, 4),
+                                content: {
+                                    // TO-DO
+                            FileRow(fileName: file.fileName,
+                                    fileExtension: file.fileExtension,
+                                    size: "3.8 MB")
+                        })
+                    }
+                }
                     
                 Section(header: Text(NSLocalizedString("Loaded models", comment: ""))
                             .padding(.bottom, 4),
@@ -47,31 +53,31 @@ struct FileSegmentProtein: View {
                             .padding(.bottom, 4),
                         content: {
                     
-                            let protein = proteinViewModel.dataSource.proteins.first
+                            let proteinFile = proteinViewModel.dataSource.files.first
                     
                             InfoTextRow(text: NSLocalizedString("PDB ID:", comment: ""),
-                                        value: String(protein?.fileInfo.pdbID ?? "-"))
+                                        value: String(proteinFile?.fileInfo.pdbID ?? "-"))
                             InfoLongTextRow(title: NSLocalizedString("Description: ", comment: ""),
-                                        longText: protein?.fileInfo.description)
+                                        longText: proteinFile?.fileInfo.description)
                             InfoLongTextRow(title: NSLocalizedString("Authors: ", comment: ""),
-                                        longText: protein?.fileInfo.authors)
+                                        longText: proteinFile?.fileInfo.authors)
                             Button(NSLocalizedString("View raw file", comment: ""), action: {
                                 showFileSource.toggle()
                             })
                             .sheet(isPresented: $showFileSource, onDismiss: nil, content: {
-                                let fileSourceViewModel = FileSourceViewModel(fileInfo: protein?.fileInfo)
+                                let fileSourceViewModel = FileSourceViewModel(fileInfo: proteinFile?.fileInfo)
                                 FileSourceView(sourceViewModel: fileSourceViewModel)
                             })
                             .buttonStyle(DefaultButtonStyle())
                             .disabled(proteinViewModel.proteinCount == 0)
                 })
                 
-                Section(header: Text(NSLocalizedString("Remove proteins", comment: ""))
+                Section(header: Text(NSLocalizedString("Remove files", comment: ""))
                             .padding(.bottom, 4),
                         content: {
                             
                             Button(NSLocalizedString("Remove all", comment: ""), action: {
-                                proteinViewModel.removeAllProteins()
+                                proteinViewModel.removeAllFiles()
                             })
                             .buttonStyle(PlainButtonStyle())
                             .foregroundColor(.red)

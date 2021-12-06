@@ -50,25 +50,41 @@ class ImportDroppedFilesDelegate: DropDelegate {
                 self.proteinViewModel?.statusFinished(importError: ImportError.unknownError)
                 return
             }
-
-            // Retrieve UTI name from the NSItemProvider
-            let nameUTI = itemProvider.registeredTypeIdentifiers.first
-            
-            // Decode file extension if the data has a dynamic UTI type
             
             let itemProviderType = itemProvider.registeredTypeIdentifiers.first
-            let fileExtension = (itemProviderType as NSString?)?.pathExtension
+            
+            var fileName: String = NSLocalizedString("Unknown", comment: "")
+            var fileExtension: String?
+            
+            if let fullFileName = itemProvider.suggestedName as NSString? {
+                fileName = fullFileName.deletingPathExtension
+                if !fullFileName.pathExtension.isEmpty {
+                    // Prefer getting the file extension from the suggested file name.
+                    fileExtension = fullFileName.pathExtension
+                } else {
+                    // If the suggested name foes not include the path extension, retrieve
+                    // it from the ItemProvider type.
+                    fileExtension = (itemProviderType as NSString?)?.pathExtension
+                }
+            }
+            
+            // Check that either the suggestedName or the itemProvider type have a valid path extension
+            guard let fileExtension = fileExtension else {
+                self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileExtension)
+                return
+            }
 
             // Try to read the input file as a UTF-8 string
             let rawFileText = String(decoding: data, as: UTF8.self)
 
             // Parse file
             do {
-                var protein = try FileParser().parseTextFile(rawText: rawFileText,
-                                                             fileExtension: fileExtension,
-                                                             fileInfo: nil,
-                                                             proteinViewModel: self.proteinViewModel)
-                self.proteinViewModel?.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+                let proteinFile = try FileParser().parseTextFile(rawText: rawFileText,
+                                                                 fileName: fileName,
+                                                                 fileExtension: fileExtension,
+                                                                 fileInfo: nil,
+                                                                 proteinViewModel: self.proteinViewModel)
+                self.proteinViewModel?.dataSource.addProteinFileToDataSource(proteinFile: proteinFile, addToScene: true)
             } catch let error as ImportError {
                 self.proteinViewModel?.statusFinished(importError: error)
             } catch {

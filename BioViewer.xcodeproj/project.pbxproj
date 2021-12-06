@@ -133,6 +133,8 @@
 		C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9950275E3686001DE6D6 /* ColorPalettePopoverRow.swift */; };
 		C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */; };
 		C57F9955275E3D29001DE6D6 /* WorkspaceHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */; };
+		C57F9958275E59D1001DE6D6 /* ProteinFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9957275E59D1001DE6D6 /* ProteinFile.swift */; };
+		C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9957275E59D1001DE6D6 /* ProteinFile.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
@@ -295,6 +297,7 @@
 		C57F9950275E3686001DE6D6 /* ColorPalettePopoverRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettePopoverRow.swift; sourceTree = "<group>"; };
 		C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettes.swift; sourceTree = "<group>"; };
 		C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceHelp.swift; sourceTree = "<group>"; };
+		C57F9957275E59D1001DE6D6 /* ProteinFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFile.swift; sourceTree = "<group>"; };
 		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
@@ -620,9 +623,7 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */,
-				C4B1F81E26457CF80035D739 /* Protein.swift */,
-				C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */,
-				C572BD192741372600FF010D /* ProteinFileInfo.swift */,
+				C57F9956275E59C0001DE6D6 /* Protein */,
 				C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */,
 				C4553629265D869D006D980B /* AtomArrayComposition.swift */,
 				C418BAFD2645B1210031C6F0 /* AtomType.swift */,
@@ -733,6 +734,17 @@
 				C572BD2C274160C900FF010D /* Info.plist */,
 			);
 			path = ProteinThumbnail;
+			sourceTree = "<group>";
+		};
+		C57F9956275E59C0001DE6D6 /* Protein */ = {
+			isa = PBXGroup;
+			children = (
+				C57F9957275E59D1001DE6D6 /* ProteinFile.swift */,
+				C4B1F81E26457CF80035D739 /* Protein.swift */,
+				C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */,
+				C572BD192741372600FF010D /* ProteinFileInfo.swift */,
+			);
+			path = Protein;
 			sourceTree = "<group>";
 		};
 		C59D6A5E275D807900CCC941 /* StatusView */ = {
@@ -946,6 +958,7 @@
 				C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */,
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
 				C515EFC3274FEA0900B6F7DB /* ColorScene.swift in Sources */,
+				C57F9958275E59D1001DE6D6 /* ProteinFile.swift in Sources */,
 				C41A0562264C2853006F551C /* FileParser.swift in Sources */,
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
 				C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */,
@@ -1081,6 +1094,7 @@
 				C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */,
 				C572BD422741660400FF010D /* ImportDroppedFilesDelegate.swift in Sources */,
 				C572BD40274165F500FF010D /* Camera.swift in Sources */,
+				C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */,
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
 				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,

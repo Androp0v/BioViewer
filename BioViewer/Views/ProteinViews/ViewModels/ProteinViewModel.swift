@@ -73,8 +73,8 @@ class ProteinViewModel: ObservableObject {
 
     // MARK: - Public functions
 
-    func removeAllProteins() {
-        self.dataSource.removeAllProteinsFromDatasource()
+    func removeAllFiles() {
+        self.dataSource.removeAllFilesFromDatasource()
         self.statusViewModel.removeAllWarnings()
         self.statusViewModel.removeAllErrors()
     }

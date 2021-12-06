@@ -9,7 +9,8 @@ import SwiftUI
 
 struct FileRow: View {
     
-    let filename: String
+    let fileName: String
+    let fileExtension: String
     let size: String
     
     private enum Constants {
@@ -32,7 +33,7 @@ struct FileRow: View {
                     .foregroundColor(.accentColor)*/
             }
             VStack(alignment: .leading) {
-                Text("Filename.extension")
+                Text(fileName + "." + fileExtension)
                     .bold()
                 Text(size)
                     .foregroundColor(.secondary)
@@ -60,7 +61,8 @@ struct FileRow: View {
 struct FileRow_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            FileRow(filename: "Filename.extension",
+            FileRow(fileName: "FileName",
+                    fileExtension: "pdb",
                     size: "3.8 MB")
         }
     }

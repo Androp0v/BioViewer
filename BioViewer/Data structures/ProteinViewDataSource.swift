@@ -14,6 +14,33 @@ import simd
 class ProteinViewDataSource: ObservableObject {
     
     // MARK: - Properties
+    private(set) var files: [ProteinFile] = [ProteinFile]() {
+        // Run when a new file is added to the datasource
+        didSet {
+            // Publishers need to be updated in the main queue
+            DispatchQueue.main.async {
+                // FIXME: This is number of files, not proteins
+                self.proteinViewModel?.proteinCount = self.files.count
+            }
+            // Sum all subunit counts from all proteins in the datasource
+            var newSubunitCount = 0
+            for file in self.files {
+                newSubunitCount += file.protein.subunitCount
+            }
+            // Sum all atom counts from all proteins in the datasource
+            var newTotalAtomCount = 0
+            for file in self.files {
+                newTotalAtomCount += file.protein.atomCount
+            }
+            // Publishers need to be updated in the main queue
+            DispatchQueue.main.async {
+                self.proteinViewModel?.totalSubunitCount = newSubunitCount
+                self.proteinViewModel?.totalAtomCount = newTotalAtomCount
+            }
+        }
+    }
+    
+    /*
     private(set) var proteins: [Protein] = [Protein]() {
         // Run when a new protein is added to the datasource
         didSet {
@@ -38,31 +65,15 @@ class ProteinViewDataSource: ObservableObject {
             }
         }
     }
+    */
 
     public var proteinViewModel: ProteinViewModel?
 
     // MARK: - Public functions
-
-    /// Add protein to a ```ProteinView``` datasource.
-    public func addProteinToDataSource(protein: inout Protein, addToScene: Bool = false) {
-        proteins.append(protein)
+    public func addProteinFileToDataSource(proteinFile: ProteinFile, addToScene: Bool) {
         if addToScene {
-            
-            // TO-DO: Opaque geometries
-            /*
-            // Generate a sphere mesh for each atom in the protein
-            let (vertexData, atomTypeData, indexData) = MetalScheduler.shared.createSphereModel(protein: protein)
-            guard var vertexData = vertexData else { return }
-            guard var atomTypeData = atomTypeData else { return }
-            guard var indexData = indexData else { return }
-            // Pass the new mesh to the renderer
-            proteinViewModel?.renderer.addOpaqueBuffers(vertexBuffer: &vertexData,
-                                                        atomTypeBuffer: &atomTypeData,
-                                                        indexBuffer: &indexData)
-            */
-            
             // Generate a billboard quad for each atom in the protein
-            let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein)
+            let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: proteinFile.protein)
             guard var vertexData = vertexData else { return }
             guard var subunitData = subunitData else { return }
             guard var atomTypeData = atomTypeData else { return }
@@ -72,22 +83,15 @@ class ProteinViewDataSource: ObservableObject {
                                                               subunitBuffer: &subunitData,
                                                               atomTypeBuffer: &atomTypeData,
                                                               indexBuffer: &indexData)
-            
-            // File import finished
-            proteinViewModel?.statusFinished(action: StatusAction.importFile)
         }
-    }
-
-    /// Get the number of active proteins in a given ```ProteinView```.
-    /// - Returns: Number of active proteins that are available in a given
-    /// ```ProteinView```, even if they are not currently being displayed.
-    public func getNumberOfProteins() -> Int {
-        return proteins.count
+        // File import finished
+        proteinViewModel?.statusFinished(action: StatusAction.importFile)
+        files.append(proteinFile)
     }
     
     /// Removes all proteins from the data source and the scene.
-    public func removeAllProteinsFromDatasource() {
-        proteins = []
+    public func removeAllFilesFromDatasource() {
+        files = []
         proteinViewModel?.renderer.removeBuffers()
     }
 

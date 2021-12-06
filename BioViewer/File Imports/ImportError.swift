@@ -12,6 +12,7 @@ enum ImportError: Error {
     case emptyAtomCount
     case notFound
     case downloadError
+    case unknownFileExtension
     case unknownError
 }
 
@@ -26,6 +27,8 @@ extension ImportError: LocalizedError {
             return NSLocalizedString("Error: File not found", comment: "")
         case .downloadError:
             return NSLocalizedString("Error downloading file", comment: "")
+        case .unknownFileExtension:
+            return NSLocalizedString("Unknown file extension", comment: "")
         case .unknownError:
             return NSLocalizedString("Error importing file", comment: "")
         }

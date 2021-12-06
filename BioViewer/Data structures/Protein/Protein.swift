@@ -10,9 +10,6 @@ import simd
 
 /// Struct holding the contents of a protein.
 public class Protein {
-    
-    // MARK: - File properties
-    public var fileInfo: ProteinFileInfo
 
     // MARK: - Sequence
 
@@ -49,8 +46,7 @@ public class Protein {
     
     // MARK: - Initialization
 
-    init(fileInfo: ProteinFileInfo, subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
-        self.fileInfo = fileInfo
+    init(subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.subunitCount = subunitCount
         self.subunits = subunits
         self.atoms = atoms

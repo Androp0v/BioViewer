@@ -24,25 +24,25 @@ struct FileAtomElementPopover: View {
     }
     
     func setAtomFractions() {
-        guard let totalAtoms = proteinViewModel.dataSource.proteins.first?.atomCount else {
+        guard let totalAtoms = proteinViewModel.dataSource.files.first?.protein.atomCount else {
             return
         }
-        guard let carbonCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.carbonCount else {
+        guard let carbonCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.carbonCount else {
             return
         }
-        guard let hydrogenCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.hydrogenCount else {
+        guard let hydrogenCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.hydrogenCount else {
             return
         }
-        guard let nitrogenCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.nitrogenCount else {
+        guard let nitrogenCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.nitrogenCount else {
             return
         }
-        guard let oxygenCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.oxygenCount else {
+        guard let oxygenCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.oxygenCount else {
             return
         }
-        guard let sulfurCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.sulfurCount else {
+        guard let sulfurCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.sulfurCount else {
             return
         }
-        guard let othersCount = proteinViewModel.dataSource.proteins.first?.atomArrayComposition.othersCount else {
+        guard let othersCount = proteinViewModel.dataSource.files.first?.protein.atomArrayComposition.othersCount else {
             return
         }
         

@@ -19,21 +19,29 @@ class FileImporter {
         proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
         
         let rawText = String(decoding: proteinData, as: UTF8.self)
+        let fileName = fileURL.deletingPathExtension().lastPathComponent
         let fileExtension = fileURL.pathExtension
+        
+        guard !fileExtension.isEmpty else {
+            proteinViewModel.statusFinished(importError: ImportError.unknownError)
+            throw ImportError.unknownFileExtension
+        }
         
         try importFileFromRawText(rawText: rawText,
                                   proteinViewModel: proteinViewModel,
                                   fileInfo: fileInfo,
-                                  fileExtension: fileExtension.isEmpty ? nil : fileExtension)
+                                  fileName: fileName,
+                                  fileExtension: fileExtension)
     }
     
-    static func importFileFromRawText(rawText: String, proteinViewModel: ProteinViewModel, fileInfo: ProteinFileInfo?, fileExtension: String?) throws {
+    static func importFileFromRawText(rawText: String, proteinViewModel: ProteinViewModel, fileInfo: ProteinFileInfo?, fileName: String, fileExtension: String) throws {
         do {
-            var protein = try FileParser().parseTextFile(rawText: rawText,
-                                                         fileExtension: fileExtension,
-                                                         fileInfo: fileInfo,
-                                                         proteinViewModel: proteinViewModel)
-            proteinViewModel.dataSource.addProteinToDataSource(protein: &protein, addToScene: true)
+            let proteinFile = try FileParser().parseTextFile(rawText: rawText,
+                                                             fileName: fileName,
+                                                             fileExtension: fileExtension,
+                                                             fileInfo: fileInfo,
+                                                             proteinViewModel: proteinViewModel)
+            proteinViewModel.dataSource.addProteinFileToDataSource(proteinFile: proteinFile, addToScene: true)
         } catch let error as ImportError {
             proteinViewModel.statusFinished(importError: error)
             throw error

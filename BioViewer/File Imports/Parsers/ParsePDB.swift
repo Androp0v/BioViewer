@@ -68,7 +68,7 @@ extension FileParser {
         }
     }
     
-    func parsePDB(rawText: String, proteinViewModel: ProteinViewModel?, originalFileInfo: ProteinFileInfo? = nil) throws -> Protein {
+    func parsePDB(fileName: String, fileExtension: String, rawText: String, proteinViewModel: ProteinViewModel?, originalFileInfo: ProteinFileInfo? = nil) throws -> ProteinFile {
 
         var atomArray = ContiguousArray<simd_float3>()
         var atomIdentifiers = [UInt8]()
@@ -347,13 +347,18 @@ extension FileParser {
         }
         
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
-
-        return Protein(fileInfo: fileInfo,
-                       subunitCount: subunitCount,
-                       subunits: proteinSubunits,
-                       atoms: &atomArray,
-                       atomArrayComposition: &totalAtomArrayComposition,
-                       atomIdentifiers: atomIdentifiers,
-                       sequence: sequenceArray)
+        
+        // Return ProteinFile
+        var protein = Protein(subunitCount: subunitCount,
+                              subunits: proteinSubunits,
+                              atoms: &atomArray,
+                              atomArrayComposition: &totalAtomArrayComposition,
+                              atomIdentifiers: atomIdentifiers,
+                              sequence: sequenceArray)
+        
+        return ProteinFile(fileName: fileName,
+                           fileExtension: fileExtension,
+                           protein: &protein,
+                           fileInfo: fileInfo)
     }
 }
