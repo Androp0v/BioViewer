@@ -42,6 +42,13 @@ struct FileRow: View {
             Button(action: {
                 // TO-DO
             }, label: {
+                Image(systemName: "square.and.arrow.up")
+            })
+                .foregroundColor(.accentColor)
+                .buttonStyle(PlainButtonStyle())
+            Button(action: {
+                // TO-DO
+            }, label: {
                 Image(systemName: "trash")
             })
                 .foregroundColor(.red)

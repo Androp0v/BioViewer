@@ -35,6 +35,7 @@ struct ColorPalettePopover: View {
                                        colorPalette: ColorPalette(.custom),
                                        paletteName: NSLocalizedString("Custom", comment: ""),
                                        optionIndex: 2)
+                    .disabled(true)
                 if horizontalSizeClass == .compact {
                     Spacer()
                 }
