@@ -12,9 +12,25 @@ struct FileRow: View {
     let filename: String
     let size: String
     
+    private enum Constants {
+        #if targetEnvironment(macCatalyst)
+        static let iconSize: CGFloat = 24
+        #else
+        static let iconSize: CGFloat = 32
+        #endif
+    }
+    
     var body: some View {
         HStack {
-            Image(systemName: "doc")
+            VStack {
+                Image(systemName: "doc")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Constants.iconSize, height: Constants.iconSize)
+                /*Text("PDB")
+                    .font(.headline)
+                    .foregroundColor(.accentColor)*/
+            }
             VStack(alignment: .leading) {
                 Text("Filename.extension")
                     .bold()
@@ -23,9 +39,13 @@ struct FileRow: View {
             }
             .padding(.leading, 8)
             Spacer()
-            Text("PDB")
-                .font(.headline)
-                .foregroundColor(Color(uiColor: .purple))
+            Button(action: {
+                // TO-DO
+            }, label: {
+                Image(systemName: "trash")
+            })
+                .foregroundColor(.red)
+                .buttonStyle(PlainButtonStyle())
         }
     }
 }

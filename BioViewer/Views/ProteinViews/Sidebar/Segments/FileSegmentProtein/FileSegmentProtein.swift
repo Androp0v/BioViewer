@@ -20,6 +20,12 @@ struct FileSegmentProtein: View {
                             .padding(.top, 52)
                             .padding(.bottom, 4),
                         content: {
+                            FileRow(filename: "TO-DO.pdb", size: "3.8 MB")
+                })
+                    
+                Section(header: Text(NSLocalizedString("Loaded models", comment: ""))
+                            .padding(.bottom, 4),
+                        content: {
                             InfoTextRow(text: NSLocalizedString("Number of proteins:", comment: ""),
                                         value: "\(proteinViewModel.proteinCount)")
                             InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
