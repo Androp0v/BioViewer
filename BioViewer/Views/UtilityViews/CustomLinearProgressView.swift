@@ -18,7 +18,7 @@ struct CustomLinearProgressView: View {
                 ZStack {
                     Color(uiColor: UIColor.secondarySystemBackground)
                     HStack {
-                        Color.blue
+                        Color.accentColor
                             .frame(width: geometry.size.width * CGFloat(value) / CGFloat(total))
                         Spacer()
                     }

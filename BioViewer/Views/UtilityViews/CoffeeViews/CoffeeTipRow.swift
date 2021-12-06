@@ -19,7 +19,7 @@ struct CoffeeTipRow: View {
             Button(price, action: {
                 // TO-DO: Handle in-app purchase
             })
-            .foregroundColor(.blue)
+            .foregroundColor(.accentColor)
             // PlainButtonStyle() makes the list row not selectable,
             // as we want.
             .buttonStyle(PlainButtonStyle())

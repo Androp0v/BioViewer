@@ -39,7 +39,7 @@ struct ComputedPropertyRow: View {
                     Text(NSLocalizedString("Compute ", comment: "") + propertyName)
                 })
                     .buttonStyle(PlainButtonStyle())
-                    .foregroundColor(.blue)
+                    .foregroundColor(.accentColor)
             } else {
                 Text(propertyName.capitalized)
             }

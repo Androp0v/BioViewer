@@ -131,6 +131,8 @@
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
 		C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
+		C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */; };
+		C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A61275D902E00CCC941 /* FileRow.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -284,6 +286,8 @@
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
 		C59D6A55275B939A00CCC941 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
+		C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTrackedAction.swift; sourceTree = "<group>"; };
+		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -359,9 +363,10 @@
 			isa = PBXGroup;
 			children = (
 				C4187E322642E0C2009E2CBA /* MainView.swift */,
-				C464C357265A56CC00E66C3E /* SettingsView.swift */,
+				C59D6A5E275D807900CCC941 /* StatusView */,
 				C44085632647153200DC5009 /* ProteinViews */,
 				C44085612647151A00DC5009 /* SequenceViews */,
+				C464C357265A56CC00E66C3E /* SettingsView.swift */,
 				C45BAC41264954FF00B36026 /* Rows */,
 				C440856D26481FD800DC5009 /* UtilityViews */,
 			);
@@ -434,11 +439,7 @@
 		C440856D26481FD800DC5009 /* UtilityViews */ = {
 			isa = PBXGroup;
 			children = (
-				C41A0565264C7B97006F551C /* StatusView.swift */,
 				C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */,
-				C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */,
-				C50D95D4273753E50002E089 /* StatusWarningPopover.swift */,
-				C500EEAF272D58A400A60317 /* StatusViewModel.swift */,
 				C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */,
 				C440856E2648200500DC5009 /* VisualEffectView.swift */,
 				C464C356265A569800E66C3E /* CoffeeViews */,
@@ -637,6 +638,7 @@
 			children = (
 				C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */,
 				C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */,
+				C59D6A61275D902E00CCC941 /* FileRow.swift */,
 			);
 			path = FileAtomElementPopover;
 			sourceTree = "<group>";
@@ -710,6 +712,18 @@
 				C572BD2C274160C900FF010D /* Info.plist */,
 			);
 			path = ProteinThumbnail;
+			sourceTree = "<group>";
+		};
+		C59D6A5E275D807900CCC941 /* StatusView */ = {
+			isa = PBXGroup;
+			children = (
+				C41A0565264C7B97006F551C /* StatusView.swift */,
+				C500EEAF272D58A400A60317 /* StatusViewModel.swift */,
+				C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */,
+				C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */,
+				C50D95D4273753E50002E089 /* StatusWarningPopover.swift */,
+			);
+			path = StatusView;
 			sourceTree = "<group>";
 		};
 		C5F7D30B275786DA008A0517 /* JSONs */ = {
@@ -921,9 +935,11 @@
 				C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */,
 				C41A056C265894AA006F551C /* CreateSASPoints.metal in Sources */,
 				C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */,
+				C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */,
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
 				C495B23C266541A7004995C2 /* ProteinObject.swift in Sources */,
+				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,

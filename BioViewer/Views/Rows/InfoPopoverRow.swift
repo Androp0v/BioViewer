@@ -34,7 +34,7 @@ struct InfoPopoverRow<Content: View>: View {
                    label: {
                 Image(systemName: "info.circle")
             })
-                .foregroundColor(Color.blue)
+                .foregroundColor(Color.accentColor)
                 .buttonStyle(PlainButtonStyle())
                 .disabled(isDisabled)
                 .popover(isPresented: $buttonToggle) {
