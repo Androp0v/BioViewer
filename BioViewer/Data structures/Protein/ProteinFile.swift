@@ -11,14 +11,16 @@ class ProteinFile {
     
     let fileName: String
     let fileExtension: String
+    let byteSize: Int?
     
     let protein: Protein
     let fileInfo: ProteinFileInfo
     
-    init(fileName: String, fileExtension: String, protein: inout Protein, fileInfo: ProteinFileInfo) {
+    init(fileName: String, fileExtension: String, protein: inout Protein, fileInfo: ProteinFileInfo, byteSize: Int?) {
         self.fileName = fileName
         self.fileExtension = fileExtension
         self.protein = protein
         self.fileInfo = fileInfo
+        self.byteSize = byteSize
     }
 }

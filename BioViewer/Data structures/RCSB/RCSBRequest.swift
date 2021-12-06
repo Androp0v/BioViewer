@@ -66,7 +66,7 @@ class RCSBFetch {
         return pdbInfo
     }
     
-    static func fetchPDBFile(rcsbid: String) async throws -> String {
+    static func fetchPDBFile(rcsbid: String) async throws -> (String, Int) {
         
         guard let url = URL(string: RCSBEndpoint.downloadPDBFile.rawValue + rcsbid + ".pdb1") else {
             throw RCSBError.malformedURL
@@ -86,7 +86,9 @@ class RCSBFetch {
         }
                 
         let rawText = String(decoding: data, as: UTF8.self)
-        return rawText
+        let byteSize = (data as NSData).length
+        
+        return (rawText, byteSize)
     }
     
     static func fetchPDBImage(rcsbid: String) async throws -> Image? {

@@ -11,7 +11,7 @@ struct FileRow: View {
     
     let fileName: String
     let fileExtension: String
-    let size: String
+    let byteSize: Int?
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)
@@ -19,6 +19,21 @@ struct FileRow: View {
         #else
         static let iconSize: CGFloat = 32
         #endif
+    }
+    
+    public func getBytesString(byteSize: Int) -> String {
+        switch byteSize {
+        case 0..<1_024:
+          return "\(byteSize) bytes"
+        case 1_024..<(1_024 * 1_024):
+          return "\(String(format: "%.0f", Double(byteSize) / 1024)) KB"
+        case 1_024..<(1_024 * 1_024 * 1_024):
+          return "\(String(format: "%.1f", Double(byteSize) / 1024 / 1024)) MB"
+        case (1_024 * 1_024 * 1_024)...Int.max:
+          return "\(String(format: "%.2f", Double(byteSize) / 1024 / 1024)) GB"
+        default:
+          return "\(byteSize) bytes"
+        }
     }
     
     var body: some View {
@@ -35,8 +50,10 @@ struct FileRow: View {
             VStack(alignment: .leading) {
                 Text(fileName + "." + fileExtension)
                     .bold()
-                Text(size)
-                    .foregroundColor(.secondary)
+                if let byteSize = byteSize {
+                    Text(getBytesString(byteSize: byteSize))
+                        .foregroundColor(.secondary)
+                }
             }
             .padding(.leading, 8)
             Spacer()
@@ -63,7 +80,7 @@ struct FileRow_Previews: PreviewProvider {
         List {
             FileRow(fileName: "FileName",
                     fileExtension: "pdb",
-                    size: "3.8 MB")
+                    byteSize: 3800)
         }
     }
 }

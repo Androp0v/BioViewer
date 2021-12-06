@@ -76,12 +76,16 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
             // Try to read the input file as a UTF-8 string
             let rawFileText = String(decoding: data, as: UTF8.self)
+            
+            // Get the file size
+            let byteSize = (data as NSData).length
 
             // Parse file
             do {
                 let proteinFile = try FileParser().parseTextFile(rawText: rawFileText,
                                                                  fileName: fileName,
                                                                  fileExtension: fileExtension,
+                                                                 byteSize: byteSize,
                                                                  fileInfo: nil,
                                                                  proteinViewModel: self.proteinViewModel)
                 self.proteinViewModel?.dataSource.addProteinFileToDataSource(proteinFile: proteinFile, addToScene: true)

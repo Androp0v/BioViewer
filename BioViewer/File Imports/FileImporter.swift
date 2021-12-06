@@ -27,18 +27,22 @@ class FileImporter {
             throw ImportError.unknownFileExtension
         }
         
+        let byteSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize
+        
         try importFileFromRawText(rawText: rawText,
                                   proteinViewModel: proteinViewModel,
                                   fileInfo: fileInfo,
                                   fileName: fileName,
-                                  fileExtension: fileExtension)
+                                  fileExtension: fileExtension,
+                                  byteSize: byteSize)
     }
     
-    static func importFileFromRawText(rawText: String, proteinViewModel: ProteinViewModel, fileInfo: ProteinFileInfo?, fileName: String, fileExtension: String) throws {
+    static func importFileFromRawText(rawText: String, proteinViewModel: ProteinViewModel, fileInfo: ProteinFileInfo?, fileName: String, fileExtension: String, byteSize: Int?) throws {
         do {
             let proteinFile = try FileParser().parseTextFile(rawText: rawText,
                                                              fileName: fileName,
                                                              fileExtension: fileExtension,
+                                                             byteSize: byteSize,
                                                              fileInfo: fileInfo,
                                                              proteinViewModel: proteinViewModel)
             proteinViewModel.dataSource.addProteinFileToDataSource(proteinFile: proteinFile, addToScene: true)

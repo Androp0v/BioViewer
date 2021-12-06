@@ -24,15 +24,13 @@ struct FileSegmentProtein: View {
                 })
                 
                 if proteinViewModel.dataSource.files.count != 0 {
-                    if let file = proteinViewModel.dataSource.files.first {
-                        Section(header: Text(NSLocalizedString("Loaded files", comment: ""))
-                                    .padding(.bottom, 4),
-                                content: {
-                                    // TO-DO
+                    Section(header: Text(NSLocalizedString("Loaded files", comment: "")).padding(.bottom, 4)) {
+                        ForEach(Array(proteinViewModel.dataSource.files.enumerated()), id: \.offset) { _, file in
+                            // TO-DO: file size
                             FileRow(fileName: file.fileName,
                                     fileExtension: file.fileExtension,
-                                    size: "3.8 MB")
-                        })
+                                    byteSize: file.byteSize)
+                        }
                     }
                 }
                     

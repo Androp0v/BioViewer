@@ -68,7 +68,7 @@ extension FileParser {
         }
     }
     
-    func parsePDB(fileName: String, fileExtension: String, rawText: String, proteinViewModel: ProteinViewModel?, originalFileInfo: ProteinFileInfo? = nil) throws -> ProteinFile {
+    func parsePDB(fileName: String, fileExtension: String, byteSize: Int?, rawText: String, proteinViewModel: ProteinViewModel?, originalFileInfo: ProteinFileInfo? = nil) throws -> ProteinFile {
 
         var atomArray = ContiguousArray<simd_float3>()
         var atomIdentifiers = [UInt8]()
@@ -359,6 +359,7 @@ extension FileParser {
         return ProteinFile(fileName: fileName,
                            fileExtension: fileExtension,
                            protein: &protein,
-                           fileInfo: fileInfo)
+                           fileInfo: fileInfo,
+                           byteSize: byteSize)
     }
 }
