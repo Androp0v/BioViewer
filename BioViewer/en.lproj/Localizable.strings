@@ -12,6 +12,6 @@
 
 "apoptosome_description" = "Apoptosomes are one of the protein groups that mediate programmed cell death (apoptosis).";
 
-"bioViewer_workspace_description" = "BioViewer workspace files are a type of container file that stores all the files you have on the view (PDBs, CIFs...) plus all the configuration options you have selected (color schemes, visualization type...).
+"bioViewer_workspace_description" = "BioViewer workspace files are a type of container file that stores all the files you have on the view (PDBs, CIFs...) plus all the configuration options you have selected (color schemes, visualization type...), and any additional info that was added (description, authors...).
 
 BioViewer workspace files also contain a thumbnail image of your structures, so you can identify the file at a glance without opening it.";

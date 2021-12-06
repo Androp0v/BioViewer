@@ -14,14 +14,13 @@ class ThumbnailProvider: QLThumbnailProvider {
     
     override func provideThumbnail(for request: QLFileThumbnailRequest, _ handler: @escaping (QLThumbnailReply?, Error?) -> Void) {
         
-        #if os(iOS)
         // iOS restricts max memory for file thumbnails, disable the thumbnail provider there
         handler(QLThumbnailReply(contextSize: CGSize.zero, currentContextDrawing: { () -> Bool in
             // Return false to notify that a thumbnail could not be created
             return false
         }), nil)
         
-        #else
+        /*
         // macOS can run the extension with more memory, so enable it there
         let proteinViewModel = ProteinViewModel()
         var proteinViewController: ProteinMetalViewController?
@@ -84,6 +83,7 @@ class ThumbnailProvider: QLThumbnailProvider {
         }), nil)
         
         #endif
+        */
     }
 }
 

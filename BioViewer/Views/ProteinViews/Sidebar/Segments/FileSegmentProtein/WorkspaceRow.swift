@@ -10,6 +10,7 @@ import SwiftUI
 struct WorkspaceRow: View {
     
     @State var showWorkspaceHelp: Bool = false
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)
@@ -18,12 +19,12 @@ struct WorkspaceRow: View {
         static let iconSize: CGFloat = 18
         #endif
     }
-    
+
     var body: some View {
         HStack {
             
             Button(action: {
-                // TO-DO
+                WorkspaceExporter.createWorkspace(proteinViewModel: proteinViewModel)
             }, label: {
                 Image(systemName: "square.and.arrow.down")
                     .resizable()
@@ -52,8 +53,12 @@ struct WorkspaceRow: View {
     }
 }
 
+// MARK: - Previews
 struct WorkspaceRow_Previews: PreviewProvider {
     static var previews: some View {
-        WorkspaceRow()
+        List {
+            WorkspaceRow()
+        }
+        .frame(width: 300)
     }
 }
