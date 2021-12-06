@@ -133,6 +133,7 @@
 		C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
 		C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */; };
 		C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A61275D902E00CCC941 /* FileRow.swift */; };
+		C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -288,6 +289,7 @@
 		C59D6A55275B939A00CCC941 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
 		C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTrackedAction.swift; sourceTree = "<group>"; };
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
+		C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRow.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -524,6 +526,7 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
+				C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */,
 				C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */,
 				C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */,
 				C515EFBD274E691800B6F7DB /* InfoTextRow.swift */,
@@ -944,6 +947,7 @@
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
+				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
 				C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */,
 				C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */,
 				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,
