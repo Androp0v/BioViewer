@@ -44,6 +44,9 @@ public class Protein {
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     public var atomIdentifiers: [UInt8]
     
+    // MARK: - Volume
+    public var boundingSphere: BoundingSphere
+    
     // MARK: - Initialization
 
     init(subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
@@ -54,6 +57,7 @@ public class Protein {
         self.atomIdentifiers = atomIdentifiers
         self.atomCount = atoms.count
         self.sequence = sequence
-        normalizeAtomPositions(atoms: &self.atoms)
+        self.boundingSphere = computeBoundingSphere(atoms: atoms)
+        normalizeAtomPositions(atoms: &self.atoms, center: boundingSphere.center)
     }
 }

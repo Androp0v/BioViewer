@@ -16,7 +16,7 @@ struct WorkspaceRow: View {
         #if targetEnvironment(macCatalyst)
         static let iconSize: CGFloat = 16
         #else
-        static let iconSize: CGFloat = 18
+        static let iconSize: CGFloat = 20
         #endif
     }
 
