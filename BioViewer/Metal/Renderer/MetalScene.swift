@@ -26,7 +26,7 @@ class MetalScene: ObservableObject {
     var frame: Int
     
     /// Position of the camera used to render the scene
-    var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
+    private(set) var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
     /// Rotation of the model applied by the user
     var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true} }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on
@@ -139,6 +139,18 @@ class MetalScene: ObservableObject {
         updateColors()
         frame += 1
         needsRedraw = false
+    }
+    
+    func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
+        // TO-DO: Fit all files
+        guard let protein = proteinDataSource.files.first?.protein else {
+            return
+        }
+        // Update camera far and near planes
+        self.camera.nearPlane = max(1, distanceToModel - protein.boundingSphere.radius)
+        self.camera.farPlane = distanceToModel + protein.boundingSphere.radius
+        // Update camera position
+        self.cameraPosition = simd_float3(0, 0, distanceToModel)
     }
     
     // MARK: - Private

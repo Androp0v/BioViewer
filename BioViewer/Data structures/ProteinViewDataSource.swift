@@ -44,6 +44,9 @@ class ProteinViewDataSource: ObservableObject {
 
     // MARK: - Public functions
     public func addProteinFileToDataSource(proteinFile: ProteinFile, addToScene: Bool) {
+        
+        files.append(proteinFile)
+        
         if addToScene {
             // Generate a billboard quad for each atom in the protein
             let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: proteinFile.protein)
@@ -51,21 +54,25 @@ class ProteinViewDataSource: ObservableObject {
             guard var subunitData = subunitData else { return }
             guard var atomTypeData = atomTypeData else { return }
             guard var indexData = indexData else { return }
-            // Pass the new mesh to the renderer
-            proteinViewModel?.renderer.addBillboardingBuffers(vertexBuffer: &vertexData,
-                                                              subunitBuffer: &subunitData,
-                                                              atomTypeBuffer: &atomTypeData,
-                                                              indexBuffer: &indexData)
-            // Fit file in frustum
-            if let scene = proteinViewModel?.renderer.scene {
+
+            if let proteinViewModel = proteinViewModel {
+                
+                // Fit file in frustum
+                let scene = proteinViewModel.renderer.scene
                 let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: proteinFile.protein.boundingSphere.radius,
                                                                               aspectRatio: scene.aspectRatio)
-                scene.cameraPosition = simd_float3(0, 0, cameraDistanceToFit)
+                scene.updateCameraDistanceToModel(distanceToModel: cameraDistanceToFit,
+                                                  proteinDataSource: proteinViewModel.dataSource)
+                
+                // Pass the new mesh to the renderer
+                proteinViewModel.renderer.addBillboardingBuffers(vertexBuffer: &vertexData,
+                                                                 subunitBuffer: &subunitData,
+                                                                 atomTypeBuffer: &atomTypeData,
+                                                                 indexBuffer: &indexData)
             }
         }
         // File import finished
         proteinViewModel?.statusFinished(action: StatusAction.importFile)
-        files.append(proteinFile)
     }
     
     /// Removes all proteins from the data source and the scene.

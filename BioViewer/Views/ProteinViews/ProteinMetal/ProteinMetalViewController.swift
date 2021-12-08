@@ -71,8 +71,11 @@ class ProteinMetalViewController: UIViewController {
 
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let currentCameraPosition = self.proteinViewModel.renderer.scene.cameraPosition
             // TO-DO: Proper zooming
-            self.proteinViewModel.renderer.scene.cameraPosition.z /= Float(gestureRecognizer.scale)
+            let newDistance = currentCameraPosition.z / Float(gestureRecognizer.scale)
+            self.proteinViewModel.renderer.scene.updateCameraDistanceToModel(distanceToModel: newDistance,
+                                                                             proteinDataSource: proteinViewModel.dataSource)
             gestureRecognizer.scale = 1.0
        }
     }
