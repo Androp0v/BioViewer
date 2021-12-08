@@ -56,6 +56,12 @@ class ProteinViewDataSource: ObservableObject {
                                                               subunitBuffer: &subunitData,
                                                               atomTypeBuffer: &atomTypeData,
                                                               indexBuffer: &indexData)
+            // Fit file in frustum
+            if let scene = proteinViewModel?.renderer.scene {
+                let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: proteinFile.protein.boundingSphere.radius,
+                                                                              aspectRatio: scene.aspectRatio)
+                scene.cameraPosition = simd_float3(0, 0, cameraDistanceToFit)
+            }
         }
         // File import finished
         proteinViewModel?.statusFinished(action: StatusAction.importFile)

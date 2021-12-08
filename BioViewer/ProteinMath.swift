@@ -39,9 +39,9 @@ func computeBoundingSphere(atoms: ContiguousArray<simd_float3>, extraMargin: Flo
                                           z: (boundingBox.minZ + boundingBox.maxZ) / 2)
     
     // Compute box dimensions
-    let length = abs(boundingBox.minX) + abs(boundingBox.maxX)
-    let width = abs(boundingBox.minY) + abs(boundingBox.maxY)
-    let depth = abs(boundingBox.minZ) + abs(boundingBox.maxZ)
+    let length = boundingBox.maxX - boundingBox.minX
+    let width = boundingBox.maxY - boundingBox.minY
+    let depth = boundingBox.maxZ - boundingBox.minZ
     
     let radius = sqrt( pow(length, 2) + pow(width, 2) + pow(depth, 2) ) / 2
     

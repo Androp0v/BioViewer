@@ -18,12 +18,15 @@ class Camera {
     /// Whether the camera has changed its properties
     @Published var didChange = PassthroughSubject<Bool, Never>()
     
-    /// Near clipping plane of the camera view frustum
+    /// Near clipping plane of the camera view frustum.
     var nearPlane: Float
-    /// Far clipping plane of the camera view frustum
+    /// Far clipping plane of the camera view frustum.
     var farPlane: Float
-    var fieldOfView: Float
+    /// Vertical field of view of the camera, in degrees. Related to focal length.
+    var verticalFieldOfView: Float
+    /// Focal length of the camera. Related to the vertical field of view.
     var focalLength: Float
+    /// Projection matrix of the camera.
     var projectionMatrix = simd_float4x4()
     
     // MARK: - Initialization
@@ -36,7 +39,7 @@ class Camera {
     init(nearPlane: Float, farPlane: Float, fieldOfView: Float) {
         self.nearPlane = nearPlane
         self.farPlane = farPlane
-        self.fieldOfView = fieldOfView
+        self.verticalFieldOfView = fieldOfView
         self.focalLength = Camera.fullFrameDiagonal / ( 2 * tan( (fieldOfView * Float.pi / 180) / 2 ) )
         projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
                                                            1.0,
@@ -52,9 +55,9 @@ class Camera {
     init(nearPlane: Float, farPlane: Float, focalLength: Float) {
         self.nearPlane = nearPlane
         self.farPlane = farPlane
-        self.fieldOfView = 2 * atan( Camera.fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
+        self.verticalFieldOfView = 2 * atan( Camera.fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
         self.focalLength = focalLength
-        projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
+        projectionMatrix = Transform.perspectiveProjection(verticalFieldOfView * Float.pi / 180,
                                                            1.0,
                                                            nearPlane,
                                                            farPlane)
@@ -66,10 +69,9 @@ class Camera {
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
     func updateProjection(drawableSize: CGSize) {
-        let fieldOfViewRadians = fieldOfView * Float.pi / 180
+        let fieldOfViewRadians = verticalFieldOfView * Float.pi / 180
         let aspectRatio = Float(drawableSize.width) / Float(drawableSize.height)
-        let verticalFieldOfView = verticalFieldOfView(diagonalFieldOfView: fieldOfViewRadians, aspectRatio: aspectRatio)
-        projectionMatrix = Transform.perspectiveProjection(verticalFieldOfView,
+        projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
                                                            aspectRatio,
                                                            nearPlane,
                                                            farPlane)
@@ -80,9 +82,8 @@ class Camera {
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
     func updateProjection(aspectRatio: Float) {
-        let fieldOfViewRadians = fieldOfView * Float.pi / 180
-        let verticalFieldOfView = verticalFieldOfView(diagonalFieldOfView: fieldOfViewRadians, aspectRatio: aspectRatio)
-        projectionMatrix = Transform.perspectiveProjection(verticalFieldOfView,
+        let fieldOfViewRadians = verticalFieldOfView * Float.pi / 180
+        projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
                                                            aspectRatio,
                                                            nearPlane,
                                                            farPlane)
@@ -94,8 +95,7 @@ class Camera {
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
     func updateFocalLength(focalLength: Float, aspectRatio: Float) {
         self.focalLength = focalLength
-        self.fieldOfView = 2 * atan( Camera.fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
-        let verticalFieldOfView = verticalFieldOfView(diagonalFieldOfView: fieldOfView, aspectRatio: aspectRatio)
+        self.verticalFieldOfView = 2 * atan( Camera.fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
         projectionMatrix = Transform.perspectiveProjection(verticalFieldOfView * Float.pi / 180,
                                                            aspectRatio,
                                                            nearPlane,
@@ -105,13 +105,13 @@ class Camera {
     
     // MARK: - Functions
     
-    func verticalFieldOfView(diagonalFieldOfView: Float, aspectRatio: Float) -> Float {
-        let beta = atan(1 / aspectRatio)
-        return diagonalFieldOfView * sin(beta)
-    }
-    
-    func horizontalFieldOfView(diagonalFieldOfView: Float, aspectRatio: Float) -> Float {
-        let beta = atan(1 / aspectRatio)
-        return diagonalFieldOfView * cos(beta)
+    func distanceToFitInFrustum(sphereRadius: Float, aspectRatio: Float) -> Float {
+                
+        let verticalFOV = verticalFieldOfView * Float.pi / 180
+        let horizontalFOV = verticalFOV * aspectRatio
+        let smallestFOV = min(verticalFOV, horizontalFOV)
+        
+        let distanceToFit = sphereRadius / sin(smallestFOV / 2)
+        return distanceToFit
     }
 }
