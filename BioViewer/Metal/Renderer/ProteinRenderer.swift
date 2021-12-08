@@ -18,10 +18,14 @@ class ProteinRenderer: NSObject {
     
     /// GPU
     var device: MTLDevice
+    /// Pipeline state for the directional shadow creation
+    var shadowRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the opaque geometry rendering
     var opaqueRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times)
     var impostorRenderingPipelineState: MTLRenderPipelineState?
+    /// Shadow depth state
+    var shadowDepthState: MTLDepthStencilState?
     /// Depth state
     var depthState: MTLDepthStencilState?
     /// Command queue
@@ -47,6 +51,9 @@ class ProteinRenderer: NSObject {
     var atomTypeBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader
     var uniformBuffers: [MTLBuffer]?
+    
+    // MARK: - Textures
+    var shadowTextures = ShadowTextures()
 
     // MARK: - Runtime variables
     
@@ -80,7 +87,20 @@ class ProteinRenderer: NSObject {
                              alpha: rgbaColorComponents[3])
     }
     
-    // MARK: - Descriptors
+    // MARK: - Render pass descriptors
+    
+    let shadowRenderPassDescriptor: MTLRenderPassDescriptor = {
+        let descriptor = MTLRenderPassDescriptor()
+        descriptor.colorAttachments[0].loadAction = .dontCare
+        descriptor.colorAttachments[0].storeAction = .dontCare
+        descriptor.colorAttachments[1].loadAction = .clear
+        descriptor.colorAttachments[1].storeAction = .store
+        
+        descriptor.defaultRasterSampleCount = 1
+        descriptor.renderTargetWidth = ShadowTextures.textureWidth
+        descriptor.renderTargetHeight = ShadowTextures.textureHeight
+        return descriptor
+    }()
     
     let opaqueRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
@@ -100,52 +120,14 @@ class ProteinRenderer: NSObject {
         return descriptor
     }()
     
+    // MARK: - Texture descriptors
+
     let depthDescriptor: MTLDepthStencilDescriptor = {
         let descriptor = MTLDepthStencilDescriptor()
         descriptor.depthCompareFunction = MTLCompareFunction.less
         descriptor.isDepthWriteEnabled = true
         return descriptor
     }()
-    
-    // MARK: - Pipelines
-    
-    private func makeOpaqueRenderPipelineState(device: MTLDevice) {
-        // Setup pipeline
-        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
-            fatalError()
-        }
-        let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
-        let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
-
-        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
-        pipelineStateDescriptor.vertexFunction = vertexProgram
-        pipelineStateDescriptor.fragmentFunction = fragmentProgram
-        pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-
-        // Specify the format of the depth texture
-        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
-
-        opaqueRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-    }
-    
-    private func makeImpostorRenderPipelineState(device: MTLDevice) {
-        // Setup pipeline
-        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
-            fatalError()
-        }
-        let fragmentProgram = defaultLibrary.makeFunction(name: "impostor_fragment")
-        let vertexProgram = defaultLibrary.makeFunction(name: "impostor_vertex")
-
-        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
-        pipelineStateDescriptor.vertexFunction = vertexProgram
-        pipelineStateDescriptor.fragmentFunction = fragmentProgram
-        pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-
-        // Specify the format of the depth texture
-        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
-
-        impostorRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-    }
     
     // MARK: - Initialization
 
@@ -179,10 +161,17 @@ class ProteinRenderer: NSObject {
         }
         
         // Create pipeline states
+        makeShadowRenderPipelineState(device: device)
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device)
         
+        // Create shadow textures
+        shadowTextures.makeTextures(device: device,
+                                    size: CGSize(width: ShadowTextures.textureWidth, height: ShadowTextures.textureHeight),
+                                    storageMode: .shared)
+        
         // Depth state
+        shadowDepthState = device.makeDepthStencilState(descriptor: depthDescriptor)
         depthState = device.makeDepthStencilState(descriptor: depthDescriptor)
     }
 
@@ -278,7 +267,62 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Shadow Map pass
         
-        // TO-DO
+        shadowRenderingBlock: if scene.hasShadows {
+            
+            // TO-DO: Shadow pass
+            
+            // Ensure transparent buffers are loaded
+            guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
+            guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
+            
+            // Attach textures
+            shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
+            shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
+            
+            // Create render command encoder
+            guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: shadowRenderPassDescriptor) else {
+                break shadowRenderingBlock
+            }
+            
+            // Set pipeline state
+            guard let shadowRenderingPipelineState = shadowRenderingPipelineState else {
+                break shadowRenderingBlock
+            }
+            renderCommandEncoder.setRenderPipelineState(shadowRenderingPipelineState)
+            
+            // Set depth state
+            renderCommandEncoder.setDepthStencilState(depthState)
+            
+            // Add buffers to pipeline
+            renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
+                                                 offset: 0,
+                                                 index: 0)
+            renderCommandEncoder.setVertexBuffer(subunitBuffer,
+                                                 offset: 0,
+                                                 index: 1)
+            renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+                                                 offset: 0,
+                                                 index: 2)
+            renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                                 offset: 0,
+                                                 index: 3)
+            
+            renderCommandEncoder.setFragmentBuffer(uniformBuffer,
+                                                   offset: 0,
+                                                   index: 1)
+
+            // Don't render back-facing triangles (cull them)
+            renderCommandEncoder.setCullMode(.back)
+
+            // Draw primitives
+            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                       indexCount: impostorIndexBuffer.length / MemoryLayout<UInt32>.stride,
+                                                       indexType: .uint32,
+                                                       indexBuffer: impostorIndexBuffer,
+                                                       indexBufferOffset: 0)
+
+            renderCommandEncoder.endEncoding()
+        }
         
         // MARK: - Transparent geometry pass
         transparentGeometryBlock: if true {

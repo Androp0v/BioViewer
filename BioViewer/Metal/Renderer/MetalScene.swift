@@ -15,23 +15,33 @@ class MetalScene: ObservableObject {
 
     // MARK: - Properties
     
-    /// Whether the scene needs to be redrawn for the next frame
+    /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
-
-    /// Camera used to render the scene
-    private(set) var camera: Camera
-    /// Struct with data passed to the GPU shader
+    
+    /// Struct with data passed to the GPU shader.
     var frameData: FrameData
-    /// Frame count since the scene started
+    /// Frame count since the scene started.
     var frame: Int
     
-    /// Position of the camera used to render the scene
+    /// Wether the scene should render shadows.
+    var hasShadows: Bool = true
+    
+    // MARK: - Camera properties
+    
+    /// Camera used to render the scene.
+    private(set) var camera: Camera
+    /// Position of the camera used to render the scene.
     private(set) var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
-    /// Rotation of the model applied by the user
+    /// Rotation of the model applied by the user.
     var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true} }
-    /// Scene's aspect ratio, determined by the MTKView it's displayed on
+    /// Scene's aspect ratio, determined by the MTKView it's displayed on.
     var aspectRatio: Float { didSet { needsRedraw = true } }
-    /// Background color of the view
+    /// Subscriber to camera changes.
+    var cameraChangedCancellable: AnyCancellable?
+    
+    // MARK: - Color properties
+    
+    /// Background color of the view.
     var backgroundColor: CGColor { didSet { needsRedraw = true } }
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     @Published var colorBy: Int {
@@ -44,12 +54,7 @@ class MetalScene: ObservableObject {
             needsRedraw = true
         }
     }
-    
-    /// Subscriber to camera changes.
-    var cameraChangedCancellable: AnyCancellable?
-    
-    // MARK: - Atom colors
-    
+        
     @Published var cAtomColor: Color = Color(.displayP3, red: 0.423, green: 0.733, blue: 0.235, opacity: 1.0) {
         didSet { needsRedraw = true }
     }
@@ -74,7 +79,6 @@ class MetalScene: ObservableObject {
         didSet { needsRedraw = true }
     }
     
-    // MARK: - Subunit colors
     @Published var subunitColors: [Color] = [Color]() {
         didSet { needsRedraw = true }
     }
