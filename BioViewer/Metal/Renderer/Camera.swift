@@ -68,7 +68,8 @@ class Camera {
     func updateProjection(drawableSize: CGSize) {
         let fieldOfViewRadians = fieldOfView * Float.pi / 180
         let aspectRatio = Float(drawableSize.width) / Float(drawableSize.height)
-        projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
+        let verticalFieldOfView = verticalFieldOfView(diagonalFieldOfView: fieldOfViewRadians, aspectRatio: aspectRatio)
+        projectionMatrix = Transform.perspectiveProjection(verticalFieldOfView,
                                                            aspectRatio,
                                                            nearPlane,
                                                            farPlane)
@@ -80,23 +81,37 @@ class Camera {
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
     func updateProjection(aspectRatio: Float) {
         let fieldOfViewRadians = fieldOfView * Float.pi / 180
-        projectionMatrix = Transform.perspectiveProjection(fieldOfViewRadians,
+        let verticalFieldOfView = verticalFieldOfView(diagonalFieldOfView: fieldOfViewRadians, aspectRatio: aspectRatio)
+        projectionMatrix = Transform.perspectiveProjection(verticalFieldOfView,
                                                            aspectRatio,
                                                            nearPlane,
                                                            farPlane)
         didChange.send(true)
     }
     
-    /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
+    /// Update the projection matrix of the camera to account for the aspect ratio of the drawable the
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
     func updateFocalLength(focalLength: Float, aspectRatio: Float) {
         self.focalLength = focalLength
         self.fieldOfView = 2 * atan( Camera.fullFrameDiagonal / (2 * focalLength) ) * 180 / Float.pi
-        projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
-                                                           1.0,
+        let verticalFieldOfView = verticalFieldOfView(diagonalFieldOfView: fieldOfView, aspectRatio: aspectRatio)
+        projectionMatrix = Transform.perspectiveProjection(verticalFieldOfView * Float.pi / 180,
+                                                           aspectRatio,
                                                            nearPlane,
                                                            farPlane)
         didChange.send(true)
+    }
+    
+    // MARK: - Functions
+    
+    func verticalFieldOfView(diagonalFieldOfView: Float, aspectRatio: Float) -> Float {
+        let beta = atan(1 / aspectRatio)
+        return diagonalFieldOfView * sin(beta)
+    }
+    
+    func horizontalFieldOfView(diagonalFieldOfView: Float, aspectRatio: Float) -> Float {
+        let beta = atan(1 / aspectRatio)
+        return diagonalFieldOfView * cos(beta)
     }
 }
