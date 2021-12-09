@@ -177,9 +177,9 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     constexpr sampler textureSampler(mag_filter::nearest,
                                      min_filter::nearest);
     float testDepthInSunCoordinates = shadowMap.sample(textureSampler, sphereShadowClipPosition.xy);
-    output.color = half4(shadedColor.r - 0.5 * (1 - is_sunlit), // sphereShadowClipPosition.x, // shadedColor.r - 0.5 * shadow_sample,
-                         shadedColor.g - 0.5 * (1 - is_sunlit), // sphereShadowClipPosition.y, // shadedColor.g - 0.5 * shadow_sample,
-                         shadedColor.b - 0.5 * (1 - is_sunlit), // sphereShadowClipPosition.z, // testDepthInSunCoordinates, // shadedColor.b - 0.5 * shadow_sample,
+    output.color = half4(shadedColor.r - 0.3 * (1 - is_sunlit), // sphereShadowClipPosition.x, // shadedColor.r - 0.5 * shadow_sample,
+                         shadedColor.g - 0.3 * (1 - is_sunlit), // sphereShadowClipPosition.y, // shadedColor.g - 0.5 * shadow_sample,
+                         shadedColor.b - 0.3 * (1 - is_sunlit), // sphereShadowClipPosition.z, // testDepthInSunCoordinates, // shadedColor.b - 0.5 * shadow_sample,
                          1.0); // testDepthInSunCoordinates);
     
     return output;

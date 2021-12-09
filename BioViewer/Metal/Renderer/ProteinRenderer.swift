@@ -400,9 +400,7 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Commit buffer
         // Commit command buffer
-        commandBuffer.commit()
-        
-        commandBuffer.waitUntilCompleted() // FIXME: SHADOW REMOVE
+        commandBuffer.commit()        
     }
 
 }
