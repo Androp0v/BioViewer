@@ -167,8 +167,7 @@ class ProteinRenderer: NSObject {
         
         // Create shadow textures
         shadowTextures.makeTextures(device: device,
-                                    size: CGSize(width: ShadowTextures.textureWidth, height: ShadowTextures.textureHeight),
-                                    storageMode: .shared)
+                                    size: CGSize(width: ShadowTextures.textureWidth, height: ShadowTextures.textureHeight))
         
         // Depth state
         shadowDepthState = device.makeDepthStencilState(descriptor: depthDescriptor)
@@ -400,7 +399,7 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Commit buffer
         // Commit command buffer
-        commandBuffer.commit()        
+        commandBuffer.commit()
     }
 
 }

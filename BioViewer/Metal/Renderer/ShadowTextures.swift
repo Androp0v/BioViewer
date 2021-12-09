@@ -13,13 +13,13 @@ struct ShadowTextures {
     var shadowTexture: MTLTexture!
     var shadowDepthTexture: MTLTexture!
     
-    static let textureWidth: Int = 4096
-    static let textureHeight: Int = 4096
+    static let textureWidth: Int = 2048
+    static let textureHeight: Int = 2048
     
     static let shadowTexturePixelFormat = MTLPixelFormat.r32Float
     static let shadowDepthTexturePixelFormat = MTLPixelFormat.depth32Float
     
-    mutating func makeTextures(device: MTLDevice, size: CGSize, storageMode: MTLStorageMode) {
+    mutating func makeTextures(device: MTLDevice, size: CGSize) {
         
         let shadowTextureDescriptor = MTLTextureDescriptor
             .texture2DDescriptor(pixelFormat: .rgba8Unorm_srgb,
@@ -28,8 +28,8 @@ struct ShadowTextures {
                                  mipmapped: false)
         
         shadowTextureDescriptor.textureType = .type2D
-        shadowTextureDescriptor.usage = [.shaderRead, .shaderWrite, .renderTarget]
-        shadowTextureDescriptor.storageMode = storageMode
+        shadowTextureDescriptor.usage = [.renderTarget]
+        shadowTextureDescriptor.storageMode = .memoryless
         
         // Shadow color texture
         shadowTextureDescriptor.pixelFormat = ShadowTextures.shadowTexturePixelFormat
@@ -39,7 +39,7 @@ struct ShadowTextures {
         // Shadow depth texture
         shadowTextureDescriptor.pixelFormat = .depth32Float
         shadowTextureDescriptor.usage = [.shaderRead, .shaderWrite, .renderTarget]
-        shadowTextureDescriptor.allowGPUOptimizedContents = false
+        shadowTextureDescriptor.storageMode = .private
         shadowDepthTexture = device.makeTexture(descriptor: shadowTextureDescriptor)
         shadowDepthTexture.label = "Shadow Depth Texture"
     }
