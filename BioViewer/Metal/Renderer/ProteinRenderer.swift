@@ -278,6 +278,7 @@ extension ProteinRenderer: MTKViewDelegate {
             // Attach textures
             shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
             shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
+            shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
             
             // Create render command encoder
             guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: shadowRenderPassDescriptor) else {
@@ -313,6 +314,9 @@ extension ProteinRenderer: MTKViewDelegate {
 
             // Don't render back-facing triangles (cull them)
             renderCommandEncoder.setCullMode(.back)
+            
+            // FIXME: SHADOW
+            /*renderCommandEncoder.setDepthBias(0.015, slopeScale: 7, clamp: 0.02)*/
 
             // Draw primitives
             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
@@ -367,6 +371,8 @@ extension ProteinRenderer: MTKViewDelegate {
             renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                    offset: 0,
                                                    index: 1)
+            renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
+                                                    index: 0)
 
             // Don't render back-facing triangles (cull them)
             renderCommandEncoder.setCullMode(.back)
@@ -395,6 +401,8 @@ extension ProteinRenderer: MTKViewDelegate {
         // MARK: - Commit buffer
         // Commit command buffer
         commandBuffer.commit()
+        
+        commandBuffer.waitUntilCompleted() // FIXME: SHADOW REMOVE
     }
 
 }

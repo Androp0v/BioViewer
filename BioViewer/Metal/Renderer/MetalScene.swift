@@ -25,6 +25,8 @@ class MetalScene: ObservableObject {
     
     /// Wether the scene should render shadows.
     var hasShadows: Bool = true
+    /// Sun position, world coordinates.
+    var sunDirection: simd_float3 = simd_float3(1, 1, 0)
     
     // MARK: - Camera properties
     
@@ -96,11 +98,30 @@ class MetalScene: ObservableObject {
 
         // Setup initial values for FrameData
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
+        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
+        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: 0.0,
                                                                   axis: simd_float3(0.0, 1.0, 0.0))
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
-                                                                  axis: simd_float3(0.0, 1.0, 0.0)).inverse
+        self.frameData.inverse_rotation_matrix = Transform.rotationMatrix(radians: 0.0,
+                                                                          axis: simd_float3(0.0, 1.0, 0.0)).inverse
+        
+        // TO-DO: shadowProjectionMatrix may need to change dynamically
+        // FIXME: set clipping planes properly
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-50,
+                                                                                 50,
+                                                                                 -50,
+                                                                                 50,
+                                                                                 -200,
+                                                                                 2000)
+        self.frameData.sunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
+                                                                    axis: simd_float3(-1.0, 0.0, 1.0))
+        /*self.frameData.sunRotationMatrix *= Transform.rotationMatrix(radians: -Float.pi,
+                                                                     axis: simd_float3(1.0, 0.0, 0.0))*/
+        self.frameData.inverseSunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
+                                                                           axis: simd_float3(-1.0, 0.0, 1.0)).inverse
+        /*self.frameData.inverseSunRotationMatrix *= Transform.rotationMatrix(radians: -Float.pi,
+                                                                            axis: simd_float3(1.0, 0.0, 0.0)).inverse*/
+        
         self.frameData.colorBySubunit = 0 // False
         self.colorBy = ProteinColorByOption.element
         
@@ -134,12 +155,14 @@ class MetalScene: ObservableObject {
         guard needsRedraw else { return skipFrame() }
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
+        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         // TO-DO: Re-enable rotation when idle
         /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                     axis: simd_float3(0,1,0))*/
         self.frameData.rotation_matrix = self.userModelRotationMatrix
         self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+ 
         updateColors()
         frame += 1
         needsRedraw = false

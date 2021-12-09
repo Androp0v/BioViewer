@@ -17,6 +17,9 @@ typedef struct {
 
     /// Model to view matrix
     simd_float4x4 model_view_matrix;
+    
+    /// Inverse of model to view matrix
+    simd_float4x4 inverse_model_view_matrix;
 
     /// Projection matrix
     simd_float4x4 projectionMatrix;
@@ -26,6 +29,15 @@ typedef struct {
     
     /// Inverse rotation matrix
     simd_float4x4 inverse_rotation_matrix;
+    
+    /// Shadow projection matrix
+    simd_float4x4 shadowProjectionMatrix;
+    
+    /// Rotation matrix to view the model from the sun's point of view.
+    simd_float4x4 sunRotationMatrix;
+    
+    /// Inverse rotation matrix to view the model from the sun's point of view.
+    simd_float4x4 inverseSunRotationMatrix;
 
     /// Displayed atomic radii in hard-spheres visualization mode
     float atomRadius [6];
