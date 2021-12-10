@@ -42,8 +42,14 @@ typedef struct {
     /// Displayed atomic radii in hard-spheres visualization mode
     float atomRadius [6];
     
-    /// Color by subunit
+    /// Color by subunit, used as a boolean.
     int8_t colorBySubunit;
+    
+    /// Whether it should cast shadows.
+    int8_t has_shadows;
+    
+    /// Whether it should cast shadows.
+    int8_t has_depth_cueing;
     
     /// Displayed atomic color in hard-spheres visualization mode.
     /// When spheres are coloured by element, only the first 6 elements of the array will be used.

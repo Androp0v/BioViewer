@@ -93,12 +93,10 @@ class ProteinRenderer: NSObject {
         let descriptor = MTLRenderPassDescriptor()
         descriptor.colorAttachments[0].loadAction = .dontCare
         descriptor.colorAttachments[0].storeAction = .dontCare
-        descriptor.colorAttachments[1].loadAction = .clear
-        descriptor.colorAttachments[1].storeAction = .store
-        
+        descriptor.depthAttachment.loadAction = .clear
         descriptor.depthAttachment.storeAction = .store
         
-        descriptor.defaultRasterSampleCount = 1
+        descriptor.defaultRasterSampleCount = 0
         descriptor.renderTargetWidth = ShadowTextures.textureWidth
         descriptor.renderTargetHeight = ShadowTextures.textureHeight
         return descriptor

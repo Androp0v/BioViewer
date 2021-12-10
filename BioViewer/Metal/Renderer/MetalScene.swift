@@ -23,8 +23,6 @@ class MetalScene: ObservableObject {
     /// Frame count since the scene started.
     var frame: Int
     
-    /// Wether the scene should render shadows.
-    var hasShadows: Bool = true
     /// Sun position, world coordinates.
     var sunDirection: simd_float3 = simd_float3(1, 1, 0)
     
@@ -40,6 +38,13 @@ class MetalScene: ObservableObject {
     var aspectRatio: Float { didSet { needsRedraw = true } }
     /// Subscriber to camera changes.
     var cameraChangedCancellable: AnyCancellable?
+    
+    // MARK: - Shadow properties
+    
+    /// Whether shadows should be casted between geometry elements.
+    @Published var hasShadows: Bool { didSet { needsRedraw = true } }
+    /// Whether depth cueing should be used in the scene.
+    @Published var hasDepthCueing: Bool { didSet { needsRedraw = true } }
     
     // MARK: - Color properties
     
@@ -114,11 +119,18 @@ class MetalScene: ObservableObject {
         self.frameData.colorBySubunit = 0 // False, color by atom element
         self.colorBy = ProteinColorByOption.element
         
+        self.hasShadows = true
+        self.hasDepthCueing = false
+        
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
             guard let self = self else { return }
             self.needsRedraw = true
         })
+        
+        // Pass cast shadows and depth cueing to FrameData
+        self.frameData.has_shadows = self.hasShadows ? 1 : 0
+        self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
         
         // TO-DO: This is not very elegant
         self.frameData.atomRadius.0 = 1.70 // Carbon
@@ -149,6 +161,10 @@ class MetalScene: ObservableObject {
         self.frameData.rotation_matrix = self.userModelRotationMatrix
         self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
         
+        // Update shadow behaviour
+        self.frameData.has_shadows = self.hasShadows ? 1 : 0
+        self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
+        
         updateColors()
         frame += 1
         needsRedraw = false
@@ -173,12 +189,12 @@ class MetalScene: ObservableObject {
         
         // Update shadow projection to fit too
         let boundingSphereRadius = protein.boundingSphere.radius
-        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphereRadius,
-                                                                                  boundingSphereRadius,
-                                                                                 -boundingSphereRadius,
-                                                                                  boundingSphereRadius,
-                                                                                 -distanceToModel - boundingSphereRadius,
-                                                                                 distanceToModel + boundingSphereRadius)
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphereRadius + 3.3,
+                                                                                  boundingSphereRadius - 3.3,
+                                                                                 -boundingSphereRadius + 3.3,
+                                                                                  boundingSphereRadius - 3.3,
+                                                                                 -distanceToModel - boundingSphereRadius + 3.3,
+                                                                                  distanceToModel + boundingSphereRadius - 3.3)
     }
     
     // MARK: - Private

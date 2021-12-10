@@ -109,8 +109,10 @@ struct AppearanceSegmentProtein: View {
             // MARK: - Shadows section
             Section(header: Text(NSLocalizedString("Shadows", comment: ""))
                         .padding(.bottom, 4)) {
-                SwitchRow(title: NSLocalizedString("Cast shadows", comment: ""), toggledVariable: .constant(true))
-                SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""), toggledVariable: .constant(true))
+                SwitchRow(title: NSLocalizedString("Cast shadows", comment: ""),
+                          toggledVariable: $proteinViewModel.renderer.scene.hasShadows)
+                SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""),
+                          toggledVariable: $proteinViewModel.renderer.scene.hasDepthCueing)
             }
             
             // MARK: - Camera section

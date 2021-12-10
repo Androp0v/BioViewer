@@ -64,7 +64,9 @@ struct ShadowTextures {
         
         // If it's less or equal than the depth seen by the sun's frame of reference, the
         // fragment will be lit.
-        shadowSamplerDescriptor.compareFunction = .lessEqual
+        if AppState.hasSamplerCompareSupport(device: device) {
+            shadowSamplerDescriptor.compareFunction = .lessEqual
+        }
         
         shadowSampler = device.makeSamplerState(descriptor: shadowSamplerDescriptor)
     }

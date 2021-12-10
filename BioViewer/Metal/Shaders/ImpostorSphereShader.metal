@@ -10,9 +10,6 @@
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
-// TO-DO: Make DEPTH_CUEING an argument
-#define DEPTH_CUEING true
-
 using namespace metal;
 
 struct ImpostorVertexOut{
@@ -141,46 +138,52 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     output.depth = normalizedDeviceCoordinatesDepth;
     
     // Depth cueing
-    if (DEPTH_CUEING) {
+    if (frameData.has_depth_cueing) {
         shadedColor.rgb -= 0.3 * half3(normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth);
     }
     
     // Add hard shadows
-    simd_float4x4 inverse_model_view_matrix = frameData.inverse_model_view_matrix;
-    float4 sphereShadowModelPosition = ( inverse_model_view_matrix * float4(spherePosition.x,
-                                                                            spherePosition.y,
-                                                                            spherePosition.z,
-                                                                            1.0) );
-    simd_float4x4 sun_rotation_matrix = frameData.sunRotationMatrix;
-    float4 sphereShadowWorldPosition = ( sun_rotation_matrix * float4(sphereShadowModelPosition.x,
-                                                                      sphereShadowModelPosition.y,
-                                                                      sphereShadowModelPosition.z,
-                                                                      1.0) );
-    simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
-    float4 sphereShadowClipPosition = ( shadow_projection_matrix * float4(sphereShadowWorldPosition.x,
-                                                                          sphereShadowWorldPosition.y,
-                                                                          sphereShadowWorldPosition.z,
-                                                                          1.0));
-    
-    // When calculating texture coordinates to sample from shadow map, flip the y/t coordinate and
-    // convert from the [-1, 1] range of clip coordinates to [0, 1] range of
-    // used for texture sampling
-    sphereShadowClipPosition.y *= -1;
-    sphereShadowClipPosition.xy += 1.0;
-    sphereShadowClipPosition.xy /= 2;
-    
-    float shadow_sample = shadowMap.sample_compare(shadowSampler,
-                                                   sphereShadowClipPosition.xy,
-                                                   sphereShadowClipPosition.z);
-    bool is_sunlit = false;
-    if (shadow_sample > 0) {
-        is_sunlit = true;
+    if (frameData.has_shadows) {
+        simd_float4x4 inverse_model_view_matrix = frameData.inverse_model_view_matrix;
+        float4 sphereShadowModelPosition = ( inverse_model_view_matrix * float4(spherePosition.x,
+                                                                                spherePosition.y,
+                                                                                spherePosition.z,
+                                                                                1.0) );
+        simd_float4x4 sun_rotation_matrix = frameData.sunRotationMatrix;
+        float4 sphereShadowWorldPosition = ( sun_rotation_matrix * float4(sphereShadowModelPosition.x,
+                                                                          sphereShadowModelPosition.y,
+                                                                          sphereShadowModelPosition.z,
+                                                                          1.0) );
+        simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
+        float4 sphereShadowClipPosition = ( shadow_projection_matrix * float4(sphereShadowWorldPosition.x,
+                                                                              sphereShadowWorldPosition.y,
+                                                                              sphereShadowWorldPosition.z,
+                                                                              1.0));
+        
+        // When calculating texture coordinates to sample from shadow map, flip the y/t coordinate and
+        // convert from the [-1, 1] range of clip coordinates to [0, 1] range of
+        // used for texture sampling
+        sphereShadowClipPosition.y *= -1;
+        sphereShadowClipPosition.xy += 1.0;
+        sphereShadowClipPosition.xy /= 2;
+        
+        float shadow_sample = shadowMap.sample_compare(shadowSampler,
+                                                       sphereShadowClipPosition.xy,
+                                                       sphereShadowClipPosition.z);
+            
+        bool is_sunlit = false;
+        if (shadow_sample > 0) {
+            is_sunlit = true;
+        }
+        
+        // Add the shadow to the shadedColor by subtracting color
+        shadedColor.rgb -= 0.3 * (1 - is_sunlit);
     }
     
-    // Color
-    output.color = half4(shadedColor.r - 0.3 * (1 - is_sunlit),
-                         shadedColor.g - 0.3 * (1 - is_sunlit),
-                         shadedColor.b - 0.3 * (1 - is_sunlit),
+    // Final color
+    output.color = half4(shadedColor.r,
+                         shadedColor.g,
+                         shadedColor.b,
                          1.0);
     
     return output;
