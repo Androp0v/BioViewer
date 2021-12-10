@@ -43,6 +43,7 @@ class MetalScene: ObservableObject {
     
     /// Whether shadows should be casted between geometry elements.
     @Published var hasShadows: Bool { didSet { needsRedraw = true } }
+    @Published var shadowStrength: Float = 0.3 { didSet { needsRedraw = true } }
     /// Whether depth cueing should be used in the scene.
     @Published var hasDepthCueing: Bool { didSet { needsRedraw = true } }
     
@@ -119,9 +120,15 @@ class MetalScene: ObservableObject {
         self.frameData.colorBySubunit = 0 // False, color by atom element
         self.colorBy = ProteinColorByOption.element
         
-        self.hasShadows = true
+        if AppState.hasSamplerCompareSupport() {
+            self.hasShadows = true
+        } else {
+            self.hasShadows = false
+        }
         self.hasDepthCueing = false
         
+        self.frameData.shadow_strength = shadowStrength
+
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
             guard let self = self else { return }
@@ -163,6 +170,7 @@ class MetalScene: ObservableObject {
         
         // Update shadow behaviour
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
+        self.frameData.shadow_strength = self.shadowStrength
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
         
         updateColors()

@@ -47,6 +47,7 @@ typedef struct {
     
     /// Whether it should cast shadows.
     int8_t has_shadows;
+    float shadow_strength;
     
     /// Whether it should cast shadows.
     int8_t has_depth_cueing;

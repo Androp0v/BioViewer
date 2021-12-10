@@ -75,7 +75,17 @@ class ProteinViewDataSource: ObservableObject {
         proteinViewModel?.statusFinished(action: StatusAction.importFile)
     }
     
-    /// Removes all proteins from the data source and the scene.
+    /// Removes file at index from data source and scene.
+    public func removeFileAtIndex(index: Int) {
+        guard files.count > index else {
+            NSLog("File to remove has an index out of bounds.")
+            return
+        }
+        files.remove(at: index)
+        proteinViewModel?.renderer.removeBuffers()
+    }
+    
+    /// Removes all files from the data source and the scene.
     public func removeAllFilesFromDatasource() {
         files = []
         proteinViewModel?.renderer.removeBuffers()

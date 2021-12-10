@@ -177,7 +177,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         }
         
         // Add the shadow to the shadedColor by subtracting color
-        shadedColor.rgb -= 0.3 * (1 - is_sunlit);
+        shadedColor.rgb -= frameData.shadow_strength * (1 - is_sunlit);
     }
     
     // Final color

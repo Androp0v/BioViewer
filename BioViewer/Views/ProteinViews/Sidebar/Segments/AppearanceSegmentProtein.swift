@@ -74,33 +74,33 @@ struct AppearanceSegmentProtein: View {
                               pickerOptions: ["Element",
                                               "Subunit"])
                     // TO-DO: Make it work
-                    ColorPaletteRow(indent: true,
-                                    colorPalette: ColorPalette(.default))
+                    ColorPaletteRow(colorPalette: ColorPalette(.default))
+                        .indentRow()
                     if proteinViewModel.renderer.scene.colorBy == ProteinColorByOption.element {
                         ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.cAtomColor,
-                                       indent: true)
+                                       selectedColor: $proteinViewModel.renderer.scene.cAtomColor)
+                            .indentRow()
                         ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.hAtomColor,
-                                       indent: true)
+                                       selectedColor: $proteinViewModel.renderer.scene.hAtomColor)
+                            .indentRow()
                         ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.nAtomColor,
-                                       indent: true)
+                                       selectedColor: $proteinViewModel.renderer.scene.nAtomColor)
+                            .indentRow()
                         ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.oAtomColor,
-                                       indent: true)
+                                       selectedColor: $proteinViewModel.renderer.scene.oAtomColor)
+                            .indentRow()
                         ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.sAtomColor,
-                                       indent: true)
+                                       selectedColor: $proteinViewModel.renderer.scene.sAtomColor)
+                            .indentRow()
                         ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.unknownAtomColor,
-                                       indent: true)
+                                       selectedColor: $proteinViewModel.renderer.scene.unknownAtomColor)
+                            .indentRow()
                     } else if let subunits = proteinViewModel.dataSource.files.first?.protein.subunits {
                         ForEach(subunits, id: \.id) { subunit in
                             // TO-DO: Show real subunit list
                             ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
-                                           selectedColor: $proteinViewModel.renderer.scene.subunitColors[subunit.id],
-                                           indent: true)
+                                           selectedColor: $proteinViewModel.renderer.scene.subunitColors[subunit.id])
+                                .indentRow()
                         }
                     }
                 })
@@ -109,16 +109,34 @@ struct AppearanceSegmentProtein: View {
             // MARK: - Shadows section
             Section(header: Text(NSLocalizedString("Shadows", comment: ""))
                         .padding(.bottom, 4)) {
-                SwitchRow(title: NSLocalizedString("Cast shadows", comment: ""),
-                          toggledVariable: $proteinViewModel.renderer.scene.hasShadows)
+                if AppState.hasSamplerCompareSupport() {
+                    SwitchRow(title: NSLocalizedString("Cast shadows", comment: ""),
+                              toggledVariable: $proteinViewModel.renderer.scene.hasShadows)
+                    if proteinViewModel.renderer.scene.hasShadows {
+                        SliderRow(title: NSLocalizedString("Strength", comment: ""),
+                                  value: $proteinViewModel.renderer.scene.shadowStrength,
+                                  minValue: 0.0,
+                                  maxValue: 1.0)
+                            .indentRow()
+                    }
+                }
                 SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""),
                           toggledVariable: $proteinViewModel.renderer.scene.hasDepthCueing)
+                if proteinViewModel.renderer.scene.hasDepthCueing {
+                    RangeRow(title: "Range:")
+                        .indentRow()
+                    SliderRow(title: NSLocalizedString("Strength", comment: ""),
+                              value: $proteinViewModel.renderer.scene.shadowStrength,
+                              minValue: 0.0,
+                              maxValue: 1.0)
+                        .indentRow()
+                }
             }
             
             // MARK: - Camera section
             Section(header: Text(NSLocalizedString("Focal distance", comment: ""))
                         .padding(.bottom, 4)) {
-                SliderRow(focalLength: $proteinViewModel.cameraFocalLength)
+                FocalLengthRow(focalLength: $proteinViewModel.cameraFocalLength)
             }
 
         }

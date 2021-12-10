@@ -41,7 +41,7 @@ struct ColorPaletteView: View {
         .background(RoundedRectangle(cornerRadius: 8)
                     .stroke(Color(uiColor: .separator),
                             style: StrokeStyle(lineWidth: 1))
-                    .background(Rectangle()
+                    .background(RoundedRectangle(cornerRadius: 8)
                                     .fill(Color(uiColor: .tertiarySystemFill))))
         #endif
     }

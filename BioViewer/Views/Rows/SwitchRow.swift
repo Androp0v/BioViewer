@@ -14,7 +14,8 @@ struct SwitchRow: View {
     @Binding var toggledVariable: Bool
 
     var body: some View {
-        Toggle(title, isOn: $toggledVariable)
+        Toggle(title, isOn: $toggledVariable.animation())
+            .tint(.accentColor)
     }
 
 }

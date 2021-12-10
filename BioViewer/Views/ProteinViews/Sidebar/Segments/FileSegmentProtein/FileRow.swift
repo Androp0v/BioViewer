@@ -11,13 +11,18 @@ struct FileRow: View {
     
     let fileName: String
     let fileExtension: String
+    let fileIndex: Int
     let byteSize: Int?
+    
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)
         static let iconSize: CGFloat = 24
+        static let buttonSize: CGFloat = 16
         #else
         static let iconSize: CGFloat = 32
+        static let buttonSize: CGFloat = 24
         #endif
     }
     
@@ -57,17 +62,26 @@ struct FileRow: View {
             }
             .padding(.leading, 8)
             Spacer()
+            // TO-DO: Export files
+            /*
             Button(action: {
                 // TO-DO
             }, label: {
                 Image(systemName: "square.and.arrow.up")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Constants.buttonSize, height: Constants.buttonSize)
             })
                 .foregroundColor(.accentColor)
                 .buttonStyle(PlainButtonStyle())
+            */
             Button(action: {
-                // TO-DO
+                proteinViewModel.dataSource.removeAllFilesFromDatasource()
             }, label: {
                 Image(systemName: "trash")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Constants.buttonSize, height: Constants.buttonSize)
             })
                 .foregroundColor(.red)
                 .buttonStyle(PlainButtonStyle())
@@ -80,6 +94,7 @@ struct FileRow_Previews: PreviewProvider {
         List {
             FileRow(fileName: "FileName",
                     fileExtension: "pdb",
+                    fileIndex: 0,
                     byteSize: 3800)
         }
     }

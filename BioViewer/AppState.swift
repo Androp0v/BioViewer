@@ -16,7 +16,10 @@ class AppState {
     static let maxNumberOfWarnings: Int = 99
     
     // MARK: - Metal support
-    static func hasSamplerCompareSupport(device: MTLDevice) -> Bool {
+    static let hasSamplerCompareSupport = { () -> Bool in
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return false
+        }
         if device.supportsFamily(.common2) || device.supportsFamily(.apple3) || device.supportsFamily(.mac1) || device.supportsFamily(.macCatalyst1) {
             return true
         } else {

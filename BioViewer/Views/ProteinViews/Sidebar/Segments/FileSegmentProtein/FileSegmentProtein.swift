@@ -25,10 +25,11 @@ struct FileSegmentProtein: View {
                 
                 if proteinViewModel.dataSource.files.count != 0 {
                     Section(header: Text(NSLocalizedString("Loaded files", comment: "")).padding(.bottom, 4)) {
-                        ForEach(Array(proteinViewModel.dataSource.files.enumerated()), id: \.offset) { _, file in
+                        ForEach(Array(proteinViewModel.dataSource.files.enumerated()), id: \.offset) { index, file in
                             // TO-DO: file size
                             FileRow(fileName: file.fileName,
                                     fileExtension: file.fileExtension,
+                                    fileIndex: index,
                                     byteSize: file.byteSize)
                         }
                     }

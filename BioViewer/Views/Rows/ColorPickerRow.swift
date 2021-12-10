@@ -11,14 +11,9 @@ struct ColorPickerRow: View {
 
     var title: String
     @Binding var selectedColor: Color
-    var indent: Bool = false
 
     var body: some View {
         HStack {
-            if indent {
-                Spacer()
-                    .frame(width: 24)
-            }
             #if targetEnvironment(macCatalyst)
             Text(title)
             Spacer()
@@ -38,7 +33,6 @@ struct ColorPickerRow: View {
 struct ColorPickerRow_Previews: PreviewProvider {
     static var previews: some View {
         ColorPickerRow(title: NSLocalizedString("Selected color", comment: ""),
-                       selectedColor: .constant(Color.black),
-                       indent: false)
+                       selectedColor: .constant(Color.black))
     }
 }

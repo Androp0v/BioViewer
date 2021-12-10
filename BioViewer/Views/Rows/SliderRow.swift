@@ -2,45 +2,33 @@
 //  SliderRow.swift
 //  BioViewer
 //
-//  Created by Raúl Montón Pinillos on 30/10/21.
+//  Created by Raúl Montón Pinillos on 10/12/21.
 //
 
 import SwiftUI
 
 struct SliderRow: View {
     
-    @Binding var focalLength: Float
+    let title: String
+    @Binding var value: Float
+    let minValue: Float
+    let maxValue: Float
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            Slider(value: $focalLength, in: 24...300)
-            
-            HStack {
-                Text("24")
-                    .font(.system(size: 12))
-                
-                Spacer()
-                
-                Text("\(focalLength, specifier: "%.0f") mm")
-                    .font(.system(size: 14))
-                    .padding(.all, 4)
-                    .foregroundColor(.secondary)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.secondary, lineWidth: 1)
-                    )
-                Spacer()
-                
-                Text("300")
-                    .font(.system(size: 12))
-            }
+        HStack {
+            Text(title)
+            Slider(value: $value, in: minValue...maxValue)
         }
     }
 }
 
 struct SliderRow_Previews: PreviewProvider {
     static var previews: some View {
-        SliderRow(focalLength: .constant(200))
+        List {
+            SliderRow(title: "Strength",
+                      value: .constant(0.3),
+                      minValue: 0.0,
+                      maxValue: 1.0)
+        }
     }
 }

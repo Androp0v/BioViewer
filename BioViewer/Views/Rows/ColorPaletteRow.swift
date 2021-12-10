@@ -9,17 +9,11 @@ import SwiftUI
 
 struct ColorPaletteRow: View {
     
-    var indent: Bool = false
     @State var showPalettePicker: Bool = false
     let colorPalette: ColorPalette
     
     var body: some View {
         HStack {
-            
-            if indent {
-                Spacer()
-                    .frame(width: 24)
-            }
             Text(NSLocalizedString("Color palette", comment: ""))
             Spacer()
             Button(action: {
