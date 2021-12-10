@@ -25,6 +25,8 @@ class MetalScene: ObservableObject {
     
     /// Wether the scene should render shadows.
     var hasShadows: Bool = true
+    /// Sun position, world coordinates.
+    var sunDirection: simd_float3 = simd_float3(1, 1, 0)
     
     // MARK: - Camera properties
     
@@ -96,12 +98,20 @@ class MetalScene: ObservableObject {
 
         // Setup initial values for FrameData
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
+        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
+        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: 0.0,
                                                                   axis: simd_float3(0.0, 1.0, 0.0))
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: Float.pi,
-                                                                  axis: simd_float3(0.0, 1.0, 0.0)).inverse
-        self.frameData.colorBySubunit = 0 // False
+        self.frameData.inverse_rotation_matrix = Transform.rotationMatrix(radians: 0.0,
+                                                                          axis: simd_float3(0.0, 1.0, 0.0)).inverse
+        
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-200, 200, -200, 200, -200, 200)
+        self.frameData.sunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
+                                                                    axis: simd_float3(-1.0, 0.0, 1.0))
+        self.frameData.inverseSunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
+                                                                           axis: simd_float3(-1.0, 0.0, 1.0)).inverse
+        
+        self.frameData.colorBySubunit = 0 // False, color by atom element
         self.colorBy = ProteinColorByOption.element
         
         // Subscribe to changes in the camera properties
@@ -134,15 +144,20 @@ class MetalScene: ObservableObject {
         guard needsRedraw else { return skipFrame() }
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
+        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        // TO-DO: Re-enable rotation when idle
-        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                    axis: simd_float3(0,1,0))*/
         self.frameData.rotation_matrix = self.userModelRotationMatrix
         self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+        
         updateColors()
         frame += 1
         needsRedraw = false
+        
+        // TO-DO
+        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
+                                                                  axis: simd_float3(0,1,0))
+        self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+        needsRedraw = true*/
     }
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
@@ -155,6 +170,15 @@ class MetalScene: ObservableObject {
         self.camera.farPlane = distanceToModel + protein.boundingSphere.radius
         // Update camera position
         self.cameraPosition = simd_float3(0, 0, distanceToModel)
+        
+        // Update shadow projection to fit too
+        let boundingSphereRadius = protein.boundingSphere.radius
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphereRadius,
+                                                                                  boundingSphereRadius,
+                                                                                 -boundingSphereRadius,
+                                                                                  boundingSphereRadius,
+                                                                                 -distanceToModel - boundingSphereRadius,
+                                                                                 distanceToModel + boundingSphereRadius)
     }
     
     // MARK: - Private

@@ -33,6 +33,10 @@ func normalizeAtomPositions(atoms: inout ContiguousArray<simd_float3>, center: s
 /// - Returns: Position of the center of the bounding sphere and its radius.
 func computeBoundingSphere(atoms: ContiguousArray<simd_float3>, extraMargin: Float = 5) -> BoundingSphere {
     
+    guard atoms.count != 1 else {
+        return BoundingSphere(center: atoms.first!, radius: extraMargin)
+    }
+    
     let boundingBox = computeBoundingBox(atoms: atoms)
     let center: simd_float3 = simd_float3(x: (boundingBox.minX + boundingBox.maxX) / 2,
                                           y: (boundingBox.minY + boundingBox.maxY) / 2,
@@ -61,17 +65,20 @@ func computeBoundingBox(atoms: ContiguousArray<simd_float3>) -> BoundingBox {
         let z = atom.z
         if x > maxX {
             maxX = x
-        } else if x < minX {
+        }
+        if x < minX {
             minX = x
         }
         if y > maxY {
             maxY = y
-        } else if y < minY {
+        }
+        if y < minY {
             minY = y
         }
         if z > maxZ {
             maxZ = z
-        } else if z < minZ {
+        }
+        if z < minZ {
             minZ = z
         }
     }

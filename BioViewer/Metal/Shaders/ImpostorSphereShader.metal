@@ -10,6 +10,9 @@
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
+// TO-DO: Make DEPTH_CUEING an argument
+#define DEPTH_CUEING true
+
 using namespace metal;
 
 struct ImpostorVertexOut{
@@ -56,7 +59,7 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
                                                     1.0);
     // Then translate the triangle to the origin of coordinates
     rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
-    // Reverse the rotation by rotating in the oposite rotation along the billboard axis, NOT
+    // Reverse the rotation by rotating in the opposite rotation along the billboard axis, NOT
     // the protein axis.
     rotated_model = inverse_rotation_matrix * rotated_model;
     // Translate the triangles back to their positions, now that they're already rotated
@@ -92,7 +95,9 @@ struct ImpostorFragmentOut{
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
-                                               const device FrameData& frameData [[ buffer(1) ]] ) {
+                                               const device FrameData& frameData [[ buffer(1) ]],
+                                               depth2d<float> shadowMap [[ texture(0) ]],
+                                               sampler shadowSampler [[ sampler(0) ]]) {
     
     // Declare output
     ImpostorFragmentOut output;
@@ -122,7 +127,6 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     // Compute the position of the fragment in camera space
     float3 spherePosition = (normal * atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
-    //float3 spherePosition = impostor_vertex.atomCenter;
     
     // Add Phong diffuse component
     shadedColor = shadedColor + dot(normal, float3(sunRayDirection)) * reflectivity;
@@ -136,11 +140,48 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     float normalizedDeviceCoordinatesDepth = sphereClipPosition.z / sphereClipPosition.w;
     output.depth = normalizedDeviceCoordinatesDepth;
     
+    // Depth cueing
+    if (DEPTH_CUEING) {
+        shadedColor.rgb -= 0.3 * half3(normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth);
+    }
+    
+    // Add hard shadows
+    simd_float4x4 inverse_model_view_matrix = frameData.inverse_model_view_matrix;
+    float4 sphereShadowModelPosition = ( inverse_model_view_matrix * float4(spherePosition.x,
+                                                                            spherePosition.y,
+                                                                            spherePosition.z,
+                                                                            1.0) );
+    simd_float4x4 sun_rotation_matrix = frameData.sunRotationMatrix;
+    float4 sphereShadowWorldPosition = ( sun_rotation_matrix * float4(sphereShadowModelPosition.x,
+                                                                      sphereShadowModelPosition.y,
+                                                                      sphereShadowModelPosition.z,
+                                                                      1.0) );
+    simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
+    float4 sphereShadowClipPosition = ( shadow_projection_matrix * float4(sphereShadowWorldPosition.x,
+                                                                          sphereShadowWorldPosition.y,
+                                                                          sphereShadowWorldPosition.z,
+                                                                          1.0));
+    
+    // When calculating texture coordinates to sample from shadow map, flip the y/t coordinate and
+    // convert from the [-1, 1] range of clip coordinates to [0, 1] range of
+    // used for texture sampling
+    sphereShadowClipPosition.y *= -1;
+    sphereShadowClipPosition.xy += 1.0;
+    sphereShadowClipPosition.xy /= 2;
+    
+    float shadow_sample = shadowMap.sample_compare(shadowSampler,
+                                                   sphereShadowClipPosition.xy,
+                                                   sphereShadowClipPosition.z);
+    bool is_sunlit = false;
+    if (shadow_sample > 0) {
+        is_sunlit = true;
+    }
+    
     // Color
-    output.color = half4(shadedColor.r,
-                         shadedColor.g,
-                         shadedColor.b,
-                         impostor_vertex.color.a);
+    output.color = half4(shadedColor.r - 0.3 * (1 - is_sunlit),
+                         shadedColor.g - 0.3 * (1 - is_sunlit),
+                         shadedColor.b - 0.3 * (1 - is_sunlit),
+                         1.0);
     
     return output;
 }
