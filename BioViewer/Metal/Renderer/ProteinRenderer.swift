@@ -96,6 +96,8 @@ class ProteinRenderer: NSObject {
         descriptor.colorAttachments[1].loadAction = .clear
         descriptor.colorAttachments[1].storeAction = .store
         
+        descriptor.depthAttachment.storeAction = .store
+        
         descriptor.defaultRasterSampleCount = 1
         descriptor.renderTargetWidth = ShadowTextures.textureWidth
         descriptor.renderTargetHeight = ShadowTextures.textureHeight
@@ -121,6 +123,13 @@ class ProteinRenderer: NSObject {
     }()
     
     // MARK: - Texture descriptors
+    
+    let shadowDepthDescriptor: MTLDepthStencilDescriptor = {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = MTLCompareFunction.less
+        descriptor.isDepthWriteEnabled = true
+        return descriptor
+    }()
 
     let depthDescriptor: MTLDepthStencilDescriptor = {
         let descriptor = MTLDepthStencilDescriptor()
@@ -165,9 +174,10 @@ class ProteinRenderer: NSObject {
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device)
         
-        // Create shadow textures
+        // Create shadow textures and sampler
         shadowTextures.makeTextures(device: device,
                                     size: CGSize(width: ShadowTextures.textureWidth, height: ShadowTextures.textureHeight))
+        shadowTextures.makeShadowSampler(device: device)
         
         // Depth state
         shadowDepthState = device.makeDepthStencilState(descriptor: depthDescriptor)
@@ -291,7 +301,7 @@ extension ProteinRenderer: MTKViewDelegate {
             renderCommandEncoder.setRenderPipelineState(shadowRenderingPipelineState)
             
             // Set depth state
-            renderCommandEncoder.setDepthStencilState(depthState)
+            renderCommandEncoder.setDepthStencilState(shadowDepthState)
             
             // Add buffers to pipeline
             renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
@@ -326,7 +336,7 @@ extension ProteinRenderer: MTKViewDelegate {
 
             renderCommandEncoder.endEncoding()
         }
-        
+                
         // MARK: - Transparent geometry pass
         transparentGeometryBlock: if true {
             
@@ -372,6 +382,8 @@ extension ProteinRenderer: MTKViewDelegate {
                                                    index: 1)
             renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
                                                     index: 0)
+            renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
+                                                         index: 0)
 
             // Don't render back-facing triangles (cull them)
             renderCommandEncoder.setCullMode(.back)
@@ -399,7 +411,7 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Commit buffer
         // Commit command buffer
-        commandBuffer.commit()
+        commandBuffer.commit()        
     }
 
 }

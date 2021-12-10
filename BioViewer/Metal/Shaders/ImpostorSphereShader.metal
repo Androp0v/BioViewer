@@ -10,6 +10,7 @@
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
+// TO-DO: Make DEPTH_CUEING an argument
 #define DEPTH_CUEING true
 
 using namespace metal;
@@ -95,7 +96,8 @@ struct ImpostorFragmentOut{
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
                                                const device FrameData& frameData [[ buffer(1) ]],
-                                               depth2d<float> shadowMap [[ texture(0) ]]) {
+                                               depth2d<float> shadowMap [[ texture(0) ]],
+                                               sampler shadowSampler [[ sampler(0) ]]) {
     
     // Declare output
     ImpostorFragmentOut output;
@@ -160,13 +162,6 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                                                                           sphereShadowWorldPosition.z,
                                                                           1.0));
     
-    constexpr sampler shadowSampler(coord::normalized,
-                                    filter::linear,
-                                    mip_filter::none,
-                                    address::clamp_to_border,
-                                    border_color::opaque_white,
-                                    compare_func::less_equal);
-    
     // When calculating texture coordinates to sample from shadow map, flip the y/t coordinate and
     // convert from the [-1, 1] range of clip coordinates to [0, 1] range of
     // used for texture sampling
@@ -183,15 +178,10 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     }
     // Color
     float testDepthInSunCoordinates = shadowMap.sample(shadowSampler, sphereShadowClipPosition.xy);
-    output.color = half4(shadedColor.r - 0.3 * (1 - is_sunlit), // sphereShadowClipPosition.x, // shadedColor.r - 0.5 * shadow_sample,
-                         shadedColor.g - 0.3 * (1 - is_sunlit), // sphereShadowClipPosition.y, // shadedColor.g - 0.5 * shadow_sample,
-                         shadedColor.b - 0.3 * (1 - is_sunlit), // sphereShadowClipPosition.z, // testDepthInSunCoordinates, // shadedColor.b - 0.5 * shadow_sample,
-                         1.0); // testDepthInSunCoordinates);
-    
-    /*output.color = half4(is_sunlit, // sphereShadowClipPosition.x, // shadedColor.r - 0.5 * shadow_sample,
-                         is_sunlit, // sphereShadowClipPosition.y, // shadedColor.g - 0.5 * shadow_sample,
-                         is_sunlit, // sphereShadowClipPosition.z, // testDepthInSunCoordinates, // shadedColor.b - 0.5 * shadow_sample,
-                         1.0); // testDepthInSunCoordinates);*/
+    output.color = half4(shadedColor.r - 0.3 * (1 - is_sunlit),
+                         shadedColor.g - 0.3 * (1 - is_sunlit),
+                         shadedColor.b - 0.3 * (1 - is_sunlit),
+                         1.0);
     
     return output;
 }

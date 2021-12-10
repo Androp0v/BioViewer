@@ -157,15 +157,18 @@ class MetalScene: ObservableObject {
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        // TO-DO: Re-enable rotation when idle
-        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                    axis: simd_float3(0,1,0))*/
         self.frameData.rotation_matrix = self.userModelRotationMatrix
         self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
- 
+        
         updateColors()
         frame += 1
         needsRedraw = false
+        
+        // FIXME: Write actual autorotate implementation
+        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
+                                                                  axis: simd_float3(0,1,0))
+        self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+        needsRedraw = true*/
     }
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {

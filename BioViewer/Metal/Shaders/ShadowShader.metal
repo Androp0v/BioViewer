@@ -96,9 +96,13 @@ struct ShadowFragmentOut{
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ShadowFragmentOut shadow_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
                                            const device FrameData& frameData [[ buffer(1) ]] ) {
-    
     // Declare output
     ShadowFragmentOut output;
+    
+    /*
+    output.depth = 1.0;
+    return output;
+    */
     
     // squaredLength = x^2 + y^2
     half squaredLength = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
