@@ -106,13 +106,18 @@ struct AppearanceSegmentProtein: View {
                 })
             }
             
+            // MARK: - Shadows section
+            Section(header: Text(NSLocalizedString("Shadows", comment: ""))
+                        .padding(.bottom, 4)) {
+                SwitchRow(title: NSLocalizedString("Cast shadows", comment: ""), toggledVariable: .constant(true))
+                SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""), toggledVariable: .constant(true))
+            }
+            
             // MARK: - Camera section
             Section(header: Text(NSLocalizedString("Focal distance", comment: ""))
-                        .padding(.bottom, 4), content: {
-
+                        .padding(.bottom, 4)) {
                 SliderRow(focalLength: $proteinViewModel.cameraFocalLength)
-
-            })
+            }
 
         }
         .environment(\.defaultMinListHeaderHeight, 0)

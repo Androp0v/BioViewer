@@ -105,24 +105,13 @@ class MetalScene: ObservableObject {
         self.frameData.inverse_rotation_matrix = Transform.rotationMatrix(radians: 0.0,
                                                                           axis: simd_float3(0.0, 1.0, 0.0)).inverse
         
-        // TO-DO: shadowProjectionMatrix may need to change dynamically
-        // FIXME: set clipping planes properly
-        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-50,
-                                                                                 50,
-                                                                                 -50,
-                                                                                 50,
-                                                                                 -200,
-                                                                                 2000)
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-200, 200, -200, 200, -200, 200)
         self.frameData.sunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
                                                                     axis: simd_float3(-1.0, 0.0, 1.0))
-        /*self.frameData.sunRotationMatrix *= Transform.rotationMatrix(radians: -Float.pi,
-                                                                     axis: simd_float3(1.0, 0.0, 0.0))*/
         self.frameData.inverseSunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
                                                                            axis: simd_float3(-1.0, 0.0, 1.0)).inverse
-        /*self.frameData.inverseSunRotationMatrix *= Transform.rotationMatrix(radians: -Float.pi,
-                                                                            axis: simd_float3(1.0, 0.0, 0.0)).inverse*/
         
-        self.frameData.colorBySubunit = 0 // False
+        self.frameData.colorBySubunit = 0 // False, color by atom element
         self.colorBy = ProteinColorByOption.element
         
         // Subscribe to changes in the camera properties
@@ -164,7 +153,7 @@ class MetalScene: ObservableObject {
         frame += 1
         needsRedraw = false
         
-        // FIXME: Write actual autorotate implementation
+        // TO-DO
         /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                   axis: simd_float3(0,1,0))
         self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
@@ -181,6 +170,15 @@ class MetalScene: ObservableObject {
         self.camera.farPlane = distanceToModel + protein.boundingSphere.radius
         // Update camera position
         self.cameraPosition = simd_float3(0, 0, distanceToModel)
+        
+        // Update shadow projection to fit too
+        let boundingSphereRadius = protein.boundingSphere.radius
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphereRadius,
+                                                                                  boundingSphereRadius,
+                                                                                 -boundingSphereRadius,
+                                                                                  boundingSphereRadius,
+                                                                                 -distanceToModel - boundingSphereRadius,
+                                                                                 distanceToModel + boundingSphereRadius)
     }
     
     // MARK: - Private

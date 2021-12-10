@@ -172,12 +172,12 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     float shadow_sample = shadowMap.sample_compare(shadowSampler,
                                                    sphereShadowClipPosition.xy,
                                                    sphereShadowClipPosition.z);
-    float is_sunlit = 0;
+    bool is_sunlit = false;
     if (shadow_sample > 0) {
-        is_sunlit = 1;
+        is_sunlit = true;
     }
+    
     // Color
-    float testDepthInSunCoordinates = shadowMap.sample(shadowSampler, sphereShadowClipPosition.xy);
     output.color = half4(shadedColor.r - 0.3 * (1 - is_sunlit),
                          shadedColor.g - 0.3 * (1 - is_sunlit),
                          shadedColor.b - 0.3 * (1 - is_sunlit),

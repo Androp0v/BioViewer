@@ -45,7 +45,6 @@ struct ShadowTextures {
         shadowTextureDescriptor.pixelFormat = .depth32Float
         shadowTextureDescriptor.usage = [.shaderRead, .shaderWrite, .renderTarget]
         shadowTextureDescriptor.storageMode = .private
-        shadowTextureDescriptor.allowGPUOptimizedContents = false
         shadowDepthTexture = device.makeTexture(descriptor: shadowTextureDescriptor)
         shadowDepthTexture.label = "Shadow Depth Texture"
     }
@@ -55,12 +54,9 @@ struct ShadowTextures {
         let shadowSamplerDescriptor = MTLSamplerDescriptor()
         
         // Address modes
-        shadowSamplerDescriptor.sAddressMode = .clampToBorderColor
-        shadowSamplerDescriptor.rAddressMode = .clampToBorderColor
-        shadowSamplerDescriptor.tAddressMode = .clampToBorderColor
-        
-        // This makes samples outside the texture 'lit' by the ImpostorSphereShader fragment.
-        shadowSamplerDescriptor.borderColor = .opaqueWhite
+        shadowSamplerDescriptor.sAddressMode = .clampToEdge
+        shadowSamplerDescriptor.rAddressMode = .clampToEdge
+        shadowSamplerDescriptor.tAddressMode = .clampToEdge
         
         // Interpolation
         shadowSamplerDescriptor.magFilter = .linear
@@ -72,28 +68,4 @@ struct ShadowTextures {
         
         shadowSampler = device.makeSamplerState(descriptor: shadowSamplerDescriptor)
     }
-}
-
-// FIXME: SHADOW Remove
-func checkIfPopulated(_ texture: MTLTexture) -> Bool {
-    let width = texture.width
-    let height = texture.height
-    let bytesPerRow = width * 4
-
-    let data = UnsafeMutableRawPointer.allocate(byteCount: bytesPerRow * height, alignment: 4)
-    defer {
-        data.deallocate()
-    }
-
-    let region = MTLRegionMake2D(0, 0, width, height)
-    texture.getBytes(data, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
-    var bind = data.assumingMemoryBound(to: UInt8.self)
-
-    for _ in 0..<bytesPerRow * height {
-        if bind.pointee != 0 {
-            return true
-        }
-        bind = bind.advanced(by: 1)
-    }
-    return false
 }
