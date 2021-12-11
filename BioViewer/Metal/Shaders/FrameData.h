@@ -47,10 +47,13 @@ typedef struct {
     
     /// Whether it should cast shadows.
     int8_t has_shadows;
+    /// The strength of the shadow color subtraction, from 0 to 1.
     float shadow_strength;
     
     /// Whether it should cast shadows.
     int8_t has_depth_cueing;
+    /// The strength of the depth cueing, from 0 to 1.
+    float depth_cueing_strength;
     
     /// Displayed atomic color in hard-spheres visualization mode.
     /// When spheres are coloured by element, only the first 6 elements of the array will be used.

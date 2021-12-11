@@ -126,7 +126,7 @@ struct AppearanceSegmentProtein: View {
                     RangeRow(title: "Range:")
                         .indentRow()
                     SliderRow(title: NSLocalizedString("Strength", comment: ""),
-                              value: $proteinViewModel.renderer.scene.shadowStrength,
+                              value: $proteinViewModel.renderer.scene.depthCueingStrength,
                               minValue: 0.0,
                               maxValue: 1.0)
                         .indentRow()

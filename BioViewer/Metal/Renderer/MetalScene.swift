@@ -46,6 +46,7 @@ class MetalScene: ObservableObject {
     @Published var shadowStrength: Float = 0.3 { didSet { needsRedraw = true } }
     /// Whether depth cueing should be used in the scene.
     @Published var hasDepthCueing: Bool { didSet { needsRedraw = true } }
+    @Published var depthCueingStrength: Float = 0.3 { didSet { needsRedraw = true } }
     
     // MARK: - Color properties
     
@@ -128,6 +129,7 @@ class MetalScene: ObservableObject {
         self.hasDepthCueing = false
         
         self.frameData.shadow_strength = shadowStrength
+        self.frameData.depth_cueing_strength = depthCueingStrength
 
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
@@ -172,6 +174,7 @@ class MetalScene: ObservableObject {
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
         self.frameData.shadow_strength = self.shadowStrength
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
+        self.frameData.depth_cueing_strength = self.depthCueingStrength
         
         updateColors()
         frame += 1

@@ -139,7 +139,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     // Depth cueing
     if (frameData.has_depth_cueing) {
-        shadedColor.rgb -= 0.3 * half3(normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth);
+        shadedColor.rgb -= frameData.depth_cueing_strength * half3(normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth);
     }
     
     // Add hard shadows
