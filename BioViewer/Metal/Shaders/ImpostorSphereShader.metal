@@ -126,7 +126,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     float3 spherePosition = (normal * atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
     
     // Add Phong diffuse component
-    shadedColor = shadedColor + dot(normal, float3(sunRayDirection)) * reflectivity;
+    shadedColor = saturate(shadedColor + dot(normal, float3(sunRayDirection)) * reflectivity);
     
     // Recompute fragment depth
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;

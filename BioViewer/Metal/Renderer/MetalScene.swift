@@ -43,7 +43,7 @@ class MetalScene: ObservableObject {
     
     /// Whether shadows should be casted between geometry elements.
     @Published var hasShadows: Bool { didSet { needsRedraw = true } }
-    @Published var shadowStrength: Float = 0.3 { didSet { needsRedraw = true } }
+    @Published var shadowStrength: Float = 0.4 { didSet { needsRedraw = true } }
     /// Whether depth cueing should be used in the scene.
     @Published var hasDepthCueing: Bool { didSet { needsRedraw = true } }
     @Published var depthCueingStrength: Float = 0.3 { didSet { needsRedraw = true } }
@@ -176,9 +176,11 @@ class MetalScene: ObservableObject {
         needsRedraw = false
         
         // TO-DO: Proper camera auto-rotation
+        /*
         updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                      axis: simd_float3(0,1,0)))
         needsRedraw = true
+        */
     }
     
     func updateModelRotation(rotationMatrix: simd_float4x4) {
