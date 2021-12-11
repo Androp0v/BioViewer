@@ -15,7 +15,7 @@ using namespace metal;
 struct ImpostorVertexOut{
     float4 position [[position]];
     float3 atomCenter;
-    float2 billboardMapping;
+    half2 billboardMapping;
     uint8_t atomType;
     float4 color;
 };
@@ -33,7 +33,7 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     int verticesPerAtom = 4;
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = vertex_buffer[vid].billboardMapping;
+    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vid].billboardMapping.xy);
     normalized_impostor_vertex.atomType = atomType[vid / verticesPerAtom];
 
     // Fetch the matrices
@@ -109,18 +109,18 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                               impostor_vertex.color.b);
     
     
-    // squaredLength = x^2 + y^2
-    half squaredLength = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
+    // dot = x^2 + y^2
+    half length = sqrt(1.0 - dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping));
     
     // Discard pixels outside the sphere center (no need to do the sqrt)
-    if (squaredLength > 1) {
+    if (length > 1) {
         discard_fragment();
     }
     
     // Compute the normal in camera space
     float3 normal = float3(impostor_vertex.billboardMapping.x,
                            impostor_vertex.billboardMapping.y,
-                           -sqrt(1.0 - squaredLength));
+                           -length);
     
     // Compute the position of the fragment in camera space
     float3 spherePosition = (normal * atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
@@ -144,23 +144,6 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     // Add hard shadows
     if (frameData.has_shadows) {
-        /*
-        simd_float4x4 inverse_model_view_matrix = frameData.inverse_model_view_matrix;
-        float4 sphereShadowModelPosition = ( inverse_model_view_matrix * float4(spherePosition.x,
-                                                                                spherePosition.y,
-                                                                                spherePosition.z,
-                                                                                1.0) );
-        simd_float4x4 sun_rotation_matrix = frameData.sun_rotation_matrix;
-        float4 sphereShadowWorldPosition = ( sun_rotation_matrix * float4(sphereShadowModelPosition.x,
-                                                                          sphereShadowModelPosition.y,
-                                                                          sphereShadowModelPosition.z,
-                                                                          1.0) );
-        simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
-        float4 sphereShadowClipPosition = ( shadow_projection_matrix * float4(sphereShadowWorldPosition.x,
-                                                                              sphereShadowWorldPosition.y,
-                                                                              sphereShadowWorldPosition.z,
-                                                                              1.0));
-        */
         
         simd_float4x4 camera_to_shadow_projection_matrix = frameData.camera_to_shadow_projection_matrix;
         float4 sphereShadowClipPosition = ( camera_to_shadow_projection_matrix * float4(spherePosition.x,
