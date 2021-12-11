@@ -144,12 +144,13 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     // Add hard shadows
     if (frameData.has_shadows) {
+        /*
         simd_float4x4 inverse_model_view_matrix = frameData.inverse_model_view_matrix;
         float4 sphereShadowModelPosition = ( inverse_model_view_matrix * float4(spherePosition.x,
                                                                                 spherePosition.y,
                                                                                 spherePosition.z,
                                                                                 1.0) );
-        simd_float4x4 sun_rotation_matrix = frameData.sunRotationMatrix;
+        simd_float4x4 sun_rotation_matrix = frameData.sun_rotation_matrix;
         float4 sphereShadowWorldPosition = ( sun_rotation_matrix * float4(sphereShadowModelPosition.x,
                                                                           sphereShadowModelPosition.y,
                                                                           sphereShadowModelPosition.z,
@@ -159,6 +160,13 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                                                                               sphereShadowWorldPosition.y,
                                                                               sphereShadowWorldPosition.z,
                                                                               1.0));
+        */
+        
+        simd_float4x4 camera_to_shadow_projection_matrix = frameData.camera_to_shadow_projection_matrix;
+        float4 sphereShadowClipPosition = ( camera_to_shadow_projection_matrix * float4(spherePosition.x,
+                                                                                        spherePosition.y,
+                                                                                        spherePosition.z,
+                                                                                        1.0));
         
         // When calculating texture coordinates to sample from shadow map, flip the y/t coordinate and
         // convert from the [-1, 1] range of clip coordinates to [0, 1] range of

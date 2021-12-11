@@ -9,10 +9,11 @@ import Foundation
 import MetalKit
 import SwiftUI
 
-class ProteinRenderer: NSObject {
+class ProteinRenderer: NSObject, ObservableObject {
     
     // MARK: - Constants
-    var maxBuffersInFlight = 3
+    
+    let maxBuffersInFlight = 3
     
     // MARK: - Metal variables
     
@@ -399,11 +400,12 @@ extension ProteinRenderer: MTKViewDelegate {
         // MARK: - Triple buffering
         
         // Schedule a drawable presentation to occur after the GPU completes its work
+        // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
         commandBuffer.present(drawable)
         
         commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
-            // GPU work is complete, signal the semaphore to start the CPU work
             guard let self = self else { return }
+            // GPU work is complete, signal the semaphore to start the CPU work
             self.frameBoundarySemaphore.signal()
         })
         

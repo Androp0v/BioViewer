@@ -84,6 +84,9 @@
 		C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024D27639B43005D7F06 /* SliderRow.swift */; };
 		C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024F2763CB0C005D7F06 /* RangeRow.swift */; };
 		C50E02532763D1B2005D7F06 /* IndentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02522763D1B2005D7F06 /* IndentRow.swift */; };
+		C50E02552764B5BE005D7F06 /* PDBLikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */; };
+		C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */; };
+		C50E02582764C4BE005D7F06 /* PhysicsLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02572764C4BE005D7F06 /* PhysicsLoop.swift */; };
 		C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */; };
 		C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */; };
 		C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBD274E691800B6F7DB /* InfoTextRow.swift */; };
@@ -283,6 +286,8 @@
 		C50E024D27639B43005D7F06 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C50E024F2763CB0C005D7F06 /* RangeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeRow.swift; sourceTree = "<group>"; };
 		C50E02522763D1B2005D7F06 /* IndentRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndentRow.swift; sourceTree = "<group>"; };
+		C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDBLikeConstants.swift; sourceTree = "<group>"; };
+		C50E02572764C4BE005D7F06 /* PhysicsLoop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsLoop.swift; sourceTree = "<group>"; };
 		C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementPopover.swift; sourceTree = "<group>"; };
 		C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementRow.swift; sourceTree = "<group>"; };
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
@@ -610,6 +615,7 @@
 				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
 				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
 				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
+				C50E02572764C4BE005D7F06 /* PhysicsLoop.swift */,
 				C49D9D31271C469100E12E2F /* MetalScene.swift */,
 				C515EFC2274FEA0900B6F7DB /* ColorScene.swift */,
 				C46435612669313A00434CC6 /* Camera.swift */,
@@ -728,6 +734,7 @@
 		C54066FC274D20BE00710CFC /* Parsers */ = {
 			isa = PBXGroup;
 			children = (
+				C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */,
 				C54066F9274D1C7900710CFC /* ParsePDB.swift */,
 			);
 			path = Parsers;
@@ -1051,6 +1058,7 @@
 				C45BAC4526497A3300B36026 /* ProteinCameraControlView.swift in Sources */,
 				C50E02532763D1B2005D7F06 /* IndentRow.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
+				C50E02582764C4BE005D7F06 /* PhysicsLoop.swift in Sources */,
 				C4057407265E93E9008527D1 /* RemovePoints.metal in Sources */,
 				C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */,
 				C41A0566264C7B97006F551C /* StatusView.swift in Sources */,
@@ -1061,6 +1069,7 @@
 				C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */,
 				C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */,
 				C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */,
+				C50E02552764B5BE005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
@@ -1163,6 +1172,7 @@
 				C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */,
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
 				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
+				C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,
 				C515EFC4274FEA8400B6F7DB /* ColorScene.swift in Sources */,
 				C54066FB274D1CA600710CFC /* ParsePDB.swift in Sources */,

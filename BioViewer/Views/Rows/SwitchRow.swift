@@ -14,8 +14,13 @@ struct SwitchRow: View {
     @Binding var toggledVariable: Bool
 
     var body: some View {
+        #if targetEnvironment(macCatalyst)
+        Toggle(title, isOn: $toggledVariable)
+            .tint(.accentColor)
+        #else
         Toggle(title, isOn: $toggledVariable.animation())
             .tint(.accentColor)
+        #endif
     }
 
 }

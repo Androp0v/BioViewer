@@ -74,7 +74,7 @@ struct ProteinView: View {
                             }
                         }
                         .padding(.bottom, 12)
-
+                        
                         // Import view
                         if proteinViewModel.proteinCount == 0 {
                             ProteinImportView()

@@ -107,16 +107,6 @@ class MetalScene: ObservableObject {
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        self.frameData.rotation_matrix = Transform.rotationMatrix(radians: 0.0,
-                                                                  axis: simd_float3(0.0, 1.0, 0.0))
-        self.frameData.inverse_rotation_matrix = Transform.rotationMatrix(radians: 0.0,
-                                                                          axis: simd_float3(0.0, 1.0, 0.0)).inverse
-        
-        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-200, 200, -200, 200, -200, 200)
-        self.frameData.sunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
-                                                                    axis: simd_float3(-1.0, 0.0, 1.0))
-        self.frameData.inverseSunRotationMatrix = Transform.rotationMatrix(radians: Float.pi / 2,
-                                                                           axis: simd_float3(-1.0, 0.0, 1.0)).inverse
         
         self.frameData.colorBySubunit = 0 // False, color by atom element
         self.colorBy = ProteinColorByOption.element
@@ -136,6 +126,10 @@ class MetalScene: ObservableObject {
             guard let self = self else { return }
             self.needsRedraw = true
         })
+        
+        // Initial rotation matrix values
+        updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: 0.0,
+                                                                     axis: simd_float3(0.0, 1.0, 0.0)))
         
         // Pass cast shadows and depth cueing to FrameData
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
@@ -167,8 +161,9 @@ class MetalScene: ObservableObject {
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        self.frameData.rotation_matrix = self.userModelRotationMatrix
-        self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
+        
+        // Update rotation matrices
+        updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
         
         // Update shadow behaviour
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
@@ -180,11 +175,28 @@ class MetalScene: ObservableObject {
         frame += 1
         needsRedraw = false
         
-        // TO-DO
-        /*self.frameData.rotation_matrix = Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                  axis: simd_float3(0,1,0))
-        self.frameData.inverse_rotation_matrix = self.frameData.rotation_matrix.inverse
-        needsRedraw = true*/
+        // TO-DO: Proper camera auto-rotation
+        updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
+                                                                     axis: simd_float3(0,1,0)))
+        needsRedraw = true
+    }
+    
+    func updateModelRotation(rotationMatrix: simd_float4x4) {
+        
+        // Update model rotation matrix
+        self.frameData.rotation_matrix = rotationMatrix
+        self.frameData.inverse_rotation_matrix = rotationMatrix.inverse
+        
+        // Update sun rotation matrix (model rotation + sun rotation)
+        let sunRotation = Transform.rotationMatrix(radians: Float.pi / 2,
+                                                   axis: simd_float3(-1.0, 0.0, 1.0))
+        self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix
+        self.frameData.inverse_sun_rotation_matrix = rotationMatrix.inverse * sunRotation.inverse
+        
+        // Update camera -> sun's coordinate transform
+        self.frameData.camera_to_shadow_projection_matrix = self.frameData.shadowProjectionMatrix
+            * sunRotation
+            * Transform.translationMatrix(cameraPosition).inverse
     }
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
