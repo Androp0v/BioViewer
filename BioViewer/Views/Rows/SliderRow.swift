@@ -14,12 +14,14 @@ struct SliderRow: View {
     let minValue: Float
     let maxValue: Float
     
-    let formatter: NumberFormatter = { () -> NumberFormatter in
+    func getNumberFormatter(min: Float, max: Float) -> NumberFormatter {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         numberFormatter.maximumFractionDigits = 1
+        numberFormatter.minimum = min as NSNumber
+        numberFormatter.maximum = max as NSNumber
         return numberFormatter
-    }()
+    }
     
     var body: some View {
         HStack {
@@ -30,7 +32,7 @@ struct SliderRow: View {
             Stepper(value: $value, in: 0...1, step: 0.1) {
                 TextField("Value",
                           value: $value,
-                          formatter: formatter)
+                          formatter: getNumberFormatter(min: minValue, max: maxValue))
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             .frame(maxWidth: 64)
