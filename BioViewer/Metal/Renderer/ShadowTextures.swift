@@ -26,6 +26,7 @@ struct ShadowTextures {
     
     mutating func makeTextures(device: MTLDevice, size: CGSize) {
         
+        // MARK: - Common texture descriptor
         let shadowTextureDescriptor = MTLTextureDescriptor
             .texture2DDescriptor(pixelFormat: ShadowTextures.shadowTexturePixelFormat,
                                  width: ShadowTextures.textureWidth,
@@ -34,20 +35,31 @@ struct ShadowTextures {
         
         shadowTextureDescriptor.textureType = .type2D
         
-        // Shadow color texture
+        // MARK: - Shadow color texture
+        
         shadowTextureDescriptor.pixelFormat = ShadowTextures.shadowTexturePixelFormat
         shadowTextureDescriptor.usage = [.renderTarget]
-        shadowTextureDescriptor.storageMode = .memoryless
+        
+        // Memoryless storage mode only works on TBDR GPUs
+        if device.supportsFamily(.apple1) {
+            shadowTextureDescriptor.storageMode = .memoryless
+        } else {
+            shadowTextureDescriptor.storageMode = .private
+        }
+        
         shadowTexture = device.makeTexture(descriptor: shadowTextureDescriptor)
         shadowTexture.label = "Shadow Texture"
         
-        // Shadow depth texture
+        // MARK: - Shadow depth texture
+        
         shadowTextureDescriptor.pixelFormat = .depth32Float
         shadowTextureDescriptor.usage = [.shaderRead, .shaderWrite, .renderTarget]
         shadowTextureDescriptor.storageMode = .private
         shadowDepthTexture = device.makeTexture(descriptor: shadowTextureDescriptor)
         shadowDepthTexture.label = "Shadow Depth Texture"
     }
+    
+    // MARK: - Shadow sampler
     
     mutating func makeShadowSampler(device: MTLDevice) {
         
