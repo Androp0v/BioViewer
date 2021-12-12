@@ -103,21 +103,12 @@ class ProteinRenderer: NSObject, ObservableObject {
         return descriptor
     }()
     
-    let opaqueRenderPassDescriptor: MTLRenderPassDescriptor = {
-        let descriptor = MTLRenderPassDescriptor()
-        // colorAttachments[0] is the final drawable texture, set in draw()
-        // colorAttachments[1] is the depth texture
-        descriptor.colorAttachments[1].loadAction = .dontCare
-        return descriptor
-    }()
-    
     let impostorRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
-        // Load the depth of the already populated opaque geometry pass
         descriptor.colorAttachments[0].loadAction = .clear
         descriptor.colorAttachments[0].storeAction = .store
-        descriptor.colorAttachments[1].loadAction = .load
-        descriptor.colorAttachments[1].storeAction = .dontCare
+        descriptor.depthAttachment.loadAction = .clear
+        descriptor.depthAttachment.storeAction = .dontCare
         return descriptor
     }()
     
@@ -230,9 +221,6 @@ extension ProteinRenderer: MTKViewDelegate {
         // Check if the scene needs to be redrawn
         guard scene.needsRedraw else { return }
         
-        // Retrieve current view drawable
-        guard let drawable = view.currentDrawable else { return }
-        
         // Assure buffers are loaded
         guard let subunitBuffer = self.subunitBuffer else { return }
         guard let atomTypeBuffer = self.atomTypeBuffer else { return }
@@ -335,73 +323,79 @@ extension ProteinRenderer: MTKViewDelegate {
 
             renderCommandEncoder.endEncoding()
         }
+        
+        // MARK: - Getting drawable
+        // The final pass can only render if a drawable is available, otherwise it needs to skip
+        // rendering this frame. Get the drawable as late as possible.
+        if let drawable = view.currentDrawable {
                 
-        // MARK: - Transparent geometry pass
-        transparentGeometryBlock: if true {
-            
-            // Ensure transparent buffers are loaded
-            guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
-            guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
-            
-            // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-            impostorRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
-            impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
-            impostorRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
+            // MARK: - Transparent geometry pass
+            transparentGeometryBlock: if true {
+                
+                // Ensure transparent buffers are loaded
+                guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
+                guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
+                
+                // Attach textures. colorAttachments[0] is the final texture we draw onscreen
+                impostorRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
+                impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
+                impostorRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
 
-            // Create render command encoder
-            guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
-                break transparentGeometryBlock
+                // Create render command encoder
+                guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
+                    break transparentGeometryBlock
+                }
+
+                // Set pipeline state
+                guard let impostorRenderingPipelineState = impostorRenderingPipelineState else {
+                    break transparentGeometryBlock
+                }
+                renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
+
+                // Set depth state
+                renderCommandEncoder.setDepthStencilState(depthState)
+
+                // Add buffers to pipeline
+                renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
+                                                     offset: 0,
+                                                     index: 0)
+                renderCommandEncoder.setVertexBuffer(subunitBuffer,
+                                                     offset: 0,
+                                                     index: 1)
+                renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+                                                     offset: 0,
+                                                     index: 2)
+                renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                                     offset: 0,
+                                                     index: 3)
+                
+                renderCommandEncoder.setFragmentBuffer(uniformBuffer,
+                                                       offset: 0,
+                                                       index: 1)
+                renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
+                                                        index: 0)
+                renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
+                                                             index: 0)
+
+                // Don't render back-facing triangles (cull them)
+                renderCommandEncoder.setCullMode(.back)
+
+                // Draw primitives
+                renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                           indexCount: impostorIndexBuffer.length / MemoryLayout<UInt32>.stride,
+                                                           indexType: .uint32,
+                                                           indexBuffer: impostorIndexBuffer,
+                                                           indexBufferOffset: 0)
+
+                renderCommandEncoder.endEncoding()
             }
-
-            // Set pipeline state
-            guard let impostorRenderingPipelineState = impostorRenderingPipelineState else {
-                break transparentGeometryBlock
-            }
-            renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
-
-            // Set depth state
-            renderCommandEncoder.setDepthStencilState(depthState)
-
-            // Add buffers to pipeline
-            renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
-                                                 offset: 0,
-                                                 index: 0)
-            renderCommandEncoder.setVertexBuffer(subunitBuffer,
-                                                 offset: 0,
-                                                 index: 1)
-            renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
-                                                 offset: 0,
-                                                 index: 2)
-            renderCommandEncoder.setVertexBuffer(uniformBuffer,
-                                                 offset: 0,
-                                                 index: 3)
             
-            renderCommandEncoder.setFragmentBuffer(uniformBuffer,
-                                                   offset: 0,
-                                                   index: 1)
-            renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
-                                                    index: 0)
-            renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
-                                                         index: 0)
-
-            // Don't render back-facing triangles (cull them)
-            renderCommandEncoder.setCullMode(.back)
-
-            // Draw primitives
-            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                       indexCount: impostorIndexBuffer.length / MemoryLayout<UInt32>.stride,
-                                                       indexType: .uint32,
-                                                       indexBuffer: impostorIndexBuffer,
-                                                       indexBufferOffset: 0)
-
-            renderCommandEncoder.endEncoding()
+            // MARK: - Triple buffering
+            
+            // Schedule a drawable presentation to occur after the GPU completes its work
+            // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
+            commandBuffer.present(drawable)
         }
-        
-        // MARK: - Triple buffering
-        
-        // Schedule a drawable presentation to occur after the GPU completes its work
-        // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
-        commandBuffer.present(drawable)
         
         commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
             guard let self = self else { return }

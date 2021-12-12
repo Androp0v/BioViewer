@@ -17,7 +17,7 @@ struct ImpostorVertexOut{
     float3 atomCenter;
     half2 billboardMapping;
     uint8_t atomType;
-    float4 color;
+    half4 color;
 };
 
 // MARK: - Vertex function
@@ -73,10 +73,10 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     
     if (frameData.colorBySubunit) {
         // Color the atom based on the subunit type
-        normalized_impostor_vertex.color = frameData.atomColor[ subunitIndex[vid / verticesPerAtom] ];
+        normalized_impostor_vertex.color = half4(frameData.atomColor[ subunitIndex[vid / verticesPerAtom] ]);
     } else {
         // Color the atom based on the atom type
-        normalized_impostor_vertex.color = frameData.atomColor[ atomType[vid / verticesPerAtom] ];
+        normalized_impostor_vertex.color = half4(frameData.atomColor[ atomType[vid / verticesPerAtom] ]);
     }
 
     // Return the processed vertex
@@ -100,14 +100,11 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     ImpostorFragmentOut output;
     
     // Phong diffuse shading
-    half3 sunRayDirection = normalize(half3(1, 1, 0));
+    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
     half reflectivity = 0.3;
     
     // Add base color
-    half3 shadedColor = half3(impostor_vertex.color.r,
-                              impostor_vertex.color.g,
-                              impostor_vertex.color.b);
-    
+    half3 shadedColor = impostor_vertex.color.rgb;
     
     // dot = x^2 + y^2
     half length = sqrt(1.0 - dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping));
@@ -118,15 +115,15 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     }
     
     // Compute the normal in camera space
-    float3 normal = float3(impostor_vertex.billboardMapping.x,
-                           impostor_vertex.billboardMapping.y,
-                           -length);
+    half3 normal = half3(impostor_vertex.billboardMapping.x,
+                         impostor_vertex.billboardMapping.y,
+                         -length);
     
     // Compute the position of the fragment in camera space
-    float3 spherePosition = (normal * atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
+    float3 spherePosition = (float3(normal) * atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
     
     // Add Phong diffuse component
-    shadedColor = saturate(shadedColor + dot(normal, float3(sunRayDirection)) * reflectivity);
+    shadedColor = saturate(shadedColor + dot(normal, sunRayDirection) * reflectivity);
     
     // Recompute fragment depth
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
@@ -139,7 +136,9 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     // Depth cueing
     if (frameData.has_depth_cueing) {
-        shadedColor.rgb -= frameData.depth_cueing_strength * half3(normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth, normalizedDeviceCoordinatesDepth);
+        shadedColor.rgb -= frameData.depth_cueing_strength * half3(normalizedDeviceCoordinatesDepth,
+                                                                   normalizedDeviceCoordinatesDepth,
+                                                                   normalizedDeviceCoordinatesDepth);
     }
     
     // Add hard shadows
@@ -172,10 +171,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     }
     
     // Final color
-    output.color = half4(shadedColor.r,
-                         shadedColor.g,
-                         shadedColor.b,
-                         1.0);
+    output.color = half4(shadedColor.rgb, 1.0);
     
     return output;
 }
