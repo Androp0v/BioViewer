@@ -16,17 +16,24 @@ struct FileSegmentProtein: View {
             List {
                 // First section hast 64pt padding to account for the
                 // space under the segmented control.
+                /*
                 Section(header: Text(NSLocalizedString("Workspace", comment: ""))
                             .padding(.top, 52)
                             .padding(.bottom, 4),
                         content: {
                             WorkspaceRow()
                 })
+                */
                 
-                if proteinViewModel.dataSource.files.count != 0 {
-                    Section(header: Text(NSLocalizedString("Loaded files", comment: "")).padding(.bottom, 4)) {
+                // First section hast 64pt padding to account for the
+                // space under the segmented control.
+                Section(header: Text(NSLocalizedString("Loaded files", comment: ""))
+                            .padding(.top, 52)
+                            .padding(.bottom, 4)) {
+                    if proteinViewModel.dataSource.files.count == 0 {
+                        EmptyFileRow()
+                    } else {
                         ForEach(Array(proteinViewModel.dataSource.files.enumerated()), id: \.offset) { index, file in
-                            // TO-DO: file size
                             FileRow(fileName: file.fileName,
                                     fileExtension: file.fileExtension,
                                     fileIndex: index,

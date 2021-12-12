@@ -139,7 +139,7 @@ struct ProteinImportView: View {
             willLoadProtein = true
             // Dispatch on background queue, file loading can be slow
             DispatchQueue.global(qos: .userInitiated).async {
-                guard let fileURL = Bundle.main.url(forResource: "2OGM", withExtension: "pdb") else {
+                guard let fileURL = Bundle.main.url(forResource: "3JBT", withExtension: "pdb") else {
                     failedToLoad()
                     return
                 }

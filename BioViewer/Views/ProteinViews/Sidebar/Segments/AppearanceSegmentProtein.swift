@@ -73,9 +73,11 @@ struct AppearanceSegmentProtein: View {
                               selectedOption: $proteinViewModel.renderer.scene.colorBy,
                               pickerOptions: ["Element",
                                               "Subunit"])
-                    // TO-DO: Make it work
+                    // TO-DO: Make color palette work
+                    /*
                     ColorPaletteRow(colorPalette: ColorPalette(.default))
                         .indentRow()
+                    */
                     if proteinViewModel.renderer.scene.colorBy == ProteinColorByOption.element {
                         ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
                                        selectedColor: $proteinViewModel.renderer.scene.cAtomColor)
@@ -123,8 +125,11 @@ struct AppearanceSegmentProtein: View {
                 SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""),
                           toggledVariable: $proteinViewModel.renderer.scene.hasDepthCueing)
                 if proteinViewModel.renderer.scene.hasDepthCueing {
+                    // TO-DO:
+                    /*
                     RangeRow(title: "Range:")
                         .indentRow()
+                    */
                     SliderRow(title: NSLocalizedString("Strength", comment: ""),
                               value: $proteinViewModel.renderer.scene.depthCueingStrength,
                               minValue: 0.0,
