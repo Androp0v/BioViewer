@@ -7,7 +7,17 @@
 
 import Foundation
 
+// MARK: - ProteinFileType
+enum ProteinFileType {
+    case staticStructure
+    case dynamicStructure
+}
+
+// MARK: - ProteinFile
+
 class ProteinFile {
+    
+    let fileType: ProteinFileType
     
     let fileName: String
     let fileExtension: String
@@ -16,7 +26,8 @@ class ProteinFile {
     let protein: Protein
     let fileInfo: ProteinFileInfo
     
-    init(fileName: String, fileExtension: String, protein: inout Protein, fileInfo: ProteinFileInfo, byteSize: Int?) {
+    init(fileType: ProteinFileType, fileName: String, fileExtension: String, protein: inout Protein, fileInfo: ProteinFileInfo, byteSize: Int?) {
+        self.fileType = fileType
         self.fileName = fileName
         self.fileExtension = fileExtension
         self.protein = protein

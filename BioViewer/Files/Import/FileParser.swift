@@ -11,11 +11,10 @@ import Foundation
 
 class FileParser {
     func parseTextFile(rawText: String, fileName: String, fileExtension: String, byteSize: Int?, fileInfo: ProteinFileInfo?, proteinViewModel: ProteinViewModel?) throws -> ProteinFile {
-
-        if fileExtension == "pdb"
-            || fileExtension == "PDB"
-            || fileExtension == "pdb1"
-            || fileExtension == "PDB1" {
+        
+        switch fileExtension {
+        // MARK: - PDB Files
+        case "pdb", "PDB", "pdb1", "PDB1":
             proteinViewModel?.statusUpdate(statusText: "Importing file")
             do {
                 let proteinFile = try parsePDBLike(fileName: fileName,
@@ -32,7 +31,26 @@ class FileParser {
                 proteinViewModel?.statusFinished(importError: ImportError.unknownError)
                 throw ImportError.unknownError
             }
-        } else {
+        // MARK: - XYZ Files
+        case "xyz", "XYZ":
+            proteinViewModel?.statusUpdate(statusText: "Importing file")
+            do {
+                let proteinFile = try parseXYZ(fileName: fileName,
+                                               fileExtension: fileExtension,
+                                               byteSize: byteSize,
+                                               rawText: rawText,
+                                               proteinViewModel: proteinViewModel,
+                                               originalFileInfo: fileInfo)
+                return proteinFile
+            } catch let error as ImportError {
+                proteinViewModel?.statusFinished(importError: error)
+                throw ImportError.emptyAtomCount
+            } catch {
+                proteinViewModel?.statusFinished(importError: ImportError.unknownError)
+                throw ImportError.unknownError
+            }
+        // MARK: - Unknown Files
+        default:
             proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
             throw ImportError.unknownFileType
         }

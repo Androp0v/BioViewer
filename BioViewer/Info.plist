@@ -24,6 +24,16 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>XYZ</string>
+			<key>LSHandlerRank</key>
+			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.raulmonton.bioviewer.xyz</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>BioViewer Workspace</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
@@ -124,6 +134,29 @@
 					<string>pdb1</string>
 					<string>PDB</string>
 					<string>pdb</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>LSSupportsOpeningDocumentsInPlace</key>
+			<true/>
+			<key>UISupportsDocumentBrowser</key>
+			<true/>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>XYZ File</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
+			<key>UTTypeIdentifier</key>
+			<string>com.raulmonton.bioviewer.xyz</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xyz</string>
 				</array>
 			</dict>
 		</dict>

@@ -64,18 +64,18 @@ struct ProteinView: View {
                             .edgesIgnoringSafeArea([.top, .bottom])
                         
                         // Scene controls
-                        /*
                         VStack(spacing: 12) {
                             Spacer()
-                            ProteinCameraControlView()
+                            DynamicStructureControlView()
+                            /*
                             if toggleSequenceView {
                                 ProteinSequenceView()
                                     .padding(.horizontal, 12)
                                     .frame(minWidth: 32, maxWidth: sequenceViewMaxWidth)
                             }
+                            */
                         }
                         .padding(.bottom, 12)
-                        */
                         
                         // Import view
                         if proteinViewModel.proteinCount == 0 {

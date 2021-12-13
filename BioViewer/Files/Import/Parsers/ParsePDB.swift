@@ -316,7 +316,8 @@ extension FileParser {
                               atomIdentifiers: atomIdentifiers,
                               sequence: sequenceArray)
         
-        return ProteinFile(fileName: fileName,
+        return ProteinFile(fileType: .staticStructure,
+                           fileName: fileName,
                            fileExtension: fileExtension,
                            protein: &protein,
                            fileInfo: fileInfo,
