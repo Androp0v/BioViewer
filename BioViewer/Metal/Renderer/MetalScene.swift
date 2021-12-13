@@ -68,7 +68,7 @@ class MetalScene: ObservableObject {
         didSet { needsRedraw = true }
     }
     
-    @Published var hAtomColor: Color = Color(.displayP3, red: 0.517, green: 0.517, blue: 0.517, opacity: 1.0) {
+    @Published var hAtomColor: Color = Color(.displayP3, red: 1.000, green: 1.000, blue: 1.000, opacity: 1.0) {
         didSet { needsRedraw = true }
     }
     
