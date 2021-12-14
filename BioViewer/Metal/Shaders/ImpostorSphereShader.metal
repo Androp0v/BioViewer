@@ -10,6 +10,9 @@
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
+#define PERCENTAGE_CLOSE_FILTERING
+//#define SURFACE_CLOSE_FILTERING
+
 using namespace metal;
 
 struct ImpostorVertexOut{
@@ -19,6 +22,21 @@ struct ImpostorVertexOut{
     uint8_t atomType;
     half4 color;
 };
+
+// MARK: - Functions
+
+half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
+    half GoldenAngle = 2.4f;
+
+    half r = radius_scale * sqrt(sampleIndex + 0.5f) / sqrt(half(samplesCount));
+    half theta = sampleIndex * GoldenAngle + phi;
+
+    half2 sine_cosine;
+    sincos(theta, sine_cosine);
+  
+    return half2(r * sine_cosine.y, r * sine_cosine.x);
+}
+
 
 // MARK: - Vertex function
 
@@ -114,7 +132,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         discard_fragment();
     }
     
-    // Compute the normal in camera space
+    // Compute the normal in atom space
     half3 normal = half3(impostor_vertex.billboardMapping.x,
                          impostor_vertex.billboardMapping.y,
                          -length);
@@ -122,8 +140,9 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     // Compute the position of the fragment in camera space
     float3 spherePosition = (float3(normal) * atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
     
-    // Add Phong diffuse component
-    shadedColor = saturate(shadedColor + dot(normal, sunRayDirection) * reflectivity);
+    // Compute Phong diffuse component
+    half phongDiffuse = dot(normal, sunRayDirection) * reflectivity;
+    shadedColor = saturate(shadedColor + phongDiffuse);
     
     // Recompute fragment depth
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
@@ -145,10 +164,10 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     if (frameData.has_shadows) {
         
         simd_float4x4 camera_to_shadow_projection_matrix = frameData.camera_to_shadow_projection_matrix;
-        float4 sphereShadowClipPosition = ( camera_to_shadow_projection_matrix * float4(spherePosition.x,
+        float3 sphereShadowClipPosition = ( camera_to_shadow_projection_matrix * float4(spherePosition.x,
                                                                                         spherePosition.y,
                                                                                         spherePosition.z,
-                                                                                        1.0));
+                                                                                        1.0)).xyz;
         
         // When calculating texture coordinates to sample from shadow map, flip the y/t coordinate and
         // convert from the [-1, 1] range of clip coordinates to [0, 1] range of
@@ -157,6 +176,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         sphereShadowClipPosition.xy += 1.0;
         sphereShadowClipPosition.xy /= 2;
         
+        #ifndef PERCENTAGE_CLOSE_FILTERING
         float shadow_sample = shadowMap.sample_compare(shadowSampler,
                                                        sphereShadowClipPosition.xy,
                                                        sphereShadowClipPosition.z);
@@ -168,6 +188,19 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         
         // Add the shadow to the shadedColor by subtracting color
         shadedColor.rgb -= frameData.shadow_strength * (1 - is_sunlit);
+        #else
+        float sunlit_fraction = 0;
+        constexpr int sample_count = 2;
+        for (int sample_index = 0; sample_index < sample_count; sample_index++) {
+            half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 0);
+            sunlit_fraction += shadowMap.sample_compare(shadowSampler,
+                                                        sphereShadowClipPosition.xy + float2(sample_offset),
+                                                        sphereShadowClipPosition.z);
+        }
+        
+        // Add the shadow to the shadedColor by subtracting color
+        shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+        #endif
     }
     
     // Final color

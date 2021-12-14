@@ -126,6 +126,7 @@ extension FileParser {
         guard let firstConfiguration = configurations.first else {
             throw ImportError.unknownError
         }
+        let configurationCount = configurations.count
 
         // Add element array contents into the contiguous array
         let totalCount: Int = firstConfiguration.atomArrayComposition.totalCount
