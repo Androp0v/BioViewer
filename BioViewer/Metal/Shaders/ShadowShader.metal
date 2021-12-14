@@ -10,6 +10,9 @@
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
+// Depth offset used to avoid shadow acne
+#define DEPTH_OFFSET 0.001
+
 using namespace metal;
 
 struct ShadowVertexOut{
@@ -104,8 +107,10 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
                                                                       sphereWorldPosition.y,
                                                                       sphereWorldPosition.z,
                                                                       1.0) );
-    // No need to divide by sphereClipPosition.w since after the orthogonal projection w will always be 1.0
-    output.depth = sphereClipPosition.z;
+    // No need to divide by sphereClipPosition.w since after the orthogonal projection w will always be 1.0.
+    // Also, a depth offset is added to avoid self-shadowing on small molecules (the output depth here being
+    // just slightly too short and failing the depth comparison on the ImpostorShader).
+    output.depth = sphereClipPosition.z + DEPTH_OFFSET;
     
     return output;
 }

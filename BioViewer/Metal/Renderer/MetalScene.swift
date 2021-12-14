@@ -218,8 +218,8 @@ class MetalScene: ObservableObject {
                                                                                   boundingSphereRadius - 3.3,
                                                                                  -boundingSphereRadius + 3.3,
                                                                                   boundingSphereRadius - 3.3,
-                                                                                 -distanceToModel - boundingSphereRadius + 3.3,
-                                                                                  distanceToModel + boundingSphereRadius - 3.3)
+                                                                                 -boundingSphereRadius - 3.3,
+                                                                                  boundingSphereRadius + 3.3)
     }
     
     // MARK: - Private
