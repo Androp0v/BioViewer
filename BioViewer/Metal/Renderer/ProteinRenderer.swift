@@ -222,8 +222,8 @@ extension ProteinRenderer: MTKViewDelegate {
         guard scene.needsRedraw else { return }
         
         // Assure buffers are loaded
-        guard let subunitBuffer = self.subunitBuffer else { return }
-        guard let atomTypeBuffer = self.atomTypeBuffer else { return }
+        guard self.subunitBuffer != nil else { return }
+        guard self.atomTypeBuffer != nil else { return }
         guard let uniformBuffers = self.uniformBuffers else { return }
         
         // Wait until the inflight command buffer has completed its work
@@ -232,7 +232,7 @@ extension ProteinRenderer: MTKViewDelegate {
         // MARK: - Update uniforms buffer
         
         // Ensure the uniform buffer is loaded
-        let uniformBuffer = uniformBuffers[currentFrameIndex]
+        var uniformBuffer = uniformBuffers[currentFrameIndex]
         
         // Update current frame index
         currentFrameIndex = (currentFrameIndex + 1) % maxBuffersInFlight
@@ -263,66 +263,7 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Shadow Map pass
         
-        shadowRenderingBlock: if scene.hasShadows {
-            
-            // TO-DO: Shadow pass
-            
-            // Ensure transparent buffers are loaded
-            guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
-            guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
-            
-            // Attach textures
-            shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
-            shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
-            shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
-            
-            // Create render command encoder
-            guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: shadowRenderPassDescriptor) else {
-                break shadowRenderingBlock
-            }
-            
-            // Set pipeline state
-            guard let shadowRenderingPipelineState = shadowRenderingPipelineState else {
-                break shadowRenderingBlock
-            }
-            renderCommandEncoder.setRenderPipelineState(shadowRenderingPipelineState)
-            
-            // Set depth state
-            renderCommandEncoder.setDepthStencilState(shadowDepthState)
-            
-            // Add buffers to pipeline
-            renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
-                                                 offset: 0,
-                                                 index: 0)
-            renderCommandEncoder.setVertexBuffer(subunitBuffer,
-                                                 offset: 0,
-                                                 index: 1)
-            renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
-                                                 offset: 0,
-                                                 index: 2)
-            renderCommandEncoder.setVertexBuffer(uniformBuffer,
-                                                 offset: 0,
-                                                 index: 3)
-            
-            renderCommandEncoder.setFragmentBuffer(uniformBuffer,
-                                                   offset: 0,
-                                                   index: 1)
-
-            // Don't render back-facing triangles (cull them)
-            renderCommandEncoder.setCullMode(.back)
-            
-            // FIXME: SHADOW
-            /*renderCommandEncoder.setDepthBias(0.015, slopeScale: 7, clamp: 0.02)*/
-
-            // Draw primitives
-            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                       indexCount: impostorIndexBuffer.length / MemoryLayout<UInt32>.stride,
-                                                       indexType: .uint32,
-                                                       indexBuffer: impostorIndexBuffer,
-                                                       indexBufferOffset: 0)
-
-            renderCommandEncoder.endEncoding()
-        }
+        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer)
         
         // MARK: - Getting drawable
         // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -330,65 +271,10 @@ extension ProteinRenderer: MTKViewDelegate {
         if let drawable = view.currentDrawable {
                 
             // MARK: - Transparent geometry pass
-            transparentGeometryBlock: if true {
-                
-                // Ensure transparent buffers are loaded
-                guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
-                guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
-                
-                // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-                impostorRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
-                impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
-                impostorRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
-
-                // Create render command encoder
-                guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
-                    break transparentGeometryBlock
-                }
-
-                // Set pipeline state
-                guard let impostorRenderingPipelineState = impostorRenderingPipelineState else {
-                    break transparentGeometryBlock
-                }
-                renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
-
-                // Set depth state
-                renderCommandEncoder.setDepthStencilState(depthState)
-
-                // Add buffers to pipeline
-                renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
-                                                     offset: 0,
-                                                     index: 0)
-                renderCommandEncoder.setVertexBuffer(subunitBuffer,
-                                                     offset: 0,
-                                                     index: 1)
-                renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
-                                                     offset: 0,
-                                                     index: 2)
-                renderCommandEncoder.setVertexBuffer(uniformBuffer,
-                                                     offset: 0,
-                                                     index: 3)
-                
-                renderCommandEncoder.setFragmentBuffer(uniformBuffer,
-                                                       offset: 0,
-                                                       index: 1)
-                renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
-                                                        index: 0)
-                renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
-                                                             index: 0)
-
-                // Don't render back-facing triangles (cull them)
-                renderCommandEncoder.setCullMode(.back)
-
-                // Draw primitives
-                renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                           indexCount: impostorIndexBuffer.length / MemoryLayout<UInt32>.stride,
-                                                           indexType: .uint32,
-                                                           indexBuffer: impostorIndexBuffer,
-                                                           indexBufferOffset: 0)
-
-                renderCommandEncoder.endEncoding()
-            }
+            impostorRenderPass(commandBuffer: commandBuffer,
+                               uniformBuffer: &uniformBuffer,
+                               drawable: drawable,
+                               view: view)
             
             // MARK: - Triple buffering
             

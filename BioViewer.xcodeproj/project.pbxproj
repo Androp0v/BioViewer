@@ -98,6 +98,11 @@
 		C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */; };
 		C51D4EDE27679A5200C69B3D /* ParseXYZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */; };
 		C51D4EDF27679B1100C69B3D /* DynamicStructureControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC4426497A3300B36026 /* DynamicStructureControlView.swift */; };
+		C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE0276912AE00C69B3D /* ShadowPass.swift */; };
+		C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE0276912AE00C69B3D /* ShadowPass.swift */; };
+		C51D4EE52769137500C69B3D /* ImpostorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE42769137500C69B3D /* ImpostorPass.swift */; };
+		C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE42769137500C69B3D /* ImpostorPass.swift */; };
+		C51D4EE92769153200C69B3D /* AmbientOcclusionPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE82769153200C69B3D /* AmbientOcclusionPass.swift */; };
 		C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* RCSBImportView.swift */; };
 		C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */; };
@@ -299,6 +304,9 @@
 		C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyFileRow.swift; sourceTree = "<group>"; };
 		C51D4EDA2765985000C69B3D /* 3JBT.pdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3JBT.pdb; sourceTree = "<group>"; };
 		C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseXYZ.swift; sourceTree = "<group>"; };
+		C51D4EE0276912AE00C69B3D /* ShadowPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowPass.swift; sourceTree = "<group>"; };
+		C51D4EE42769137500C69B3D /* ImpostorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpostorPass.swift; sourceTree = "<group>"; };
+		C51D4EE82769153200C69B3D /* AmbientOcclusionPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientOcclusionPass.swift; sourceTree = "<group>"; };
 		C53A118B2736D17500119BE6 /* RCSBImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportView.swift; sourceTree = "<group>"; };
 		C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRowView.swift; sourceTree = "<group>"; };
 		C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportViewModel.swift; sourceTree = "<group>"; };
@@ -619,8 +627,10 @@
 			isa = PBXGroup;
 			children = (
 				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
+				C51D4EE72769151100C69B3D /* Computed once */,
+				C51D4EE2276912B200C69B3D /* RenderPasses */,
 				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
-				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
+				C51D4EEA2769190000C69B3D /* Textures */,
 				C50E02572764C4BE005D7F06 /* PhysicsLoop.swift */,
 				C49D9D31271C469100E12E2F /* MetalScene.swift */,
 				C515EFC2274FEA0900B6F7DB /* ColorScene.swift */,
@@ -711,6 +721,31 @@
 				C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */,
 			);
 			path = FileAtomElementPopover;
+			sourceTree = "<group>";
+		};
+		C51D4EE2276912B200C69B3D /* RenderPasses */ = {
+			isa = PBXGroup;
+			children = (
+				C51D4EE0276912AE00C69B3D /* ShadowPass.swift */,
+				C51D4EE42769137500C69B3D /* ImpostorPass.swift */,
+			);
+			path = RenderPasses;
+			sourceTree = "<group>";
+		};
+		C51D4EE72769151100C69B3D /* Computed once */ = {
+			isa = PBXGroup;
+			children = (
+				C51D4EE82769153200C69B3D /* AmbientOcclusionPass.swift */,
+			);
+			path = "Computed once";
+			sourceTree = "<group>";
+		};
+		C51D4EEA2769190000C69B3D /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
+			);
+			path = Textures;
 			sourceTree = "<group>";
 		};
 		C53A118D2736DCFA00119BE6 /* ProteinRCSBViews */ = {
@@ -1032,6 +1067,7 @@
 				C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */,
 				C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
+				C51D4EE92769153200C69B3D /* AmbientOcclusionPass.swift in Sources */,
 				C455362A265D869D006D980B /* AtomArrayComposition.swift in Sources */,
 				C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */,
 				C41A056C265894AA006F551C /* CreateSASPoints.metal in Sources */,
@@ -1045,6 +1081,7 @@
 				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
 				C495B23C266541A7004995C2 /* ProteinObject.swift in Sources */,
 				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
+				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
@@ -1096,6 +1133,7 @@
 				C405744C2663DC74008527D1 /* ProteinMetalViewController.swift in Sources */,
 				C57F9964275EBE04001DE6D6 /* WorkspaceExporter.swift in Sources */,
 				C41A0560264ACBF0006F551C /* InfoPopoverRow.swift in Sources */,
+				C51D4EE52769137500C69B3D /* ImpostorPass.swift in Sources */,
 				C4057409265ED6CD008527D1 /* ComputeEDT.metal in Sources */,
 				C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */,
 				C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */,
@@ -1161,6 +1199,7 @@
 				C572BD362741655700FF010D /* Protein.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
+				C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */,
 				C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */,
 				C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */,
 				C572BD442741661300FF010D /* MatrixTransform.swift in Sources */,
@@ -1183,6 +1222,7 @@
 				C572BD40274165F500FF010D /* Camera.swift in Sources */,
 				C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */,
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
+				C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */,
 				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
 				C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,

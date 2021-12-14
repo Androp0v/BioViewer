@@ -192,6 +192,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         float sunlit_fraction = 0;
         constexpr int sample_count = 2;
         for (int sample_index = 0; sample_index < sample_count; sample_index++) {
+            // FIXME: 0.001 should be proportional to the typical atom size
             half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 0);
             sunlit_fraction += shadowMap.sample_compare(shadowSampler,
                                                         sphereShadowClipPosition.xy + float2(sample_offset),
