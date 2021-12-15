@@ -15,9 +15,44 @@ Since we are using impostor geometries to render the scene, we have to invoke th
 
 ### Step 2
 ![ShadowedDrawableTexture](Figures/ShadowedDrawableTexture.png)
-After the render pass in Step 1 renders the depth texture, we enqueue the render pass that draws the impostor geometries (the spheres). During the fragment function, we convert the coordinates of the sphere from camera space to the sun's frame of reference. Then, we make a depth comparison using `sample_compare`. The shadow depth texture on the sun's frame of reference contains the depth of the closest occluder for a given `x` and `y` on that frame of reference. If the point seen in the camera render pass has a depth value greater than the one saved in the texture for the `x` and `y` values of that point in the sun's frame of reference, it means that it's occluded.
+After the render pass in Step 1 renders the depth texture, we enqueue the render pass that draws the impostor geometries (the spheres). During the fragment function, we convert the coordinates of the sphere from camera space to the sun's frame of reference, in the same way we did in Step 1. 
+
+```Metal
+simd_float4x4 camera_to_shadow_projection_matrix = frameData.camera_to_shadow_projection_matrix;
+float3 sphereShadowClipPosition = (camera_to_shadow_projection_matrix * float4(spherePosition.x,
+                                                                               spherePosition.y,
+                                                                               spherePosition.z,
+                                                                               1.0)).xyz;
+```
+
+To be able to sample the sun's frame depth texture we need to convert the coordinates from Metal's Normalized Device Coordinates (NDC) to Metal's texture coordinates. To do that, we use:
+
+```Metal
+sphereShadowClipPosition.y *= -1;
+sphereShadowClipPosition.xy += 1.0;
+sphereShadowClipPosition.xy /= 2;
+```
+
+Then, we make a depth comparison using `sample_compare`. The shadow depth texture on the sun's frame of reference contains the depth of the closest occluder for a given `x` and `y` on that frame of reference. If the point seen in the camera render pass has a depth value greater than the one saved in the texture for the `x` and `y` values of that point in the sun's frame of reference, it means that it's occluded.
+
+```Metal
+float sunlit_fraction = 0;
+constexpr int sample_count = 2;
+for (int sample_index = 0; sample_index < sample_count; sample_index++) {
+    // FIXME: 0.001 should be proportional to the typical atom size
+    // TO-DO: VogelDiskSample may be called with a random number instead of 0 for the rotation
+    half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 0);
+    sunlit_fraction += shadowMap.sample_compare(shadowSampler,
+                                                sphereShadowClipPosition.xy + float2(sample_offset),
+                                                sphereShadowClipPosition.z);
+}
+```
 
 If it's occluded, we substract some light from the final color of that pixel, creating the shadows.
+
+```Metal
+shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+```
 
 ### Step 3 (Optional) - Soften shadows
 ![PercentageCloseFiltering](Figures/PercentageCloseFiltering.png)
