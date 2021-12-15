@@ -11,7 +11,6 @@
 #include "../Meshes/AtomProperties.h"
 
 #define PERCENTAGE_CLOSE_FILTERING
-//#define SURFACE_CLOSE_FILTERING
 
 using namespace metal;
 
