@@ -2,4 +2,5 @@
 Documentation for BioViewer app.
 
 ## Protein visualization
-[Drawing the molecular surface](ProteinVisualization/MolecularSurface)
+[Casting shadows](ProteinVisualization/HardShadows.md)
+[Drawing the molecular surface](ProteinVisualization/MolecularSurface.md)

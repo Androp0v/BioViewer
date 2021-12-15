@@ -24,7 +24,7 @@ struct ShadowTextures {
     static let shadowTexturePixelFormat = MTLPixelFormat.r32Float
     static let shadowDepthTexturePixelFormat = MTLPixelFormat.depth32Float
     
-    mutating func makeTextures(device: MTLDevice, size: CGSize) {
+    mutating func makeTextures(device: MTLDevice) {
         
         // MARK: - Common texture descriptor
         let shadowTextureDescriptor = MTLTextureDescriptor

@@ -165,8 +165,7 @@ class ProteinRenderer: NSObject, ObservableObject {
         makeImpostorRenderPipelineState(device: device)
         
         // Create shadow textures and sampler
-        shadowTextures.makeTextures(device: device,
-                                    size: CGSize(width: ShadowTextures.textureWidth, height: ShadowTextures.textureHeight))
+        shadowTextures.makeTextures(device: device)
         shadowTextures.makeShadowSampler(device: device)
         
         // Depth state
@@ -237,7 +236,7 @@ extension ProteinRenderer: MTKViewDelegate {
         // Update current frame index
         currentFrameIndex = (currentFrameIndex + 1) % maxBuffersInFlight
                 
-        // TO-DO: Address directly instead of copying data on each frame
+        // Update uniform buffer
         self.scene.updateScene()
         withUnsafePointer(to: self.scene.frameData) {
             uniformBuffer.contents()
