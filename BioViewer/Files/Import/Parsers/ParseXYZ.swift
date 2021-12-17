@@ -36,7 +36,7 @@ extension FileParser {
         
         var atomArray = ContiguousArray<simd_float3>()
         var atomIdentifiers = [UInt8]()
-        var totalAtomArrayComposition = AtomArrayComposition()
+        var atomArrayComposition = AtomArrayComposition()
         
         // Initialize empty configuration
         var configurations: [ParsedConfiguration] = [ParsedConfiguration(id: 0)]
@@ -122,22 +122,29 @@ extension FileParser {
                 configurations.last?.othersIDs.append(element)
             }
         })
-        
+                
         guard let firstConfiguration = configurations.first else {
             throw ImportError.unknownError
         }
-        let configurationCount = configurations.count
-
+        
+        let configurationCount: Int = configurations.count
+        
         // Add element array contents into the contiguous array
         let totalCount: Int = firstConfiguration.atomArrayComposition.totalCount
-        atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
+        atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount * configurationCount)
         
-        atomArray.append(contentsOf: firstConfiguration.carbonArray)
-        atomArray.append(contentsOf: firstConfiguration.nitrogenArray)
-        atomArray.append(contentsOf: firstConfiguration.hydrogenArray)
-        atomArray.append(contentsOf: firstConfiguration.oxygenArray)
-        atomArray.append(contentsOf: firstConfiguration.sulfurArray)
-        atomArray.append(contentsOf: firstConfiguration.othersArray)
+        for configuration in configurations {
+            atomArray.append(contentsOf: configuration.carbonArray)
+            atomArray.append(contentsOf: configuration.nitrogenArray)
+            atomArray.append(contentsOf: configuration.hydrogenArray)
+            atomArray.append(contentsOf: configuration.oxygenArray)
+            atomArray.append(contentsOf: configuration.sulfurArray)
+            atomArray.append(contentsOf: configuration.othersArray)
+        }
+        
+        guard atomArray.count > 0 else {
+            throw ImportError.emptyAtomCount
+        }
         
         // Add atom identifiers codes in the right order (so atomArray[i] corresponds
         // has an atomIdentifiers[i] identifier.
@@ -153,23 +160,20 @@ extension FileParser {
                                                  count: firstConfiguration.atomArrayComposition.sulfurCount))
         atomIdentifiers.append(contentsOf: firstConfiguration.othersIDs)
         
-        totalAtomArrayComposition = firstConfiguration.atomArrayComposition
+        atomArrayComposition = firstConfiguration.atomArrayComposition
         
         let proteinSubunits = [ProteinSubunit(id: firstConfiguration.id,
                                               atomCount: firstConfiguration.atomArrayComposition.totalCount,
                                               indexStart: 0)]
         
-        guard atomArray.count > 0 else {
-            throw ImportError.emptyAtomCount
-        }
-                
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
         
         // Return ProteinFile
-        var protein = Protein(subunitCount: 1,
+        var protein = Protein(configurationCount: configurationCount,
+                              subunitCount: 1,
                               subunits: proteinSubunits,
                               atoms: &atomArray,
-                              atomArrayComposition: &totalAtomArrayComposition,
+                              atomArrayComposition: &atomArrayComposition,
                               atomIdentifiers: atomIdentifiers,
                               sequence: nil)
         

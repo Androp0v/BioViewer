@@ -17,11 +17,16 @@ class MetalScene: ObservableObject {
     
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
+    /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
+    var isPlaying: Bool = false
     
     /// Struct with data passed to the GPU shader.
     var frameData: FrameData
     /// Frame count since the scene started.
     var frame: Int
+    
+    /// Object to select the appropriate regions of the MTLBuffer for each protein configuration.
+    var configurationSelector: ConfigurationSelector?
     
     /// Sun position, world coordinates.
     var sunDirection: simd_float3 = simd_float3(1, 1, 0)
@@ -153,10 +158,10 @@ class MetalScene: ObservableObject {
         initSubunitColors()
     }
 
-    // MARK: - Updates
+    // MARK: - Update scene
 
     func updateScene() {
-        guard needsRedraw else { return skipFrame() }
+        guard needsRedraw || isPlaying else { return skipFrame() }
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
@@ -183,6 +188,8 @@ class MetalScene: ObservableObject {
         */
     }
     
+    // MARK: - Update rotation
+    
     func updateModelRotation(rotationMatrix: simd_float4x4) {
         
         // Update model rotation matrix
@@ -200,6 +207,13 @@ class MetalScene: ObservableObject {
             * sunRotation
             * Transform.translationMatrix(cameraPosition).inverse
     }
+    
+    // MARK: - Add protein to scene
+    func createConfigurationSelector(protein: Protein) {
+        self.configurationSelector = ConfigurationSelector(atomsPerConfiguration: protein.atomCount)
+    }
+    
+    // MARK: - Fit protein on screen
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
         // TO-DO: Fit all files

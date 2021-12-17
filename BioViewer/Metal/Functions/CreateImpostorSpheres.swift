@@ -29,10 +29,13 @@ extension MetalScheduler {
             subunitData.append(contentsOf: Array(repeating: Int16(index),
                                                  count: subunits[index].atomCount))
         }
+        
+        // Get the number of configurations
+        let configurationCount = protein.configurationCount
 
         // Populate buffers
         let generatedVertexBuffer = device.makeBuffer(
-            length: protein.atomCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
+            length: protein.atomCount * configurationCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
         )
         let subunitBuffer = device.makeBuffer(
             bytes: subunitData,
@@ -43,18 +46,18 @@ extension MetalScheduler {
             length: protein.atomCount * MemoryLayout<UInt8>.stride
         )
         let generatedIndexBuffer = device.makeBuffer(
-            length: protein.atomCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
+            length: protein.atomCount * configurationCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
         )
 
         metalDispatchQueue.sync {
             // Populate buffers
             let atomPositionsBuffer = device.makeBuffer(
                 bytes: Array(protein.atoms),
-                length: protein.atomCount * MemoryLayout<simd_float3>.stride
+                length: protein.atomCount * configurationCount * MemoryLayout<simd_float3>.stride
             )
             let atomTypeBuffer = device.makeBuffer(
                 bytes: Array(protein.atomIdentifiers),
-                length: protein.atomCount * MemoryLayout<UInt8>.stride
+                length: protein.atomCount * configurationCount * MemoryLayout<UInt8>.stride
             )
 
             // Make Metal command buffer
@@ -94,14 +97,15 @@ extension MetalScheduler {
             // Schedule the threads
             if device.supportsFamily(.apple3) {
                 // Create threads and threadgroup sizes
-                let threadsPerArray = MTLSizeMake(protein.atomCount, 1, 1)
+                let threadsPerArray = MTLSizeMake(protein.atomCount * configurationCount, 1, 1)
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
                 // Dispatch threads
                 computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
             } else {
                 // LEGACY: Older devices do not support non-uniform threadgroup sizes
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-                let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(protein.atomCount) / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
+                let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(protein.atomCount * configurationCount)
+                                                                / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
                 // Dispatch threadgroups
                 computeEncoder.dispatchThreadgroups(threadGroupsPerGrid, threadsPerThreadgroup: groupSize)
             }

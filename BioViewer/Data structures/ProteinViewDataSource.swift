@@ -57,8 +57,12 @@ class ProteinViewDataSource: ObservableObject {
 
             if let proteinViewModel = proteinViewModel {
                 
-                // Fit file in frustum
                 let scene = proteinViewModel.renderer.scene
+                
+                // Add protein configurations to the scene
+                scene.createConfigurationSelector(protein: proteinFile.protein)
+                
+                // Fit file in frustum
                 let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: proteinFile.protein.boundingSphere.radius,
                                                                               aspectRatio: scene.aspectRatio)
                 scene.updateCameraDistanceToModel(distanceToModel: cameraDistanceToFit,

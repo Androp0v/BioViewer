@@ -309,7 +309,8 @@ extension FileParser {
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
         
         // Return ProteinFile
-        var protein = Protein(subunitCount: subunitCount,
+        var protein = Protein(configurationCount: 1,
+                              subunitCount: subunitCount,
                               subunits: proteinSubunits,
                               atoms: &atomArray,
                               atomArrayComposition: &totalAtomArrayComposition,

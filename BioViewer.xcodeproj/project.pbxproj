@@ -105,6 +105,7 @@
 		C51D4EE92769153200C69B3D /* AmbientOcclusionRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE82769153200C69B3D /* AmbientOcclusionRenderer.swift */; };
 		C51D4EEC2769199600C69B3D /* AmbientOcclusionTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */; };
 		C51D4EED276919B200C69B3D /* AmbientOcclusionTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */; };
+		C51D4EEF276D073200C69B3D /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
 		C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* RCSBImportView.swift */; };
 		C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */; };
@@ -310,6 +311,7 @@
 		C51D4EE42769137500C69B3D /* ImpostorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpostorPass.swift; sourceTree = "<group>"; };
 		C51D4EE82769153200C69B3D /* AmbientOcclusionRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientOcclusionRenderer.swift; sourceTree = "<group>"; };
 		C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientOcclusionTextures.swift; sourceTree = "<group>"; };
+		C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationSelector.swift; sourceTree = "<group>"; };
 		C53A118B2736D17500119BE6 /* RCSBImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportView.swift; sourceTree = "<group>"; };
 		C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRowView.swift; sourceTree = "<group>"; };
 		C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportViewModel.swift; sourceTree = "<group>"; };
@@ -636,6 +638,7 @@
 				C51D4EEA2769190000C69B3D /* Textures */,
 				C50E02572764C4BE005D7F06 /* PhysicsLoop.swift */,
 				C49D9D31271C469100E12E2F /* MetalScene.swift */,
+				C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */,
 				C515EFC2274FEA0900B6F7DB /* ColorScene.swift */,
 				C46435612669313A00434CC6 /* Camera.swift */,
 			);
@@ -1145,6 +1148,7 @@
 				C405744F2663DD58008527D1 /* BasicShader.metal in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
 				C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */,
+				C51D4EEF276D073200C69B3D /* ConfigurationSelector.swift in Sources */,
 				C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */,
 				C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */,
 				C57F9955275E3D29001DE6D6 /* WorkspaceHelp.swift in Sources */,

@@ -218,7 +218,7 @@ extension ProteinRenderer: MTKViewDelegate {
     func draw(in view: MTKView) {
         
         // Check if the scene needs to be redrawn
-        guard scene.needsRedraw else { return }
+        guard scene.needsRedraw || scene.isPlaying else { return }
         
         // Assure buffers are loaded
         guard self.subunitBuffer != nil else { return }

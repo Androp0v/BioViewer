@@ -19,6 +19,9 @@ public class Protein {
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
     private var sequence: [String]?
     
+    // MARK: - Configurations
+    public var configurationCount: Int
+    
     // MARK: - Subunits
     
     /// Number of subunits in the protein
@@ -49,13 +52,14 @@ public class Protein {
     
     // MARK: - Initialization
 
-    init(subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(configurationCount: Int, subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+        self.configurationCount = configurationCount
         self.subunitCount = subunitCount
         self.subunits = subunits
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers
-        self.atomCount = atoms.count
+        self.atomCount = atomArrayComposition.totalCount
         self.sequence = sequence
         self.boundingSphere = computeBoundingSphere(atoms: atoms)
         normalizeAtomPositions(atoms: &self.atoms, center: boundingSphere.center)
