@@ -36,22 +36,20 @@ sphereShadowClipPosition.xy /= 2;
 Then, we make a depth comparison using `sample_compare`. The shadow depth texture on the sun's frame of reference contains the depth of the closest occluder for a given `x` and `y` on that frame of reference. If the point seen in the camera render pass has a depth value greater than the one saved in the texture for the `x` and `y` values of that point in the sun's frame of reference, it means that it's occluded.
 
 ```Metal
-float sunlit_fraction = 0;
-constexpr int sample_count = 2;
-for (int sample_index = 0; sample_index < sample_count; sample_index++) {
-    // FIXME: 0.001 should be proportional to the typical atom size
-    // TO-DO: VogelDiskSample may be called with a random number instead of 0 for the rotation
-    half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 0);
-    sunlit_fraction += shadowMap.sample_compare(shadowSampler,
-                                                sphereShadowClipPosition.xy + float2(sample_offset),
-                                                sphereShadowClipPosition.z);
+float shadow_sample = shadowMap.sample_compare(shadowSampler,
+                                               sphereShadowClipPosition.xy,
+                                               sphereShadowClipPosition.z);
+    
+bool is_sunlit = false;
+if (shadow_sample > 0) {
+    is_sunlit = true;
 }
 ```
 
 If it's occluded, we substract some light from the final color of that pixel, creating the shadows.
 
 ```Metal
-shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+shadedColor.rgb -= frameData.shadow_strength * (1 - is_sunlit);
 ```
 
 ### Step 3 (Optional) - Soften shadows
@@ -60,7 +58,49 @@ Directional shadows are hard. Since the resolution of the texture we use for the
 
 When the shadows are cast from that pixels, aliasing problems appear. _Specially_ if you cast them onto surfaces that are almost tangential to that direction (the sphere's sides, in out case). There are some cool algorithms to fix this problem, the coolest of them probably being Variance Shadow Maps (VSMs), which models each pixel as a distribution (of depth values) and uses the variance (the squared depth) to estimate the bounds of the distribution by recovering the moments of the distribution. But I digress. This cool method causes unwanted light leaks when there are too many occluders for a single `x` and `y` region (depth complexity). Since the pathological case for this algorithm is the expected case for our application, we have to discard this approach. Instead, we use what's called **Percentage Close Filtering**. Essentially, when sampling the sun's depth texture in Step 2, we sample neighbouring texture pixels and make an average, thus creating a soft shadow terminator.
 
-As seen on the image, there are still some problems with the shadows that are not solved with PCF, but it's definitely a huge improvement.
+As seen on the image, there are still some problems with the shadows that are not solved with PCF, but it's definitely a huge improvement. This is the code used to sample the texture using PCF (we call this instead of the previous code snippet containing `sample_compare` in Step 2):
+
+```Metal
+float sunlit_fraction = 0;
+constexpr int sample_count = 2;
+for (int sample_index = 0; sample_index < sample_count; sample_index++) {
+    // VogelDiskSample may be called with a random number instead of 0 for the rotation
+    half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 0);
+    sunlit_fraction += shadowMap.sample_compare(shadowSampler,
+                                                sphereShadowClipPosition.xy + float2(sample_offset),
+                                                sphereShadowClipPosition.z);
+}
+```
+
+And then we subtract the color like this:
+
+```Metal
+shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+```
+
+You may be wondering wtf is a Vogel Disk and why we call it to compute the offset. This is the Vogel Disk function:
+
+```Metal
+half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
+    half GoldenAngle = 2.4f;
+
+    half r = radius_scale * sqrt(sampleIndex + 0.5f) / sqrt(half(samplesCount));
+    half theta = sampleIndex * GoldenAngle + phi;
+
+    half2 sine_cosine;
+    sincos(theta, sine_cosine);
+  
+    return half2(r * sine_cosine.y, r * sine_cosine.x);
+}
+```
+
+But why are we calling such an expensive function instead of making the offset be, for example, along the `x` and `y`coordinates? There's a `sqrt` and a `sincos` function in there, it's almost as ALU intensive as the rest of the fragment funcion. Or is it?
+
+Truth is, making the offset along the `x` and `y` directions didn't look good in practice. It's aligned with the pixels in the sun's depth texture, so it probably caused another kind of aliasing problem where the samples had an unfair probability of sampling the same pixel on the texture. The Vogel Disk looks much better in practice. A Vogel Disk sample is typically called using a random number for `phi`, to completely vanish any probability of aliasing problems when sampling the sun's depth texture. That's because Vogel Disk's have a nice property: if you create a Vogel Disk with N samples and φ rotation, and another Vogel Disk (of the same number of samples and radius, and the same center), but with φ + δφ rotation, with δφ being any angle other than 2π (or a multiple of it), none of the samples of the second disk overlap any of the samples of the first disk.
+
+Anyway, it looks like calling it with a random angle made little difference in practice, and calling it with `phi = 0` didn't tank performance. Why? Well, the loop is likely to be unrolled by the compiler for any reasonable number of samples. When the loop is unrolled, all the arguments of the function `VogelDiskSample` are known at compile time, so the calls to the function can be computed at compile time and replaced with constant values. No need to compute the expensive `sqrt` and `sincos` functions at runtime!
+
+So essentially we're just using the Vogel Disk to take two samples at an angle that doesn't cause aliasing problems with the sun's depth texture. We can just hardcode the angles, but leaving it like this opens the door to calling it with a random `phi` value in the future (maybe in a non-realtime high-quality render like a 'photo mode').
 
 ## Gotchas
 
