@@ -48,10 +48,11 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     // Initialize the returned VertexOut structure
     ImpostorVertexOut normalized_impostor_vertex;
     int verticesPerAtom = 4;
+    int atom_id_configuration = (vid / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Set attributes
     normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vid].billboardMapping.xy);
-    normalized_impostor_vertex.atomType = atomType[vid / verticesPerAtom];
+    normalized_impostor_vertex.atomType = atomType[atom_id_configuration];
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -90,10 +91,10 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     
     if (frameData.colorBySubunit) {
         // Color the atom based on the subunit type
-        normalized_impostor_vertex.color = half4(frameData.atomColor[ subunitIndex[vid / verticesPerAtom] ]);
+        normalized_impostor_vertex.color = half4(frameData.atomColor[ subunitIndex[atom_id_configuration] ]);
     } else {
         // Color the atom based on the atom type
-        normalized_impostor_vertex.color = half4(frameData.atomColor[ atomType[vid / verticesPerAtom] ]);
+        normalized_impostor_vertex.color = half4(frameData.atomColor[ atomType[atom_id_configuration] ]);
     }
 
     // Return the processed vertex

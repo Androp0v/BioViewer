@@ -13,11 +13,31 @@ struct BufferRegion {
 }
 
 class ConfigurationSelector {
+    weak var scene: MetalScene?
     var atomsPerConfiguration: Int
     var currentConfiguration: Int = 0
+    var lastConfiguration: Int
         
-    init(atomsPerConfiguration: Int) {
+    init(scene: MetalScene, atomsPerConfiguration: Int, lastConfiguration: Int) {
+        self.scene = scene
         self.atomsPerConfiguration = atomsPerConfiguration
+        self.lastConfiguration = lastConfiguration
+    }
+    
+    func previousConfiguration() {
+        currentConfiguration -= 1
+        if currentConfiguration <= -1 {
+            currentConfiguration = lastConfiguration
+        }
+        scene?.needsRedraw = true
+    }
+    
+    func nextConfiguration() {
+        currentConfiguration += 1
+        if currentConfiguration >= lastConfiguration {
+            currentConfiguration = 0
+        }
+        scene?.needsRedraw = true
     }
     
     // MARK: - Get buffer regions

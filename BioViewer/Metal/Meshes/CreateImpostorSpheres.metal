@@ -15,6 +15,7 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
                                   const device uint8_t *atomType [[ buffer(1) ]],
                                   device BillboardVertex *generatedVertices [[ buffer(2) ]],
                                   device uint32_t *generatedIndices [[ buffer(3) ]],
+                                  constant uint32_t & totalAtomCount [[ buffer(4) ]],
                                   uint i [[ thread_position_in_grid ]],
                                   uint l [[ thread_position_in_threadgroup ]]) {
     // TO-DO
@@ -24,7 +25,7 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
     const uint32_t index = i * 4;
     const uint32_t index_2 = i * 6;
     // TO-DO: Deprecate AtomProperties, single source of truth with FrameData
-    const float radius = atomRadius[atomType[i]];
+    const float radius = atomRadius[atomType[i % totalAtomCount]];
     
     // MARK: - Vertices
 

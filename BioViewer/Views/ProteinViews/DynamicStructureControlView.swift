@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DynamicStructureControlView: View {
     
-    @State private var isPlaying: Bool = false
+    @EnvironmentObject var scene: MetalScene
     
     private struct Constants {
         #if targetEnvironment(macCatalyst)
@@ -26,7 +26,7 @@ struct DynamicStructureControlView: View {
     var body: some View {
         HStack(spacing: Constants.spacing) {
             Button(action: {
-                // TO-DO
+                scene.configurationSelector?.previousConfiguration()
             }, label: {
                 Image(systemName: "backward.frame.fill")
                     .resizable()
@@ -34,12 +34,12 @@ struct DynamicStructureControlView: View {
             })
                 .frame(width: Constants.buttonSize, height: Constants.buttonSize)
                 .buttonStyle(CameraControlButtonStyle())
-                .disabled(isPlaying)
+                .disabled(scene.isPlaying)
             
             Button(action: {
-                isPlaying.toggle()
+                scene.isPlaying.toggle()
             }, label: {
-                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                Image(systemName: scene.isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             })
@@ -47,7 +47,7 @@ struct DynamicStructureControlView: View {
                 .buttonStyle(CameraControlButtonStyle())
             
             Button(action: {
-                // TO-DO
+                scene.configurationSelector?.nextConfiguration()
             }, label: {
                 Image(systemName: "forward.frame.fill")
                     .resizable()
@@ -55,7 +55,7 @@ struct DynamicStructureControlView: View {
             })
                 .frame(width: Constants.buttonSize, height: Constants.buttonSize)
                 .buttonStyle(CameraControlButtonStyle())
-                .disabled(isPlaying)
+                .disabled(scene.isPlaying)
         }
         .padding(Constants.outerPadding)
         .background(.regularMaterial)

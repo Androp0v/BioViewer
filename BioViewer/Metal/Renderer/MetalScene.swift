@@ -18,7 +18,7 @@ class MetalScene: ObservableObject {
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
-    var isPlaying: Bool = false
+    @Published var isPlaying: Bool = false
     
     /// Struct with data passed to the GPU shader.
     var frameData: FrameData
@@ -167,6 +167,13 @@ class MetalScene: ObservableObject {
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         
+        // Update configuration
+        if isPlaying {
+            if frame % 100 == 0 {
+                self.configurationSelector?.nextConfiguration()
+            }
+        }
+        
         // Update rotation matrices
         updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
         
@@ -210,7 +217,10 @@ class MetalScene: ObservableObject {
     
     // MARK: - Add protein to scene
     func createConfigurationSelector(protein: Protein) {
-        self.configurationSelector = ConfigurationSelector(atomsPerConfiguration: protein.atomCount)
+        self.configurationSelector = ConfigurationSelector(scene: self,
+                                                           atomsPerConfiguration: protein.atomCount,
+                                                           lastConfiguration: protein.configurationCount)
+        self.frameData.atoms_per_configuration = Int32(protein.atomCount)
     }
     
     // MARK: - Fit protein on screen

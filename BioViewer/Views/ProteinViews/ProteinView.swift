@@ -67,6 +67,7 @@ struct ProteinView: View {
                         VStack(spacing: 12) {
                             Spacer()
                             DynamicStructureControlView()
+                                .environmentObject(proteinViewModel.renderer.scene)
                             /*
                             if toggleSequenceView {
                                 ProteinSequenceView()

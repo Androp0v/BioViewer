@@ -14,7 +14,10 @@
 #define MAX_ATOM_COLORS 64
 
 typedef struct {
-
+    
+    /// Number of atoms in a single configuration.
+    int atoms_per_configuration;
+    
     /// Model to view matrix
     simd_float4x4 model_view_matrix;
     

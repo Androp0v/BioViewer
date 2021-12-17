@@ -33,10 +33,11 @@ vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer
     // Initialize the returned VertexOut structure
     ShadowVertexOut normalized_impostor_vertex;
     int verticesPerAtom = 4;
+    int atom_id_configuration = (vid / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Set attributes
     normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vid].billboardMapping.x, vertex_buffer[vid].billboardMapping.y);
-    normalized_impostor_vertex.atomType = atomType[vid / verticesPerAtom];
+    normalized_impostor_vertex.atomType = atomType[atom_id_configuration];
 
     // Fetch the matrices
     simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
