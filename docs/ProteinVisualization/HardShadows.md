@@ -105,4 +105,9 @@ So essentially we're just using the Vogel Disk to take two samples at an angle t
 ## Gotchas
 
 ### Shadow acne
+![ShadowAcne](Figures/ShadowAcne.png)
 This is solved applying a small offset when computing the depth from the sun's frame of reference (Step 1). It's caused by the sampler in Step 2 returning a depth value just below the one stored in the texture created in Step 1 due to floating point precision issues.
+
+We basically tell the shader in Step 1 to 'lie' and say that everything is a tiny amount (in out case, 0.001Å) further than it really is, so the `sample_compare` doesn't fail due to comparing two extremely similar values and not having enough floating point precision.
+
+If you look at the comparison image, the upper right part of the oxygen (red) atom should be completely lit, but if we apply no offset (left image), a weird shadow pattern emerges due to accidental self-shadowing because of the floating point precision issues. The depth offset fixes it (right image). The shadow terminators in both images look weird too, but that's due to the aliasing issue mitigated in Step 3 with PCF (which this images don't have).
