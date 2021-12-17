@@ -111,3 +111,9 @@ This is solved applying a small offset when computing the depth from the sun's f
 We basically tell the shader in Step 1 to 'lie' and say that everything is a tiny amount (in out case, 0.001Å) further than it really is, so the `sample_compare` doesn't fail due to comparing two extremely similar values and not having enough floating point precision.
 
 If you look at the comparison image, the upper right part of the oxygen (red) atom should be completely lit, but if we apply no offset (left image), a weird shadow pattern emerges due to accidental self-shadowing because of the floating point precision issues. The depth offset fixes it (right image). The shadow terminators in both images look weird too, but that's due to the aliasing issue mitigated in Step 3 with PCF (which this images don't have).
+
+Adding PCF back in causes _some_ self-shadowing to reappear for the usual 1024x1024 shadow texture resolution. However, this is not an issue for the normal viewing experience, and we can increase the texture resolution and ```sample_count``` used for PCF, and get this smooth-as-f\*ck image (expensive to render, non-realtime for large proteins but suitable for a near-realtime 'photo mode'):
+
+![HighResH2O](Figures/HighResH2O.png)
+
+Simply using a high resolution shadow texture and a high ```sample_count``` alone without the depth offset didn't quite get the image to look as smooth due to the self-shadowing artifact.
