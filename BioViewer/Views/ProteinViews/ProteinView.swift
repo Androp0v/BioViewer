@@ -63,6 +63,12 @@ struct ProteinView: View {
                             .background(.black)
                             .edgesIgnoringSafeArea([.top, .bottom])
                         
+                        // Top bar
+                        VStack {
+                            TopToolbar()
+                            Spacer()
+                        }
+                        
                         // Scene controls
                         VStack(spacing: 12) {
                             Spacer()
