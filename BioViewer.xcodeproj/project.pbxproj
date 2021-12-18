@@ -93,6 +93,7 @@
 		C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
 		C515EFC3274FEA0900B6F7DB /* ColorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ColorScene.swift */; };
 		C515EFC4274FEA8400B6F7DB /* ColorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ColorScene.swift */; };
+		C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
 		C51D4ED9276596EE00C69B3D /* EmptyFileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */; };
 		C51D4EDB2765985000C69B3D /* 3JBT.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C51D4EDA2765985000C69B3D /* 3JBT.pdb */; };
 		C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */; };
@@ -1234,6 +1235,7 @@
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
 				C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */,
 				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
+				C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */,
 				C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,
 				C515EFC4274FEA8400B6F7DB /* ColorScene.swift in Sources */,

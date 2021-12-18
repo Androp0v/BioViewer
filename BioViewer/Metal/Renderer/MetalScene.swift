@@ -169,7 +169,7 @@ class MetalScene: ObservableObject {
         
         // Update configuration
         if isPlaying {
-            if frame % 100 == 0 {
+            if frame % 1 == 0 {
                 self.configurationSelector?.nextConfiguration()
             }
         }

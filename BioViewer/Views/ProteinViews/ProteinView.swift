@@ -66,8 +66,10 @@ struct ProteinView: View {
                         // Scene controls
                         VStack(spacing: 12) {
                             Spacer()
-                            DynamicStructureControlView()
-                                .environmentObject(proteinViewModel.renderer.scene)
+                            if proteinViewModel.dataSource.files.first?.fileType == .dynamicStructure {
+                                DynamicStructureControlView()
+                                    .environmentObject(proteinViewModel.renderer.scene)
+                            }
                             /*
                             if toggleSequenceView {
                                 ProteinSequenceView()

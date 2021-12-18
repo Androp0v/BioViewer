@@ -177,7 +177,9 @@ extension FileParser {
                               atomIdentifiers: atomIdentifiers,
                               sequence: nil)
         
-        return ProteinFile(fileType: .dynamicStructure,
+        let fileType: ProteinFileType = configurations.count > 1 ? .dynamicStructure : .staticStructure
+        
+        return ProteinFile(fileType: fileType,
                            fileName: fileName,
                            fileExtension: fileExtension,
                            protein: &protein,
