@@ -71,7 +71,7 @@ private struct CameraControlButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.8 : 1.0)
-            .foregroundColor(isEnabled ? .primary : .secondary)
+            .foregroundColor(isEnabled ? .primary : .primary.opacity(0.3))
     }
 }
 
