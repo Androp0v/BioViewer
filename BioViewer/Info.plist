@@ -26,7 +26,7 @@
 			<key>CFBundleTypeName</key>
 			<string>XYZ</string>
 			<key>LSHandlerRank</key>
-			<string>Viewer</string>
+			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>com.raulmonton.bioviewer.xyz</string>
