@@ -8,6 +8,7 @@
 import UIKit
 import Metal
 import MetalKit
+import simd
 
 class ProteinMetalViewController: UIViewController {
 
@@ -82,11 +83,33 @@ class ProteinMetalViewController: UIViewController {
     
     @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
         if gestureRecognizer.state == .changed {
-            let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
-            let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
-            // Revert the axis rotation before rotating through that axis
-            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedX, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz )
-            self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedY, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz )
+            switch proteinViewModel.toolbarConfig.selectedTool {
+                
+            case CameraControlTool.rotate:
+                let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
+                let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                // Revert the axis rotation before rotating through that axis
+                self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedX, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz )
+                self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedY, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz )
+                
+            case CameraControlTool.move:
+                // TO-DO: Improve move tool
+                #if targetEnvironment(macCatalyst)
+                var translationSensitivity: Float = 0.000005
+                #else
+                var translationSensitivity: Float = 0.00001
+                #endif
+                
+                // Move should be less sensible the closer the camera is to the protein
+                translationSensitivity *= proteinViewModel.renderer.scene.cameraPosition.z
+                
+                let translationX = Float(gestureRecognizer.velocity(in: renderedView).x) * translationSensitivity
+                let translationY = Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
+                self.proteinViewModel.renderer.scene.moveCamera(x: translationX, y: -translationY)
+            
+            default:
+                break
+            }
         }
     }
 

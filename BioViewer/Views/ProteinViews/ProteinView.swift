@@ -15,7 +15,7 @@ struct ProteinView: View {
     // MARK: - Properties
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-
+    
     // Sidebar
     @State private var showSidebar = UserDefaults.standard.bool(forKey: "showSidebar") {
         didSet {
@@ -72,6 +72,7 @@ struct ProteinView: View {
                             }
                             Spacer()
                         }
+                        .environmentObject(proteinViewModel.toolbarConfig)
                         
                         // Scene controls
                         VStack(spacing: 12) {

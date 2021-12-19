@@ -21,6 +21,8 @@ class ProteinViewModel: ObservableObject {
     var dropHandler: ImportDroppedFilesDelegate
     /// Reference to the status view model for updates.
     var statusViewModel: StatusViewModel
+    /// Toolbar view model.
+    @Published var toolbarConfig = ToolbarConfig()
     
     /// Total protein count in view.
     @Published var proteinCount: Int = 0

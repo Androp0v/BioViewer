@@ -234,7 +234,7 @@ class MetalScene: ObservableObject {
         self.camera.nearPlane = max(1, distanceToModel - protein.boundingSphere.radius)
         self.camera.farPlane = distanceToModel + protein.boundingSphere.radius
         // Update camera position
-        self.cameraPosition = simd_float3(0, 0, distanceToModel)
+        self.cameraPosition.z = distanceToModel
         
         // Update shadow projection to fit too
         let boundingSphereRadius = protein.boundingSphere.radius
@@ -244,6 +244,22 @@ class MetalScene: ObservableObject {
                                                                                   boundingSphereRadius - 3.3,
                                                                                  -boundingSphereRadius - 3.3,
                                                                                   boundingSphereRadius + 3.3)
+    }
+    
+    // MARK: - Move camera
+    func moveCamera(x: Float, y: Float) {
+        self.cameraPosition.x += x
+        self.cameraPosition.y += y
+    }
+    
+    func resetCamera() {
+        // Undo translation
+        self.cameraPosition.x = 0
+        self.cameraPosition.y = 0
+        // Undo rotation
+        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0,
+                                                                axis: simd_float3(1, 0, 0))
+        // TO-DO: Undo zoom
     }
     
     // MARK: - Private

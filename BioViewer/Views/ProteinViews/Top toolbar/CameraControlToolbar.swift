@@ -9,10 +9,11 @@ import SwiftUI
 
 struct CameraControlToolbar: View {
     
-    @State var selectedTool: Int = 0
+    @EnvironmentObject var config: ToolbarConfig
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
         
     var body: some View {
-        Picker("Rotation mode", selection: $selectedTool) {
+        Picker("Rotation mode", selection: $config.selectedTool) {
             Image(systemName: "rotate.3d")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -27,11 +28,19 @@ struct CameraControlToolbar: View {
         .pickerStyle(SegmentedPickerStyle())
         .foregroundColor(.accentColor)
         .frame(width: 4 * TopToolbar.Constants.buttonSize)
+        .contextMenu {
+            Button(role: .destructive) {
+                proteinViewModel.renderer.scene.resetCamera()
+            } label: {
+                Label("Reset camera", systemImage: "arrow.uturn.backward")
+            }
+        }
     }
 }
 
 struct CameraControlToolbar_Previews: PreviewProvider {
     static var previews: some View {
         CameraControlToolbar()
+            .environmentObject(ToolbarConfig())
     }
 }
