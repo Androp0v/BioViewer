@@ -38,35 +38,38 @@ struct TopToolbar: View {
         ZStack {
             
             // Toolbar
-            ZStack {
+            ZStack(alignment: .top) {
                 if displayToolbar {
-                    HStack(spacing: Constants.spacing) {
-                        Spacer()
-                        Button(action: {
-                            displayPhotoMode.toggle()
-                        }, label: {
-                            Image(systemName: "camera.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
+                    VStack(spacing: 0) {
+                        HStack(spacing: Constants.spacing) {
+                            Spacer()
+                            Button(action: {
+                                displayPhotoMode.toggle()
+                            }, label: {
+                                Image(systemName: "camera.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: Constants.buttonSize, height: Constants.buttonSize)
+                                    .foregroundColor(.accentColor)
+                            })
+                                .sheet(isPresented: $displayPhotoMode) {
+                                    PhotoModeView()
+                                }
+                            Divider()
+                                .frame(height: Constants.buttonSize)
+                            
+                            CameraControlToolbar()
+                            
+                            Divider()
+                                .frame(height: Constants.buttonSize)
+                            Spacer()
                                 .frame(width: Constants.buttonSize, height: Constants.buttonSize)
-                                .foregroundColor(.accentColor)
-                        })
-                            .sheet(isPresented: $displayPhotoMode) {
-                                PhotoModeView()
-                            }
+                        }
+                        .frame(maxHeight: .infinity)
+                        .padding(.horizontal, Constants.spacing)
+                        .background(.thickMaterial)
                         Divider()
-                            .frame(height: Constants.buttonSize)
-                        
-                        CameraControlToolbar()
-                        
-                        Divider()
-                            .frame(height: Constants.buttonSize)
-                        Spacer()
-                            .frame(width: Constants.buttonSize, height: Constants.buttonSize)
                     }
-                    .frame(maxHeight: .infinity)
-                    .padding(.horizontal, Constants.spacing)
-                    .background(.thickMaterial)
                     .transition(.move(edge: .top))
                 }
                 Spacer()
