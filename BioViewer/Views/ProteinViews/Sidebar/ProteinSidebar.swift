@@ -19,6 +19,7 @@ private struct SidebarItem: View {
 private struct ProteinSidebarContent: View {
 
     @Binding var selectedSegment: Int
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -27,7 +28,8 @@ private struct ProteinSidebarContent: View {
             case 0: FileSegmentProtein()
             case 1: AppearanceSegmentProtein()
             case 2: FunctionsSegmentProtein()
-            case 3: SettingsSegmentProtein()
+            case 3: TrajectorySegmentProtein()
+            case 4: SettingsSegmentProtein()
             default: Spacer()
             }
             // Top segmented control to switch between options
@@ -38,6 +40,11 @@ private struct ProteinSidebarContent: View {
                         SidebarItem(image: "camera.filters", tag: 1)
                         /*
                         SidebarItem(image: "function", tag: 2)
+                        */
+                        if proteinViewModel.dataSource.files.first?.fileType == .dynamicStructure {
+                            SidebarItem(image: "video", tag: 3)
+                        }
+                        /*
                         SidebarItem(image: "gearshape.2", tag: 3)
                         */
                     }

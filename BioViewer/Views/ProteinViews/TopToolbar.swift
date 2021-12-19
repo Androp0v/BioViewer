@@ -10,6 +10,7 @@ import SwiftUI
 struct TopToolbar: View {
     
     @State var displayToolbar: Bool = true
+    @State var displayPhotoMode: Bool = false
     
     #if targetEnvironment(macCatalyst)
     let buttonStyle = PlainButtonStyle()
@@ -39,11 +40,19 @@ struct TopToolbar: View {
                 if displayToolbar {
                     HStack(spacing: Constants.spacing) {
                         Spacer()
-                        Image(systemName: "camera.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: Constants.buttonSize, height: Constants.buttonSize)
-                            .foregroundColor(.accentColor)
+                        Button(action: {
+                            displayPhotoMode.toggle()
+                        }, label: {
+                            Image(systemName: "camera.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: Constants.buttonSize, height: Constants.buttonSize)
+                                .foregroundColor(.accentColor)
+                        })
+                            .sheet(isPresented: $displayPhotoMode,
+                                   onDismiss: {}) {
+                                PhotoModeView()
+                            }
                         Divider()
                             .frame(height: Constants.buttonSize)
                         Image(systemName: "rotate.3d")
