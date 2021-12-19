@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TopToolbar: View {
     
-    @State var displayToolbar: Bool = true
+    @State var displayToolbar: Bool
     @State var displayPhotoMode: Bool = false
     
     #if targetEnvironment(macCatalyst)
@@ -49,8 +49,7 @@ struct TopToolbar: View {
                                 .frame(width: Constants.buttonSize, height: Constants.buttonSize)
                                 .foregroundColor(.accentColor)
                         })
-                            .sheet(isPresented: $displayPhotoMode,
-                                   onDismiss: {}) {
+                            .sheet(isPresented: $displayPhotoMode) {
                                 PhotoModeView()
                             }
                         Divider()
@@ -98,6 +97,7 @@ struct TopToolbar: View {
                         withAnimation {
                             displayToolbar.toggle()
                         }
+                        UserDefaults.standard.set(displayToolbar, forKey: "showToolbar")
                     }, label: {
                         Image(systemName: "rectangle.topthird.inset.filled")
                             .resizable()
@@ -116,6 +116,6 @@ struct TopToolbar: View {
 
 struct TopToolbar_Previews: PreviewProvider {
     static var previews: some View {
-        TopToolbar()
+        TopToolbar(displayToolbar: true)
     }
 }

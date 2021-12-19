@@ -63,9 +63,13 @@ struct ProteinView: View {
                             .background(.black)
                             .edgesIgnoringSafeArea([.top, .bottom])
                         
-                        // Top bar
+                        // Top toolbar
                         VStack {
-                            TopToolbar()
+                            if UserDefaults.standard.value(forKey: "showToolbar") == nil {
+                                TopToolbar(displayToolbar: horizontalSizeClass != .compact)
+                            } else {
+                                TopToolbar(displayToolbar: UserDefaults.standard.bool(forKey: "showToolbar"))
+                            }
                             Spacer()
                         }
                         
