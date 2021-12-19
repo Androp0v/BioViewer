@@ -179,6 +179,7 @@
 		C5EEE9B2276F5BCD005737C1 /* PhotoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B1276F5BCD005737C1 /* PhotoModeView.swift */; };
 		C5EEE9B5276F6031005737C1 /* PhotoModeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B4276F6031005737C1 /* PhotoModeHeader.swift */; };
 		C5EEE9B7276F66E4005737C1 /* PhotoModeConfigList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B6276F66E4005737C1 /* PhotoModeConfigList.swift */; };
+		C5EEE9BA276F8616005737C1 /* CameraControlToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -367,6 +368,7 @@
 		C5EEE9B1276F5BCD005737C1 /* PhotoModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeView.swift; sourceTree = "<group>"; };
 		C5EEE9B4276F6031005737C1 /* PhotoModeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeHeader.swift; sourceTree = "<group>"; };
 		C5EEE9B6276F66E4005737C1 /* PhotoModeConfigList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeConfigList.swift; sourceTree = "<group>"; };
+		C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlToolbar.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -500,7 +502,7 @@
 				C405744A2663DC4C008527D1 /* ProteinMetal */,
 				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
 				C45BAC4426497A3300B36026 /* DynamicStructureControlView.swift */,
-				C5EEE9AB276DE4B9005737C1 /* TopToolbar.swift */,
+				C5EEE9B8276F8605005737C1 /* Top toolbar */,
 				C5EEE9B3276F6022005737C1 /* PhotoMode */,
 				C440856B26481E0300DC5009 /* ProteinSequenceView.swift */,
 			);
@@ -894,6 +896,15 @@
 			path = PhotoMode;
 			sourceTree = "<group>";
 		};
+		C5EEE9B8276F8605005737C1 /* Top toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				C5EEE9AB276DE4B9005737C1 /* TopToolbar.swift */,
+				C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */,
+			);
+			path = "Top toolbar";
+			sourceTree = "<group>";
+		};
 		C5F7D30B275786DA008A0517 /* JSONs */ = {
 			isa = PBXGroup;
 			children = (
@@ -1143,6 +1154,7 @@
 				C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
 				C50E02582764C4BE005D7F06 /* PhysicsLoop.swift in Sources */,
+				C5EEE9BA276F8616005737C1 /* CameraControlToolbar.swift in Sources */,
 				C4057407265E93E9008527D1 /* RemovePoints.metal in Sources */,
 				C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */,
 				C41A0566264C7B97006F551C /* StatusView.swift in Sources */,

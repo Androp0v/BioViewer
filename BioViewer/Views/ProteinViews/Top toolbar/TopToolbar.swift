@@ -18,7 +18,7 @@ struct TopToolbar: View {
     let buttonStyle = DefaultButtonStyle()
     #endif
     
-    private struct Constants {
+    struct Constants {
         #if targetEnvironment(macCatalyst)
         static let toolbarSize: CGFloat = 28
         static let buttonSize: CGFloat = 16
@@ -54,16 +54,9 @@ struct TopToolbar: View {
                             }
                         Divider()
                             .frame(height: Constants.buttonSize)
-                        Image(systemName: "rotate.3d")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: Constants.buttonSize, height: Constants.buttonSize)
-                            .foregroundColor(.accentColor)
-                        Image(systemName: "move.3d")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: Constants.buttonSize, height: Constants.buttonSize)
-                            .foregroundColor(.accentColor)
+                        
+                        CameraControlToolbar()
+                        
                         Divider()
                             .frame(height: Constants.buttonSize)
                         Spacer()
