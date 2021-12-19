@@ -13,27 +13,14 @@ struct PhotoModeView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                Spacer()
-                    .frame(height: 12)
-                PhotoModeHeader()
-                Spacer()
-                Divider()
-                    .padding(.horizontal)
-                Button(action: {
-                    
-                }, label: {
-                    HStack {
-                        Image(systemName: "camera")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24)
-                        Text(NSLocalizedString("Take photo", comment: ""))
-                    }
-                    .frame(maxWidth: .infinity)
-                })
-                    .buttonStyle(BorderedProminentButtonStyle())
-                    .padding()
+            ZStack {
+                PhotoModeContent()
+                    .edgesIgnoringSafeArea(.bottom)
+                
+                VStack {
+                    Spacer()
+                    PhotoModeFooter()
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading:

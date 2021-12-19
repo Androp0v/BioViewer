@@ -177,11 +177,11 @@
 		C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AD276E0198005737C1 /* TrajectorySegmentProtein.swift */; };
 		C5EEE9B0276E0448005737C1 /* InputWithButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AF276E0448005737C1 /* InputWithButtonRow.swift */; };
 		C5EEE9B2276F5BCD005737C1 /* PhotoModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B1276F5BCD005737C1 /* PhotoModeView.swift */; };
-		C5EEE9B5276F6031005737C1 /* PhotoModeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B4276F6031005737C1 /* PhotoModeHeader.swift */; };
-		C5EEE9B7276F66E4005737C1 /* PhotoModeConfigList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B6276F66E4005737C1 /* PhotoModeConfigList.swift */; };
+		C5EEE9B5276F6031005737C1 /* PhotoModeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B4276F6031005737C1 /* PhotoModeContent.swift */; };
 		C5EEE9BA276F8616005737C1 /* CameraControlToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */; };
 		C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */; };
 		C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */; };
+		C5EEE9BF276FCC65005737C1 /* PhotoModeFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -368,10 +368,10 @@
 		C5EEE9AD276E0198005737C1 /* TrajectorySegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectorySegmentProtein.swift; sourceTree = "<group>"; };
 		C5EEE9AF276E0448005737C1 /* InputWithButtonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputWithButtonRow.swift; sourceTree = "<group>"; };
 		C5EEE9B1276F5BCD005737C1 /* PhotoModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeView.swift; sourceTree = "<group>"; };
-		C5EEE9B4276F6031005737C1 /* PhotoModeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeHeader.swift; sourceTree = "<group>"; };
-		C5EEE9B6276F66E4005737C1 /* PhotoModeConfigList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeConfigList.swift; sourceTree = "<group>"; };
+		C5EEE9B4276F6031005737C1 /* PhotoModeContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeContent.swift; sourceTree = "<group>"; };
 		C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlToolbar.swift; sourceTree = "<group>"; };
 		C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarConfig.swift; sourceTree = "<group>"; };
+		C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeFooter.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -893,8 +893,8 @@
 			isa = PBXGroup;
 			children = (
 				C5EEE9B1276F5BCD005737C1 /* PhotoModeView.swift */,
-				C5EEE9B4276F6031005737C1 /* PhotoModeHeader.swift */,
-				C5EEE9B6276F66E4005737C1 /* PhotoModeConfigList.swift */,
+				C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */,
+				C5EEE9B4276F6031005737C1 /* PhotoModeContent.swift */,
 			);
 			path = PhotoMode;
 			sourceTree = "<group>";
@@ -1106,6 +1106,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */,
+				C5EEE9BF276FCC65005737C1 /* PhotoModeFooter.swift in Sources */,
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
 				C515EFC3274FEA0900B6F7DB /* ColorScene.swift in Sources */,
 				C57F9958275E59D1001DE6D6 /* ProteinFile.swift in Sources */,
@@ -1134,7 +1135,6 @@
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
-				C5EEE9B7276F66E4005737C1 /* PhotoModeConfigList.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
@@ -1176,7 +1176,7 @@
 				C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */,
-				C5EEE9B5276F6031005737C1 /* PhotoModeHeader.swift in Sources */,
+				C5EEE9B5276F6031005737C1 /* PhotoModeContent.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
 				C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
