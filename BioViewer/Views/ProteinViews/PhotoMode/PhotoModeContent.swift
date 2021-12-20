@@ -30,6 +30,15 @@ struct PhotoModeContent: View {
                 if photoModeViewModel.isPreviewCreated {
                     image?
                         .resizable()
+                        .onDrag {
+                            guard let cgImage = photoModeViewModel.image else { return NSItemProvider() }
+                            let data = UIImage(cgImage: cgImage).pngData()
+                            let provider = NSItemProvider(item: data as NSSecureCoding?, typeIdentifier: "public.png")
+                            provider.previewImageHandler = { (handler, _, _) -> Void in
+                                handler?(data as NSSecureCoding?, nil)
+                            }
+                            return provider
+                        }
                 }
             }
             .aspectRatio(1.0, contentMode: .fit)
