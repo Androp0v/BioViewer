@@ -102,6 +102,7 @@ extension ProteinRenderer {
             DispatchQueue.main.async {
                 let hqImage = hqTextures.hqTexture.getCGImage(clearBackground: photoModeViewModel.photoConfig.clearBackground,
                                                               depthTexture: hqTextures.hqDepthTexture)
+                photoModeViewModel.showSpinner = false
                 photoModeViewModel.image = hqImage
                 photoModeViewModel.isPreviewCreated = true
             }

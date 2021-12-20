@@ -40,6 +40,10 @@ struct PhotoModeContentHeaderView: View {
                             return provider
                         }
                 }
+                if photoModeViewModel.showSpinner {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                }
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(Color(uiColor: .separator),
                             style: StrokeStyle(lineWidth: 2))
@@ -96,7 +100,7 @@ struct PhotoModeContentHeaderView: View {
                     .disabled(!photoModeViewModel.isPreviewCreated)
                     #if targetEnvironment(macCatalyst)
                     .buttonStyle(BorderedProminentButtonStyle())
-                    #endif                
+                    #endif
             }
             Spacer()
         }

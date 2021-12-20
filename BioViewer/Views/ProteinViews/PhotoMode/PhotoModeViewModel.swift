@@ -47,6 +47,7 @@ class PhotoModeViewModel: ObservableObject {
     // MARK: - Previews
     var image: CGImage?
     @Published var isPreviewCreated: Bool = false
+    @Published var showSpinner: Bool = false
 }
 
 struct PhotoModeTextureOptions {

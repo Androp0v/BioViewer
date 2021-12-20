@@ -16,6 +16,7 @@ struct PhotoModeFooter: View {
         VStack(spacing: 0) {
             Divider()
             Button(action: {
+                photoModeViewModel.showSpinner = true
                 // TO-DO: Error handling
                 try? proteinViewModel.renderer.drawHighQualityFrame(size: CGSize(width: 2048, height: 2048),
                                                                     photoModeViewModel: photoModeViewModel)
