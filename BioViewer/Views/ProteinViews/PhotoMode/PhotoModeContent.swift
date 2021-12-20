@@ -21,32 +21,35 @@ struct PhotoModeContent: View {
         
     var body: some View {
         
-        List {
+        VStack(spacing: 0) {
             PhotoModeContentHeaderView()
-            
-            Section {
-                PickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
-                          selectedOption: .constant(1),
-                          pickerOptions: ["1024x1024", "2048x2048", "4096x4096"])
-                PickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
-                          selectedOption: .constant(1),
-                          pickerOptions: ["Normal", "High", "Very high"])
-                PickerRow(optionName: NSLocalizedString("Shadow smoothing", comment: ""),
-                          selectedOption: .constant(1),
-                          pickerOptions: ["Normal", "High", "Very high"])
-                SwitchRow(title: NSLocalizedString("Clear background", comment: ""),
-                          toggledVariable: .constant(true))
+                .padding()
+            Divider()
+            List {
+                Section {
+                    PickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
+                              selectedOption: .constant(1),
+                              pickerOptions: ["1024x1024", "2048x2048", "4096x4096"])
+                    PickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
+                              selectedOption: .constant(1),
+                              pickerOptions: ["Normal", "High", "Very high"])
+                    PickerRow(optionName: NSLocalizedString("Shadow smoothing", comment: ""),
+                              selectedOption: .constant(1),
+                              pickerOptions: ["Normal", "High", "Very high"])
+                    SwitchRow(title: NSLocalizedString("Clear background", comment: ""),
+                              toggledVariable: .constant(true))
+                }
+                
+                // Empty section to add spacing at the bottom of the list
+                Section {
+                    Spacer()
+                        .frame(height: 24)
+                        .listRowBackground(Color.clear)
+                }
             }
-            
-            // Empty section to add spacing at the bottom of the list
-            Section {
-                Spacer()
-                    .frame(height: 24)
-                    .listRowBackground(Color.clear)
-            }
+            .environment(\.defaultMinListHeaderHeight, 0)
+            .listStyle(DefaultListStyle())
         }
-        .environment(\.defaultMinListHeaderHeight, 0)
-        .listStyle(DefaultListStyle())
     }
 }
 

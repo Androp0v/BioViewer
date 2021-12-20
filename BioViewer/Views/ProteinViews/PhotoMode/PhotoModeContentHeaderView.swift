@@ -96,9 +96,7 @@ struct PhotoModeContentHeaderView: View {
                     .disabled(!photoModeViewModel.isPreviewCreated)
                     #if targetEnvironment(macCatalyst)
                     .buttonStyle(BorderedProminentButtonStyle())
-                    #endif
-                
-                Spacer()
+                    #endif                
             }
             Spacer()
         }
