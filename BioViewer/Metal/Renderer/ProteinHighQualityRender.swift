@@ -30,6 +30,9 @@ extension ProteinRenderer {
         hqShadowTextures.makeTextures(device: device, textureWidth: 4096, textureHeight: 4096)
         hqShadowTextures.makeShadowSampler(device: device)
         
+        // Create high quality impostor render pass pipeline state
+        makeImpostorRenderPipelineState(device: device, variant: .highQuality)
+        
         // Change the image aspect ratio
         self.scene.camera.updateProjection(drawableSize: CGSize(width: HQTextures.textureWidth,
                                                                 height: HQTextures.textureHeight))
@@ -84,7 +87,8 @@ extension ProteinRenderer {
                            uniformBuffer: &uniformBuffer,
                            drawableTexture: hqTextures.hqTexture,
                            depthTexture: hqTextures.hqDepthTexture,
-                           shadowTextures: hqShadowTextures)
+                           shadowTextures: hqShadowTextures,
+                           variant: .highQuality)
         
         // MARK: - Completion handler
         commandBuffer.addCompletedHandler({ [weak self] commandBuffer in

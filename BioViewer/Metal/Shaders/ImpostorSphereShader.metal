@@ -22,6 +22,9 @@ struct ImpostorVertexOut{
     half4 color;
 };
 
+// MARK: - Constants
+constant bool hq_sample_count [[ function_constant(0) ]];
+
 // MARK: - Functions
 
 half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
@@ -190,7 +193,12 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         shadedColor.rgb -= frameData.shadow_strength * (1 - is_sunlit);
         #else
         float sunlit_fraction = 0;
-        constexpr int sample_count = 2;
+        int sample_count;
+        if (hq_sample_count) {
+            sample_count = 128;
+        } else {
+            sample_count = 2;
+        }
         for (int sample_index = 0; sample_index < sample_count; sample_index++) {
             // FIXME: 0.001 should be proportional to the typical atom size
             // TO-DO: VogelDiskSample may be called with a random number instead of 0 for the rotation

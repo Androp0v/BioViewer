@@ -25,6 +25,8 @@ class ProteinRenderer: NSObject, ObservableObject {
     var opaqueRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times)
     var impostorRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
+    var impostorHQRenderingPipelineState: MTLRenderPipelineState?
     /// Shadow depth state
     var shadowDepthState: MTLDepthStencilState?
     /// Depth state
@@ -160,7 +162,7 @@ class ProteinRenderer: NSObject, ObservableObject {
         // Create pipeline states
         makeShadowRenderPipelineState(device: device)
         makeOpaqueRenderPipelineState(device: device)
-        makeImpostorRenderPipelineState(device: device)
+        makeImpostorRenderPipelineState(device: device, variant: .normal)
         
         // Create shadow textures and sampler
         shadowTextures.makeTextures(device: device,
@@ -270,7 +272,8 @@ extension ProteinRenderer: MTKViewDelegate {
                                uniformBuffer: &uniformBuffer,
                                drawableTexture: drawable.texture,
                                depthTexture: view.depthStencilTexture,
-                               shadowTextures: shadowTextures)
+                               shadowTextures: shadowTextures,
+                               variant: .normal)
             
             // MARK: - Triple buffering
             

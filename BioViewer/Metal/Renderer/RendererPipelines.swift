@@ -51,13 +51,32 @@ extension ProteinRenderer {
     }
     
     // MARK: - Impostor geometry pass
-    func makeImpostorRenderPipelineState(device: MTLDevice) {
+    
+    enum ImpostorRenderPassVariant {
+        case normal
+        case highQuality
+    }
+    
+    func makeImpostorRenderPipelineState(device: MTLDevice, variant: ImpostorRenderPassVariant) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
             fatalError()
         }
+        
+        // Constant values to avoid unwanted branching
+        let constantValues = MTLFunctionConstantValues()
+        switch variant {
+        case .normal:
+            var useHighShadowSampleCount: Bool = false
+            constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
+        case .highQuality:
+            var useHighShadowSampleCount: Bool = true
+            constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
+        }
+        
+        // Vertex and fragment functions
         let vertexProgram = defaultLibrary.makeFunction(name: "impostor_vertex")
-        let fragmentProgram = defaultLibrary.makeFunction(name: "impostor_fragment")
+        let fragmentProgram = try? defaultLibrary.makeFunction(name: "impostor_fragment", constantValues: constantValues)
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
@@ -66,7 +85,13 @@ extension ProteinRenderer {
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
-
-        impostorRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        
+        // Save to the appropriate pipeline state
+        switch variant {
+        case .normal:
+            impostorRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        case .highQuality:
+            impostorHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        }
     }
 }

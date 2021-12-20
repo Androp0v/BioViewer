@@ -12,7 +12,7 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
@@ -32,8 +32,15 @@ extension ProteinRenderer {
             return
         }
 
-        // Set pipeline state
-        guard let impostorRenderingPipelineState = impostorRenderingPipelineState else {
+        // Set pipeline state for the variant
+        var variantPipelineState: MTLRenderPipelineState?
+        switch variant {
+        case .normal:
+            variantPipelineState = impostorRenderingPipelineState
+        case .highQuality:
+            variantPipelineState = impostorHQRenderingPipelineState
+        }
+        guard let impostorRenderingPipelineState = variantPipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
