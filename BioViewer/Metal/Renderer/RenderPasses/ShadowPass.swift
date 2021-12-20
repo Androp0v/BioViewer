@@ -10,7 +10,7 @@ import Metal
 
 extension ProteinRenderer {
     
-    func shadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer) {
+    func shadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures) {
     
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
@@ -20,6 +20,9 @@ extension ProteinRenderer {
         shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
         shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
         shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        
+        shadowRenderPassDescriptor.renderTargetWidth = shadowTextures.textureWidth
+        shadowRenderPassDescriptor.renderTargetHeight = shadowTextures.textureHeight
         
         // Create render command encoder
         guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: shadowRenderPassDescriptor) else {

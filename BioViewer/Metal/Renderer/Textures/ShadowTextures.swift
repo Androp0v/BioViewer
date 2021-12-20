@@ -13,24 +13,30 @@ struct ShadowTextures {
     var shadowTexture: MTLTexture!
     var shadowDepthTexture: MTLTexture!
     var shadowSampler: MTLSamplerState?
+    var textureWidth: Int!
+    var textureHeight: Int!
     
     // Since the texture should be just enough to fit the bounding sphere on an
     // orthographic projection, the shadow texture should be square. High resolution
     // shadows are *very* expensive due to the need to call the fragment shader.
     
-    static let textureWidth: Int = 1024
-    static let textureHeight: Int = 1024
+    static let defaultTextureWidth: Int = 1024
+    static let defaultTextureHeight: Int = 1024
     
     static let shadowTexturePixelFormat = MTLPixelFormat.r32Float
     static let shadowDepthTexturePixelFormat = MTLPixelFormat.depth32Float
     
-    mutating func makeTextures(device: MTLDevice) {
+    mutating func makeTextures(device: MTLDevice, textureWidth: Int, textureHeight: Int) {
+        
+        // MARK: - Texture size
+        self.textureWidth = textureWidth
+        self.textureHeight = textureHeight
         
         // MARK: - Common texture descriptor
         let shadowTextureDescriptor = MTLTextureDescriptor
             .texture2DDescriptor(pixelFormat: ShadowTextures.shadowTexturePixelFormat,
-                                 width: ShadowTextures.textureWidth,
-                                 height: ShadowTextures.textureHeight,
+                                 width: self.textureWidth,
+                                 height: self.textureHeight,
                                  mipmapped: false)
         
         shadowTextureDescriptor.textureType = .type2D

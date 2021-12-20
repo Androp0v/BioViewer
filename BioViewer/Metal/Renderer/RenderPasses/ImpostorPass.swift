@@ -12,7 +12,7 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }

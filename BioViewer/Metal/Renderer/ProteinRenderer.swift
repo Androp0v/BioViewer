@@ -98,8 +98,6 @@ class ProteinRenderer: NSObject, ObservableObject {
         descriptor.depthAttachment.storeAction = .store
         
         descriptor.defaultRasterSampleCount = 0
-        descriptor.renderTargetWidth = ShadowTextures.textureWidth
-        descriptor.renderTargetHeight = ShadowTextures.textureHeight
         return descriptor
     }()
     
@@ -165,7 +163,9 @@ class ProteinRenderer: NSObject, ObservableObject {
         makeImpostorRenderPipelineState(device: device)
         
         // Create shadow textures and sampler
-        shadowTextures.makeTextures(device: device)
+        shadowTextures.makeTextures(device: device,
+                                    textureWidth: ShadowTextures.defaultTextureWidth,
+                                    textureHeight: ShadowTextures.defaultTextureHeight)
         shadowTextures.makeShadowSampler(device: device)
         
         // Depth state
@@ -258,7 +258,7 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // MARK: - Shadow Map pass
         
-        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer)
+        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: shadowTextures)
         
         // MARK: - Getting drawable
         // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -269,7 +269,8 @@ extension ProteinRenderer: MTKViewDelegate {
             impostorRenderPass(commandBuffer: commandBuffer,
                                uniformBuffer: &uniformBuffer,
                                drawableTexture: drawable.texture,
-                               depthTexture: view.depthStencilTexture)
+                               depthTexture: view.depthStencilTexture,
+                               shadowTextures: shadowTextures)
             
             // MARK: - Triple buffering
             

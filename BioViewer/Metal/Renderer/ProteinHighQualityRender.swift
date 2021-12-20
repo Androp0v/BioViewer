@@ -25,6 +25,11 @@ extension ProteinRenderer {
         var hqTextures = HQTextures()
         hqTextures.makeTextures(device: device)
         
+        // Create the textures required for HQ shadow casting
+        var hqShadowTextures = ShadowTextures()
+        hqShadowTextures.makeTextures(device: device, textureWidth: 4096, textureHeight: 4096)
+        hqShadowTextures.makeShadowSampler(device: device)
+        
         // Change the image aspect ratio
         self.scene.camera.updateProjection(drawableSize: CGSize(width: HQTextures.textureWidth,
                                                                 height: HQTextures.textureHeight))
@@ -68,7 +73,7 @@ extension ProteinRenderer {
         
         // MARK: - Shadow Map pass
         
-        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer)
+        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: hqShadowTextures)
         
         // MARK: - Getting drawable
         // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -78,7 +83,8 @@ extension ProteinRenderer {
         impostorRenderPass(commandBuffer: commandBuffer,
                            uniformBuffer: &uniformBuffer,
                            drawableTexture: hqTextures.hqTexture,
-                           depthTexture: hqTextures.hqDepthTexture)
+                           depthTexture: hqTextures.hqDepthTexture,
+                           shadowTextures: hqShadowTextures)
         
         // MARK: - Completion handler
         commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
