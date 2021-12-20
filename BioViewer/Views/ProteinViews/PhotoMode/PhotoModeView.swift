@@ -10,16 +10,19 @@ import SwiftUI
 struct PhotoModeView: View {
     
     @Environment(\.dismiss) var dismiss
+    @StateObject var photoModeViewModel = PhotoModeViewModel()
     
     var body: some View {
         NavigationView {
             ZStack {
                 PhotoModeContent()
                     .edgesIgnoringSafeArea(.bottom)
+                    .environmentObject(photoModeViewModel)
                 
                 VStack {
                     Spacer()
                     PhotoModeFooter()
+                        .environmentObject(photoModeViewModel)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

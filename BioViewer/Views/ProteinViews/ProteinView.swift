@@ -73,6 +73,7 @@ struct ProteinView: View {
                             Spacer()
                         }
                         .environmentObject(proteinViewModel.toolbarConfig)
+                        .environmentObject(proteinViewModel)
                         
                         // Scene controls
                         VStack(spacing: 12) {

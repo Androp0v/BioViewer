@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct PhotoModeFooter: View {
+    
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
+    
     var body: some View {
         VStack(spacing: 0) {
             Divider()
             Button(action: {
-                
+                // TO-DO: Error handling
+                try? proteinViewModel.renderer.drawHighQualityFrame(size: CGSize(width: 2048, height: 2048),
+                                                                    photoModeViewModel: photoModeViewModel)
             }, label: {
                 HStack {
                     Image(systemName: "camera")

@@ -12,16 +12,20 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawable: CAMetalDrawable, view: MTKView) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        impostorRenderPassDescriptor.colorAttachments[0].texture = drawable.texture
+        impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
+        // Clear the drawable texture using the scene's background color
         impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
-        impostorRenderPassDescriptor.depthAttachment.texture = view.depthStencilTexture
+        // Attach depth texture.
+        impostorRenderPassDescriptor.depthAttachment.texture = depthTexture
+        // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
+        impostorRenderPassDescriptor.depthAttachment.clearDepth = 1.0
 
         // Create render command encoder
         guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {

@@ -249,11 +249,7 @@ extension ProteinRenderer: MTKViewDelegate {
             NSLog("Command queue is nil.")
             return
         }
-        
-        // Clear the depth texture (depth is in normalized device coordinates,
-        // where 1.0 is the maximum/deepest value).
-        view.clearDepth = 1.0
-        
+                
         // Create command buffer
         guard let commandBuffer = commandQueue.makeCommandBuffer() else {
             NSLog("Unable to create command buffer.")
@@ -272,8 +268,8 @@ extension ProteinRenderer: MTKViewDelegate {
             // MARK: - Transparent geometry pass
             impostorRenderPass(commandBuffer: commandBuffer,
                                uniformBuffer: &uniformBuffer,
-                               drawable: drawable,
-                               view: view)
+                               drawableTexture: drawable.texture,
+                               depthTexture: view.depthStencilTexture)
             
             // MARK: - Triple buffering
             

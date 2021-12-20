@@ -10,6 +10,8 @@ import SwiftUI
 struct PhotoModeContent: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
+    @State var image: Image?
     
     private struct Constants {
         #if targetEnvironment(macCatalyst)
@@ -38,12 +40,22 @@ struct PhotoModeContent: View {
     var body: some View {
         if horizontalSizeClass == .compact {
             List {
-                Rectangle()
-                    .background(.black)
+                ZStack {
+                    if photoModeViewModel.isPreviewCreated {
+                        image
+                    }
+                    Rectangle()
+                        .background(.red)
+                }
                     .aspectRatio(1.0, contentMode: .fit)
                     .padding()
                     .frame(maxWidth: .infinity, maxHeight: 300)
                     .listRowBackground(Color.clear)
+                    .onReceive(photoModeViewModel.$isPreviewCreated) { _ in
+                        if let cgImage = photoModeViewModel.image {
+                            self.image = Image(uiImage: UIImage(cgImage: cgImage))
+                        }
+                    }
                 Section(content: {
                     ListContent()
                 }, header: {
@@ -54,12 +66,22 @@ struct PhotoModeContent: View {
             .listStyle(GroupedListStyle())
         } else {
             List {
-                Rectangle()
-                    .background(.black)
-                    .aspectRatio(1.0, contentMode: .fit)
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: 300)
-                    .listRowBackground(Color.clear)
+                ZStack {
+                    Color.black
+                    if photoModeViewModel.isPreviewCreated {
+                        image?
+                            .resizable()
+                    }
+                }
+                .aspectRatio(1.0, contentMode: .fit)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: 300)
+                .listRowBackground(Color.clear)
+                .onReceive(photoModeViewModel.$isPreviewCreated) { _ in
+                    if let cgImage = photoModeViewModel.image {
+                        self.image = Image(uiImage: UIImage(cgImage: cgImage))
+                    }
+                }
                 Section(content: {
                     ListContent()
                 }, header: {

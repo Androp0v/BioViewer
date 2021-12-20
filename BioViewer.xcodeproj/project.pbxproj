@@ -182,6 +182,9 @@
 		C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */; };
 		C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */; };
 		C5EEE9BF276FCC65005737C1 /* PhotoModeFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */; };
+		C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */; };
+		C5EEE9C3276FFC02005737C1 /* HQTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C2276FFC02005737C1 /* HQTextures.swift */; };
+		C5EEE9C52770043D005737C1 /* PhotoModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -372,6 +375,9 @@
 		C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlToolbar.swift; sourceTree = "<group>"; };
 		C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarConfig.swift; sourceTree = "<group>"; };
 		C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeFooter.swift; sourceTree = "<group>"; };
+		C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinHighQualityRender.swift; sourceTree = "<group>"; };
+		C5EEE9C2276FFC02005737C1 /* HQTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HQTextures.swift; sourceTree = "<group>"; };
+		C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewModel.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -654,6 +660,7 @@
 			isa = PBXGroup;
 			children = (
 				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
+				C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */,
 				C51D4EE72769151100C69B3D /* Computed once */,
 				C51D4EE2276912B200C69B3D /* RenderPasses */,
 				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
@@ -772,6 +779,7 @@
 			isa = PBXGroup;
 			children = (
 				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
+				C5EEE9C2276FFC02005737C1 /* HQTextures.swift */,
 				C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */,
 			);
 			path = Textures;
@@ -893,6 +901,7 @@
 			isa = PBXGroup;
 			children = (
 				C5EEE9B1276F5BCD005737C1 /* PhotoModeView.swift */,
+				C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */,
 				C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */,
 				C5EEE9B4276F6031005737C1 /* PhotoModeContent.swift */,
 			);
@@ -1105,6 +1114,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5EEE9C52770043D005737C1 /* PhotoModeViewModel.swift in Sources */,
 				C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */,
 				C5EEE9BF276FCC65005737C1 /* PhotoModeFooter.swift in Sources */,
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
@@ -1121,6 +1131,7 @@
 				C455362A265D869D006D980B /* AtomArrayComposition.swift in Sources */,
 				C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */,
 				C41A056C265894AA006F551C /* CreateSASPoints.metal in Sources */,
+				C5EEE9C3276FFC02005737C1 /* HQTextures.swift in Sources */,
 				C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */,
 				C57F995E275E8E31001DE6D6 /* BioViewerWorkspace.swift in Sources */,
 				C5E7AF9B2760FF950065F6AD /* ShadowShader.metal in Sources */,
@@ -1211,6 +1222,7 @@
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
 				C54066FA274D1C7900710CFC /* ParsePDB.swift in Sources */,
 				C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */,
+				C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */,
 				C495B23E26654242004995C2 /* ProteinChunk.swift in Sources */,
 				C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
