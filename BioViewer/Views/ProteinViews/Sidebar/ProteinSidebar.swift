@@ -40,11 +40,9 @@ private struct ProteinSidebarContent: View {
                         SidebarItem(image: "camera.filters", tag: 1)
                         /*
                         SidebarItem(image: "function", tag: 2)
-                        */
                         if proteinViewModel.dataSource.files.first?.fileType == .dynamicStructure {
                             SidebarItem(image: "video", tag: 3)
                         }
-                        /*
                         SidebarItem(image: "gearshape.2", tag: 3)
                         */
                     }
