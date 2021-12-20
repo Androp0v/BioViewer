@@ -18,23 +18,7 @@ struct PhotoModeContent: View {
         static let spacing: CGFloat = 36
         #endif
     }
-    
-    struct ListContent: View {
-        var body: some View {
-            PickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
-                      selectedOption: .constant(1),
-                      pickerOptions: ["1024x1024", "2048x2048", "4096x4096"])
-            PickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
-                      selectedOption: .constant(1),
-                      pickerOptions: ["Normal", "High", "Very high"])
-            PickerRow(optionName: NSLocalizedString("Shadow smoothing", comment: ""),
-                      selectedOption: .constant(1),
-                      pickerOptions: ["Normal", "High", "Very high"])
-            SwitchRow(title: NSLocalizedString("Clear background", comment: ""),
-                      toggledVariable: .constant(true))
-        }
-    }
-    
+        
     struct PreviewContent: View {
         
         @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
@@ -49,7 +33,7 @@ struct PhotoModeContent: View {
                 }
             }
             .aspectRatio(1.0, contentMode: .fit)
-            .padding()
+            .padding(.horizontal)
             .frame(maxWidth: .infinity, maxHeight: 300)
             .listRowBackground(Color.clear)
             .onReceive(photoModeViewModel.$isPreviewCreated) { _ in
@@ -59,21 +43,35 @@ struct PhotoModeContent: View {
             }
         }
     }
-        
+
     var body: some View {
-        if horizontalSizeClass == .compact {
-            List {
-                PreviewContent()
-                ListContent()
+        
+        List {
+            PreviewContent()
+            
+            Section {
+                PickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
+                          selectedOption: .constant(1),
+                          pickerOptions: ["1024x1024", "2048x2048", "4096x4096"])
+                PickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
+                          selectedOption: .constant(1),
+                          pickerOptions: ["Normal", "High", "Very high"])
+                PickerRow(optionName: NSLocalizedString("Shadow smoothing", comment: ""),
+                          selectedOption: .constant(1),
+                          pickerOptions: ["Normal", "High", "Very high"])
+                SwitchRow(title: NSLocalizedString("Clear background", comment: ""),
+                          toggledVariable: .constant(true))
             }
-            .listStyle(GroupedListStyle())
-        } else {
-            List {
-                PreviewContent()
-                ListContent()
+            
+            // Empty section to add spacing at the bottom of the list
+            Section {
+                Spacer()
+                    .frame(height: 24)
+                    .listRowBackground(Color.clear)
             }
-            .listStyle(DefaultListStyle())
         }
+        .environment(\.defaultMinListHeaderHeight, 0)
+        .listStyle(DefaultListStyle())
     }
 }
 
