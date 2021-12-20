@@ -25,7 +25,7 @@ struct PhotoModeView: View {
                         .environmentObject(photoModeViewModel)
                 }
             }
-            .navigationTitle(NSLocalizedString("Photo configuration", comment: ""))
+            .navigationTitle(NSLocalizedString("Photo Mode", comment: ""))
             .navigationBarItems(leading:
                 Button(action: {
                     dismiss()
