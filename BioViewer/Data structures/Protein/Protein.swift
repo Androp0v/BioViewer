@@ -20,7 +20,10 @@ public class Protein {
     private var sequence: [String]?
     
     // MARK: - Configurations
+    /// Number of configurations for this structure.
     public var configurationCount: Int
+    /// Energies of each configuration.
+    public var configurationEnergies: [Float]?
     
     // MARK: - Subunits
     

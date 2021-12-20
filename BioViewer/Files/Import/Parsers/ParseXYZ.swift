@@ -16,6 +16,7 @@ extension FileParser {
     
     private class ParsedConfiguration {
         var id: Int
+        var energy: Float?
         // Make one atom array per common element
         var carbonArray = [simd_float3]()
         var nitrogenArray = [simd_float3]()

@@ -10,7 +10,6 @@ import SwiftUI
 struct FileSegmentProtein: View {
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @State var showFileSource: Bool = false
 
     var body: some View {
             List {
@@ -25,6 +24,7 @@ struct FileSegmentProtein: View {
                 })
                 */
                 
+                // MARK: - Loaded files
                 // First section hast 64pt padding to account for the
                 // space under the segmented control.
                 Section(header: Text(NSLocalizedString("Loaded files", comment: ""))
@@ -42,6 +42,7 @@ struct FileSegmentProtein: View {
                     }
                 }
                     
+                // MARK: - Loaded models
                 Section(header: Text(NSLocalizedString("Loaded models", comment: ""))
                             .padding(.bottom, 4),
                         content: {
@@ -55,29 +56,14 @@ struct FileSegmentProtein: View {
                                                   content: { FileAtomElementPopover() })
                 })
                 
+                // MARK: - File details
                 Section(header: Text(NSLocalizedString("File details", comment: ""))
                             .padding(.bottom, 4),
                         content: {
-                    
-                            let proteinFile = proteinViewModel.dataSource.files.first
-                    
-                            InfoTextRow(text: NSLocalizedString("PDB ID:", comment: ""),
-                                        value: String(proteinFile?.fileInfo.pdbID ?? "-"))
-                            InfoLongTextRow(title: NSLocalizedString("Description: ", comment: ""),
-                                        longText: proteinFile?.fileInfo.description)
-                            InfoLongTextRow(title: NSLocalizedString("Authors: ", comment: ""),
-                                        longText: proteinFile?.fileInfo.authors)
-                            Button(NSLocalizedString("View raw file", comment: ""), action: {
-                                showFileSource.toggle()
-                            })
-                            .sheet(isPresented: $showFileSource, onDismiss: nil, content: {
-                                let fileSourceViewModel = FileSourceViewModel(fileInfo: proteinFile?.fileInfo)
-                                FileSourceView(sourceViewModel: fileSourceViewModel)
-                            })
-                            .buttonStyle(DefaultButtonStyle())
-                            .disabled(proteinViewModel.proteinCount == 0)
+                            FileDetailsSection()
                 })
                 
+                // MARK: - Remove files
                 Section(header: Text(NSLocalizedString("Remove files", comment: ""))
                             .padding(.bottom, 4),
                         content: {

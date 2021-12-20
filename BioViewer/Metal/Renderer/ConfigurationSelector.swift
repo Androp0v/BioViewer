@@ -18,10 +18,10 @@ class ConfigurationSelector {
     var currentConfiguration: Int = 0
     var lastConfiguration: Int
         
-    init(scene: MetalScene, atomsPerConfiguration: Int, lastConfiguration: Int) {
+    init(scene: MetalScene, atomsPerConfiguration: Int, configurationCount: Int) {
         self.scene = scene
         self.atomsPerConfiguration = atomsPerConfiguration
-        self.lastConfiguration = lastConfiguration
+        self.lastConfiguration = configurationCount - 1
     }
     
     func previousConfiguration() {

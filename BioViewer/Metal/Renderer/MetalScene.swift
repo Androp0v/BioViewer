@@ -219,7 +219,7 @@ class MetalScene: ObservableObject {
     func createConfigurationSelector(protein: Protein) {
         self.configurationSelector = ConfigurationSelector(scene: self,
                                                            atomsPerConfiguration: protein.atomCount,
-                                                           lastConfiguration: protein.configurationCount)
+                                                           configurationCount: protein.configurationCount)
         self.frameData.atoms_per_configuration = Int32(protein.atomCount)
     }
     
