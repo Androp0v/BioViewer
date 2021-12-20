@@ -9,6 +9,54 @@ import Foundation
 import SwiftUI
 
 class PhotoModeViewModel: ObservableObject {
+    
+    // MARK: - Config
+    @Published var photoConfig = PhotoModeConfig()
+    
+    // MARK: - Pickers
+    @Published var finalTextureSizeOption: Int = PhotoModeTextureOptions.high {
+        didSet {
+            switch finalTextureSizeOption {
+            case PhotoModeTextureOptions.normal:
+                photoConfig.finalTextureSize = 1024
+            case PhotoModeTextureOptions.high:
+                photoConfig.finalTextureSize = 2048
+            case PhotoModeTextureOptions.highest:
+                photoConfig.finalTextureSize = 4096
+            default:
+                photoConfig.finalTextureSize = 2048
+            }
+        }
+    }
+    
+    @Published var shadowResolution: Int = PhotoModeShadowOptions.high {
+        didSet {
+            switch finalTextureSizeOption {
+            case PhotoModeTextureOptions.normal:
+                photoConfig.shadowTextureSize = 2048
+            case PhotoModeTextureOptions.high:
+                photoConfig.shadowTextureSize = 4096
+            case PhotoModeTextureOptions.highest:
+                photoConfig.shadowTextureSize = 8192
+            default:
+                photoConfig.shadowTextureSize = 4096
+            }
+        }
+    }
+    
+    // MARK: - Previews
     var image: CGImage?
     @Published var isPreviewCreated: Bool = false
+}
+
+struct PhotoModeTextureOptions {
+    static let normal = 0
+    static let high = 1
+    static let highest = 2
+}
+
+struct PhotoModeShadowOptions {
+    static let normal = 0
+    static let high = 1
+    static let highest = 2
 }

@@ -23,19 +23,22 @@ extension ProteinRenderer {
         
         // Create the textures required for HQ rendering
         var hqTextures = HQTextures()
-        hqTextures.makeTextures(device: device)
+        hqTextures.makeTextures(device: device, photoConfig: photoModeViewModel.photoConfig)
+        impostorRenderPassDescriptor.depthAttachment.storeAction = .store
         
         // Create the textures required for HQ shadow casting
         var hqShadowTextures = ShadowTextures()
-        hqShadowTextures.makeTextures(device: device, textureWidth: 4096, textureHeight: 4096)
+        hqShadowTextures.makeTextures(device: device,
+                                      textureWidth: photoModeViewModel.photoConfig.shadowTextureSize,
+                                      textureHeight: photoModeViewModel.photoConfig.shadowTextureSize)
         hqShadowTextures.makeShadowSampler(device: device)
         
         // Create high quality impostor render pass pipeline state
         makeImpostorRenderPipelineState(device: device, variant: .highQuality)
         
         // Change the image aspect ratio
-        self.scene.camera.updateProjection(drawableSize: CGSize(width: HQTextures.textureWidth,
-                                                                height: HQTextures.textureHeight))
+        self.scene.camera.updateProjection(drawableSize: CGSize(width: photoModeViewModel.photoConfig.finalTextureSize,
+                                                                height: photoModeViewModel.photoConfig.finalTextureSize))
         self.scene.aspectRatio = 1.0
         
         // Assure buffers are loaded
@@ -97,7 +100,8 @@ extension ProteinRenderer {
             self.frameBoundarySemaphore.signal()
             // Display the image
             DispatchQueue.main.async {
-                let hqImage = hqTextures.hqTexture.getCGImage()
+                let hqImage = hqTextures.hqTexture.getCGImage(clearBackground: photoModeViewModel.photoConfig.clearBackground,
+                                                              depthTexture: hqTextures.hqDepthTexture)
                 photoModeViewModel.image = hqImage
                 photoModeViewModel.isPreviewCreated = true
             }

@@ -10,6 +10,7 @@ import SwiftUI
 struct PhotoModeContent: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
     
     private struct Constants {
         #if targetEnvironment(macCatalyst)
@@ -28,16 +29,17 @@ struct PhotoModeContent: View {
             List {
                 Section {
                     PickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
-                              selectedOption: .constant(1),
-                              pickerOptions: ["1024x1024", "2048x2048", "4096x4096"])
+                              selectedOption: $photoModeViewModel.finalTextureSizeOption,
+                              pickerOptions: ["1024x1024",
+                                              "2048x2048",
+                                              "4096x4096"])
                     PickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
-                              selectedOption: .constant(1),
-                              pickerOptions: ["Normal", "High", "Very high"])
-                    PickerRow(optionName: NSLocalizedString("Shadow smoothing", comment: ""),
-                              selectedOption: .constant(1),
-                              pickerOptions: ["Normal", "High", "Very high"])
+                              selectedOption: $photoModeViewModel.shadowResolution,
+                              pickerOptions: ["Normal",
+                                              "High",
+                                              "Very high"])
                     SwitchRow(title: NSLocalizedString("Clear background", comment: ""),
-                              toggledVariable: .constant(true))
+                              toggledVariable: $photoModeViewModel.photoConfig.clearBackground)
                 }
                 
                 // Empty section to add spacing at the bottom of the list

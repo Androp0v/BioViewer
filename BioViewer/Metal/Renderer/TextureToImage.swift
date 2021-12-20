@@ -12,20 +12,39 @@ import UIKit
 
 extension MTLTexture {
 
-    func getCGImage(clearBackground: Bool = false) -> CGImage? {
+    func getCGImage(clearBackground: Bool = false, depthTexture: MTLTexture? = nil) -> CGImage? {
 
         assert(self.pixelFormat == .bgra8Unorm)
     
         // Read texture as byte array
         let rowBytes = self.width * 4
         let length = rowBytes * self.height
-        let bgraBytes = [UInt8](repeating: 0, count: length)
+        var bgraBytes = [UInt8](repeating: 0, count: length)
         let region = MTLRegionMake2D(0, 0, self.width, self.height)
         self.getBytes(UnsafeMutableRawPointer(mutating: bgraBytes),
                       bytesPerRow: rowBytes,
                       from: region,
                       mipmapLevel: 0)
-
+        
+        // Clear background
+        if let depthTexture = depthTexture, clearBackground {
+            let depthRowBytes = self.width * 4
+            let depthBytes = [Float](repeating: 0, count: 4 * self.width * self.height)
+            let depthRegion = MTLRegionMake2D(0, 0, self.width, self.height)
+            depthTexture.getBytes(UnsafeMutableRawPointer(mutating: depthBytes),
+                                  bytesPerRow: depthRowBytes,
+                                  from: depthRegion,
+                                  mipmapLevel: 0)
+            let bgraPointer = UnsafeMutableRawPointer(mutating: bgraBytes).assumingMemoryBound(to: UInt8.self)
+            let depthPointer = UnsafeMutableRawPointer(mutating: depthBytes).assumingMemoryBound(to: Float32.self)
+            for index in 0..<(self.width * self.height) {
+                let bgraIndex = index * 4 + 3
+                if (depthPointer + index).pointee == 1.0 {
+                    (bgraPointer + bgraIndex).pointee = 0
+                }
+            }
+        }
+        
         // Use Accelerate framework to convert from BGRA to RGBA
         var bgraBuffer = vImage_Buffer(data: UnsafeMutableRawPointer(mutating: bgraBytes),
                                        height: vImagePixelCount(self.height),
