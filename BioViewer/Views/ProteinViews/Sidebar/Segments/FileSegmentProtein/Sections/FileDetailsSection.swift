@@ -25,7 +25,7 @@ struct FileDetailsSection: View {
                         longText: proteinFile?.fileInfo.authors)
         } else if proteinFile?.fileType == .dynamicStructure {
             // Dynamic XYZ Files
-            LineGraphView()
+            LineGraphView(values: proteinViewModel.dataSource.files.first?.protein.configurationEnergies)
         }
         Button(NSLocalizedString("View raw file", comment: ""), action: {
             showFileSource.toggle()

@@ -36,6 +36,7 @@ extension FileParser {
     func parseXYZ(fileName: String, fileExtension: String, byteSize: Int?, rawText: String, proteinViewModel: ProteinViewModel?, originalFileInfo: ProteinFileInfo? = nil) throws -> ProteinFile {
         
         var atomArray = ContiguousArray<simd_float3>()
+        var energyArray: [Float]?
         var atomIdentifiers = [UInt8]()
         var atomArrayComposition = AtomArrayComposition()
         
@@ -77,7 +78,16 @@ extension FileParser {
                 createNewConfigurationUnlessEmpty()
                 return
             }
-
+            
+            // Try to parse energy
+            let normalizedLine = line.lowercased().components(separatedBy: .whitespacesAndNewlines).joined(separator: "")
+            if normalizedLine.contains("energy=") {
+                let components = normalizedLine.components(separatedBy: "energy=")
+                if components.count >= 2 {
+                    configurations.last?.energy = Float(components[1])
+                }
+            }
+            
             // Retrieve atom element
 
             let elementString = lineElements[0].replacingOccurrences(of: " ", with: "")
@@ -141,6 +151,13 @@ extension FileParser {
             atomArray.append(contentsOf: configuration.oxygenArray)
             atomArray.append(contentsOf: configuration.sulfurArray)
             atomArray.append(contentsOf: configuration.othersArray)
+            
+            if let configurationEnergy = configuration.energy {
+                if energyArray == nil {
+                    energyArray = [Float]()
+                }
+                energyArray?.append(configurationEnergy)
+            }
         }
         
         guard atomArray.count > 0 else {
@@ -171,6 +188,7 @@ extension FileParser {
         
         // Return ProteinFile
         var protein = Protein(configurationCount: configurationCount,
+                              configurationEnergies: energyArray,
                               subunitCount: 1,
                               subunits: proteinSubunits,
                               atoms: &atomArray,

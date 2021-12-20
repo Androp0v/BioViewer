@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LineGraphView: View {
     
-    @State var values: [Float]?
+    var values: [Float]?
     
     enum Constants {
         #if targetEnvironment(macCatalyst)
@@ -77,7 +77,21 @@ struct LineGraphView: View {
                             .strokedPath(StrokeStyle(lineWidth: 1.0, dash: [5.0]))
                             .foregroundColor(.white.opacity(0.5))
                             
-                            if values == nil {
+                            if let values = values {
+                                Path { path in
+                                    let valueCount = CGFloat(values.count)
+                                    let maxValue = values.max() ?? 0
+                                    let minValue = values.min() ?? 0
+                                    path.move(to: CGPoint(x: 0,
+                                                          y: CGFloat((values[0] - minValue) / (maxValue - minValue)) * geometry.size.height))
+                                    for (index, value) in values.enumerated() {
+                                        path.addLine(to: CGPoint(x: CGFloat(index) * geometry.size.width / (valueCount - 1),
+                                                                 y: CGFloat((value - minValue) / (maxValue - minValue)) * geometry.size.height))
+                                    }
+                                }
+                                .strokedPath(StrokeStyle(lineWidth: 2.0))
+                                .foregroundColor(.white)
+                            } else {
                                 Image(systemName: "questionmark")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -90,24 +104,6 @@ struct LineGraphView: View {
                                             x: 0,
                                             y: 10)
                             }
-                            
-                            // Data
-                            /*
-                            Path { path in
-                                path.move(to: CGPoint(x: 0,
-                                                      y: 0))
-                                path.addLine(to: CGPoint(x: geometry.size.width / 4,
-                                                         y: geometry.size.height / 1.5))
-                                path.addLine(to: CGPoint(x: geometry.size.width / 2,
-                                                         y: geometry.size.height / 8))
-                                path.addLine(to: CGPoint(x: geometry.size.width * 3 / 4,
-                                                         y: geometry.size.height))
-                                path.addLine(to: CGPoint(x: geometry.size.width,
-                                                         y: geometry.size.height / 7))
-                            }
-                            .strokedPath(StrokeStyle(lineWidth: 2.0))
-                            .foregroundColor(.white)
-                            */
                         }
                     }
                     .padding(.horizontal)

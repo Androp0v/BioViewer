@@ -310,6 +310,7 @@ extension FileParser {
         
         // Return ProteinFile
         var protein = Protein(configurationCount: 1,
+                              configurationEnergies: nil,
                               subunitCount: subunitCount,
                               subunits: proteinSubunits,
                               atoms: &atomArray,

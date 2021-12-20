@@ -55,8 +55,9 @@ public class Protein {
     
     // MARK: - Initialization
 
-    init(configurationCount: Int, subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
         self.configurationCount = configurationCount
+        self.configurationEnergies = configurationEnergies
         self.subunitCount = subunitCount
         self.subunits = subunits
         self.atoms = atoms
