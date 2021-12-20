@@ -39,6 +39,7 @@ extension ProteinRenderer {
         // Change the image aspect ratio
         self.scene.camera.updateProjection(drawableSize: CGSize(width: photoModeViewModel.photoConfig.finalTextureSize,
                                                                 height: photoModeViewModel.photoConfig.finalTextureSize))
+        let oldAspectRatio = self.scene.aspectRatio
         self.scene.aspectRatio = 1.0
         
         // Assure buffers are loaded
@@ -106,6 +107,7 @@ extension ProteinRenderer {
                 photoModeViewModel.image = hqImage
                 photoModeViewModel.isPreviewCreated = true
             }
+            self.scene.aspectRatio = oldAspectRatio
         })
         
         // MARK: - Commit buffer

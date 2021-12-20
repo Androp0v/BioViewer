@@ -64,6 +64,8 @@ struct PhotoModeContentHeaderView: View {
             
             // MARK: - Side buttons
             VStack(alignment: .leading, spacing: 12) {
+                
+                /*
                 Button(action: {
                     // TO-DO
                 }, label: {
@@ -82,9 +84,11 @@ struct PhotoModeContentHeaderView: View {
                     #if targetEnvironment(macCatalyst)
                     .buttonStyle(BorderedProminentButtonStyle())
                     #endif
+                */
                 
                 Button(action: {
-                    // TO-DO
+                    ImageExporter().showImageExportSheet(cgImage: photoModeViewModel.image,
+                                                         preferredFileName: nil)
                 }, label: {
                     HStack {
                         Image(systemName: "square.and.arrow.up")

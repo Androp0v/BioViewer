@@ -120,6 +120,7 @@
 		C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5406703274D656700710CFC /* SettingsSegmentProtein.swift */; };
 		C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */; };
 		C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */; };
+		C5433F3B2770EABA00607B20 /* ImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3A2770EABA00607B20 /* ImageExporter.swift */; };
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
 		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
 		C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
@@ -339,6 +340,7 @@
 		C5406703274D656700710CFC /* SettingsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSegmentProtein.swift; sourceTree = "<group>"; };
 		C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeContentHeaderView.swift; sourceTree = "<group>"; };
 		C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeConfig.swift; sourceTree = "<group>"; };
+		C5433F3A2770EABA00607B20 /* ImageExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExporter.swift; sourceTree = "<group>"; };
 		C544D39F277016270060B30D /* TextureToImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToImage.swift; sourceTree = "<group>"; };
 		C572BD172740222800FF010D /* FileSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceView.swift; sourceTree = "<group>"; };
 		C572BD192741372600FF010D /* ProteinFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFileInfo.swift; sourceTree = "<group>"; };
@@ -888,6 +890,7 @@
 				C54066FF274D387200710CFC /* ImportError.swift */,
 				C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */,
 				C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */,
+				C5433F3A2770EABA00607B20 /* ImageExporter.swift */,
 			);
 			path = Import;
 			sourceTree = "<group>";
@@ -1243,6 +1246,7 @@
 				C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */,
 				C5406700274D387200710CFC /* ImportError.swift in Sources */,
 				C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */,
+				C5433F3B2770EABA00607B20 /* ImageExporter.swift in Sources */,
 				C572BD182740222800FF010D /* FileSourceView.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
