@@ -37,7 +37,8 @@ extension MTLTexture {
                                   mipmapLevel: 0)
             let bgraPointer = UnsafeMutableRawPointer(mutating: bgraBytes).assumingMemoryBound(to: UInt8.self)
             let depthPointer = UnsafeMutableRawPointer(mutating: depthBytes).assumingMemoryBound(to: Float32.self)
-            for index in 0..<(self.width * self.height) {
+            
+            DispatchQueue.concurrentPerform(iterations: self.width * self.height) { index in
                 let bgraIndex = index * 4 + 3
                 if (depthPointer + index).pointee == 1.0 {
                     (bgraPointer + bgraIndex).pointee = 0

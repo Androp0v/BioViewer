@@ -12,6 +12,7 @@ class PhotoModeViewModel: ObservableObject {
     
     // MARK: - Config
     @Published var photoConfig = PhotoModeConfig()
+    @Published var shutterAnimator = ShutterAnimator()
     
     // MARK: - Pickers
     @Published var finalTextureSizeOption: Int = PhotoModeTextureOptions.high {
@@ -44,10 +45,14 @@ class PhotoModeViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Previews
+    // MARK: - Viewfinder
     var image: CGImage?
     @Published var isPreviewCreated: Bool = false
-    @Published var showSpinner: Bool = false
+    
+    // MARK: - Initialization
+    init() {
+        shutterAnimator.photoModeViewModel = self
+    }
 }
 
 struct PhotoModeTextureOptions {

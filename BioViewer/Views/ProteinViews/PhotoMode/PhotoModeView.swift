@@ -21,7 +21,7 @@ struct PhotoModeView: View {
                 
                 VStack {
                     Spacer()
-                    PhotoModeFooter()
+                    PhotoModeFooter(shutterAnimator: photoModeViewModel.shutterAnimator)
                         .environmentObject(photoModeViewModel)
                 }
             }

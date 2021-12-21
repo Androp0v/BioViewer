@@ -100,18 +100,25 @@ extension ProteinRenderer {
             // GPU work is complete, signal the semaphore to start the CPU work
             self.frameBoundarySemaphore.signal()
             // Display the image
+            DispatchQueue.global(qos: .userInteractive).async {
+                photoModeViewModel.shutterAnimator.closeShutter()
+            }
+            let hqImage = hqTextures.hqTexture.getCGImage(clearBackground: photoModeViewModel.photoConfig.clearBackground,
+                                                          depthTexture: hqTextures.hqDepthTexture)
             DispatchQueue.main.async {
-                let hqImage = hqTextures.hqTexture.getCGImage(clearBackground: photoModeViewModel.photoConfig.clearBackground,
-                                                              depthTexture: hqTextures.hqDepthTexture)
-                photoModeViewModel.showSpinner = false
-                photoModeViewModel.image = hqImage
-                photoModeViewModel.isPreviewCreated = true
+                withAnimation {
+                    photoModeViewModel.image = hqImage
+                    photoModeViewModel.isPreviewCreated = true
+                }
             }
             self.scene.aspectRatio = oldAspectRatio
         })
         
         // MARK: - Commit buffer
-        // Commit command buffer
+        // Commit command buffer when the shutter is open (so no animations appear onscreen)
+        _ = photoModeViewModel.shutterAnimator.shutterOpenSemaphore.wait(timeout: .distantFuture)
         commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+        photoModeViewModel.shutterAnimator.shutterOpenSemaphore.signal()
     }
 }

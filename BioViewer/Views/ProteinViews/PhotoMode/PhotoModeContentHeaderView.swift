@@ -10,7 +10,6 @@ import SwiftUI
 struct PhotoModeContentHeaderView: View {
     
     @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
-    @State var image: Image?
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -26,41 +25,7 @@ struct PhotoModeContentHeaderView: View {
         HStack(alignment: .top, spacing: 12) {
             
             // MARK: - Preview image
-            ZStack {
-                if photoModeViewModel.isPreviewCreated {
-                    image?
-                        .resizable()
-                        .onDrag {
-                            guard let cgImage = photoModeViewModel.image else { return NSItemProvider() }
-                            let data = UIImage(cgImage: cgImage).pngData()
-                            let provider = NSItemProvider(item: data as NSSecureCoding?, typeIdentifier: "public.png")
-                            provider.previewImageHandler = { (handler, _, _) -> Void in
-                                handler?(data as NSSecureCoding?, nil)
-                            }
-                            return provider
-                        }
-                }
-                if photoModeViewModel.showSpinner {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                }
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color(uiColor: .separator),
-                            style: StrokeStyle(lineWidth: 2))
-                    .shadow(color: .black.opacity(0.25),
-                            radius: 8,
-                            x: 0,
-                            y: 0)
-
-            }
-            .cornerRadius(12)
-            .aspectRatio(1.0, contentMode: .fit)
-            .frame(maxHeight: 300)
-            .onReceive(photoModeViewModel.$isPreviewCreated) { _ in
-                if let cgImage = photoModeViewModel.image {
-                    self.image = Image(uiImage: UIImage(cgImage: cgImage))
-                }
-            }
+            PhotoModeViewfinder(shutterAnimator: photoModeViewModel.shutterAnimator)
             
             // MARK: - Side buttons
             VStack(alignment: .leading, spacing: 12) {

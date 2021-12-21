@@ -11,15 +11,18 @@ struct PhotoModeFooter: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
+    @ObservedObject var shutterAnimator: ShutterAnimator
     
     var body: some View {
         VStack(spacing: 0) {
             Divider()
             Button(action: {
-                photoModeViewModel.showSpinner = true
+                photoModeViewModel.shutterAnimator.openShutter()
                 // TO-DO: Error handling
-                try? proteinViewModel.renderer.drawHighQualityFrame(size: CGSize(width: 2048, height: 2048),
-                                                                    photoModeViewModel: photoModeViewModel)
+                DispatchQueue.global(qos: .userInitiated).async {
+                    try? proteinViewModel.renderer.drawHighQualityFrame(size: CGSize(width: 2048, height: 2048),
+                                                                        photoModeViewModel: photoModeViewModel)
+                }
             }, label: {
                 HStack {
                     Image(systemName: "camera")
@@ -32,6 +35,7 @@ struct PhotoModeFooter: View {
                 .padding(4)
                 .frame(maxWidth: .infinity)
             })
+                .disabled(photoModeViewModel.shutterAnimator.shutterAnimationRunning)
                 .buttonStyle(BorderedProminentButtonStyle())
                 .padding()
         }
@@ -42,6 +46,6 @@ struct PhotoModeFooter: View {
 
 struct PhotoModeFooter_Previews: PreviewProvider {
     static var previews: some View {
-        PhotoModeFooter()
+        PhotoModeFooter(shutterAnimator: ShutterAnimator())
     }
 }
