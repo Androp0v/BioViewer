@@ -37,6 +37,8 @@ struct LineGraphView: View {
                             .padding()
                             #endif
                         Spacer()
+                        // TO-DO: Add graph help button
+                        /*
                         Image(systemName: "questionmark.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -47,6 +49,7 @@ struct LineGraphView: View {
                             #else
                             .padding()
                             #endif
+                        */
                     }
                     ZStack(alignment: .center) {
                         GeometryReader { geometry in
@@ -124,7 +127,14 @@ struct LineGraphView: View {
                     radius: 12,
                     x: 0,
                     y: 10)
-            Text(NSLocalizedString("Maximum: 37.8, Minimum: 26.6", comment: ""))
+            if let values = values {
+                HStack {
+                    Text(NSLocalizedString("Maximum:", comment: ""))
+                    Text(String(values.max() ?? 0.0))
+                    Text(NSLocalizedString("Minimum:", comment: ""))
+                    Text(String(values.min() ?? 0.0))
+                }
+            }
         }
     }
 }

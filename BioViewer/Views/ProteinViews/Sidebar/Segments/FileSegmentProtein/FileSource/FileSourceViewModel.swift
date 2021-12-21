@@ -33,7 +33,7 @@ class FileSourceViewModel: ObservableObject {
             return
         }
 
-        loadedLines?.append(contentsOf: sourceLines[0..<batchSize])
+        loadedLines?.append(contentsOf: sourceLines[0..<min(batchSize, sourceLines.count)])
         batchCount += 1
     }
     
