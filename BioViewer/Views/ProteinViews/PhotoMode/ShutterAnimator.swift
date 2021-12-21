@@ -53,7 +53,7 @@ class ShutterAnimator: ObservableObject {
             try? AVAudioSession.sharedInstance().setActive(true)
 
             self.player = try? AVAudioPlayer(contentsOf: soundURL, fileTypeHint: AVFileType.aiff.rawValue)
-            self.player.volume = 0.01
+            self.player.volume = 0.1
             self.player?.prepareToPlay()
         }
         
@@ -68,7 +68,7 @@ class ShutterAnimator: ObservableObject {
             try? AVAudioSession.sharedInstance().setActive(true)
 
             self.player = try? AVAudioPlayer(contentsOf: soundURL, fileTypeHint: AVFileType.aiff.rawValue)
-            self.player.volume = 0.01
+            self.player.volume = 0.1
             self.player?.prepareToPlay()
         }
         
