@@ -16,9 +16,14 @@ struct PhotoModeViewfinder: View {
     var body: some View {
         ZStack {
             
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
-                .zIndex(1.0)
+            ZStack {
+                Image("DefaultViewfinderImage")
+                    .resizable()
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .colorScheme(.dark)
+            }
+            .zIndex(1.0)
             
             if shutterAnimator.showSecondShutterCurtain {
                 Image("Shutter")
