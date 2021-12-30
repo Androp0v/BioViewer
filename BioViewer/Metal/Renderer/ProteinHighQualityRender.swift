@@ -92,7 +92,8 @@ extension ProteinRenderer {
                            drawableTexture: hqTextures.hqTexture,
                            depthTexture: hqTextures.hqDepthTexture,
                            shadowTextures: hqShadowTextures,
-                           variant: .highQuality)
+                           variant: .highQuality,
+                           renderLinks: false)
         
         // MARK: - Completion handler
         commandBuffer.addCompletedHandler({ [weak self] commandBuffer in

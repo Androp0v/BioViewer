@@ -27,6 +27,10 @@ class ProteinRenderer: NSObject, ObservableObject {
     var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorHQRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the impostor geometry rendering (transparent at times)
+    var impostorLinkRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
+    var impostorLinkHQRenderingPipelineState: MTLRenderPipelineState?
     /// Shadow depth state
     var shadowDepthState: MTLDepthStencilState?
     /// Depth state
@@ -44,6 +48,7 @@ class ProteinRenderer: NSObject, ObservableObject {
     var opaqueVertexBuffer: MTLBuffer?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader when using a dense mesh
     var opaqueIndexBuffer: MTLBuffer?
+    
     /// Used to pass the geometry vertex data to the shader when using billboarding
     var impostorVertexBuffer: MTLBuffer?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
@@ -54,6 +59,11 @@ class ProteinRenderer: NSObject, ObservableObject {
     var atomTypeBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader
     var uniformBuffers: [MTLBuffer]?
+    
+    /// Used to pass the geometry vertex data to the shader when using billboarding links
+    var impostorLinkVertexBuffer: MTLBuffer?
+    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding links
+    var impostorLinkIndexBuffer: MTLBuffer?
     
     // MARK: - Textures
     var shadowTextures = ShadowTextures()
@@ -163,6 +173,7 @@ class ProteinRenderer: NSObject, ObservableObject {
         makeShadowRenderPipelineState(device: device)
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device, variant: .normal)
+        makeImpostorLinkRenderPipelineState(device: device, variant: .normal)
         
         // Create shadow textures and sampler
         shadowTextures.makeTextures(device: device,
@@ -191,6 +202,13 @@ class ProteinRenderer: NSObject, ObservableObject {
         self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
+        self.scene.needsRedraw = true
+    }
+    
+    /// Adds the necessary buffers to display atom links in the renderer using billboarding
+    func addBillboardingLinks(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        self.impostorLinkVertexBuffer = vertexBuffer
+        self.impostorLinkIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
     }
     
@@ -273,7 +291,8 @@ extension ProteinRenderer: MTKViewDelegate {
                                drawableTexture: drawable.texture,
                                depthTexture: view.depthStencilTexture,
                                shadowTextures: shadowTextures,
-                               variant: .normal)
+                               variant: .normal,
+                               renderLinks: true)
             
             // MARK: - Triple buffering
             

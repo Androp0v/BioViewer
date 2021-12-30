@@ -22,7 +22,7 @@ kernel void createSphereModel(const device simd_float3 *atomPoints [[ buffer(0) 
     const uint32_t index = i * 162;
     const uint32_t index_2 = i * 960;
     // TO-DO: Deprecate AtomProperties, single source of truth with FrameData
-    const float radius = atomRadius[atomType[i]];
+    const float radius = atomSolidSphereRadius[atomType[i]];
 
     // MARK: - Vertices
 

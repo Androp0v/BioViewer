@@ -166,6 +166,8 @@
 		C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9960275EAD6C001DE6D6 /* ExportError.swift */; };
 		C57F9962275EADAC001DE6D6 /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
 		C57F9964275EBE04001DE6D6 /* WorkspaceExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9963275EBE04001DE6D6 /* WorkspaceExporter.swift */; };
+		C57FCE8D277E60AF001A7B4A /* CreateLinksGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC738277C977A00E348BD /* CreateLinksGeometry.swift */; };
+		C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
@@ -199,6 +201,10 @@
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
 		C5F7D30F27579615008A0517 /* RCSBSuggestionData.json in Resources */ = {isa = PBXBuildFile; fileRef = C5F7D30E27579615008A0517 /* RCSBSuggestionData.json */; };
+		C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */; };
+		C5FEC735277C744200E348BD /* ImpostorLinkShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC734277C744200E348BD /* ImpostorLinkShader.metal */; };
+		C5FEC737277C8EA800E348BD /* CreateImpostorLinks.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC736277C8EA800E348BD /* CreateImpostorLinks.metal */; };
+		C5FEC739277C977A00E348BD /* CreateLinksGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC738277C977A00E348BD /* CreateLinksGeometry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -402,6 +408,10 @@
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
 		C5F7D30E27579615008A0517 /* RCSBSuggestionData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RCSBSuggestionData.json; sourceTree = "<group>"; };
+		C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityGenerator.swift; sourceTree = "<group>"; };
+		C5FEC734277C744200E348BD /* ImpostorLinkShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorLinkShader.metal; sourceTree = "<group>"; };
+		C5FEC736277C8EA800E348BD /* CreateImpostorLinks.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorLinks.metal; sourceTree = "<group>"; };
+		C5FEC738277C977A00E348BD /* CreateLinksGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLinksGeometry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -443,6 +453,7 @@
 				C4A69AAE265936A2001C0490 /* MetalScheduler.swift */,
 				C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */,
 				C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */,
+				C5FEC738277C977A00E348BD /* CreateLinksGeometry.swift */,
 				C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */,
 				C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */,
 			);
@@ -465,6 +476,7 @@
 				C495B24026662D9A004995C2 /* VertexTypes.h */,
 				C405744E2663DD58008527D1 /* BasicShader.metal */,
 				C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */,
+				C5FEC734277C744200E348BD /* ImpostorLinkShader.metal */,
 				C5E7AF9A2760FF950065F6AD /* ShadowShader.metal */,
 			);
 			path = Shaders;
@@ -690,6 +702,7 @@
 				C50E02572764C4BE005D7F06 /* PhysicsLoop.swift */,
 				C49D9D31271C469100E12E2F /* MetalScene.swift */,
 				C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */,
+				C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */,
 				C515EFC2274FEA0900B6F7DB /* ColorScene.swift */,
 				C46435612669313A00434CC6 /* Camera.swift */,
 			);
@@ -705,6 +718,7 @@
 				C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */,
 				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 				C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */,
+				C5FEC736277C8EA800E348BD /* CreateImpostorLinks.metal */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
@@ -1190,6 +1204,7 @@
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
 				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
 				C495B23C266541A7004995C2 /* ProteinObject.swift in Sources */,
+				C5FEC737277C8EA800E348BD /* CreateImpostorLinks.metal in Sources */,
 				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
@@ -1210,10 +1225,12 @@
 				C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */,
 				C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
+				C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
 				C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */,
 				C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */,
 				C45BAC4526497A3300B36026 /* DynamicStructureControlView.swift in Sources */,
+				C5FEC735277C744200E348BD /* ImpostorLinkShader.metal in Sources */,
 				C50E02532763D1B2005D7F06 /* IndentRow.swift in Sources */,
 				C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
@@ -1240,6 +1257,7 @@
 				C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */,
 				C5EEE9B5276F6031005737C1 /* PhotoModeContent.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
+				C5FEC739277C977A00E348BD /* CreateLinksGeometry.swift in Sources */,
 				C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */,
@@ -1337,6 +1355,7 @@
 				C504C9C0274175DB002D4E6A /* BasicShader.metal in Sources */,
 				C51D4EDE27679A5200C69B3D /* ParseXYZ.swift in Sources */,
 				C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */,
+				C57FCE8D277E60AF001A7B4A /* CreateLinksGeometry.swift in Sources */,
 				C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */,
 				C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */,
 				C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */,
@@ -1361,6 +1380,7 @@
 				C504C9C3274175E2002D4E6A /* RemovePoints.metal in Sources */,
 				C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */,
 				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
+				C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */,
 				C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */,
 				C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */,
 				C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */,

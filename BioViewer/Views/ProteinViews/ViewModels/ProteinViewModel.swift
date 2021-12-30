@@ -9,6 +9,12 @@ import Combine
 import Foundation
 import SwiftUI
 
+enum ProteinVisualizationOption {
+    static let pointCloud: Int = 0
+    static let solidSpheres: Int = 1
+    static let ballAndStick: Int = 2
+}
+
 class ProteinViewModel: ObservableObject {
 
     // MARK: - Properties
@@ -38,6 +44,15 @@ class ProteinViewModel: ObservableObject {
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
             renderer.scene.backgroundColor = newCGColor
+        }
+    }
+    
+    @Published var visualization: Int = ProteinVisualizationOption.solidSpheres
+    
+    /// Whether to show the structure surface..
+    @Published var showSurface: Bool = false {
+        didSet {
+            // TO-DO
         }
     }
     

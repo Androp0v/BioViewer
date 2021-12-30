@@ -28,6 +28,7 @@ class MetalScheduler {
 
     // PipelineStateBundle bundles
     var createSphereModelBundle = PipelineStateBundle()
+    var createLinksBundle = PipelineStateBundle()
     var createSASPointsBundle = PipelineStateBundle()
     var removeSASPointsInsideSolidBundle = PipelineStateBundle()
 

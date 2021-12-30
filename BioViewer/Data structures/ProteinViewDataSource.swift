@@ -73,6 +73,14 @@ class ProteinViewDataSource: ObservableObject {
                                                                  subunitBuffer: &subunitData,
                                                                  atomTypeBuffer: &atomTypeData,
                                                                  indexBuffer: &indexData)
+                
+                // FIXME: REMOVE THIS
+                // Add link buffers to the structure
+                let (linkVertexBuffer, linkIndexBuffer) = MetalScheduler.shared.createLinksGeometry(protein: proteinFile.protein)
+                guard var linkVertexBuffer = linkVertexBuffer else { return }
+                guard var linkIndexBuffer = linkIndexBuffer else { return }
+                proteinViewModel.renderer.addBillboardingLinks(vertexBuffer: &linkVertexBuffer,
+                                                               indexBuffer: &linkIndexBuffer)
             }
         }
         // File import finished

@@ -11,6 +11,6 @@
 #include <simd/simd.h>
 
 // Carbon, Nitrogen, Hydrogen, Oxygen, Sulfur, Others
-constant float atomRadius [] = {1.70, 1.55, 1.52, 1.80, 1.10, 1.0};
+constant float atomSolidSphereRadius [] = {0.170, 0.155, 0.152, 0.180, 0.110, 0.10};
 
 #endif /* AtomProperties_h */
