@@ -12,6 +12,16 @@ struct AppearanceSegmentProtein: View {
     // MARK: - Properties
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
+    var visualizationProxy: Binding<Int> {
+        Binding<Int>(
+            get: {
+                proteinViewModel.renderer.scene.visualization.rawValue
+            },
+            set: {
+                proteinViewModel.renderer.scene.visualization = .init(rawValue: $0) ?? .solidSpheres
+            }
+        )
+    }
             
     // MARK: - View
     
@@ -27,42 +37,22 @@ struct AppearanceSegmentProtein: View {
 
                 ColorPickerRow(title: NSLocalizedString("Background color", comment: ""),
                                selectedColor: $proteinViewModel.backgroundColor)
-                // TO-DO: Enable depth cueing
-                /*
-                SwitchRow(title: NSLocalizedString("Depth cueing", comment: ""),
-                          toggledVariable: .constant(false))
-                */
             }
             
             Section(header: Text(NSLocalizedString("Visualization", comment: ""))
                         .padding(.bottom, 4), content: {
-                // TO-DO:
                 PickerRow(optionName: NSLocalizedString("View as", comment: ""),
-                          selectedOption: $proteinViewModel.visualization,
-                          pickerOptions: [NSLocalizedString("Point cloud", comment: ""),
-                                          NSLocalizedString("Space-filling spheres", comment: ""),
-                                          NSLocalizedString("Ball and stick", comment: "")])
-                    .onChange(of: proteinViewModel.visualization, perform: { value in
-                        // TO-DO: This is only working as a binary switch, not a picker.
-                        switch value {
-                        case ProteinVisualizationOption.solidSpheres:
-                            // TO-DO
-                            break
-                        case ProteinVisualizationOption.ballAndStick:
-                            // TO-DO
-                            break
-                        default:
-                            // TO-DO
-                            break
-                        }
-                    })
-                SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface)
+                          selectedOption: visualizationProxy,
+                          pickerOptions: ProteinVisualizationOption.getPickerOptions())
+                
+                // TO-DO: Surface representation
+                /* SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface) */
             })
             
             // MARK: - Color section
             
-            if proteinViewModel.visualization == ProteinVisualizationOption.solidSpheres
-                || proteinViewModel.visualization == ProteinVisualizationOption.ballAndStick {
+            if proteinViewModel.renderer.scene.visualization == ProteinVisualizationOption.solidSpheres
+                || proteinViewModel.renderer.scene.visualization == ProteinVisualizationOption.ballAndStick {
                 Section(header: Text(NSLocalizedString("Color", comment: ""))
                             .padding(.bottom, 4), content: {
                     // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption

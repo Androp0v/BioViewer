@@ -112,9 +112,6 @@ extension ProteinRenderer {
             }
             renderCommandEncoder.setRenderPipelineState(impostorLinkRenderingPipelineState)
             
-            // Set depth state
-            /*renderCommandEncoder.setDepthStencilState(depthState)*/
-
             // Add buffers to pipeline
             renderCommandEncoder.setVertexBuffer(impostorLinkVertexBuffer,
                                                  offset: 0,
@@ -126,10 +123,6 @@ extension ProteinRenderer {
             renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                    offset: 0,
                                                    index: 1)
-            /*renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
-                                                    index: 0)
-            renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
-                                                         index: 0)*/
 
             // Don't render back-facing triangles (cull them)
             renderCommandEncoder.setCullMode(.back)

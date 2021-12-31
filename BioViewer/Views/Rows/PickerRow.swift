@@ -19,26 +19,26 @@ struct PickerRow: View {
         #if targetEnvironment(macCatalyst)
         // On macOS, this uses the (beautiful) NSPopUpButton instead of
         // navigating to the option.
-        Picker(optionName, selection: $selectedOption, content: {
+        Picker(optionName, selection: $selectedOption) {
             ForEach(0..<pickerOptions.count) { index in
                 // SwiftUI detects selection by tag
                 Text(self.pickerOptions[index]).tag(index)
             }
-        })
+        }
         .pickerStyle(MenuPickerStyle())
         #else
         if horizontalSizeClass == .compact {
             // This works great for compact size classes, where the sidebar
             // is on its own NavigationView and pickers can navigate to a
             // new screen with the selection.
-            Picker(optionName, selection: $selectedOption, content: {
+            Picker(optionName, selection: $selectedOption) {
                 // We don't use .animation() here since on iPhone this is
                 // presented on a different view (through navigation).
                 ForEach(0..<pickerOptions.count) { index in
                     // SwiftUI detects selection by tag
                     Text(self.pickerOptions[index]).tag(index)
                 }
-            })
+            }
             .pickerStyle(DefaultPickerStyle())
         } else {
             // Custom picker for iPadOS (default MenuPickerStyle on iPadOS
@@ -49,12 +49,12 @@ struct PickerRow: View {
                 Spacer()
                 // We use .animation() here (iPadOS) but not on macOS because
                 // big animations are generally less used on macOS.
-                Picker(optionName, selection: $selectedOption.animation(), content: {
+                Picker(optionName, selection: $selectedOption.animation()) {
                     ForEach(0..<pickerOptions.count) { index in
                         // SwiftUI detects selection by tag
                         Text(self.pickerOptions[index]).tag(index)
                     }
-                })
+                }
                 .pickerStyle(MenuPickerStyle())
             }
         }

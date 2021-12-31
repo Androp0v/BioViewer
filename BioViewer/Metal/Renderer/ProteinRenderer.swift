@@ -292,7 +292,7 @@ extension ProteinRenderer: MTKViewDelegate {
                                depthTexture: view.depthStencilTexture,
                                shadowTextures: shadowTextures,
                                variant: .normal,
-                               renderLinks: true)
+                               renderLinks: scene.visualization == .ballAndStick)
             
             // MARK: - Triple buffering
             

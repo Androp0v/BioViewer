@@ -31,6 +31,9 @@ class MetalScene: ObservableObject {
     /// Sun position, world coordinates.
     var sunDirection: simd_float3 = simd_float3(1, 1, 0)
     
+    // MARK: - Representation properties
+    @Published var visualization: ProteinVisualizationOption = .solidSpheres { didSet { needsRedraw = true } }
+    
     // MARK: - Camera properties
     
     /// Camera used to render the scene.

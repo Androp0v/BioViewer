@@ -125,6 +125,7 @@
 		C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3F2770FA9200607B20 /* LineGraphView.swift */; };
 		C5433F422771667200607B20 /* PhotoModeViewfinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F412771667200607B20 /* PhotoModeViewfinder.swift */; };
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
+		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
 		C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
 		C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1B2741386300FF010D /* FileSourceRow.swift */; };
@@ -357,6 +358,7 @@
 		C5433F3F2770FA9200607B20 /* LineGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraphView.swift; sourceTree = "<group>"; };
 		C5433F412771667200607B20 /* PhotoModeViewfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewfinder.swift; sourceTree = "<group>"; };
 		C544D39F277016270060B30D /* TextureToImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToImage.swift; sourceTree = "<group>"; };
+		C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinVisualizationOption.swift; sourceTree = "<group>"; };
 		C572BD172740222800FF010D /* FileSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceView.swift; sourceTree = "<group>"; };
 		C572BD192741372600FF010D /* ProteinFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFileInfo.swift; sourceTree = "<group>"; };
 		C572BD1B2741386300FF010D /* FileSourceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceRow.swift; sourceTree = "<group>"; };
@@ -496,12 +498,13 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		C41A0567264D5D47006F551C /* ViewModels */ = {
+		C41A0567264D5D47006F551C /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				C41A0568264D5D58006F551C /* ProteinViewModel.swift */,
+				C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */,
 			);
-			path = ViewModels;
+			path = Data;
 			sourceTree = "<group>";
 		};
 		C41A056A2658948B006F551C /* Metal */ = {
@@ -537,7 +540,7 @@
 		C44085632647153200DC5009 /* ProteinViews */ = {
 			isa = PBXGroup;
 			children = (
-				C41A0567264D5D47006F551C /* ViewModels */,
+				C41A0567264D5D47006F551C /* Data */,
 				C5406702274D651B00710CFC /* Sidebar */,
 				C464C363265D361300E66C3E /* ImportProteins */,
 				C405744A2663DC4C008527D1 /* ProteinMetal */,
@@ -1214,6 +1217,7 @@
 				C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
 				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
+				C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */,
 				C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */,
 				C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */,
 				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,
