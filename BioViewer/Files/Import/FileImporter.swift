@@ -45,7 +45,7 @@ class FileImporter {
                                                              byteSize: byteSize,
                                                              fileInfo: fileInfo,
                                                              proteinViewModel: proteinViewModel)
-            proteinViewModel.dataSource.addProteinFileToDataSource(proteinFile: proteinFile, addToScene: true)
+            proteinViewModel.dataSource.addProteinFileToDataSource(proteinFile: proteinFile)
         } catch let error as ImportError {
             proteinViewModel.statusFinished(importError: error)
             throw error

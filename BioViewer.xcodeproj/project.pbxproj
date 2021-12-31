@@ -126,6 +126,7 @@
 		C5433F422771667200607B20 /* PhotoModeViewfinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F412771667200607B20 /* PhotoModeViewfinder.swift */; };
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
 		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
+		C565A7E1277F76D70086E2C3 /* VisualizationBufferLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoading.swift */; };
 		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
 		C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
 		C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1B2741386300FF010D /* FileSourceRow.swift */; };
@@ -359,6 +360,7 @@
 		C5433F412771667200607B20 /* PhotoModeViewfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewfinder.swift; sourceTree = "<group>"; };
 		C544D39F277016270060B30D /* TextureToImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToImage.swift; sourceTree = "<group>"; };
 		C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinVisualizationOption.swift; sourceTree = "<group>"; };
+		C565A7E0277F76D70086E2C3 /* VisualizationBufferLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationBufferLoading.swift; sourceTree = "<group>"; };
 		C572BD172740222800FF010D /* FileSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceView.swift; sourceTree = "<group>"; };
 		C572BD192741372600FF010D /* ProteinFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFileInfo.swift; sourceTree = "<group>"; };
 		C572BD1B2741386300FF010D /* FileSourceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceRow.swift; sourceTree = "<group>"; };
@@ -697,16 +699,13 @@
 			children = (
 				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
 				C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */,
-				C544D39F277016270060B30D /* TextureToImage.swift */,
-				C51D4EE72769151100C69B3D /* Computed once */,
+				C565A7E0277F76D70086E2C3 /* VisualizationBufferLoading.swift */,
 				C51D4EE2276912B200C69B3D /* RenderPasses */,
-				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
 				C51D4EEA2769190000C69B3D /* Textures */,
 				C50E02572764C4BE005D7F06 /* PhysicsLoop.swift */,
-				C49D9D31271C469100E12E2F /* MetalScene.swift */,
+				C565A7DF277F76B40086E2C3 /* Scene */,
 				C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */,
 				C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */,
-				C515EFC2274FEA0900B6F7DB /* ColorScene.swift */,
 				C46435612669313A00434CC6 /* Camera.swift */,
 			);
 			path = Renderer;
@@ -800,8 +799,10 @@
 		C51D4EE2276912B200C69B3D /* RenderPasses */ = {
 			isa = PBXGroup;
 			children = (
+				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
 				C51D4EE0276912AE00C69B3D /* ShadowPass.swift */,
 				C51D4EE42769137500C69B3D /* ImpostorPass.swift */,
+				C51D4EE72769151100C69B3D /* Computed once */,
 			);
 			path = RenderPasses;
 			sourceTree = "<group>";
@@ -817,6 +818,7 @@
 		C51D4EEA2769190000C69B3D /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				C544D39F277016270060B30D /* TextureToImage.swift */,
 				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
 				C5EEE9C2276FFC02005737C1 /* HQTextures.swift */,
 				C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */,
@@ -873,6 +875,15 @@
 				C5433F3C2770F9C600607B20 /* FileDetailsSection.swift */,
 			);
 			path = Sections;
+			sourceTree = "<group>";
+		};
+		C565A7DF277F76B40086E2C3 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				C49D9D31271C469100E12E2F /* MetalScene.swift */,
+				C515EFC2274FEA0900B6F7DB /* ColorScene.swift */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 		C572BD162740220900FF010D /* FileSegmentProtein */ = {
@@ -1218,6 +1229,7 @@
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
 				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
 				C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */,
+				C565A7E1277F76D70086E2C3 /* VisualizationBufferLoading.swift in Sources */,
 				C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */,
 				C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */,
 				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,

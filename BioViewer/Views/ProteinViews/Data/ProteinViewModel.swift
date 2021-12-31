@@ -78,6 +78,9 @@ class ProteinViewModel: ObservableObject {
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dataSource.proteinViewModel = self
         self.dropHandler.proteinViewModel = self
+        
+        // Add the dataSource to the renderer
+        self.renderer.proteinDataSource = dataSource
     }
 
     // MARK: - Public functions

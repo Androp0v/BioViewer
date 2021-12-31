@@ -11,6 +11,14 @@
 
 using namespace metal;
 
+// MARK: - Function constants
+
+// MTLFunctionConstants, set to constant at pipeline creation time,
+// allow for compiler optimizations.
+constant bool use_fixed_radius [[ function_constant(0) ]];
+
+// MARK: - Kernels
+
 kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer(0) ]],
                                   const device uint8_t *atomType [[ buffer(1) ]],
                                   device BillboardVertex *generatedVertices [[ buffer(2) ]],
@@ -24,8 +32,15 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
     const simd_float3 position = atomPoints[i];
     const uint32_t index = i * 4;
     const uint32_t index_2 = i * 6;
-    // TO-DO: Deprecate AtomProperties, single source of truth with FrameData
-    const float radius = atomSolidSphereRadius[atomType[i % totalAtomCount]];
+    
+    float radius;
+    
+    if (use_fixed_radius) {
+        radius = 0.4;
+    } else {
+        // TO-DO: Deprecate AtomProperties, single source of truth with FrameData
+        radius = atomSolidSphereRadius[atomType[i % totalAtomCount]];
+    }
     
     // MARK: - Vertices
 

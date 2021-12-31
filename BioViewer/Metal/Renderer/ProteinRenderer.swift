@@ -66,12 +66,15 @@ class ProteinRenderer: NSObject, ObservableObject {
     var impostorLinkIndexBuffer: MTLBuffer?
     
     // MARK: - Textures
+    
     var shadowTextures = ShadowTextures()
 
     // MARK: - Runtime variables
     
     /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
     var scene = MetalScene()
+    /// Data source with the proteins that back the rendering.
+    var proteinDataSource: ProteinViewDataSource?
     
     /// If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
     var getCurrentDrawable: (() -> CAMetalDrawable?)?
@@ -156,6 +159,9 @@ class ProteinRenderer: NSObject, ObservableObject {
         
         // Call super initializer
         super.init()
+        
+        // Reference renderer from scene
+        self.scene.renderer = self
         
         // Add buffers to uniforms buffer array
         for _ in 0..<maxBuffersInFlight {

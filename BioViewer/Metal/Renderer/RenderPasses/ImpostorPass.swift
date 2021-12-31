@@ -104,7 +104,8 @@ extension ProteinRenderer {
             case .normal:
                 linkVariantPipelineState = impostorLinkRenderingPipelineState
             case .highQuality:
-                linkVariantPipelineState = impostorLinkHQRenderingPipelineState
+                // TO-DO: HQ impostorHQLinkRenderingPipelineStage
+                linkVariantPipelineState = impostorLinkRenderingPipelineState
             }
             guard let impostorLinkRenderingPipelineState = linkVariantPipelineState else {
                 renderCommandEncoder.endEncoding()

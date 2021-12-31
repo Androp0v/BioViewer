@@ -21,8 +21,8 @@ extension MetalScene {
         switch colorBy {
         case ProteinColorByOption.element:
             self.frameData.atomColor.0 = getSIMDColor(atomColor: cAtomColor.cgColor) ?? simd_float4.one
-            self.frameData.atomColor.1 = getSIMDColor(atomColor: nAtomColor.cgColor) ?? simd_float4.one
-            self.frameData.atomColor.2 = getSIMDColor(atomColor: hAtomColor.cgColor) ?? simd_float4.one
+            self.frameData.atomColor.1 = getSIMDColor(atomColor: hAtomColor.cgColor) ?? simd_float4.one
+            self.frameData.atomColor.2 = getSIMDColor(atomColor: nAtomColor.cgColor) ?? simd_float4.one
             self.frameData.atomColor.3 = getSIMDColor(atomColor: oAtomColor.cgColor) ?? simd_float4.one
             self.frameData.atomColor.4 = getSIMDColor(atomColor: sAtomColor.cgColor) ?? simd_float4.one
             self.frameData.atomColor.5 = getSIMDColor(atomColor: unknownAtomColor.cgColor) ?? simd_float4.one

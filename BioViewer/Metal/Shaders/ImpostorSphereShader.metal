@@ -141,6 +141,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                          -length);
     
     // Compute the position of the fragment in camera space
+    // FIXME: Uses wrong radius for ball and sticks
     float3 spherePosition = (float3(normal) * atomSolidSphereRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
     
     // Compute Phong diffuse component

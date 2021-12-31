@@ -18,8 +18,8 @@ enum AtomTypeEnum: CaseIterable {
 
 struct AtomType {
     static let CARBON: UInt8 = 0
-    static let NITROGEN: UInt8 = 1
-    static let HYDROGEN: UInt8 = 2
+    static let HYDROGEN: UInt8 = 1
+    static let NITROGEN: UInt8 = 2
     static let OXYGEN: UInt8 = 3
     static let SULFUR: UInt8 = 4
 
@@ -29,8 +29,8 @@ struct AtomType {
 func getAtomId(atomName: String) -> UInt8 {
     // Look-up atom name and match it to internally used identifier
     if atomName.first == "C" { return AtomType.CARBON }
-    if atomName.first == "N" { return AtomType.NITROGEN }
     if atomName.first == "H" { return AtomType.HYDROGEN }
+    if atomName.first == "N" { return AtomType.NITROGEN }
     if atomName.first == "O" { return AtomType.OXYGEN }
     if atomName.first == "S" { return AtomType.SULFUR }
     return AtomType.UNKNOWN

@@ -18,7 +18,7 @@ struct AppearanceSegmentProtein: View {
                 proteinViewModel.renderer.scene.visualization.rawValue
             },
             set: {
-                proteinViewModel.renderer.scene.visualization = .init(rawValue: $0) ?? .solidSpheres
+                proteinViewModel.renderer.scene.visualization = .init(rawValue: $0) ?? .none
             }
         )
     }
