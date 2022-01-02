@@ -174,6 +174,8 @@
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
 		C59550BE2781C24700129F9B /* VisualizationPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */; };
+		C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
+		C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */; };
 		C59792CF277210580019ABD3 /* ShutterClosed.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CD277210570019ABD3 /* ShutterClosed.aiff */; };
 		C59792D0277210580019ABD3 /* ShutterOpen.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CE277210570019ABD3 /* ShutterOpen.aiff */; };
@@ -1367,6 +1369,7 @@
 				C57F995B275E8DC7001DE6D6 /* DocumentPickerViewController.swift in Sources */,
 				C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */,
 				C51D4EDF27679B1100C69B3D /* DynamicStructureControlView.swift in Sources */,
+				C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */,
 				C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */,
 				C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */,
 				C572BD362741655700FF010D /* Protein.swift in Sources */,
@@ -1409,6 +1412,7 @@
 				C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */,
 				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
 				C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */,
+				C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */,
 				C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */,
 				C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */,
 				C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */,

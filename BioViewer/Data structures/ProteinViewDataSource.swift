@@ -62,7 +62,7 @@ class ProteinViewDataSource: ObservableObject {
         
         // Change visualization to trigger rendering
         // TO-DO: visualization should depend on file type too
-        DispatchQueue.main.sync {
+        DispatchQueue.main.async {
             proteinViewModel.visualization = .solidSpheres
         }
         
