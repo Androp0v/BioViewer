@@ -34,7 +34,7 @@ class MetalScene: ObservableObject {
     // MARK: - Representation properties
     /// Current ProteinVisualizationOption. May not match the value of the ProteinViewModel `visualization` until the new geometry
     /// is generated and the buffers are populated.
-    var currentVisualization: ProteinVisualizationOption = .none { didSet { needsRedraw = true } }
+    var currentVisualization: ProteinVisualizationOption = .ballAndStick { didSet { needsRedraw = true } }
     
     // MARK: - Camera properties
     

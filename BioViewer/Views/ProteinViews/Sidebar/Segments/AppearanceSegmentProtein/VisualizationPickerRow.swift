@@ -16,7 +16,7 @@ struct VisualizationPickerRow: View {
                 proteinViewModel.visualization.rawValue
             },
             set: {
-                proteinViewModel.visualization = .init(rawValue: $0) ?? .none
+                proteinViewModel.visualization = .init(rawValue: $0) ?? .ballAndStick
             }
         )
     }

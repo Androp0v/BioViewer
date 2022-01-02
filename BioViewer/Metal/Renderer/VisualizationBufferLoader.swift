@@ -42,11 +42,7 @@ class VisualizationBufferLoader {
         guard let protein = proteinViewModel.dataSource.files.first?.protein else { return }
 
         switch visualization {
-            
-        // MARK: - None
-        case .none:
-            proteinViewModel.renderer.removeBuffers()
-            
+        
         // MARK: - Solid spheres
         case .solidSpheres:
             // Generate a billboard quad for each atom in the protein

@@ -19,12 +19,6 @@ public class Protein {
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
     private var sequence: [String]?
     
-    // MARK: - Configurations
-    /// Number of configurations for this structure.
-    public var configurationCount: Int
-    /// Energies of each configuration.
-    public var configurationEnergies: [Float]?
-    
     // MARK: - Subunits
     
     /// Number of subunits in the protein
@@ -54,6 +48,12 @@ public class Protein {
     
     /// Array with link data for the structure.
     public var links: [LinkStruct]?
+    
+    // MARK: - Configurations
+    /// Number of configurations for this structure.
+    public var configurationCount: Int
+    /// Energies of each configuration.
+    public var configurationEnergies: [Float]?
     
     // MARK: - Volume
     

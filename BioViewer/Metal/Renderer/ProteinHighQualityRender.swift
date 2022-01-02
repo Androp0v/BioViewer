@@ -39,8 +39,6 @@ extension ProteinRenderer {
             makeImpostorRenderPipelineState(device: device, variant: .solidSpheresHQ)
         case .ballAndStick:
             makeImpostorRenderPipelineState(device: device, variant: .ballAndSticksHQ)
-        case .none:
-            return
         }
         
         // Change the image aspect ratio
