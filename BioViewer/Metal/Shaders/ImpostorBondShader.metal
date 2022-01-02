@@ -1,5 +1,5 @@
 //
-//  ImpostorLinkShader.metal
+//  ImpostorBondShader.metal
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 29/12/21.
@@ -14,7 +14,7 @@
 
 using namespace metal;
 
-struct ImpostorLinkVertexOut{
+struct ImpostorBondVertexOut{
     float4 position [[position]];
     float3 atomCenter;
     half2 billboardMapping;
@@ -40,12 +40,12 @@ half2 VogelDiskSampleFIXME(half radius_scale, int sampleIndex, int samplesCount,
 
 // MARK: - Vertex function
 
-vertex ImpostorLinkVertexOut impostor_link_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
+vertex ImpostorBondVertexOut impostor_bond_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
                                                   const device FrameData& frameData [[ buffer(1) ]],
                                                   unsigned int vid [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
-    ImpostorLinkVertexOut normalized_impostor_vertex;
+    ImpostorBondVertexOut normalized_impostor_vertex;
     
     // Set attributes
     normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vid].billboardMapping.xy);
@@ -94,18 +94,18 @@ vertex ImpostorLinkVertexOut impostor_link_vertex(const device BillboardVertex *
 
 // MARK: - Fragment function
 
-struct ImpostorLinkFragmentOut{
+struct ImpostorBondFragmentOut{
     half4 color [[ color(0) ]];
 };
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
-fragment ImpostorLinkFragmentOut impostor_link_fragment(ImpostorLinkVertexOut impostor_vertex [[stage_in]],
+fragment ImpostorBondFragmentOut impostor_bond_fragment(ImpostorBondVertexOut impostor_vertex [[stage_in]],
                                                         const device FrameData& frameData [[ buffer(1) ]],
                                                         depth2d<float> shadowMap [[ texture(0) ]],
                                                         sampler shadowSampler [[ sampler(0) ]]) {
     
     // Declare output
-    ImpostorLinkFragmentOut output;
+    ImpostorBondFragmentOut output;
     
     // Phong diffuse shading
     half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
@@ -129,7 +129,7 @@ fragment ImpostorLinkFragmentOut impostor_link_fragment(ImpostorLinkVertexOut im
                          -length);
     
     // Compute the position of the fragment in camera space
-    // FIXME: Replace 0.5 with link_radius
+    // FIXME: Replace 0.5 with bond_radius
     float3 spherePosition = (float3(normal) * 0.5) + impostor_vertex.atomCenter;
     
     // Compute Phong diffuse component

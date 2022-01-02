@@ -1,5 +1,5 @@
 //
-//  CreateLinksGeometry.swift
+//  CreateBondsGeometry.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 29/12/21.
@@ -14,25 +14,25 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createLinksGeometry(linkData: [LinkStruct]) -> (vertexBuffer: MTLBuffer?, indexBuffer: MTLBuffer?) {
+    public func createBondsGeometry(bondData: [BondStruct]) -> (vertexBuffer: MTLBuffer?, indexBuffer: MTLBuffer?) {
 
         let impostorVertexCount = 8
         let impostorTriangleCount = 8
         
-        let linkCount = linkData.count
+        let bondCount = bondData.count
         
         // Populate buffers
         let generatedVertexBuffer = device.makeBuffer(
-            length: linkCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
+            length: bondCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
         )
         let generatedIndexBuffer = device.makeBuffer(
-            length: linkCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
+            length: bondCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
         )
 
         metalDispatchQueue.sync {
             // Populate buffers
-            let linkDataBuffer = device.makeBuffer(bytes: Array(linkData),
-                                                   length: linkCount * MemoryLayout<LinkStruct>.stride)
+            let bondDataBuffer = device.makeBuffer(bytes: Array(bondData),
+                                                   length: bondCount * MemoryLayout<BondStruct>.stride)
 
             // Make Metal command buffer
             guard let buffer = queue?.makeCommandBuffer() else { return }
@@ -41,13 +41,13 @@ extension MetalScheduler {
             guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return }
 
             // Check if the function needs to be compiled
-            if createLinksBundle.requiresBuilding(newFunctionParameters: nil) {
-                createLinksBundle.createPipelineState(functionName: "create_impostor_links",
+            if createBondsBundle.requiresBuilding(newFunctionParameters: nil) {
+                createBondsBundle.createPipelineState(functionName: "create_impostor_bonds",
                                                       library: self.library,
                                                       device: self.device,
                                                       constantValues: nil)
             }
-            guard let pipelineState = createLinksBundle.getPipelineState(functionParameters: nil) else {
+            guard let pipelineState = createBondsBundle.getPipelineState(functionParameters: nil) else {
                 return
             }
 
@@ -55,7 +55,7 @@ extension MetalScheduler {
             computeEncoder.setComputePipelineState(pipelineState)
 
             // Set buffer contents
-            computeEncoder.setBuffer(linkDataBuffer,
+            computeEncoder.setBuffer(bondDataBuffer,
                                      offset: 0,
                                      index: 0)
             computeEncoder.setBuffer(generatedVertexBuffer,
@@ -68,7 +68,7 @@ extension MetalScheduler {
             // Schedule the threads
             if device.supportsFamily(.apple3) {
                 // Create threads and threadgroup sizes
-                let threadsPerArray = MTLSizeMake(linkCount, 1, 1)
+                let threadsPerArray = MTLSizeMake(bondCount, 1, 1)
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
                 
                 // Avoid crashes dispatching too big of a size
@@ -82,7 +82,7 @@ extension MetalScheduler {
             } else {
                 // LEGACY: Older devices do not support non-uniform threadgroup sizes
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-                let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(linkCount)
+                let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(bondCount)
                                                                 / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
                 // Dispatch threadgroups
                 computeEncoder.dispatchThreadgroups(threadGroupsPerGrid, threadsPerThreadgroup: groupSize)

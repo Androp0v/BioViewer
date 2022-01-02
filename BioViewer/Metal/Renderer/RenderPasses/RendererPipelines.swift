@@ -118,8 +118,8 @@ extension ProteinRenderer {
         }
     }
     
-    // MARK: - Impostor links
-    func makeImpostorLinkRenderPipelineState(device: MTLDevice, variant: ImpostorRenderPassVariant) {
+    // MARK: - Impostor bonds
+    func makeImpostorBondRenderPipelineState(device: MTLDevice, variant: ImpostorRenderPassVariant) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
             fatalError()
@@ -137,8 +137,8 @@ extension ProteinRenderer {
         }
         
         // Vertex and fragment functions
-        let vertexProgram = defaultLibrary.makeFunction(name: "impostor_link_vertex")
-        let fragmentProgram = try? defaultLibrary.makeFunction(name: "impostor_link_fragment", constantValues: constantValues)
+        let vertexProgram = defaultLibrary.makeFunction(name: "impostor_bond_vertex")
+        let fragmentProgram = try? defaultLibrary.makeFunction(name: "impostor_bond_fragment", constantValues: constantValues)
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
@@ -151,9 +151,9 @@ extension ProteinRenderer {
         // Save to the appropriate pipeline state
         switch variant {
         case .solidSpheres, .ballAndSticks:
-            impostorLinkRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            impostorBondRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
         case .solidSpheresHQ, .ballAndSticksHQ:
-            impostorLinkHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            impostorBondHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
         }
     }
 }

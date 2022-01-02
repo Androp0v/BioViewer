@@ -44,10 +44,10 @@ public class Protein {
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     public var atomIdentifiers: [UInt8]
     
-    // MARK: - Links
+    // MARK: - Bonds
     
-    /// Array with link data for the structure.
-    public var links: [LinkStruct]?
+    /// Array with bond data for the structure.
+    public var bonds: [BondStruct]?
     
     // MARK: - Configurations
     /// Number of configurations for this structure.

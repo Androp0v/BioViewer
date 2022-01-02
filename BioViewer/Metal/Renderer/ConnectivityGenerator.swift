@@ -12,7 +12,7 @@ class ConnectivityGenerator {
         
     func computeConnectivity(protein: Protein, proteinViewModel: ProteinViewModel?) async {
         
-        var computedLinks = [LinkStruct]()
+        var computedBonds = [BondStruct]()
         var computedInteractions = 0
         var progress: Float {
             return Float(computedInteractions) / Float( pow(Float(protein.atomCount * protein.configurationCount), 2) / 2 )
@@ -24,7 +24,7 @@ class ConnectivityGenerator {
             // Index where the configuration ends in the atom array
             let configurationEndIndex = configurationIndex * protein.atomCount + protein.atomCount
             
-            // Loop over all the atoms in the configuration
+            // Loop over all the atoms in the configuration (to avoid bonding atoms in different configurations)
             for indexA in configurationStartIndex..<configurationEndIndex {
                 
                 // Check whether this computation has been cancelled before computing a new
@@ -41,16 +41,16 @@ class ConnectivityGenerator {
                     // FIXME: This should use the atom's covalent radius
                     if distance(atomA, atomB) < 1.6 {
                         // Atoms close enough, create an impostor cylinder
-                        computedLinks.append(LinkStruct(atom_A: atomA,
-                                                      atom_B: atomB,
-                                                      cylinder_center: (atomA + atomB) / 2,
-                                                      link_radius: 0.05))
+                        computedBonds.append(BondStruct(atom_A: atomA,
+                                                        atom_B: atomB,
+                                                        cylinder_center: (atomA + atomB) / 2,
+                                                        bond_radius: 0.05))
                     }
                 }
                 computedInteractions += indexA
             }
         }
         
-        protein.links = computedLinks
+        protein.bonds = computedBonds
     }
 }

@@ -45,9 +45,9 @@ typedef struct {
     /// Cylinder center in world space.
     simd_float3 cylinder_center;
     
-    /// Link radius.
-    float link_radius;
+    /// Bond radius.
+    float bond_radius;
 
-} LinkStruct;
+} BondStruct;
 
 #endif /* GeneratedVertex_h */

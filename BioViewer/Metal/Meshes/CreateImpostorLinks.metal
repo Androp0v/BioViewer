@@ -1,5 +1,5 @@
 //
-//  CreateImpostorLinks.metal
+//  CreateImpostorbonds.metal
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 29/12/21.
@@ -11,23 +11,23 @@
 
 using namespace metal;
 
-kernel void create_impostor_links(const device LinkStruct *link_array [[ buffer(0) ]],
+kernel void create_impostor_bonds(const device BondStruct *bond_array [[ buffer(0) ]],
                                   device BillboardVertex *generated_vertices [[ buffer(1) ]],
                                   device uint32_t *generated_indices [[ buffer(2) ]],
                                   uint i [[ thread_position_in_grid ]],
                                   uint l [[ thread_position_in_threadgroup ]]) {
     
-    constexpr int16_t vertices_per_link = 8;
-    constexpr int16_t indices_per_link = 24;
+    constexpr int16_t vertices_per_bond = 8;
+    constexpr int16_t indices_per_bond = 24;
     
-    int32_t index = i * vertices_per_link;
-    int32_t index_2 = i * indices_per_link;
+    int32_t index = i * vertices_per_bond;
+    int32_t index_2 = i * indices_per_bond;
     
-    float3 atom_A = link_array[i].atom_A;
-    float3 atom_B = link_array[i].atom_B;
-    float3 cylinder_center = link_array[i].cylinder_center;
-    float link_radius = link_array[i].link_radius;
-    float link_radius_root = sqrt(link_radius);
+    float3 atom_A = bond_array[i].atom_A;
+    float3 atom_B = bond_array[i].atom_B;
+    float3 cylinder_center = bond_array[i].cylinder_center;
+    float bond_radius = bond_array[i].bond_radius;
+    float bond_radius_root = sqrt(bond_radius);
     
     float2 direction_B_to_A = normalize(atom_A.xy - atom_B.xy);
     float2 direction_A_to_B = normalize(atom_B.xy - atom_A.xy);
@@ -35,47 +35,47 @@ kernel void create_impostor_links(const device LinkStruct *link_array [[ buffer(
     // MARK: - Vertices
     
     // Vertices of Atom A Face 0
-    generated_vertices[index + 0].position = simd_float3(-direction_A_to_B.y * link_radius,
-                                                         direction_A_to_B.x * link_radius,
-                                                         -link_radius) + atom_B;
+    generated_vertices[index + 0].position = simd_float3(-direction_A_to_B.y * bond_radius,
+                                                         direction_A_to_B.x * bond_radius,
+                                                         -bond_radius) + atom_B;
     generated_vertices[index + 0].billboard_world_center = cylinder_center;
     
-    generated_vertices[index + 1].position = simd_float3(direction_A_to_B.y * link_radius,
-                                                         -direction_A_to_B.x * link_radius,
-                                                         -link_radius) + atom_B;
+    generated_vertices[index + 1].position = simd_float3(direction_A_to_B.y * bond_radius,
+                                                         -direction_A_to_B.x * bond_radius,
+                                                         -bond_radius) + atom_B;
     generated_vertices[index + 1].billboard_world_center = cylinder_center;
     
     // Vertices of Atom B Face 0
-    generated_vertices[index + 2].position = simd_float3(-direction_B_to_A.y * link_radius,
-                                                         direction_B_to_A.x * link_radius,
-                                                         -link_radius) + atom_A;
+    generated_vertices[index + 2].position = simd_float3(-direction_B_to_A.y * bond_radius,
+                                                         direction_B_to_A.x * bond_radius,
+                                                         -bond_radius) + atom_A;
     generated_vertices[index + 2].billboard_world_center = cylinder_center;
     
-    generated_vertices[index + 3].position = simd_float3(direction_B_to_A.y * link_radius,
-                                                         -direction_B_to_A.x * link_radius,
-                                                         -link_radius) + atom_A;
+    generated_vertices[index + 3].position = simd_float3(direction_B_to_A.y * bond_radius,
+                                                         -direction_B_to_A.x * bond_radius,
+                                                         -bond_radius) + atom_A;
     generated_vertices[index + 3].billboard_world_center = cylinder_center;
     
     // Vertices of Atom A Face 1
-    generated_vertices[index + 4].position = simd_float3(-direction_A_to_B.y * link_radius,
-                                                         direction_A_to_B.x * link_radius,
-                                                         link_radius) + atom_B;
+    generated_vertices[index + 4].position = simd_float3(-direction_A_to_B.y * bond_radius,
+                                                         direction_A_to_B.x * bond_radius,
+                                                         bond_radius) + atom_B;
     generated_vertices[index + 4].billboard_world_center = cylinder_center;
     
-    generated_vertices[index + 5].position = simd_float3(direction_A_to_B.y * link_radius,
-                                                         -direction_A_to_B.x * link_radius,
-                                                         link_radius) + atom_B;
+    generated_vertices[index + 5].position = simd_float3(direction_A_to_B.y * bond_radius,
+                                                         -direction_A_to_B.x * bond_radius,
+                                                         bond_radius) + atom_B;
     generated_vertices[index + 5].billboard_world_center = cylinder_center;
     
     // Vertices of Atom B Face 1
-    generated_vertices[index + 6].position = simd_float3(-direction_B_to_A.y * link_radius,
-                                                         direction_B_to_A.x * link_radius,
-                                                         link_radius) + atom_A;
+    generated_vertices[index + 6].position = simd_float3(-direction_B_to_A.y * bond_radius,
+                                                         direction_B_to_A.x * bond_radius,
+                                                         bond_radius) + atom_A;
     generated_vertices[index + 6].billboard_world_center = cylinder_center;
     
-    generated_vertices[index + 7].position = simd_float3(direction_B_to_A.y * link_radius,
-                                                         -direction_B_to_A.x * link_radius,
-                                                         link_radius) + atom_A;
+    generated_vertices[index + 7].position = simd_float3(direction_B_to_A.y * bond_radius,
+                                                         -direction_B_to_A.x * bond_radius,
+                                                         bond_radius) + atom_A;
     generated_vertices[index + 7].billboard_world_center = cylinder_center;
     
     // MARK: - Indices

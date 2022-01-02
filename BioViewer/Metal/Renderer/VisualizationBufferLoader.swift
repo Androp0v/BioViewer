@@ -73,25 +73,25 @@ class VisualizationBufferLoader {
             guard var indexData = indexData else { return }
             
             // Compute model connectivity if not already present
-            if protein.links == nil {
+            if protein.bonds == nil {
                 await ConnectivityGenerator().computeConnectivity(protein: protein, proteinViewModel: proteinViewModel)
             }
-            guard let linkData = protein.links else { return }
+            guard let bondData = protein.bonds else { return }
             if Task.isCancelled { return }
             
-            // Add link buffers to the structure
-            let (linkVertexBuffer, linkIndexBuffer) = MetalScheduler.shared.createLinksGeometry(linkData: linkData)
-            guard var linkVertexBuffer = linkVertexBuffer else { return }
-            guard var linkIndexBuffer = linkIndexBuffer else { return }
+            // Add bond buffers to the structure
+            let (bondVertexBuffer, bondIndexBuffer) = MetalScheduler.shared.createBondsGeometry(bondData: bondData)
+            guard var bondVertexBuffer = bondVertexBuffer else { return }
+            guard var bondIndexBuffer = bondIndexBuffer else { return }
             
             // Pass atom buffers to the renderer
             proteinViewModel.renderer.addBillboardingBuffers(vertexBuffer: &vertexData,
                                                              subunitBuffer: &subunitData,
                                                              atomTypeBuffer: &atomTypeData,
                                                              indexBuffer: &indexData)
-            // Pass link buffers to the renderer
-            proteinViewModel.renderer.addBillboardingLinks(vertexBuffer: &linkVertexBuffer,
-                                                           indexBuffer: &linkIndexBuffer)
+            // Pass bond buffers to the renderer
+            proteinViewModel.renderer.addBillboardingBonds(vertexBuffer: &bondVertexBuffer,
+                                                           indexBuffer: &bondIndexBuffer)
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)

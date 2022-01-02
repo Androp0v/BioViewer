@@ -12,7 +12,7 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderLinks: Bool) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
@@ -87,34 +87,34 @@ extension ProteinRenderer {
                                                    indexBuffer: impostorIndexBuffer,
                                                    indexBufferOffset: indexBufferOffset * MemoryLayout<UInt32>.stride)
         
-        // MARK: - Link rendering
-        if renderLinks {
-            guard let impostorLinkVertexBuffer = self.impostorLinkVertexBuffer else {
+        // MARK: - Bond rendering
+        if renderBonds {
+            guard let impostorBondVertexBuffer = self.impostorBondVertexBuffer else {
                 renderCommandEncoder.endEncoding()
                 return
             }
-            guard let impostorLinkIndexBuffer = self.impostorLinkIndexBuffer else {
+            guard let impostorBondIndexBuffer = self.impostorBondIndexBuffer else {
                 renderCommandEncoder.endEncoding()
                 return
             }
             
             // Set pipeline state for the variant
-            var linkVariantPipelineState: MTLRenderPipelineState?
+            var bondVariantPipelineState: MTLRenderPipelineState?
             switch variant {
             case .solidSpheres, .ballAndSticks:
-                linkVariantPipelineState = impostorLinkRenderingPipelineState
+                bondVariantPipelineState = impostorBondRenderingPipelineState
             case .solidSpheresHQ, .ballAndSticksHQ:
-                // TO-DO: HQ impostorHQLinkRenderingPipelineStage
-                linkVariantPipelineState = impostorLinkRenderingPipelineState
+                // TO-DO: HQ impostorHQBondRenderingPipelineStage
+                bondVariantPipelineState = impostorBondRenderingPipelineState
             }
-            guard let impostorLinkRenderingPipelineState = linkVariantPipelineState else {
+            guard let impostorBondRenderingPipelineState = bondVariantPipelineState else {
                 renderCommandEncoder.endEncoding()
                 return
             }
-            renderCommandEncoder.setRenderPipelineState(impostorLinkRenderingPipelineState)
+            renderCommandEncoder.setRenderPipelineState(impostorBondRenderingPipelineState)
             
             // Add buffers to pipeline
-            renderCommandEncoder.setVertexBuffer(impostorLinkVertexBuffer,
+            renderCommandEncoder.setVertexBuffer(impostorBondVertexBuffer,
                                                  offset: 0,
                                                  index: 0)
             renderCommandEncoder.setVertexBuffer(uniformBuffer,
@@ -130,9 +130,9 @@ extension ProteinRenderer {
             
             // Draw primitives
             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                       indexCount: impostorLinkIndexBuffer.length / MemoryLayout<Int32>.stride,
+                                                       indexCount: impostorBondIndexBuffer.length / MemoryLayout<Int32>.stride,
                                                        indexType: .uint32,
-                                                       indexBuffer: impostorLinkIndexBuffer,
+                                                       indexBuffer: impostorBondIndexBuffer,
                                                        indexBufferOffset: 0)
         }
         
