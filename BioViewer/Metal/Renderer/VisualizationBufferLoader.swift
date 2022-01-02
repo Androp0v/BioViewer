@@ -76,8 +76,11 @@ class VisualizationBufferLoader {
             guard var atomTypeData = atomTypeData else { return }
             guard var indexData = indexData else { return }
             
-            // Compute model connectivity
-            let linkData = await ConnectivityGenerator().computeConnectivity(protein: protein, proteinViewModel: proteinViewModel)
+            // Compute model connectivity if not already present
+            if protein.links == nil {
+                await ConnectivityGenerator().computeConnectivity(protein: protein, proteinViewModel: proteinViewModel)
+            }
+            guard let linkData = protein.links else { return }
             if Task.isCancelled { return }
             
             // Add link buffers to the structure

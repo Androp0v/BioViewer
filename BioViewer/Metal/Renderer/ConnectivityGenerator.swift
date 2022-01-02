@@ -10,9 +10,9 @@ import Metal
 
 class ConnectivityGenerator {
         
-    func computeConnectivity(protein: Protein, proteinViewModel: ProteinViewModel?) async -> [LinkStruct] {
+    func computeConnectivity(protein: Protein, proteinViewModel: ProteinViewModel?) async {
         
-        var linkedAtoms = [LinkStruct]()
+        var computedLinks = [LinkStruct]()
         var computedInteractions = 0
         var progress: Float {
             return Float(computedInteractions) / Float( pow(Float(protein.atomCount), 2) / 2 )
@@ -22,7 +22,7 @@ class ConnectivityGenerator {
             
             // Check whether this computation has been cancelled before computing a new
             // connectivity row. Results will be discarded.
-            if Task.isCancelled { return [LinkStruct]() }
+            if Task.isCancelled { return }
             
             // Update progress
             proteinViewModel?.statusProgress(progress: progress)
@@ -34,15 +34,15 @@ class ConnectivityGenerator {
                 // FIXME: LINKS
                 if distance(atomA, atomB) < 1.6 {
                     // Atoms close enough, create an impostor cylinder
-                    linkedAtoms.append(LinkStruct(atom_A: atomA,
+                    computedLinks.append(LinkStruct(atom_A: atomA,
                                                   atom_B: atomB,
                                                   cylinder_center: (atomA + atomB) / 2,
                                                   link_radius: 0.05))
                 }
-                computedInteractions += 1
             }
+            computedInteractions += indexA
         }
         
-        return linkedAtoms
+        protein.links = computedLinks
     }
 }

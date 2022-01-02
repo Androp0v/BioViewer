@@ -50,7 +50,13 @@ public class Protein {
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     public var atomIdentifiers: [UInt8]
     
+    // MARK: - Links
+    
+    /// Array with link data for the structure.
+    public var links: [LinkStruct]?
+    
     // MARK: - Volume
+    
     public var boundingSphere: BoundingSphere
     
     // MARK: - Initialization
