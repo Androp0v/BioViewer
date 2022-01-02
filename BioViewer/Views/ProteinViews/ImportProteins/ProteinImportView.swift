@@ -84,7 +84,7 @@ struct ProteinImportView: View {
         switch action {
         case .importFile:
             // Import from file
-            let picker = DocumentPickerViewController(forOpeningContentTypes: [.pdbFiles], asCopy: false)
+            let picker = DocumentPickerViewController(forOpeningContentTypes: [.pdbFiles, .xyzFiles], asCopy: false)
             picker.delegate = pickerHandler
             pickerHandler.onPick = { fileURL in
                 // Access security scoped files (outside the sandbox)

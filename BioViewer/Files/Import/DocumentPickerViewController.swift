@@ -40,4 +40,7 @@ extension UTType {
     static var pdbFiles: UTType {
         UTType(importedAs: "com.raulmonton.bioviewer.pdb")
     }
+    static var xyzFiles: UTType {
+        UTType(importedAs: "com.raulmonton.bioviewer.xyz")
+    }
 }
