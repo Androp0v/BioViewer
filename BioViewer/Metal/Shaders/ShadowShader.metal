@@ -15,6 +15,8 @@
 
 using namespace metal;
 
+constant bool use_fixed_radius [[ function_constant(0) ]];
+
 struct ShadowVertexOut{
     float4 position [[position]];
     float3 atomCenter;
@@ -45,9 +47,9 @@ vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer
     simd_float4x4 inverse_sun_rotation_matrix = frameData.inverse_sun_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vid].atomCenter.x,
-                                                               vertex_buffer[vid].atomCenter.y,
-                                                               vertex_buffer[vid].atomCenter.z,
+    float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vid].billboard_world_center.x,
+                                                               vertex_buffer[vid].billboard_world_center.y,
+                                                               vertex_buffer[vid].billboard_world_center.z,
                                                                1.0);
 
     // To rotate the billboards so they are facing the screen, first rotate them like the model,
@@ -100,8 +102,12 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
                            -length);
     
     // Compute the position of the fragment in world space
-    float3 sphereWorldPosition = (normal * atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
-    
+    float3 sphereWorldPosition;
+    if (use_fixed_radius) {
+        sphereWorldPosition = (normal * 0.4) + impostor_vertex.atomCenter;
+    } else {
+        sphereWorldPosition = (normal * atomSolidSphereRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
+    }
     // Recompute fragment depth
     simd_float4x4 orthogonalProjectionMatrix = frameData.shadowProjectionMatrix;
     float4 sphereClipPosition = ( orthogonalProjectionMatrix * float4(sphereWorldPosition.x,

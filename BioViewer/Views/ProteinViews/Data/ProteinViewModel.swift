@@ -41,6 +41,22 @@ class ProteinViewModel: ObservableObject {
         }
     }
     
+    /// Shared reference to the VisualizationBufferLoader class so it can be easily cancelled for subsequent calls..
+    private var visualizationBufferLoader = VisualizationBufferLoader()
+    /// Visualization option for protein representation.
+    @Published var visualization: ProteinVisualizationOption = .none {
+        didSet {
+            visualizationBufferLoader.handleVisualizationChange(visualization: visualization, proteinViewModel: self)
+        }
+    }
+        
+    /// Whether to show the structure surface..
+    @Published var showSurface: Bool = false {
+        didSet {
+            // TO-DO
+        }
+    }
+    
     /// Scene's main camera focal length.
     @Published var cameraFocalLength: Float = 200 {
         didSet {
@@ -71,6 +87,9 @@ class ProteinViewModel: ObservableObject {
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dataSource.proteinViewModel = self
         self.dropHandler.proteinViewModel = self
+        
+        // Add the dataSource to the renderer
+        self.renderer.proteinDataSource = dataSource
     }
 
     // MARK: - Public functions
@@ -98,6 +117,9 @@ class ProteinViewModel: ObservableObject {
         switch action {
         case .importFile:
             self.statusViewModel.removeImportError()
+        case .geometryGeneration:
+            // TO-DO
+            break
         }
     }
     

@@ -12,7 +12,7 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderLinks: Bool) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
@@ -31,13 +31,14 @@ extension ProteinRenderer {
         guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
             return
         }
-
+        
+        // MARK: - Impostor sphere rendering
         // Set pipeline state for the variant
         var variantPipelineState: MTLRenderPipelineState?
         switch variant {
-        case .normal:
+        case .solidSpheres, .ballAndSticks:
             variantPipelineState = impostorRenderingPipelineState
-        case .highQuality:
+        case .solidSpheresHQ, .ballAndSticksHQ:
             variantPipelineState = impostorHQRenderingPipelineState
         }
         guard let impostorRenderingPipelineState = variantPipelineState else {
@@ -85,7 +86,57 @@ extension ProteinRenderer {
                                                    indexType: .uint32,
                                                    indexBuffer: impostorIndexBuffer,
                                                    indexBufferOffset: indexBufferOffset * MemoryLayout<UInt32>.stride)
+        
+        // MARK: - Link rendering
+        if renderLinks {
+            guard let impostorLinkVertexBuffer = self.impostorLinkVertexBuffer else {
+                renderCommandEncoder.endEncoding()
+                return
+            }
+            guard let impostorLinkIndexBuffer = self.impostorLinkIndexBuffer else {
+                renderCommandEncoder.endEncoding()
+                return
+            }
+            
+            // Set pipeline state for the variant
+            var linkVariantPipelineState: MTLRenderPipelineState?
+            switch variant {
+            case .solidSpheres, .ballAndSticks:
+                linkVariantPipelineState = impostorLinkRenderingPipelineState
+            case .solidSpheresHQ, .ballAndSticksHQ:
+                // TO-DO: HQ impostorHQLinkRenderingPipelineStage
+                linkVariantPipelineState = impostorLinkRenderingPipelineState
+            }
+            guard let impostorLinkRenderingPipelineState = linkVariantPipelineState else {
+                renderCommandEncoder.endEncoding()
+                return
+            }
+            renderCommandEncoder.setRenderPipelineState(impostorLinkRenderingPipelineState)
+            
+            // Add buffers to pipeline
+            renderCommandEncoder.setVertexBuffer(impostorLinkVertexBuffer,
+                                                 offset: 0,
+                                                 index: 0)
+            renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                                 offset: 0,
+                                                 index: 1)
+            
+            renderCommandEncoder.setFragmentBuffer(uniformBuffer,
+                                                   offset: 0,
+                                                   index: 1)
 
+            // Don't render back-facing triangles (cull them)
+            renderCommandEncoder.setCullMode(.back)
+            
+            // Draw primitives
+            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                       indexCount: impostorLinkIndexBuffer.length / MemoryLayout<Int32>.stride,
+                                                       indexType: .uint32,
+                                                       indexBuffer: impostorLinkIndexBuffer,
+                                                       indexBufferOffset: 0)
+        }
+        
+        // MARK: - End encoding
         renderCommandEncoder.endEncoding()
     }
 }

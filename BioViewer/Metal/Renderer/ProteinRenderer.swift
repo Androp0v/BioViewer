@@ -27,6 +27,10 @@ class ProteinRenderer: NSObject, ObservableObject {
     var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorHQRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the impostor geometry rendering (transparent at times)
+    var impostorLinkRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
+    var impostorLinkHQRenderingPipelineState: MTLRenderPipelineState?
     /// Shadow depth state
     var shadowDepthState: MTLDepthStencilState?
     /// Depth state
@@ -44,6 +48,7 @@ class ProteinRenderer: NSObject, ObservableObject {
     var opaqueVertexBuffer: MTLBuffer?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader when using a dense mesh
     var opaqueIndexBuffer: MTLBuffer?
+    
     /// Used to pass the geometry vertex data to the shader when using billboarding
     var impostorVertexBuffer: MTLBuffer?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
@@ -55,13 +60,21 @@ class ProteinRenderer: NSObject, ObservableObject {
     /// Used to pass constant frame data to the shader
     var uniformBuffers: [MTLBuffer]?
     
+    /// Used to pass the geometry vertex data to the shader when using billboarding links
+    var impostorLinkVertexBuffer: MTLBuffer?
+    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding links
+    var impostorLinkIndexBuffer: MTLBuffer?
+    
     // MARK: - Textures
+    
     var shadowTextures = ShadowTextures()
 
     // MARK: - Runtime variables
     
     /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
     var scene = MetalScene()
+    /// Data source with the proteins that back the rendering.
+    var proteinDataSource: ProteinViewDataSource?
     
     /// If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
     var getCurrentDrawable: (() -> CAMetalDrawable?)?
@@ -160,9 +173,10 @@ class ProteinRenderer: NSObject, ObservableObject {
         }
         
         // Create pipeline states
-        makeShadowRenderPipelineState(device: device)
+        makeShadowRenderPipelineState(device: device, useFixedRadius: false)
         makeOpaqueRenderPipelineState(device: device)
-        makeImpostorRenderPipelineState(device: device, variant: .normal)
+        makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
+        makeImpostorLinkRenderPipelineState(device: device, variant: .solidSpheres)
         
         // Create shadow textures and sampler
         shadowTextures.makeTextures(device: device,
@@ -194,12 +208,29 @@ class ProteinRenderer: NSObject, ObservableObject {
         self.scene.needsRedraw = true
     }
     
+    /// Adds the necessary buffers to display atom links in the renderer using billboarding
+    func addBillboardingLinks(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        self.impostorLinkVertexBuffer = vertexBuffer
+        self.impostorLinkIndexBuffer = indexBuffer
+        self.scene.needsRedraw = true
+    }
+    
     /// Deallocates the MTLBuffers used to render a protein
     func removeBuffers() {
         self.opaqueVertexBuffer = nil
         self.atomTypeBuffer = nil
         self.opaqueIndexBuffer = nil
         self.scene.needsRedraw = true
+    }
+    
+    /// Make new impostor pipeline variant.
+    func remakeImpostorPipelineForVariant(variant: ImpostorRenderPassVariant) {
+        makeImpostorRenderPipelineState(device: self.device, variant: variant)
+    }
+    
+    /// Make new shadow pipeline variant.
+    func remakeShadowPipelineForVariant(useFixedRadius: Bool) {
+        makeShadowRenderPipelineState(device: self.device, useFixedRadius: useFixedRadius)
     }
 }
 
@@ -273,7 +304,8 @@ extension ProteinRenderer: MTKViewDelegate {
                                drawableTexture: drawable.texture,
                                depthTexture: view.depthStencilTexture,
                                shadowTextures: shadowTextures,
-                               variant: .normal)
+                               variant: .solidSpheres,
+                               renderLinks: scene.currentVisualization == .ballAndStick)
             
             // MARK: - Triple buffering
             

@@ -16,6 +16,7 @@ struct PhotoModeViewfinder: View {
     var body: some View {
         ZStack {
             
+            // MARK: - Open shutter background
             ZStack {
                 Image("DefaultViewfinderImage")
                     .resizable()
@@ -25,6 +26,7 @@ struct PhotoModeViewfinder: View {
             }
             .zIndex(1.0)
             
+            // MARK: - Second shutter curtain
             if shutterAnimator.showSecondShutterCurtain {
                 Image("Shutter")
                     .resizable()
@@ -33,6 +35,7 @@ struct PhotoModeViewfinder: View {
                                                          removal: .move(edge: .bottom)))
             }
             
+            // MARK: - First shutter curtain
             if shutterAnimator.showFirstShutterCurtain {
                 Image("Shutter")
                     .resizable()
@@ -41,6 +44,7 @@ struct PhotoModeViewfinder: View {
                                                          removal: .move(edge: .bottom)))
             }
             
+            // MARK: - Photo/mirror
             if photoModeViewModel.isPreviewCreated && shutterAnimator.showImage {
                 ZStack {
                     Color(uiColor: .systemBackground)
@@ -61,6 +65,7 @@ struct PhotoModeViewfinder: View {
                 .transition(AnyTransition.move(edge: .top))
             }
             
+            // MARK: - Container
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color(uiColor: .separator),
                         style: StrokeStyle(lineWidth: 2))

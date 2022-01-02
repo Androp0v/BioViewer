@@ -14,7 +14,7 @@ import SwiftUI
 class MetalScene: ObservableObject {
 
     // MARK: - Properties
-    
+        
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
@@ -30,6 +30,11 @@ class MetalScene: ObservableObject {
     
     /// Sun position, world coordinates.
     var sunDirection: simd_float3 = simd_float3(1, 1, 0)
+    
+    // MARK: - Representation properties
+    /// Current ProteinVisualizationOption. May not match the value of the ProteinViewModel `visualization` until the new geometry
+    /// is generated and the buffers are populated.
+    var currentVisualization: ProteinVisualizationOption = .none { didSet { needsRedraw = true } }
     
     // MARK: - Camera properties
     

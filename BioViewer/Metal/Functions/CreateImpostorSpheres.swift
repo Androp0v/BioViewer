@@ -14,7 +14,7 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(protein: Protein) -> (vertexData: MTLBuffer?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(protein: Protein, fixedRadius: Bool = false) -> (vertexData: MTLBuffer?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         let impostorVertexCount = 4
         let impostorTriangleCount = 2
@@ -61,19 +61,34 @@ extension MetalScheduler {
             )
 
             // Make Metal command buffer
-            guard let buffer = queue?.makeCommandBuffer() else { return }
+            guard let buffer = queue?.makeCommandBuffer() else {
+                return
+            }
 
             // Set Metal compute encoder
-            guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return }
+            guard let computeEncoder = buffer.makeComputeCommandEncoder() else {
+                return
+            }
 
             // Check if the function needs to be compiled
-            if createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
+            let kernelParameters = MTLFunctionConstantValues()
+            if fixedRadius {
+                // Used for ball and stick
+                var useFixedRadius = true
+                kernelParameters.setConstantValue(&useFixedRadius, type: .bool, index: 0)
+            } else {
+                // Used for solid spheres
+                var useFixedRadius = false
+                kernelParameters.setConstantValue(&useFixedRadius, type: .bool, index: 0)
+            }
+            
+            if createSphereModelBundle.requiresBuilding(newFunctionParameters: kernelParameters) {
                 createSphereModelBundle.createPipelineState(functionName: "createImpostorSpheres",
                                                             library: self.library,
                                                             device: self.device,
-                                                            constantValues: nil)
+                                                            constantValues: kernelParameters)
             }
-            guard let pipelineState = createSphereModelBundle.getPipelineState(functionParameters: nil) else {
+            guard let pipelineState = createSphereModelBundle.getPipelineState(functionParameters: kernelParameters) else {
                 return
             }
 

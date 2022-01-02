@@ -27,11 +27,27 @@ typedef struct {
     simd_float3 position;
     
     /// Position of the atom center in world space
-    simd_float3 atomCenter;
+    simd_float3 billboard_world_center;
     
     /// Position of the atomic center in world space
     simd_float2 billboardMapping;
 
 } BillboardVertex;
+
+typedef struct {
+
+    /// Position of the first atom in world space.
+    simd_float3 atom_A;
+    
+    /// Position of the first atom in world space.
+    simd_float3 atom_B;
+    
+    /// Cylinder center in world space.
+    simd_float3 cylinder_center;
+    
+    /// Link radius.
+    float link_radius;
+
+} LinkStruct;
 
 #endif /* GeneratedVertex_h */

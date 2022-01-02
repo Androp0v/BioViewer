@@ -111,7 +111,7 @@ struct LineGraphView: View {
                     }
                     .padding(.horizontal)
                     Spacer()
-                        .frame(height: 1.5 * Constants.cornerRadius)
+                        .frame(height: 1.0 * Constants.cornerRadius)
                 }
             }
             .mask(RoundedRectangle(cornerRadius: Constants.cornerRadius))
@@ -128,11 +128,17 @@ struct LineGraphView: View {
                     x: 0,
                     y: 10)
             if let values = values {
-                HStack {
-                    Text(NSLocalizedString("Maximum:", comment: ""))
-                    Text(String(values.max() ?? 0.0))
-                    Text(NSLocalizedString("Minimum:", comment: ""))
-                    Text(String(values.min() ?? 0.0))
+                VStack {
+                    HStack {
+                        Text(NSLocalizedString("Maximum:", comment: ""))
+                        Text(String(values.max() ?? 0.0))
+                        Spacer()
+                    }
+                    HStack {
+                        Text(NSLocalizedString("Minimum:", comment: ""))
+                        Text(String(values.min() ?? 0.0))
+                        Spacer()
+                    }
                 }
             }
         }
@@ -143,5 +149,6 @@ struct LineGraphView_Previews: PreviewProvider {
     static var previews: some View {
         LineGraphView()
             .padding()
+            .frame(width: 300)
     }
 }

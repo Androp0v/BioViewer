@@ -42,42 +42,35 @@ class ProteinViewDataSource: ObservableObject {
 
     public weak var proteinViewModel: ProteinViewModel?
 
-    // MARK: - Public functions
-    public func addProteinFileToDataSource(proteinFile: ProteinFile, addToScene: Bool) {
+    // MARK: - Add files
+    
+    public func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
         files.append(proteinFile)
         
-        if addToScene {
-            // Generate a billboard quad for each atom in the protein
-            let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: proteinFile.protein)
-            guard var vertexData = vertexData else { return }
-            guard var subunitData = subunitData else { return }
-            guard var atomTypeData = atomTypeData else { return }
-            guard var indexData = indexData else { return }
-
-            if let proteinViewModel = proteinViewModel {
-                
-                let scene = proteinViewModel.renderer.scene
-                
-                // Add protein configurations to the scene
-                scene.createConfigurationSelector(protein: proteinFile.protein)
-                
-                // Fit file in frustum
-                let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: proteinFile.protein.boundingSphere.radius,
-                                                                              aspectRatio: scene.aspectRatio)
-                scene.updateCameraDistanceToModel(distanceToModel: cameraDistanceToFit,
-                                                  proteinDataSource: proteinViewModel.dataSource)
-                
-                // Pass the new mesh to the renderer
-                proteinViewModel.renderer.addBillboardingBuffers(vertexBuffer: &vertexData,
-                                                                 subunitBuffer: &subunitData,
-                                                                 atomTypeBuffer: &atomTypeData,
-                                                                 indexBuffer: &indexData)
-            }
+        guard let proteinViewModel = proteinViewModel else { return }
+        let scene = proteinViewModel.renderer.scene
+        
+        // Add protein configurations to the scene
+        scene.createConfigurationSelector(protein: proteinFile.protein)
+        
+        // Fit file in frustum
+        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: proteinFile.protein.boundingSphere.radius,
+                                                                      aspectRatio: scene.aspectRatio)
+        scene.updateCameraDistanceToModel(distanceToModel: cameraDistanceToFit,
+                                          proteinDataSource: proteinViewModel.dataSource)
+        
+        // Change visualization to trigger rendering
+        // TO-DO: visualization should depend on file type too
+        DispatchQueue.main.sync {
+            proteinViewModel.visualization = .solidSpheres
         }
+        
         // File import finished
-        proteinViewModel?.statusFinished(action: StatusAction.importFile)
+        proteinViewModel.statusFinished(action: StatusAction.importFile)
     }
+    
+    // MARK: - Remove files
     
     /// Removes file at index from data source and scene.
     public func removeFileAtIndex(index: Int) {
