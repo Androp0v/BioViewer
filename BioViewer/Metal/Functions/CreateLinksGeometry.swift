@@ -65,16 +65,7 @@ extension MetalScheduler {
             computeEncoder.setBuffer(generatedIndexBuffer,
                                      offset: 0,
                                      index: 2)
-            
-            // Set uniform buffer contents
-            let uniformBuffer = device.makeBuffer(
-                bytes: Array([Int32(protein.atomArrayComposition.totalCount)]),
-                length: MemoryLayout<Int32>.stride 
-            )
-            computeEncoder.setBuffer(uniformBuffer,
-                                     offset: 0,
-                                     index: 3)
-            
+                        
             // Schedule the threads
             if device.supportsFamily(.apple3) {
                 // Create threads and threadgroup sizes

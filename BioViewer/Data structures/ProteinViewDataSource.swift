@@ -62,7 +62,9 @@ class ProteinViewDataSource: ObservableObject {
         
         // Change visualization to trigger rendering
         // TO-DO: visualization should depend on file type too
-        proteinViewModel.renderer.scene.visualization = .solidSpheres
+        DispatchQueue.main.sync {
+            proteinViewModel.visualization = .solidSpheres
+        }
         
         // File import finished
         proteinViewModel.statusFinished(action: StatusAction.importFile)

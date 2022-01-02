@@ -93,7 +93,7 @@ extension ProteinRenderer {
                            depthTexture: hqTextures.hqDepthTexture,
                            shadowTextures: hqShadowTextures,
                            variant: .highQuality,
-                           renderLinks: scene.visualization == .ballAndStick)
+                           renderLinks: scene.currentVisualization == .ballAndStick)
         
         // MARK: - Completion handler
         commandBuffer.addCompletedHandler({ [weak self] commandBuffer in

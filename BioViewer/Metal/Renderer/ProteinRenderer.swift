@@ -160,9 +160,6 @@ class ProteinRenderer: NSObject, ObservableObject {
         // Call super initializer
         super.init()
         
-        // Reference renderer from scene
-        self.scene.renderer = self
-        
         // Add buffers to uniforms buffer array
         for _ in 0..<maxBuffersInFlight {
             let uniformBuffer = device.makeBuffer(bytes: &self.scene.frameData,
@@ -298,7 +295,7 @@ extension ProteinRenderer: MTKViewDelegate {
                                depthTexture: view.depthStencilTexture,
                                shadowTextures: shadowTextures,
                                variant: .normal,
-                               renderLinks: scene.visualization == .ballAndStick)
+                               renderLinks: scene.currentVisualization == .ballAndStick)
             
             // MARK: - Triple buffering
             

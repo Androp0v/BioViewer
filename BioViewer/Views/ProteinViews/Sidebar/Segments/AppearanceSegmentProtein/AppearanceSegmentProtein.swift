@@ -12,16 +12,6 @@ struct AppearanceSegmentProtein: View {
     // MARK: - Properties
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    var visualizationProxy: Binding<Int> {
-        Binding<Int>(
-            get: {
-                proteinViewModel.renderer.scene.visualization.rawValue
-            },
-            set: {
-                proteinViewModel.renderer.scene.visualization = .init(rawValue: $0) ?? .none
-            }
-        )
-    }
             
     // MARK: - View
     
@@ -41,18 +31,15 @@ struct AppearanceSegmentProtein: View {
             
             Section(header: Text(NSLocalizedString("Visualization", comment: ""))
                         .padding(.bottom, 4), content: {
-                PickerRow(optionName: NSLocalizedString("View as", comment: ""),
-                          selectedOption: visualizationProxy,
-                          pickerOptions: ProteinVisualizationOption.getPickerOptions())
-                
+                VisualizationPickerRow()
                 // TO-DO: Surface representation
                 /* SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface) */
             })
             
             // MARK: - Color section
             
-            if proteinViewModel.renderer.scene.visualization == ProteinVisualizationOption.solidSpheres
-                || proteinViewModel.renderer.scene.visualization == ProteinVisualizationOption.ballAndStick {
+            if proteinViewModel.visualization == ProteinVisualizationOption.solidSpheres
+                || proteinViewModel.visualization == ProteinVisualizationOption.ballAndStick {
                 Section(header: Text(NSLocalizedString("Color", comment: ""))
                             .padding(.bottom, 4), content: {
                     // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption

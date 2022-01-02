@@ -40,6 +40,15 @@ class ProteinViewModel: ObservableObject {
             renderer.scene.backgroundColor = newCGColor
         }
     }
+    
+    /// Shared reference to the VisualizationBufferLoader class so it can be easily cancelled for subsequent calls..
+    private var visualizationBufferLoader = VisualizationBufferLoader()
+    /// Visualization option for protein representation.
+    @Published var visualization: ProteinVisualizationOption = .none {
+        didSet {
+            visualizationBufferLoader.handleVisualizationChange(visualization: visualization, proteinViewModel: self)
+        }
+    }
         
     /// Whether to show the structure surface..
     @Published var showSurface: Bool = false {
