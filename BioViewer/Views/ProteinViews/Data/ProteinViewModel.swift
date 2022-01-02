@@ -117,6 +117,9 @@ class ProteinViewModel: ObservableObject {
         switch action {
         case .importFile:
             self.statusViewModel.removeImportError()
+        case .geometryGeneration:
+            // TO-DO
+            break
         }
     }
     

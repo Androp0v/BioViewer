@@ -14,12 +14,11 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createLinksGeometry(protein: Protein) -> (vertexBuffer: MTLBuffer?, indexBuffer: MTLBuffer?) {
+    public func createLinksGeometry(linkData: [LinkStruct]) -> (vertexBuffer: MTLBuffer?, indexBuffer: MTLBuffer?) {
 
         let impostorVertexCount = 8
         let impostorTriangleCount = 8
         
-        let linkData = ConnectivityGenerator().computeConnectivity(protein: protein)
         let linkCount = linkData.count
         
         // Populate buffers

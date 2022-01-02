@@ -11,20 +11,33 @@ class VisualizationBufferLoader {
     
     // MARK: - Handle visualization
     
+    var currentTask: Task<Void, Never>?
+    
     func handleVisualizationChange(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) {
-        DispatchQueue.init(label: "Geometry generation", qos: .userInitiated).async {
-            self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
+        
+        // Cancel previously running visualization handling task (if any)
+        currentTask?.cancel()
+        
+        // Update Status View
+        proteinViewModel.statusUpdate(statusText: NSLocalizedString("Generating geometry", comment: ""))
+        
+        // Add a new geometry creation task
+        currentTask = Task {
+            await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
             
             DispatchQueue.main.sync {
                 // Update internal visualization mode as seen by renderer
                 proteinViewModel.renderer.scene.currentVisualization = visualization
+                
+                // Update Status View
+                proteinViewModel.statusFinished(action: .geometryGeneration)
             }
         }
     }
     
     // MARK: - Populate buffers
     
-    private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) {
+    private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
         guard let protein = proteinViewModel.dataSource.files.first?.protein else { return }
 
@@ -59,8 +72,12 @@ class VisualizationBufferLoader {
             guard var atomTypeData = atomTypeData else { return }
             guard var indexData = indexData else { return }
             
+            // Compute model connectivity
+            let linkData = await ConnectivityGenerator().computeConnectivity(protein: protein, proteinViewModel: proteinViewModel)
+            if Task.isCancelled { return }
+            
             // Add link buffers to the structure
-            let (linkVertexBuffer, linkIndexBuffer) = MetalScheduler.shared.createLinksGeometry(protein: protein)
+            let (linkVertexBuffer, linkIndexBuffer) = MetalScheduler.shared.createLinksGeometry(linkData: linkData)
             guard var linkVertexBuffer = linkVertexBuffer else { return }
             guard var linkIndexBuffer = linkIndexBuffer else { return }
             

@@ -10,6 +10,7 @@ import QuartzCore
 
 enum StatusAction {
     case importFile
+    case geometryGeneration
 }
 
 class StatusViewModel: ObservableObject {
