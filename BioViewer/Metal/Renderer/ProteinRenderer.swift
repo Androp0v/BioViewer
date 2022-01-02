@@ -173,10 +173,10 @@ class ProteinRenderer: NSObject, ObservableObject {
         }
         
         // Create pipeline states
-        makeShadowRenderPipelineState(device: device)
+        makeShadowRenderPipelineState(device: device, useFixedRadius: false)
         makeOpaqueRenderPipelineState(device: device)
-        makeImpostorRenderPipelineState(device: device, variant: .normal)
-        makeImpostorLinkRenderPipelineState(device: device, variant: .normal)
+        makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
+        makeImpostorLinkRenderPipelineState(device: device, variant: .solidSpheres)
         
         // Create shadow textures and sampler
         shadowTextures.makeTextures(device: device,
@@ -221,6 +221,16 @@ class ProteinRenderer: NSObject, ObservableObject {
         self.atomTypeBuffer = nil
         self.opaqueIndexBuffer = nil
         self.scene.needsRedraw = true
+    }
+    
+    /// Make new impostor pipeline variant.
+    func remakeImpostorPipelineForVariant(variant: ImpostorRenderPassVariant) {
+        makeImpostorRenderPipelineState(device: self.device, variant: variant)
+    }
+    
+    /// Make new shadow pipeline variant.
+    func remakeShadowPipelineForVariant(useFixedRadius: Bool) {
+        makeShadowRenderPipelineState(device: self.device, useFixedRadius: useFixedRadius)
     }
 }
 
@@ -294,7 +304,7 @@ extension ProteinRenderer: MTKViewDelegate {
                                drawableTexture: drawable.texture,
                                depthTexture: view.depthStencilTexture,
                                shadowTextures: shadowTextures,
-                               variant: .normal,
+                               variant: .solidSpheres,
                                renderLinks: scene.currentVisualization == .ballAndStick)
             
             // MARK: - Triple buffering

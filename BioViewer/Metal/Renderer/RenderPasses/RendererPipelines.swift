@@ -9,15 +9,22 @@ import Foundation
 import Metal
 
 extension ProteinRenderer {
-    
+        
     // MARK: - Shadow pass
-    func makeShadowRenderPipelineState(device: MTLDevice) {
+    func makeShadowRenderPipelineState(device: MTLDevice, useFixedRadius: Bool) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
             fatalError()
         }
+        
+        let constantValues = MTLFunctionConstantValues()
+        var useFixedRadius = useFixedRadius
+        constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 0)
+        
         let vertexProgram = defaultLibrary.makeFunction(name: "shadow_vertex")
-        let fragmentProgram = defaultLibrary.makeFunction(name: "shadow_fragment")
+        guard let fragmentProgram = try? defaultLibrary.makeFunction(name: "shadow_fragment", constantValues: constantValues) else {
+            return
+        }
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
@@ -53,8 +60,10 @@ extension ProteinRenderer {
     // MARK: - Impostor geometry pass
     
     enum ImpostorRenderPassVariant {
-        case normal
-        case highQuality
+        case solidSpheres
+        case solidSpheresHQ
+        case ballAndSticks
+        case ballAndSticksHQ
     }
     
     func makeImpostorRenderPipelineState(device: MTLDevice, variant: ImpostorRenderPassVariant) {
@@ -66,12 +75,26 @@ extension ProteinRenderer {
         // Constant values to avoid unwanted branching
         let constantValues = MTLFunctionConstantValues()
         switch variant {
-        case .normal:
+        case .solidSpheres:
             var useHighShadowSampleCount: Bool = false
+            var useFixedRadius: Bool = false
             constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
-        case .highQuality:
+            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
+        case .solidSpheresHQ:
             var useHighShadowSampleCount: Bool = true
+            var useFixedRadius: Bool = false
             constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
+            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
+        case .ballAndSticks:
+            var useHighShadowSampleCount: Bool = false
+            var useFixedRadius: Bool = true
+            constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
+            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
+        case .ballAndSticksHQ:
+            var useHighShadowSampleCount: Bool = true
+            var useFixedRadius: Bool = true
+            constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
+            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
         }
         
         // Vertex and fragment functions
@@ -88,9 +111,9 @@ extension ProteinRenderer {
         
         // Save to the appropriate pipeline state
         switch variant {
-        case .normal:
+        case .solidSpheres, .ballAndSticks:
             impostorRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-        case .highQuality:
+        case .solidSpheresHQ, .ballAndSticksHQ:
             impostorHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
         }
     }
@@ -105,10 +128,10 @@ extension ProteinRenderer {
         // Constant values to avoid unwanted branching
         let constantValues = MTLFunctionConstantValues()
         switch variant {
-        case .normal:
+        case .solidSpheres, .ballAndSticks:
             var useHighShadowSampleCount: Bool = false
             constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
-        case .highQuality:
+        case .solidSpheresHQ, .ballAndSticksHQ:
             var useHighShadowSampleCount: Bool = true
             constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
         }
@@ -127,9 +150,9 @@ extension ProteinRenderer {
         
         // Save to the appropriate pipeline state
         switch variant {
-        case .normal:
+        case .solidSpheres, .ballAndSticks:
             impostorLinkRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-        case .highQuality:
+        case .solidSpheresHQ, .ballAndSticksHQ:
             impostorLinkHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
         }
     }

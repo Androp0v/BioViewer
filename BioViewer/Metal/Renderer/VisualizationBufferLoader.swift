@@ -62,6 +62,10 @@ class VisualizationBufferLoader {
                                                              atomTypeBuffer: &atomTypeData,
                                                              indexBuffer: &indexData)
             
+            // Change pipeline
+            proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
+            proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
+            
         // MARK: - Ball and stick
         case .ballAndStick:
             // Generate a billboard quad for each atom in the protein
@@ -89,6 +93,10 @@ class VisualizationBufferLoader {
             // Pass link buffers to the renderer
             proteinViewModel.renderer.addBillboardingLinks(vertexBuffer: &linkVertexBuffer,
                                                            indexBuffer: &linkIndexBuffer)
+            
+            // Change pipeline
+            proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
+            proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
         }
     }
 }

@@ -36,9 +36,9 @@ extension ProteinRenderer {
         // Set pipeline state for the variant
         var variantPipelineState: MTLRenderPipelineState?
         switch variant {
-        case .normal:
+        case .solidSpheres, .ballAndSticks:
             variantPipelineState = impostorRenderingPipelineState
-        case .highQuality:
+        case .solidSpheresHQ, .ballAndSticksHQ:
             variantPipelineState = impostorHQRenderingPipelineState
         }
         guard let impostorRenderingPipelineState = variantPipelineState else {
@@ -101,9 +101,9 @@ extension ProteinRenderer {
             // Set pipeline state for the variant
             var linkVariantPipelineState: MTLRenderPipelineState?
             switch variant {
-            case .normal:
+            case .solidSpheres, .ballAndSticks:
                 linkVariantPipelineState = impostorLinkRenderingPipelineState
-            case .highQuality:
+            case .solidSpheresHQ, .ballAndSticksHQ:
                 // TO-DO: HQ impostorHQLinkRenderingPipelineStage
                 linkVariantPipelineState = impostorLinkRenderingPipelineState
             }
