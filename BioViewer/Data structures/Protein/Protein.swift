@@ -35,7 +35,7 @@ public class Protein {
     /// Atomic positions (in Armstrongs). ContiguousArray is faster than array since we
     /// don't need to add new atoms after its creation. Also has easier conversion to MTLBuffer.
     ///
-    /// Stored in C,N,H,O,S,X order (X for others).
+    /// Stored in C, H, N, O, S, X order (X for others).
     public var atoms: ContiguousArray<simd_float3>
 
     /// Number of atoms of each element.
@@ -50,8 +50,13 @@ public class Protein {
     public var bonds: [BondStruct]?
     
     // MARK: - Configurations
+    
     /// Number of configurations for this structure.
     public var configurationCount: Int
+    /// Number of bonds in each configuration.
+    public var bondsPerConfiguration: [Int]?
+    /// Index of the bond array start  for each configuration.
+    public var bondsConfigurationArrayStart: [Int]?
     /// Energies of each configuration.
     public var configurationEnergies: [Float]?
     

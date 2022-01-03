@@ -79,6 +79,12 @@ class VisualizationBufferLoader {
             guard let bondData = protein.bonds else { return }
             if Task.isCancelled { return }
             
+            // Update configuration selector with bonds
+            guard let bondsPerConfiguration = protein.bondsPerConfiguration else { return }
+            guard let bondsConfigurationArrayStart = protein.bondsConfigurationArrayStart else { return }
+            proteinViewModel.renderer.scene.configurationSelector?.addBonds(bondsPerConfiguration: bondsPerConfiguration,
+                                                                            bondArrayStarts: bondsConfigurationArrayStart)
+            
             // Add bond buffers to the structure
             let (bondVertexBuffer, bondIndexBuffer) = MetalScheduler.shared.createBondsGeometry(bondData: bondData)
             guard var bondVertexBuffer = bondVertexBuffer else { return }
