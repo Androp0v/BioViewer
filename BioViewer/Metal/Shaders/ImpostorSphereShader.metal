@@ -164,9 +164,10 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     // Depth cueing
     if (frameData.has_depth_cueing) {
-        shadedColor.rgb -= frameData.depth_cueing_strength * half3(normalizedDeviceCoordinatesDepth,
-                                                                   normalizedDeviceCoordinatesDepth,
-                                                                   normalizedDeviceCoordinatesDepth);
+        // Rescale depth so only the part of the model that has a depth ranging 0.5 to 1.0
+        // (the furthest half of the model) gets depth cued.
+        float rescaled_depth = max((2.0 * normalizedDeviceCoordinatesDepth) - 1.0, 0.0);
+        shadedColor.rgb -= frameData.depth_cueing_strength * half3(rescaled_depth);
     }
     
     // Add hard shadows
