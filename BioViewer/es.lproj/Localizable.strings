@@ -1,73 +1,309 @@
-/* 
-  Localizable.strings
-  BioViewer
+/* No comment provided by engineer. */
+"Authors: " = "Autores: ";
 
-  Created by Raúl Montón Pinillos on 1/11/21.
-  
-*/
-
-"View protein structure" = "Ver estructura";
-
-"View sequence" = "Ver secuencia";
-
-"Settings" = "Ajustes";
-
-"Idle" = "Libre";
-
-"Close" = "Cerrar";
-
-"Import files" = "Importar archivos";
-
-"Download from RCSB" = "Descargar desde RCSB";
-
-"Download from URL" = "Descargar desde la URL";
-
-"Sample protein" = "Proteína de ejemplo";
-
-"Inspector" = "Inspector";
-
-"Loaded files" = "Archivos cargados";
-
-"Number of proteins: " = "Número de proteínas: ";
-
-"Number of atoms: " = "Número de átomos: ";
-
-"Remove all" = "Eliminar todos";
-
+/* No comment provided by engineer. */
 "Background color" = "Color de fondo";
 
-"C atom color" = "Color átomos de C";
-
-"H atom color" = "Color átomos de H";
-
-"N atom color" = "Color átomos de N";
-
-"O atom color" = "Color átomos de O";
-
-"S atom color" = "Color átomos de S";
-
-"Unknown atom color" = "Resto de átomos";
-
-"Focal distance" = "Distancia focal";
-
+/* No comment provided by engineer. */
 "Buy me a coffee ☕️" = "Cómprame un café ☕️";
 
-"Hello there! You can buy me a coffee if you want to and contribute supporting BioViewer." = "Hola! Puedes comprarme un café para contribuir al desarrollo de BioViewer.";
+/* No comment provided by engineer. */
+"C atom color" = "Color átomos de C";
 
-"Tasty coffee pod" = "Cápsula de café";
+/* No comment provided by engineer. */
+"Cancel" = "Cancelar";
 
-"Nice bar coffee" = "Café de cafetería";
-
+/* No comment provided by engineer. */
 "Caramel Macchiato" = "Caramel Macchiato";
 
+/* No comment provided by engineer. */
 "Caramel Macchiato + biscuits" = "Caramel Macchiato + galletas";
 
-"Purchased coffees:" = "Cafés comprados:";
+/* No comment provided by engineer. */
+"Cast shadows" = "Sombras";
 
-"RCSB ID" = "RCSB ID";
+/* No comment provided by engineer. */
+"Clear background" = "Fondo transparente";
 
+/* No comment provided by engineer. */
+"Close" = "Cerrar";
+
+/* No comment provided by engineer. */
+"Color" = "Color";
+
+/* No comment provided by engineer. */
+"Color palette" = "Paleta de color";
+
+/* No comment provided by engineer. */
+"Compute " = "Calcular ";
+
+/* No comment provided by engineer. */
+"Configurations" = "Configuraciones";
+
+/* No comment provided by engineer. */
+"Custom" = "Personalizado";
+
+/* No comment provided by engineer. */
+"Default" = "Por defecto";
+
+/* No comment provided by engineer. */
+"Depth cueing" = "Señalizar profundidad";
+
+/* No comment provided by engineer. */
+"Description: " = "Descripción: ";
+
+/* No comment provided by engineer. */
+"Don't know what to search for?" = "¿No sabes qué buscar?";
+
+/* No comment provided by engineer. */
+"Download from RCSB" = "Descargar desde RCSB";
+
+/* No comment provided by engineer. */
+"Download from URL" = "Descargar desde la URL";
+
+/* No comment provided by engineer. */
+"Downloading file" = "Descargando archivo";
+
+/* No comment provided by engineer. */
+"Energy" = "Energía";
+
+/* No comment provided by engineer. */
 "Enter RCSB ID" = "Introduce el ID de RCSB";
 
+/* No comment provided by engineer. */
+"Error downloading file" = "Error descargando el archivo";
+
+/* No comment provided by engineer. */
+"Error importing file" = "Error importando el archivo";
+
+/* No comment provided by engineer. */
+"Error: File does not contain any atom positions" = "Error: El archivo no contiene posiciones de átomos";
+
+/* No comment provided by engineer. */
+"Error: File not found" = "Error: Archivo no encontrado";
+
+/* No comment provided by engineer. */
+"Error: Unknown file type" = "Error: Tipo de archivo desconocido";
+
+/* No comment provided by engineer. */
+"Failed to identify residue ID for atom in line" = "No se ha conseguido identifiar el ID del residuo para el átomo en la línea";
+
+/* No comment provided by engineer. */
+"File details" = "Información del archivo";
+
+/* No comment provided by engineer. */
+"Focal distance" = "Distancia focal";
+
+/* No comment provided by engineer. */
+"Frames per configuration" = "Fotogramas por configuración";
+
+/* No comment provided by engineer. */
+"General" = "General";
+
+/* No comment provided by engineer. */
+"Generating geometry" = "Generando geometría";
+
+/* No comment provided by engineer. */
+"Go" = "Ir";
+
+/* No comment provided by engineer. */
+"Go to frame" = "Ir al fotograma";
+
+/* No comment provided by engineer. */
+"H atom color" = "Color átomos de H";
+
+/* No comment provided by engineer. */
+"Hello there! You can buy me a coffee if you want to and contribute supporting BioViewer." = "Hola! Puedes comprarme un café para contribuir al desarrollo de BioViewer.";
+
+/* No comment provided by engineer. */
+"Help" = "Ayuda";
+
+/* No comment provided by engineer. */
+"Here are some suggestions..." = "Aquí hay algunas sugerencias";
+
+/* No comment provided by engineer. */
+"Idle" = "Libre";
+
+/* No comment provided by engineer. */
+"Ignored atom in line" = "Ignorado átomo en la línea";
+
+/* No comment provided by engineer. */
+"Image resolution" = "Resolución de imagen";
+
+/* No comment provided by engineer. */
+"Import files" = "Importar archivos";
+
+/* No comment provided by engineer. */
 "Importing file" = "Importando archivo";
 
-"Downloading file" = "Descargando archivo";
+/* No comment provided by engineer. */
+"Inspector" = "Inspector";
+
+/* No comment provided by engineer. */
+"Invalid image data" = "Datos de imagen inválidos";
+
+/* No comment provided by engineer. */
+"Invalid RCSB ID" = "ID de RCSB inválido";
+
+/* No comment provided by engineer. */
+"Loaded files" = "Archivos cargados";
+
+/* No comment provided by engineer. */
+"Loaded models" = "Modelos cargados";
+
+/* No comment provided by engineer. */
+"Maximum:" = "Máximo:";
+
+/* No comment provided by engineer. */
+"Minimum:" = "Mínimo:";
+
+/* No comment provided by engineer. */
+"N atom color" = "Color átomos de N";
+
+/* No comment provided by engineer. */
+"Nice bar coffee" = "Café de cafetería";
+
+/* No comment provided by engineer. */
+"No imported files" = "No se ha importado ningún archivo";
+
+/* No comment provided by engineer. */
+"No structure found with the given RCSB ID" = "No se ha encontrado ninguna estructura con el ID de RCSB indicado";
+
+/* No comment provided by engineer. */
+"No TER keyword found to mark the end of a chain, subunit count may be wrong" = "No se ha encontrado la keyword TER al final de la cadena, el recuento de subunidades puede ser incorrecto";
+
+/* No comment provided by engineer. */
+"Number of atoms of each element" = "Número de átomos de cada elemento";
+
+/* No comment provided by engineer. */
+"Number of atoms:" = "Número de átomos:";
+
+/* No comment provided by engineer. */
+"Number of proteins:" = "Número de proteínas:";
+
+/* No comment provided by engineer. */
+"Number of subunits:" = "Número de subunidades:";
+
+/* No comment provided by engineer. */
+"O atom color" = "Color átomos de O";
+
+/* No comment provided by engineer. */
+"Other atoms" = "Otros átomos";
+
+/* No comment provided by engineer. */
+"PDB" = "PDB";
+
+/* No comment provided by engineer. */
+"PDB ID:" = "ID de PDB:";
+
+/* No comment provided by engineer. */
+"Photo Mode" = "Modo Foto";
+
+/* No comment provided by engineer. */
+"Protein properties" = "Propiedades de la proteína";
+
+/* No comment provided by engineer. */
+"Purchased coffees:" = "Cafés comprados:";
+
+/* No comment provided by engineer. */
+"RCSB ID" = "RCSB ID";
+
+/* No comment provided by engineer. */
+"Remove all" = "Eliminar todos";
+
+/* No comment provided by engineer. */
+"Remove files" = "Eliminar archivos";
+
+/* No comment provided by engineer. */
+"S atom color" = "Color átomos de S";
+
+/* No comment provided by engineer. */
+"Sample protein" = "Proteína de ejemplo";
+
+/* No comment provided by engineer. */
+"Save to photos" = "Guardar en fotos";
+
+/* No comment provided by engineer. */
+"Search protein structures by entering their RCSB ID." = "Busca estructuras de proteína intruduciendo su ID en el RCSB";
+
+/* No comment provided by engineer. */
+"Select a palette" = "Selecciona una paleta";
+
+/* No comment provided by engineer. */
+"Selected color" = "Color seleccionado";
+
+/* No comment provided by engineer. */
+"Settings" = "Ajustes";
+
+/* No comment provided by engineer. */
+"Shadow resolution" = "Resolución de las sombras";
+
+/* No comment provided by engineer. */
+"Shadows" = "Sombras";
+
+/* No comment provided by engineer. */
+"Share" = "Compartir";
+
+/* No comment provided by engineer. */
+"Source file" = "Archivo original";
+
+/* No comment provided by engineer. */
+"Source text not available" = "Texto original no disponible";
+
+/* No comment provided by engineer. */
+"Strength" = "Intensidad";
+
+/* No comment provided by engineer. */
+"Subunit (subunit.getUppercaseName())" = "Subunidad (subunit.getUppercaseName())";
+
+/* No comment provided by engineer. */
+"Suggestions" = "Sugerencias";
+
+/* No comment provided by engineer. */
+"Take photo" = "Sacar foto";
+
+/* No comment provided by engineer. */
+"Tasty coffee pod" = "Cápsula de café";
+
+/* No comment provided by engineer. */
+"Thank you!" = "Gracias!";
+
+/* No comment provided by engineer. */
+"There seems to be a problem with the server" = "Parece haber un problema con el servidor";
+
+/* No comment provided by engineer. */
+"Too many warnings found. Showing only the first (AppState.maxNumberOfWarnings)." = "Demasiados avisos encontrados. Mostrando solo los primeros (AppState.maxNumberOfWarnings).";
+
+/* No comment provided by engineer. */
+"Too many warnings found. Showing only the first %@." = "Demasiados avisos encontrados. Mostrando solo los primeros %@";
+
+/* No comment provided by engineer. */
+"Unknown" = "Desconocido";
+
+/* No comment provided by engineer. */
+"Unknown error" = "Error desconocido";
+
+/* No comment provided by engineer. */
+"Unknown file extension" = "Tipo de archivo desconocido";
+
+/* No comment provided by engineer. */
+"Unkwnown" = "Desconocido";
+
+/* No comment provided by engineer. */
+"View as" = "Ver como";
+
+/* No comment provided by engineer. */
+"View protein structure" = "Ver estructura";
+
+/* No comment provided by engineer. */
+"View raw file" = "Ver archivo original";
+
+/* No comment provided by engineer. */
+"View sequence" = "Ver secuencia";
+
+/* No comment provided by engineer. */
+"Visualization" = "Visualización";
+
+/* No comment provided by engineer. */
+"Warnings" = "Avisos";
+
