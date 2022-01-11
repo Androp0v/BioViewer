@@ -26,4 +26,9 @@ class AppState {
             return false
         }
     }
+    
+    // MARK: - Focused view model
+    
+    /// Workaround around @FocusedValue bugs
+    var focusedViewModel: ProteinViewModel?
 }

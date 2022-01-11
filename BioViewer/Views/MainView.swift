@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-    
+        
     init() {
         
         // Custom segmented controls in the app
@@ -27,8 +27,8 @@ struct MainView: View {
         
         // Share view between default detail in master-detail mode and the same view
         // pushed through navigation.
-        let proteinView = ProteinView()
         let proteinViewModel = ProteinViewModel()
+        let proteinView = ProteinView()
         
         NavigationView {
 
@@ -36,8 +36,7 @@ struct MainView: View {
             // in other modes
             List {
                 NavigationLink(
-                    destination: proteinView
-                        .environmentObject(proteinViewModel),
+                    destination: proteinView.environmentObject(proteinViewModel),
                     label: {
                         Text(NSLocalizedString("View protein structure", comment: ""))
                 })
@@ -62,6 +61,7 @@ struct MainView: View {
             // Initial view in master-detail mode
             proteinView.environmentObject(proteinViewModel)
         }
+        
         // Open documents in view from other apps
         .onOpenURL { fileURL in
             try? FileImporter.importFromFileURL(fileURL: fileURL,

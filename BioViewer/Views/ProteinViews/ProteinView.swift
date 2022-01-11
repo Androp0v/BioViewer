@@ -156,6 +156,8 @@ struct ProteinView: View {
                 sidebar
             })
         }
+        // Inform command menus of focus changes
+        .focusedValue(\.proteinViewModel, proteinViewModel)
         .environmentObject(proteinViewModel)
     }
 

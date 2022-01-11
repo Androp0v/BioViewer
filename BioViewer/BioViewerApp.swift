@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct BioViewerApp: App {
+        
     var body: some Scene {
+                
         WindowGroup {
             MainView()
+        }
+        .commands {
+            BioViewerCommands()
         }
     }
 }

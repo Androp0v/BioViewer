@@ -127,6 +127,8 @@
 		C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
 		C56E87E0278D895B004BAEE2 /* SceneAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */; };
 		C56E87E1278D896B004BAEE2 /* SceneAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */; };
+		C56E87E4278DB906004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
+		C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */; };
 		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
 		C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
 		C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1B2741386300FF010D /* FileSourceRow.swift */; };
@@ -363,6 +365,7 @@
 		C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationBufferLoader.swift; sourceTree = "<group>"; };
 		C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomRadiiGenerator.swift; sourceTree = "<group>"; };
 		C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneAnimator.swift; sourceTree = "<group>"; };
+		C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerCommands.swift; sourceTree = "<group>"; };
 		C572BD172740222800FF010D /* FileSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceView.swift; sourceTree = "<group>"; };
 		C572BD192741372600FF010D /* ProteinFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFileInfo.swift; sourceTree = "<group>"; };
 		C572BD1B2741386300FF010D /* FileSourceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceRow.swift; sourceTree = "<group>"; };
@@ -616,6 +619,7 @@
 				C57303F82730401E00D5B0A6 /* README.md */,
 				C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */,
 				C44FC0712641AF1B00459E01 /* BioViewerApp.swift */,
+				C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */,
 				C44D0558266BAA6E00BAFDCD /* AppState.swift */,
 				C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */,
 				C54066F8274D1C6100710CFC /* Files */,
@@ -1229,6 +1233,7 @@
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
 				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
 				C5FEC737277C8EA800E348BD /* CreateImpostorLinks.metal in Sources */,
+				C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */,
 				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
@@ -1387,6 +1392,7 @@
 				C57FCE8D277E60AF001A7B4A /* CreateBondsGeometry.swift in Sources */,
 				C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */,
 				C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */,
+				C56E87E4278DB906004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
 				C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */,
 				C572BD3A2741657B00FF010D /* AtomType.swift in Sources */,
 				C504C9C4274175E4002D4E6A /* ComputeEDT.metal in Sources */,
