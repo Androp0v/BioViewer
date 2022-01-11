@@ -15,8 +15,6 @@
 
 using namespace metal;
 
-constant bool use_fixed_radius [[ function_constant(0) ]];
-
 struct ShadowVertexOut{
     float4 position [[position]];
     float3 atomCenter;
@@ -102,12 +100,8 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
                            -length);
     
     // Compute the position of the fragment in world space
-    float3 sphereWorldPosition;
-    if (use_fixed_radius) {
-        sphereWorldPosition = (normal * 0.4) + impostor_vertex.atomCenter;
-    } else {
-        sphereWorldPosition = (normal * atomSolidSphereRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
-    }
+    float3 sphereWorldPosition = normal * frameData.atom_radii.atomRadius[impostor_vertex.atomType] + impostor_vertex.atomCenter;
+
     // Recompute fragment depth
     simd_float4x4 orthogonalProjectionMatrix = frameData.shadowProjectionMatrix;
     float4 sphereClipPosition = ( orthogonalProjectionMatrix * float4(sphereWorldPosition.x,

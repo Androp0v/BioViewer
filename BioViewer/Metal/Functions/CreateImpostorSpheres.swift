@@ -14,7 +14,7 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(protein: Protein, fixedRadius: Bool = false) -> (vertexData: MTLBuffer?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(protein: Protein, atomRadii: AtomRadii) -> (vertexData: MTLBuffer?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         let impostorVertexCount = 4
         let impostorTriangleCount = 2
@@ -71,24 +71,13 @@ extension MetalScheduler {
             }
 
             // Check if the function needs to be compiled
-            let kernelParameters = MTLFunctionConstantValues()
-            if fixedRadius {
-                // Used for ball and stick
-                var useFixedRadius = true
-                kernelParameters.setConstantValue(&useFixedRadius, type: .bool, index: 0)
-            } else {
-                // Used for solid spheres
-                var useFixedRadius = false
-                kernelParameters.setConstantValue(&useFixedRadius, type: .bool, index: 0)
-            }
-            
-            if createSphereModelBundle.requiresBuilding(newFunctionParameters: kernelParameters) {
+            if createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
                 createSphereModelBundle.createPipelineState(functionName: "createImpostorSpheres",
                                                             library: self.library,
                                                             device: self.device,
-                                                            constantValues: kernelParameters)
+                                                            constantValues: nil)
             }
-            guard let pipelineState = createSphereModelBundle.getPipelineState(functionParameters: kernelParameters) else {
+            guard let pipelineState = createSphereModelBundle.getPipelineState(functionParameters: nil) else {
                 return
             }
 
@@ -117,6 +106,9 @@ extension MetalScheduler {
             computeEncoder.setBuffer(uniformBuffer,
                                      offset: 0,
                                      index: 4)
+            
+            var atomRadii = atomRadii
+            computeEncoder.setBytes(&atomRadii, length: MemoryLayout<AtomRadii>.stride, index: 5)
             
             // Schedule the threads
             if device.supportsFamily(.apple3) {

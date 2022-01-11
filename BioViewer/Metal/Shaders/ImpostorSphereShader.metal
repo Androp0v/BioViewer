@@ -24,7 +24,6 @@ struct ImpostorVertexOut{
 
 // MARK: - Constants
 constant bool hq_sample_count [[ function_constant(0) ]];
-constant bool use_fixed_radius [[ function_constant(1) ]];
 
 // MARK: - Functions
 
@@ -142,12 +141,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                          -length);
     
     // Compute the position of the fragment in camera space
-    float3 spherePosition;
-    if (use_fixed_radius) {
-        spherePosition = (float3(normal) * 0.4) + impostor_vertex.atomCenter;
-    } else {
-        spherePosition = (float3(normal) * atomSolidSphereRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
-    }
+    float3 spherePosition = (float3(normal) * frameData.atom_radii.atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
     
     // Compute Phong diffuse component
     half phongDiffuse = dot(normal, sunRayDirection) * reflectivity;

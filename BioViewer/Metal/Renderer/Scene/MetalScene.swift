@@ -19,6 +19,8 @@ class MetalScene: ObservableObject {
     var needsRedraw: Bool = false
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
     @Published var isPlaying: Bool = false
+    /// Class used to animate changes in scene properties.
+    var animator: SceneAnimator?
     
     /// Struct with data passed to the GPU shader.
     var frameData: FrameData
@@ -130,7 +132,9 @@ class MetalScene: ObservableObject {
         
         self.frameData.shadow_strength = shadowStrength
         self.frameData.depth_cueing_strength = depthCueingStrength
-
+        
+        self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
+        
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
             guard let self = self else { return }
@@ -145,13 +149,8 @@ class MetalScene: ObservableObject {
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
         
-        // TO-DO: This is not very elegant
-        self.frameData.atomRadius.0 = 1.70 // Carbon
-        self.frameData.atomRadius.1 = 1.55 // Nitrogen
-        self.frameData.atomRadius.2 = 1.52 // Hydrogen
-        self.frameData.atomRadius.3 = 1.80 // Oxygen
-        self.frameData.atomRadius.4 = 1.10 // Sulfur
-        self.frameData.atomRadius.5 = 1.0 // Others
+        // Initial atom radii
+        self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
         
         self.frameData.atomColor.0 = simd_float4(0.423, 0.733, 0.235, 1.0) // Carbon
         self.frameData.atomColor.1 = simd_float4(0.091, 0.148, 0.556, 1.0) // Nitrogen
@@ -161,6 +160,9 @@ class MetalScene: ObservableObject {
         self.frameData.atomColor.5 = simd_float4(0.517, 0.517, 0.517, 1.0) // Others
         
         initSubunitColors()
+        
+        // Create the animator
+        self.animator = SceneAnimator(scene: self)
     }
 
     // MARK: - Update scene

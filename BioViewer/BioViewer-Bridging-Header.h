@@ -4,3 +4,4 @@
 
 #import "FrameData.h"
 #import "GeneratedVertex.h"
+#import "SharedDataStructs.h"

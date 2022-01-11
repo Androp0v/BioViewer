@@ -8,14 +8,9 @@
 #include <metal_stdlib>
 #include "AtomProperties.h"
 #include "GeneratedVertex.h"
+#include "../SharedDataStructs.h"
 
 using namespace metal;
-
-// MARK: - Function constants
-
-// MTLFunctionConstants, set to constant at pipeline creation time,
-// allow for compiler optimizations.
-constant bool use_fixed_radius [[ function_constant(0) ]];
 
 // MARK: - Kernels
 
@@ -24,6 +19,7 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
                                   device BillboardVertex *generatedVertices [[ buffer(2) ]],
                                   device uint32_t *generatedIndices [[ buffer(3) ]],
                                   constant uint32_t & totalAtomCount [[ buffer(4) ]],
+                                  constant AtomRadii &atom_radii [[buffer(5)]],
                                   uint i [[ thread_position_in_grid ]],
                                   uint l [[ thread_position_in_threadgroup ]]) {
     // TO-DO
@@ -33,14 +29,7 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
     const uint32_t index = i * 4;
     const uint32_t index_2 = i * 6;
     
-    float radius;
-    
-    if (use_fixed_radius) {
-        radius = 0.4;
-    } else {
-        // TO-DO: Deprecate AtomProperties, single source of truth with FrameData
-        radius = atomSolidSphereRadius[atomType[i % totalAtomCount]];
-    }
+    float radius = atom_radii.atomRadius[atomType[i % totalAtomCount]];
     
     // MARK: - Vertices
 

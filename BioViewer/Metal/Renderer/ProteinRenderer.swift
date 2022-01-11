@@ -199,8 +199,8 @@ class ProteinRenderer: NSObject, ObservableObject {
         self.scene.needsRedraw = true
     }
     
-    /// Adds the necessary buffers to display a protein in the renderer using billboarding
-    func addBillboardingBuffers(vertexBuffer: inout MTLBuffer, subunitBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    /// Sets the necessary buffers to display a protein in the renderer using billboarding
+    func setBillboardingBuffers(vertexBuffer: inout MTLBuffer, subunitBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
         self.impostorVertexBuffer = vertexBuffer
         self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
@@ -208,8 +208,8 @@ class ProteinRenderer: NSObject, ObservableObject {
         self.scene.needsRedraw = true
     }
     
-    /// Adds the necessary buffers to display atom bonds in the renderer using billboarding
-    func addBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    /// Sets the necessary buffers to display atom bonds in the renderer using billboarding
+    func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
         self.impostorBondVertexBuffer = vertexBuffer
         self.impostorBondIndexBuffer = indexBuffer
         self.scene.needsRedraw = true

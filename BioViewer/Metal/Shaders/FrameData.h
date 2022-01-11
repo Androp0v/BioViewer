@@ -9,6 +9,7 @@
 #define FrameData_h
 
 #include <simd/simd.h>
+#include "../SharedDataStructs.h"
 
 /// Maximum number of colours that can be passed down to the GPU using FrameData.
 #define MAX_ATOM_COLORS 64
@@ -44,9 +45,6 @@ typedef struct {
     
     /// Transform from camera coordinates to sun's perspective coordinates.
     simd_float4x4 camera_to_shadow_projection_matrix;
-
-    /// Displayed atomic radii in hard-spheres visualization mode
-    float atomRadius [6];
     
     /// Color by subunit, used as a boolean.
     int8_t colorBySubunit;
@@ -65,6 +63,9 @@ typedef struct {
     /// When spheres are coloured by element, only the first 6 elements of the array will be used.
     /// When spheres are coloured by subunit, all the array may be used.
     simd_float4 atomColor [MAX_ATOM_COLORS];
+    
+    /// Atom radii for each atom type.
+    AtomRadii atom_radii;
 
 } FrameData;
 

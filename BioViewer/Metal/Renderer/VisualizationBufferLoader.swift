@@ -12,8 +12,12 @@ class VisualizationBufferLoader {
     // MARK: - Handle visualization
     
     var currentTask: Task<Void, Never>?
+    weak var proteinViewModel: ProteinViewModel?
     
     func handleVisualizationChange(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) {
+        
+        // Save reference to proteinViewModel
+        self.proteinViewModel = proteinViewModel
         
         // Cancel previously running visualization handling task (if any)
         currentTask?.cancel()
@@ -40,38 +44,25 @@ class VisualizationBufferLoader {
     private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
         guard let protein = proteinViewModel.dataSource.files.first?.protein else { return }
+        guard let animator = proteinViewModel.renderer.scene.animator else { return }
 
         switch visualization {
         
         // MARK: - Solid spheres
         case .solidSpheres:
-            // Generate a billboard quad for each atom in the protein
-            let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein)
-            guard var vertexData = vertexData else { return }
-            guard var subunitData = subunitData else { return }
-            guard var atomTypeData = atomTypeData else { return }
-            guard var indexData = indexData else { return }
-            
-            // Pass the new mesh to the renderer
-            proteinViewModel.renderer.addBillboardingBuffers(vertexBuffer: &vertexData,
-                                                             subunitBuffer: &subunitData,
-                                                             atomTypeBuffer: &atomTypeData,
-                                                             indexBuffer: &indexData)
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
             proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
             
+            // Animate radii changes
+            animator.bufferLoader = self
+            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(),
+                                        duration: 0.15)
+            
         // MARK: - Ball and stick
         case .ballAndStick:
-            // Generate a billboard quad for each atom in the protein
-            let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,
-                                                                                                                 fixedRadius: true)
-            guard var vertexData = vertexData else { return }
-            guard var subunitData = subunitData else { return }
-            guard var atomTypeData = atomTypeData else { return }
-            guard var indexData = indexData else { return }
-            
+
             // Compute model connectivity if not already present
             if protein.bonds == nil {
                 await ConnectivityGenerator().computeConnectivity(protein: protein, proteinViewModel: proteinViewModel)
@@ -90,18 +81,39 @@ class VisualizationBufferLoader {
             guard var bondVertexBuffer = bondVertexBuffer else { return }
             guard var bondIndexBuffer = bondIndexBuffer else { return }
             
-            // Pass atom buffers to the renderer
-            proteinViewModel.renderer.addBillboardingBuffers(vertexBuffer: &vertexData,
-                                                             subunitBuffer: &subunitData,
-                                                             atomTypeBuffer: &atomTypeData,
-                                                             indexBuffer: &indexData)
             // Pass bond buffers to the renderer
-            proteinViewModel.renderer.addBillboardingBonds(vertexBuffer: &bondVertexBuffer,
+            proteinViewModel.renderer.setBillboardingBonds(vertexBuffer: &bondVertexBuffer,
                                                            indexBuffer: &bondIndexBuffer)
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
             proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
+            
+            // Animate radii changes
+            animator.bufferLoader = self
+            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(),
+                                        duration: 0.15)
         }
+    }
+    
+    // MARK: - Impostor sphere buffer
+    
+    func populateImpostorSphereBuffers(atomRadii: AtomRadii) {
+        
+        guard let protein = proteinViewModel?.dataSource.files.first?.protein else { return }
+        
+        // Generate a billboard quad for each atom in the protein
+        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,
+                                                                                                             atomRadii: atomRadii)
+        guard var vertexData = vertexData else { return }
+        guard var subunitData = subunitData else { return }
+        guard var atomTypeData = atomTypeData else { return }
+        guard var indexData = indexData else { return }
+        
+        // Pass the new mesh to the renderer
+        proteinViewModel?.renderer.setBillboardingBuffers(vertexBuffer: &vertexData,
+                                                          subunitBuffer: &subunitData,
+                                                          atomTypeBuffer: &atomTypeData,
+                                                          indexBuffer: &indexData)
     }
 }
