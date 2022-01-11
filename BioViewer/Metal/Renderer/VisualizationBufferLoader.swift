@@ -22,9 +22,6 @@ class VisualizationBufferLoader {
         // Cancel previously running visualization handling task (if any)
         currentTask?.cancel()
         
-        // Update Status View
-        proteinViewModel.statusUpdate(statusText: NSLocalizedString("Generating geometry", comment: ""))
-        
         // Add a new geometry creation task
         currentTask = Task {
             await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
@@ -32,9 +29,6 @@ class VisualizationBufferLoader {
             DispatchQueue.main.sync {
                 // Update internal visualization mode as seen by renderer
                 proteinViewModel.renderer.scene.currentVisualization = visualization
-                
-                // Update Status View
-                proteinViewModel.statusFinished(action: .geometryGeneration)
             }
         }
     }
@@ -65,10 +59,17 @@ class VisualizationBufferLoader {
 
             // Compute model connectivity if not already present
             if protein.bonds == nil {
+                // Update Status View
+                proteinViewModel.statusUpdate(statusText: NSLocalizedString("Generating geometry", comment: ""))
+                
+                // Compute links
                 await ConnectivityGenerator().computeConnectivity(protein: protein, proteinViewModel: proteinViewModel)
+                
+                // Finished computing links, update status
+                proteinViewModel.statusFinished(action: .geometryGeneration)
             }
             guard let bondData = protein.bonds else { return }
-            if Task.isCancelled { return }
+            guard !Task.isCancelled else { return }
             
             // Update configuration selector with bonds
             guard let bondsPerConfiguration = protein.bondsPerConfiguration else { return }

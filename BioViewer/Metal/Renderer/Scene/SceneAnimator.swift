@@ -23,6 +23,7 @@ class SceneAnimator {
     
     var displayLink: CADisplayLink?
     var radiiAnimation: RunningAnimation?
+    var isBusy: Bool = false
     
     init(scene: MetalScene) {
         self.scene = scene
@@ -50,8 +51,15 @@ class SceneAnimator {
     }
     
     @objc private func updateAllAnimations() {
-        if radiiAnimation != nil {
-            updateRadiiAnimation()
+        guard !isBusy else { return }
+        isBusy = true
+        
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            guard let self = self else { return }
+            if self.radiiAnimation != nil {
+                self.updateRadiiAnimation()
+            }
+            self.isBusy = false
         }
     }
     
@@ -62,7 +70,7 @@ class SceneAnimator {
         guard let scene = scene else {
             return
         }
-        guard var radiiAnimation = radiiAnimation else {
+        guard let radiiAnimation = radiiAnimation else {
             return
         }
         guard let initialRadii = radiiAnimation.initialValue as? AtomRadii else {
