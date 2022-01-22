@@ -24,9 +24,7 @@ extension FocusedValues {
 }
 
 struct BioViewerCommands: Commands {
-    
-    @FocusedValue(\.proteinViewModel) var proteinViewModel
-    
+        
     var body: some Commands {
         
         // MARK: - Files

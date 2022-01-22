@@ -8,7 +8,7 @@
 import Foundation
 import Metal
 
-class AppState {
+class AppState: ObservableObject {
 
     static let shared = AppState()
     
@@ -30,5 +30,5 @@ class AppState {
     // MARK: - Focused view model
     
     /// Workaround around @FocusedValue bugs
-    var focusedViewModel: ProteinViewModel?
+    @Published var focusedViewModel: ProteinViewModel?
 }
