@@ -68,9 +68,11 @@ class MetalScene: ObservableObject {
     @Published var colorBy: Int {
         didSet {
             if colorBy == ProteinColorByOption.element {
-                self.frameData.colorBySubunit = 0 // False
+                // FIXME: RECOLOR
+                // self.frameData.colorBySubunit = 0 // False
             } else {
-                self.frameData.colorBySubunit = 1 // True
+                // FIXME: RECOLOR
+                // self.frameData.colorBySubunit = 1 // True
             }
             needsRedraw = true
         }
@@ -120,7 +122,6 @@ class MetalScene: ObservableObject {
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         
-        self.frameData.colorBySubunit = 0 // False, color by atom element
         self.colorBy = ProteinColorByOption.element
         
         if AppState.hasSamplerCompareSupport() {
@@ -151,13 +152,6 @@ class MetalScene: ObservableObject {
         
         // Initial atom radii
         self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
-        
-        self.frameData.atomColor.0 = simd_float4(0.423, 0.733, 0.235, 1.0) // Carbon
-        self.frameData.atomColor.1 = simd_float4(0.091, 0.148, 0.556, 1.0) // Nitrogen
-        self.frameData.atomColor.2 = simd_float4(0.517, 0.517, 0.517, 1.0) // Hydrogen
-        self.frameData.atomColor.3 = simd_float4(1.000, 0.149, 0.000, 1.0) // Oxygen
-        self.frameData.atomColor.4 = simd_float4(1.000, 0.780, 0.349, 1.0) // Sulfur
-        self.frameData.atomColor.5 = simd_float4(0.517, 0.517, 0.517, 1.0) // Others
         
         initSubunitColors()
         

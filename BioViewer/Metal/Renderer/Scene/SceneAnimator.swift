@@ -23,6 +23,7 @@ class SceneAnimator {
     
     var displayLink: CADisplayLink?
     var radiiAnimation: RunningAnimation?
+    var colorAnimation: RunningAnimation?
     var isBusy: Bool = false
     
     init(scene: MetalScene) {
@@ -63,6 +64,8 @@ class SceneAnimator {
         }
     }
     
+    // MARK: - Update animations
+    
     private func updateRadiiAnimation() {
         
         self.radiiAnimation?.currentTime = CACurrentMediaTime()
@@ -93,6 +96,23 @@ class SceneAnimator {
         
         if progress == 1 {
             self.radiiAnimation = nil
+        }
+    }
+    
+    private func updateColorAnimation() {
+        
+        self.colorAnimation?.currentTime = CACurrentMediaTime()
+
+        guard let scene = scene else {
+            return
+        }
+        guard let colorAnimation = colorAnimation else {
+            return
+        }
+        
+        let progress = getAnimationProgress(animation: colorAnimation)
+        if progress == 1 {
+            self.colorAnimation = nil
         }
     }
 

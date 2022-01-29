@@ -18,6 +18,7 @@ public enum ProteinColorByOption {
 extension MetalScene {
     
     func updateColors() {
+        /*
         switch colorBy {
         case ProteinColorByOption.element:
             self.frameData.atomColor.0 = getSIMDColor(atomColor: cAtomColor.cgColor) ?? simd_float4.one
@@ -52,10 +53,10 @@ extension MetalScene {
         default:
             break
         }
+        */
     }
     
     func initSubunitColors() {
-        let max_atom_colors = Mirror(reflecting: self.frameData.atomColor).children.count
         subunitColors = []
         // Preselected color palette
         let fixedColorPalette =
@@ -70,12 +71,12 @@ extension MetalScene {
                 Color(.displayP3, red: 0.216, green: 0.945, blue: 0.657, opacity: 1)
             ]
         for index in 0..<fixedColorPalette.count {
-            guard index < max_atom_colors else { return }
+            guard index < MAX_ATOM_COLORS else { return }
             subunitColors.append(fixedColorPalette[index])
         }
         // If there are more subunits than colors in the preselected color palette, chose them
         // at random.
-        for index in fixedColorPalette.count..<max_atom_colors {
+        for _ in fixedColorPalette.count..<Int(MAX_ATOM_COLORS) {
             subunitColors.append(randomColor())
         }
     }

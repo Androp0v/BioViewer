@@ -104,17 +104,23 @@ class VisualizationBufferLoader {
         guard let protein = proteinViewModel?.dataSource.files.first?.protein else { return }
         
         // Generate a billboard quad for each atom in the protein
-        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,
-                                                                                                             atomRadii: atomRadii)
+        let (vertexData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,
+                                                                                                atomRadii: atomRadii)
         guard var vertexData = vertexData else { return }
-        guard var subunitData = subunitData else { return }
         guard var atomTypeData = atomTypeData else { return }
         guard var indexData = indexData else { return }
         
+        // Create and populate color buffer
+        let colorData = MetalScheduler.shared.createAtomColorArray(protein: protein,
+                                                                   atomTypeBuffer: atomTypeData,
+                                                                   color: .init(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+        guard var colorData = colorData else { return }
+        
         // Pass the new mesh to the renderer
         proteinViewModel?.renderer.setBillboardingBuffers(vertexBuffer: &vertexData,
-                                                          subunitBuffer: &subunitData,
                                                           atomTypeBuffer: &atomTypeData,
                                                           indexBuffer: &indexData)
+        // Pass the color buffer to the renderer
+        proteinViewModel?.renderer.setColorBuffer(colorBuffer: &colorData)
     }
 }

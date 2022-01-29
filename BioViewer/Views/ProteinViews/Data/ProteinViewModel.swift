@@ -44,7 +44,7 @@ class ProteinViewModel: ObservableObject {
     /// Shared reference to the VisualizationBufferLoader class so it can be easily cancelled for subsequent calls..
     private var visualizationBufferLoader = VisualizationBufferLoader()
     /// Visualization option for protein representation.
-    @Published var visualization: ProteinVisualizationOption = .ballAndStick {
+    @Published var visualization: ProteinVisualizationOption = .solidSpheres {
         didSet {
             visualizationBufferLoader.handleVisualizationChange(visualization: visualization, proteinViewModel: self)
         }

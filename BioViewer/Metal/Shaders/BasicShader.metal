@@ -56,7 +56,7 @@ vertex VertexOut basic_vertex(const device GeneratedVertex* vertex_buffer [[ buf
                                                                1.0)).xyz );
 
     // Color the atom based on the atom type
-    normalized_vertex.color = frameData.atomColor[ atomType[vid / verticesPerAtom] ];
+    normalized_vertex.color = float4(1.0, 1.0, 1.0, 1.0); // frameData.atomColor[ atomType[vid / verticesPerAtom] ];
 
     // Depth is computed in eye space coordinates, not normalized device coordinates
     normalized_vertex.depth = eye_position.z;

@@ -19,7 +19,7 @@ struct ImpostorVertexOut{
     float3 atomCenter;
     half2 billboardMapping;
     uint8_t atomType;
-    half4 color;
+    half3 color;
 };
 
 // MARK: - Constants
@@ -43,8 +43,8 @@ half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, floa
 // MARK: - Vertex function
 
 vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                         const device int16_t *subunitIndex [[ buffer(1) ]],
-                                         const device uint8_t *atomType [[ buffer(2) ]],
+                                         const device uint8_t *atomType [[ buffer(1) ]],
+                                         const device half3 *atomColor [[ buffer(2) ]],
                                          const device FrameData& frameData [[ buffer(3) ]],
                                          unsigned int vid [[ vertex_id ]]) {
 
@@ -92,13 +92,8 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     // Transform the eye space coordinates to normalized device coordinates
     normalized_impostor_vertex.position = projectionMatrix * eye_position;
     
-    if (frameData.colorBySubunit) {
-        // Color the atom based on the subunit type
-        normalized_impostor_vertex.color = half4(frameData.atomColor[ subunitIndex[atom_id_configuration] ]);
-    } else {
-        // Color the atom based on the atom type
-        normalized_impostor_vertex.color = half4(frameData.atomColor[ atomType[atom_id_configuration] ]);
-    }
+    // Set atom base color
+    normalized_impostor_vertex.color = atomColor[atom_id_configuration];
 
     // Return the processed vertex
     return normalized_impostor_vertex;
