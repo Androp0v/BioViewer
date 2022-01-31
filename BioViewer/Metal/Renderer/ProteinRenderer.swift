@@ -12,8 +12,13 @@ import SwiftUI
 class ProteinRenderer: NSObject, ObservableObject {
     
     // MARK: - Constants
-    
     let maxBuffersInFlight = 3
+    
+    // MARK: - Scheduling
+    /// Whether a frame is currently being processed on the CPU.
+    var isProcessingFrame: Bool = false
+    /// GCD queue used to process frames.
+    let renderQueue = DispatchQueue(label: "com.bioviewer.renderqueue", qos: .userInteractive)
     
     // MARK: - Metal variables
     
@@ -256,77 +261,103 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // Check if the scene needs to be redrawn
         guard scene.needsRedraw || scene.isPlaying else { return }
+        guard !isProcessingFrame else { return }
         
-        // Assure buffers are loaded
-        guard self.atomTypeBuffer != nil else { return }
-        guard self.atomColorBuffer != nil else { return }
-        guard let uniformBuffers = self.uniformBuffers else { return }
+        isProcessingFrame = true
         
-        // Wait until the inflight command buffer has completed its work
-        _ = frameBoundarySemaphore.wait(timeout: .distantFuture)
+        // Render on a background thread
+        renderQueue.async { [weak self] in
+                                    
+            guard let self = self else {
+                self?.isProcessingFrame = false
+                return
+            }
+            
+            // Assure buffers are loaded
+            guard self.atomTypeBuffer != nil else {
+                self.isProcessingFrame = false
+                return
+            }
+            guard self.atomColorBuffer != nil else {
+                self.isProcessingFrame = false
+                return
+            }
+            guard let uniformBuffers = self.uniformBuffers else {
+                self.isProcessingFrame = false
+                return
+            }
+            
+            // Wait until the inflight command buffer has completed its work
+            _ = self.frameBoundarySemaphore.wait(timeout: .distantFuture)
 
-        // MARK: - Update uniforms buffer
-        
-        // Ensure the uniform buffer is loaded
-        var uniformBuffer = uniformBuffers[currentFrameIndex]
-        
-        // Update current frame index
-        currentFrameIndex = (currentFrameIndex + 1) % maxBuffersInFlight
-                
-        // Update uniform buffer
-        self.scene.updateScene()
-        withUnsafePointer(to: self.scene.frameData) {
-            uniformBuffer.contents()
-                .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
-        }
-        
-        // MARK: - Command buffer & depth
-        
-        guard let commandQueue = commandQueue else {
-            NSLog("Command queue is nil.")
-            return
-        }
-                
-        // Create command buffer
-        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
-            NSLog("Unable to create command buffer.")
-            return
-        }
-        
-        // MARK: - Shadow Map pass
-        
-        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: shadowTextures)
-        
-        // MARK: - Getting drawable
-        // The final pass can only render if a drawable is available, otherwise it needs to skip
-        // rendering this frame. Get the drawable as late as possible.
-        if let drawable = view.currentDrawable {
-                
-            // MARK: - Transparent geometry pass
-            impostorRenderPass(commandBuffer: commandBuffer,
-                               uniformBuffer: &uniformBuffer,
-                               drawableTexture: drawable.texture,
-                               depthTexture: view.depthStencilTexture,
-                               shadowTextures: shadowTextures,
-                               variant: .solidSpheres,
-                               renderBonds: scene.currentVisualization == .ballAndStick)
+            // MARK: - Update uniforms buffer
             
-            // MARK: - Triple buffering
+            // Ensure the uniform buffer is loaded
+            var uniformBuffer = uniformBuffers[self.currentFrameIndex]
             
-            // Schedule a drawable presentation to occur after the GPU completes its work
-            // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
-            commandBuffer.present(drawable)
+            // Update current frame index
+            self.currentFrameIndex = (self.currentFrameIndex + 1) % self.maxBuffersInFlight
+                    
+            // Update uniform buffer
+            self.scene.updateScene()
+            withUnsafePointer(to: self.scene.frameData) {
+                uniformBuffer.contents()
+                    .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
+            }
+            
+            // MARK: - Command buffer & depth
+            
+            guard let commandQueue = self.commandQueue else {
+                NSLog("Command queue is nil.")
+                self.isProcessingFrame = false
+                return
+            }
+                    
+            // Create command buffer
+            guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+                NSLog("Unable to create command buffer.")
+                self.isProcessingFrame = false
+                return
+            }
+            
+            // MARK: - Shadow Map pass
+            
+            self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: self.shadowTextures)
+            
+            // MARK: - Getting drawable
+            // The final pass can only render if a drawable is available, otherwise it needs to skip
+            // rendering this frame. Get the drawable as late as possible.
+            if let drawable = view.currentDrawable {
+                    
+                // MARK: - Transparent geometry pass
+                self.impostorRenderPass(commandBuffer: commandBuffer,
+                                        uniformBuffer: &uniformBuffer,
+                                        drawableTexture: drawable.texture,
+                                        depthTexture: view.depthStencilTexture,
+                                        shadowTextures: self.shadowTextures,
+                                        variant: .solidSpheres,
+                                        renderBonds: self.scene.currentVisualization == .ballAndStick)
+                
+                // MARK: - Triple buffering
+                
+                // Schedule a drawable presentation to occur after the GPU completes its work
+                // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
+                commandBuffer.present(drawable)
+            }
+            
+            commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
+                guard let self = self else { return }
+                // GPU work is complete, signal the semaphore to start the CPU work
+                self.frameBoundarySemaphore.signal()
+            })
+            
+            // MARK: - Commit buffer
+            // Commit command buffer
+            commandBuffer.commit()
+            
+            // MARK: - Finish
+            self.isProcessingFrame = false
         }
-        
-        commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
-            guard let self = self else { return }
-            // GPU work is complete, signal the semaphore to start the CPU work
-            self.frameBoundarySemaphore.signal()
-        })
-        
-        // MARK: - Commit buffer
-        // Commit command buffer
-        commandBuffer.commit()        
     }
 
 }

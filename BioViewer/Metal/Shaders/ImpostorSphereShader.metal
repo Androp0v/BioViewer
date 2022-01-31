@@ -115,13 +115,6 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     // Declare output
     ImpostorFragmentOut output;
     
-    // Phong diffuse shading
-    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
-    half reflectivity = 0.3;
-    
-    // Add base color
-    half3 shadedColor = impostor_vertex.color.rgb;
-    
     // dot = x^2 + y^2
     half length = sqrt(1.0 - dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping));
     
@@ -129,6 +122,13 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     if (length > 1) {
         discard_fragment();
     }
+    
+    // Phong diffuse shading
+    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
+    half reflectivity = 0.3;
+    
+    // Add base color
+    half3 shadedColor = impostor_vertex.color.rgb;
     
     // Compute the normal in atom space
     half3 normal = half3(impostor_vertex.billboardMapping.x,
