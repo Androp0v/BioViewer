@@ -81,7 +81,7 @@ class MetalScene: ObservableObject {
             needsColorPass = true
         }
     }
-    
+
     /// Color used for each subunit when coloring by subunit.
     var subunitColors: [Color] = [Color]() {
         didSet {

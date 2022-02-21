@@ -102,7 +102,8 @@ class VisualizationBufferLoader {
     
     func populateImpostorSphereBuffers(atomRadii: AtomRadii) {
         
-        guard let protein = proteinViewModel?.dataSource.files.first?.protein else { return }
+        guard let proteinViewModel = proteinViewModel else { return }
+        guard let protein = proteinViewModel.dataSource.files.first?.protein else { return }
         
         // Generate a billboard quad for each atom in the protein
         let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,
@@ -112,41 +113,19 @@ class VisualizationBufferLoader {
         guard var atomTypeData = atomTypeData else { return }
         guard var indexData = indexData else { return }
         
-        // Create and populate color buffer
-        let colorData = createAtomColorArray(protein: protein,
-                                             subunitBuffer: subunitData,
-                                             atomTypeBuffer: atomTypeData,
-                                             colorList: self.proteinViewModel?.elementColors,
-                                             colorBy: self.proteinViewModel?.colorBy)
-        guard var colorData = colorData else { return }
-        
         // Pass the new mesh to the renderer
-        proteinViewModel?.renderer.setBillboardingBuffers(vertexBuffer: &vertexData,
-                                                          subunitBuffer: &subunitData,
-                                                          atomTypeBuffer: &atomTypeData,
-                                                          indexBuffer: &indexData)
-        // Pass the color buffer to the renderer
-        proteinViewModel?.renderer.setColorBuffer(colorBuffer: &colorData)
-    }
-    
-    // MARK: - Color buffer
-    
-    private func createAtomColorArray(protein: Protein, subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) -> MTLBuffer? {
+        proteinViewModel.renderer.setBillboardingBuffers(vertexBuffer: &vertexData,
+                                                         subunitBuffer: &subunitData,
+                                                         atomTypeBuffer: &atomTypeData,
+                                                         indexBuffer: &indexData)
         
-        // Retrieve device
-        guard let device = MTLCreateSystemDefaultDevice() else { return nil }
-        
-        // Get the number of configurations
-        let configurationCount = protein.configurationCount
-        
-        // WORKAROUND: The memory layout should conform to simd_half3's stride, which is
-        // syntactic sugar for SIMD3<Float16>, but Float16 is (still) unavailable on macOS
-        // due to lack of support on x86. We assume SIMD3<Int16> is packed in the same way
-        // Metal packs the half3 type.
-        guard let generatedColorBuffer = device.makeBuffer(
-            length: protein.atomCount * configurationCount * MemoryLayout<SIMD3<Int16>>.stride
-        ) else { return nil }
-        
-        return generatedColorBuffer
+        // Create color buffer if needed
+        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0) / MemoryLayout<SIMD4<Int16>>.stride == protein.atoms.count) {
+            proteinViewModel.renderer.createAtomColorBuffer(protein: protein,
+                                                            subunitBuffer: subunitData,
+                                                            atomTypeBuffer: atomTypeData,
+                                                            colorList: proteinViewModel.elementColors,
+                                                            colorBy: proteinViewModel.colorBy)
+        }
     }
 }

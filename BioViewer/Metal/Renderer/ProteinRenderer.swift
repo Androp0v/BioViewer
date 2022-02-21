@@ -19,15 +19,17 @@ class ProteinRenderer: NSObject, ObservableObject {
     var isProcessingFrame: Bool = false
     /// GCD queue used to process frames.
     let renderQueue = DispatchQueue(label: "com.bioviewer.renderqueue", qos: .userInteractive)
+    /// Used to signal that a new frame is ready to be computed by the CPU.
+    var frameBoundarySemaphore: DispatchSemaphore
+    /// Used to index the dynamic buffers.
+    var currentFrameIndex: Int
     
     // MARK: - Metal variables
     
     /// GPU
     var device: MTLDevice
-    
     /// Pipeline state for filling the color buffer.
     var fillColorComputePipelineState: MTLComputePipelineState?
-    
     /// Pipeline state for the directional shadow creation.
     var shadowRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the opaque geometry rendering.
@@ -46,10 +48,6 @@ class ProteinRenderer: NSObject, ObservableObject {
     var depthState: MTLDepthStencilState?
     /// Command queue.
     var commandQueue: MTLCommandQueue?
-    /// Used to signal that a new frame is ready to be computed by the CPU.
-    var frameBoundarySemaphore: DispatchSemaphore
-    /// Used to index the dynamic buffers.
-    var currentFrameIndex: Int
     
     // MARK: - Buffers
     
@@ -204,6 +202,22 @@ class ProteinRenderer: NSObject, ObservableObject {
     }
 
     // MARK: - Public functions
+        
+    func createAtomColorBuffer(protein: Protein, subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) {
+        
+        // Get the number of configurations
+        let configurationCount = protein.configurationCount
+        
+        // WORKAROUND: The memory layout should conform to simd_half3's stride, which is
+        // syntactic sugar for SIMD3<Float16>, but Float16 is (still) unavailable on macOS
+        // due to lack of support on x86. We assume SIMD3<Int16> is packed in the same way
+        // Metal packs the half3 type.
+        guard let generatedColorBuffer = device.makeBuffer(
+            length: protein.atomCount * configurationCount * MemoryLayout<SIMD3<Int16>>.stride
+        ) else { return }
+        
+        self.atomColorBuffer = generatedColorBuffer
+    }
     
     /// Adds the necessary buffers to display a protein in the renderer with a dense mesh
     func addOpaqueBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
@@ -365,6 +379,7 @@ extension ProteinRenderer: MTKViewDelegate {
             if let drawable = view.currentDrawable {
                     
                 // MARK: - Impostor pass
+                
                 self.impostorRenderPass(commandBuffer: commandBuffer,
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,
@@ -372,13 +387,15 @@ extension ProteinRenderer: MTKViewDelegate {
                                         shadowTextures: self.shadowTextures,
                                         variant: .solidSpheres,
                                         renderBonds: self.scene.currentVisualization == .ballAndStick)
-                
-                // MARK: - Triple buffering
-                
+                                
                 // Schedule a drawable presentation to occur after the GPU completes its work
                 // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
                 commandBuffer.present(drawable)
+                
+                self.scene.needsColorPass = false
             }
+            
+            // MARK: - Triple buffering
             
             commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
                 guard let self = self else { return }
