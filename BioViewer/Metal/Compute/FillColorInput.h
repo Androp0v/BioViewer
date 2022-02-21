@@ -8,8 +8,8 @@
 #ifndef FillColorInput_h
 #define FillColorInput_h
 
-/// Maximum number of colours that can be passed down to the GPU using FrameData.
-#define MAX_ATOM_COLORS 64
+/// Maximum number of colours that can be passed down to the GPU.
+#define MAX_ATOM_COLORS 128
 
 typedef struct {
     

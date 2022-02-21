@@ -14,10 +14,21 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(protein: Protein, atomRadii: AtomRadii) -> (vertexData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(protein: Protein, atomRadii: AtomRadii) -> (vertexData: MTLBuffer?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         let impostorVertexCount = 4
         let impostorTriangleCount = 2
+        
+        // Create subunit data array
+        var subunitData = [Int16]()
+        guard let subunits = protein.subunits else {
+            NSLog("Unable to create subunit data array buffer: protein has no subunits")
+            return (nil, nil, nil, nil)
+        }
+        for index in 0..<protein.subunitCount {
+            subunitData.append(contentsOf: Array(repeating: Int16(index),
+                                                 count: subunits[index].atomCount))
+        }
         
         // Get the number of configurations
         let configurationCount = protein.configurationCount
@@ -25,6 +36,10 @@ extension MetalScheduler {
         // Populate buffers
         let generatedVertexBuffer = device.makeBuffer(
             length: protein.atomCount * configurationCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
+        )
+        let subunitBuffer = device.makeBuffer(
+            bytes: subunitData,
+            length: protein.atomCount * MemoryLayout<Int16>.stride
         )
         let atomTypeBuffer = device.makeBuffer(
             bytes: protein.atomIdentifiers,
@@ -120,6 +135,6 @@ extension MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (generatedVertexBuffer, atomTypeBuffer, generatedIndexBuffer)
+        return (generatedVertexBuffer, subunitBuffer, atomTypeBuffer, generatedIndexBuffer)
     }
 }

@@ -86,8 +86,8 @@
 		C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBD274E691800B6F7DB /* InfoTextRow.swift */; };
 		C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
 		C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
-		C515EFC3274FEA0900B6F7DB /* ColorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ColorScene.swift */; };
-		C515EFC4274FEA8400B6F7DB /* ColorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ColorScene.swift */; };
+		C515EFC3274FEA0900B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
+		C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
 		C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
 		C51D4ED9276596EE00C69B3D /* EmptyFileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */; };
 		C51D4EDB2765985000C69B3D /* 3JBT.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C51D4EDA2765985000C69B3D /* 3JBT.pdb */; };
@@ -337,7 +337,7 @@
 		C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementRow.swift; sourceTree = "<group>"; };
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
 		C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSubunit.swift; sourceTree = "<group>"; };
-		C515EFC2274FEA0900B6F7DB /* ColorScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScene.swift; sourceTree = "<group>"; };
+		C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinColorModel.swift; sourceTree = "<group>"; };
 		C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyFileRow.swift; sourceTree = "<group>"; };
 		C51D4EDA2765985000C69B3D /* 3JBT.pdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3JBT.pdb; sourceTree = "<group>"; };
 		C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseXYZ.swift; sourceTree = "<group>"; };
@@ -515,6 +515,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A0568264D5D58006F551C /* ProteinViewModel.swift */,
+				C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */,
 				C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */,
 			);
 			path = Data;
@@ -902,7 +903,6 @@
 			isa = PBXGroup;
 			children = (
 				C49D9D31271C469100E12E2F /* MetalScene.swift */,
-				C515EFC2274FEA0900B6F7DB /* ColorScene.swift */,
 				C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */,
 			);
 			path = Scene;
@@ -1225,7 +1225,7 @@
 				C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */,
 				C5EEE9BF276FCC65005737C1 /* PhotoModeFooter.swift in Sources */,
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
-				C515EFC3274FEA0900B6F7DB /* ColorScene.swift in Sources */,
+				C515EFC3274FEA0900B6F7DB /* ProteinColorModel.swift in Sources */,
 				C57F9958275E59D1001DE6D6 /* ProteinFile.swift in Sources */,
 				C41A0562264C2853006F551C /* FileParser.swift in Sources */,
 				C4B1F81F26457CF80035D739 /* Protein.swift in Sources */,
@@ -1426,7 +1426,7 @@
 				C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */,
 				C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,
-				C515EFC4274FEA8400B6F7DB /* ColorScene.swift in Sources */,
+				C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */,
 				C54066FB274D1CA600710CFC /* ParsePDB.swift in Sources */,
 				C504C9C2274175DF002D4E6A /* CreateSASPoints.metal in Sources */,
 				C504C9C3274175E2002D4E6A /* RemovePoints.metal in Sources */,

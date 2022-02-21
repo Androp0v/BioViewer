@@ -64,48 +64,7 @@ class MetalScene: ObservableObject {
     
     /// Background color of the view.
     var backgroundColor: CGColor { didSet { needsRedraw = true } }
-    /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
-    @Published var colorBy: Int {
-        didSet {
-            if colorBy == ProteinColorByOption.element {
-                // FIXME: RECOLOR
-                // self.frameData.colorBySubunit = 0 // False
-            } else {
-                // FIXME: RECOLOR
-                // self.frameData.colorBySubunit = 1 // True
-            }
-            needsRedraw = true
-        }
-    }
-        
-    @Published var cAtomColor: Color = Color(.displayP3, red: 0.423, green: 0.733, blue: 0.235, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
     
-    @Published var hAtomColor: Color = Color(.displayP3, red: 1.000, green: 1.000, blue: 1.000, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var nAtomColor: Color = Color(.displayP3, red: 0.091, green: 0.148, blue: 0.556, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var oAtomColor: Color = Color(.displayP3, red: 1.000, green: 0.149, blue: 0.000, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var sAtomColor: Color = Color(.displayP3, red: 1.000, green: 0.780, blue: 0.349, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var unknownAtomColor: Color = Color(.displayP3, red: 0.517, green: 0.517, blue: 0.517, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var subunitColors: [Color] = [Color]() {
-        didSet { needsRedraw = true }
-    }
-
     // MARK: - Initialization
 
     init() {
@@ -121,9 +80,7 @@ class MetalScene: ObservableObject {
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        
-        self.colorBy = ProteinColorByOption.element
-        
+                
         if AppState.hasSamplerCompareSupport() {
             self.hasShadows = true
         } else {
@@ -152,9 +109,7 @@ class MetalScene: ObservableObject {
         
         // Initial atom radii
         self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
-        
-        initSubunitColors()
-        
+                
         // Create the animator
         self.animator = SceneAnimator(scene: self)
     }
@@ -184,7 +139,6 @@ class MetalScene: ObservableObject {
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
         self.frameData.depth_cueing_strength = self.depthCueingStrength
         
-        updateColors()
         frame += 1
         needsRedraw = false
         

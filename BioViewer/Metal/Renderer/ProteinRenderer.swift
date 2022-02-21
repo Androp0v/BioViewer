@@ -60,6 +60,8 @@ class ProteinRenderer: NSObject, ObservableObject {
     var impostorIndexBuffer: MTLBuffer?
     /// Used to pass the atomic type data to the shader (used for coloring, size...)
     var atomTypeBuffer: MTLBuffer?
+    /// Used to pass the subunit index to the shader (used for coloring)
+    var subunitBuffer: MTLBuffer?
     /// Used to pass the atom base color to the shader (used for coloring, size...)
     var atomColorBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader
@@ -205,8 +207,9 @@ class ProteinRenderer: NSObject, ObservableObject {
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
-    func setBillboardingBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    func setBillboardingBuffers(vertexBuffer: inout MTLBuffer, subunitBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
         self.impostorVertexBuffer = vertexBuffer
+        self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
