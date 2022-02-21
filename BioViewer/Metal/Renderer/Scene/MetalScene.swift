@@ -17,6 +17,9 @@ class MetalScene: ObservableObject {
         
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
+    /// Whether the color buffer needs to be recomputed.
+    var needsColorPass: Bool = false
+    
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
     @Published var isPlaying: Bool = false
     /// Class used to animate changes in scene properties.
@@ -64,6 +67,28 @@ class MetalScene: ObservableObject {
     
     /// Background color of the view.
     var backgroundColor: CGColor { didSet { needsRedraw = true } }
+    /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
+    var colorBy: Int = ProteinColorByOption.element {
+        didSet {
+            needsRedraw = true
+            needsColorPass = true
+        }
+    }
+    /// Color used for each subunit when coloring by element.
+    var elementColors: [Color] = [Color]() {
+        didSet {
+            needsRedraw = true
+            needsColorPass = true
+        }
+    }
+    
+    /// Color used for each subunit when coloring by subunit.
+    var subunitColors: [Color] = [Color]() {
+        didSet {
+            needsRedraw = true
+            needsColorPass = true
+        }
+    }
     
     // MARK: - Initialization
 

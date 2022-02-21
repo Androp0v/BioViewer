@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class VisualizationBufferLoader {
     
@@ -112,11 +113,11 @@ class VisualizationBufferLoader {
         guard var indexData = indexData else { return }
         
         // Create and populate color buffer
-        let colorData = MetalScheduler.shared.createAtomColorArray(protein: protein,
-                                                                   subunitBuffer: subunitData,
-                                                                   atomTypeBuffer: atomTypeData,
-                                                                   colorList: self.proteinViewModel?.elementColors,
-                                                                   colorBy: self.proteinViewModel?.colorBy)
+        let colorData = createAtomColorArray(protein: protein,
+                                             subunitBuffer: subunitData,
+                                             atomTypeBuffer: atomTypeData,
+                                             colorList: self.proteinViewModel?.elementColors,
+                                             colorBy: self.proteinViewModel?.colorBy)
         guard var colorData = colorData else { return }
         
         // Pass the new mesh to the renderer
@@ -126,5 +127,26 @@ class VisualizationBufferLoader {
                                                           indexBuffer: &indexData)
         // Pass the color buffer to the renderer
         proteinViewModel?.renderer.setColorBuffer(colorBuffer: &colorData)
+    }
+    
+    // MARK: - Color buffer
+    
+    private func createAtomColorArray(protein: Protein, subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) -> MTLBuffer? {
+        
+        // Retrieve device
+        guard let device = MTLCreateSystemDefaultDevice() else { return nil }
+        
+        // Get the number of configurations
+        let configurationCount = protein.configurationCount
+        
+        // WORKAROUND: The memory layout should conform to simd_half3's stride, which is
+        // syntactic sugar for SIMD3<Float16>, but Float16 is (still) unavailable on macOS
+        // due to lack of support on x86. We assume SIMD3<Int16> is packed in the same way
+        // Metal packs the half3 type.
+        guard let generatedColorBuffer = device.makeBuffer(
+            length: protein.atomCount * configurationCount * MemoryLayout<SIMD3<Int16>>.stride
+        ) else { return nil }
+        
+        return generatedColorBuffer
     }
 }

@@ -24,27 +24,31 @@ class ProteinRenderer: NSObject, ObservableObject {
     
     /// GPU
     var device: MTLDevice
-    /// Pipeline state for the directional shadow creation
+    
+    /// Pipeline state for filling the color buffer.
+    var fillColorComputePipelineState: MTLComputePipelineState?
+    
+    /// Pipeline state for the directional shadow creation.
     var shadowRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the opaque geometry rendering
+    /// Pipeline state for the opaque geometry rendering.
     var opaqueRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the impostor geometry rendering (transparent at times)
+    /// Pipeline state for the impostor geometry rendering (transparent at times).
     var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorHQRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the impostor geometry rendering (transparent at times)
+    /// Pipeline state for the impostor geometry rendering (transparent at times).
     var impostorBondRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorBondHQRenderingPipelineState: MTLRenderPipelineState?
-    /// Shadow depth state
+    /// Shadow depth state.
     var shadowDepthState: MTLDepthStencilState?
-    /// Depth state
+    /// Depth state.
     var depthState: MTLDepthStencilState?
-    /// Command queue
+    /// Command queue.
     var commandQueue: MTLCommandQueue?
-    /// Used to signal that a new frame is ready to be computed by the CPU
+    /// Used to signal that a new frame is ready to be computed by the CPU.
     var frameBoundarySemaphore: DispatchSemaphore
-    /// Used to index the dynamic buffers
+    /// Used to index the dynamic buffers.
     var currentFrameIndex: Int
     
     // MARK: - Buffers
@@ -179,7 +183,10 @@ class ProteinRenderer: NSObject, ObservableObject {
             uniformBuffers?.append(uniformBuffer)
         }
         
-        // Create pipeline states
+        // Create compute pipeline states
+        makeFillColorComputePipelineState(device: device)
+        
+        // Create render pipeline states
         makeShadowRenderPipelineState(device: device, useFixedRadius: false)
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
@@ -213,6 +220,7 @@ class ProteinRenderer: NSObject, ObservableObject {
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
+        self.scene.needsColorPass = true
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
@@ -308,7 +316,7 @@ extension ProteinRenderer: MTKViewDelegate {
                     .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
             }
             
-            // MARK: - Command buffer & depth
+            // MARK: - Command buffer & queue
             
             guard let commandQueue = self.commandQueue else {
                 NSLog("Command queue is nil.")
@@ -323,16 +331,40 @@ extension ProteinRenderer: MTKViewDelegate {
                 return
             }
             
+            /*- COMPUTE PASSES -*/
+            
+            // MARK: - Fill color pass
+            
+            if self.scene.needsColorPass {
+                var colorList = [Color]()
+                switch self.scene.colorBy {
+                case ProteinColorByOption.element:
+                    colorList = self.scene.elementColors
+                case ProteinColorByOption.subunit:
+                    colorList = self.scene.subunitColors
+                default:
+                    break
+                }
+                self.fillColorPass(commandBuffer: commandBuffer,
+                                   colorBuffer: self.atomColorBuffer,
+                                   subunitBuffer: self.subunitBuffer,
+                                   atomTypeBuffer: self.atomTypeBuffer,
+                                   colorList: colorList,
+                                   colorBy: self.scene.colorBy)
+            }
+            
+            /*- RENDER PASSES -*/
+            
             // MARK: - Shadow Map pass
             
             self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: self.shadowTextures)
             
-            // MARK: - Getting drawable
+            // GETTING THE DRAWABLE
             // The final pass can only render if a drawable is available, otherwise it needs to skip
             // rendering this frame. Get the drawable as late as possible.
             if let drawable = view.currentDrawable {
                     
-                // MARK: - Transparent geometry pass
+                // MARK: - Impostor pass
                 self.impostorRenderPass(commandBuffer: commandBuffer,
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,

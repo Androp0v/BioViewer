@@ -53,48 +53,21 @@ class ProteinViewModel: ObservableObject {
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     @Published var colorBy: Int {
         didSet {
-            if colorBy == ProteinColorByOption.element {
-                MetalScheduler.shared.updateAtomColorArray(colorBuffer: self.renderer.atomColorBuffer,
-                                                           protein: self.dataSource.files.first?.protein,
-                                                           subunitBuffer: self.renderer.subunitBuffer,
-                                                           atomTypeBuffer: self.renderer.atomTypeBuffer,
-                                                           colorList: self.elementColors,
-                                                           colorBy: ProteinColorByOption.element)
-            } else {
-                MetalScheduler.shared.updateAtomColorArray(colorBuffer: self.renderer.atomColorBuffer,
-                                                           protein: self.dataSource.files.first?.protein,
-                                                           subunitBuffer: self.renderer.subunitBuffer,
-                                                           atomTypeBuffer: self.renderer.atomTypeBuffer,
-                                                           colorList: self.subunitColors,
-                                                           colorBy: ProteinColorByOption.subunit)
-            }
-            self.renderer.scene.needsRedraw = true
+            self.renderer.scene.colorBy = colorBy
         }
     }
     
     /// Color used for each subunit when coloring by element.
     @Published var elementColors: [Color] = [Color]() {
         didSet {
-            MetalScheduler.shared.updateAtomColorArray(colorBuffer: self.renderer.atomColorBuffer,
-                                                       protein: self.dataSource.files.first?.protein,
-                                                       subunitBuffer: self.renderer.subunitBuffer,
-                                                       atomTypeBuffer: self.renderer.atomTypeBuffer,
-                                                       colorList: self.elementColors,
-                                                       colorBy: ProteinColorByOption.element)
-            self.renderer.scene.needsRedraw = true
+            self.renderer.scene.elementColors = elementColors
         }
     }
     
     /// Color used for each subunit when coloring by subunit.
     @Published var subunitColors: [Color] = [Color]() {
         didSet {
-            MetalScheduler.shared.updateAtomColorArray(colorBuffer: self.renderer.atomColorBuffer,
-                                                       protein: self.dataSource.files.first?.protein,
-                                                       subunitBuffer: self.renderer.subunitBuffer,
-                                                       atomTypeBuffer: self.renderer.atomTypeBuffer,
-                                                       colorList: self.subunitColors,
-                                                       colorBy: ProteinColorByOption.subunit)
-            self.renderer.scene.needsRedraw = true
+            self.renderer.scene.subunitColors = subunitColors
         }
     }
         
