@@ -17,8 +17,8 @@ kernel void fill_color_buffer(device half3 *atom_color [[ buffer(0) ]],
                               uint i [[ thread_position_in_grid ]],
                               uint l [[ thread_position_in_threadgroup ]]) {
     half3 final_color;
-    final_color = half3( color_input.element_color[atom_type[i]].rgb ) * color_input.colorByElement;
-    final_color += half3( color_input.subunit_color[subunitIndex[i]].rgb ) * color_input.colorBySubunit;
+    final_color = pow(half3( color_input.element_color[atom_type[i]].rgb ), 2) * color_input.colorByElement;
+    final_color += pow(half3( color_input.subunit_color[subunitIndex[i]].rgb), 2) * color_input.colorBySubunit;
     
-    atom_color[i] = final_color;
+    atom_color[i] = sqrt(final_color);
 }
