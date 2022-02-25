@@ -350,21 +350,11 @@ extension ProteinRenderer: MTKViewDelegate {
             // MARK: - Fill color pass
             
             if self.scene.needsColorPass {
-                var colorList = [Color]()
-                switch self.scene.colorBy {
-                case ProteinColorByOption.element:
-                    colorList = self.scene.elementColors
-                case ProteinColorByOption.subunit:
-                    colorList = self.scene.subunitColors
-                default:
-                    break
-                }
                 self.fillColorPass(commandBuffer: commandBuffer,
                                    colorBuffer: self.atomColorBuffer,
                                    subunitBuffer: self.subunitBuffer,
                                    atomTypeBuffer: self.atomTypeBuffer,
-                                   colorList: colorList,
-                                   colorBy: self.scene.colorBy)
+                                   colorFill: self.scene.colorFill)
             }
             
             /*- RENDER PASSES -*/

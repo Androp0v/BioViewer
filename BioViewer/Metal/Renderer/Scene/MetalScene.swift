@@ -68,25 +68,10 @@ class MetalScene: ObservableObject {
     /// Background color of the view.
     var backgroundColor: CGColor { didSet { needsRedraw = true } }
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
-    var colorBy: Int = ProteinColorByOption.element {
+    var colorFill = FillColorInput() {
         didSet {
-            needsRedraw = true
             needsColorPass = true
-        }
-    }
-    /// Color used for each subunit when coloring by element.
-    var elementColors: [Color] = [Color]() {
-        didSet {
             needsRedraw = true
-            needsColorPass = true
-        }
-    }
-
-    /// Color used for each subunit when coloring by subunit.
-    var subunitColors: [Color] = [Color]() {
-        didSet {
-            needsRedraw = true
-            needsColorPass = true
         }
     }
     

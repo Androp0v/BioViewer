@@ -16,7 +16,9 @@ public enum ProteinColorByOption {
 }
 
 extension ProteinViewModel {
-        
+    
+    // MARK: - Initialization
+    
     func initElementColors() {
         // Preselected element color palette, C, H, N, O, S, Unknown
         elementColors =
@@ -45,14 +47,69 @@ extension ProteinViewModel {
                 Color(.displayP3, red: 0.216, green: 0.945, blue: 0.657, opacity: 1)
             ]
         for index in 0..<fixedColorPalette.count {
-            guard index < MAX_ATOM_COLORS else { return }
+            guard index < MAX_SUBUNIT_COLORS else { return }
             subunitColors.append(fixedColorPalette[index])
         }
         // If there are more subunits than colors in the preselected color palette, chose them
         // at random.
-        for _ in fixedColorPalette.count..<Int(MAX_ATOM_COLORS) {
+        for _ in fixedColorPalette.count..<Int(MAX_SUBUNIT_COLORS) {
             subunitColors.append(randomColor())
         }
+    }
+    
+    // MARK: - Updates
+    
+    func updatedFillColor() -> FillColorInput {
+        
+        var fillColor = FillColorInput()
+        
+        fillColor.colorByElement = 0.0
+        fillColor.colorBySubunit = 0.0
+        
+        switch colorBy {
+        case ProteinColorByOption.element:
+            fillColor.colorByElement = 1.0
+        case ProteinColorByOption.subunit:
+            fillColor.colorBySubunit = 1.0
+        default:
+            break
+        }
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &fillColor.element_color) { rawPtr -> Void in
+            for index in 0..<min(elementColors.count, Int(MAX_ELEMENT_COLORS)) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                // TO-DO:
+                guard let simdColor = getSIMDColor(atomColor: elementColors[index].cgColor) else {
+                    NSLog("Unable to get SIMD color from CGColor for protein subunit coloring.")
+                    return
+                }
+                ptr.pointee = simdColor
+            }
+        }
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &fillColor.subunit_color) { rawPtr -> Void in
+            for index in 0..<min(subunitColors.count, Int(MAX_SUBUNIT_COLORS)) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                // TO-DO:
+                guard let simdColor = getSIMDColor(atomColor: subunitColors[index].cgColor) else {
+                    NSLog("Unable to get SIMD color from CGColor for protein subunit coloring.")
+                    return
+                }
+                ptr.pointee = simdColor
+            }
+        }
+        
+        return fillColor
     }
     
     // MARK: - Utility functions
@@ -62,5 +119,32 @@ extension ProteinViewModel {
         let green = CGFloat.random(in: 0..<1)
         let blue = CGFloat.random(in: 0..<1)
         return Color(cgColor: CGColor(red: red, green: green, blue: blue, alpha: 1.0))
+    }
+        
+    private func getSIMDColor(atomColor: CGColor?) -> simd_float4? {
+        
+        guard let atomColor = atomColor else {
+            return nil
+        }
+
+        // Convert color to RGB from other color spaces (i.e. grayscale) as MTLClearColor requires
+        // a RGBA value.
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let rgbaColor = atomColor.converted(to: rgbColorSpace, intent: .defaultIntent, options: nil) else {
+            return nil
+        }
+        
+        // We expect 4 color components in RGBA
+        guard rgbaColor.numberOfComponents == 4 else {
+            return nil
+        }
+        guard let rgbaColorComponents = rgbaColor.components else {
+            return nil
+        }
+        
+        return simd_float4(Float(rgbaColorComponents[0]),
+                           Float(rgbaColorComponents[1]),
+                           Float(rgbaColorComponents[2]),
+                           Float(rgbaColorComponents[3]))
     }
 }

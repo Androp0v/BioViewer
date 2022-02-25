@@ -53,21 +53,21 @@ class ProteinViewModel: ObservableObject {
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     @Published var colorBy: Int {
         didSet {
-            self.renderer.scene.colorBy = colorBy
+            self.renderer.scene.colorFill = updatedFillColor()
         }
     }
     
     /// Color used for each subunit when coloring by element.
     @Published var elementColors: [Color] = [Color]() {
         didSet {
-            self.renderer.scene.elementColors = elementColors
+            self.renderer.scene.colorFill = updatedFillColor()
         }
     }
     
     /// Color used for each subunit when coloring by subunit.
     @Published var subunitColors: [Color] = [Color]() {
         didSet {
-            self.renderer.scene.subunitColors = subunitColors
+            self.renderer.scene.colorFill = updatedFillColor()
         }
     }
         

@@ -9,17 +9,20 @@
 #define FillColorInput_h
 
 /// Maximum number of colours that can be passed down to the GPU.
-#define MAX_ATOM_COLORS 128
+#define MAX_SUBUNIT_COLORS 128
+#define MAX_ELEMENT_COLORS 6
 
 typedef struct {
     
-    /// Color by subunit, used as a boolean.
-    int8_t colorBySubunit;
+    /// Color by element, used as a percentage (is always 0 or 1 outside animations).
+    float colorByElement;
+    /// Color by subunit, used as a percentage (is always 0 or 1 outside animations).
+    float colorBySubunit;
     
-    /// Displayed atomic color in hard-spheres visualization mode.
-    /// When spheres are coloured by element, only the first 6 elements of the array will be used.
-    /// When spheres are coloured by subunit, all the array may be used.
-    simd_float4 atom_color [MAX_ATOM_COLORS];
+    /// Color used when coloring by element.
+    simd_float4 element_color [MAX_ELEMENT_COLORS];
+    /// Color used when coloring by subunit.
+    simd_float4 subunit_color [MAX_SUBUNIT_COLORS];
     
 } FillColorInput;
 
