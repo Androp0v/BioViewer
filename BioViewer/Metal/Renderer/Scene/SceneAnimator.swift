@@ -40,6 +40,15 @@ class SceneAnimator {
         createDisplayLinkIfNeeded()
     }
     
+    func animatedFillColorChange(initialColors: FillColorInput, finalColors: FillColorInput, duration: Double) {
+        colorAnimation = RunningAnimation(currentTime: CACurrentMediaTime(),
+                                          initialTime: CACurrentMediaTime(),
+                                          initialValue: initialColors,
+                                          finalValue: finalColors,
+                                          duration: duration)
+        createDisplayLinkIfNeeded()
+    }
+    
     // MARK: - Private
     
     private func createDisplayLinkIfNeeded() {
@@ -59,6 +68,9 @@ class SceneAnimator {
             guard let self = self else { return }
             if self.radiiAnimation != nil {
                 self.updateRadiiAnimation()
+            }
+            if self.colorAnimation != nil {
+                self.updateColorAnimation()
             }
             self.isBusy = false
         }
@@ -102,16 +114,27 @@ class SceneAnimator {
     private func updateColorAnimation() {
         
         self.colorAnimation?.currentTime = CACurrentMediaTime()
-
+        
         guard let scene = scene else {
             return
         }
         guard let colorAnimation = colorAnimation else {
             return
         }
+        guard let initialFill = colorAnimation.initialValue as? FillColorInput else {
+            return
+        }
+        guard let finalFill = colorAnimation.finalValue as? FillColorInput else {
+            return
+        }
         
         let progress = getAnimationProgress(animation: colorAnimation)
-        if progress == 1 {
+        
+        scene.colorFill = FillColorInputUtility.interpolateFillColorInput(start: initialFill,
+                                                                          end: finalFill,
+                                                                          fraction: Float(progress))
+        if progress >= 1 {
+            scene.colorFill = finalFill
             self.colorAnimation = nil
         }
     }

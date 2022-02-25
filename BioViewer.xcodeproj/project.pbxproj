@@ -65,6 +65,7 @@
 		C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */; };
 		C500EEB4272DA57300A60317 /* FocalLengthRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB3272DA57300A60317 /* FocalLengthRow.swift */; };
 		C501C74527C3FE93008CDA25 /* ComputePipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74427C3FE93008CDA25 /* ComputePipelines.swift */; };
+		C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
 		C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405744B2663DC74008527D1 /* ProteinMetalViewController.swift */; };
 		C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */ = {isa = PBXBuildFile; fileRef = C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */; };
 		C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
@@ -326,6 +327,7 @@
 		C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLinearProgressView.swift; sourceTree = "<group>"; };
 		C500EEB3272DA57300A60317 /* FocalLengthRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocalLengthRow.swift; sourceTree = "<group>"; };
 		C501C74427C3FE93008CDA25 /* ComputePipelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputePipelines.swift; sourceTree = "<group>"; };
+		C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorInputUtility.swift; sourceTree = "<group>"; };
 		C504C9C527418769002D4E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C504C9C7274294A7002D4E6A /* RCSBError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBError.swift; sourceTree = "<group>"; };
 		C50D95D4273753E50002E089 /* StatusWarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWarningPopover.swift; sourceTree = "<group>"; };
@@ -855,6 +857,7 @@
 			children = (
 				C52AE373279D7CE900BEE11B /* FillColorInput.h */,
 				C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */,
+				C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */,
 			);
 			path = Compute;
 			sourceTree = "<group>";
@@ -1360,6 +1363,7 @@
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
 				C51D4ED9276596EE00C69B3D /* EmptyFileRow.swift in Sources */,
 				C572BD1E27413AFB00FF010D /* FileSourceViewModel.swift in Sources */,
+				C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */,
 				C5433F3D2770F9C600607B20 /* FileDetailsSection.swift in Sources */,
 				C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */,
 				C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */,

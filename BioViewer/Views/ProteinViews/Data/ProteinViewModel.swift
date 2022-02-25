@@ -53,7 +53,9 @@ class ProteinViewModel: ObservableObject {
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     @Published var colorBy: Int {
         didSet {
-            self.renderer.scene.colorFill = updatedFillColor()
+            self.renderer.scene.animator?.animatedFillColorChange(initialColors: self.renderer.scene.colorFill,
+                                                                  finalColors: updatedFillColor(),
+                                                                  duration: 0.5)
         }
     }
     
@@ -118,6 +120,7 @@ class ProteinViewModel: ObservableObject {
         // Initialize colors
         initElementColors()
         initSubunitColors()
+        renderer.scene.colorFill = updatedFillColor()
     }
 
     // MARK: - Public functions
