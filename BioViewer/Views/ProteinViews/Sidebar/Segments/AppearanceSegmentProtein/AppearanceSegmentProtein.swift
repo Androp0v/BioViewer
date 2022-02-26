@@ -44,7 +44,7 @@ struct AppearanceSegmentProtein: View {
                             .padding(.bottom, 4), content: {
                     // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption
                     PickerRow(optionName: "Color by",
-                              selectedOption: $proteinViewModel.renderer.scene.colorBy,
+                              selectedOption: $proteinViewModel.colorBy,
                               pickerOptions: ["Element",
                                               "Subunit"])
                     // TO-DO: Make color palette work
@@ -52,30 +52,30 @@ struct AppearanceSegmentProtein: View {
                     ColorPaletteRow(colorPalette: ColorPalette(.default))
                     */
                      
-                    if proteinViewModel.renderer.scene.colorBy == ProteinColorByOption.element {
+                    if proteinViewModel.colorBy == ProteinColorByOption.element {
                         ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.cAtomColor)
+                                       selectedColor: $proteinViewModel.elementColors[0])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.hAtomColor)
+                                       selectedColor: $proteinViewModel.elementColors[1])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.nAtomColor)
+                                       selectedColor: $proteinViewModel.elementColors[2])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.oAtomColor)
+                                       selectedColor: $proteinViewModel.elementColors[3])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.sAtomColor)
+                                       selectedColor: $proteinViewModel.elementColors[4])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
-                                       selectedColor: $proteinViewModel.renderer.scene.unknownAtomColor)
+                                       selectedColor: $proteinViewModel.elementColors[5])
                             .indentRow()
                     } else if let subunits = proteinViewModel.dataSource.files.first?.protein.subunits {
                         ForEach(subunits, id: \.id) { subunit in
                             // TO-DO: Show real subunit list
                             ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
-                                           selectedColor: $proteinViewModel.renderer.scene.subunitColors[subunit.id])
+                                           selectedColor: $proteinViewModel.subunitColors[subunit.id])
                                 .indentRow()
                         }
                     }

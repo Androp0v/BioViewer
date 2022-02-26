@@ -60,7 +60,7 @@ extension FileParser {
             return Float(currentLine) / Float(totalLineCount)
         }
 
-        rawText.enumerateLines(invoking: { line, stop in
+        rawText.enumerateLines { line, _ in
             
             currentLine += 1
             proteinViewModel?.statusProgress(progress: progress)
@@ -247,7 +247,7 @@ extension FileParser {
                 }
 
             }
-        })
+        }
 
         // Add element array contents into the contiguous array
         var totalCount: Int = 0

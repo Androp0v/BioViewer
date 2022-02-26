@@ -17,6 +17,12 @@ class MetalScene: ObservableObject {
         
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
+    
+    /// The last time a color buffer recompute was required.
+    var lastColorPassRequest: CFTimeInterval = CACurrentMediaTime()
+    /// The last time a color buffer recompute was performed.
+    var lastColorPass: CFTimeInterval = .zero
+    
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
     @Published var isPlaying: Bool = false
     /// Class used to animate changes in scene properties.
@@ -65,45 +71,13 @@ class MetalScene: ObservableObject {
     /// Background color of the view.
     var backgroundColor: CGColor { didSet { needsRedraw = true } }
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
-    @Published var colorBy: Int {
+    var colorFill = FillColorInput() {
         didSet {
-            if colorBy == ProteinColorByOption.element {
-                self.frameData.colorBySubunit = 0 // False
-            } else {
-                self.frameData.colorBySubunit = 1 // True
-            }
+            lastColorPassRequest = CACurrentMediaTime()
             needsRedraw = true
         }
     }
-        
-    @Published var cAtomColor: Color = Color(.displayP3, red: 0.423, green: 0.733, blue: 0.235, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
     
-    @Published var hAtomColor: Color = Color(.displayP3, red: 1.000, green: 1.000, blue: 1.000, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var nAtomColor: Color = Color(.displayP3, red: 0.091, green: 0.148, blue: 0.556, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var oAtomColor: Color = Color(.displayP3, red: 1.000, green: 0.149, blue: 0.000, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var sAtomColor: Color = Color(.displayP3, red: 1.000, green: 0.780, blue: 0.349, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var unknownAtomColor: Color = Color(.displayP3, red: 0.517, green: 0.517, blue: 0.517, opacity: 1.0) {
-        didSet { needsRedraw = true }
-    }
-    
-    @Published var subunitColors: [Color] = [Color]() {
-        didSet { needsRedraw = true }
-    }
-
     // MARK: - Initialization
 
     init() {
@@ -119,10 +93,7 @@ class MetalScene: ObservableObject {
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
         self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
-        
-        self.frameData.colorBySubunit = 0 // False, color by atom element
-        self.colorBy = ProteinColorByOption.element
-        
+                
         if AppState.hasSamplerCompareSupport() {
             self.hasShadows = true
         } else {
@@ -151,16 +122,7 @@ class MetalScene: ObservableObject {
         
         // Initial atom radii
         self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
-        
-        self.frameData.atomColor.0 = simd_float4(0.423, 0.733, 0.235, 1.0) // Carbon
-        self.frameData.atomColor.1 = simd_float4(0.091, 0.148, 0.556, 1.0) // Nitrogen
-        self.frameData.atomColor.2 = simd_float4(0.517, 0.517, 0.517, 1.0) // Hydrogen
-        self.frameData.atomColor.3 = simd_float4(1.000, 0.149, 0.000, 1.0) // Oxygen
-        self.frameData.atomColor.4 = simd_float4(1.000, 0.780, 0.349, 1.0) // Sulfur
-        self.frameData.atomColor.5 = simd_float4(0.517, 0.517, 0.517, 1.0) // Others
-        
-        initSubunitColors()
-        
+                
         // Create the animator
         self.animator = SceneAnimator(scene: self)
     }
@@ -190,7 +152,6 @@ class MetalScene: ObservableObject {
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
         self.frameData.depth_cueing_strength = self.depthCueingStrength
         
-        updateColors()
         frame += 1
         needsRedraw = false
         

@@ -65,37 +65,37 @@ struct FileAtomElementPopover: View {
                 // Others
                 Circle()
                     .trim(from: 0, to: othersFraction)
-                    .stroke(proteinViewModel.renderer.scene.unknownAtomColor,
+                    .stroke(proteinViewModel.elementColors[5],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Sulfur
                 Circle()
                     .trim(from: 0, to: sulfurFraction)
-                    .stroke(proteinViewModel.renderer.scene.sAtomColor,
+                    .stroke(proteinViewModel.elementColors[4],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Oxygen
                 Circle()
                     .trim(from: 0, to: oxygenFraction)
-                    .stroke(proteinViewModel.renderer.scene.oAtomColor,
+                    .stroke(proteinViewModel.elementColors[3],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Nitrogen
                 Circle()
                     .trim(from: 0, to: nitrogenFraction)
-                    .stroke(proteinViewModel.renderer.scene.nAtomColor,
+                    .stroke(proteinViewModel.elementColors[2],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Hydrogen
                 Circle()
                     .trim(from: 0, to: hydrogenFraction)
-                    .stroke(proteinViewModel.renderer.scene.hAtomColor,
+                    .stroke(proteinViewModel.elementColors[1],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Carbon
                 Circle()
                     .trim(from: 0, to: carbonFraction)
-                    .stroke(proteinViewModel.renderer.scene.cAtomColor,
+                    .stroke(proteinViewModel.elementColors[0],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
             }

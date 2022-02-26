@@ -44,9 +44,32 @@ class ProteinViewModel: ObservableObject {
     /// Shared reference to the VisualizationBufferLoader class so it can be easily cancelled for subsequent calls..
     private var visualizationBufferLoader = VisualizationBufferLoader()
     /// Visualization option for protein representation.
-    @Published var visualization: ProteinVisualizationOption = .ballAndStick {
+    @Published var visualization: ProteinVisualizationOption = .solidSpheres {
         didSet {
             visualizationBufferLoader.handleVisualizationChange(visualization: visualization, proteinViewModel: self)
+        }
+    }
+    
+    /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
+    @Published var colorBy: Int {
+        didSet {
+            self.renderer.scene.animator?.animatedFillColorChange(initialColors: self.renderer.scene.colorFill,
+                                                                  finalColors: updatedFillColor(),
+                                                                  duration: 0.15)
+        }
+    }
+    
+    /// Color used for each subunit when coloring by element.
+    @Published var elementColors: [Color] = [Color]() {
+        didSet {
+            self.renderer.scene.colorFill = updatedFillColor()
+        }
+    }
+    
+    /// Color used for each subunit when coloring by subunit.
+    @Published var subunitColors: [Color] = [Color]() {
+        didSet {
+            self.renderer.scene.colorFill = updatedFillColor()
         }
     }
         
@@ -83,6 +106,9 @@ class ProteinViewModel: ObservableObject {
 
         // Setup view status
         self.statusViewModel = StatusViewModel()
+        
+        // Setup coloring scheme
+        self.colorBy = ProteinColorByOption.element
 
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dataSource.proteinViewModel = self
@@ -90,6 +116,11 @@ class ProteinViewModel: ObservableObject {
         
         // Add the dataSource to the renderer
         self.renderer.proteinDataSource = dataSource
+        
+        // Initialize colors
+        initElementColors()
+        initSubunitColors()
+        renderer.scene.colorFill = updatedFillColor()
     }
 
     // MARK: - Public functions
