@@ -66,6 +66,9 @@
 		C500EEB4272DA57300A60317 /* FocalLengthRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB3272DA57300A60317 /* FocalLengthRow.swift */; };
 		C501C74527C3FE93008CDA25 /* ComputePipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74427C3FE93008CDA25 /* ComputePipelines.swift */; };
 		C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
+		C501C74827CA2C3E008CDA25 /* ComputePipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74427C3FE93008CDA25 /* ComputePipelines.swift */; };
+		C501C74927CA2C4C008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
+		C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
 		C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405744B2663DC74008527D1 /* ProteinMetalViewController.swift */; };
 		C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */ = {isa = PBXBuildFile; fileRef = C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */; };
 		C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
@@ -1406,9 +1409,11 @@
 				C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */,
 				C51D4EDF27679B1100C69B3D /* DynamicStructureControlView.swift in Sources */,
 				C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */,
+				C501C74827CA2C3E008CDA25 /* ComputePipelines.swift in Sources */,
 				C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */,
 				C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */,
 				C572BD362741655700FF010D /* Protein.swift in Sources */,
+				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
 				C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */,
@@ -1439,6 +1444,7 @@
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
 				C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */,
 				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
+				C501C74927CA2C4C008CDA25 /* FillColorInputUtility.swift in Sources */,
 				C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */,
 				C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,

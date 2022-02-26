@@ -47,7 +47,11 @@ struct ProteinImportView: View {
     
     var body: some View {
         ZStack {
+            
+            // Background
             Color.black
+            
+            // Import actions
             VStack(spacing: 32) {
                 // TO-DO: Enable missing row
                 ImportRowView(title: NSLocalizedString("Import files", comment: ""),
@@ -70,6 +74,27 @@ struct ProteinImportView: View {
                               parent: self)
             }
             .frame(alignment: .leading)
+            
+            // Supported files
+            VStack {
+                Spacer()
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Supported files:")
+                        .foregroundColor(.gray)
+                    Divider()
+                        .background(Color.gray)
+                    HStack {
+                        Text(".pdb")
+                            .foregroundColor(.gray)
+                            .bold()
+                        Text(".xyz")
+                            .foregroundColor(.gray)
+                            .bold()
+                    }
+                }
+                .padding(.horizontal, 32)
+                .padding(.bottom, 24)
+            }
         }
         .sheet(isPresented: $showRCSBImportSheet, onDismiss: nil, content: {
             RCSBImportView(rcsbShowSheet: $showRCSBImportSheet)
