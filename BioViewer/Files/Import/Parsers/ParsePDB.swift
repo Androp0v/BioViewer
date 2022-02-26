@@ -139,7 +139,7 @@ extension FileParser {
             }
             
             // We're only interested in the lines that contain atom positions
-            if line.starts(with: "ATOM") {
+            if line.starts(with: "ATOM") || line.starts(with: "HETATM") {
 
                 // Check that the input line has the expected length (or more)
                 // to avoid IndexOutOfRange exceptions.
