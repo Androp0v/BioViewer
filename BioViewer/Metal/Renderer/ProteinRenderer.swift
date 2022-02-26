@@ -12,9 +12,11 @@ import SwiftUI
 class ProteinRenderer: NSObject, ObservableObject {
     
     // MARK: - Constants
+    
     let maxBuffersInFlight = 3
     
     // MARK: - Scheduling
+    
     /// Whether a frame is currently being processed on the CPU.
     var isProcessingFrame: Bool = false
     /// GCD queue used to process frames.
@@ -23,6 +25,8 @@ class ProteinRenderer: NSObject, ObservableObject {
     var frameBoundarySemaphore: DispatchSemaphore
     /// Used to index the dynamic buffers.
     var currentFrameIndex: Int
+    /// Used to ensure buffers are untouched during frame rendering.
+    let bufferResourceLock = NSLock()
     
     // MARK: - Metal variables
     
@@ -216,45 +220,57 @@ class ProteinRenderer: NSObject, ObservableObject {
             length: protein.atomCount * configurationCount * MemoryLayout<SIMD3<Int16>>.stride
         ) else { return }
         
+        bufferResourceLock.lock()
         self.atomColorBuffer = generatedColorBuffer
+        bufferResourceLock.unlock()
     }
     
     /// Adds the necessary buffers to display a protein in the renderer with a dense mesh
     func addOpaqueBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        bufferResourceLock.lock()
         self.opaqueVertexBuffer = vertexBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.opaqueIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
+        bufferResourceLock.unlock()
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
     func setBillboardingBuffers(vertexBuffer: inout MTLBuffer, subunitBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        bufferResourceLock.lock()
         self.impostorVertexBuffer = vertexBuffer
         self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
+        bufferResourceLock.unlock()
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
     func setColorBuffer(colorBuffer: inout MTLBuffer) {
+        bufferResourceLock.lock()
         self.atomColorBuffer = colorBuffer
+        bufferResourceLock.unlock()
     }
     
     /// Sets the necessary buffers to display atom bonds in the renderer using billboarding
     func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+        bufferResourceLock.lock()
         self.impostorBondVertexBuffer = vertexBuffer
         self.impostorBondIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
+        bufferResourceLock.unlock()
     }
     
     /// Deallocates the MTLBuffers used to render a protein
     func removeBuffers() {
+        bufferResourceLock.lock()
         self.opaqueVertexBuffer = nil
         self.atomTypeBuffer = nil
         self.opaqueIndexBuffer = nil
         self.scene.needsRedraw = true
+        bufferResourceLock.unlock()
     }
     
     /// Make new impostor pipeline variant.
@@ -292,23 +308,28 @@ extension ProteinRenderer: MTKViewDelegate {
         
         // Render on a background thread
         renderQueue.async { [weak self] in
-                                    
+                                                
             guard let self = self else {
                 self?.isProcessingFrame = false
                 return
             }
             
+            self.bufferResourceLock.lock()
+            
             // Assure buffers are loaded
             guard self.atomTypeBuffer != nil else {
                 self.isProcessingFrame = false
+                self.bufferResourceLock.unlock()
                 return
             }
             guard self.atomColorBuffer != nil else {
                 self.isProcessingFrame = false
+                self.bufferResourceLock.unlock()
                 return
             }
             guard let uniformBuffers = self.uniformBuffers else {
                 self.isProcessingFrame = false
+                self.bufferResourceLock.unlock()
                 return
             }
             
@@ -335,6 +356,7 @@ extension ProteinRenderer: MTKViewDelegate {
             guard let commandQueue = self.commandQueue else {
                 NSLog("Command queue is nil.")
                 self.isProcessingFrame = false
+                self.bufferResourceLock.unlock()
                 return
             }
                     
@@ -342,6 +364,7 @@ extension ProteinRenderer: MTKViewDelegate {
             guard let commandBuffer = commandQueue.makeCommandBuffer() else {
                 NSLog("Unable to create command buffer.")
                 self.isProcessingFrame = false
+                self.bufferResourceLock.unlock()
                 return
             }
             
@@ -397,6 +420,7 @@ extension ProteinRenderer: MTKViewDelegate {
             
             // MARK: - Finish
             self.isProcessingFrame = false
+            self.bufferResourceLock.unlock()
         }
     }
 
