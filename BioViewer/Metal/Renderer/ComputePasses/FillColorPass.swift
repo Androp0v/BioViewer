@@ -26,7 +26,10 @@ extension ProteinRenderer {
         }
 
         // Retrieve pipeline state
-        guard let pipelineState = fillColorComputePipelineState else { return }
+        guard let pipelineState = fillColorComputePipelineState else {
+            computeEncoder.endEncoding()
+            return
+        }
 
         // Set compute pipeline state for current arguments
         computeEncoder.setComputePipelineState(pipelineState)
@@ -62,5 +65,8 @@ extension ProteinRenderer {
 
         // REQUIRED: End the compute encoder encoding
         computeEncoder.endEncoding()
+        
+        // Mark color pass as performed (doesn't mean it has displayed yet)
+        self.scene.lastColorPass = CACurrentMediaTime()
     }
 }

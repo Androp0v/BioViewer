@@ -55,7 +55,7 @@ class ProteinViewModel: ObservableObject {
         didSet {
             self.renderer.scene.animator?.animatedFillColorChange(initialColors: self.renderer.scene.colorFill,
                                                                   finalColors: updatedFillColor(),
-                                                                  duration: 0.5)
+                                                                  duration: 0.15)
         }
     }
     

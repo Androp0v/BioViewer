@@ -14,8 +14,8 @@ class SceneAnimator {
     weak var bufferLoader: VisualizationBufferLoader?
     
     struct RunningAnimation {
+        var initialTime: Double?
         var currentTime: Double
-        let initialTime: Double
         let initialValue: Any
         let finalValue: Any
         let duration: Double
@@ -33,7 +33,6 @@ class SceneAnimator {
     func animateRadiiChange(finalRadii: AtomRadii, duration: Double) {
         guard let scene = scene else { return }
         radiiAnimation = RunningAnimation(currentTime: CACurrentMediaTime(),
-                                          initialTime: CACurrentMediaTime(),
                                           initialValue: scene.frameData.atom_radii,
                                           finalValue: finalRadii,
                                           duration: duration)
@@ -42,7 +41,6 @@ class SceneAnimator {
     
     func animatedFillColorChange(initialColors: FillColorInput, finalColors: FillColorInput, duration: Double) {
         colorAnimation = RunningAnimation(currentTime: CACurrentMediaTime(),
-                                          initialTime: CACurrentMediaTime(),
                                           initialValue: initialColors,
                                           finalValue: finalColors,
                                           duration: duration)
@@ -56,15 +54,24 @@ class SceneAnimator {
         displayLink?.add(to: .main, forMode: .default)
     }
     
-    private func getAnimationProgress(animation: RunningAnimation) -> Double {
-        return max(0.0, min(1.0, (animation.currentTime - animation.initialTime) / animation.duration ))
+    private func getAnimationProgress(animation: inout RunningAnimation?) -> Double {
+        if let initialTime = animation?.initialTime {
+            guard let animation = animation else {
+                NSLog("Error in animation")
+                return 0.0
+            }
+            return max(0.0, min(1.0, (animation.currentTime - initialTime) / animation.duration ))
+        } else {
+            animation?.initialTime = CACurrentMediaTime()
+            return 0.0
+        }
     }
     
     @objc private func updateAllAnimations() {
         guard !isBusy else { return }
         isBusy = true
         
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             if self.radiiAnimation != nil {
                 self.updateRadiiAnimation()
@@ -95,7 +102,7 @@ class SceneAnimator {
             return
         }
         
-        let progress = getAnimationProgress(animation: radiiAnimation)
+        let progress = getAnimationProgress(animation: &self.radiiAnimation)
                 
         scene.frameData.atom_radii.atomRadius.0 = (finalRadii.atomRadius.0 - initialRadii.atomRadius.0) * Float(progress) + initialRadii.atomRadius.0
         scene.frameData.atom_radii.atomRadius.1 = (finalRadii.atomRadius.1 - initialRadii.atomRadius.1) * Float(progress) + initialRadii.atomRadius.1
@@ -128,7 +135,7 @@ class SceneAnimator {
             return
         }
         
-        let progress = getAnimationProgress(animation: colorAnimation)
+        let progress = getAnimationProgress(animation: &self.colorAnimation)
         
         scene.colorFill = FillColorInputUtility.interpolateFillColorInput(start: initialFill,
                                                                           end: finalFill,

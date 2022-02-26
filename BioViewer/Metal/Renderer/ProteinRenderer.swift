@@ -234,7 +234,7 @@ class ProteinRenderer: NSObject, ObservableObject {
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
-        self.scene.needsColorPass = true
+        self.scene.lastColorPassRequest = CACurrentMediaTime()
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
@@ -349,7 +349,7 @@ extension ProteinRenderer: MTKViewDelegate {
             
             // MARK: - Fill color pass
             
-            if self.scene.needsColorPass {
+            if self.scene.lastColorPassRequest > self.scene.lastColorPass {
                 self.fillColorPass(commandBuffer: commandBuffer,
                                    colorBuffer: self.atomColorBuffer,
                                    subunitBuffer: self.subunitBuffer,
@@ -381,8 +381,6 @@ extension ProteinRenderer: MTKViewDelegate {
                 // Schedule a drawable presentation to occur after the GPU completes its work
                 // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
                 commandBuffer.present(drawable)
-                
-                self.scene.needsColorPass = false
             }
             
             // MARK: - Triple buffering

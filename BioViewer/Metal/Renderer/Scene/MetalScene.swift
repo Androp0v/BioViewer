@@ -17,8 +17,11 @@ class MetalScene: ObservableObject {
         
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
-    /// Whether the color buffer needs to be recomputed.
-    var needsColorPass: Bool = false
+    
+    /// The last time a color buffer recompute was required.
+    var lastColorPassRequest: CFTimeInterval = CACurrentMediaTime()
+    /// The last time a color buffer recompute was performed.
+    var lastColorPass: CFTimeInterval = .zero
     
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
     @Published var isPlaying: Bool = false
@@ -70,7 +73,7 @@ class MetalScene: ObservableObject {
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     var colorFill = FillColorInput() {
         didSet {
-            needsColorPass = true
+            lastColorPassRequest = CACurrentMediaTime()
             needsRedraw = true
         }
     }
