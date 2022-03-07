@@ -111,7 +111,7 @@ extension MetalScheduler {
             computeEncoder.setBytes(&atomRadii, length: MemoryLayout<AtomRadii>.stride, index: 5)
             
             // Schedule the threads
-            if device.supportsFamily(.apple3) {
+            if device.supportsFamily(.common3) {
                 // Create threads and threadgroup sizes
                 let threadsPerArray = MTLSizeMake(protein.atomCount * configurationCount, 1, 1)
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
