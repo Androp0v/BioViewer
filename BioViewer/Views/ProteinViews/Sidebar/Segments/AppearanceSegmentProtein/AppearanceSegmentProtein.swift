@@ -82,7 +82,7 @@ struct AppearanceSegmentProtein: View {
                         ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
                                        selectedColor: $proteinViewModel.elementColors[5])
                             .indentRow()
-                    } else if let subunits = proteinViewModel.dataSource.files.first?.protein.subunits {
+                    } else if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
                         ForEach(subunits, id: \.id) { subunit in
                             // TO-DO: Show real subunit list
                             ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),

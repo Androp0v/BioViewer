@@ -43,18 +43,17 @@ struct FileSegmentProtein: View {
             }
                 
             // MARK: - Loaded models
-            Section(header: Text(NSLocalizedString("Loaded models", comment: ""))
-                        .padding(.bottom, 4),
-                    content: {
-                        InfoTextRow(text: NSLocalizedString("Number of proteins:", comment: ""),
-                                    value: "\(proteinViewModel.proteinCount)")
-                        InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
-                                    value: "\(proteinViewModel.totalSubunitCount)")
-                        InfoPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
-                                              value: "\(proteinViewModel.totalAtomCount)",
-                                              isDisabled: proteinViewModel.proteinCount == 0,
-                                              content: { FileAtomElementPopover() })
-            })
+            Section(header: Text(NSLocalizedString("Loaded models", comment: "")).padding(.bottom, 4)) {
+                
+                InfoTextRow(text: NSLocalizedString("Number of proteins:", comment: ""),
+                            value: "\(proteinViewModel.proteinCount)")
+                InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
+                            value: "\(proteinViewModel.totalSubunitCount)")
+                InfoPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
+                                      value: "\(proteinViewModel.totalAtomCount)",
+                                      isDisabled: proteinViewModel.proteinCount == 0,
+                                      content: { FileAtomElementPopover() })
+            }
             
             // MARK: - File details
             Section(header: Text(NSLocalizedString("File details", comment: ""))

@@ -38,7 +38,9 @@ class VisualizationBufferLoader {
     
     private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
-        guard let protein = proteinViewModel.dataSource.files.first?.protein else { return }
+        guard let protein = proteinViewModel.dataSource.getFirstProtein() else {
+            return
+        }
         guard let animator = proteinViewModel.renderer.scene.animator else { return }
 
         switch visualization {
@@ -103,7 +105,9 @@ class VisualizationBufferLoader {
     func populateImpostorSphereBuffers(atomRadii: AtomRadii) {
         
         guard let proteinViewModel = proteinViewModel else { return }
-        guard let protein = proteinViewModel.dataSource.files.first?.protein else { return }
+        guard let protein = proteinViewModel.dataSource.getFirstProtein() else {
+            return
+        }
         
         // Generate a billboard quad for each atom in the protein
         let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,

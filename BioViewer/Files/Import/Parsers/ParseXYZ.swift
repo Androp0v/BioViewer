@@ -187,7 +187,7 @@ extension FileParser {
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
         
         // Return ProteinFile
-        var protein = Protein(configurationCount: configurationCount,
+        let protein = Protein(configurationCount: configurationCount,
                               configurationEnergies: energyArray,
                               subunitCount: 1,
                               subunits: proteinSubunits,
@@ -201,7 +201,7 @@ extension FileParser {
         return ProteinFile(fileType: fileType,
                            fileName: fileName,
                            fileExtension: fileExtension,
-                           protein: &protein,
+                           models: [protein],
                            fileInfo: fileInfo,
                            byteSize: byteSize)
     }

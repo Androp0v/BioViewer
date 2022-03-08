@@ -14,6 +14,8 @@ import simd
 class ProteinViewDataSource: ObservableObject {
     
     // MARK: - Properties
+    
+    /// Files in the scene.
     private(set) var files: [ProteinFile] = [ProteinFile]() {
         // Run when a new file is added to the datasource
         didSet {
@@ -25,12 +27,16 @@ class ProteinViewDataSource: ObservableObject {
             // Sum all subunit counts from all proteins in the datasource
             var newSubunitCount = 0
             for file in self.files {
-                newSubunitCount += file.protein.subunitCount
+                if let protein = modelForFile(file: file) {
+                    newSubunitCount += protein.subunitCount
+                }
             }
             // Sum all atom counts from all proteins in the datasource
             var newTotalAtomCount = 0
             for file in self.files {
-                newTotalAtomCount += file.protein.atomCount
+                if let protein = modelForFile(file: file) {
+                    newTotalAtomCount += protein.atomCount
+                }
             }
             // Publishers need to be updated in the main queue
             DispatchQueue.main.async {
@@ -39,23 +45,31 @@ class ProteinViewDataSource: ObservableObject {
             }
         }
     }
-
+    
+    /// Selected user-selected model for each ProteinFile.
+    private(set) var selectedModel: [String: Int] = [:]
+    
     public weak var proteinViewModel: ProteinViewModel?
 
     // MARK: - Add files
     
     public func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
+        // Initialize selected protein model to first model.
+        selectedModel[proteinFile.fileID] = 0
+        
+        // Add file to datasource.
         files.append(proteinFile)
         
         guard let proteinViewModel = proteinViewModel else { return }
         let scene = proteinViewModel.renderer.scene
+        guard let protein = modelForFile(file: proteinFile) else { return }
         
         // Add protein configurations to the scene
-        scene.createConfigurationSelector(protein: proteinFile.protein)
+        scene.createConfigurationSelector(protein: protein)
         
         // Fit file in frustum
-        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: proteinFile.protein.boundingSphere.radius,
+        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: protein.boundingSphere.radius,
                                                                       aspectRatio: scene.aspectRatio)
         scene.updateCameraDistanceToModel(distanceToModel: cameraDistanceToFit,
                                           proteinDataSource: proteinViewModel.dataSource)
@@ -86,6 +100,23 @@ class ProteinViewDataSource: ObservableObject {
     public func removeAllFilesFromDatasource() {
         files = []
         proteinViewModel?.renderer.removeBuffers()
+    }
+    
+    // MARK: - Get model
+        
+    private func modelForFile(file: ProteinFile?) -> Protein? {
+        guard let file = file else {
+            return nil
+        }
+        guard let selectedModel = selectedModel[file.fileID] else {
+            return nil
+        }
+        return file.models[selectedModel]
+    }
+    
+    // FIXME: Remove this function when multiple files are supported
+    func getFirstProtein() -> Protein? {
+        return modelForFile(file: files.first)
     }
 
 }

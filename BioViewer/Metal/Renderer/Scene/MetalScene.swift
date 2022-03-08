@@ -195,7 +195,7 @@ class MetalScene: ObservableObject {
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
         // TO-DO: Fit all files
-        guard let protein = proteinDataSource.files.first?.protein else {
+        guard let protein = proteinDataSource.getFirstProtein() else {
             return
         }
         // Update camera far and near planes
