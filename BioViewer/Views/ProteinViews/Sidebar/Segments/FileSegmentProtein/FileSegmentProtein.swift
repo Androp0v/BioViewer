@@ -6,10 +6,19 @@
 //
 
 import SwiftUI
+import simd
 
 struct FileSegmentProtein: View {
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
+    
+    private func getModelNames(modelCount: Int) -> [String] {
+        var modelNames = [String]()
+        for modelIndex in 0..<modelCount {
+            modelNames.append( NSLocalizedString("Model \(modelIndex + 1)", comment: ""))
+        }
+        return modelNames
+    }
 
     var body: some View {
         List {
@@ -38,22 +47,40 @@ struct FileSegmentProtein: View {
                                 fileExtension: file.fileExtension,
                                 fileIndex: index,
                                 byteSize: file.byteSize)
+                        
+                        // Show model selector only if there's more than one model
+                        if file.models.count > 1 {
+                            PickerRow(optionName: NSLocalizedString("Viewing:", comment: ""),
+                                      selectedOption: proteinViewModel.dataSource.selectedModelBinding(for: file.fileID),
+                                      pickerOptions: getModelNames(modelCount: file.models.count))
+                                .disabled(true)
+                                .listRowSeparator(.hidden)
+                        }
+                        
+                        if let protein = proteinViewModel.dataSource.modelForFile(file: file) {
+                            
+                            InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
+                                        value: "\(protein.subunitCount)")
+                                .listRowSeparator(.hidden)
+                            
+                            InfoPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
+                                           value: "\(protein.atomCount)",
+                                           isDisabled: false,
+                                           content: { FileAtomElementPopover() })
+                                .listRowSeparator(.hidden)
+                        }
                     }
                 }
             }
                 
             // MARK: - Loaded models
+            /*
             Section(header: Text(NSLocalizedString("Loaded models", comment: "")).padding(.bottom, 4)) {
                 
                 InfoTextRow(text: NSLocalizedString("Number of proteins:", comment: ""),
                             value: "\(proteinViewModel.proteinCount)")
-                InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
-                            value: "\(proteinViewModel.totalSubunitCount)")
-                InfoPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
-                                      value: "\(proteinViewModel.totalAtomCount)",
-                                      isDisabled: proteinViewModel.proteinCount == 0,
-                                      content: { FileAtomElementPopover() })
             }
+            */
             
             // MARK: - File details
             Section(header: Text(NSLocalizedString("File details", comment: ""))

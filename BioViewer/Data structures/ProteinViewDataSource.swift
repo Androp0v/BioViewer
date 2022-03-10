@@ -7,6 +7,7 @@
 
 import Foundation
 import simd
+import SwiftUI
 
 /// Handle all source data for a ```ProteinView``` that is not related to the
 /// scene nor the appearance, like the ```Protein``` objects that have been
@@ -47,7 +48,18 @@ class ProteinViewDataSource: ObservableObject {
     }
     
     /// Selected user-selected model for each ProteinFile.
-    private(set) var selectedModel: [String: Int] = [:]
+    @Published var selectedModel: [String: Int] = [:]
+    
+    func selectedModelBinding(for fileID: String) -> Binding<Int> {
+        return .init(
+            get: { [weak self] in
+                self?.selectedModel[fileID, default: 0] ?? 0
+            },
+            set: { [weak self] in
+                self?.selectedModel[fileID] = $0
+            }
+        )
+    }
     
     public weak var proteinViewModel: ProteinViewModel?
 
@@ -104,11 +116,14 @@ class ProteinViewDataSource: ObservableObject {
     
     // MARK: - Get model
         
-    private func modelForFile(file: ProteinFile?) -> Protein? {
+    func modelForFile(file: ProteinFile?) -> Protein? {
         guard let file = file else {
             return nil
         }
         guard let selectedModel = selectedModel[file.fileID] else {
+            return nil
+        }
+        guard selectedModel < file.models.count else {
             return nil
         }
         return file.models[selectedModel]
