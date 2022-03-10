@@ -57,6 +57,9 @@ class ProteinViewDataSource: ObservableObject {
             },
             set: { [weak self] in
                 self?.selectedModel[fileID] = $0
+                guard let proteinViewModel = self?.proteinViewModel else { return }
+                proteinViewModel.visualizationBufferLoader.handleVisualizationChange(visualization: proteinViewModel.visualization,
+                                                                                     proteinViewModel: proteinViewModel)
             }
         )
     }

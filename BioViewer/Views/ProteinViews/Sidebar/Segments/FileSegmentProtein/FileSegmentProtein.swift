@@ -53,7 +53,6 @@ struct FileSegmentProtein: View {
                             PickerRow(optionName: NSLocalizedString("Viewing:", comment: ""),
                                       selectedOption: proteinViewModel.dataSource.selectedModelBinding(for: file.fileID),
                                       pickerOptions: getModelNames(modelCount: file.models.count))
-                                .disabled(true)
                                 .listRowSeparator(.hidden)
                         }
                         
