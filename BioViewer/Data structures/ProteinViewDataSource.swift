@@ -48,22 +48,15 @@ class ProteinViewDataSource: ObservableObject {
     }
     
     /// Selected user-selected model for each ProteinFile.
-    @Published var selectedModel: [String: Int] = [:]
-    
-    func selectedModelBinding(for fileID: String) -> Binding<Int> {
-        return .init(
-            get: { [weak self] in
-                self?.selectedModel[fileID, default: 0] ?? 0
-            },
-            set: { [weak self] in
-                self?.selectedModel[fileID] = $0
-                guard let proteinViewModel = self?.proteinViewModel else { return }
-                proteinViewModel.visualizationBufferLoader.handleVisualizationChange(visualization: proteinViewModel.visualization,
-                                                                                     proteinViewModel: proteinViewModel)
-            }
-        )
+    @Published var selectedModel = [Int]() {
+        didSet {
+            updateFileModels()
+        }
     }
     
+    /// Maps file ID to selected model array index.
+    var selectedModelIndexForFile = [String: Int]()
+        
     public weak var proteinViewModel: ProteinViewModel?
 
     // MARK: - Add files
@@ -71,7 +64,8 @@ class ProteinViewDataSource: ObservableObject {
     public func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
         // Initialize selected protein model to first model.
-        selectedModel[proteinFile.fileID] = 0
+        selectedModel.append(0)
+        selectedModelIndexForFile[proteinFile.fileID] = selectedModel.count - 1
         
         // Add file to datasource.
         files.append(proteinFile)
@@ -117,19 +111,25 @@ class ProteinViewDataSource: ObservableObject {
         proteinViewModel?.renderer.removeBuffers()
     }
     
-    // MARK: - Get model
+    // MARK: - Update model
+    
+    func updateFileModels() {
+        guard let proteinViewModel = self.proteinViewModel else { return }
+        proteinViewModel.visualizationBufferLoader.handleVisualizationChange(visualization: proteinViewModel.visualization,
+                                                                             proteinViewModel: proteinViewModel)
+    }
         
     func modelForFile(file: ProteinFile?) -> Protein? {
         guard let file = file else {
             return nil
         }
-        guard let selectedModel = selectedModel[file.fileID] else {
+        guard let selectedModelIndex = selectedModelIndexForFile[file.fileID] else {
             return nil
         }
-        guard selectedModel < file.models.count else {
+        guard selectedModel[selectedModelIndex] < file.models.count else {
             return nil
         }
-        return file.models[selectedModel]
+        return file.models[selectedModel[selectedModelIndex]]
     }
     
     // FIXME: Remove this function when multiple files are supported
