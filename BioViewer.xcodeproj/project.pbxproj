@@ -196,6 +196,8 @@
 		C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
 		C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
+		C5C7513627DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */; };
+		C5C7513827DBC194004CEE8E /* AtomRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513727DBC194004CEE8E /* AtomRadiiPickerRow.swift */; };
 		C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
 		C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
@@ -413,6 +415,8 @@
 		C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTrackedAction.swift; sourceTree = "<group>"; };
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRow.swift; sourceTree = "<group>"; };
+		C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSolidSpheresRadiusOptions.swift; sourceTree = "<group>"; };
+		C5C7513727DBC194004CEE8E /* AtomRadiiPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomRadiiPickerRow.swift; sourceTree = "<group>"; };
 		C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingVolumes.swift; sourceTree = "<group>"; };
 		C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererPipelines.swift; sourceTree = "<group>"; };
 		C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTextures.swift; sourceTree = "<group>"; };
@@ -525,6 +529,7 @@
 				C41A0568264D5D58006F551C /* ProteinViewModel.swift */,
 				C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */,
 				C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */,
+				C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1000,6 +1005,7 @@
 			children = (
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
 				C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */,
+				C5C7513727DBC194004CEE8E /* AtomRadiiPickerRow.swift */,
 			);
 			path = AppearanceSegmentProtein;
 			sourceTree = "<group>";
@@ -1345,6 +1351,7 @@
 				C500EEB4272DA57300A60317 /* FocalLengthRow.swift in Sources */,
 				C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */,
 				C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */,
+				C5C7513827DBC194004CEE8E /* AtomRadiiPickerRow.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */,
@@ -1392,6 +1399,7 @@
 				C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */,
 				C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */,
 				C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */,
+				C5C7513627DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */,
 				C544D3A0277016270060B30D /* TextureToImage.swift in Sources */,
 				C5EEE9B0276E0448005737C1 /* InputWithButtonRow.swift in Sources */,
 			);

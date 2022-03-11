@@ -50,12 +50,22 @@ class VisualizationBufferLoader {
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
-            proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
+            
+            if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
+                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
+            } else {
+                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
+            }
             
             // Animate radii changes
             animator.bufferLoader = self
-            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(),
-                                        duration: 0.15)
+            if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
+                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(),
+                                            duration: 0.15)
+            } else {
+                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.solidSpheresFixedAtomRadii),
+                                            duration: 0.15)
+            }
             
         // MARK: - Ball and stick
         case .ballAndStick:
@@ -95,7 +105,7 @@ class VisualizationBufferLoader {
             
             // Animate radii changes
             animator.bufferLoader = self
-            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksAtomRadii),
+            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksFixedAtomRadii),
                                         duration: 0.15)
         }
     }

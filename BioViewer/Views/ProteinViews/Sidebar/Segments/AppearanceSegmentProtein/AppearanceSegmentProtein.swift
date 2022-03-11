@@ -35,9 +35,22 @@ struct AppearanceSegmentProtein: View {
                 // TO-DO: Surface representation
                 /* SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface) */
                 
+                if proteinViewModel.visualization == .solidSpheres {
+                    AtomRadiiPickerRow()
+                        .indentRow()
+                    if proteinViewModel.solidSpheresRadiusOption == .fixed {
+                        SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
+                                  value: $proteinViewModel.solidSpheresFixedAtomRadii,
+                                  minValue: 0.2,
+                                  maxValue: 2.0)
+                            .indentRow()
+                            .indentRow()
+                    }
+                }
+                
                 if proteinViewModel.visualization == .ballAndStick {
-                    SliderRow(title: NSLocalizedString("Atom radii", comment: ""),
-                              value: $proteinViewModel.ballAndSticksAtomRadii,
+                    SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
+                              value: $proteinViewModel.ballAndSticksFixedAtomRadii,
                               minValue: 0.2,
                               maxValue: 0.6)
                         .indentRow()

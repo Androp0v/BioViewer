@@ -43,16 +43,42 @@ class ProteinViewModel: ObservableObject {
     
     /// Shared reference to the VisualizationBufferLoader class so it can be easily cancelled for subsequent calls..
     var visualizationBufferLoader = VisualizationBufferLoader()
+    
     /// Visualization option for protein representation.
     @Published var visualization: ProteinVisualizationOption = .solidSpheres {
         didSet {
-            visualizationBufferLoader.handleVisualizationChange(visualization: visualization, proteinViewModel: self)
+            visualizationBufferLoader.handleVisualizationChange(visualization: visualization,
+                                                                proteinViewModel: self)
         }
     }
     
-    @Published var ballAndSticksAtomRadii: Float = 0.4 {
+    /// Visualization option for protein representation.
+    @Published var solidSpheresRadiusOption: ProteinSolidSpheresRadiusOptions = .vanDerWaals {
         didSet {
-            visualizationBufferLoader.handleVisualizationChange(visualization: visualization, proteinViewModel: self)
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
+                                                                         proteinViewModel: self)
+            }
+        }
+    }
+    @Published var solidSpheresFixedAtomRadii: Float = 1.0 {
+        didSet {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
+                                                                         proteinViewModel: self)
+            }
+        }
+    }
+    
+    @Published var ballAndSticksFixedAtomRadii: Float = 0.4 {
+        didSet {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
+                                                                         proteinViewModel: self)
+            }
         }
     }
     
