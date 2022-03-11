@@ -95,7 +95,7 @@ class VisualizationBufferLoader {
             
             // Animate radii changes
             animator.bufferLoader = self
-            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(),
+            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksAtomRadii),
                                         duration: 0.15)
         }
     }

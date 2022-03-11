@@ -35,16 +35,13 @@ struct AppearanceSegmentProtein: View {
                 // TO-DO: Surface representation
                 /* SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface) */
                 
-                // TO-DO: Selectable fixed atom radii
-                /*
                 if proteinViewModel.visualization == .ballAndStick {
                     SliderRow(title: NSLocalizedString("Atom radii", comment: ""),
-                              value: .constant(0.4),
-                              minValue: 0.1,
-                              maxValue: 1.0)
+                              value: $proteinViewModel.ballAndSticksAtomRadii,
+                              minValue: 0.2,
+                              maxValue: 0.6)
                         .indentRow()
                 }
-                */
             })
             
             // MARK: - Color section

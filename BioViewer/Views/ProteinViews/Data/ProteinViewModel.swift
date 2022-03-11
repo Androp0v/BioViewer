@@ -50,6 +50,12 @@ class ProteinViewModel: ObservableObject {
         }
     }
     
+    @Published var ballAndSticksAtomRadii: Float = 0.4 {
+        didSet {
+            visualizationBufferLoader.handleVisualizationChange(visualization: visualization, proteinViewModel: self)
+        }
+    }
+    
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     @Published var colorBy: Int {
         didSet {

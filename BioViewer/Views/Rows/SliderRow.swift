@@ -29,7 +29,7 @@ struct SliderRow: View {
             Slider(value: $value, in: minValue...maxValue)
                 .frame(maxWidth: .infinity)
             #if targetEnvironment(macCatalyst)
-            Stepper(value: $value, in: 0...1, step: 0.1) {
+            Stepper(value: $value, in: minValue...maxValue, step: 0.1) {
                 TextField("Value",
                           value: $value,
                           formatter: getNumberFormatter(min: minValue, max: maxValue))
