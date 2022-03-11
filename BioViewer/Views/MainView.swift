@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-        
+            
     init() {
         
         // Custom segmented controls in the app

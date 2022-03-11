@@ -200,6 +200,10 @@
 		C5C7513827DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */; };
 		C5C7513A27DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */; };
 		C5C7513C27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */; };
+		C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */; };
+		C5C7514027DBF716004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */; };
+		C5C7514127DBF71E004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */; };
+		C5C7514327DBF8CB004CEE8E /* NewsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514227DBF8CB004CEE8E /* NewsRow.swift */; };
 		C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
 		C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
@@ -421,6 +425,8 @@
 		C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidSpheresRadiiPickerRow.swift; sourceTree = "<group>"; };
 		C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProteinBallAndStickRadiusOptions.swift; sourceTree = "<group>"; };
 		C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallAndStickRadiiPickerRow.swift; sourceTree = "<group>"; };
+		C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
+		C5C7514227DBF8CB004CEE8E /* NewsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRow.swift; sourceTree = "<group>"; };
 		C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingVolumes.swift; sourceTree = "<group>"; };
 		C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererPipelines.swift; sourceTree = "<group>"; };
 		C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTextures.swift; sourceTree = "<group>"; };
@@ -517,6 +523,7 @@
 			isa = PBXGroup;
 			children = (
 				C4187E322642E0C2009E2CBA /* MainView.swift */,
+				C5C7513D27DBF6D3004CEE8E /* Onboarding */,
 				C59D6A5E275D807900CCC941 /* StatusView */,
 				C44085632647153200DC5009 /* ProteinViews */,
 				C44085612647151A00DC5009 /* SequenceViews */,
@@ -1038,6 +1045,15 @@
 			path = StatusView;
 			sourceTree = "<group>";
 		};
+		C5C7513D27DBF6D3004CEE8E /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */,
+				C5C7514227DBF8CB004CEE8E /* NewsRow.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		C5EEE9B3276F6022005737C1 /* PhotoMode */ = {
 			isa = PBXGroup;
 			children = (
@@ -1272,6 +1288,7 @@
 				C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */,
 				C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */,
 				C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */,
+				C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */,
 				C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */,
 				C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
@@ -1281,6 +1298,7 @@
 				C41A056C265894AA006F551C /* CreateSASPoints.metal in Sources */,
 				C5EEE9C3276FFC02005737C1 /* HQTextures.swift in Sources */,
 				C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */,
+				C5C7514327DBF8CB004CEE8E /* NewsRow.swift in Sources */,
 				C57F995E275E8E31001DE6D6 /* BioViewerWorkspace.swift in Sources */,
 				C5E7AF9B2760FF950065F6AD /* ShadowShader.metal in Sources */,
 				C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */,
@@ -1441,6 +1459,7 @@
 				C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */,
 				C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */,
 				C572BD362741655700FF010D /* Protein.swift in Sources */,
+				C5C7514127DBF71E004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */,
 				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
@@ -1452,6 +1471,7 @@
 				C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */,
 				C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */,
 				C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */,
+				C5C7514027DBF716004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */,
 				C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */,
 				C51D4EDE27679A5200C69B3D /* ParseXYZ.swift in Sources */,
 				C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */,
