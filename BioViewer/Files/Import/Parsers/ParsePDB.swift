@@ -265,10 +265,11 @@ class PDBParser {
             subunitIndex += subunit.atomArrayComposition.totalCount
         }
         
-        if subunitCount == 0 {
+        if subunitCount == subunits.count - 1 {
             proteinViewModel?.statusViewModel.setWarning(warning:
                 NSLocalizedString("No TER keyword found to mark the end of a chain, subunit count may be wrong", comment: "")
             )
+            subunitCount += 1
         }
         
         let protein = Protein(configurationCount: 1,
@@ -288,10 +289,8 @@ class PDBParser {
     // MARK: - Create last protein
     
     private func createLastProteinIfNeeded() {
-        if let leftoverAtomCount = subunits.last?.atomArrayComposition.totalCount {
-            if leftoverAtomCount > 0 {
-                createNewProtein()
-            }
+        if atomArray.count > 0 || proteins.count == 0 {
+            createNewProtein()
         }
     }
     

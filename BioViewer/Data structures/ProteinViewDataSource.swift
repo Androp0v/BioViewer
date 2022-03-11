@@ -108,6 +108,8 @@ class ProteinViewDataSource: ObservableObject {
     /// Removes all files from the data source and the scene.
     public func removeAllFilesFromDatasource() {
         files = []
+        selectedModel = []
+        selectedModelIndexForFile = [:]
         proteinViewModel?.renderer.removeBuffers()
     }
     

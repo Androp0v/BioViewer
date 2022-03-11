@@ -50,7 +50,7 @@ extension ProteinRenderer {
         // Schedule the threads
         if device.supportsFamily(.apple3) {
             // Create threads and threadgroup sizes
-            let threadsPerArray = MTLSizeMake(colorBuffer.length / MemoryLayout<SIMD4<Int16>>.stride, 1, 1)
+            let threadsPerArray = MTLSizeMake(colorBuffer.length / MemoryLayout<SIMD3<Int16>>.stride, 1, 1)
             let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
             // Dispatch threads
             computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
