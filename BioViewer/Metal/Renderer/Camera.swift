@@ -65,7 +65,7 @@ class Camera {
 
     // MARK: - Updates
     
-    /// Update the projection matrix of the cammera to account for the aspect ratio of the drawable the
+    /// Update the projection matrix of the camera to account for the aspect ratio of the drawable the
     /// view is displayed on.
     /// - Parameter drawableSize: The size of the view the scene is rendered on.
     func updateProjection(drawableSize: CGSize) {

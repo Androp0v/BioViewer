@@ -103,14 +103,16 @@ extension FileParser {
 
             guard let x = Float( lineElements[1] ),
                   let y = Float( lineElements[2] ),
-                  let z = Float( lineElements[3] )
+                  var z = Float( lineElements[3] )
             else {
                 createNewConfigurationUnlessEmpty()
                 return
             }
-
+            
+            // Since the projection matrix is left-handed, fix the chirality of the molecules
+            z = -z
+            
             // Save atom position to array based on element
-
             switch element {
             case AtomType.CARBON:
                 configurations.last?.atomArrayComposition.carbonCount += 1

@@ -188,9 +188,11 @@ class PDBParser {
             self.fileInfo?.warningIndices.append(self.currentLine)
             return
         }
-
-        // Save atom position to array based on element
         
+        // Since the projection matrix is left-handed, fix the chirality of the molecules
+        z = -z
+
+        // Save atom position to array
         self.subunits.last?.subunitAtomTypes.append(element)
         self.subunits.last?.subunitAtomPositions.append(simd_float3(x, y, z))
     }
