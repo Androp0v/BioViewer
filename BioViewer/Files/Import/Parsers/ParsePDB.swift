@@ -139,6 +139,12 @@ class PDBParser {
                 let rangeResName = startResName..<endResName
 
                 let resName = line[rangeResName].replacingOccurrences(of: " ", with: "")
+                
+                // Ignore water molecules
+                if resName.contains("HOH") {
+                    return
+                }
+                
                 self.sequenceArray.append(resName)
             }
         } else {
@@ -274,7 +280,7 @@ class PDBParser {
         
         let protein = Protein(configurationCount: 1,
                               configurationEnergies: nil,
-                              subunitCount: subunitCount,
+                              subunitCount: proteinSubunits.count,
                               subunits: proteinSubunits,
                               atoms: &atomArray,
                               atomArrayComposition: &totalAtomArrayComposition,
@@ -289,7 +295,7 @@ class PDBParser {
     // MARK: - Create last protein
     
     private func createLastProteinIfNeeded() {
-        if atomArray.count > 0 || proteins.count == 0 {
+        if proteins.count == 0 {
             createNewProtein()
         }
     }
