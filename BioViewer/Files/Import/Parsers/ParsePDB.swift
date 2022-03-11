@@ -178,7 +178,7 @@ class PDBParser {
 
         guard let x = Float( line[rangeX].replacingOccurrences(of: " ", with: "") ),
               let y = Float( line[rangeY].replacingOccurrences(of: " ", with: "") ),
-              let z = Float( line[rangeZ].replacingOccurrences(of: " ", with: "") )
+              var z = Float( line[rangeZ].replacingOccurrences(of: " ", with: "") )
         else {
             proteinViewModel?.statusViewModel.setWarning(warning:
                 NSLocalizedString("Ignored atom in line", comment: "")
