@@ -13,6 +13,7 @@ struct SliderRow: View {
     @Binding var value: Float
     let minValue: Float
     let maxValue: Float
+    let stepSize: Float
     
     func getNumberFormatter(min: Float, max: Float) -> NumberFormatter {
         let numberFormatter = NumberFormatter()
@@ -23,13 +24,21 @@ struct SliderRow: View {
         return numberFormatter
     }
     
+    init(title: String, value: Binding<Float>, minValue: Float, maxValue: Float, stepSize: Float = 0.1) {
+        self.title = title
+        self._value = value
+        self.minValue = minValue
+        self.maxValue = maxValue
+        self.stepSize = stepSize
+    }
+    
     var body: some View {
         HStack {
             Text(title)
             Slider(value: $value, in: minValue...maxValue)
                 .frame(maxWidth: .infinity)
             #if targetEnvironment(macCatalyst)
-            Stepper(value: $value, in: minValue...maxValue, step: 0.1) {
+            Stepper(value: $value, in: minValue...maxValue, step: stepSize) {
                 TextField("Value",
                           value: $value,
                           formatter: getNumberFormatter(min: minValue, max: maxValue))

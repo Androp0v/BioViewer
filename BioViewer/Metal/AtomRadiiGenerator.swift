@@ -10,7 +10,7 @@ import CoreAudio
 
 class AtomRadiiGenerator {
         
-    static func vanDerWaalsRadii() -> AtomRadii {
+    static func vanDerWaalsRadii(scale: Float = 1.0) -> AtomRadii {
         var atomRadii = AtomRadii()
         
         // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
@@ -21,7 +21,7 @@ class AtomRadiiGenerator {
                     return
                 }
                 let ptr = (ptrAddress + MemoryLayout<Float>.stride * index).assumingMemoryBound(to: Float.self)
-                ptr.pointee = AtomTypeUtilities.getAtomicRadius(atomType: UInt8(index))
+                ptr.pointee = AtomTypeUtilities.getAtomicVanDerWaalsRadius(atomType: UInt8(index)) * scale
             }
         }
         

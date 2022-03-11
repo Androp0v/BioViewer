@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AtomRadiiPickerRow: View {
+struct SolidSpheresRadiiPickerRow: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     var solidSpheresRadiusProxy: Binding<Int> {
@@ -22,14 +22,14 @@ struct AtomRadiiPickerRow: View {
     }
     
     var body: some View {
-        PickerRow(optionName: NSLocalizedString("View as", comment: ""),
+        PickerRow(optionName: NSLocalizedString("Atom radius", comment: ""),
                   selectedOption: solidSpheresRadiusProxy,
                   pickerOptions: ProteinSolidSpheresRadiusOptions.getPickerOptions())
     }
 }
 
-struct AtomRadiiPickerRow_Previews: PreviewProvider {
+struct SolidSpheresRadiiPickerRow_Previews: PreviewProvider {
     static var previews: some View {
-        AtomRadiiPickerRow()
+        SolidSpheresRadiiPickerRow()
     }
 }

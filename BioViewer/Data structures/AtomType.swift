@@ -23,6 +23,7 @@ struct AtomType {
     static let CARBON: UInt8 = 6
     static let NITROGEN: UInt8 = 7
     static let OXYGEN: UInt8 = 8
+    static let FLUORINE: UInt8 = 9
     static let SULFUR: UInt8 = 16
     static let POTASSIUM: UInt8 = 19
     static let IRON: UInt8 = 26
@@ -73,22 +74,24 @@ class AtomTypeUtilities {
         return AtomTypeUtilities.atomTypeDict[atomName.uppercased(), default: AtomType.UNKNOWN]
     }
 
-    /// Return atom size in Armstrongs based on the type
+    /// Return atom Van Der Waals size in Armstrongs based on the type
     /// - Parameter atomType: Atom type identifier, defined in AtomType.swift
-    /// - Returns: Atomic radius (in armstrongs)
-    static func getAtomicRadius(atomType: UInt8) -> Float {
+    /// - Returns: Atomic radius (in Armstrongs)
+    static func getAtomicVanDerWaalsRadius(atomType: UInt8) -> Float {
         
         switch atomType {
         case AtomType.CARBON:
-            return 1.50 // 0.67
+            return 1.50
         case AtomType.HYDROGEN:
             return 1.10
         case AtomType.NITROGEN:
-            return 1.55 // 0.56
+            return 1.55
         case AtomType.OXYGEN:
-            return 1.52 // 0.48
+            return 1.52
+        case AtomType.FLUORINE:
+            return 1.47
         case AtomType.SULFUR:
-            return 1.80 // 0.88
+            return 1.80
         case AtomType.POTASSIUM:
             return 2.80
         case AtomType.IRON:
@@ -108,6 +111,8 @@ class AtomTypeUtilities {
             return Color(.displayP3, red: 0.091, green: 0.148, blue: 0.556, opacity: 1.0)
         case AtomType.OXYGEN:
             return Color(.displayP3, red: 1.000, green: 0.149, blue: 0.000, opacity: 1.0)
+        case AtomType.FLUORINE:
+            return Color(.displayP3, red: 1.000, green: 0.427, blue: 1.000, opacity: 1.0)
         case AtomType.SULFUR:
             return Color(.displayP3, red: 1.000, green: 0.780, blue: 0.349, opacity: 1.0)
         default:

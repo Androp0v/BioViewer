@@ -36,7 +36,7 @@ struct AppearanceSegmentProtein: View {
                 /* SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface) */
                 
                 if proteinViewModel.visualization == .solidSpheres {
-                    AtomRadiiPickerRow()
+                    SolidSpheresRadiiPickerRow()
                         .indentRow()
                     if proteinViewModel.solidSpheresRadiusOption == .fixed {
                         SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
@@ -45,15 +45,34 @@ struct AppearanceSegmentProtein: View {
                                   maxValue: 2.0)
                             .indentRow()
                             .indentRow()
+                    } else if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
+                        SliderRow(title: NSLocalizedString("Scale", comment: ""),
+                                  value: $proteinViewModel.solidSpheresVDWScale,
+                                  minValue: 0.1,
+                                  maxValue: 1.5)
+                            .indentRow()
+                            .indentRow()
                     }
                 }
                 
                 if proteinViewModel.visualization == .ballAndStick {
-                    SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
-                              value: $proteinViewModel.ballAndSticksFixedAtomRadii,
-                              minValue: 0.2,
-                              maxValue: 0.6)
+                    BallAndStickRadiiPickerRow()
                         .indentRow()
+                    if proteinViewModel.ballAndStickRadiusOption == .fixed {
+                        SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
+                                  value: $proteinViewModel.ballAndSticksFixedAtomRadii,
+                                  minValue: 0.2,
+                                  maxValue: 0.6)
+                            .indentRow()
+                            .indentRow()
+                    } else if proteinViewModel.ballAndStickRadiusOption == .scaledVDW {
+                        SliderRow(title: NSLocalizedString("Scale", comment: ""),
+                                  value: $proteinViewModel.ballAndSticksVDWScale,
+                                  minValue: 0.2,
+                                  maxValue: 0.4)
+                            .indentRow()
+                            .indentRow()
+                    }
                 }
             })
             

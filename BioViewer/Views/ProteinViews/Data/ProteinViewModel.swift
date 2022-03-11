@@ -52,7 +52,7 @@ class ProteinViewModel: ObservableObject {
         }
     }
     
-    /// Visualization option for protein representation.
+    /// Radius option for solid spheres.
     @Published var solidSpheresRadiusOption: ProteinSolidSpheresRadiusOptions = .vanDerWaals {
         didSet {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
@@ -71,8 +71,36 @@ class ProteinViewModel: ObservableObject {
             }
         }
     }
+    @Published var solidSpheresVDWScale: Float = 1.0 {
+        didSet {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
+                                                                         proteinViewModel: self)
+            }
+        }
+    }
     
+    /// Radius option for ball and stick.
+    @Published var ballAndStickRadiusOption: ProteinBallAndStickRadiusOptions = .fixed {
+        didSet {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
+                                                                         proteinViewModel: self)
+            }
+        }
+    }
     @Published var ballAndSticksFixedAtomRadii: Float = 0.4 {
+        didSet {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
+                                                                         proteinViewModel: self)
+            }
+        }
+    }
+    @Published var ballAndSticksVDWScale: Float = 0.3 {
         didSet {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 guard let self = self else { return }

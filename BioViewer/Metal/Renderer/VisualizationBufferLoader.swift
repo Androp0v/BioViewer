@@ -60,7 +60,7 @@ class VisualizationBufferLoader {
             // Animate radii changes
             animator.bufferLoader = self
             if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
-                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(),
+                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.solidSpheresVDWScale),
                                             duration: 0.15)
             } else {
                 animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.solidSpheresFixedAtomRadii),
@@ -101,12 +101,21 @@ class VisualizationBufferLoader {
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
-            proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
+            if proteinViewModel.ballAndStickRadiusOption == .fixed {
+                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
+            } else {
+                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
+            }
             
             // Animate radii changes
             animator.bufferLoader = self
-            animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksFixedAtomRadii),
-                                        duration: 0.15)
+            if proteinViewModel.ballAndStickRadiusOption == .fixed {
+                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksFixedAtomRadii),
+                                            duration: 0.15)
+            } else {
+                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.ballAndSticksVDWScale),
+                                            duration: 0.15)
+            }
         }
     }
     
