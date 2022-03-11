@@ -9,7 +9,7 @@
 #define SharedDataStructs_h
 
 /// Supported number of (different) atom types.
-#define ATOM_TYPE_COUNT 6
+#define ATOM_TYPE_COUNT 64
 
 typedef struct {
     /// Radius of each atom type (C, H, N, O, S, Others).

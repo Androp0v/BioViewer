@@ -6,47 +6,74 @@
 //
 
 import Foundation
+import CoreAudio
 
 class AtomRadiiGenerator {
-    
-    static func createAtomRadii(radii: [Float]) -> AtomRadii {
-        guard radii.count >= 6 else {
-            NSLog("Not enough atom sizes specified to create an atom radii configuration, defaulting to Van der Waals radii.")
-            return vanDerWaalsRadii()
-        }
-        var atomRadii = AtomRadii()
-        atomRadii.atomRadius.0 = radii[0]
-        atomRadii.atomRadius.1 = radii[1]
-        atomRadii.atomRadius.2 = radii[2]
-        atomRadii.atomRadius.3 = radii[3]
-        atomRadii.atomRadius.4 = radii[4]
-        atomRadii.atomRadius.5 = radii[5]
         
-        return atomRadii
-    }
-    
     static func vanDerWaalsRadii() -> AtomRadii {
         var atomRadii = AtomRadii()
-        // C, H, N, O, S, Others
-        atomRadii.atomRadius.0 = 1.70
-        atomRadii.atomRadius.1 = 1.10
-        atomRadii.atomRadius.2 = 1.55
-        atomRadii.atomRadius.3 = 1.52
-        atomRadii.atomRadius.4 = 1.80
-        atomRadii.atomRadius.5 = 1.50
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &atomRadii.atomRadius) { rawPtr -> Void in
+            for index in 0..<Int(ATOM_TYPE_COUNT) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<Float>.stride * index).assumingMemoryBound(to: Float.self)
+                ptr.pointee = AtomTypeUtilities.getAtomicRadius(atomType: UInt8(index))
+            }
+        }
         
         return atomRadii
     }
     
     static func fixedRadii(radius: Float = 0.4) -> AtomRadii {
         var atomRadii = AtomRadii()
-        // C, H, N, O, S, Others
-        atomRadii.atomRadius.0 = radius
-        atomRadii.atomRadius.1 = radius
-        atomRadii.atomRadius.2 = radius
-        atomRadii.atomRadius.3 = radius
-        atomRadii.atomRadius.4 = radius
-        atomRadii.atomRadius.5 = radius
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &atomRadii.atomRadius) { rawPtr -> Void in
+            for index in 0..<Int(ATOM_TYPE_COUNT) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<Float>.stride * index).assumingMemoryBound(to: Float.self)
+                ptr.pointee = radius
+            }
+        }
+
+        return atomRadii
+    }
+    
+    static func interpolatedRadii(initial: AtomRadii, final: AtomRadii, progress: Float) -> AtomRadii {
+        var atomRadii = AtomRadii()
+        var initial = initial
+        var final = final
+        
+        withUnsafeMutableBytes(of: &atomRadii.atomRadius) { rawPtrOutput -> Void in
+            withUnsafeMutableBytes(of: &initial.atomRadius) { rawPtrInitial -> Void in
+                withUnsafeMutableBytes(of: &final.atomRadius) { rawPtrFinal -> Void in
+                    for index in 0..<Int(ATOM_TYPE_COUNT) {
+                        guard let ptrAddressOutput = rawPtrOutput.baseAddress else {
+                            return
+                        }
+                        guard let ptrAddressInitial = rawPtrInitial.baseAddress else {
+                            return
+                        }
+                        guard let ptrAddressFinal = rawPtrFinal.baseAddress else {
+                            return
+                        }
+                        let ptrOutput = (ptrAddressOutput + MemoryLayout<Float>.stride * index).assumingMemoryBound(to: Float.self)
+                        let ptrInitial = (ptrAddressInitial + MemoryLayout<Float>.stride * index).assumingMemoryBound(to: Float.self)
+                        let ptrFinal = (ptrAddressFinal + MemoryLayout<Float>.stride * index).assumingMemoryBound(to: Float.self)
+                        
+                        // Interpolate
+                        ptrOutput.pointee = (ptrFinal.pointee - ptrInitial.pointee) * progress + ptrInitial.pointee
+                    }
+                }
+            }
+        }
         
         return atomRadii
     }

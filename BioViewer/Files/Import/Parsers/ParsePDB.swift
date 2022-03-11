@@ -12,15 +12,8 @@ class PDBParser {
     
     private class ParsedSubunit {
         var id: Int
-        // Make one atom array per common element
-        var carbonArray = [simd_float3]()
-        var nitrogenArray = [simd_float3]()
-        var hydrogenArray = [simd_float3]()
-        var oxygenArray = [simd_float3]()
-        var sulfurArray = [simd_float3]()
-        var othersArray = [simd_float3]()
-        var othersIDs = [UInt8]()
-        var atomArrayComposition = AtomArrayComposition()
+        var subunitAtomPositions = [simd_float3]()
+        var subunitAtomTypes = [UInt8]()
         
         init(id: Int) {
             self.id = id
@@ -163,7 +156,7 @@ class PDBParser {
         let elementString = line[rangeElement].replacingOccurrences(of: " ", with: "")
 
         // Normalize atom element, might be of "UNKNOWN" type
-        let element = getAtomId(atomName: String(elementString))
+        let element = AtomTypeUtilities.getAtomId(atomName: String(elementString))
 
         // Get atom coordinates
 
@@ -197,28 +190,9 @@ class PDBParser {
         }
 
         // Save atom position to array based on element
-
-        switch element {
-        case AtomType.CARBON:
-            self.subunits.last?.atomArrayComposition.carbonCount += 1
-            self.subunits.last?.carbonArray.append(simd_float3(x, y, z))
-        case AtomType.NITROGEN:
-            self.subunits.last?.atomArrayComposition.nitrogenCount += 1
-            self.subunits.last?.nitrogenArray.append(simd_float3(x, y, z))
-        case AtomType.HYDROGEN:
-            self.subunits.last?.atomArrayComposition.hydrogenCount += 1
-            self.subunits.last?.hydrogenArray.append(simd_float3(x, y, z))
-        case AtomType.OXYGEN:
-            self.subunits.last?.atomArrayComposition.oxygenCount += 1
-            self.subunits.last?.oxygenArray.append(simd_float3(x, y, z))
-        case AtomType.SULFUR:
-            self.subunits.last?.atomArrayComposition.sulfurCount += 1
-            self.subunits.last?.sulfurArray.append(simd_float3(x, y, z))
-        default:
-            self.subunits.last?.atomArrayComposition.othersCount += 1
-            self.subunits.last?.othersArray.append(simd_float3(x, y, z))
-            self.subunits.last?.othersIDs.append(element)
-        }
+        
+        self.subunits.last?.subunitAtomTypes.append(element)
+        self.subunits.last?.subunitAtomPositions.append(simd_float3(x, y, z))
     }
     
     // MARK: - Create Protein object
@@ -227,61 +201,37 @@ class PDBParser {
         // Add element array contents into the contiguous array
         var totalCount: Int = 0
         for subunit in subunits {
-            totalCount += subunit.atomArrayComposition.totalCount
+            totalCount += subunit.subunitAtomPositions.count
         }
         atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
         
         for subunit in subunits {
-            atomArray.append(contentsOf: subunit.carbonArray)
-            atomArray.append(contentsOf: subunit.nitrogenArray)
-            atomArray.append(contentsOf: subunit.hydrogenArray)
-            atomArray.append(contentsOf: subunit.oxygenArray)
-            atomArray.append(contentsOf: subunit.sulfurArray)
-            atomArray.append(contentsOf: subunit.othersArray)
-            
-            // Add atom identifiers codes in the right order (so atomArray[i] corresponds
-            // has an atomIdentifiers[i] identifier.
-            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.CARBON,
-                                                     count: subunit.atomArrayComposition.carbonCount))
-            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.NITROGEN,
-                                                     count: subunit.atomArrayComposition.nitrogenCount))
-            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.HYDROGEN,
-                                                     count: subunit.atomArrayComposition.hydrogenCount))
-            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.OXYGEN,
-                                                     count: subunit.atomArrayComposition.oxygenCount))
-            atomIdentifiers.append(contentsOf: Array(repeating: AtomType.SULFUR,
-                                                     count: subunit.atomArrayComposition.sulfurCount))
-            atomIdentifiers.append(contentsOf: subunit.othersIDs)
+            atomArray.append(contentsOf: subunit.subunitAtomPositions)
+            atomIdentifiers.append(contentsOf: subunit.subunitAtomTypes)
         }
         
         for subunit in subunits {
-            totalAtomArrayComposition += subunit.atomArrayComposition
+            totalAtomArrayComposition += AtomArrayComposition(atomTypes: subunit.subunitAtomTypes)
         }
         
         var subunitIndex = 0
         var proteinSubunits = [ProteinSubunit]()
         for subunit in subunits {
             // The last 'parsed' subunit may be empty, discard it
-            guard subunit.atomArrayComposition.totalCount != 0 else {
+            guard subunit.subunitAtomPositions.count != 0 else {
                 continue
             }
             proteinSubunits.append(ProteinSubunit(id: subunit.id,
-                                                  atomCount: subunit.atomArrayComposition.totalCount,
+                                                  atomCount: subunit.subunitAtomPositions.count,
                                                   indexStart: subunitIndex))
-            subunitIndex += subunit.atomArrayComposition.totalCount
-        }
-        
-        if subunitCount == subunits.count - 1 {
-            proteinViewModel?.statusViewModel.setWarning(warning:
-                NSLocalizedString("No TER keyword found to mark the end of a chain, subunit count may be wrong", comment: "")
-            )
-            subunitCount += 1
+            subunitIndex += subunit.subunitAtomPositions.count
         }
         
         let protein = Protein(configurationCount: 1,
                               configurationEnergies: nil,
                               subunitCount: proteinSubunits.count,
                               subunits: proteinSubunits,
+                              hasNonChainSubunit: true,
                               atoms: &atomArray,
                               atomArrayComposition: &totalAtomArrayComposition,
                               atomIdentifiers: atomIdentifiers,

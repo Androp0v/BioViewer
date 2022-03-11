@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AtomArrayComposition {
+public class AtomArrayComposition {
     var carbonCount: Int = 0
     var nitrogenCount: Int = 0
     var hydrogenCount: Int = 0
@@ -26,5 +26,28 @@ public struct AtomArrayComposition {
         left.oxygenCount += right.oxygenCount
         left.sulfurCount += right.sulfurCount
         left.othersCount += right.othersCount
+    }
+    
+    init() {
+        
+    }
+    
+    init(atomTypes: [UInt8]) {
+        for atomType in atomTypes {
+            switch atomType {
+            case AtomType.CARBON:
+                carbonCount += 1
+            case AtomType.NITROGEN:
+                nitrogenCount += 1
+            case AtomType.HYDROGEN:
+                hydrogenCount += 1
+            case AtomType.OXYGEN:
+                oxygenCount += 1
+            case AtomType.SULFUR:
+                sulfurCount += 1
+            default:
+                othersCount += 1
+            }
+        }
     }
 }

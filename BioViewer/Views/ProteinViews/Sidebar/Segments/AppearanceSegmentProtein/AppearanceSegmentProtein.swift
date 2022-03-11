@@ -65,22 +65,22 @@ struct AppearanceSegmentProtein: View {
                      
                     if proteinViewModel.colorBy == ProteinColorByOption.element {
                         ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[0])
+                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.CARBON)])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[1])
+                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.HYDROGEN)])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[2])
+                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.NITROGEN)])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[3])
+                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.OXYGEN)])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[4])
+                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.SULFUR)])
                             .indentRow()
                         ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[5])
+                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)])
                             .indentRow()
                     } else if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
                         ForEach(subunits, id: \.id) { subunit in

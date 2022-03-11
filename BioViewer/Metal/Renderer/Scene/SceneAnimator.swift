@@ -104,12 +104,7 @@ class SceneAnimator {
         
         let progress = getAnimationProgress(animation: &self.radiiAnimation)
                 
-        scene.frameData.atom_radii.atomRadius.0 = (finalRadii.atomRadius.0 - initialRadii.atomRadius.0) * Float(progress) + initialRadii.atomRadius.0
-        scene.frameData.atom_radii.atomRadius.1 = (finalRadii.atomRadius.1 - initialRadii.atomRadius.1) * Float(progress) + initialRadii.atomRadius.1
-        scene.frameData.atom_radii.atomRadius.2 = (finalRadii.atomRadius.2 - initialRadii.atomRadius.2) * Float(progress) + initialRadii.atomRadius.2
-        scene.frameData.atom_radii.atomRadius.3 = (finalRadii.atomRadius.3 - initialRadii.atomRadius.3) * Float(progress) + initialRadii.atomRadius.3
-        scene.frameData.atom_radii.atomRadius.4 = (finalRadii.atomRadius.4 - initialRadii.atomRadius.4) * Float(progress) + initialRadii.atomRadius.4
-        scene.frameData.atom_radii.atomRadius.5 = (finalRadii.atomRadius.5 - initialRadii.atomRadius.5) * Float(progress) + initialRadii.atomRadius.5
+        scene.frameData.atom_radii = AtomRadiiGenerator.interpolatedRadii(initial: initialRadii, final: finalRadii, progress: Float(progress))
         
         bufferLoader?.populateImpostorSphereBuffers(atomRadii: scene.frameData.atom_radii)
         

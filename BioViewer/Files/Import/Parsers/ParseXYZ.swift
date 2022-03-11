@@ -93,7 +93,7 @@ extension FileParser {
             let elementString = lineElements[0].replacingOccurrences(of: " ", with: "")
 
             // Normalize atom element, might be of "UNKNOWN" type
-            let element = getAtomId(atomName: String(elementString))
+            let element = AtomTypeUtilities.getAtomId(atomName: String(elementString))
 
             // Get atom coordinates
 
@@ -191,6 +191,7 @@ extension FileParser {
                               configurationEnergies: energyArray,
                               subunitCount: 1,
                               subunits: proteinSubunits,
+                              hasNonChainSubunit: false,
                               atoms: &atomArray,
                               atomArrayComposition: &atomArrayComposition,
                               atomIdentifiers: atomIdentifiers,

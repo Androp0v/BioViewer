@@ -100,7 +100,7 @@ extension MetalScheduler {
             
             // Set uniform buffer contents
             let uniformBuffer = device.makeBuffer(
-                bytes: Array([Int32(protein.atomArrayComposition.totalCount)]),
+                bytes: Array([Int32(protein.atomCount)]),
                 length: MemoryLayout<Int32>.stride
             )
             computeEncoder.setBuffer(uniformBuffer,

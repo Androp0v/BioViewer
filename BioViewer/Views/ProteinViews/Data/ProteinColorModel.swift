@@ -20,16 +20,11 @@ extension ProteinViewModel {
     // MARK: - Initialization
     
     func initElementColors() {
-        // Preselected element color palette, C, H, N, O, S, Unknown
-        elementColors =
-            [
-                Color(.displayP3, red: 0.423, green: 0.733, blue: 0.235, opacity: 1.0),
-                Color(.displayP3, red: 1.000, green: 1.000, blue: 1.000, opacity: 1.0),
-                Color(.displayP3, red: 0.091, green: 0.148, blue: 0.556, opacity: 1.0),
-                Color(.displayP3, red: 1.000, green: 0.149, blue: 0.000, opacity: 1.0),
-                Color(.displayP3, red: 1.000, green: 0.780, blue: 0.349, opacity: 1.0),
-                Color(.displayP3, red: 0.517, green: 0.517, blue: 0.517, opacity: 1.0)
-            ]
+        // Preselected element color palette
+        elementColors = []
+        for atomType in 0..<ATOM_TYPE_COUNT {
+            elementColors.append(AtomTypeUtilities.getAtomicColor(atomType: UInt8(atomType)))
+        }
     }
     
     func initSubunitColors() {
