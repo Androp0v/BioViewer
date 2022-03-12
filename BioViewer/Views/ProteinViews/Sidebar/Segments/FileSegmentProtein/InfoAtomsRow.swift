@@ -29,7 +29,8 @@ struct InfoAtomsRow: View {
                 Spacer()
                     .frame(height: 8)
                 // TO-DO:
-                // InfoAtomsCapsule(file: file)
+                InfoAtomsCapsule(file: file)
+                    .opacity(0.8)
                 Spacer()
                     .frame(height: 4)
             }

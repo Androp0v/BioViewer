@@ -53,19 +53,16 @@ struct FileSegmentProtein: View {
                             PickerRow(optionName: NSLocalizedString("Viewing:", comment: ""),
                                       selectedOption: $proteinViewModel.dataSource.selectedModel[index],
                                       pickerOptions: getModelNames(modelCount: file.models.count))
-                                .listRowSeparator(.hidden)
                         }
                         
                         if let protein = proteinViewModel.dataSource.modelForFile(file: file) {
                             
                             InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
                                         value: "\(protein.subunitCount)")
-                                .listRowSeparator(.hidden)
                             InfoAtomsRow(label: NSLocalizedString("Number of atoms:", comment: ""),
                                          value: "\(protein.atomCount)",
                                          isDisabled: false,
                                          file: file)
-                                .listRowSeparator(.hidden)
                         }
                     }
                 }

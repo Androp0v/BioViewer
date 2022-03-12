@@ -206,6 +206,8 @@
 		C5C7514327DBF8CB004CEE8E /* NewsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514227DBF8CB004CEE8E /* NewsRow.swift */; };
 		C5C7514527DC16A4004CEE8E /* ChangeLog.plist in Resources */ = {isa = PBXBuildFile; fileRef = C5C7514427DC16A4004CEE8E /* ChangeLog.plist */; };
 		C5C7514727DC1859004CEE8E /* WhatsNewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514627DC1859004CEE8E /* WhatsNewViewModel.swift */; };
+		C5C7514927DC33D5004CEE8E /* InfoAtomsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514827DC33D5004CEE8E /* InfoAtomsRow.swift */; };
+		C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514A27DC35BF004CEE8E /* InfoAtomsCapsule.swift */; };
 		C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
 		C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
@@ -431,6 +433,8 @@
 		C5C7514227DBF8CB004CEE8E /* NewsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRow.swift; sourceTree = "<group>"; };
 		C5C7514427DC16A4004CEE8E /* ChangeLog.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ChangeLog.plist; sourceTree = "<group>"; };
 		C5C7514627DC1859004CEE8E /* WhatsNewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewViewModel.swift; sourceTree = "<group>"; };
+		C5C7514827DC33D5004CEE8E /* InfoAtomsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAtomsRow.swift; sourceTree = "<group>"; };
+		C5C7514A27DC35BF004CEE8E /* InfoAtomsCapsule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAtomsCapsule.swift; sourceTree = "<group>"; };
 		C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingVolumes.swift; sourceTree = "<group>"; };
 		C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererPipelines.swift; sourceTree = "<group>"; };
 		C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTextures.swift; sourceTree = "<group>"; };
@@ -961,6 +965,8 @@
 			isa = PBXGroup;
 			children = (
 				C44085692648008500DC5009 /* FileSegmentProtein.swift */,
+				C5C7514827DC33D5004CEE8E /* InfoAtomsRow.swift */,
+				C5C7514A27DC35BF004CEE8E /* InfoAtomsCapsule.swift */,
 				C5433F3E2770F9CA00607B20 /* Sections */,
 				C57F994A275DAA38001DE6D6 /* WorkspaceRow.swift */,
 				C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */,
@@ -1342,6 +1348,7 @@
 				C5C7513C27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
 				C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */,
+				C5C7514927DC33D5004CEE8E /* InfoAtomsRow.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
 				C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */,
 				C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */,
@@ -1387,6 +1394,7 @@
 				C5C7513827DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
+				C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */,
 				C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */,
 				C405744C2663DC74008527D1 /* ProteinMetalViewController.swift in Sources */,
 				C57F9964275EBE04001DE6D6 /* WorkspaceExporter.swift in Sources */,
