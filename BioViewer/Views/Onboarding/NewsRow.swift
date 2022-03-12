@@ -7,19 +7,20 @@
 
 import SwiftUI
 
-enum NewsRowType {
-    case feature
-    case fix
-}
-
 struct NewsRow: View {
     
     let rowType: NewsRowType
     let title: String
     let subtitle: String
     
+    init(whatsNewItem: WhatsNew) {
+        self.rowType = whatsNewItem.type
+        self.title = whatsNewItem.title
+        self.subtitle = whatsNewItem.subtitle
+    }
+    
     var body: some View {
-        HStack(spacing: 18) {
+        HStack(alignment: .top, spacing: 18) {
             switch rowType {
             case .feature:
                 VStack(spacing: 4) {
@@ -31,6 +32,7 @@ struct NewsRow: View {
                         .font(.caption)
                         .foregroundColor(.accentColor)
                 }
+                .padding(.top, 4)
             case .fix:
                 VStack(spacing: 4) {
                     Image(systemName: "wrench.fill")
@@ -41,6 +43,7 @@ struct NewsRow: View {
                         .font(.caption)
                         .foregroundColor(.accentColor)
                 }
+                .padding(.top, 4)
             }
             
             VStack(alignment: .leading) {
@@ -50,7 +53,7 @@ struct NewsRow: View {
                     .foregroundColor(.gray)
             }
         }
-        .padding(.vertical, 12)
+        .padding(.vertical, 6)
         .listRowSeparator(.hidden)
     }
 }
@@ -58,15 +61,9 @@ struct NewsRow: View {
 struct NewsRow_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            NewsRow(rowType: .feature,
-                    title: "Selectable atom radii",
-                    subtitle: "Atom radii can now be selected for both the solid spheres and the ball and stick visualization modes.")
-            NewsRow(rowType: .feature,
-                    title: "Selectable atom radii",
-                    subtitle: "Atom radii can now be selected for both the solid spheres and the ball and stick visualization modes.")
-            NewsRow(rowType: .fix,
-                    title: "Selectable atom radii",
-                    subtitle: "Atom radii can now be selected for both the solid spheres and the ball and stick visualization modes.")
+            NewsRow(whatsNewItem: WhatsNew(type: .feature,
+                                           title: "Selectable atom radii",
+                                           subtitle: "Atom radii can now be selected for both the solid spheres and the ball and stick visualization modes."))
         }
         .listStyle(.plain)
     }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>1.3</key>
+	<array>
+		<dict>
+            <key>Type</key>
+            <string>FEAT</string>
+			<key>Title</key>
+			<string>Selectable atom radii</string>
+			<key>Subtitle</key>
+			<string>Atom radii can now be specified and scaled. Available on both the solid spheres and the ball and stick visualization modes.</string>
+		</dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Support for multi-model PDBs</string>
+            <key>Subtitle</key>
+            <string>PDBs containing several models are now supported.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>More atom elements detected</string>
+            <key>Subtitle</key>
+            <string>More atom elements are now detected and given the proper radius and unique color.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FIX</string>
+            <key>Title</key>
+            <string>Fix crash on some PDBs</string>
+            <key>Subtitle</key>
+            <string>Fixes a crash on some PDBs containing certain HETATM records.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FIX</string>
+            <key>Title</key>
+            <string>Fix chirality</string>
+            <key>Subtitle</key>
+            <string>Molecules and proteins displayed now have the correct chirality.</string>
+        </dict>
+	</array>
+</dict>
+</plist>

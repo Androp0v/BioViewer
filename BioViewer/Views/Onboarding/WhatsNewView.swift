@@ -10,24 +10,16 @@ import SwiftUI
 struct WhatsNewView: View {
     
     @Environment(\.dismiss) var dismiss
-    let version = "1.3"
+    @StateObject var viewModel = WhatsNewViewModel()
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
-                List {
-                    NewsRow(rowType: .feature,
-                            title: "Selectable atom radii",
-                            subtitle: "Atom radii can now be selected for both the solid spheres and the ball and stick visualization modes.")
-                    NewsRow(rowType: .feature,
-                            title: "Selectable atom radii",
-                            subtitle: "Atom radii can now be selected for both the solid spheres and the ball and stick visualization modes.")
-                    NewsRow(rowType: .fix,
-                            title: "Selectable atom radii",
-                            subtitle: "Atom radii can now be selected for both the solid spheres and the ball and stick visualization modes.")
+                List(viewModel.newItems) { newItem in
+                    NewsRow(whatsNewItem: newItem)
                 }
                 .listStyle(.plain)
-                .navigationTitle(NSLocalizedString("What's new (\(version))", comment: ""))
+                .navigationTitle(NSLocalizedString("What's new (\(viewModel.version))", comment: ""))
                 
                 // Bottom buttons
                 VStack {
