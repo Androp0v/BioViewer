@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 10/5/21.
 //
 
+import Combine
 import Foundation
 import simd
 import SwiftUI
@@ -46,7 +47,7 @@ class ProteinViewDataSource: ObservableObject {
             }
         }
     }
-    
+            
     /// Selected user-selected model for each ProteinFile.
     @Published var selectedModel = [Int]() {
         didSet {

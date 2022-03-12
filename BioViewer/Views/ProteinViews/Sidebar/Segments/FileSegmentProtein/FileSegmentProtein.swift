@@ -61,11 +61,10 @@ struct FileSegmentProtein: View {
                             InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
                                         value: "\(protein.subunitCount)")
                                 .listRowSeparator(.hidden)
-                            
-                            InfoPopoverRow(label: NSLocalizedString("Number of atoms:", comment: ""),
-                                           value: "\(protein.atomCount)",
-                                           isDisabled: false,
-                                           content: { FileAtomElementPopover() })
+                            InfoAtomsRow(label: NSLocalizedString("Number of atoms:", comment: ""),
+                                         value: "\(protein.atomCount)",
+                                         isDisabled: false,
+                                         file: file)
                                 .listRowSeparator(.hidden)
                         }
                     }

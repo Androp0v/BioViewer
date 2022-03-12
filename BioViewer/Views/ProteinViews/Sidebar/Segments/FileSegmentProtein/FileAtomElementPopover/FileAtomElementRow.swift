@@ -75,22 +75,22 @@ struct FileAtomElementRow: View {
             switch element.lowercased() {
             case "carbon":
                 self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.carbonCount
-                self.elementColor = proteinViewModel.elementColors[0]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomType.CARBON)]
             case "hydrogen":
                 self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.hydrogenCount
-                self.elementColor = proteinViewModel.elementColors[1]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomType.HYDROGEN)]
             case "nitrogen":
                 self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.nitrogenCount
-                self.elementColor = proteinViewModel.elementColors[2]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomType.NITROGEN)]
             case "oxygen":
                 self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.oxygenCount
-                self.elementColor = proteinViewModel.elementColors[3]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomType.OXYGEN)]
             case "sulfur":
                 self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.sulfurCount
-                self.elementColor = proteinViewModel.elementColors[4]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomType.SULFUR)]
             case "others":
                 self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.othersCount
-                self.elementColor = proteinViewModel.elementColors[5]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
             case "total":
                 self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomCount
                 self.elementColor = .clear
