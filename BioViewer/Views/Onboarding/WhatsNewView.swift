@@ -17,6 +17,7 @@ struct WhatsNewView: View {
             ZStack(alignment: .bottom) {
                 List(viewModel.newItems) { newItem in
                     NewsRow(whatsNewItem: newItem)
+                        .listRowSeparator(.hidden)
                 }
                 .listStyle(.plain)
                 .navigationTitle(NSLocalizedString("What's new (\(viewModel.version))", comment: ""))
@@ -39,6 +40,7 @@ struct WhatsNewView: View {
                     
                     Button(action: {
                         dismiss()
+                        AppState.shared.userDoesNotWantUpdates()
                     }, label: {
                         Text(NSLocalizedString("Don't notify new features", comment: ""))
                             .padding(4)

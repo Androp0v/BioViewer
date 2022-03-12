@@ -13,9 +13,11 @@ class AppState: ObservableObject {
     static let shared = AppState()
     
     // MARK: - Configuration
+    
     static let maxNumberOfWarnings: Int = 99
     
     // MARK: - Metal support
+    
     static let hasSamplerCompareSupport = { () -> Bool in
         guard let device = MTLCreateSystemDefaultDevice() else {
             return false
@@ -25,6 +27,45 @@ class AppState: ObservableObject {
         } else {
             return false
         }
+    }
+    
+    // MARK: - Version
+    
+    func version() -> String {
+        guard let dictionary = Bundle.main.infoDictionary else { return "" }
+        guard let version = dictionary["CFBundleShortVersionString"] as? String else { return "" }
+        return version
+    }
+    
+    // MARK: - What's New screen
+    
+    func shouldShowWhatsNew() -> Bool {
+        let userDefaults = UserDefaults.standard
+        
+        if userDefaults.value(forKey: "userWantsUpdates") == nil {
+            userDefaults.set(true, forKey: "userWantsUpdates")
+        }
+        if userDefaults.value(forKey: "hasSeen\(version())updates") == nil {
+            userDefaults.set(false, forKey: "hasSeen\(version())updates")
+        }
+        
+        let userWantsUpdates = userDefaults.bool(forKey: "userWantsUpdates")
+        let userHasSeenUpdates = userDefaults.bool(forKey: "hasSeen\(version())updates")
+        
+        if userWantsUpdates && !userHasSeenUpdates {
+            return true
+        }
+        return false
+    }
+    
+    func userDoesNotWantUpdates() {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(false, forKey: "userWantsUpdates")
+    }
+    
+    func userHasSeenWhatsNew() {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(true, forKey: "hasSeen\(version())updates")
     }
     
     // MARK: - Focused view model

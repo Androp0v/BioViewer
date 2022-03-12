@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MainView: View {
+    
+    @State var isPresentingNews = false
             
     init() {
         
@@ -58,8 +60,20 @@ struct MainView: View {
             .navigationBarHidden(false)
             .navigationTitle(Text("BioViewer"))
             
+            .sheet(isPresented: $isPresentingNews, onDismiss: {
+                AppState.shared.userHasSeenWhatsNew()
+            }, content: {
+                WhatsNewView()
+            })
+                        
             // Initial view in master-detail mode
             proteinView.environmentObject(proteinViewModel)
+        }
+        
+        .onAppear {
+            if AppState.shared.shouldShowWhatsNew() {
+                isPresentingNews = true
+            }
         }
         
         // Open documents in view from other apps

@@ -46,7 +46,7 @@ struct NewsRow: View {
                 .padding(.top, 4)
             }
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .bold()
                 Text(subtitle)
@@ -54,7 +54,6 @@ struct NewsRow: View {
             }
         }
         .padding(.vertical, 6)
-        .listRowSeparator(.hidden)
     }
 }
 

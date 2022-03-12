@@ -8,9 +8,9 @@
             <key>Type</key>
             <string>FEAT</string>
 			<key>Title</key>
-			<string>Selectable atom radii</string>
+			<string>Selectable atom radius</string>
 			<key>Subtitle</key>
-			<string>Atom radii can now be specified and scaled. Available on both the solid spheres and the ball and stick visualization modes.</string>
+			<string>Atom radius can now be specified and scaled. Available on both the solid spheres and the ball and stick visualization modes.</string>
 		</dict>
         <dict>
             <key>Type</key>
@@ -26,7 +26,7 @@
             <key>Title</key>
             <string>More atom elements detected</string>
             <key>Subtitle</key>
-            <string>More atom elements are now detected and given the proper radius and unique color.</string>
+            <string>More atom elements are now detected and given the appropriate radius and a unique color.</string>
         </dict>
         <dict>
             <key>Type</key>
@@ -42,7 +42,7 @@
             <key>Title</key>
             <string>Fix chirality</string>
             <key>Subtitle</key>
-            <string>Molecules and proteins displayed now have the correct chirality.</string>
+            <string>Molecules and proteins displayed now have the correct chirality (whoopsie).</string>
         </dict>
 	</array>
 </dict>
