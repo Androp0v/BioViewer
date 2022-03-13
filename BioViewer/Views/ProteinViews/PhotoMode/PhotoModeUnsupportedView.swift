@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct PhotoModeUnsupportedView: View {
+    
+    @Environment(\.dismiss) var dismiss
+
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(NSLocalizedString(":(", comment: ""))
@@ -24,6 +27,14 @@ struct PhotoModeUnsupportedView: View {
                 .font(.body)
                 .foregroundColor(.gray)
             Spacer()
+            Button(action: {
+                dismiss()
+            }, label: {
+                Text(NSLocalizedString("Close", comment: ""))
+                    .bold()
+                    .frame(maxWidth: .infinity)
+            })
+            .buttonStyle(.borderedProminent)
         }
         .padding()
     }

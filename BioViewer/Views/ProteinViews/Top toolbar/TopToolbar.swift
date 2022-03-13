@@ -54,7 +54,7 @@ struct TopToolbar: View {
                             })
                                 .sheet(isPresented: $displayPhotoMode) {
                                     if AppState.hasPhotoModeSupport() {
-                                        PhotoModeView()
+                                        PhotoModeUnsupportedView()
                                     } else {
                                         PhotoModeUnsupportedView()
                                     }

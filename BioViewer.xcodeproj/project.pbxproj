@@ -1694,7 +1694,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
@@ -1729,7 +1729,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
