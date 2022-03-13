@@ -7,6 +7,7 @@
 
 import Foundation
 import Metal
+import SwiftUI
 
 class AppState: ObservableObject {
 
@@ -22,7 +23,23 @@ class AppState: ObservableObject {
         guard let device = MTLCreateSystemDefaultDevice() else {
             return false
         }
-        if device.supportsFamily(.common2) || device.supportsFamily(.apple3) || device.supportsFamily(.mac1) || device.supportsFamily(.macCatalyst1) {
+        if device.supportsFamily(.common3) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    static let hasPhotoModeSupport = { () -> Bool in
+        
+        #if arch(x86_64)
+        return false
+        #endif
+        
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return false
+        }
+        if device.supportsFamily(.common3) {
             return true
         } else {
             return false

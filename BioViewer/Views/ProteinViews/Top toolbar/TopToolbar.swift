@@ -53,7 +53,11 @@ struct TopToolbar: View {
                                     .foregroundColor(.accentColor)
                             })
                                 .sheet(isPresented: $displayPhotoMode) {
-                                    PhotoModeView()
+                                    if AppState.hasPhotoModeSupport() {
+                                        PhotoModeView()
+                                    } else {
+                                        PhotoModeUnsupportedView()
+                                    }
                                 }
                             Divider()
                                 .frame(height: Constants.buttonSize)

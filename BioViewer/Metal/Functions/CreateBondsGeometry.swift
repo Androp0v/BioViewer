@@ -82,7 +82,7 @@ extension MetalScheduler {
             } else {
                 // LEGACY: Older devices do not support non-uniform threadgroup sizes
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-                let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(bondCount)
+                let threadGroupsPerGrid = MTLSizeMake(Int(floorf(Float(bondCount)
                                                                 / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
                 // Dispatch threadgroups
                 computeEncoder.dispatchThreadgroups(threadGroupsPerGrid, threadsPerThreadgroup: groupSize)

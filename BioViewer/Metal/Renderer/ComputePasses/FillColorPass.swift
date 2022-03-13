@@ -57,7 +57,7 @@ extension ProteinRenderer {
         } else {
             // LEGACY: Older devices do not support non-uniform threadgroup sizes
             let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-            let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(colorBuffer.length / MemoryLayout<SIMD4<Int16>>.stride)
+            let threadGroupsPerGrid = MTLSizeMake(Int(floorf(Float(colorBuffer.length / MemoryLayout<SIMD4<Int16>>.stride)
                                                             / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
             // Dispatch threadgroups
             computeEncoder.dispatchThreadgroups(threadGroupsPerGrid, threadsPerThreadgroup: groupSize)

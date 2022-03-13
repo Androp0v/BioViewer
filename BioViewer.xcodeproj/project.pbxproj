@@ -208,6 +208,7 @@
 		C5C7514727DC1859004CEE8E /* WhatsNewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514627DC1859004CEE8E /* WhatsNewViewModel.swift */; };
 		C5C7514927DC33D5004CEE8E /* InfoAtomsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514827DC33D5004CEE8E /* InfoAtomsRow.swift */; };
 		C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514A27DC35BF004CEE8E /* InfoAtomsCapsule.swift */; };
+		C5C7514D27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514C27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift */; };
 		C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
 		C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
@@ -435,6 +436,7 @@
 		C5C7514627DC1859004CEE8E /* WhatsNewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewViewModel.swift; sourceTree = "<group>"; };
 		C5C7514827DC33D5004CEE8E /* InfoAtomsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAtomsRow.swift; sourceTree = "<group>"; };
 		C5C7514A27DC35BF004CEE8E /* InfoAtomsCapsule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAtomsCapsule.swift; sourceTree = "<group>"; };
+		C5C7514C27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeUnsupportedView.swift; sourceTree = "<group>"; };
 		C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingVolumes.swift; sourceTree = "<group>"; };
 		C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererPipelines.swift; sourceTree = "<group>"; };
 		C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTextures.swift; sourceTree = "<group>"; };
@@ -1070,6 +1072,7 @@
 			isa = PBXGroup;
 			children = (
 				C5EEE9B1276F5BCD005737C1 /* PhotoModeView.swift */,
+				C5C7514C27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift */,
 				C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */,
 				C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */,
 				C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */,
@@ -1438,6 +1441,7 @@
 				C572BD182740222800FF010D /* FileSourceView.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
+				C5C7514D27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift in Sources */,
 				C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */,
 				C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */,
 				C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */,
@@ -1690,7 +1694,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
@@ -1725,7 +1729,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
