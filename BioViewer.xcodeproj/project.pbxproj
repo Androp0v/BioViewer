@@ -189,6 +189,7 @@
 		C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */; };
 		C59792CF277210580019ABD3 /* ShutterClosed.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CD277210570019ABD3 /* ShutterClosed.aiff */; };
 		C59792D0277210580019ABD3 /* ShutterOpen.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CE277210570019ABD3 /* ShutterOpen.aiff */; };
+		C59D1F3827E08B43000B6020 /* PhotoModeShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D1F3727E08B43000B6020 /* PhotoModeShareButton.swift */; };
 		C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
 		C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */; };
 		C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A61275D902E00CCC941 /* FileRow.swift */; };
@@ -422,6 +423,7 @@
 		C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterAnimator.swift; sourceTree = "<group>"; };
 		C59792CD277210570019ABD3 /* ShutterClosed.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterClosed.aiff; sourceTree = "<group>"; };
 		C59792CE277210570019ABD3 /* ShutterOpen.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterOpen.aiff; sourceTree = "<group>"; };
+		C59D1F3727E08B43000B6020 /* PhotoModeShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeShareButton.swift; sourceTree = "<group>"; };
 		C59D6A55275B939A00CCC941 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
 		C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTrackedAction.swift; sourceTree = "<group>"; };
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
@@ -1079,6 +1081,7 @@
 				C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */,
 				C5EEE9B4276F6031005737C1 /* PhotoModeContent.swift */,
 				C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */,
+				C59D1F3727E08B43000B6020 /* PhotoModeShareButton.swift */,
 				C5433F412771667200607B20 /* PhotoModeViewfinder.swift */,
 			);
 			path = PhotoMode;
@@ -1408,6 +1411,7 @@
 				C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */,
 				C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
+				C59D1F3827E08B43000B6020 /* PhotoModeShareButton.swift in Sources */,
 				C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */,
 				C51D4EEF276D073200C69B3D /* ConfigurationSelector.swift in Sources */,
 				C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */,
@@ -1694,7 +1698,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
@@ -1729,7 +1733,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;

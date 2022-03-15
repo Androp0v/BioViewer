@@ -10,17 +10,7 @@ import SwiftUI
 struct PhotoModeContentHeaderView: View {
     
     @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
-    
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    enum Constants {
-        #if targetEnvironment(macCatalyst)
-        static let buttonSize: CGFloat = 16
-        #else
-        static let buttonSize: CGFloat = 24
-        #endif
-    }
-    
+            
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             
@@ -51,25 +41,7 @@ struct PhotoModeContentHeaderView: View {
                     #endif
                 */
                 
-                Button(action: {
-                    ImageExporter().showImageExportSheet(cgImage: photoModeViewModel.image,
-                                                         preferredFileName: nil)
-                }, label: {
-                    HStack {
-                        Image(systemName: "square.and.arrow.up")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: Constants.buttonSize, height: Constants.buttonSize)
-                            .padding(4)
-                        if horizontalSizeClass != .compact {
-                            Text(NSLocalizedString("Share", comment: ""))
-                        }
-                    }
-                })
-                    .disabled(!photoModeViewModel.isPreviewCreated)
-                    #if targetEnvironment(macCatalyst)
-                    .buttonStyle(BorderedProminentButtonStyle())
-                    #endif
+                PhotoModeShareButton()
             }
             Spacer()
         }

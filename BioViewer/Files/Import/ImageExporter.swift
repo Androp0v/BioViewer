@@ -10,7 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 class ImageExporter {
-    func showImageExportSheet(cgImage: CGImage?, preferredFileName: String?) {
+    func showImageExportSheet(cgImage: CGImage?, preferredFileName: String?, from sourceView: UIView) {
         guard let cgImage = cgImage else {
             return
         }
@@ -57,6 +57,11 @@ class ImageExporter {
             }
             let shareSheet = UIActivityViewController(activityItems: [fileURL],
                                                       applicationActivities: nil)
+            
+            // Share sheets on iPadOS require a sourceView or they crash
+            shareSheet.popoverPresentationController?.sourceView = presentedViewController.view
+            shareSheet.popoverPresentationController?.sourceRect = presentedViewController.view.frame
+                        
             presentedViewController.present(shareSheet, animated: true)
         }
     }
