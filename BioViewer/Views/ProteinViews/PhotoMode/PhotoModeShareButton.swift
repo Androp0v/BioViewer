@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-struct UIViewHack: UIViewRepresentable {
-    
-    let underlyingView = UIView()
-    
-    func makeUIView(context: Context) -> UIView {
-        return underlyingView
-    }
-
-    func updateUIView(_ uiView: UIView, context: Context) {
-        // Do nothing
-    }
-}
-
 struct PhotoModeShareButton: View {
     
     private enum Constants {
@@ -32,31 +19,22 @@ struct PhotoModeShareButton: View {
     
     @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    private var sourceViewHack = UIViewHack()
-    
+        
     var body: some View {
         
         Button(action: {
             ImageExporter().showImageExportSheet(cgImage: photoModeViewModel.image,
-                                                 preferredFileName: nil,
-                                                 from: sourceViewHack.underlyingView)
+                                                 preferredFileName: nil)
         }, label: {
-            ZStack(alignment: .topLeading) {
-                
-                HStack {
-                    Image(systemName: "square.and.arrow.up")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: Constants.buttonSize, height: Constants.buttonSize)
-                        .padding(4)
-                    if horizontalSizeClass != .compact {
-                        Text(NSLocalizedString("Share", comment: ""))
-                    }
+            HStack {
+                Image(systemName: "square.and.arrow.up")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Constants.buttonSize, height: Constants.buttonSize)
+                    .padding(4)
+                if horizontalSizeClass != .compact {
+                    Text(NSLocalizedString("Share", comment: ""))
                 }
-                
-                // Action sheets on iPadOS require a sourceView
-                sourceViewHack
             }
         })
             .disabled(!photoModeViewModel.isPreviewCreated)

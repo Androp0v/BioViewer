@@ -44,6 +44,14 @@
             <key>Subtitle</key>
             <string>Molecules and proteins displayed now have the correct chirality (whoopsie).</string>
         </dict>
+        <dict>
+            <key>Type</key>
+            <string>FIX</string>
+            <key>Title</key>
+            <string>Fix PhotoMode crash on iPadOS</string>
+            <key>Subtitle</key>
+            <string>Fixes a crash when showing the share dialog for photos taken on iPadOS.</string>
+        </dict>
 	</array>
 </dict>
 </plist>
