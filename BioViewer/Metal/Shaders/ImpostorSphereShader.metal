@@ -18,7 +18,7 @@ struct ImpostorVertexOut{
     float4 position [[position]];
     float3 atomCenter;
     half2 billboardMapping;
-    uint8_t atomType;
+    float atom_radius;
     half3 color;
 };
 
@@ -46,16 +46,16 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
                                          const device uint8_t *atomType [[ buffer(1) ]],
                                          const device half3 *atomColor [[ buffer(2) ]],
                                          const device FrameData& frameData [[ buffer(3) ]],
-                                         unsigned int vid [[ vertex_id ]]) {
+                                         unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
     ImpostorVertexOut normalized_impostor_vertex;
     int verticesPerAtom = 4;
-    int atom_id_configuration = (vid / verticesPerAtom) % frameData.atoms_per_configuration;
+    int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vid].billboardMapping.xy);
-    normalized_impostor_vertex.atomType = atomType[atom_id_configuration];
+    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.xy);
+    normalized_impostor_vertex.atom_radius = vertex_buffer[vertex_id].atom_radius;
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -64,16 +64,16 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     simd_float4x4 inverse_rotation_matrix = frameData.inverse_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = rotation_matrix * float4(vertex_buffer[vid].billboard_world_center.x,
-                                                           vertex_buffer[vid].billboard_world_center.y,
-                                                           vertex_buffer[vid].billboard_world_center.z,
+    float4 rotated_atom_centers = rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
+                                                           vertex_buffer[vertex_id].billboard_world_center.y,
+                                                           vertex_buffer[vertex_id].billboard_world_center.z,
                                                            1.0);
 
     // To rotate the billboards so they are facing the screen, first rotate them like the model,
     // along the protein axis.
-    float4 rotated_model = rotation_matrix * float4(vertex_buffer[vid].position.x,
-                                                    vertex_buffer[vid].position.y,
-                                                    vertex_buffer[vid].position.z,
+    float4 rotated_model = rotation_matrix * float4(vertex_buffer[vertex_id].position.x,
+                                                    vertex_buffer[vertex_id].position.y,
+                                                    vertex_buffer[vertex_id].position.z,
                                                     1.0);
     // Then translate the triangle to the origin of coordinates
     rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
@@ -108,7 +108,7 @@ struct ImpostorFragmentOut{
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
-                                               const device FrameData& frameData [[ buffer(1) ]],
+                                               const device FrameData &frameData [[ buffer(1) ]],
                                                depth2d<float> shadowMap [[ texture(0) ]],
                                                sampler shadowSampler [[ sampler(0) ]]) {
     
@@ -136,7 +136,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                          -length);
     
     // Compute the position of the fragment in camera space
-    float3 spherePosition = (float3(normal) * frameData.atom_radii.atomRadius[impostor_vertex.atomType]) + impostor_vertex.atomCenter;
+    float3 spherePosition = (float3(normal) * impostor_vertex.atom_radius) + impostor_vertex.atomCenter;
     
     // Compute Phong diffuse component
     half phongDiffuse = dot(normal, sunRayDirection) * reflectivity;

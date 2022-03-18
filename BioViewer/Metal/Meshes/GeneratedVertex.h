@@ -31,6 +31,9 @@ typedef struct {
     
     /// Position of the atomic center in world space
     simd_float2 billboardMapping;
+    
+    /// Atom radii
+    float atom_radius;
 
 } BillboardVertex;
 

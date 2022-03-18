@@ -19,7 +19,7 @@ struct ShadowVertexOut{
     float4 position [[position]];
     float3 atomCenter;
     half2 billboardMapping;
-    uint8_t atomType;
+    float atom_radius;
 };
 
 // MARK: - Vertex function
@@ -27,16 +27,14 @@ struct ShadowVertexOut{
 vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
                                      const device uint8_t *atomType [[ buffer(1) ]],
                                      const device FrameData& frameData [[ buffer(2) ]],
-                                     unsigned int vid [[ vertex_id ]]) {
+                                     unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
     ShadowVertexOut normalized_impostor_vertex;
-    int verticesPerAtom = 4;
-    int atom_id_configuration = (vid / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vid].billboardMapping.x, vertex_buffer[vid].billboardMapping.y);
-    normalized_impostor_vertex.atomType = atomType[atom_id_configuration];
+    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.x, vertex_buffer[vertex_id].billboardMapping.y);
+    normalized_impostor_vertex.atom_radius = vertex_buffer[vertex_id].atom_radius;
 
     // Fetch the matrices
     simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
@@ -44,16 +42,16 @@ vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer
     simd_float4x4 inverse_sun_rotation_matrix = frameData.inverse_sun_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vid].billboard_world_center.x,
-                                                               vertex_buffer[vid].billboard_world_center.y,
-                                                               vertex_buffer[vid].billboard_world_center.z,
+    float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
+                                                               vertex_buffer[vertex_id].billboard_world_center.y,
+                                                               vertex_buffer[vertex_id].billboard_world_center.z,
                                                                1.0);
 
     // To rotate the billboards so they are facing the screen, first rotate them like the model,
     // along the protein axis.
-    float4 rotated_model = sun_rotation_matrix * float4(vertex_buffer[vid].position.x,
-                                                                vertex_buffer[vid].position.y,
-                                                                vertex_buffer[vid].position.z,
+    float4 rotated_model = sun_rotation_matrix * float4(vertex_buffer[vertex_id].position.x,
+                                                                vertex_buffer[vertex_id].position.y,
+                                                                vertex_buffer[vertex_id].position.z,
                                                                 1.0);
     // Then translate the triangle to the origin of coordinates
     rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
@@ -99,7 +97,7 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
                            -length);
     
     // Compute the position of the fragment in world space
-    float3 sphereWorldPosition = normal * frameData.atom_radii.atomRadius[impostor_vertex.atomType] + impostor_vertex.atomCenter;
+    float3 sphereWorldPosition = normal * impostor_vertex.atom_radius + impostor_vertex.atomCenter;
 
     // Recompute fragment depth
     simd_float4x4 orthogonalProjectionMatrix = frameData.shadowProjectionMatrix;
