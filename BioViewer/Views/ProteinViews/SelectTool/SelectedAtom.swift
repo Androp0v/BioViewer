@@ -32,6 +32,7 @@ struct SelectedAtom: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 14, height: 14)
                         .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
                 })
                     .foregroundColor(.gray)
                     .buttonStyle(PlainButtonStyle())
