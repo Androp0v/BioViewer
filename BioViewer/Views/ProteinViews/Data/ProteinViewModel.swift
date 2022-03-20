@@ -136,7 +136,11 @@ class ProteinViewModel: ObservableObject {
     /// Whether to show the structure surface..
     @Published var showSurface: Bool = false {
         didSet {
-            // TO-DO
+            if showSurface {
+                MetalScheduler.shared.computeSDFGrid(protein: (dataSource.files.first?.models.first)!,
+                                                     boxSize: 10,
+                                                     gridResolution: 3)
+            }
         }
     }
     

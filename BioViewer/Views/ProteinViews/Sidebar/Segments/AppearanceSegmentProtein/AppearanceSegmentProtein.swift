@@ -33,7 +33,8 @@ struct AppearanceSegmentProtein: View {
                         .padding(.bottom, 4), content: {
                 VisualizationPickerRow()
                 // TO-DO: Surface representation
-                /* SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface) */
+                
+                SwitchRow(title: "Show solvent-excluded surface", toggledVariable: $proteinViewModel.showSurface)
                 
                 if proteinViewModel.visualization == .solidSpheres {
                     SolidSpheresRadiiPickerRow()
