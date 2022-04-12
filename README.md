@@ -1,12 +1,13 @@
 # BioViewer
 Protein (.pdb, .cif and .fasta) viewer for iPhone, iPad and Mac, using SwiftUI + custom Metal engine.
 
-![Mockup](Mockup.png)
+![Mockup](PromoAssets/Mockup.png)
 
 ## Documentation
 Documentation is available at [https://androp0v.github.io/BioViewer/](https://androp0v.github.io/BioViewer/).
 
 ## Implemented Metal optimizations
+![Metal Features](PromoAssets/MetalFeatures.png)
 - Dynamic data is updated using a triple buffering scheme (the dynamic uniform buffer *FrameData* of the next render passes is computed and populated on the CPU while a previous GPU render command encoder is still running).
 - Spheres are drawn using impostor geometries (a single *quad* is used for each sphere, and the sphere itself is drawn on the shading stage, allowing for far lower memory utilization and triangle count). This is a separate pipeline stage from the one drawing the opaque geometries (currently unused, but may be used in the future for more complex geometries like ⍺-helix or β-sheets that are harder to describe analytically).
 - Hard shadows are casted by drawing the scene from the sun's point of view and creating a shadow map with the depth of each point as seen by the sun. The shadows are later softened using Percentage Close Filtering (PCF). Cascade Shadow Maps (CSMs) could be used to improve the resolution of the areas closer to the camera, but it's not yet implemented. Also, A15 Bionic and later GPUs support sparse depth textures which is ideal for the CSMs. 
