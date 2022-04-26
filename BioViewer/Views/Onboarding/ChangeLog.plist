@@ -2,56 +2,67 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>1.3.1</key>
+	<array/>
+	<key>Item 0</key>
+	<dict>
+		<key>Type</key>
+		<string>FIX</string>
+		<key>Title</key>
+		<string>Fix rendering bug on Intel Macs</string>
+		<key>Subtitle</key>
+		<string>Fixes rendering bug on Intel Macs</string>
+	</dict>
 	<key>1.3</key>
 	<array>
 		<dict>
-            <key>Type</key>
-            <string>FEAT</string>
+			<key>Type</key>
+			<string>FEAT</string>
 			<key>Title</key>
 			<string>Selectable atom radius</string>
 			<key>Subtitle</key>
 			<string>Atom radius can now be specified and scaled. Available on both the solid spheres and the ball and stick visualization modes.</string>
 		</dict>
-        <dict>
-            <key>Type</key>
-            <string>FEAT</string>
-            <key>Title</key>
-            <string>Support for multi-model PDBs</string>
-            <key>Subtitle</key>
-            <string>PDBs containing several models are now supported.</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>FEAT</string>
-            <key>Title</key>
-            <string>More atom elements detected</string>
-            <key>Subtitle</key>
-            <string>More atom elements are now detected and given the appropriate radius and a unique color.</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>FIX</string>
-            <key>Title</key>
-            <string>Fix crash on some PDBs</string>
-            <key>Subtitle</key>
-            <string>Fixes a crash on some PDBs containing certain HETATM records.</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>FIX</string>
-            <key>Title</key>
-            <string>Fix chirality</string>
-            <key>Subtitle</key>
-            <string>Molecules and proteins displayed now have the correct chirality (whoopsie).</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>FIX</string>
-            <key>Title</key>
-            <string>Fix PhotoMode crash on iPadOS</string>
-            <key>Subtitle</key>
-            <string>Fixes a crash when showing the share dialog for photos taken on iPadOS.</string>
-        </dict>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Support for multi-model PDBs</string>
+			<key>Subtitle</key>
+			<string>PDBs containing several models are now supported.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>More atom elements detected</string>
+			<key>Subtitle</key>
+			<string>More atom elements are now detected and given the appropriate radius and a unique color.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Fix crash on some PDBs</string>
+			<key>Subtitle</key>
+			<string>Fixes a crash on some PDBs containing certain HETATM records.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Fix chirality</string>
+			<key>Subtitle</key>
+			<string>Molecules and proteins displayed now have the correct chirality (whoopsie).</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Fix PhotoMode crash on iPadOS</string>
+			<key>Subtitle</key>
+			<string>Fixes a crash when showing the share dialog for photos taken on iPadOS.</string>
+		</dict>
 	</array>
 </dict>
 </plist>
