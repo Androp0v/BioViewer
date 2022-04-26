@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>1.3.1</key>
-	<array/>
-	<key>Item 0</key>
-	<dict>
-		<key>Type</key>
-		<string>FIX</string>
-		<key>Title</key>
-		<string>Fix rendering bug on Intel Macs</string>
-		<key>Subtitle</key>
-		<string>Fixes rendering bug on Intel Macs</string>
-	</dict>
+    <array>
+        <dict>
+            <key>Type</key>
+            <string>FIX</string>
+            <key>Title</key>
+            <string>Fix rendering bug on Intel Macs</string>
+            <key>Subtitle</key>
+            <string>Fixes rendering bug on Intel Macs</string>
+        </dict>
+	</array>
 	<key>1.3</key>
 	<array>
 		<dict>

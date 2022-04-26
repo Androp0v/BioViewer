@@ -35,7 +35,6 @@ class WhatsNewViewModel: ObservableObject {
         guard let currentNews = changeLog[version] as? [NSDictionary] else {
             return
         }
-        
         for newItem in currentNews {
             var type: NewsRowType?
             if newItem["Type"] as? String == "FEAT" {
