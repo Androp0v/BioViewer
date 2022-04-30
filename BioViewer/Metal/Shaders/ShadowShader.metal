@@ -84,17 +84,17 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
     ShadowFragmentOut output;
 
     // dot = x^2 + y^2
-    half length = sqrt(dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping));
+    half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
     
     // Discard pixels outside the sphere center (no need to do the sqrt)
-    if (length > 1) {
+    if (xy_squared_length > 1) {
         discard_fragment();
     }
     
     // Compute the normal in camera space
-    float3 normal = float3(impostor_vertex.billboardMapping.x,
-                           impostor_vertex.billboardMapping.y,
-                           length);
+    half3 normal = half3(impostor_vertex.billboardMapping.x,
+                         impostor_vertex.billboardMapping.y,
+                         -sqrt(1.0 - xy_squared_length));
     
     // Compute the position of the fragment in world space
     float3 sphereWorldPosition = normal * impostor_vertex.atom_radius + impostor_vertex.atomCenter;
