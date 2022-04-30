@@ -207,6 +207,7 @@
 		C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514A27DC35BF004CEE8E /* InfoAtomsCapsule.swift */; };
 		C5C7514D27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514C27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift */; };
 		C5E593B7281D793E00CFFAA2 /* MetalLegacySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */; };
+		C5E593B8281D8C4500CFFAA2 /* MetalLegacySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */; };
 		C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
 		C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
@@ -1485,6 +1486,7 @@
 				C572BD442741661300FF010D /* MatrixTransform.swift in Sources */,
 				C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */,
 				C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */,
+				C5E593B8281D8C4500CFFAA2 /* MetalLegacySupport.swift in Sources */,
 				C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */,
 				C5C7514027DBF716004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */,
 				C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */,
