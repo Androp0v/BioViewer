@@ -2,6 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>1.3.2</key>
+    <array>
+        <dict>
+            <key>Type</key>
+            <string>FIX</string>
+            <key>Title</key>
+            <string>Fix rendering bug</string>
+            <key>Subtitle</key>
+            <string>Fixes shadow rendering bug on most devices.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FIX</string>
+            <key>Title</key>
+            <string>Fix crash on small proteins</string>
+            <key>Subtitle</key>
+            <string>Fixes crash when trying to display small proteins on older devices.</string>
+        </dict>
+    </array>
 	<key>1.3.1</key>
     <array>
         <dict>
@@ -10,7 +29,7 @@
             <key>Title</key>
             <string>Fix rendering bug on Intel Macs</string>
             <key>Subtitle</key>
-            <string>Fixes rendering bug on Intel Macs</string>
+            <string>Fixes rendering bug on Intel Macs.</string>
         </dict>
 	</array>
 	<key>1.3</key>
