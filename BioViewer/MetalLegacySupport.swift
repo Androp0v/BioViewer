@@ -10,17 +10,13 @@ import Metal
 
 class MetalLegacySupport {
     
-    static func legacyDispatchThreadsForArray(commandEncoder: MTLComputeCommandEncoder, length: Int, pipelineState: MTLRenderPipelineState) {
+    static func legacyDispatchThreadsForArray(commandEncoder: MTLComputeCommandEncoder, length: Int, pipelineState: MTLComputePipelineState) {
         
-        let threadsPerThreadGroup = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-        let numberOfFullThreadGroups = length / pipelineState.maxTotalThreadsPerThreadgroup
-        let fullThreadGroupSize = MTLSizeMake(numberOfFullThreadGroups, 1, 1)
+        let threadsPerThreadgroup = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
+        let numberOfFullThreadgroups = Int(ceilf(Float(length) / Float(pipelineState.maxTotalThreadsPerThreadgroup)))
+        let threadgroupSize = MTLSizeMake(numberOfFullThreadgroups, 1, 1)
         
-        // Dispatch the full threadgroups
-        commandEncoder.dispatchThreadgroups(fullThreadGroupSize, threadsPerThreadgroup: threadsPerThreadGroup)
-        
-        // Dispatch the remaining threads
-        let remainingThreads = length - (pipelineState.maxTotalThreadsPerThreadgroup * numberOfFullThreadGroups)
-        commandEncoder.dispatchThreadgroups(MTLSizeMake(1, 1, 1), threadsPerThreadgroup: MTLSizeMake(remainingThreads, 1, 1))
+        // Dispatch the threadgroups
+        commandEncoder.dispatchThreadgroups(threadgroupSize, threadsPerThreadgroup: threadsPerThreadgroup)
     }
 }

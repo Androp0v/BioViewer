@@ -119,11 +119,10 @@ extension MetalScheduler {
                 computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
             } else {
                 // LEGACY: Older devices do not support non-uniform threadgroup sizes
-                let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-                let threadGroupsPerGrid = MTLSizeMake(Int(ceilf(Float(protein.atomCount * configurationCount)
-                                                                / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
-                // Dispatch threadgroups
-                computeEncoder.dispatchThreadgroups(threadGroupsPerGrid, threadsPerThreadgroup: groupSize)
+                let arrayLength = protein.atomCount * configurationCount
+                MetalLegacySupport.legacyDispatchThreadsForArray(commandEncoder: computeEncoder,
+                                                                 length: arrayLength,
+                                                                 pipelineState: pipelineState)
             }
 
             // REQUIRED: End the compute encoder encoding
