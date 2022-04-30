@@ -97,7 +97,7 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
                          -sqrt(1.0 - xy_squared_length));
     
     // Compute the position of the fragment in world space
-    float3 sphereWorldPosition = normal * impostor_vertex.atom_radius + impostor_vertex.atomCenter;
+    float3 sphereWorldPosition = float3(normal) * impostor_vertex.atom_radius + impostor_vertex.atomCenter;
 
     // Recompute fragment depth
     simd_float4x4 orthogonalProjectionMatrix = frameData.shadowProjectionMatrix;

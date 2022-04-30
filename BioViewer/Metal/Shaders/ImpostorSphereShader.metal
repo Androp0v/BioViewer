@@ -116,7 +116,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     ImpostorFragmentOut output;
     
     // dot = x^2 + y^2
-    half xy_squared_length = sqrt(dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping));
+    half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
     
     // Discard pixels outside the sphere center (no need to do the sqrt)
     if (xy_squared_length > 1) {
