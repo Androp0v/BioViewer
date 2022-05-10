@@ -16,7 +16,7 @@
 using namespace metal;
 
 half Smoothed_Signed_Distance(half distance_A, half distance_B, half angle_A_B) {
-    half k = max_k / (1 + pow(exp(angle_A_B / smoothing_bias), 2.3));
+    half k = max_k / (1 + pow(exp(angle_A_B / smoothing_bias), 2.5));
     return exp(-k * distance_A) + exp(-k * distance_B);
 }
 
@@ -92,6 +92,8 @@ kernel void compute_SDF_Grid(device simd_float3 *atom_positions [[ buffer(0) ]],
     // surface, instead of the SES).
     half combined_signed_distance = 0.0;
     
+    int cummulative_interactions = 0;
+    
     // Loop over every atom (each one generates a VdW surface)
     for (int index_atom_I = 0; index_atom_I < sdf_grid.number_of_atoms; index_atom_I++) {
         for (int index_atom_J = 0; index_atom_J < index_atom_I; index_atom_J++) {
@@ -119,12 +121,14 @@ kernel void compute_SDF_Grid(device simd_float3 *atom_positions [[ buffer(0) ]],
                 combined_signed_distance += Smoothed_Signed_Distance(van_der_waals_distance_atom_I,
                                                                      van_der_waals_distance_atom_J,
                                                                      angle_I_J);
+                cummulative_interactions += 1;
             } else {
                 // Atoms further than the cutoff distance create a non-smoothed field
-                combined_signed_distance += Regular_Min(van_der_waals_distance_atom_I, van_der_waals_distance_atom_J);
+                combined_signed_distance += Regular_Min(van_der_waals_distance_atom_I,
+                                                        van_der_waals_distance_atom_J);
             }
         }
     }
     
-    grid_values[cell_index] = -log(combined_signed_distance);
+    grid_values[cell_index] = -log(combined_signed_distance - 0.02 * cummulative_interactions);
  }
