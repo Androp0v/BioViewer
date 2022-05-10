@@ -156,4 +156,29 @@ extension ProteinRenderer {
             impostorBondHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
         }
     }
+    
+    // MARK: - Debug Points pipeline
+    #if DEBUG
+    func makeDebugPointsPipelineState(device: MTLDevice) {
+        // Setup pipeline
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
+            fatalError()
+        }
+        
+        // Vertex and fragment functions
+        let vertexProgram = defaultLibrary.makeFunction(name: "debug_point_vertex")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "debug_point_fragment")
+
+        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+        pipelineStateDescriptor.vertexFunction = vertexProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+
+        // Specify the format of the depth texture
+        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
+        
+        // Save to the appropriate pipeline state
+        debugPointsRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+    }
+    #endif
 }

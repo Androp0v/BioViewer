@@ -127,6 +127,10 @@
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
 		C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */; };
 		C5546DAB27E4DF9F00F607F2 /* ComputeSDFGrid.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */; };
+		C555EC7E282A7513001281CD /* DebugPointShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C555EC7D282A7513001281CD /* DebugPointShader.metal */; };
+		C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
+		C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
+		C555EC86282A9616001281CD /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
 		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
@@ -386,6 +390,10 @@
 		C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeSDFGrid.swift; sourceTree = "<group>"; };
 		C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeSDFGrid.metal; sourceTree = "<group>"; };
 		C5546DAC27E4E18E00F607F2 /* SDFGrid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDFGrid.h; sourceTree = "<group>"; };
+		C555EC7D282A7513001281CD /* DebugPointShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DebugPointShader.metal; sourceTree = "<group>"; };
+		C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeMolecularSurfaceUtility.swift; sourceTree = "<group>"; };
+		C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeBufferFromArray.swift; sourceTree = "<group>"; };
+		C555EC85282A9616001281CD /* PointsPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsPass.swift; sourceTree = "<group>"; };
 		C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinVisualizationOption.swift; sourceTree = "<group>"; };
 		C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationBufferLoader.swift; sourceTree = "<group>"; };
 		C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomRadiiGenerator.swift; sourceTree = "<group>"; };
@@ -502,6 +510,7 @@
 				C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */,
 				C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */,
 				C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */,
+				C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */,
 				C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */,
 				C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */,
 			);
@@ -525,6 +534,7 @@
 				C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */,
 				C5FEC734277C744200E348BD /* ImpostorBondShader.metal */,
 				C5E7AF9A2760FF950065F6AD /* ShadowShader.metal */,
+				C555EC7F282A751A001281CD /* DebugShader */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -858,6 +868,7 @@
 				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
 				C51D4EE0276912AE00C69B3D /* ShadowPass.swift */,
 				C51D4EE42769137500C69B3D /* ImpostorPass.swift */,
+				C555EC84282A9604001281CD /* DebugPass */,
 				C51D4EE72769151100C69B3D /* Computed once */,
 			);
 			path = RenderPasses;
@@ -889,6 +900,7 @@
 				C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */,
 				C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */,
 				C5546DAC27E4E18E00F607F2 /* SDFGrid.h */,
+				C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */,
 				C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */,
 			);
 			path = Compute;
@@ -943,6 +955,22 @@
 				C5433F3C2770F9C600607B20 /* FileDetailsSection.swift */,
 			);
 			path = Sections;
+			sourceTree = "<group>";
+		};
+		C555EC7F282A751A001281CD /* DebugShader */ = {
+			isa = PBXGroup;
+			children = (
+				C555EC7D282A7513001281CD /* DebugPointShader.metal */,
+			);
+			path = DebugShader;
+			sourceTree = "<group>";
+		};
+		C555EC84282A9604001281CD /* DebugPass */ = {
+			isa = PBXGroup;
+			children = (
+				C555EC85282A9616001281CD /* PointsPass.swift */,
+			);
+			path = DebugPass;
 			sourceTree = "<group>";
 		};
 		C565A7DF277F76B40086E2C3 /* Scene */ = {
@@ -1350,6 +1378,7 @@
 				C45BAC4526497A3300B36026 /* DynamicStructureControlView.swift in Sources */,
 				C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */,
 				C50E02532763D1B2005D7F06 /* IndentRow.swift in Sources */,
+				C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */,
 				C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
 				C5EEE9BA276F8616005737C1 /* CameraControlToolbar.swift in Sources */,
@@ -1362,6 +1391,7 @@
 				C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
+				C555EC86282A9616001281CD /* PointsPass.swift in Sources */,
 				C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */,
 				C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */,
 				C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
@@ -1380,6 +1410,7 @@
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */,
 				C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */,
+				C555EC7E282A7513001281CD /* DebugPointShader.metal in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C50AF7B927CB84A000768E4D /* SelectedAtom.swift in Sources */,
 				C500EEB4272DA57300A60317 /* FocalLengthRow.swift in Sources */,
@@ -1396,6 +1427,7 @@
 				C51D4EE52769137500C69B3D /* ImpostorPass.swift in Sources */,
 				C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */,
 				C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */,
+				C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */,
 				C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */,
 				C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,

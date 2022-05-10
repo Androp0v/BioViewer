@@ -112,13 +112,6 @@ extension MetalScheduler {
 
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
-            
-            // FIXME: REMOVE
-            if let generatedSDFBufferToSwift = generatedSDFBuffer?.contents().assumingMemoryBound(to: Float.self) {
-                for i in 0..<numberOfGridPoints {
-                    print(generatedSDFBufferToSwift[i])
-                }
-            }
         }
         return generatedSDFBuffer
     }

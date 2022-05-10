@@ -137,9 +137,12 @@ class ProteinViewModel: ObservableObject {
     @Published var showSurface: Bool = false {
         didSet {
             if showSurface {
-                MetalScheduler.shared.computeSDFGrid(protein: (dataSource.files.first?.models.first)!,
-                                                     boxSize: 10,
-                                                     gridResolution: 3)
+                Task {
+                    guard var debugBuffer = ComputeMolecularSurfaceUtility().createMolecularSurface(protein: (dataSource.files.first?.models.first)!) else {
+                        return
+                    }
+                    renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
+                }
             }
         }
     }
