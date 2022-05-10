@@ -10,7 +10,7 @@ import Metal
 
 class ComputeMolecularSurfaceUtility {
     
-    let boxSize: Float = 10
+    let boxSize: Float = 20 // 50
     let gridResolution: Int = 200
     
     func createMolecularSurface(protein: Protein) -> MTLBuffer? {

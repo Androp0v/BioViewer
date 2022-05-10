@@ -10,11 +10,24 @@
 #include "../SharedDataStructs.h"
 
 #define cutoff_distance 2.8
+#define smoothing_bias 1.5
+#define max_k 40
 
 using namespace metal;
 
-float Smoothed_Signed_Distance(float combined_signed_distance, float van_der_waals_distance_atom) {
-    return min(combined_signed_distance, van_der_waals_distance_atom);
+half Smoothed_Signed_Distance(half distance_A, half distance_B, half angle_A_B) {
+    half k = max_k / (1 + pow(exp(angle_A_B / smoothing_bias), 2.3));
+    return exp(-k * distance_A) + exp(-k * distance_B);
+}
+
+half Regular_Min(half distance_A, half distance_B) {
+    return exp(-max_k * min(distance_A, distance_B));
+}
+
+half angle(half3 vector_A, half3 vector_B) {
+    half3 norm_A = normalize(vector_A);
+    half3 normB = normalize(vector_B);
+    return acos(clamp(dot(norm_A, normB), -1.0h, 1.0h));
 }
 
 int getCellID(float x, float y, float z, float cellRadius, int cellsPerDimension, int currentCellNumber){
@@ -77,7 +90,7 @@ kernel void compute_SDF_Grid(device simd_float3 *atom_positions [[ buffer(0) ]],
     // Smoothed_Signed_Distance just returns the min of the pair of values, making
     // the created mesh converge to the non-smoothed surface (the Van Der Waals
     // surface, instead of the SES).
-    float combined_signed_distance = 0.0;
+    half combined_signed_distance = 0.0;
     
     // Loop over every atom (each one generates a VdW surface)
     for (int index_atom_I = 0; index_atom_I < sdf_grid.number_of_atoms; index_atom_I++) {
@@ -87,28 +100,31 @@ kernel void compute_SDF_Grid(device simd_float3 *atom_positions [[ buffer(0) ]],
             
             // Radius of the atom that generates the VdW surface
             float atom_radius_I = atom_radii.atomRadius[ atom_types[index_atom_I] ];
-            float atom_radius_J = atom_radii.atomRadius[ atom_types[index_atom_I] ];
+            float atom_radius_J = atom_radii.atomRadius[ atom_types[index_atom_J] ];
             // Atom position of the center of the VdW surface in world space
             simd_float3 atom_position_I = atom_positions[index_atom_I];
             simd_float3 atom_position_J = atom_positions[index_atom_J];
             // Distance from closest point of the VdW surface of the atom to the
-            float van_der_waals_distance_atom_I = distance(grid_point_position, atom_position_I) - atom_radius_I;
-            float van_der_waals_distance_atom_J = distance(grid_point_position, atom_position_J) - atom_radius_J;
+            half van_der_waals_distance_atom_I = distance(grid_point_position, atom_position_I) - atom_radius_I;
+            half van_der_waals_distance_atom_J = distance(grid_point_position, atom_position_J) - atom_radius_J;
             // Distance between atom centers
-            float distance_I_J = distance(atom_position_I, atom_position_J) - atom_radius_I - atom_radius_J;
-            
+            half distance_I_J = distance(atom_position_I, atom_position_J) - atom_radius_I - atom_radius_J;
+            half angle_I_J = angle(half3(grid_point_position - atom_position_I),
+                                   half3(grid_point_position - atom_position_J));
             // Update the combined signed distance value with the effect from the
             // pairwise interaction
             
             if (distance_I_J < cutoff_distance) {
                 // Atoms closer than the cutoff distance create a smoothed field
-                combined_signed_distance += Smoothed_Signed_Distance(van_der_waals_distance_atom_I, van_der_waals_distance_atom_J);
+                combined_signed_distance += Smoothed_Signed_Distance(van_der_waals_distance_atom_I,
+                                                                     van_der_waals_distance_atom_J,
+                                                                     angle_I_J);
             } else {
                 // Atoms further than the cutoff distance create a non-smoothed field
-                min(van_der_waals_distance_atom_I, van_der_waals_distance_atom_J);
+                combined_signed_distance += Regular_Min(van_der_waals_distance_atom_I, van_der_waals_distance_atom_J);
             }
         }
     }
     
-    grid_values[cell_index] = combined_signed_distance;
+    grid_values[cell_index] = -log(combined_signed_distance);
  }

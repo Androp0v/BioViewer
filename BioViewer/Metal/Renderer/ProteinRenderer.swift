@@ -152,9 +152,9 @@ class ProteinRenderer: NSObject, ObservableObject {
     
     let debugPointsRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
-        descriptor.colorAttachments[0].loadAction = .clear
+        descriptor.colorAttachments[0].loadAction = .load
         descriptor.colorAttachments[0].storeAction = .store
-        descriptor.depthAttachment.loadAction = .clear
+        descriptor.depthAttachment.loadAction = .load
         descriptor.depthAttachment.storeAction = .dontCare
         return descriptor
     }()
@@ -415,7 +415,7 @@ extension ProteinRenderer: MTKViewDelegate {
             
             // MARK: - Shadow Map pass
             
-            //self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: self.shadowTextures)
+            self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: self.shadowTextures)
             
             // GETTING THE DRAWABLE
             // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -424,13 +424,13 @@ extension ProteinRenderer: MTKViewDelegate {
                     
                 // MARK: - Impostor pass
                 
-                /*self.impostorRenderPass(commandBuffer: commandBuffer,
+                self.impostorRenderPass(commandBuffer: commandBuffer,
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,
                                         depthTexture: view.depthStencilTexture,
                                         shadowTextures: self.shadowTextures,
                                         variant: .solidSpheres,
-                                        renderBonds: self.scene.currentVisualization == .ballAndStick)*/
+                                        renderBonds: self.scene.currentVisualization == .ballAndStick)
                                                 
                 // MARK: - Debug points pass
                 #if DEBUG
