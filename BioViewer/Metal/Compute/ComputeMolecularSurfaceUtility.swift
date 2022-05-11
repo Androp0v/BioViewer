@@ -10,17 +10,39 @@ import Metal
 
 class ComputeMolecularSurfaceUtility {
     
-    let boxSize: Float = 20 // 50
-    let gridResolution: Int = 200
+    let protein: Protein
     
-    func createMolecularSurface(protein: Protein) -> MTLBuffer? {
-        guard let sdfBuffer = createSDFGrid(protein: protein) else {
+    /// Size of the cell neighbour checker, in Armstrongs.
+    let neighbourCellSize: Float = 3.0
+    
+    var boxSize: Float = 0.0
+    let gridResolution: Int
+    
+    init(protein: Protein, gridResolution: Int = 200) {
+        self.protein = protein
+        self.gridResolution = gridResolution
+        
+        self.boxSize = optimalBoxSize(boundingSphereRadius: protein.boundingSphere.radius)
+    }
+    
+    func createMolecularSurface() -> MTLBuffer? {
+        guard let sdfBuffer = createSDFGrid() else {
             return nil
         }
         return debugCreatePointsFromSDFGrid(sdfBuffer: sdfBuffer)
     }
     
-    func createSDFGrid(protein: Protein) -> MTLBuffer? {
+    // MARK: - Private
+    
+    private func optimalBoxSize(boundingSphereRadius: Float) -> Float {
+        return ceil(2 * boundingSphereRadius / neighbourCellSize) * neighbourCellSize
+    }
+        
+    private func createNeighbourGrid() {
+        let neighbourCellsPerSide = boxSize / neighbourCellSize
+    }
+    
+    private func createSDFGrid() -> MTLBuffer? {
         
         let sdfBuffer = MetalScheduler.shared.computeSDFGrid(protein: protein,
                                                              boxSize: boxSize,

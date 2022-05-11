@@ -27,7 +27,7 @@ half Regular_Min(half distance_A, half distance_B) {
 half angle(half3 vector_A, half3 vector_B) {
     half3 norm_A = normalize(vector_A);
     half3 normB = normalize(vector_B);
-    return acos(clamp(dot(norm_A, normB), -1.0h, 1.0h));
+    return acos(clamp(dot(norm_A, normB), -1.0h, 1.0h)); // Clamp may not be needed
 }
 
 int getCellID(float x, float y, float z, float cellRadius, int cellsPerDimension, int currentCellNumber){

@@ -138,7 +138,8 @@ class ProteinViewModel: ObservableObject {
         didSet {
             if showSurface {
                 Task {
-                    guard var debugBuffer = ComputeMolecularSurfaceUtility().createMolecularSurface(protein: (dataSource.files.first?.models.first)!) else {
+                    guard var debugBuffer = ComputeMolecularSurfaceUtility(protein: (dataSource.files.first?.models.first)!)
+                            .createMolecularSurface() else {
                         return
                     }
                     renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
