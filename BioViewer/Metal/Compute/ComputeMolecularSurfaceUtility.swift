@@ -26,6 +26,7 @@ class ComputeMolecularSurfaceUtility {
     }
     
     func createMolecularSurface() -> MTLBuffer? {
+        
         guard let sdfBuffer = createSDFGrid() else {
             return nil
         }
@@ -35,11 +36,16 @@ class ComputeMolecularSurfaceUtility {
     // MARK: - Private
     
     private func optimalBoxSize(boundingSphereRadius: Float) -> Float {
-        return ceil(2 * boundingSphereRadius / neighbourCellSize) * neighbourCellSize
+        let numberOfCells = ceil(2 * boundingSphereRadius / neighbourCellSize)
+        let optimalSize = numberOfCells * neighbourCellSize
+        BioViewerLogger.shared.log(type: .info,
+                                   category: .ComputeSurfaceUtility,
+                                   message: "NeighbourGrid has \(numberOfCells) cells.")
+        return optimalSize
     }
         
     private func createNeighbourGrid() {
-        let neighbourCellsPerSide = boxSize / neighbourCellSize
+        
     }
     
     private func createSDFGrid() -> MTLBuffer? {
