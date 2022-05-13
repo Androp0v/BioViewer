@@ -13,7 +13,7 @@ class PDBParser {
     private class ParsedSubunit {
         var id: Int
         var subunitAtomPositions = [simd_float3]()
-        var subunitAtomTypes = [UInt8]()
+        var subunitAtomTypes = [UInt16]()
         
         init(id: Int) {
             self.id = id
@@ -27,7 +27,7 @@ class PDBParser {
     private var fileInfo: ProteinFileInfo?
     
     private var atomArray = ContiguousArray<simd_float3>()
-    private var atomIdentifiers = [UInt8]()
+    private var atomIdentifiers = [UInt16]()
     private var totalAtomArrayComposition = AtomArrayComposition()
     
     // Protein model list
@@ -256,7 +256,7 @@ class PDBParser {
     
     private func resetProteinVariables() {
         atomArray = ContiguousArray<simd_float3>()
-        atomIdentifiers = [UInt8]()
+        atomIdentifiers = [UInt16]()
         totalAtomArrayComposition = AtomArrayComposition()
         subunits = [ParsedSubunit(id: 0)]
         subunitCount = 0

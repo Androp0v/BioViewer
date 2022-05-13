@@ -24,7 +24,7 @@ struct VertexOut{
 // MARK: - Vertex function
 
 vertex VertexOut basic_vertex(const device GeneratedVertex* vertex_buffer [[ buffer(0) ]],
-                              const device uint8_t *atomType [[ buffer(1) ]],
+                              const device uint16_t *atomType [[ buffer(1) ]],
                               const device FrameData& frameData [[ buffer(2) ]],
                               unsigned int vid [[ vertex_id ]]) {
 

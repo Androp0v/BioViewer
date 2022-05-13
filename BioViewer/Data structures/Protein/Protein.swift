@@ -45,7 +45,7 @@ public class Protein {
     public var atomArrayComposition: AtomArrayComposition
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
-    public var atomIdentifiers: [UInt8]
+    public var atomIdentifiers: [UInt16]
     
     // MARK: - Bonds
     
@@ -69,7 +69,7 @@ public class Protein {
     
     // MARK: - Initialization
 
-    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], hasNonChainSubunit: Bool, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt8], sequence: [String]? = nil) {
+    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], hasNonChainSubunit: Bool, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt16], sequence: [String]? = nil) {
         self.configurationCount = configurationCount
         self.configurationEnergies = configurationEnergies
         self.subunitCount = subunitCount

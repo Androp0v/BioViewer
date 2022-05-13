@@ -32,7 +32,7 @@ public class AtomArrayComposition {
         
     }
     
-    init(atomTypes: [UInt8]) {
+    init(atomTypes: [UInt16]) {
         for atomType in atomTypes {
             switch atomType {
             case AtomType.CARBON:

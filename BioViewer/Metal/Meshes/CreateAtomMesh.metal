@@ -11,7 +11,7 @@
 using namespace metal;
 
 kernel void createSphereModel(const device simd_float3 *atomPoints [[ buffer(0) ]],
-                              const device uint8_t *atomType [[ buffer(1) ]],
+                              const device uint16_t *atomType [[ buffer(1) ]],
                               device GeneratedVertex *generatedVertices [[ buffer(2) ]],
                               device uint32_t *generatedIndices [[ buffer(3) ]],
                               uint i [[ thread_position_in_grid ]],

@@ -28,7 +28,7 @@ extension MetalScheduler {
             )
             let atomTypeBuffer = device.makeBuffer(
                 bytes: Array(protein.atomIdentifiers),
-                length: protein.atomCount * protein.configurationCount * MemoryLayout<UInt8>.stride
+                length: protein.atomCount * protein.configurationCount * MemoryLayout<UInt16>.stride
             )
 
             // Make Metal command buffer

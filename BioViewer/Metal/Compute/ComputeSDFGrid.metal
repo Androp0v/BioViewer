@@ -64,7 +64,7 @@ simd_float3 get_cell_center(int cell_index, float grid_size, int grid_resolution
 }
 
 kernel void compute_SDF_Grid(device simd_float3 *atom_positions [[ buffer(0) ]],
-                             device uint8_t *atom_types [[ buffer(1) ]],
+                             device uint16_t *atom_types [[ buffer(1) ]],
                              device float *grid_values [[ buffer(2) ]],
                              constant SDFGrid &sdf_grid [[ buffer(3) ]],
                              constant AtomRadii &atom_radii [[buffer(4)]],

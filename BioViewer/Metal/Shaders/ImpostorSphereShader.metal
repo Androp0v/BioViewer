@@ -43,7 +43,7 @@ half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, floa
 // MARK: - Vertex function
 
 vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                         const device uint8_t *atomType [[ buffer(1) ]],
+                                         const device uint16_t *atomType [[ buffer(1) ]],
                                          const device half3 *atomColor [[ buffer(2) ]],
                                          const device FrameData& frameData [[ buffer(3) ]],
                                          unsigned int vertex_id [[ vertex_id ]]) {

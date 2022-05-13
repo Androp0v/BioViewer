@@ -45,7 +45,12 @@ extension ProteinRenderer {
                                  offset: 0,
                                  index: 2)
         
-        computeEncoder.setBytes(&colorFillData, length: MemoryLayout<FillColorInput>.stride, index: 3)
+        // Create fillColor buffer and fill with data
+        let fillColorBuffer = device.makeBuffer(bytes: &colorFillData,
+                                                length: MemoryLayout<FillColorInput>.stride)
+        computeEncoder.setBuffer(fillColorBuffer,
+                                 offset: 0,
+                                 index: 3)
         
         // Schedule the threads
         if device.supportsFamily(.common3) {

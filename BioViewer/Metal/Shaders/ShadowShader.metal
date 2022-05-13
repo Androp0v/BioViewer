@@ -25,7 +25,7 @@ struct ShadowVertexOut{
 // MARK: - Vertex function
 
 vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                     const device uint8_t *atomType [[ buffer(1) ]],
+                                     const device uint16_t *atomType [[ buffer(1) ]],
                                      const device FrameData& frameData [[ buffer(2) ]],
                                      unsigned int vertex_id [[ vertex_id ]]) {
 

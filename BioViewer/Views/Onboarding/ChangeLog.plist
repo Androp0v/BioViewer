@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>NEXT_VERSION</key>
+    <array>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Support for more subunit colors</string>
+            <key>Subtitle</key>
+            <string>Support for up to 512 subunit colors.</string>
+        </dict>
+    </array>
     <key>1.3.2</key>
     <array>
         <dict>
