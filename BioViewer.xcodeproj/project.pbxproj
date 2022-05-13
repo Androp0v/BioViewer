@@ -131,6 +131,10 @@
 		C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
 		C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
 		C555EC86282A9616001281CD /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
+		C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
+		C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
+		C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
+		C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */; };
 		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
@@ -1512,6 +1516,7 @@
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
 				C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */,
+				C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */,
 				C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */,
 				C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */,
 				C56E87E1278D896B004BAEE2 /* SceneAnimator.swift in Sources */,
@@ -1532,10 +1537,13 @@
 				C572BD3A2741657B00FF010D /* AtomType.swift in Sources */,
 				C51D4EED276919B200C69B3D /* AmbientOcclusionTextures.swift in Sources */,
 				C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */,
+				C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */,
 				C572BD352741653E00FF010D /* FileParser.swift in Sources */,
 				C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */,
 				C57F9962275EADAC001DE6D6 /* ImportDroppedFilesDelegate.swift in Sources */,
 				C572BD40274165F500FF010D /* Camera.swift in Sources */,
+				C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */,
+				C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */,
 				C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */,
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
 				C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */,

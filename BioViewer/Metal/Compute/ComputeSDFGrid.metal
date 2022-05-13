@@ -30,7 +30,7 @@ half angle(half3 vector_A, half3 vector_B) {
     return acos(clamp(dot(norm_A, normB), -1.0h, 1.0h)); // Clamp may not be needed
 }
 
-int getCellID(float x, float y, float z, float cellRadius, int cellsPerDimension, int currentCellNumber){
+int getCellID(float x, float y, float z, float cellRadius, int cellsPerDimension){
     
     int maxCellNumber = cellsPerDimension*cellsPerDimension*cellsPerDimension;
     
@@ -38,8 +38,6 @@ int getCellID(float x, float y, float z, float cellRadius, int cellsPerDimension
     cellID += cellsPerDimension*cellsPerDimension * int(cellsPerDimension * ((z+cellRadius)/(2*cellRadius)));
     cellID += cellsPerDimension * int(cellsPerDimension * ((y+cellRadius)/(2*cellRadius)));
     cellID += int(cellsPerDimension * ((x+cellRadius)/(2*cellRadius)));
-    
-    cellID += maxCellNumber*currentCellNumber;
     
     return cellID;
 }

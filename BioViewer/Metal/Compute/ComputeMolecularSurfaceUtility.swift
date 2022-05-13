@@ -7,45 +7,70 @@
 
 import Foundation
 import Metal
+import simd
 
 class ComputeMolecularSurfaceUtility {
     
     let protein: Protein
     
-    /// Size of the cell neighbour checker, in Armstrongs.
-    let neighbourCellSize: Float = 3.0
-    
+    /// Size of the box that encloses the entire protein.
     var boxSize: Float = 0.0
+    // FIXME: Remove, grid resolution will be SIMD group based
+    /// Resolution of the grid that encloses the entire protein.
     let gridResolution: Int
+    /// Size of the cell neighbour checker, in Armstrongs.
+    let neighbourCellSize: Float = 5.0
+    /// Resolution of the neighbour grid (number of neighbour cells per dimension).
+    var neighbourGridResolution: Int = 0
+    
+    /// Number of threads that a single SIMD group can handle. Obtained using the `threadExecutionWidth`
+    /// property of the compute pipeline state.
+    var threadsPerNBGrid: Int?
     
     init(protein: Protein, gridResolution: Int = 200) {
         self.protein = protein
         self.gridResolution = gridResolution
         
-        self.boxSize = optimalBoxSize(boundingSphereRadius: protein.boundingSphere.radius)
+        (self.boxSize, self.neighbourGridResolution) = optimalBox(boundingSphereRadius: protein.boundingSphere.radius)
     }
     
     func createMolecularSurface() -> MTLBuffer? {
-        
-        guard let sdfBuffer = createSDFGrid() else {
+        let neighbours = createNeighbourGrid()
+        /*guard let sdfBuffer = createSDFGrid() else {
             return nil
         }
-        return debugCreatePointsFromSDFGrid(sdfBuffer: sdfBuffer)
+        return debugCreatePointsFromSDFGrid(sdfBuffer: sdfBuffer)*/
+        return nil
     }
     
     // MARK: - Private
     
-    private func optimalBoxSize(boundingSphereRadius: Float) -> Float {
-        let numberOfCells = ceil(2 * boundingSphereRadius / neighbourCellSize)
-        let optimalSize = numberOfCells * neighbourCellSize
+    private func optimalBox(boundingSphereRadius: Float) -> (Float, Int) {
+        let numberOfCells = Int(ceil(2 * boundingSphereRadius / neighbourCellSize))
+        let optimalSize = Float(numberOfCells) * neighbourCellSize
+        
         BioViewerLogger.shared.log(type: .info,
                                    category: .ComputeSurfaceUtility,
-                                   message: "NeighbourGrid has \(numberOfCells) cells.")
-        return optimalSize
+                                   message: """
+                                            NeighbourGrid has \(numberOfCells * numberOfCells * numberOfCells)
+                                            (\(numberOfCells)x\(numberOfCells)x\(numberOfCells)) cells.
+                                            """)
+        return (optimalSize, numberOfCells)
     }
         
-    private func createNeighbourGrid() {
+    private func createNeighbourGrid() -> [Int: [simd_float3]] {
+        var neighbourDict = [Int: [simd_float3]]()
+        for atomPosition in protein.atoms {
+            let nbCellID = getNBCellID(position: atomPosition)
+            if var atomsInCellList = neighbourDict[nbCellID] {
+                atomsInCellList.append(atomPosition)
+                neighbourDict[nbCellID] = atomsInCellList
+            } else {
+                neighbourDict[nbCellID] = [atomPosition]
+            }
+        }
         
+        return neighbourDict
     }
     
     private func createSDFGrid() -> MTLBuffer? {
@@ -54,6 +79,28 @@ class ComputeMolecularSurfaceUtility {
                                                              boxSize: boxSize,
                                                              gridResolution: gridResolution)
         return sdfBuffer
+    }
+    
+    // MARK: - Utilities
+    
+    private func getNBCellID(position: simd_float3) -> Int {
+
+        var cellID: Int = 0
+        
+        cellID += neighbourGridResolution
+                    * neighbourGridResolution
+                    * Int(Float(neighbourGridResolution) * ((position.z + boxSize/2) / boxSize))
+        
+        cellID += neighbourGridResolution
+                    * Int(Float(neighbourGridResolution) * ((position.y + boxSize/2) / boxSize))
+        
+        cellID += Int(Float(neighbourGridResolution) * ((position.x + boxSize/2) / boxSize))
+        
+        return cellID
+    }
+    
+    private func optimalThreadsPerNBGroup() {
+        
     }
     
     // MARK: - Debug
