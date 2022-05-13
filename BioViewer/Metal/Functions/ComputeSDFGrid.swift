@@ -82,7 +82,7 @@ extension MetalScheduler {
                                      index: 4)
                         
             // Schedule the threads
-            if device.supportsFamily(.apple3) {
+            if device.supportsFamily(.common3) {
                 // Create threads and threadgroup sizes
                 let threadsPerArray = MTLSizeMake(numberOfGridPoints, 1, 1)
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
@@ -97,11 +97,10 @@ extension MetalScheduler {
                 computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
             } else {
                 // LEGACY: Older devices do not support non-uniform threadgroup sizes
-                let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-                let threadGroupsPerGrid = MTLSizeMake(Int(floorf(Float(numberOfGridPoints)
-                                                                / Float(pipelineState.maxTotalThreadsPerThreadgroup))), 1, 1)
-                // Dispatch threadgroups
-                computeEncoder.dispatchThreadgroups(threadGroupsPerGrid, threadsPerThreadgroup: groupSize)
+                let arrayLength = numberOfGridPoints
+                MetalLegacySupport.legacyDispatchThreadsForArray(commandEncoder: computeEncoder,
+                                                                 length: arrayLength,
+                                                                 pipelineState: pipelineState)
             }
 
             // REQUIRED: End the compute encoder encoding
