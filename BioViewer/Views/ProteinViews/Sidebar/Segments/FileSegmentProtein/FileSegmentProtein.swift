@@ -60,7 +60,7 @@ struct FileSegmentProtein: View {
                             InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
                                         value: "\(protein.subunitCount)")
                             InfoAtomsRow(label: NSLocalizedString("Number of atoms:", comment: ""),
-                                         value: "\(protein.atomCount)",
+                                         value: protein.atomCount,
                                          isDisabled: false,
                                          file: file)
                         }

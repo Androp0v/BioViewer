@@ -23,13 +23,6 @@ struct FileAtomElementRow: View {
         self.bold = bold
     }
     
-    func getAtomCountString() -> String {
-        guard let atomCount = atomCount, atomCount >= 0 else {
-            return "-"
-        }
-        return String(atomCount)
-    }
-    
     func getPercentageString() -> String {
         guard let atomCount = atomCount, let totalAtom = totalAtom else {
             return "-"
@@ -54,7 +47,7 @@ struct FileAtomElementRow: View {
             if !bold {
                 Text(element)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(getAtomCountString())
+                Text("\(atomCount ?? 0)")
                     .frame(maxWidth: .infinity, alignment: .center)
                 Text(getPercentageString())
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -62,7 +55,7 @@ struct FileAtomElementRow: View {
                 Text(element)
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(getAtomCountString())
+                Text("\(atomCount ?? 0)")
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .center)
                 Text(getPercentageString())

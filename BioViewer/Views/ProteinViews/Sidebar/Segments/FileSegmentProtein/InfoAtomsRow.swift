@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InfoAtomsRow: View {
     let label: String
-    let value: String
+    let value: Int
     let isDisabled: Bool
     let file: ProteinFile
     
@@ -22,7 +22,7 @@ struct InfoAtomsRow: View {
             VStack {
                 HStack {
                     Text(label)
-                    Text(value)
+                    Text("\(value)")
                         .foregroundColor(Color(uiColor: .secondaryLabel))
                     Spacer()
                 }
