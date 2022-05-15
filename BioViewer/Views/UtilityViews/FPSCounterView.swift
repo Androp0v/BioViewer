@@ -45,7 +45,12 @@ class FPSCounterViewModel: ObservableObject {
         
         // Compute mean of the saved values
         let averageFrameTime = frameTimeArray.reduce(0, +) / Double(frameTimeArray.count)
-        averageFPSString = String(format: "FPS: %.0f", 1 / averageFrameTime)
+        let variance = frameTimeArray.reduce(0, {
+            $0 + ($1 - averageFrameTime) * ($1 - averageFrameTime)
+        })
+        averageFPSString = String(format: "FPS: %.0f ± %.0f",
+                                  1 / averageFrameTime,
+                                  1 / sqrt(averageFrameTime - variance))
     }
 }
 
