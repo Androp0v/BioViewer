@@ -63,6 +63,17 @@ struct ProteinView: View {
                             .background(.black)
                             .edgesIgnoringSafeArea([.top, .bottom])
                         
+                        #if DEBUG
+                        HStack {
+                            VStack {
+                                Spacer()
+                                FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
+                                    .padding()
+                            }
+                            Spacer()
+                        }
+                        #endif
+                        
                         // Top toolbar
                         VStack {
                             if UserDefaults.standard.value(forKey: "showToolbar") == nil {
@@ -73,7 +84,6 @@ struct ProteinView: View {
                             Spacer()
                         }
                         .environmentObject(proteinViewModel.toolbarConfig)
-                        .environmentObject(proteinViewModel)
                         
                         // Scene controls
                         VStack(spacing: 12) {
@@ -158,7 +168,6 @@ struct ProteinView: View {
         }
         // Inform command menus of focus changes
         .focusedValue(\.proteinViewModel, proteinViewModel)
-        .environmentObject(proteinViewModel)
     }
 
     // MARK: - Public functions

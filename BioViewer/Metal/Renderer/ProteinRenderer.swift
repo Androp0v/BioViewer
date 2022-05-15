@@ -28,6 +28,9 @@ class ProteinRenderer: NSObject, ObservableObject {
     /// Used to ensure buffers are untouched during frame rendering.
     let bufferResourceLock = NSLock()
     
+    /// Frame GPU execution time, exponentially averaged.
+    var lastFrameGPUTime = CFTimeInterval()
+    
     // MARK: - Metal variables
     
     /// GPU
@@ -449,6 +452,8 @@ extension ProteinRenderer: MTKViewDelegate {
             
             commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
                 guard let self = self else { return }
+                // Store the time required to render the frame
+                self.lastFrameGPUTime = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
                 // GPU work is complete, signal the semaphore to start the CPU work
                 self.frameBoundarySemaphore.signal()
             })
