@@ -15,6 +15,7 @@ class FPSCounterViewModel: ObservableObject {
     
     @Published var averageFPSString = "-"
     private var frameTimeArray = [CFTimeInterval]()
+    private var lastIndex: Int = 0
     private var currentIndex: Int = 0
     private let maxSavedFrames: Int = 100
     
@@ -26,16 +27,23 @@ class FPSCounterViewModel: ObservableObject {
     }
     
     @objc private func updateFrameTime() {
+        
+        // Retrieve last GPU frame time.
         let newFrameTime = proteinViewModel.renderer.lastFrameGPUTime
         
+        // Avoid saving the same frame time several times if the renderer
+        // is paused.
         if frameTimeArray.count < maxSavedFrames {
+            guard newFrameTime != frameTimeArray.last else { return }
             frameTimeArray.append(newFrameTime)
         } else {
+            guard newFrameTime != frameTimeArray[lastIndex] else { return }
             frameTimeArray[currentIndex] = newFrameTime
         }
+        lastIndex = currentIndex
         currentIndex = (currentIndex + 1) % maxSavedFrames
         
-        // Mean of the saved values
+        // Compute mean of the saved values
         let averageFrameTime = frameTimeArray.reduce(0, +) / Double(frameTimeArray.count)
         averageFPSString = String(format: "FPS: %.0f", 1 / averageFrameTime)
     }
