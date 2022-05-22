@@ -65,8 +65,9 @@ struct ProteinView: View {
                         
                         #if DEBUG
                         HStack {
-                            VStack {
+                            VStack(spacing: .zero) {
                                 Spacer()
+                                ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
                                 FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
                                     .padding()
                             }

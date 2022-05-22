@@ -118,6 +118,7 @@
 		C5406700274D387200710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406701274D38C100710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5406703274D656700710CFC /* SettingsSegmentProtein.swift */; };
+		C5412FEC283AB63100234403 /* ResolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5412FEB283AB63100234403 /* ResolutionView.swift */; };
 		C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */; };
 		C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */; };
 		C5433F3B2770EABA00607B20 /* ImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3A2770EABA00607B20 /* ImageExporter.swift */; };
@@ -388,6 +389,7 @@
 		C54066F9274D1C7900710CFC /* ParsePDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsePDB.swift; sourceTree = "<group>"; };
 		C54066FF274D387200710CFC /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
 		C5406703274D656700710CFC /* SettingsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSegmentProtein.swift; sourceTree = "<group>"; };
+		C5412FEB283AB63100234403 /* ResolutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolutionView.swift; sourceTree = "<group>"; };
 		C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeContentHeaderView.swift; sourceTree = "<group>"; };
 		C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeConfig.swift; sourceTree = "<group>"; };
 		C5433F3A2770EABA00607B20 /* ImageExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExporter.swift; sourceTree = "<group>"; };
@@ -649,7 +651,7 @@
 				C5433F3F2770FA9200607B20 /* LineGraphView.swift */,
 				C440856E2648200500DC5009 /* VisualEffectView.swift */,
 				C464C356265A569800E66C3E /* CoffeeViews */,
-				C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */,
+				C5412FED283AB63600234403 /* Debug Views */,
 			);
 			path = UtilityViews;
 			sourceTree = "<group>";
@@ -961,6 +963,15 @@
 				C44085662647ECE500DC5009 /* ProteinSidebar.swift */,
 			);
 			path = Sidebar;
+			sourceTree = "<group>";
+		};
+		C5412FED283AB63600234403 /* Debug Views */ = {
+			isa = PBXGroup;
+			children = (
+				C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */,
+				C5412FEB283AB63100234403 /* ResolutionView.swift */,
+			);
+			path = "Debug Views";
 			sourceTree = "<group>";
 		};
 		C5433F3E2770F9CA00607B20 /* Sections */ = {
@@ -1349,6 +1360,7 @@
 				C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */,
 				C5C7514327DBF8CB004CEE8E /* NewsRow.swift in Sources */,
 				C57F995E275E8E31001DE6D6 /* BioViewerWorkspace.swift in Sources */,
+				C5412FEC283AB63100234403 /* ResolutionView.swift in Sources */,
 				C5E7AF9B2760FF950065F6AD /* ShadowShader.metal in Sources */,
 				C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */,
 				C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */,

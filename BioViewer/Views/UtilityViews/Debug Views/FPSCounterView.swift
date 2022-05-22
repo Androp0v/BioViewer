@@ -62,5 +62,6 @@ struct FPSCounterView: View {
         Text(viewModel.averageFPSString)
             .foregroundColor(.white)
             .background(.black)
+            .monospacedDigit()
     }
 }

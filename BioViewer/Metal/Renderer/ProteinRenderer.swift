@@ -9,7 +9,7 @@ import Foundation
 import MetalKit
 import SwiftUI
 
-class ProteinRenderer: NSObject, ObservableObject {
+class ProteinRenderer: NSObject {
     
     // MARK: - Constants
     
@@ -37,6 +37,8 @@ class ProteinRenderer: NSObject, ObservableObject {
     var device: MTLDevice
     /// Command queue.
     var commandQueue: MTLCommandQueue?
+    /// Resolution of the view
+    var viewResolution: CGSize?
     
     /// Pipeline state for filling the color buffer.
     var fillColorComputePipelineState: MTLComputePipelineState?
@@ -326,7 +328,9 @@ extension ProteinRenderer: MTKViewDelegate {
         // TO-DO: Update G-Buffer texture size to match view size
         self.scene.camera.updateProjection(drawableSize: size)
         self.scene.aspectRatio = Float(size.width / size.height)
-
+        
+        self.viewResolution = size
+        
         // TO-DO: Enqueue draw calls so this doesn't drop the FPS
         view.draw()
     }
