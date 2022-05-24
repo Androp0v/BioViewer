@@ -448,10 +448,12 @@ extension ProteinRenderer: MTKViewDelegate {
             if let drawable = view.currentDrawable {
                 
                 // MARK: - Depth bound pass
-                self.depthBoundRenderPass(commandBuffer: commandBuffer,
-                                          uniformBuffer: &uniformBuffer,
-                                          drawableTexture: drawable.texture,
-                                          depthTexture: view.depthStencilTexture)
+                if AppState.hasDepthUpperBoundPrePass() {
+                    self.depthBoundRenderPass(commandBuffer: commandBuffer,
+                                              uniformBuffer: &uniformBuffer,
+                                              drawableTexture: drawable.texture,
+                                              depthTexture: view.depthStencilTexture)
+                }
                     
                 // MARK: - Impostor pass
                 
