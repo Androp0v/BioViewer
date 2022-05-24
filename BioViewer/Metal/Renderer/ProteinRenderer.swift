@@ -44,6 +44,8 @@ class ProteinRenderer: NSObject {
     var fillColorComputePipelineState: MTLComputePipelineState?
     /// Pipeline state for the directional shadow creation.
     var shadowRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the depth bounding pre-pass.
+    var depthBoundRenderPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the opaque geometry rendering.
     var opaqueRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times).
@@ -146,11 +148,24 @@ class ProteinRenderer: NSObject {
         return descriptor
     }()
     
+    let depthBoundRenderPassDescriptor: MTLRenderPassDescriptor = {
+        let descriptor = MTLRenderPassDescriptor()
+        descriptor.colorAttachments[0].loadAction = .dontCare
+        descriptor.colorAttachments[0].storeAction = .dontCare
+        descriptor.depthAttachment.loadAction = .clear
+        descriptor.depthAttachment.storeAction = .store
+        return descriptor
+    }()
+    
     let impostorRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
         descriptor.colorAttachments[0].loadAction = .clear
         descriptor.colorAttachments[0].storeAction = .store
-        descriptor.depthAttachment.loadAction = .clear
+        if AppState.hasDepthUpperBoundPrePass() {
+            descriptor.depthAttachment.loadAction = .load
+        } else {
+            descriptor.depthAttachment.loadAction = .clear
+        }
         descriptor.depthAttachment.storeAction = .dontCare
         return descriptor
     }()
@@ -216,6 +231,9 @@ class ProteinRenderer: NSObject {
         
         // Create render pipeline states
         makeShadowRenderPipelineState(device: device, useFixedRadius: false)
+        if AppState.hasDepthUpperBoundPrePass() {
+            makeDepthBoundRenderPipelineState(device: device)
+        }
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
         makeImpostorBondRenderPipelineState(device: device, variant: .solidSpheres)
@@ -428,6 +446,12 @@ extension ProteinRenderer: MTKViewDelegate {
             // The final pass can only render if a drawable is available, otherwise it needs to skip
             // rendering this frame. Get the drawable as late as possible.
             if let drawable = view.currentDrawable {
+                
+                // MARK: - Depth bound pass
+                self.depthBoundRenderPass(commandBuffer: commandBuffer,
+                                          uniformBuffer: &uniformBuffer,
+                                          drawableTexture: drawable.texture,
+                                          depthTexture: view.depthStencilTexture)
                     
                 // MARK: - Impostor pass
                 

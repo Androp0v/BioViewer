@@ -11,6 +11,7 @@ import Metal
 extension ProteinRenderer {
         
     // MARK: - Shadow pass
+    
     func makeShadowRenderPipelineState(device: MTLDevice, useFixedRadius: Bool) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
@@ -37,7 +38,29 @@ extension ProteinRenderer {
         shadowRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
+    // MARK: - Depth bound pass
+    
+    func makeDepthBoundRenderPipelineState(device: MTLDevice) {
+        // Setup pipeline
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
+            fatalError()
+        }
+        let vertexProgram = defaultLibrary.makeFunction(name: "depth_bound_vertex")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "depth_bound_fragment")
+
+        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+        pipelineStateDescriptor.vertexFunction = vertexProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+
+        // Specify the format of the depth texture
+        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
+
+        depthBoundRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+    }
+    
     // MARK: - Opaque geometry pass
+    
     func makeOpaqueRenderPipelineState(device: MTLDevice) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
@@ -119,6 +142,7 @@ extension ProteinRenderer {
     }
     
     // MARK: - Impostor bonds
+    
     func makeImpostorBondRenderPipelineState(device: MTLDevice, variant: ImpostorRenderPassVariant) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
@@ -158,6 +182,7 @@ extension ProteinRenderer {
     }
     
     // MARK: - Debug Points pipeline
+    
     #if DEBUG
     func makeDebugPointsPipelineState(device: MTLDevice) {
         // Setup pipeline

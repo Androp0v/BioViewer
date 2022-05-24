@@ -46,6 +46,10 @@ class AppState: ObservableObject {
         }
     }
     
+    static let hasDepthUpperBoundPrePass = { () -> Bool in
+        return true
+    }
+    
     // MARK: - Version
     
     func version() -> String {
