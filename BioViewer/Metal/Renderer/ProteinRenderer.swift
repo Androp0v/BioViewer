@@ -73,6 +73,9 @@ class ProteinRenderer: NSObject {
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader when using a dense mesh
     var opaqueIndexBuffer: MTLBuffer?
     
+    /// Used to disable atoms when using a depth bound pre-pass.
+    var disabledAtomsBuffer: MTLBuffer?
+    
     /// Used to pass the geometry vertex data to the shader when using billboarding
     var impostorVertexBuffer: MTLBuffer?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
@@ -100,6 +103,7 @@ class ProteinRenderer: NSObject {
     // MARK: - Textures
     
     var shadowTextures = ShadowTextures()
+    var atomIDTexture = AtomIDTexture()
 
     // MARK: - Runtime variables
     
@@ -150,7 +154,7 @@ class ProteinRenderer: NSObject {
     
     let depthBoundRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
-        descriptor.colorAttachments[0].loadAction = .dontCare
+        descriptor.colorAttachments[0].loadAction = .clear
         descriptor.colorAttachments[0].storeAction = .dontCare
         descriptor.depthAttachment.loadAction = .clear
         descriptor.depthAttachment.storeAction = .store
@@ -291,6 +295,17 @@ class ProteinRenderer: NSObject {
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
+        if AppState.hasDepthUpperBoundPrePass() {
+            // Initialize disabled atoms to all disabled
+            let atomCount = atomTypeBuffer.length / MemoryLayout<UInt16>.stride
+            disabledAtomsBuffer = device.makeBuffer(bytes: Array(repeating: true, count: atomCount),
+                                                    length: atomCount * MemoryLayout<Bool>.stride)
+        } else {
+            // Initialize disabled atoms to none disabled
+            let atomCount = atomTypeBuffer.length / MemoryLayout<UInt16>.stride
+            disabledAtomsBuffer = device.makeBuffer(bytes: Array(repeating: false, count: atomCount),
+                                                    length: atomCount * MemoryLayout<Bool>.stride)
+        }
         bufferResourceLock.unlock()
     }
     
@@ -348,6 +363,12 @@ extension ProteinRenderer: MTKViewDelegate {
         self.scene.aspectRatio = Float(size.width / size.height)
         
         self.viewResolution = size
+        
+        if AppState.hasDepthUpperBoundPrePass() {
+            atomIDTexture.makeTextures(device: device,
+                                           textureWidth: Int(size.width),
+                                           textureHeight: Int(size.height))
+        }
         
         // TO-DO: Enqueue draw calls so this doesn't drop the FPS
         view.draw()
@@ -451,12 +472,11 @@ extension ProteinRenderer: MTKViewDelegate {
                 if AppState.hasDepthUpperBoundPrePass() {
                     self.depthBoundRenderPass(commandBuffer: commandBuffer,
                                               uniformBuffer: &uniformBuffer,
-                                              drawableTexture: drawable.texture,
+                                              atomIDTexture: self.atomIDTexture.atomIDTexture,
                                               depthTexture: view.depthStencilTexture)
                 }
                     
                 // MARK: - Impostor pass
-                
                 self.impostorRenderPass(commandBuffer: commandBuffer,
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,

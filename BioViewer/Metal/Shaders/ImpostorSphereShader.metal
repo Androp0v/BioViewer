@@ -45,13 +45,20 @@ half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, floa
 vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
                                          const device uint16_t *atomType [[ buffer(1) ]],
                                          const device half3 *atomColor [[ buffer(2) ]],
-                                         const device FrameData& frameData [[ buffer(3) ]],
+                                         const device bool *disabledAtoms [[ buffer(3) ]],
+                                         const device FrameData& frameData [[ buffer(4) ]],
                                          unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
     ImpostorVertexOut normalized_impostor_vertex;
     int verticesPerAtom = 4;
     int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
+    
+    // Send vertex outside display bounds if disabled
+    if (disabledAtoms[atom_id_configuration]) {
+        normalized_impostor_vertex.position = float4(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);
+        return normalized_impostor_vertex;
+    }
     
     // Set attributes
     normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.xy);

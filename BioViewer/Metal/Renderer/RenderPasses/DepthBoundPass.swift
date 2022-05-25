@@ -12,14 +12,14 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func depthBoundRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
+    func depthBoundRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, atomIDTexture: MTLTexture, depthTexture: MTLTexture?) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        depthBoundRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
+        depthBoundRenderPassDescriptor.colorAttachments[0].texture = atomIDTexture
         // Attach depth texture.
         depthBoundRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
@@ -48,6 +48,10 @@ extension ProteinRenderer {
                                              offset: 0,
                                              index: 1)
         
+        renderCommandEncoder.setFragmentBuffer(disabledAtomsBuffer,
+                                               offset: 0,
+                                               index: 0)
+        
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)
 
@@ -66,5 +70,16 @@ extension ProteinRenderer {
         
         // MARK: - End encoding
         renderCommandEncoder.endEncoding()
+        
+        // FIXME: REMOVE
+        /*
+        let randomBufferToSwift = disabledAtomsBuffer!.contents().assumingMemoryBound(to: Int16.self)
+        let atomCount = disabledAtomsBuffer!.length / MemoryLayout<Int16>.stride
+        for i in 0..<atomCount {
+            if randomBufferToSwift[i] != 1 {
+                print("Enabled atom at \(i)")
+            }
+        }
+        */
     }
 }

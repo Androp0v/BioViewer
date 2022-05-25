@@ -14,17 +14,20 @@ using namespace metal;
 
 struct DepthBoundVertexOut{
     float4 position [[position]];
+    int atomID;
 };
 
 
 // MARK: - Vertex function
 
 vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                            const device FrameData& frameData [[ buffer(1) ]],
-                                            unsigned int vertex_id [[ vertex_id ]]) {
+                                              const device FrameData& frameData [[ buffer(1) ]],
+                                              unsigned int vertex_id [[ vertex_id ]]) {
 
-    // Initialize the returned VertexOut structure
-    DepthBoundVertexOut normalized_impostor_vertex;
+    // Initialize the returned DepthBoundVertexOut structure
+    DepthBoundVertexOut normalized_depth_bound_vertex;
+    int verticesPerAtom = 4;
+    normalized_depth_bound_vertex.atomID = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -56,26 +59,30 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vert
     float4 eye_position = model_view_matrix * rotated_model;
         
     // Transform the eye space coordinates to normalized device coordinates
-    normalized_impostor_vertex.position = projectionMatrix * eye_position;
+    normalized_depth_bound_vertex.position = projectionMatrix * eye_position;
 
     // Return the processed vertex
-    return normalized_impostor_vertex;
+    return normalized_depth_bound_vertex;
 }
 
 // MARK: - Fragment function
 
 struct DepthBoundFragmentOut{
-    half4 color [[ color(0) ]];
+    uint color [[ color(0) ]];
 };
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
-fragment DepthBoundFragmentOut fragment_bound_vertex(DepthBoundVertexOut impostor_vertex [[stage_in]]) {
+fragment DepthBoundFragmentOut depth_bound_fragment(DepthBoundVertexOut depth_bound_vertex [[stage_in]],
+                                                    device bool *disabledAtoms [[ buffer(0) ]]) {
     
     // Declare output
     DepthBoundFragmentOut output;
     
-    // Shade all shown fragments
-    output.color = half4(1.0, 1.0, 1.0, 1.0);
+    // Mark the atom as visible (not hidden by HSR)
+    disabledAtoms[depth_bound_vertex.atomID] = false;
+    
+    // Shade all shown fragments using atomID
+    output.color = depth_bound_vertex.atomID;
     
     return output;
 }
