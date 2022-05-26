@@ -9,36 +9,45 @@ import Foundation
 import Metal
 import CoreGraphics
 
-struct AtomIDTexture {
+struct DepthBoundTextures {
     
     var atomIDTexture: MTLTexture!
+    var depthTexture: MTLTexture!
 
     static let pixelFormat = MTLPixelFormat.r32Uint
     
     mutating func makeTextures(device: MTLDevice, textureWidth: Int, textureHeight: Int) {
                 
         // MARK: - Common texture descriptor
-        let atomIDTextureDescriptor = MTLTextureDescriptor
+        let commonTextureDescriptor = MTLTextureDescriptor
             .texture2DDescriptor(pixelFormat: ShadowTextures.shadowTexturePixelFormat,
                                  width: textureWidth,
                                  height: textureHeight,
                                  mipmapped: false)
         
-        atomIDTextureDescriptor.textureType = .type2D
+        commonTextureDescriptor.textureType = .type2D
         
-        // MARK: - Shadow color texture
+        // MARK: - AtomID texture
         
-        atomIDTextureDescriptor.pixelFormat = AtomIDTexture.pixelFormat
-        atomIDTextureDescriptor.usage = [.renderTarget]
+        commonTextureDescriptor.pixelFormat = DepthBoundTextures.pixelFormat
+        commonTextureDescriptor.usage = [.renderTarget]
         
         // Memoryless storage mode only works on TBDR GPUs
         if device.supportsFamily(.apple1) {
-            atomIDTextureDescriptor.storageMode = .memoryless
+            commonTextureDescriptor.storageMode = .memoryless
         } else {
-            atomIDTextureDescriptor.storageMode = .private
+            commonTextureDescriptor.storageMode = .private
         }
         
-        atomIDTexture = device.makeTexture(descriptor: atomIDTextureDescriptor)
+        atomIDTexture = device.makeTexture(descriptor: commonTextureDescriptor)
         atomIDTexture.label = "AtomID Texture"
+        
+        // MARK: - Depth texture
+        commonTextureDescriptor.pixelFormat = .depth32Float
+        commonTextureDescriptor.usage = [.renderTarget, .shaderRead]
+        commonTextureDescriptor.storageMode = .shared
+        
+        depthTexture = device.makeTexture(descriptor: commonTextureDescriptor)
+        depthTexture.label = "Depth-bound Texture"
     }
 }

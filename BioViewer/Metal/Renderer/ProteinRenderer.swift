@@ -103,7 +103,7 @@ class ProteinRenderer: NSObject {
     // MARK: - Textures
     
     var shadowTextures = ShadowTextures()
-    var atomIDTexture = AtomIDTexture()
+    var depthBoundTextures = DepthBoundTextures()
 
     // MARK: - Runtime variables
     
@@ -165,11 +165,7 @@ class ProteinRenderer: NSObject {
         let descriptor = MTLRenderPassDescriptor()
         descriptor.colorAttachments[0].loadAction = .clear
         descriptor.colorAttachments[0].storeAction = .store
-        if AppState.hasDepthUpperBoundPrePass() {
-            descriptor.depthAttachment.loadAction = .load
-        } else {
-            descriptor.depthAttachment.loadAction = .clear
-        }
+        descriptor.depthAttachment.loadAction = .clear
         descriptor.depthAttachment.storeAction = .dontCare
         return descriptor
     }()
@@ -365,9 +361,9 @@ extension ProteinRenderer: MTKViewDelegate {
         self.viewResolution = size
         
         if AppState.hasDepthUpperBoundPrePass() {
-            atomIDTexture.makeTextures(device: device,
-                                           textureWidth: Int(size.width),
-                                           textureHeight: Int(size.height))
+            depthBoundTextures.makeTextures(device: device,
+                                            textureWidth: Int(size.width),
+                                            textureHeight: Int(size.height))
         }
         
         // TO-DO: Enqueue draw calls so this doesn't drop the FPS
@@ -472,8 +468,8 @@ extension ProteinRenderer: MTKViewDelegate {
                 if AppState.hasDepthUpperBoundPrePass() {
                     self.depthBoundRenderPass(commandBuffer: commandBuffer,
                                               uniformBuffer: &uniformBuffer,
-                                              atomIDTexture: self.atomIDTexture.atomIDTexture,
-                                              depthTexture: view.depthStencilTexture)
+                                              atomIDTexture: self.depthBoundTextures.atomIDTexture,
+                                              depthTexture: self.depthBoundTextures.depthTexture)
                 }
                     
                 // MARK: - Impostor pass
@@ -481,6 +477,7 @@ extension ProteinRenderer: MTKViewDelegate {
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,
                                         depthTexture: view.depthStencilTexture,
+                                        depthBoundTexture: self.depthBoundTextures.depthTexture,
                                         shadowTextures: self.shadowTextures,
                                         variant: .solidSpheres,
                                         renderBonds: self.scene.currentVisualization == .ballAndStick)

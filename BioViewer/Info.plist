@@ -9,7 +9,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>BioViewer</string>
+	<string>BioViewer EXP</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>

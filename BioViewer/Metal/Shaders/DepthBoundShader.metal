@@ -47,12 +47,17 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vert
                                                     vertex_buffer[vertex_id].position.y,
                                                     vertex_buffer[vertex_id].position.z,
                                                     1.0);
-    // Then translate the triangle to the origin of coordinates
+    // Then translate the vertex to the origin of coordinates
     rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
+        
     // Reverse the rotation by rotating in the opposite rotation along the billboard axis, NOT
     // the protein axis.
     rotated_model = inverse_rotation_matrix * rotated_model;
-    // Translate the triangles back to their positions, now that they're already rotated
+    
+    // Now, to make the billboards smaller for the depth-bound shader
+    rotated_model.xyz = rotated_model.xyz * 0.70710678;
+    
+    // Translate the triangles back to their positions, now that they're already rotated and scaled
     rotated_model.xyz = rotated_model.xyz + rotated_atom_centers.xyz;
     
     // Transform the world space coordinates to eye space coordinates

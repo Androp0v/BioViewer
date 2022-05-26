@@ -12,7 +12,7 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthBoundTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
@@ -69,8 +69,10 @@ extension ProteinRenderer {
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,
                                                index: 1)
-        renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
+        renderCommandEncoder.setFragmentTexture(depthBoundTexture,
                                                 index: 0)
+        renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
+                                                index: 1)
         renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
                                                      index: 0)
 

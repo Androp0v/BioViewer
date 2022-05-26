@@ -51,7 +51,7 @@ extension ProteinRenderer {
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
-        pipelineStateDescriptor.colorAttachments[0].pixelFormat = AtomIDTexture.pixelFormat
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = DepthBoundTextures.pixelFormat
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float

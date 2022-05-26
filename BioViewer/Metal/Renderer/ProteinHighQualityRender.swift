@@ -95,6 +95,7 @@ extension ProteinRenderer {
                            uniformBuffer: &uniformBuffer,
                            drawableTexture: hqTextures.hqTexture,
                            depthTexture: hqTextures.hqDepthTexture,
+                           depthBoundTexture: depthBoundTextures.depthTexture, // FIXME: Need HQ here
                            shadowTextures: hqShadowTextures,
                            variant: .solidSpheresHQ,
                            renderBonds: scene.currentVisualization == .ballAndStick)
