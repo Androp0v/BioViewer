@@ -14,7 +14,6 @@ using namespace metal;
 
 struct DepthBoundVertexOut{
     float4 position [[position]];
-    int atomID;
 };
 
 
@@ -26,8 +25,6 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vert
 
     // Initialize the returned DepthBoundVertexOut structure
     DepthBoundVertexOut normalized_depth_bound_vertex;
-    int verticesPerAtom = 4;
-    normalized_depth_bound_vertex.atomID = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -77,17 +74,12 @@ struct DepthBoundFragmentOut{
 };
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
-fragment DepthBoundFragmentOut depth_bound_fragment(DepthBoundVertexOut depth_bound_vertex [[stage_in]],
-                                                    device bool *disabledAtoms [[ buffer(0) ]]) {
+fragment DepthBoundFragmentOut depth_bound_fragment(DepthBoundVertexOut depth_bound_vertex [[stage_in]]) {
     
     // Declare output
     DepthBoundFragmentOut output;
     
-    // Mark the atom as visible (not hidden by HSR)
-    disabledAtoms[depth_bound_vertex.atomID] = false;
-    
-    // Shade all shown fragments using atomID
-    output.color = depth_bound_vertex.atomID;
+    output.color = 0;
     
     return output;
 }

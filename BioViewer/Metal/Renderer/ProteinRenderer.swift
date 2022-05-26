@@ -154,7 +154,7 @@ class ProteinRenderer: NSObject {
     
     let depthBoundRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
-        descriptor.colorAttachments[0].loadAction = .clear
+        descriptor.colorAttachments[0].loadAction = .dontCare
         descriptor.colorAttachments[0].storeAction = .dontCare
         descriptor.depthAttachment.loadAction = .clear
         descriptor.depthAttachment.storeAction = .store
@@ -292,9 +292,9 @@ class ProteinRenderer: NSObject {
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
         if AppState.hasDepthUpperBoundPrePass() {
-            // Initialize disabled atoms to all disabled
+            // Initialize disabled atoms to none disabled (not yet used)
             let atomCount = atomTypeBuffer.length / MemoryLayout<UInt16>.stride
-            disabledAtomsBuffer = device.makeBuffer(bytes: Array(repeating: true, count: atomCount),
+            disabledAtomsBuffer = device.makeBuffer(bytes: Array(repeating: false, count: atomCount),
                                                     length: atomCount * MemoryLayout<Bool>.stride)
         } else {
             // Initialize disabled atoms to none disabled

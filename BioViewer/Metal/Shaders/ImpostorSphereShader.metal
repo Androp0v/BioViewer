@@ -11,6 +11,7 @@
 #include "../Meshes/AtomProperties.h"
 
 #define PERCENTAGE_CLOSE_FILTERING
+#define DEPTH_TEST_BIAS 0.001 // TODO: This should be relative to atom size
 
 using namespace metal;
 
@@ -128,7 +129,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
     float boundedDepth = depthBound.sample(nearest, impostor_vertex.position.xy);
     float primitiveDepth = impostor_vertex.position.z;
-    if (boundedDepth < primitiveDepth) {
+    if (boundedDepth + DEPTH_TEST_BIAS < primitiveDepth) {
         discard_fragment();
     }
     

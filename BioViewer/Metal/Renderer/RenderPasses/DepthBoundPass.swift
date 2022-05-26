@@ -48,10 +48,6 @@ extension ProteinRenderer {
                                              offset: 0,
                                              index: 1)
         
-        renderCommandEncoder.setFragmentBuffer(disabledAtomsBuffer,
-                                               offset: 0,
-                                               index: 0)
-        
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)
 
@@ -70,16 +66,5 @@ extension ProteinRenderer {
         
         // MARK: - End encoding
         renderCommandEncoder.endEncoding()
-        
-        // FIXME: REMOVE
-        /*
-        let randomBufferToSwift = disabledAtomsBuffer!.contents().assumingMemoryBound(to: Int16.self)
-        let atomCount = disabledAtomsBuffer!.length / MemoryLayout<Int16>.stride
-        for i in 0..<atomCount {
-            if randomBufferToSwift[i] != 1 {
-                print("Enabled atom at \(i)")
-            }
-        }
-        */
     }
 }
