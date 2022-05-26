@@ -59,6 +59,9 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vert
     
     // Transform the world space coordinates to eye space coordinates
     float4 eye_position = model_view_matrix * rotated_model;
+    
+    // Depth bias of 2 Armstrongs to avoid artifacts
+    eye_position.z += 2;
         
     // Transform the eye space coordinates to normalized device coordinates
     normalized_depth_bound_vertex.position = projectionMatrix * eye_position;
