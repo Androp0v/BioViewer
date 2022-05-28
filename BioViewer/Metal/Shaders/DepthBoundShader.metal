@@ -37,14 +37,13 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vert
                                                            vertex_buffer[vertex_id].billboard_world_center.z,
                                                            1.0);
 
-    // To rotate the billboards so they are facing the screen, first rotate them like the model,
-    // along the protein axis.
+    // Get te billboard vertex position, relative to the atom center
     float4 billboard_vertex = float4(vertex_buffer[vertex_id].position.xyz, 1.0);
     
-    // Now, to make the billboards smaller for the depth-bound shader
+    // Now, make the billboards smaller for the depth-bound shader
     billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678;
     
-    // Translate the triangles back to their positions, now that they're already rotated
+    // Translate the triangles to their (rotated) world positions
     billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
     
     // Transform the world space coordinates to eye space coordinates
