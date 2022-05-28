@@ -210,6 +210,7 @@
 		C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
 		C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
+		C5C1B4DE2842925E009D6A52 /* RotateModelPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C1B4DD2842925E009D6A52 /* RotateModelPass.swift */; };
 		C5C7513627DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */; };
 		C5C7513827DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */; };
 		C5C7513A27DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */; };
@@ -453,6 +454,7 @@
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRow.swift; sourceTree = "<group>"; };
 		C5AC7D63283EB4310089572D /* DepthBoundTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthBoundTextures.swift; sourceTree = "<group>"; };
+		C5C1B4DD2842925E009D6A52 /* RotateModelPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateModelPass.swift; sourceTree = "<group>"; };
 		C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSolidSpheresRadiusOptions.swift; sourceTree = "<group>"; };
 		C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidSpheresRadiiPickerRow.swift; sourceTree = "<group>"; };
 		C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProteinBallAndStickRadiusOptions.swift; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 			children = (
 				C501C74427C3FE93008CDA25 /* ComputePipelines.swift */,
 				C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */,
+				C5C1B4DD2842925E009D6A52 /* RotateModelPass.swift */,
 			);
 			path = ComputePasses;
 			sourceTree = "<group>";
@@ -1449,6 +1452,7 @@
 				C5FEC739277C977A00E348BD /* CreateBondsGeometry.swift in Sources */,
 				C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */,
 				C5E593B7281D793E00CFFAA2 /* MetalLegacySupport.swift in Sources */,
+				C5C1B4DE2842925E009D6A52 /* RotateModelPass.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */,
 				C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */,

@@ -49,23 +49,18 @@ vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer
 
     // To rotate the billboards so they are facing the screen, first rotate them like the model,
     // along the protein axis.
-    float4 rotated_model = sun_rotation_matrix * float4(vertex_buffer[vertex_id].position.x,
-                                                                vertex_buffer[vertex_id].position.y,
-                                                                vertex_buffer[vertex_id].position.z,
-                                                                1.0);
-    // Then translate the triangle to the origin of coordinates
-    rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
-    // Reverse the rotation by rotating in the opposite rotation along the billboard axis, NOT
-    // the protein axis.
-    rotated_model = inverse_sun_rotation_matrix * rotated_model;
+    float4 billboard_vertex = float4(vertex_buffer[vertex_id].position.x,
+                                     vertex_buffer[vertex_id].position.y,
+                                     vertex_buffer[vertex_id].position.z,
+                                     1.0);
     // Translate the triangles back to their positions, now that they're already rotated
-    rotated_model.xyz = rotated_model.xyz + rotated_atom_centers.xyz;
+    billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
         
     // For the ShadowShader, we use model coordinates instead of camera coordinates
     normalized_impostor_vertex.atomCenter = rotated_atom_centers.xyz;
     
     // Transform the model space coordinates to normalized device coordinates
-    normalized_impostor_vertex.position = shadow_projection_matrix * rotated_model;
+    normalized_impostor_vertex.position = shadow_projection_matrix * billboard_vertex;
 
     // Return the processed vertex
     return normalized_impostor_vertex;

@@ -30,7 +30,6 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vert
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
-    simd_float4x4 inverse_rotation_matrix = frameData.inverse_rotation_matrix;
     
     // Rotate the model in world space
     float4 rotated_atom_centers = rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
@@ -40,28 +39,19 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device BillboardVertex *vert
 
     // To rotate the billboards so they are facing the screen, first rotate them like the model,
     // along the protein axis.
-    float4 rotated_model = rotation_matrix * float4(vertex_buffer[vertex_id].position.x,
-                                                    vertex_buffer[vertex_id].position.y,
-                                                    vertex_buffer[vertex_id].position.z,
-                                                    1.0);
-    // Then translate the vertex to the origin of coordinates
-    rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
-        
-    // Reverse the rotation by rotating in the opposite rotation along the billboard axis, NOT
-    // the protein axis.
-    rotated_model = inverse_rotation_matrix * rotated_model;
+    float4 billboard_vertex = float4(vertex_buffer[vertex_id].position.xyz, 1.0);
     
     // Now, to make the billboards smaller for the depth-bound shader
-    rotated_model.xyz = rotated_model.xyz * 0.70710678;
+    billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678;
     
-    // Translate the triangles back to their positions, now that they're already rotated and scaled
-    rotated_model.xyz = rotated_model.xyz + rotated_atom_centers.xyz;
+    // Translate the triangles back to their positions, now that they're already rotated
+    billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
     
     // Transform the world space coordinates to eye space coordinates
-    float4 eye_position = model_view_matrix * rotated_model;
+    float4 eye_position = model_view_matrix * billboard_vertex;
     
     // Depth bias of 2 Armstrongs to avoid artifacts
-    eye_position.z += 2;
+    eye_position.z += 2; // FIXME: This introduces a perspective bug
         
     // Transform the eye space coordinates to normalized device coordinates
     normalized_depth_bound_vertex.position = projectionMatrix * eye_position;

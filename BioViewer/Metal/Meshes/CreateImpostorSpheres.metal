@@ -33,10 +33,10 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
     
     // MARK: - Vertices
 
-    generatedVertices[index+0].position = simd_float3(radius, radius, 0.0) + position;
-    generatedVertices[index+1].position = simd_float3(-radius, radius, 0.0) + position;
-    generatedVertices[index+2].position = simd_float3(-radius, -radius, 0.0) + position;
-    generatedVertices[index+3].position = simd_float3(radius, -radius, 0.0) + position;
+    generatedVertices[index+0].position = simd_float3(radius, radius, 0.0);
+    generatedVertices[index+1].position = simd_float3(-radius, radius, 0.0);
+    generatedVertices[index+2].position = simd_float3(-radius, -radius, 0.0);
+    generatedVertices[index+3].position = simd_float3(radius, -radius, 0.0);
     
     generatedVertices[index+0].billboardMapping = simd_float2(1, 1);
     generatedVertices[index+1].billboardMapping = simd_float2(-1, 1);
