@@ -55,10 +55,12 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Send vertex outside display bounds if disabled
+    /*
     if (disabledAtoms[atom_id_configuration]) {
         normalized_impostor_vertex.position = float4(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);
         return normalized_impostor_vertex;
     }
+    */
     
     // Set attributes
     normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.xy);

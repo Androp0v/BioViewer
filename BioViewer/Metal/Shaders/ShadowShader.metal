@@ -39,7 +39,6 @@ vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer
     // Fetch the matrices
     simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
     simd_float4x4 sun_rotation_matrix = frameData.sun_rotation_matrix;
-    simd_float4x4 inverse_sun_rotation_matrix = frameData.inverse_sun_rotation_matrix;
     
     // Rotate the model in world space
     float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
