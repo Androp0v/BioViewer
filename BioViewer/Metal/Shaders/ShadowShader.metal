@@ -72,9 +72,18 @@ struct ShadowFragmentOut{
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[stage_in]],
-                                           const device FrameData& frameData [[ buffer(1) ]] ) {
+                                           const device FrameData& frameData [[ buffer(0) ]],
+                                           depth2d<float, access::sample> shadowDepthBound [[ texture(0) ]]) {
     // Declare output
     ShadowFragmentOut output;
+    
+    // Depth testing with precomputed depth upper bound
+    constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
+    float boundedDepth = shadowDepthBound.sample(nearest, impostor_vertex.position.xy);
+    float primitiveDepth = impostor_vertex.position.z;
+    if (boundedDepth < primitiveDepth) {
+        discard_fragment();
+    }
 
     // dot = x^2 + y^2
     half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);

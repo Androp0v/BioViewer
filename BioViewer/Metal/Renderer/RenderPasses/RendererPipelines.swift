@@ -9,6 +9,27 @@ import Foundation
 import Metal
 
 extension ProteinRenderer {
+    
+    // MARK: - Shadow depth bound pass
+    
+    func makeShadowDepthBoundRenderPipelineState(device: MTLDevice) {
+        // Setup pipeline
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
+            fatalError()
+        }
+        let vertexProgram = defaultLibrary.makeFunction(name: "depth_bound_shadow_vertex")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "depth_bound_shadow_fragment")
+
+        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+        pipelineStateDescriptor.vertexFunction = vertexProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = DepthBoundTextures.pixelFormat
+
+        // Specify the format of the depth texture
+        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
+
+        shadowDepthBoundRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+    }
         
     // MARK: - Shadow pass
     

@@ -12,14 +12,14 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func depthBoundRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, atomIDTexture: MTLTexture, depthTexture: MTLTexture?) {
+    func depthBoundRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, colorTexture: MTLTexture, depthTexture: MTLTexture?) {
         
         // Ensure transparent buffers are loaded
         guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        depthBoundRenderPassDescriptor.colorAttachments[0].texture = atomIDTexture
+        depthBoundRenderPassDescriptor.colorAttachments[0].texture = colorTexture
         // Attach depth texture.
         depthBoundRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).

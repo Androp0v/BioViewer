@@ -42,6 +42,9 @@ class ProteinRenderer: NSObject {
     
     /// Pipeline state for filling the color buffer.
     var fillColorComputePipelineState: MTLComputePipelineState?
+    
+    /// Pipeline state for the shadow depth bounding pre-pass.
+    var shadowDepthBoundRenderPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the directional shadow creation.
     var shadowRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the depth bounding pre-pass.
@@ -141,6 +144,15 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Render pass descriptors
     
+    let shadowDepthBoundRenderPassDescriptor: MTLRenderPassDescriptor = {
+        let descriptor = MTLRenderPassDescriptor()
+        descriptor.colorAttachments[0].loadAction = .dontCare
+        descriptor.colorAttachments[0].storeAction = .dontCare
+        descriptor.depthAttachment.loadAction = .clear
+        descriptor.depthAttachment.storeAction = .store
+        return descriptor
+    }()
+    
     let shadowRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
         descriptor.colorAttachments[0].loadAction = .dontCare
@@ -232,6 +244,7 @@ class ProteinRenderer: NSObject {
         // Create render pipeline states
         makeShadowRenderPipelineState(device: device, useFixedRadius: false)
         if AppState.hasDepthUpperBoundPrePass() {
+            makeShadowDepthBoundRenderPipelineState(device: device)
             makeDepthBoundRenderPipelineState(device: device)
         }
         makeOpaqueRenderPipelineState(device: device)
@@ -246,6 +259,13 @@ class ProteinRenderer: NSObject {
                                     textureWidth: ShadowTextures.defaultTextureWidth,
                                     textureHeight: ShadowTextures.defaultTextureHeight)
         shadowTextures.makeShadowSampler(device: device)
+        
+        // Create texture for depth-bound shadow render pass pre-pass
+        if AppState.hasDepthUpperBoundPrePass() {
+            depthBoundTextures.makeShadowTextures(device: device,
+                                                  shadowTextureWidth: ShadowTextures.defaultTextureWidth,
+                                                  shadowTextureHeight: ShadowTextures.defaultTextureHeight)
+        }
         
         // Depth state
         shadowDepthState = device.makeDepthStencilState(descriptor: depthDescriptor)
@@ -455,9 +475,20 @@ extension ProteinRenderer: MTKViewDelegate {
             
             /*- RENDER PASSES -*/
             
+            // MARK: - Shadow depth bound pass
+            
+            if AppState.hasDepthUpperBoundPrePass() {
+                self.depthBoundShadowRenderPass(commandBuffer: commandBuffer,
+                                          uniformBuffer: &uniformBuffer,
+                                          colorTexture: self.depthBoundTextures.shadowColorTexture,
+                                          depthTexture: self.depthBoundTextures.shadowDepthTexture)
+            }
+            
             // MARK: - Shadow Map pass
             
-            self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: self.shadowTextures)
+            self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
+                                  shadowTextures: self.shadowTextures,
+                                  depthBoundTexture: self.depthBoundTextures.shadowDepthTexture)
             
             // GETTING THE DRAWABLE
             // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -465,14 +496,16 @@ extension ProteinRenderer: MTKViewDelegate {
             if let drawable = view.currentDrawable {
                 
                 // MARK: - Depth bound pass
+                
                 if AppState.hasDepthUpperBoundPrePass() {
                     self.depthBoundRenderPass(commandBuffer: commandBuffer,
                                               uniformBuffer: &uniformBuffer,
-                                              atomIDTexture: self.depthBoundTextures.atomIDTexture,
+                                              colorTexture: self.depthBoundTextures.colorTexture,
                                               depthTexture: self.depthBoundTextures.depthTexture)
                 }
                     
                 // MARK: - Impostor pass
+                
                 self.impostorRenderPass(commandBuffer: commandBuffer,
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,

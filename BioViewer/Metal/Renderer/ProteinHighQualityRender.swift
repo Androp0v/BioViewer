@@ -84,7 +84,10 @@ extension ProteinRenderer {
         
         // MARK: - Shadow Map pass
         
-        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: hqShadowTextures)
+        shadowRenderPass(commandBuffer: commandBuffer,
+                         uniformBuffer: &uniformBuffer,
+                         shadowTextures: hqShadowTextures,
+                         depthBoundTexture: depthBoundTextures.shadowDepthTexture)
         
         // MARK: - Getting drawable
         // The final pass can only render if a drawable is available, otherwise it needs to skip

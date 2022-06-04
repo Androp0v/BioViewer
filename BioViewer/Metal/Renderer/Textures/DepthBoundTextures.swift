@@ -11,8 +11,11 @@ import CoreGraphics
 
 struct DepthBoundTextures {
     
-    var atomIDTexture: MTLTexture!
+    var colorTexture: MTLTexture!
     var depthTexture: MTLTexture!
+    
+    var shadowColorTexture: MTLTexture!
+    var shadowDepthTexture: MTLTexture!
 
     static let pixelFormat = MTLPixelFormat.r32Uint
     
@@ -27,7 +30,7 @@ struct DepthBoundTextures {
         
         commonTextureDescriptor.textureType = .type2D
         
-        // MARK: - AtomID texture
+        // MARK: - Visible texture
         
         commonTextureDescriptor.pixelFormat = DepthBoundTextures.pixelFormat
         commonTextureDescriptor.usage = [.renderTarget]
@@ -39,8 +42,8 @@ struct DepthBoundTextures {
             commonTextureDescriptor.storageMode = .private
         }
         
-        atomIDTexture = device.makeTexture(descriptor: commonTextureDescriptor)
-        atomIDTexture.label = "AtomID Texture"
+        colorTexture = device.makeTexture(descriptor: commonTextureDescriptor)
+        colorTexture.label = "Color depth-bound Texture"
         
         // MARK: - Depth texture
         commonTextureDescriptor.pixelFormat = .depth32Float
@@ -49,5 +52,39 @@ struct DepthBoundTextures {
         
         depthTexture = device.makeTexture(descriptor: commonTextureDescriptor)
         depthTexture.label = "Depth-bound Texture"
+    }
+    
+    mutating func makeShadowTextures(device: MTLDevice, shadowTextureWidth: Int, shadowTextureHeight: Int) {
+        // MARK: - Common texture descriptor
+        let commonTextureDescriptor = MTLTextureDescriptor
+            .texture2DDescriptor(pixelFormat: ShadowTextures.shadowTexturePixelFormat,
+                                 width: shadowTextureWidth,
+                                 height: shadowTextureHeight,
+                                 mipmapped: false)
+        
+        commonTextureDescriptor.textureType = .type2D
+        
+        // MARK: - Visible texture
+        
+        commonTextureDescriptor.pixelFormat = DepthBoundTextures.pixelFormat
+        commonTextureDescriptor.usage = [.renderTarget]
+        
+        // Memoryless storage mode only works on TBDR GPUs
+        if device.supportsFamily(.apple1) {
+            commonTextureDescriptor.storageMode = .memoryless
+        } else {
+            commonTextureDescriptor.storageMode = .private
+        }
+        
+        shadowColorTexture = device.makeTexture(descriptor: commonTextureDescriptor)
+        shadowColorTexture.label = "Shadow color depth-bound Texture"
+        
+        // MARK: - Depth texture
+        commonTextureDescriptor.pixelFormat = .depth32Float
+        commonTextureDescriptor.usage = [.renderTarget, .shaderRead]
+        commonTextureDescriptor.storageMode = .shared
+        
+        shadowDepthTexture = device.makeTexture(descriptor: commonTextureDescriptor)
+        shadowDepthTexture.label = "Shadow depth-bound Texture"
     }
 }

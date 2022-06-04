@@ -117,7 +117,6 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     ImpostorFragmentOut output;
     
     // Depth testing with precomputed depth upper bound
-    // TODO: Write the code.
     constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
     float boundedDepth = depthBound.sample(nearest, impostor_vertex.position.xy);
     float primitiveDepth = impostor_vertex.position.z;
