@@ -27,7 +27,8 @@ extension ProteinRenderer {
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
-
+        
+        pipelineStateDescriptor.label = "Shadow map depth bound pre-pass"
         shadowDepthBoundRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
         
@@ -56,6 +57,7 @@ extension ProteinRenderer {
         pipelineStateDescriptor.depthAttachmentPixelFormat = ShadowTextures.shadowDepthTexturePixelFormat
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = ShadowTextures.shadowTexturePixelFormat
 
+        pipelineStateDescriptor.label = "Shadow map impostor shading"
         shadowRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
@@ -77,6 +79,7 @@ extension ProteinRenderer {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
 
+        pipelineStateDescriptor.label = "Main depth bound pre-pass"
         depthBoundRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
@@ -98,6 +101,7 @@ extension ProteinRenderer {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
 
+        pipelineStateDescriptor.label = "Opaque geometry pass"
         opaqueRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
@@ -153,6 +157,7 @@ extension ProteinRenderer {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
         
+        pipelineStateDescriptor.label = "Impostor geometry shading"
         // Save to the appropriate pipeline state
         switch variant {
         case .solidSpheres, .ballAndSticks:
@@ -193,6 +198,7 @@ extension ProteinRenderer {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
         
+        pipelineStateDescriptor.label = "Bond shading"
         // Save to the appropriate pipeline state
         switch variant {
         case .solidSpheres, .ballAndSticks:
@@ -223,6 +229,7 @@ extension ProteinRenderer {
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
         
+        pipelineStateDescriptor.label = "[DEBUG] Points shading"
         // Save to the appropriate pipeline state
         debugPointsRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
