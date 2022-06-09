@@ -16,10 +16,13 @@ using namespace metal;
 
 kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer(0) ]],
                                   const device uint16_t *atomType [[ buffer(1) ]],
-                                  device BillboardVertex *generatedVertices [[ buffer(2) ]],
-                                  device uint32_t *generatedIndices [[ buffer(3) ]],
-                                  constant uint32_t & totalAtomCount [[ buffer(4) ]],
-                                  constant AtomRadii &atom_radii [[buffer(5)]],
+                                  device simd_half3 *generatedPositions [[ buffer(2) ]],
+                                  device simd_float3 *generatedAtomCenters [[ buffer(3) ]],
+                                  device simd_half2 *generatedBillboardMapping [[ buffer(4) ]],
+                                  device half *generatedAtomRadius [[ buffer(5) ]],
+                                  device uint32_t *generatedIndices [[ buffer(6) ]],
+                                  constant uint32_t & totalAtomCount [[ buffer(7) ]],
+                                  constant AtomRadii &atom_radii [[buffer(8)]],
                                   uint i [[ thread_position_in_grid ]],
                                   uint l [[ thread_position_in_threadgroup ]]) {
     // TO-DO
@@ -33,25 +36,25 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
     
     // MARK: - Vertices
 
-    generatedVertices[index+0].position = simd_float3(radius, radius, 0.0);
-    generatedVertices[index+1].position = simd_float3(-radius, radius, 0.0);
-    generatedVertices[index+2].position = simd_float3(-radius, -radius, 0.0);
-    generatedVertices[index+3].position = simd_float3(radius, -radius, 0.0);
+    generatedPositions[index+0] = simd_half3(radius, radius, 0.0);
+    generatedPositions[index+1] = simd_half3(-radius, radius, 0.0);
+    generatedPositions[index+2] = simd_half3(-radius, -radius, 0.0);
+    generatedPositions[index+3] = simd_half3(radius, -radius, 0.0);
     
-    generatedVertices[index+0].billboardMapping = simd_float2(1, 1);
-    generatedVertices[index+1].billboardMapping = simd_float2(-1, 1);
-    generatedVertices[index+2].billboardMapping = simd_float2(-1, -1);
-    generatedVertices[index+3].billboardMapping = simd_float2(1, -1);
+    generatedBillboardMapping[index+0] = simd_half2(1, 1);
+    generatedBillboardMapping[index+1] = simd_half2(-1, 1);
+    generatedBillboardMapping[index+2] = simd_half2(-1, -1);
+    generatedBillboardMapping[index+3] = simd_half2(1, -1);
     
-    generatedVertices[index+0].billboard_world_center = position;
-    generatedVertices[index+1].billboard_world_center = position;
-    generatedVertices[index+2].billboard_world_center = position;
-    generatedVertices[index+3].billboard_world_center = position;
+    generatedAtomCenters[index+0] = position;
+    generatedAtomCenters[index+1] = position;
+    generatedAtomCenters[index+2] = position;
+    generatedAtomCenters[index+3] = position;
     
-    generatedVertices[index+0].atom_radius = radius;
-    generatedVertices[index+1].atom_radius = radius;
-    generatedVertices[index+2].atom_radius = radius;
-    generatedVertices[index+3].atom_radius = radius;
+    generatedAtomRadius[index+0] = half(radius);
+    generatedAtomRadius[index+1] = half(radius);
+    generatedAtomRadius[index+2] = half(radius);
+    generatedAtomRadius[index+3] = half(radius);
     
     // MARK: - Indices
 

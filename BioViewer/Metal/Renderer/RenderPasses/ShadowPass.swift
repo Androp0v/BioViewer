@@ -13,7 +13,7 @@ extension ProteinRenderer {
     func shadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, depthBoundTexture: MTLTexture?) {
     
         // Ensure transparent buffers are loaded
-        guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
+        guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures
@@ -39,15 +39,25 @@ extension ProteinRenderer {
         renderCommandEncoder.setDepthStencilState(shadowDepthState)
         
         // Add buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
                                              offset: 0,
                                              index: 0)
-        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomWorldCenterBuffer,
                                              offset: 0,
                                              index: 1)
-        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.billboardMappingBuffer,
                                              offset: 0,
                                              index: 2)
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomRadiusBuffer,
+                                             offset: 0,
+                                             index: 3)
+        
+        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+                                             offset: 0,
+                                             index: 4)
+        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                             offset: 0,
+                                             index: 5)
         
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,

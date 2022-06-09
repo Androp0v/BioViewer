@@ -24,33 +24,30 @@ struct ShadowVertexOut{
 
 // MARK: - Vertex function
 
-vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                     const device uint16_t *atomType [[ buffer(1) ]],
-                                     const device FrameData& frameData [[ buffer(2) ]],
+vertex ShadowVertexOut shadow_vertex(const device simd_half3 *vertex_position [[ buffer(0) ]],
+                                     const device simd_float3 *billboard_world_center [[ buffer(1) ]],
+                                     const device simd_half2 *billboard_mapping [[ buffer(2) ]],
+                                     const device half *atom_radius [[ buffer(3) ]],
+                                     const device uint16_t *atomType [[ buffer(4) ]],
+                                     const device FrameData& frameData [[ buffer(5) ]],
                                      unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
     ShadowVertexOut normalized_impostor_vertex;
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.xy);
-    normalized_impostor_vertex.atom_radius = vertex_buffer[vertex_id].atom_radius;
+    normalized_impostor_vertex.billboardMapping = billboard_mapping[vertex_id];
+    normalized_impostor_vertex.atom_radius = atom_radius[vertex_id];
 
     // Fetch the matrices
     simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
     simd_float4x4 sun_rotation_matrix = frameData.sun_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
-                                                               vertex_buffer[vertex_id].billboard_world_center.y,
-                                                               vertex_buffer[vertex_id].billboard_world_center.z,
-                                                               1.0);
+    float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
     // Get te billboard vertex position, relative to the atom center
-    float4 billboard_vertex = float4(vertex_buffer[vertex_id].position.x,
-                                     vertex_buffer[vertex_id].position.y,
-                                     vertex_buffer[vertex_id].position.z,
-                                     1.0);
+    float4 billboard_vertex = float4(float3(vertex_position[vertex_id].xyz), 1.0);
     // Translate the triangles to their (rotated) world positions
     billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
         
@@ -67,7 +64,7 @@ vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer
 // MARK: - Fragment function
 
 struct ShadowFragmentOut{
-    float depth [[ depth(any) ]];
+    float depth [[ depth(less) ]];
 };
 
 // [[stage_in]] uses the output from the basic_vertex vertex function

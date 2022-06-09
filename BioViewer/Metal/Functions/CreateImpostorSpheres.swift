@@ -14,7 +14,7 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(protein: Protein, atomRadii: AtomRadii) -> (vertexData: MTLBuffer?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(protein: Protein, atomRadii: AtomRadii) -> (vertexData: BillboardVertexBuffers?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         let impostorVertexCount = 4
         let impostorTriangleCount = 2
@@ -34,9 +34,9 @@ extension MetalScheduler {
         let configurationCount = protein.configurationCount
 
         // Populate buffers
-        let generatedVertexBuffer = device.makeBuffer(
-            length: protein.atomCount * configurationCount * impostorVertexCount * MemoryLayout<BillboardVertex>.stride
-        )
+        let billboardVertexBuffers = BillboardVertexBuffers(device: device,
+                                                                  atomCount: protein.atomCount,
+                                                                  configurationCount: protein.configurationCount)
         let subunitBuffer = device.makeBuffer(
             bytes: subunitData,
             length: protein.atomCount * MemoryLayout<Int16>.stride
@@ -91,12 +91,23 @@ extension MetalScheduler {
             computeEncoder.setBuffer(atomTypeBuffer,
                                      offset: 0,
                                      index: 1)
-            computeEncoder.setBuffer(generatedVertexBuffer,
+            
+            computeEncoder.setBuffer(billboardVertexBuffers?.positionBuffer,
                                      offset: 0,
                                      index: 2)
-            computeEncoder.setBuffer(generatedIndexBuffer,
+            computeEncoder.setBuffer(billboardVertexBuffers?.atomWorldCenterBuffer,
                                      offset: 0,
                                      index: 3)
+            computeEncoder.setBuffer(billboardVertexBuffers?.billboardMappingBuffer,
+                                     offset: 0,
+                                     index: 4)
+            computeEncoder.setBuffer(billboardVertexBuffers?.atomRadiusBuffer,
+                                     offset: 0,
+                                     index: 5)
+            
+            computeEncoder.setBuffer(generatedIndexBuffer,
+                                     offset: 0,
+                                     index: 6)
             
             // Set uniform buffer contents
             let uniformBuffer = device.makeBuffer(
@@ -105,10 +116,10 @@ extension MetalScheduler {
             )
             computeEncoder.setBuffer(uniformBuffer,
                                      offset: 0,
-                                     index: 4)
+                                     index: 7)
             
             var atomRadii = atomRadii
-            computeEncoder.setBytes(&atomRadii, length: MemoryLayout<AtomRadii>.stride, index: 5)
+            computeEncoder.setBytes(&atomRadii, length: MemoryLayout<AtomRadii>.stride, index: 8)
             
             // Schedule the threads
             if device.supportsFamily(.common3) {
@@ -134,6 +145,6 @@ extension MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (generatedVertexBuffer, subunitBuffer, atomTypeBuffer, generatedIndexBuffer)
+        return (billboardVertexBuffers, subunitBuffer, atomTypeBuffer, generatedIndexBuffer)
     }
 }

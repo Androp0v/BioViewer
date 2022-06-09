@@ -19,8 +19,9 @@ struct DepthBoundVertexOut{
 
 // MARK: - Vertex function
 
-vertex DepthBoundVertexOut depth_bound_shadow_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                                     const device FrameData& frameData [[ buffer(1) ]],
+vertex DepthBoundVertexOut depth_bound_shadow_vertex(const device simd_half3 *vertex_position [[ buffer(0) ]],
+                                                     const device simd_float3 *billboard_world_center [[ buffer(1) ]],
+                                                     const device FrameData& frameData [[ buffer(2) ]],
                                                      unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned DepthBoundVertexOut structure
@@ -31,13 +32,10 @@ vertex DepthBoundVertexOut depth_bound_shadow_vertex(const device BillboardVerte
     simd_float4x4 sun_rotation_matrix = frameData.sun_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
-                                                               vertex_buffer[vertex_id].billboard_world_center.y,
-                                                               vertex_buffer[vertex_id].billboard_world_center.z,
-                                                               1.0);
+    float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
     // Get te billboard vertex position, relative to the atom center
-    float4 billboard_vertex = float4(vertex_buffer[vertex_id].position.xyz, 1.0);
+    float4 billboard_vertex = float4(float3(vertex_position[vertex_id].xyz), 1.0);
     
     // Now, make the billboards smaller for the depth-bound shader
     billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678;

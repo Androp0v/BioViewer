@@ -42,11 +42,14 @@ half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, floa
 
 // MARK: - Vertex function
 
-vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                         const device uint16_t *atomType [[ buffer(1) ]],
-                                         const device half3 *atomColor [[ buffer(2) ]],
-                                         const device bool *disabledAtoms [[ buffer(3) ]],
-                                         const device FrameData& frameData [[ buffer(4) ]],
+vertex ImpostorVertexOut impostor_vertex(const device simd_half3 *vertex_position [[ buffer(0) ]],
+                                         const device simd_float3 *billboard_world_center [[ buffer(1) ]],
+                                         const device simd_half2 *billboard_mapping [[ buffer(2) ]],
+                                         const device half *atom_radius [[ buffer(3) ]],
+                                         const device uint16_t *atomType [[ buffer(4) ]],
+                                         const device half3 *atomColor [[ buffer(5) ]],
+                                         const device bool *disabledAtoms [[ buffer(6) ]],
+                                         const device FrameData& frameData [[ buffer(7) ]],
                                          unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
@@ -63,8 +66,8 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     */
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.xy);
-    normalized_impostor_vertex.atom_radius = vertex_buffer[vertex_id].atom_radius;
+    normalized_impostor_vertex.billboardMapping = billboard_mapping[vertex_id];
+    normalized_impostor_vertex.atom_radius = atom_radius[vertex_id];
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -72,13 +75,10 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
-                                                           vertex_buffer[vertex_id].billboard_world_center.y,
-                                                           vertex_buffer[vertex_id].billboard_world_center.z,
-                                                           1.0);
+    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
     // Get te billboard vertex position, relative to the atom center
-    float4 billboard_vertex = float4(vertex_buffer[vertex_id].position.xyz, 1.0);
+    float4 billboard_vertex = float4(float3(vertex_position[vertex_id].xyz), 1.0);
     
     // Translate the triangles to their (rotated) world positions
     billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
@@ -103,7 +103,7 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
 
 struct ImpostorFragmentOut{
     half4 color [[ color(0) ]];
-    float depth [[ depth(any) ]];
+    float depth [[ depth(less) ]];
 };
 
 // [[stage_in]] uses the output from the basic_vertex vertex function

@@ -15,7 +15,7 @@ extension ProteinRenderer {
     func depthBoundShadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, colorTexture: MTLTexture, depthTexture: MTLTexture?) {
         
         // Ensure transparent buffers are loaded
-        guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
+        guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
@@ -41,12 +41,15 @@ extension ProteinRenderer {
         renderCommandEncoder.setDepthStencilState(shadowDepthState)
 
         // Add buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
                                              offset: 0,
                                              index: 0)
-        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomWorldCenterBuffer,
                                              offset: 0,
                                              index: 1)
+        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                             offset: 0,
+                                             index: 2)
         
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)

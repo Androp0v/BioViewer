@@ -80,7 +80,7 @@ class ProteinRenderer: NSObject {
     var disabledAtomsBuffer: MTLBuffer?
     
     /// Used to pass the geometry vertex data to the shader when using billboarding
-    var impostorVertexBuffer: MTLBuffer?
+    var billboardVertexBuffers: BillboardVertexBuffers?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
     var impostorIndexBuffer: MTLBuffer?
     
@@ -303,9 +303,9 @@ class ProteinRenderer: NSObject {
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
-    func setBillboardingBuffers(vertexBuffer: inout MTLBuffer, subunitBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    func setBillboardingBuffers(billboardVertexBuffers: BillboardVertexBuffers, subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, indexBuffer: MTLBuffer) {
         bufferResourceLock.lock()
-        self.impostorVertexBuffer = vertexBuffer
+        self.billboardVertexBuffers = billboardVertexBuffers
         self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer

@@ -109,6 +109,8 @@
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
 		C52AE375279D80A900BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
+		C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
+		C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* RCSBImportView.swift */; };
 		C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */; };
@@ -388,6 +390,7 @@
 		C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorPass.swift; sourceTree = "<group>"; };
 		C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FillColorBuffer.metal; sourceTree = "<group>"; };
 		C52AE373279D7CE900BEE11B /* FillColorInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillColorInput.h; sourceTree = "<group>"; };
+		C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillboardVertexBuffers.swift; sourceTree = "<group>"; };
 		C5385325278998A0007A8368 /* SharedDataStructs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedDataStructs.h; sourceTree = "<group>"; };
 		C53A118B2736D17500119BE6 /* RCSBImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportView.swift; sourceTree = "<group>"; };
 		C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRowView.swift; sourceTree = "<group>"; };
@@ -810,6 +813,7 @@
 			children = (
 				C49D9D38271C6BEF00E12E2F /* AtomProperties.h */,
 				C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */,
+				C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */,
 				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 				C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */,
 				C5FEC736277C8EA800E348BD /* CreateImpostorLinks.metal */,
@@ -1475,6 +1479,7 @@
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */,
+				C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */,
 				C5626AE2283116AA00CFE7DC /* FPSCounterView.swift in Sources */,
 				C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */,
 				C405744C2663DC74008527D1 /* ProteinMetalViewController.swift in Sources */,
@@ -1564,6 +1569,7 @@
 				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
+				C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */,
 				C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */,
 				C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */,
 				C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */,

@@ -15,7 +15,7 @@ extension ProteinRenderer {
     func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthBoundTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
         
         // Ensure transparent buffers are loaded
-        guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
+        guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
@@ -50,21 +50,31 @@ extension ProteinRenderer {
         renderCommandEncoder.setDepthStencilState(depthState)
 
         // Add buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
                                              offset: 0,
                                              index: 0)
-        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomWorldCenterBuffer,
                                              offset: 0,
                                              index: 1)
-        renderCommandEncoder.setVertexBuffer(atomColorBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.billboardMappingBuffer,
                                              offset: 0,
                                              index: 2)
-        renderCommandEncoder.setVertexBuffer(disabledAtomsBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomRadiusBuffer,
                                              offset: 0,
                                              index: 3)
-        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+        
+        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
                                              offset: 0,
                                              index: 4)
+        renderCommandEncoder.setVertexBuffer(atomColorBuffer,
+                                             offset: 0,
+                                             index: 5)
+        renderCommandEncoder.setVertexBuffer(disabledAtomsBuffer,
+                                             offset: 0,
+                                             index: 6)
+        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                             offset: 0,
+                                             index: 7)
         
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,
