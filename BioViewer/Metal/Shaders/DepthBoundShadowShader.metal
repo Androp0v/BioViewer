@@ -35,21 +35,20 @@ vertex DepthBoundVertexOut depth_bound_shadow_vertex(const device simd_half3 *ve
     float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
     // Get te billboard vertex position, relative to the atom center
-    float4 billboard_vertex = float4(float3(vertex_position[vertex_id].xyz), 1.0);
+    half3 billboard_vertex = vertex_position[vertex_id].xyz;
     
     // Now, make the billboards smaller for the depth-bound shader
     billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678;
     
     // Translate the triangles to their (rotated) world positions
     // For the ShadowShader, we use model coordinates instead of camera coordinates
-    billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
+    float3 billboard_vertex_world = float3(billboard_vertex.xyz) + rotated_atom_centers.xyz;
     
-
     // Depth bias of 2 Armstrongs to avoid artifacts
-    billboard_vertex.z += 2; // FIXME: This introduces a perspective bug
+    billboard_vertex_world.z += 2; // FIXME: This introduces a perspective bug
         
     // Transform the eye space coordinates to normalized device coordinates
-    normalized_depth_bound_vertex.position = shadow_projection_matrix * billboard_vertex;
+    normalized_depth_bound_vertex.position = shadow_projection_matrix * float4(billboard_vertex_world.xyz, 1.0);
 
     // Return the processed vertex
     return normalized_depth_bound_vertex;

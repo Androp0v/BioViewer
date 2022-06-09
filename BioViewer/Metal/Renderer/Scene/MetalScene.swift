@@ -30,6 +30,8 @@ class MetalScene: ObservableObject {
     
     /// Struct with data passed to the GPU shader.
     var frameData: FrameData
+    /// Current atom radii configuration
+    var atom_radii: AtomRadii
     /// Frame count since the scene started.
     var frame: Int
     
@@ -91,7 +93,6 @@ class MetalScene: ObservableObject {
 
         // Setup initial values for FrameData
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
-        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
                 
         if AppState.hasSamplerCompareSupport() {
@@ -101,10 +102,11 @@ class MetalScene: ObservableObject {
         }
         self.hasDepthCueing = false
         
+        // Initial atom radii
+        self.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
+        
         self.frameData.shadow_strength = shadowStrength
         self.frameData.depth_cueing_strength = depthCueingStrength
-        
-        self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
         
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
@@ -119,10 +121,7 @@ class MetalScene: ObservableObject {
         // Pass cast shadows and depth cueing to FrameData
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
-        
-        // Initial atom radii
-        self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
-                
+            
         // Create the animator
         self.animator = SceneAnimator(scene: self)
     }
@@ -133,7 +132,6 @@ class MetalScene: ObservableObject {
         guard needsRedraw || isPlaying else { return skipFrame() }
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
-        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         
         // Update configuration
@@ -173,7 +171,6 @@ class MetalScene: ObservableObject {
         let sunRotation = Transform.rotationMatrix(radians: Float.pi / 2,
                                                    axis: simd_float3(-1.0, 0.0, 1.0))
         self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix
-        self.frameData.inverse_sun_rotation_matrix = rotationMatrix.inverse * sunRotation.inverse
         
         // Update camera -> sun's coordinate transform
         self.frameData.camera_to_shadow_projection_matrix = self.frameData.shadowProjectionMatrix
