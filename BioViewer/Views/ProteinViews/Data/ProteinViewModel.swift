@@ -142,7 +142,9 @@ class ProteinViewModel: ObservableObject {
                             .createMolecularSurface() else {
                         return
                     }
+                    #if DEBUG
                     renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
+                    #endif
                 }
             }
         }

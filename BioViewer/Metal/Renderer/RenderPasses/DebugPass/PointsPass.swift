@@ -10,6 +10,7 @@ import Metal
 
 extension ProteinRenderer {
     
+    #if DEBUG
     func pointsRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
         
         // Ensure transparent buffers are loaded
@@ -61,4 +62,5 @@ extension ProteinRenderer {
         // MARK: - End encoding
         renderCommandEncoder.endEncoding()
     }
+    #endif
 }

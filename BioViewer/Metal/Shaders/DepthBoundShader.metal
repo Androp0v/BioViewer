@@ -39,7 +39,7 @@ vertex DepthBoundVertexOut depth_bound_vertex(const device simd_half3 *vertex_po
     half3 billboard_vertex = vertex_position[vertex_id].xyz;
     
     // Now, make the billboards smaller for the depth-bound shader
-    billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678;
+    billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678h;
     
     // Translate the triangles to their (rotated) world positions
     float4 billboard_vertex_world = float4(float3(billboard_vertex.xyz) + rotated_atom_centers.xyz, 1.0);

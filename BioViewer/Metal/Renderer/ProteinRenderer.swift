@@ -341,12 +341,14 @@ class ProteinRenderer: NSObject {
         bufferResourceLock.unlock()
     }
     
+    #if DEBUG
     func setDebugPointsBuffer(vertexBuffer: inout MTLBuffer) {
         bufferResourceLock.lock()
         self.debugPointVertexBuffer = vertexBuffer
         self.scene.needsRedraw = true
         bufferResourceLock.unlock()
     }
+    #endif
     
     /// Deallocates the MTLBuffers used to render a protein
     func removeBuffers() {
@@ -477,7 +479,7 @@ extension ProteinRenderer: MTKViewDelegate {
             
             // MARK: - Shadow depth bound pass
             
-            if AppState.hasDepthUpperBoundPrePass() {
+            if AppState.hasDepthUpperBoundPrePass() && self.scene.hasShadows {
                 self.depthBoundShadowRenderPass(commandBuffer: commandBuffer,
                                           uniformBuffer: &uniformBuffer,
                                           colorTexture: self.depthBoundTextures.shadowColorTexture,
@@ -486,9 +488,11 @@ extension ProteinRenderer: MTKViewDelegate {
             
             // MARK: - Shadow Map pass
             
-            self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
-                                  shadowTextures: self.shadowTextures,
-                                  depthBoundTexture: self.depthBoundTextures.shadowDepthTexture)
+            if self.scene.hasShadows {
+                self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
+                                      shadowTextures: self.shadowTextures,
+                                      depthBoundTexture: self.depthBoundTextures.shadowDepthTexture)
+            }
             
             // GETTING THE DRAWABLE
             // The final pass can only render if a drawable is available, otherwise it needs to skip

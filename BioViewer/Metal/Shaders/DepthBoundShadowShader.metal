@@ -38,7 +38,7 @@ vertex DepthBoundVertexOut depth_bound_shadow_vertex(const device simd_half3 *ve
     half3 billboard_vertex = vertex_position[vertex_id].xyz;
     
     // Now, make the billboards smaller for the depth-bound shader
-    billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678;
+    billboard_vertex.xyz = billboard_vertex.xyz * 0.70710678h;
     
     // Translate the triangles to their (rotated) world positions
     // For the ShadowShader, we use model coordinates instead of camera coordinates
