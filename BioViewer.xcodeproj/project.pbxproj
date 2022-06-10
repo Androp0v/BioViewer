@@ -247,6 +247,7 @@
 		C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */; };
 		C5EEE9C3276FFC02005737C1 /* HQTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C2276FFC02005737C1 /* HQTextures.swift */; };
 		C5EEE9C52770043D005737C1 /* PhotoModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */; };
+		C5F6D2232853A45700C1962F /* ColorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F6D2222853A45700C1962F /* ColorSection.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
@@ -490,6 +491,7 @@
 		C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinHighQualityRender.swift; sourceTree = "<group>"; };
 		C5EEE9C2276FFC02005737C1 /* HQTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HQTextures.swift; sourceTree = "<group>"; };
 		C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewModel.swift; sourceTree = "<group>"; };
+		C5F6D2222853A45700C1962F /* ColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSection.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
@@ -1097,9 +1099,8 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
-				C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */,
-				C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */,
-				C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */,
+				C5F6D2222853A45700C1962F /* ColorSection.swift */,
+				C5F6D22128536AB100C1962F /* AppearancePickers */,
 			);
 			path = AppearanceSegmentProtein;
 			sourceTree = "<group>";
@@ -1162,6 +1163,16 @@
 				C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */,
 			);
 			path = "Top toolbar";
+			sourceTree = "<group>";
+		};
+		C5F6D22128536AB100C1962F /* AppearancePickers */ = {
+			isa = PBXGroup;
+			children = (
+				C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */,
+				C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */,
+				C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */,
+			);
+			path = AppearancePickers;
 			sourceTree = "<group>";
 		};
 		C5F7D30B275786DA008A0517 /* JSONs */ = {
@@ -1409,6 +1420,7 @@
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
 				C5546DAB27E4DF9F00F607F2 /* ComputeSDFGrid.metal in Sources */,
 				C5412FEF283D9D0400234403 /* DepthBoundShader.metal in Sources */,
+				C5F6D2232853A45700C1962F /* ColorSection.swift in Sources */,
 				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
 				C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */,
 				C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */,

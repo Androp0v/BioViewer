@@ -41,14 +41,7 @@ struct PickerRow: View {
             }
             .pickerStyle(DefaultPickerStyle())
         } else {
-            // Custom picker for iPadOS (default MenuPickerStyle on iPadOS
-            // does not show the option name no it's not very intuitive for
-            // our typical options).
-            HStack {
-                Text(optionName)
-                Spacer()
-                // We use .animation() here (iPadOS) but not on macOS because
-                // big animations are generally less used on macOS.
+            if #available(iOS 16.0, *) {
                 Picker(optionName, selection: $selectedOption.animation()) {
                     ForEach(0..<pickerOptions.count) { index in
                         // SwiftUI detects selection by tag
@@ -56,6 +49,23 @@ struct PickerRow: View {
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
+            } else {
+                // Custom picker for iPadOS pre iOS 16 (default MenuPickerStyle
+                // on iPadOS did not show the option name pre iOS 16 so it's not
+                // very intuitive for our typical options).
+                HStack {
+                    Text(optionName)
+                    Spacer()
+                    // We use .animation() here (iPadOS) but not on macOS because
+                    // big animations are generally less used on macOS.
+                    Picker(optionName, selection: $selectedOption.animation()) {
+                        ForEach(0..<pickerOptions.count) { index in
+                            // SwiftUI detects selection by tag
+                            Text(self.pickerOptions[index]).tag(index)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                }
             }
         }
         #endif
