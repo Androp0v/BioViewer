@@ -22,8 +22,8 @@ struct ImpostorVertexOut{
     half3 color;
 };
 
-// MARK: - Constants
-constant bool hq_sample_count [[ function_constant(0) ]];
+// MARK: - Build constants
+constant bool is_high_quality_frame [[ function_constant(0) ]];
 
 // MARK: - Functions
 
@@ -117,11 +117,13 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     ImpostorFragmentOut output;
     
     // Depth testing with precomputed depth upper bound
-    constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
-    float boundedDepth = depthBound.sample(nearest, impostor_vertex.position.xy);
-    float primitiveDepth = impostor_vertex.position.z;
-    if (boundedDepth < primitiveDepth) {
-        discard_fragment();
+    if (!is_high_quality_frame) {
+        constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
+        float boundedDepth = depthBound.sample(nearest, impostor_vertex.position.xy);
+        float primitiveDepth = impostor_vertex.position.z;
+        if (boundedDepth < primitiveDepth) {
+            discard_fragment();
+        }
     }
     
     // dot = x^2 + y^2
@@ -199,7 +201,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         #else
         float sunlit_fraction = 0;
         int sample_count;
-        if (hq_sample_count) {
+        if (is_high_quality_frame) {
             sample_count = 128;
         } else {
             sample_count = 2;

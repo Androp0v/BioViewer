@@ -47,18 +47,24 @@ class ProteinRenderer: NSObject {
     var shadowDepthBoundRenderPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the directional shadow creation.
     var shadowRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the directional shadow creation.
+    var shadowHQRenderingPipelineState: MTLRenderPipelineState?
+    
+    var opaqueRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the impostor geometry rendering (transparent at times).
+    
     /// Pipeline state for the depth bounding pre-pass.
     var depthBoundRenderPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the opaque geometry rendering.
-    var opaqueRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the impostor geometry rendering (transparent at times).
     var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorHQRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times).
+    ///
     var impostorBondRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorBondHQRenderingPipelineState: MTLRenderPipelineState?
+    
     #if DEBUG
     /// Pipeline to debug things using points.
     var debugPointsRenderingPipelineState: MTLRenderPipelineState?
@@ -242,7 +248,7 @@ class ProteinRenderer: NSObject {
         makeFillColorComputePipelineState(device: device)
         
         // Create render pipeline states
-        makeShadowRenderPipelineState(device: device, useFixedRadius: false)
+        makeShadowRenderPipelineState(device: device, highQuality: false)
         if AppState.hasDepthUpperBoundPrePass() {
             makeShadowDepthBoundRenderPipelineState(device: device)
             makeDepthBoundRenderPipelineState(device: device)
@@ -363,11 +369,6 @@ class ProteinRenderer: NSObject {
     /// Make new impostor pipeline variant.
     func remakeImpostorPipelineForVariant(variant: ImpostorRenderPassVariant) {
         makeImpostorRenderPipelineState(device: self.device, variant: variant)
-    }
-    
-    /// Make new shadow pipeline variant.
-    func remakeShadowPipelineForVariant(useFixedRadius: Bool) {
-        makeShadowRenderPipelineState(device: self.device, useFixedRadius: useFixedRadius)
     }
 }
 
@@ -491,7 +492,8 @@ extension ProteinRenderer: MTKViewDelegate {
             if self.scene.hasShadows {
                 self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
                                       shadowTextures: self.shadowTextures,
-                                      depthBoundTexture: self.depthBoundTextures.shadowDepthTexture)
+                                      depthBoundTexture: self.depthBoundTextures.shadowDepthTexture,
+                                      highQuality: false)
             }
             
             // GETTING THE DRAWABLE

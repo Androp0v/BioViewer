@@ -33,6 +33,9 @@ extension ProteinRenderer {
                                       textureHeight: photoModeViewModel.photoConfig.shadowTextureSize)
         hqShadowTextures.makeShadowSampler(device: device)
         
+        // Create high quality shadow render pass pipeline state
+        makeShadowRenderPipelineState(device: device, highQuality: true)
+
         // Create high quality impostor render pass pipeline state
         switch scene.currentVisualization {
         case .solidSpheres:
@@ -87,7 +90,8 @@ extension ProteinRenderer {
         shadowRenderPass(commandBuffer: commandBuffer,
                          uniformBuffer: &uniformBuffer,
                          shadowTextures: hqShadowTextures,
-                         depthBoundTexture: depthBoundTextures.shadowDepthTexture)
+                         depthBoundTexture: depthBoundTextures.shadowDepthTexture,
+                         highQuality: true)
         
         // MARK: - Getting drawable
         // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -98,13 +102,13 @@ extension ProteinRenderer {
                            uniformBuffer: &uniformBuffer,
                            drawableTexture: hqTextures.hqTexture,
                            depthTexture: hqTextures.hqDepthTexture,
-                           depthBoundTexture: depthBoundTextures.depthTexture, // FIXME: Need HQ here
+                           depthBoundTexture: depthBoundTextures.depthTexture,
                            shadowTextures: hqShadowTextures,
                            variant: .solidSpheresHQ,
                            renderBonds: scene.currentVisualization == .ballAndStick)
         
         // MARK: - Completion handler
-        commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
+        commandBuffer.addCompletedHandler({ [weak self] _ in
             guard let self = self else { return }
             // GPU work is complete, signal the semaphore to start the CPU work
             self.frameBoundarySemaphore.signal()

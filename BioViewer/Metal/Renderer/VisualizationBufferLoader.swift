@@ -51,12 +51,6 @@ class VisualizationBufferLoader {
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
             
-            if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
-            } else {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
-            }
-            
             // Animate radii changes
             animator.bufferLoader = self
             if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
@@ -101,11 +95,6 @@ class VisualizationBufferLoader {
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
-            if proteinViewModel.ballAndStickRadiusOption == .fixed {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
-            } else {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
-            }
             
             // Animate radii changes
             animator.bufferLoader = self

@@ -22,6 +22,9 @@ struct ShadowVertexOut{
     float atom_radius;
 };
 
+// MARK: - Build constants
+constant bool is_high_quality_frame [[ function_constant(0) ]];
+
 // MARK: - Vertex function
 
 vertex ShadowVertexOut shadow_vertex(const device simd_half3 *vertex_position [[ buffer(0) ]],
@@ -74,12 +77,14 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
     // Declare output
     ShadowFragmentOut output;
     
-    // Depth testing with precomputed depth upper bound
-    constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
-    float boundedDepth = shadowDepthBound.sample(nearest, impostor_vertex.position.xy);
-    float primitiveDepth = impostor_vertex.position.z;
-    if (boundedDepth < primitiveDepth) {
-        discard_fragment();
+    if (!is_high_quality_frame) {
+        // Depth testing with precomputed depth upper bound
+        constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
+        float boundedDepth = shadowDepthBound.sample(nearest, impostor_vertex.position.xy);
+        float primitiveDepth = impostor_vertex.position.z;
+        if (boundedDepth < primitiveDepth) {
+            discard_fragment();
+        }
     }
 
     // dot = x^2 + y^2

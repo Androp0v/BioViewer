@@ -34,15 +34,15 @@ extension ProteinRenderer {
         
     // MARK: - Shadow pass
     
-    func makeShadowRenderPipelineState(device: MTLDevice, useFixedRadius: Bool) {
+    func makeShadowRenderPipelineState(device: MTLDevice, highQuality: Bool) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
             fatalError()
         }
         
         let constantValues = MTLFunctionConstantValues()
-        var useFixedRadius = useFixedRadius
-        constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 0)
+        var isHighQuality: Bool = highQuality
+        constantValues.setConstantValue(&isHighQuality, type: .bool, index: 0)
         
         let vertexProgram = defaultLibrary.makeFunction(name: "shadow_vertex")
         guard let fragmentProgram = try? defaultLibrary.makeFunction(name: "shadow_fragment", constantValues: constantValues) else {
@@ -58,7 +58,12 @@ extension ProteinRenderer {
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = ShadowTextures.shadowTexturePixelFormat
 
         pipelineStateDescriptor.label = "Shadow map impostor shading"
-        shadowRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        
+        if isHighQuality {
+            shadowHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        } else {
+            shadowRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        }
     }
     
     // MARK: - Depth bound pass
@@ -123,26 +128,12 @@ extension ProteinRenderer {
         // Constant values to avoid unwanted branching
         let constantValues = MTLFunctionConstantValues()
         switch variant {
-        case .solidSpheres:
+        case .solidSpheres, .ballAndSticks:
             var useHighShadowSampleCount: Bool = false
-            var useFixedRadius: Bool = false
             constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
-            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
-        case .solidSpheresHQ:
+        case .solidSpheresHQ, .ballAndSticksHQ:
             var useHighShadowSampleCount: Bool = true
-            var useFixedRadius: Bool = false
             constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
-            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
-        case .ballAndSticks:
-            var useHighShadowSampleCount: Bool = false
-            var useFixedRadius: Bool = true
-            constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
-            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
-        case .ballAndSticksHQ:
-            var useHighShadowSampleCount: Bool = true
-            var useFixedRadius: Bool = true
-            constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
-            constantValues.setConstantValue(&useFixedRadius, type: .bool, index: 1)
         }
         
         // Vertex and fragment functions

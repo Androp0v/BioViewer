@@ -10,7 +10,7 @@ import Metal
 
 extension ProteinRenderer {
     
-    func shadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, depthBoundTexture: MTLTexture?) {
+    func shadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, depthBoundTexture: MTLTexture?, highQuality: Bool) {
     
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
@@ -29,8 +29,14 @@ extension ProteinRenderer {
             return
         }
         
-        // Set pipeline state
-        guard let shadowRenderingPipelineState = shadowRenderingPipelineState else {
+        // Set the correct pipeline state
+        var pipelineState: MTLRenderPipelineState?
+        if highQuality {
+            pipelineState = shadowHQRenderingPipelineState
+        } else {
+            pipelineState = shadowRenderingPipelineState
+        }
+        guard let shadowRenderingPipelineState = pipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(shadowRenderingPipelineState)
