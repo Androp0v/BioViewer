@@ -32,6 +32,14 @@ struct ProteinView: View {
     // UI constants
     private enum Constants {
         static let compactSequenceViewWidth: CGFloat = 32
+        
+        #if targetEnvironment(macCatalyst)
+        // macOS sidebar
+        static let sidebarWidth: CGFloat = 300
+        #else
+        // iPadOS sidebar
+        static let sidebarWidth: CGFloat = 350
+        #endif
     }
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -114,7 +122,7 @@ struct ProteinView: View {
                     // Sidebar
                     if showSidebar && horizontalSizeClass != .compact {
                         sidebar
-                            .frame(width: 300)
+                            .frame(width: Constants.sidebarWidth)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
                             .transition(AnyTransition.move(edge: .trailing))
                     }
