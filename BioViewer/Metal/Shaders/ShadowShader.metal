@@ -17,9 +17,9 @@ using namespace metal;
 
 struct ShadowVertexOut{
     float4 position [[position]];
-    float3 atomCenter;
-    half2 billboardMapping;
-    float atom_radius;
+    float3 atomCenter [[attribute(0)]];
+    half2 billboardMapping [[attribute(1)]];
+    float atom_radius [[attribute(2)]];
 };
 
 // MARK: - Build constants

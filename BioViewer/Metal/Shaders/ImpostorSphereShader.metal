@@ -16,10 +16,10 @@ using namespace metal;
 
 struct ImpostorVertexOut{
     float4 position [[position]];
-    float3 atomCenter;
-    half2 billboardMapping;
-    float atom_radius;
-    half3 color;
+    float3 atomCenter [[attribute(0)]];
+    half2 billboardMapping [[attribute(1)]];
+    float atom_radius [[attribute(2)]];
+    half3 color [[attribute(3)]];
 };
 
 // MARK: - Build constants
