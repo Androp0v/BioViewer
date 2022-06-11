@@ -58,12 +58,13 @@ vertex DepthBoundVertexOut depth_bound_shadow_vertex(const device simd_half3 *ve
 // MARK: - Fragment function
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
-fragment DepthBoundFragmentOut depth_bound_shadow_fragment(DepthBoundVertexOut depth_bound_vertex [[stage_in]]) {
+fragment ShadowDepthBoundFragmentOut depth_bound_shadow_fragment(DepthBoundVertexOut depth_bound_vertex [[stage_in]]) {
     
     // Declare output
-    DepthBoundFragmentOut output;
+    ShadowDepthBoundFragmentOut output;
     
-    output.color = depth_bound_vertex.position.z;
+    output.throwaway_color = 0.0;
+    output.bounded_depth = depth_bound_vertex.position.z;
     
     return output;
 }

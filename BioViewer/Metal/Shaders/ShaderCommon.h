@@ -9,7 +9,13 @@
 #define ShaderCommon_h
 
 struct DepthBoundFragmentOut{
-    float color [[ color(1) ]];
+    half4 throwaway_color [[ color(0) ]];
+    float bounded_depth [[ color(1) ]];
+};
+
+struct ShadowDepthBoundFragmentOut{
+    float throwaway_color [[ color(0) ]];
+    float bounded_depth [[ color(1) ]];
 };
 
 #endif /* ShaderCommon_h */

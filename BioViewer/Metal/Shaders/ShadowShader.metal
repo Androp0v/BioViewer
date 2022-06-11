@@ -74,12 +74,12 @@ struct ShadowFragmentOut{
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[stage_in]],
                                            const device FrameData& frameData [[ buffer(0) ]],
-                                           DepthBoundFragmentOut shadow_depth_bound_output) {
+                                           ShadowDepthBoundFragmentOut shadow_depth_bound_output) {
     // Declare output
     ShadowFragmentOut output;
     
     if (!is_high_quality_frame) {
-        float boundedDepth = shadow_depth_bound_output.color; // FIXME: Rename to depth
+        float boundedDepth = shadow_depth_bound_output.bounded_depth; // FIXME: Rename to depth
         float primitiveDepth = impostor_vertex.position.z;
         if (boundedDepth < primitiveDepth) {
             discard_fragment();

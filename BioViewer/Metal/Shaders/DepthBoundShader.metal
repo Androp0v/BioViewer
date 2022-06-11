@@ -65,7 +65,8 @@ fragment DepthBoundFragmentOut depth_bound_fragment(DepthBoundVertexOut depth_bo
     // Declare output
     DepthBoundFragmentOut output;
     
-    output.color = depth_bound_vertex.position.z;
+    output.throwaway_color = half4(0, 0, 0, 0);
+    output.bounded_depth = depth_bound_vertex.position.z;
     
     return output;
 }
