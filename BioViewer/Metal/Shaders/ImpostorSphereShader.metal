@@ -7,6 +7,7 @@
 
 #include <metal_stdlib>
 #include "FrameData.h"
+#include "ShaderCommon.h"
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
@@ -109,17 +110,16 @@ struct ImpostorFragmentOut{
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
                                                const device FrameData &frameData [[ buffer(1) ]],
-                                               depth2d<float, access::sample> depthBound [[ texture(0) ]],
                                                depth2d<float> shadowMap [[ texture(1) ]],
-                                               sampler shadowSampler [[ sampler(0) ]]) {
+                                               sampler shadowSampler [[ sampler(0) ]],
+                                               DepthBoundFragmentOut depth_bound_output) {
     
     // Declare output
     ImpostorFragmentOut output;
     
     // Depth testing with precomputed depth upper bound
     if (!is_high_quality_frame) {
-        constexpr sampler nearest = sampler(filter::nearest, coord::pixel);
-        float boundedDepth = depthBound.sample(nearest, impostor_vertex.position.xy);
+        float boundedDepth = depth_bound_output.color; // FIXME: Rename to depth
         float primitiveDepth = impostor_vertex.position.z;
         if (boundedDepth < primitiveDepth) {
             discard_fragment();

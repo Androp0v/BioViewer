@@ -150,41 +150,33 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Render pass descriptors
     
-    let shadowDepthBoundRenderPassDescriptor: MTLRenderPassDescriptor = {
-        let descriptor = MTLRenderPassDescriptor()
-        descriptor.colorAttachments[0].loadAction = .dontCare
-        descriptor.colorAttachments[0].storeAction = .dontCare
-        descriptor.depthAttachment.loadAction = .clear
-        descriptor.depthAttachment.storeAction = .store
-        return descriptor
-    }()
-    
     let shadowRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
-        descriptor.colorAttachments[0].loadAction = .dontCare
+        // Final shadow color texture, unused
+        descriptor.colorAttachments[0].loadAction = .clear
         descriptor.colorAttachments[0].storeAction = .dontCare
+        // Depth-bound pre-pass texture
+        descriptor.colorAttachments[1].loadAction = .clear
+        descriptor.colorAttachments[1].storeAction = .dontCare
+        // Final depth texture (Shadow Map)
         descriptor.depthAttachment.loadAction = .clear
         descriptor.depthAttachment.storeAction = .store
         
-        descriptor.defaultRasterSampleCount = 0
-        return descriptor
-    }()
-    
-    let depthBoundRenderPassDescriptor: MTLRenderPassDescriptor = {
-        let descriptor = MTLRenderPassDescriptor()
-        descriptor.colorAttachments[0].loadAction = .dontCare
-        descriptor.colorAttachments[0].storeAction = .dontCare
-        descriptor.depthAttachment.loadAction = .clear
-        descriptor.depthAttachment.storeAction = .store
         return descriptor
     }()
     
     let impostorRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
+        // Final drawable texture
         descriptor.colorAttachments[0].loadAction = .clear
         descriptor.colorAttachments[0].storeAction = .store
+        // Depth-bound pre-pass texture
+        descriptor.colorAttachments[1].loadAction = .clear
+        descriptor.colorAttachments[1].storeAction = .dontCare
+        // Final depth texture
         descriptor.depthAttachment.loadAction = .clear
         descriptor.depthAttachment.storeAction = .dontCare
+        
         return descriptor
     }()
     
@@ -478,21 +470,12 @@ extension ProteinRenderer: MTKViewDelegate {
             
             /*- RENDER PASSES -*/
             
-            // MARK: - Shadow depth bound pass
-            
-            if AppState.hasDepthUpperBoundPrePass() && self.scene.hasShadows {
-                self.depthBoundShadowRenderPass(commandBuffer: commandBuffer,
-                                          uniformBuffer: &uniformBuffer,
-                                          colorTexture: self.depthBoundTextures.shadowColorTexture,
-                                          depthTexture: self.depthBoundTextures.shadowDepthTexture)
-            }
-            
             // MARK: - Shadow Map pass
             
             if self.scene.hasShadows {
                 self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
                                       shadowTextures: self.shadowTextures,
-                                      depthBoundTexture: self.depthBoundTextures.shadowDepthTexture,
+                                      depthBoundTexture: self.depthBoundTextures.shadowColorTexture,
                                       highQuality: false)
             }
             
@@ -500,15 +483,6 @@ extension ProteinRenderer: MTKViewDelegate {
             // The final pass can only render if a drawable is available, otherwise it needs to skip
             // rendering this frame. Get the drawable as late as possible.
             if let drawable = view.currentDrawable {
-                
-                // MARK: - Depth bound pass
-                
-                if AppState.hasDepthUpperBoundPrePass() {
-                    self.depthBoundRenderPass(commandBuffer: commandBuffer,
-                                              uniformBuffer: &uniformBuffer,
-                                              colorTexture: self.depthBoundTextures.colorTexture,
-                                              depthTexture: self.depthBoundTextures.depthTexture)
-                }
                     
                 // MARK: - Impostor pass
                 
@@ -516,7 +490,7 @@ extension ProteinRenderer: MTKViewDelegate {
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,
                                         depthTexture: view.depthStencilTexture,
-                                        depthBoundTexture: self.depthBoundTextures.depthTexture,
+                                        depthBoundTexture: self.depthBoundTextures.colorTexture,
                                         shadowTextures: self.shadowTextures,
                                         variant: .solidSpheres,
                                         renderBonds: self.scene.currentVisualization == .ballAndStick)

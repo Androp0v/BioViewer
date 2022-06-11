@@ -20,6 +20,12 @@ extension ProteinRenderer {
         shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
         shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
         shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        if AppState.hasDepthUpperBoundPrePass() {
+            // colorAttachments[1] is the shadow depth-bound color texture
+            shadowRenderPassDescriptor.colorAttachments[1].texture = depthBoundTexture
+            // Clear the depth texture using the equivalent to 1.0 (max depth)
+            shadowRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        }
         
         shadowRenderPassDescriptor.renderTargetWidth = shadowTextures.textureWidth
         shadowRenderPassDescriptor.renderTargetHeight = shadowTextures.textureHeight
@@ -28,6 +34,15 @@ extension ProteinRenderer {
         guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: shadowRenderPassDescriptor) else {
             return
         }
+        
+        // MARK: - Shadow depth bound pass
+        
+        if AppState.hasDepthUpperBoundPrePass() && self.scene.hasShadows {
+            self.encodeShadowDepthBoundStage(renderCommandEncoder: renderCommandEncoder,
+                                             uniformBuffer: &uniformBuffer)
+        }
+        
+        // MARK: - Shadow map creation
         
         // Set the correct pipeline state
         var pipelineState: MTLRenderPipelineState?
@@ -68,8 +83,6 @@ extension ProteinRenderer {
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,
                                                index: 0)
-        renderCommandEncoder.setFragmentTexture(depthBoundTexture,
-                                                index: 0)
 
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)

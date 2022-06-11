@@ -7,6 +7,7 @@
 
 #include <metal_stdlib>
 #include "FrameData.h"
+#include "ShaderCommon.h"
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
@@ -56,17 +57,13 @@ vertex DepthBoundVertexOut depth_bound_shadow_vertex(const device simd_half3 *ve
 
 // MARK: - Fragment function
 
-struct DepthBoundFragmentOut{
-    uint color [[ color(0) ]];
-};
-
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment DepthBoundFragmentOut depth_bound_shadow_fragment(DepthBoundVertexOut depth_bound_vertex [[stage_in]]) {
     
     // Declare output
     DepthBoundFragmentOut output;
     
-    output.color = 0;
+    output.color = depth_bound_vertex.position.z;
     
     return output;
 }

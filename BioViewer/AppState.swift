@@ -47,6 +47,12 @@ class AppState: ObservableObject {
     }
     
     static let hasDepthUpperBoundPrePass = { () -> Bool in
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return false
+        }
+        if !device.supportsFamily(.apple1) {
+            return false
+        }
         return true
     }
     

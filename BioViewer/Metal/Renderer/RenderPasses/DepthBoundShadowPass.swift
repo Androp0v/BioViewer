@@ -12,25 +12,13 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func depthBoundShadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, colorTexture: MTLTexture, depthTexture: MTLTexture?) {
+    func encodeShadowDepthBoundStage(renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer)  {
         
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
-        // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        shadowDepthBoundRenderPassDescriptor.colorAttachments[0].texture = colorTexture
-        // Attach depth texture.
-        shadowDepthBoundRenderPassDescriptor.depthAttachment.texture = depthTexture
-        // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
-        shadowDepthBoundRenderPassDescriptor.depthAttachment.clearDepth = 1.0
-
-        // Create render command encoder
-        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: shadowDepthBoundRenderPassDescriptor) else {
-            return
-        }
-        
-        // MARK: - Impostor sphere rendering
+        // MARK: - Depth bound rendering
 
         guard let pipelineState = shadowDepthBoundRenderPipelineState else {
             return
@@ -66,8 +54,5 @@ extension ProteinRenderer {
                                                    indexType: .uint32,
                                                    indexBuffer: impostorIndexBuffer,
                                                    indexBufferOffset: indexBufferOffset * MemoryLayout<UInt32>.stride)
-        
-        // MARK: - End encoding
-        renderCommandEncoder.endEncoding()
     }
 }

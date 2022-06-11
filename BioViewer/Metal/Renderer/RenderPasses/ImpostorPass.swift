@@ -22,6 +22,14 @@ extension ProteinRenderer {
         impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
         impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
+        
+        if AppState.hasDepthUpperBoundPrePass() {
+            // Attach textures. colorAttachments[1] is the depth-bound color texture
+            impostorRenderPassDescriptor.colorAttachments[1].texture = depthBoundTexture
+            // Clear the depth texture using the equivalent to 1.0 (max depth)
+            impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        }
+                
         // Attach depth texture.
         impostorRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
@@ -32,7 +40,15 @@ extension ProteinRenderer {
             return
         }
         
+        // MARK: - Depth bound stage
+        
+        if AppState.hasDepthUpperBoundPrePass() {
+            self.encodeDepthBoundStage(renderCommandEncoder: renderCommandEncoder,
+                                       uniformBuffer: &uniformBuffer)
+        }
+        
         // MARK: - Impostor sphere rendering
+        
         // Set pipeline state for the variant
         var variantPipelineState: MTLRenderPipelineState?
         switch variant {
@@ -79,8 +95,6 @@ extension ProteinRenderer {
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,
                                                index: 1)
-        renderCommandEncoder.setFragmentTexture(depthBoundTexture,
-                                                index: 0)
         renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
                                                 index: 1)
         renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,

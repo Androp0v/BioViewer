@@ -90,7 +90,7 @@ extension ProteinRenderer {
         shadowRenderPass(commandBuffer: commandBuffer,
                          uniformBuffer: &uniformBuffer,
                          shadowTextures: hqShadowTextures,
-                         depthBoundTexture: depthBoundTextures.shadowDepthTexture,
+                         depthBoundTexture: depthBoundTextures.shadowColorTexture,
                          highQuality: true)
         
         // MARK: - Getting drawable
@@ -102,7 +102,7 @@ extension ProteinRenderer {
                            uniformBuffer: &uniformBuffer,
                            drawableTexture: hqTextures.hqTexture,
                            depthTexture: hqTextures.hqDepthTexture,
-                           depthBoundTexture: depthBoundTextures.depthTexture,
+                           depthBoundTexture: depthBoundTextures.colorTexture,
                            shadowTextures: hqShadowTextures,
                            variant: .solidSpheresHQ,
                            renderBonds: scene.currentVisualization == .ballAndStick)
