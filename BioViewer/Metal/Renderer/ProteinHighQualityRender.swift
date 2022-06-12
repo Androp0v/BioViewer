@@ -26,6 +26,15 @@ extension ProteinRenderer {
         hqTextures.makeTextures(device: device, photoConfig: photoModeViewModel.photoConfig)
         impostorRenderPassDescriptor.depthAttachment.storeAction = .store
         
+        // Create the textures required for HQ depth pre-pass
+        var hqPrePassTextures = DepthPrePassTextures()
+        hqPrePassTextures.makeTextures(device: device,
+                                       textureWidth: photoModeViewModel.photoConfig.finalTextureSize,
+                                       textureHeight: photoModeViewModel.photoConfig.finalTextureSize)
+        hqPrePassTextures.makeShadowTextures(device: device,
+                                             shadowTextureWidth: photoModeViewModel.photoConfig.shadowTextureSize,
+                                             shadowTextureHeight: photoModeViewModel.photoConfig.shadowTextureSize)
+        
         // Create the textures required for HQ shadow casting
         var hqShadowTextures = ShadowTextures()
         hqShadowTextures.makeTextures(device: device,
@@ -90,7 +99,7 @@ extension ProteinRenderer {
         shadowRenderPass(commandBuffer: commandBuffer,
                          uniformBuffer: &uniformBuffer,
                          shadowTextures: hqShadowTextures,
-                         shadowDepthPrePassTexture: depthPrePassTextures.shadowColorTexture,
+                         shadowDepthPrePassTexture: hqPrePassTextures.shadowColorTexture,
                          highQuality: true)
         
         // MARK: - Getting drawable
@@ -102,7 +111,7 @@ extension ProteinRenderer {
                            uniformBuffer: &uniformBuffer,
                            drawableTexture: hqTextures.hqTexture,
                            depthTexture: hqTextures.hqDepthTexture,
-                           depthPrePassTexture: depthPrePassTextures.colorTexture,
+                           depthPrePassTexture: hqPrePassTextures.colorTexture,
                            shadowTextures: hqShadowTextures,
                            variant: .solidSpheresHQ,
                            renderBonds: scene.currentVisualization == .ballAndStick)
