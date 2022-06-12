@@ -43,22 +43,12 @@ extension ProteinRenderer {
         guard let configurationSelector = scene.configurationSelector else {
             return
         }
-        if AppState.hasSubunitDrivenPrePass() {
-            for subunitBufferRegion in configurationSelector.getSubunitSplitImpostorIndexBufferRegions() {
-                renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                           indexCount: subunitBufferRegion.length,
-                                                           indexType: .uint32,
-                                                           indexBuffer: impostorIndexBuffer,
-                                                           indexBufferOffset: subunitBufferRegion.offset * MemoryLayout<UInt32>.stride)
-            }
-        } else {
-             let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
-             
-             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                        indexCount: indexBufferRegion.length,
-                                                        indexType: .uint32,
-                                                        indexBuffer: impostorIndexBuffer,
-                                                        indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
-        }
+        let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
+         
+        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                   indexCount: indexBufferRegion.length,
+                                                   indexType: .uint32,
+                                                   indexBuffer: impostorIndexBuffer,
+                                                   indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
     }
 }
