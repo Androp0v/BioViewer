@@ -10,27 +10,27 @@ import Metal
 
 extension ProteinRenderer {
     
-    // MARK: - Shadow depth bound pass
+    // MARK: - Shadow depth pre-pass
     
-    func makeShadowDepthBoundRenderPipelineState(device: MTLDevice) {
+    func makeShadowDepthPrePassRenderPipelineState(device: MTLDevice) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
             fatalError()
         }
-        let vertexProgram = defaultLibrary.makeFunction(name: "depth_bound_shadow_vertex")
-        let fragmentProgram = defaultLibrary.makeFunction(name: "depth_bound_shadow_fragment")
+        let vertexProgram = defaultLibrary.makeFunction(name: "shadow_depth_pre_pass_vertex")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "shadow_depth_pre_pass_fragment")
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = ShadowTextures.shadowTexturePixelFormat
-        pipelineStateDescriptor.colorAttachments[1].pixelFormat = .r32Float
+        pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
         
-        pipelineStateDescriptor.label = "Shadow map depth bound pre-pass"
-        shadowDepthBoundRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        pipelineStateDescriptor.label = "Shadow map depth pre-pass"
+        shadowDepthPrePassRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
         
     // MARK: - Shadow pass
@@ -57,7 +57,7 @@ extension ProteinRenderer {
         // Specify the format of the depth textures
         pipelineStateDescriptor.depthAttachmentPixelFormat = ShadowTextures.shadowDepthTexturePixelFormat
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = ShadowTextures.shadowTexturePixelFormat
-        pipelineStateDescriptor.colorAttachments[1].pixelFormat = .r32Float
+        pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
 
         pipelineStateDescriptor.label = "Shadow map impostor shading"
         
@@ -68,27 +68,27 @@ extension ProteinRenderer {
         }
     }
     
-    // MARK: - Depth bound pass
+    // MARK: - Main depth pre-pass
     
-    func makeDepthBoundRenderPipelineState(device: MTLDevice) {
+    func makeDepthPrePassRenderPipelineState(device: MTLDevice) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
             fatalError()
         }
-        let vertexProgram = defaultLibrary.makeFunction(name: "depth_bound_vertex")
-        let fragmentProgram = defaultLibrary.makeFunction(name: "depth_bound_fragment")
+        let vertexProgram = defaultLibrary.makeFunction(name: "depth_pre_pass_vertex")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "depth_pre_pass_fragment")
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        pipelineStateDescriptor.colorAttachments[1].pixelFormat = .r32Float
+        pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
 
-        pipelineStateDescriptor.label = "Main depth bound pre-pass"
-        depthBoundRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        pipelineStateDescriptor.label = "Main depth pre-pass"
+        depthPrePassRenderPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
     // MARK: - Opaque geometry pass
@@ -147,7 +147,7 @@ extension ProteinRenderer {
         pipelineStateDescriptor.vertexFunction = vertexProgram
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        pipelineStateDescriptor.colorAttachments[1].pixelFormat = .r32Float
+        pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float

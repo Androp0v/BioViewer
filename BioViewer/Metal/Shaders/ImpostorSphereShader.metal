@@ -49,8 +49,7 @@ vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_positio
                                          const device half *atom_radius [[ buffer(3) ]],
                                          const device uint16_t *atomType [[ buffer(4) ]],
                                          const device half3 *atomColor [[ buffer(5) ]],
-                                         const device bool *disabledAtoms [[ buffer(6) ]],
-                                         const device FrameData& frameData [[ buffer(7) ]],
+                                         const device FrameData& frameData [[ buffer(6) ]],
                                          unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
@@ -112,14 +111,14 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                                                const device FrameData &frameData [[ buffer(1) ]],
                                                const depth2d<float> shadowMap [[ texture(1) ]],
                                                sampler shadowSampler [[ sampler(0) ]],
-                                               DepthBoundFragmentOut depth_bound_output) {
+                                               DepthPrePassFragmentOut depth_pre_pass_output) {
     
     // Declare output
     ImpostorFragmentOut output;
     
     // Depth testing with precomputed depth upper bound
     if (!is_high_quality_frame) {
-        float boundedDepth = depth_bound_output.bounded_depth; // FIXME: Rename to depth
+        float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
         float primitiveDepth = impostor_vertex.position.z;
         if (boundedDepth < primitiveDepth) {
             discard_fragment();

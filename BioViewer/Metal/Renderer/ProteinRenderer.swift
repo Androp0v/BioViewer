@@ -43,8 +43,8 @@ class ProteinRenderer: NSObject {
     /// Pipeline state for filling the color buffer.
     var fillColorComputePipelineState: MTLComputePipelineState?
     
-    /// Pipeline state for the shadow depth bounding pre-pass.
-    var shadowDepthBoundRenderPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the shadow depth pre-pass.
+    var shadowDepthPrePassRenderPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the directional shadow creation.
     var shadowRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the directional shadow creation.
@@ -53,8 +53,8 @@ class ProteinRenderer: NSObject {
     var opaqueRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times).
     
-    /// Pipeline state for the depth bounding pre-pass.
-    var depthBoundRenderPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the depth pre-pass.
+    var depthPrePassRenderPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the opaque geometry rendering.
     var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
@@ -81,9 +81,6 @@ class ProteinRenderer: NSObject {
     var opaqueVertexBuffer: MTLBuffer?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader when using a dense mesh
     var opaqueIndexBuffer: MTLBuffer?
-    
-    /// Used to disable atoms when using a depth bound pre-pass.
-    var disabledAtomsBuffer: MTLBuffer?
     
     /// Used to pass the geometry vertex data to the shader when using billboarding
     var billboardVertexBuffers: BillboardVertexBuffers?
@@ -112,7 +109,7 @@ class ProteinRenderer: NSObject {
     // MARK: - Textures
     
     var shadowTextures = ShadowTextures()
-    var depthBoundTextures = DepthBoundTextures()
+    var depthPrePassTextures = DepthPrePassTextures()
 
     // MARK: - Runtime variables
     
@@ -241,9 +238,9 @@ class ProteinRenderer: NSObject {
         
         // Create render pipeline states
         makeShadowRenderPipelineState(device: device, highQuality: false)
-        if AppState.hasDepthUpperBoundPrePass() {
-            makeShadowDepthBoundRenderPipelineState(device: device)
-            makeDepthBoundRenderPipelineState(device: device)
+        if AppState.hasDepthPrePasses() {
+            makeShadowDepthPrePassRenderPipelineState(device: device)
+            makeDepthPrePassRenderPipelineState(device: device)
         }
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
@@ -259,10 +256,10 @@ class ProteinRenderer: NSObject {
         shadowTextures.makeShadowSampler(device: device)
         
         // Create texture for depth-bound shadow render pass pre-pass
-        if AppState.hasDepthUpperBoundPrePass() {
-            depthBoundTextures.makeShadowTextures(device: device,
-                                                  shadowTextureWidth: ShadowTextures.defaultTextureWidth,
-                                                  shadowTextureHeight: ShadowTextures.defaultTextureHeight)
+        if AppState.hasDepthPrePasses() {
+            depthPrePassTextures.makeShadowTextures(device: device,
+                                                    shadowTextureWidth: ShadowTextures.defaultTextureWidth,
+                                                    shadowTextureHeight: ShadowTextures.defaultTextureHeight)
         }
         
         // Depth state
@@ -309,16 +306,12 @@ class ProteinRenderer: NSObject {
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
-        if AppState.hasDepthUpperBoundPrePass() {
+        if AppState.hasDepthPrePasses() {
             // Initialize disabled atoms to none disabled (not yet used)
             let atomCount = atomTypeBuffer.length / MemoryLayout<UInt16>.stride
-            disabledAtomsBuffer = device.makeBuffer(bytes: Array(repeating: false, count: atomCount),
-                                                    length: atomCount * MemoryLayout<Bool>.stride)
         } else {
             // Initialize disabled atoms to none disabled
             let atomCount = atomTypeBuffer.length / MemoryLayout<UInt16>.stride
-            disabledAtomsBuffer = device.makeBuffer(bytes: Array(repeating: false, count: atomCount),
-                                                    length: atomCount * MemoryLayout<Bool>.stride)
         }
         bufferResourceLock.unlock()
     }
@@ -375,8 +368,8 @@ extension ProteinRenderer: MTKViewDelegate {
         
         self.viewResolution = size
         
-        if AppState.hasDepthUpperBoundPrePass() {
-            depthBoundTextures.makeTextures(device: device,
+        if AppState.hasDepthPrePasses() {
+            depthPrePassTextures.makeTextures(device: device,
                                             textureWidth: Int(size.width),
                                             textureHeight: Int(size.height))
         }
@@ -475,7 +468,7 @@ extension ProteinRenderer: MTKViewDelegate {
             if self.scene.hasShadows {
                 self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
                                       shadowTextures: self.shadowTextures,
-                                      depthBoundTexture: self.depthBoundTextures.shadowColorTexture,
+                                      shadowDepthPrePassTexture: self.depthPrePassTextures.shadowColorTexture,
                                       highQuality: false)
             }
             
@@ -490,7 +483,7 @@ extension ProteinRenderer: MTKViewDelegate {
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,
                                         depthTexture: view.depthStencilTexture,
-                                        depthBoundTexture: self.depthBoundTextures.colorTexture,
+                                        depthPrePassTexture: self.depthPrePassTextures.colorTexture,
                                         shadowTextures: self.shadowTextures,
                                         variant: .solidSpheres,
                                         renderBonds: self.scene.currentVisualization == .ballAndStick)

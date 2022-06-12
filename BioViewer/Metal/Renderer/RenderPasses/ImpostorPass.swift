@@ -12,7 +12,7 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthBoundTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthPrePassTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
         
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
@@ -23,9 +23,9 @@ extension ProteinRenderer {
         // Clear the drawable texture using the scene's background color
         impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
         
-        if AppState.hasDepthUpperBoundPrePass() {
-            // Attach textures. colorAttachments[1] is the depth-bound color texture
-            impostorRenderPassDescriptor.colorAttachments[1].texture = depthBoundTexture
+        if AppState.hasDepthPrePasses() {
+            // Attach textures. colorAttachments[1] is the depth pre-pass GBuffer texture
+            impostorRenderPassDescriptor.colorAttachments[1].texture = depthPrePassTexture
             // Clear the depth texture using the equivalent to 1.0 (max depth)
             impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
@@ -39,10 +39,14 @@ extension ProteinRenderer {
         guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
             return
         }
+        renderCommandEncoder.label = "Depth Pre-pass & Billboard Shading"
         
-        // MARK: - Depth bound stage
+        // Set depth state
+        renderCommandEncoder.setDepthStencilState(depthState)
         
-        if AppState.hasDepthUpperBoundPrePass() {
+        // MARK: - Depth pre-pass stage
+        
+        if AppState.hasDepthPrePasses() {
             self.encodeDepthBoundStage(renderCommandEncoder: renderCommandEncoder,
                                        uniformBuffer: &uniformBuffer)
         }
@@ -62,16 +66,7 @@ extension ProteinRenderer {
         }
         renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
 
-        // Set depth state
-        renderCommandEncoder.setDepthStencilState(depthState)
-
-        // Add buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
-                                             offset: 0,
-                                             index: 0)
-        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomWorldCenterBuffer,
-                                             offset: 0,
-                                             index: 1)
+        // Add other buffers to pipeline
         renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.billboardMappingBuffer,
                                              offset: 0,
                                              index: 2)
@@ -85,12 +80,6 @@ extension ProteinRenderer {
         renderCommandEncoder.setVertexBuffer(atomColorBuffer,
                                              offset: 0,
                                              index: 5)
-        renderCommandEncoder.setVertexBuffer(disabledAtomsBuffer,
-                                             offset: 0,
-                                             index: 6)
-        renderCommandEncoder.setVertexBuffer(uniformBuffer,
-                                             offset: 0,
-                                             index: 7)
         
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,

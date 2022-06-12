@@ -1,5 +1,5 @@
 //
-//  DepthBoundTextures.swift
+//  DepthPrePassTextures.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 25/5/22.
@@ -9,19 +9,19 @@ import Foundation
 import Metal
 import CoreGraphics
 
-struct DepthBoundTextures {
+struct DepthPrePassTextures {
     
     var colorTexture: MTLTexture!
     
     var shadowColorTexture: MTLTexture!
 
-    static let pixelFormat = MTLPixelFormat.r32Uint
+    static let pixelFormat = MTLPixelFormat.r32Float
     
     mutating func makeTextures(device: MTLDevice, textureWidth: Int, textureHeight: Int) {
                 
         // MARK: - Common texture descriptor
         let commonTextureDescriptor = MTLTextureDescriptor
-            .texture2DDescriptor(pixelFormat: .r32Float,
+            .texture2DDescriptor(pixelFormat: DepthPrePassTextures.pixelFormat,
                                  width: textureWidth,
                                  height: textureHeight,
                                  mipmapped: false)
@@ -30,7 +30,6 @@ struct DepthBoundTextures {
         
         // MARK: - Visible texture
         
-        commonTextureDescriptor.pixelFormat = .r32Float
         commonTextureDescriptor.usage = [.renderTarget]
         
         // Memoryless storage mode only works on TBDR GPUs
@@ -41,11 +40,13 @@ struct DepthBoundTextures {
         }
         
         colorTexture = device.makeTexture(descriptor: commonTextureDescriptor)
-        colorTexture.label = "Color depth-bound Texture"
+        colorTexture.label = "Depth Pre-pass Texture"
     }
     
     mutating func makeShadowTextures(device: MTLDevice, shadowTextureWidth: Int, shadowTextureHeight: Int) {
+        
         // MARK: - Common texture descriptor
+        
         let commonTextureDescriptor = MTLTextureDescriptor
             .texture2DDescriptor(pixelFormat: ShadowTextures.shadowTexturePixelFormat,
                                  width: shadowTextureWidth,
@@ -56,7 +57,7 @@ struct DepthBoundTextures {
         
         // MARK: - Visible texture
         
-        commonTextureDescriptor.pixelFormat = .r32Float
+        commonTextureDescriptor.pixelFormat = DepthPrePassTextures.pixelFormat
         commonTextureDescriptor.usage = [.renderTarget]
         
         // Memoryless storage mode only works on TBDR GPUs
@@ -67,6 +68,6 @@ struct DepthBoundTextures {
         }
         
         shadowColorTexture = device.makeTexture(descriptor: commonTextureDescriptor)
-        shadowColorTexture.label = "Shadow color depth-bound Texture"
+        shadowColorTexture.label = "Shadow Depth Pre-pass Texture"
     }
 }

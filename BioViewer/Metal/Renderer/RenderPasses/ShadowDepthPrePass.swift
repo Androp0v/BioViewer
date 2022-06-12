@@ -12,21 +12,18 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func encodeShadowDepthBoundStage(renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer)  {
+    func encodeShadowDepthPrePassStage(renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer)  {
         
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
-        // MARK: - Depth bound rendering
+        // MARK: - Depth pre-pass rendering
 
-        guard let pipelineState = shadowDepthBoundRenderPipelineState else {
+        guard let pipelineState = shadowDepthPrePassRenderPipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(pipelineState)
-
-        // Set depth state
-        renderCommandEncoder.setDepthStencilState(shadowDepthState)
 
         // Add buffers to pipeline
         renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
@@ -37,7 +34,7 @@ extension ProteinRenderer {
                                              index: 1)
         renderCommandEncoder.setVertexBuffer(uniformBuffer,
                                              offset: 0,
-                                             index: 2)
+                                             index: 5)
         
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)

@@ -20,13 +20,10 @@ extension ProteinRenderer {
         
         // MARK: - Impostor sphere rendering
 
-        guard let pipelineState = depthBoundRenderPipelineState else {
+        guard let pipelineState = depthPrePassRenderPipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(pipelineState)
-
-        // Set depth state
-        renderCommandEncoder.setDepthStencilState(depthState)
 
         // Add buffers to pipeline
         renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
@@ -37,7 +34,7 @@ extension ProteinRenderer {
                                              index: 1)
         renderCommandEncoder.setVertexBuffer(uniformBuffer,
                                              offset: 0,
-                                             index: 2)
+                                             index: 6)
         
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)

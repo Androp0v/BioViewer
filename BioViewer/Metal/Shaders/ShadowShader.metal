@@ -74,7 +74,7 @@ struct ShadowFragmentOut{
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[stage_in]],
                                            const device FrameData& frameData [[ buffer(0) ]],
-                                           ShadowDepthBoundFragmentOut shadow_depth_bound_output) {
+                                           ShadowDepthPrePassFragmentOut shadow_depth_bound_output) {
     // Declare output
     ShadowFragmentOut output;
     
