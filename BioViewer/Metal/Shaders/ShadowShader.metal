@@ -32,7 +32,7 @@ vertex ShadowVertexOut shadow_vertex(const device simd_half2 *vertex_position [[
                                      const device simd_float3 *billboard_world_center [[ buffer(1) ]],
                                      const device simd_half2 *billboard_mapping [[ buffer(2) ]],
                                      const device half *atom_radius [[ buffer(3) ]],
-                                     const device FrameData& frameData [[ buffer(4) ]],
+                                     constant FrameData& frameData [[ buffer(4) ]],
                                      unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
@@ -72,7 +72,7 @@ struct ShadowFragmentOut{
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[stage_in]],
-                                           const device FrameData& frameData [[ buffer(0) ]],
+                                           constant FrameData& frameData [[ buffer(0) ]],
                                            ShadowDepthPrePassFragmentOut shadow_depth_bound_output) {
     // Declare output
     ShadowFragmentOut output;

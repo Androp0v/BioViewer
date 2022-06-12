@@ -22,7 +22,7 @@ struct DepthPrePassVertexOut{
 
 vertex DepthPrePassVertexOut shadow_depth_pre_pass_vertex(const device simd_half2 *vertex_position [[ buffer(0) ]],
                                                           const device simd_float3 *billboard_world_center [[ buffer(1) ]],
-                                                          const device FrameData& frameData [[ buffer(4) ]],
+                                                          constant FrameData& frameData [[ buffer(4) ]],
                                                           unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned DepthPrePassVertexOut structure

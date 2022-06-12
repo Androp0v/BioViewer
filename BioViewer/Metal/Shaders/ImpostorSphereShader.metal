@@ -48,7 +48,7 @@ vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_positio
                                          const device simd_half2 *billboard_mapping [[ buffer(2) ]],
                                          const device half *atom_radius [[ buffer(3) ]],
                                          const device half3 *atomColor [[ buffer(4) ]],
-                                         const device FrameData& frameData [[ buffer(5) ]],
+                                         constant FrameData& frameData [[ buffer(5) ]],
                                          unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
@@ -107,7 +107,7 @@ struct ImpostorFragmentOut{
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
-                                               const device FrameData &frameData [[ buffer(1) ]],
+                                               constant FrameData &frameData [[ buffer(1) ]],
                                                const depth2d<float> shadowMap [[ texture(1) ]],
                                                sampler shadowSampler [[ sampler(0) ]],
                                                DepthPrePassFragmentOut depth_pre_pass_output) {
