@@ -143,19 +143,16 @@ extension ProteinRenderer {
             renderCommandEncoder.setCullMode(.back)
             
             // Draw primitives
-            guard let indexBufferLength = scene.configurationSelector?.getBondsIndexBufferRegion()?.length else {
-                renderCommandEncoder.endEncoding()
+            guard let configurationSelector = scene.configurationSelector else {
                 return
             }
-            guard let indexBufferOffset = scene.configurationSelector?.getBondsIndexBufferRegion()?.offset else {
-                renderCommandEncoder.endEncoding()
-                return
-            }
+            let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
+            
             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                       indexCount: indexBufferLength,
+                                                       indexCount: indexBufferRegion.length,
                                                        indexType: .uint32,
-                                                       indexBuffer: impostorBondIndexBuffer,
-                                                       indexBufferOffset: indexBufferOffset * MemoryLayout<UInt32>.stride)
+                                                       indexBuffer: impostorIndexBuffer,
+                                                       indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
         }
         
         // MARK: - End encoding

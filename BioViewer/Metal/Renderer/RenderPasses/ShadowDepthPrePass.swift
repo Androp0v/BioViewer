@@ -40,16 +40,25 @@ extension ProteinRenderer {
         renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        guard let indexBufferLength = scene.configurationSelector?.getImpostorIndexBufferRegion().length else {
+        guard let configurationSelector = scene.configurationSelector else {
             return
         }
-        guard let indexBufferOffset = scene.configurationSelector?.getImpostorIndexBufferRegion().offset else {
-            return
+        if AppState.hasSubunitDrivenPrePass() {
+            for subunitBufferRegion in configurationSelector.getSubunitSplitImpostorIndexBufferRegions() {
+                renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                           indexCount: subunitBufferRegion.length,
+                                                           indexType: .uint32,
+                                                           indexBuffer: impostorIndexBuffer,
+                                                           indexBufferOffset: subunitBufferRegion.offset * MemoryLayout<UInt32>.stride)
+            }
+        } else {
+             let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
+             
+             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                        indexCount: indexBufferRegion.length,
+                                                        indexType: .uint32,
+                                                        indexBuffer: impostorIndexBuffer,
+                                                        indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
         }
-        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                   indexCount: indexBufferLength,
-                                                   indexType: .uint32,
-                                                   indexBuffer: impostorIndexBuffer,
-                                                   indexBufferOffset: indexBufferOffset * MemoryLayout<UInt32>.stride)
     }
 }
