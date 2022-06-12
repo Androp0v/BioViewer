@@ -16,6 +16,10 @@ class ConfigurationSelector {
     weak var scene: MetalScene?
     
     var atomsPerConfiguration: Int
+    
+    var subunitIndices: [Int]
+    var subunitLengths: [Int]
+    
     var bondsPerConfiguration: [Int]?
     var bondArrayStarts: [Int]?
     
@@ -24,9 +28,11 @@ class ConfigurationSelector {
     
     // MARK: - Initialization
     
-    init(scene: MetalScene, atomsPerConfiguration: Int, configurationCount: Int) {
+    init(scene: MetalScene, atomsPerConfiguration: Int, subunitIndices: [Int], subunitLengths: [Int], configurationCount: Int) {
         self.scene = scene
         self.atomsPerConfiguration = atomsPerConfiguration
+        self.subunitIndices = subunitIndices
+        self.subunitLengths = subunitLengths
         self.lastConfiguration = configurationCount - 1
     }
     
@@ -60,9 +66,27 @@ class ConfigurationSelector {
                             offset: atomsPerConfiguration * 4 * currentConfiguration)
     }
     
+    func getSubunitSplitImpostorVertexBufferRegions() -> [BufferRegion] {
+        var bufferRegions = [BufferRegion]()
+        for (subunitIndex, subunitLength) in zip(subunitIndices, subunitLengths) {
+            bufferRegions.append(BufferRegion(length: subunitLength * 4,
+                                              offset: subunitIndex * 4 + atomsPerConfiguration * 4 * currentConfiguration))
+        }
+        return bufferRegions
+    }
+    
     func getImpostorIndexBufferRegion() -> BufferRegion {
         return BufferRegion(length: atomsPerConfiguration * 2 * 3,
                             offset: atomsPerConfiguration * 2 * 3 * currentConfiguration)
+    }
+    
+    func getSubunitSplitImpostorIndexBufferRegions() -> [BufferRegion] {
+        var bufferRegions = [BufferRegion]()
+        for (subunitIndex, subunitLength) in zip(subunitIndices, subunitLengths) {
+            bufferRegions.append(BufferRegion(length: subunitLength * 2 * 3,
+                                              offset: subunitIndex * 2 * 3 + atomsPerConfiguration * 2 * 3 * currentConfiguration))
+        }
+        return bufferRegions
     }
     
     func getBondsIndexBufferRegion() -> BufferRegion? {

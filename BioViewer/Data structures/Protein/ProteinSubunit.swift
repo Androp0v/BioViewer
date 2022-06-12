@@ -18,14 +18,14 @@ public class ProteinSubunit {
     public var atomCount: Int
     
     /// Index for the offset for the subunit atoms in the parent protein atom array.
-    public var indexStart: Int
+    public var startIndex: Int
     
     // MARK: - Initialization
     
-    init(id: Int, atomCount: Int, indexStart: Int) {
+    init(id: Int, atomCount: Int, startIndex: Int) {
         self.id = id
         self.atomCount = atomCount
-        self.indexStart = indexStart
+        self.startIndex = startIndex
     }
     
     // MARK: - Functions

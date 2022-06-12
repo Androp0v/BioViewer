@@ -184,7 +184,7 @@ extension FileParser {
         
         let proteinSubunits = [ProteinSubunit(id: firstConfiguration.id,
                                               atomCount: firstConfiguration.atomArrayComposition.totalCount,
-                                              indexStart: 0)]
+                                              startIndex: 0)]
         
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
         

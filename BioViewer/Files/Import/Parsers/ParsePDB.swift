@@ -225,7 +225,7 @@ class PDBParser {
             }
             proteinSubunits.append(ProteinSubunit(id: subunit.id,
                                                   atomCount: subunit.subunitAtomPositions.count,
-                                                  indexStart: subunitIndex))
+                                                  startIndex: subunitIndex))
             subunitIndex += subunit.subunitAtomPositions.count
         }
         

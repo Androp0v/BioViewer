@@ -154,11 +154,9 @@ class MetalScene: ObservableObject {
         needsRedraw = false
         
         // TO-DO: Proper camera auto-rotation
-        /*
         updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                      axis: simd_float3(0, 1, 0)))
         needsRedraw = true
-        */
     }
     
     // MARK: - Update rotation
@@ -182,8 +180,18 @@ class MetalScene: ObservableObject {
     
     // MARK: - Add protein to scene
     func createConfigurationSelector(protein: Protein) {
+        var subunitIndices = [Int]()
+        var subunitLengths = [Int]()
+        if let subunits = protein.subunits {
+            for subunit in subunits {
+                subunitIndices.append(subunit.startIndex)
+                subunitLengths.append(subunit.atomCount)
+            }
+        }
         self.configurationSelector = ConfigurationSelector(scene: self,
                                                            atomsPerConfiguration: protein.atomCount,
+                                                           subunitIndices: subunitIndices,
+                                                           subunitLengths: subunitLengths,
                                                            configurationCount: protein.configurationCount)
         self.frameData.atoms_per_configuration = Int32(protein.atomCount)
     }

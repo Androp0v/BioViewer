@@ -56,6 +56,10 @@ class AppState: ObservableObject {
         return true
     }
     
+    static let hasSubunitDrivenPrePass = { () -> Bool in
+        return hasDepthPrePasses()
+    }
+    
     // MARK: - Version
     
     func version() -> String {
