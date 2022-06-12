@@ -32,8 +32,7 @@ vertex ShadowVertexOut shadow_vertex(const device simd_half2 *vertex_position [[
                                      const device simd_float3 *billboard_world_center [[ buffer(1) ]],
                                      const device simd_half2 *billboard_mapping [[ buffer(2) ]],
                                      const device half *atom_radius [[ buffer(3) ]],
-                                     const device uint16_t *atomType [[ buffer(4) ]],
-                                     const device FrameData& frameData [[ buffer(5) ]],
+                                     const device FrameData& frameData [[ buffer(4) ]],
                                      unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure

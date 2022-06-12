@@ -70,10 +70,6 @@ extension ProteinRenderer {
                                              offset: 0,
                                              index: 3)
         
-        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
-                                             offset: 0,
-                                             index: 4)
-        
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,
                                                index: 0)

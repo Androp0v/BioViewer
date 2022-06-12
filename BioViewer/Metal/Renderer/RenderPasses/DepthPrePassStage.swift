@@ -34,7 +34,7 @@ extension ProteinRenderer {
                                              index: 1)
         renderCommandEncoder.setVertexBuffer(uniformBuffer,
                                              offset: 0,
-                                             index: 6)
+                                             index: 5)
         
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)

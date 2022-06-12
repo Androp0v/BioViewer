@@ -306,13 +306,6 @@ class ProteinRenderer: NSObject {
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
-        if AppState.hasDepthPrePasses() {
-            // Initialize disabled atoms to none disabled (not yet used)
-            let atomCount = atomTypeBuffer.length / MemoryLayout<UInt16>.stride
-        } else {
-            // Initialize disabled atoms to none disabled
-            let atomCount = atomTypeBuffer.length / MemoryLayout<UInt16>.stride
-        }
         bufferResourceLock.unlock()
     }
     
