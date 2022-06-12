@@ -54,6 +54,14 @@ class ProteinMetalViewController: UIViewController {
 
         // Create depth texture for view
         renderedView.depthStencilPixelFormat = .depth32Float
+        
+        if #available(iOS 16.0, *) {
+            if device.supportsFamily(.apple1) {
+                renderedView.depthStencilStorageMode = .memoryless
+            } else {
+                renderedView.depthStencilStorageMode = .private
+            }
+        }
 
         // Add gesture recognition
         renderedView.isUserInteractionEnabled = true

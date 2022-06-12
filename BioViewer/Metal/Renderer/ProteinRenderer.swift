@@ -153,7 +153,7 @@ class ProteinRenderer: NSObject {
     let shadowRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
         // Final shadow color texture, unused
-        descriptor.colorAttachments[0].loadAction = .clear
+        descriptor.colorAttachments[0].loadAction = .dontCare
         descriptor.colorAttachments[0].storeAction = .dontCare
         // Depth-bound pre-pass texture
         descriptor.colorAttachments[1].loadAction = .clear

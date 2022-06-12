@@ -28,7 +28,7 @@ constant bool is_high_quality_frame [[ function_constant(0) ]];
 
 // MARK: - Vertex function
 
-vertex ShadowVertexOut shadow_vertex(const device simd_half3 *vertex_position [[ buffer(0) ]],
+vertex ShadowVertexOut shadow_vertex(const device simd_half2 *vertex_position [[ buffer(0) ]],
                                      const device simd_float3 *billboard_world_center [[ buffer(1) ]],
                                      const device simd_half2 *billboard_mapping [[ buffer(2) ]],
                                      const device half *atom_radius [[ buffer(3) ]],
@@ -51,7 +51,7 @@ vertex ShadowVertexOut shadow_vertex(const device simd_half3 *vertex_position [[
     float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
     // Get te billboard vertex position, relative to the atom center
-    float4 billboard_vertex = float4(float3(vertex_position[vertex_id].xyz), 1.0);
+    float4 billboard_vertex = float4(float2(vertex_position[vertex_id].xy), 0.0, 1.0);
     // Translate the triangles to their (rotated) world positions
     billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
         
