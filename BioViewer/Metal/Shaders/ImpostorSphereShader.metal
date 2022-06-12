@@ -19,7 +19,7 @@ struct ImpostorVertexOut{
     float4 position [[position]];
     float3 atomCenter [[attribute(0)]];
     half2 billboardMapping [[attribute(1)]];
-    float atom_radius [[attribute(2)]];
+    half atom_radius [[attribute(2)]];
     half3 color [[attribute(3)]];
 };
 
