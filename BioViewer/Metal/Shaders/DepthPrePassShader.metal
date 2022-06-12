@@ -35,7 +35,7 @@ vertex DepthPrePassVertexOut depth_pre_pass_vertex(const device simd_half2 *vert
     // Rotate the model in world space
     float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
-    // Get te billboard vertex position, relative to the atom center
+    // Get the billboard vertex position, relative to the atom center
     half3 billboard_vertex = half3(vertex_position[vertex_id].xy, 0.0);
     
     // Now, make the billboards smaller for the depth pre-pass shader

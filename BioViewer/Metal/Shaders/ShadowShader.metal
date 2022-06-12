@@ -49,7 +49,7 @@ vertex ShadowVertexOut shadow_vertex(const device simd_half2 *vertex_position [[
     // Rotate the model in world space
     float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
-    // Get te billboard vertex position, relative to the atom center
+    // Get the billboard vertex position, relative to the atom center
     float4 billboard_vertex = float4(float2(vertex_position[vertex_id].xy), 0.0, 1.0);
     // Translate the triangles to their (rotated) world positions
     billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
