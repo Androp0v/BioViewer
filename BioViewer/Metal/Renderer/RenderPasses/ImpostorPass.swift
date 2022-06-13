@@ -94,7 +94,7 @@ extension ProteinRenderer {
             return
         }
         
-        if false {
+        if true {
             let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
                                                        indexCount: indexBufferRegion.length,

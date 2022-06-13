@@ -222,11 +222,11 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     // Final color
     output.color = half4(shadedColor.rgb, 1.0);
     
-    int hundreds = int(float(subunitID) / 100.0);
-    int tens = subunitID - hundreds;
+    /*int hundreds = int(float(subunitID) / 100.0);
+    int tens = subunitID - (hundreds * 100);
     output.color.r = float(hundreds) / 255;
     output.color.g = float(tens) / 255;
-    output.color.b = 0.0;
+    output.color.b = 0.0;*/
     
     return output;
 }
