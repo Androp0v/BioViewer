@@ -155,7 +155,7 @@ class MetalScene: ObservableObject {
         
         // TO-DO: Proper camera auto-rotation
         updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                     axis: simd_float3(0, 1, 0)))
+                                                                     axis: simd_float3(0, 0, 1)))
         needsRedraw = true
     }
     

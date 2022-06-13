@@ -110,6 +110,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                                                constant FrameData &frameData [[ buffer(1) ]],
                                                const depth2d<float> shadowMap [[ texture(1) ]],
                                                sampler shadowSampler [[ sampler(0) ]],
+                                               constant int &subunitID [[ buffer(8) ]],
                                                DepthPrePassFragmentOut depth_pre_pass_output) {
     
     // Declare output
@@ -220,6 +221,12 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     
     // Final color
     output.color = half4(shadedColor.rgb, 1.0);
+    
+    int hundreds = int(float(subunitID) / 100.0);
+    int tens = subunitID - hundreds;
+    output.color.r = float(hundreds) / 255;
+    output.color.g = float(tens) / 255;
+    output.color.b = 0.0;
     
     return output;
 }

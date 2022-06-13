@@ -93,13 +93,29 @@ extension ProteinRenderer {
         guard let configurationSelector = scene.configurationSelector else {
             return
         }
-        let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
-
-        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                   indexCount: indexBufferRegion.length,
-                                                   indexType: .uint32,
-                                                   indexBuffer: impostorIndexBuffer,
-                                                   indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+        
+        if false {
+            let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
+            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                       indexCount: indexBufferRegion.length,
+                                                       indexType: .uint32,
+                                                       indexBuffer: impostorIndexBuffer,
+                                                       indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+        } else {
+            var subunitIndex: Int = 0
+            for indexBufferRegion in configurationSelector.getSubunitSplitImpostorIndexBufferRegions() {
+                var indexCopy = subunitIndex
+                renderCommandEncoder.setFragmentBytes(&indexCopy,
+                                                      length: MemoryLayout<Int32>.stride,
+                                                      index: 8)
+                renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                           indexCount: indexBufferRegion.length,
+                                                           indexType: .uint32,
+                                                           indexBuffer: impostorIndexBuffer,
+                                                           indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+                subunitIndex += 1
+            }
+        }
         
         // MARK: - Bond rendering
         if renderBonds {
