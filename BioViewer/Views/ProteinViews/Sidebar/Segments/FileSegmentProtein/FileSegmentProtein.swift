@@ -14,6 +14,7 @@ struct FileSegmentProtein: View {
     
     private func getModelNames(modelCount: Int) -> [String] {
         var modelNames = [String]()
+        modelNames.append(NSLocalizedString("Show all", comment: ""))
         for modelIndex in 0..<modelCount {
             modelNames.append( NSLocalizedString("Model \(modelIndex + 1)", comment: ""))
         }
@@ -52,6 +53,7 @@ struct FileSegmentProtein: View {
                         if file.models.count > 1 {
                             PickerRow(optionName: NSLocalizedString("Viewing:", comment: ""),
                                       selectedOption: $proteinViewModel.dataSource.selectedModel[index],
+                                      startIndex: -1,
                                       pickerOptions: getModelNames(modelCount: file.models.count))
                         }
                         

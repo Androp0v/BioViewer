@@ -48,14 +48,14 @@ class ProteinViewDataSource: ObservableObject {
         }
     }
             
-    /// Selected user-selected model for each ProteinFile.
+    /// User-selected model for each ProteinFile.
     @Published var selectedModel = [Int]() {
         didSet {
             updateFileModels()
         }
     }
     
-    /// Maps file ID to selected model array index.
+    /// Maps file ID to selected model array index (different files may have different selected models).
     var selectedModelIndexForFile = [String: Int]()
         
     public weak var proteinViewModel: ProteinViewModel?
