@@ -199,6 +199,7 @@
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
+		C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5883E872857B8D000C97818 /* RCSBDetailView.swift */; };
 		C59550BE2781C24700129F9B /* VisualizationPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */; };
 		C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
@@ -453,6 +454,7 @@
 		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
+		C5883E872857B8D000C97818 /* RCSBDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBDetailView.swift; sourceTree = "<group>"; };
 		C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationPickerRow.swift; sourceTree = "<group>"; };
 		C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterAnimator.swift; sourceTree = "<group>"; };
 		C59792CD277210570019ABD3 /* ShutterClosed.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterClosed.aiff; sourceTree = "<group>"; };
@@ -958,6 +960,7 @@
 				C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */,
 				C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */,
 				C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */,
+				C5883E872857B8D000C97818 /* RCSBDetailView.swift */,
 				C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */,
 				C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */,
 			);
@@ -1468,6 +1471,7 @@
 				C50E02552764B5BE005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
+				C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */,
 				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
 				C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,

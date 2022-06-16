@@ -31,11 +31,6 @@ struct RCSBRowView: View {
         HStack(alignment: .top, spacing: 0) {
             ZStack {
                 Color.white
-                Image(systemName: "questionmark")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 64, height: 64)
-                    .foregroundColor(Color(uiColor: .opaqueSeparator))
                 image?
                     .resizable()
                     .aspectRatio(1.0, contentMode: .fit)
