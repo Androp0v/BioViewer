@@ -15,9 +15,16 @@ struct BillboardVertexBuffers {
     let atomRadiusBuffer: MTLBuffer
     
     init?(device: MTLDevice, atomCount: Int, configurationCount: Int) {
+        self.init(device: device, atomCounts: [atomCount], configurationCounts: [configurationCount])
+    }
+    
+    init?(device: MTLDevice, atomCounts: [Int], configurationCounts: [Int]) {
 
         let verticesPerAtom: Int = 4
-        let vertexCount = atomCount * configurationCount * verticesPerAtom
+        var vertexCount = 0
+        for (atomCount, configurationCount) in zip(atomCounts, configurationCounts) {
+            vertexCount += atomCount * configurationCount * verticesPerAtom
+        }
         
         // Position buffer
         guard let newPositionBuffer = device.makeBuffer(length: vertexCount * MemoryLayout<simd_short2>.stride,

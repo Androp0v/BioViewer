@@ -16,7 +16,6 @@ extension MetalScheduler {
     /// specifying how the triangles are constructed.
     public func createImpostorSpheres(protein: Protein, atomRadii: AtomRadii) -> (vertexData: BillboardVertexBuffers?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
-        let impostorVertexCount = 4
         let impostorTriangleCount = 2
         
         // Create subunit data array
@@ -35,8 +34,8 @@ extension MetalScheduler {
 
         // Populate buffers
         let billboardVertexBuffers = BillboardVertexBuffers(device: device,
-                                                                  atomCount: protein.atomCount,
-                                                                  configurationCount: protein.configurationCount)
+                                                            atomCount: protein.atomCount,
+                                                            configurationCount: protein.configurationCount)
         let subunitBuffer = device.makeBuffer(
             bytes: subunitData,
             length: protein.atomCount * MemoryLayout<Int16>.stride
