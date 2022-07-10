@@ -18,9 +18,6 @@ typedef struct {
     
     /// Model to view matrix
     simd_float4x4 model_view_matrix;
-    
-    /// Inverse of model to view matrix
-    simd_float4x4 inverse_model_view_matrix;
 
     /// Projection matrix
     simd_float4x4 projectionMatrix;
@@ -37,9 +34,6 @@ typedef struct {
     /// Rotation matrix to view the model from the sun's point of view.
     simd_float4x4 sun_rotation_matrix;
     
-    /// Inverse rotation matrix to view the model from the sun's point of view.
-    simd_float4x4 inverse_sun_rotation_matrix;
-    
     /// Transform from camera coordinates to sun's perspective coordinates.
     simd_float4x4 camera_to_shadow_projection_matrix;
         
@@ -52,9 +46,6 @@ typedef struct {
     int8_t has_depth_cueing;
     /// The strength of the depth cueing, from 0 to 1.
     float depth_cueing_strength;
-
-    /// Atom radii for each atom type.
-    AtomRadii atom_radii;
 
 } FrameData;
 

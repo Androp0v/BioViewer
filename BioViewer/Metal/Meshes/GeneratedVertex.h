@@ -53,4 +53,11 @@ typedef struct {
 
 } BondStruct;
 
+typedef struct {
+    
+    /// Position of the vertex in world space
+    simd_float3 position;
+    
+} DebugPoint;
+
 #endif /* GeneratedVertex_h */

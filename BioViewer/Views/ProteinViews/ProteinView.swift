@@ -32,6 +32,14 @@ struct ProteinView: View {
     // UI constants
     private enum Constants {
         static let compactSequenceViewWidth: CGFloat = 32
+        
+        #if targetEnvironment(macCatalyst)
+        // macOS sidebar
+        static let sidebarWidth: CGFloat = 300
+        #else
+        // iPadOS sidebar
+        static let sidebarWidth: CGFloat = 350
+        #endif
     }
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -63,6 +71,18 @@ struct ProteinView: View {
                             .background(.black)
                             .edgesIgnoringSafeArea([.top, .bottom])
                         
+                        #if DEBUG
+                        HStack {
+                            VStack(spacing: .zero) {
+                                Spacer()
+                                ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
+                                FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
+                                    .padding()
+                            }
+                            Spacer()
+                        }
+                        #endif
+                        
                         // Top toolbar
                         VStack {
                             if UserDefaults.standard.value(forKey: "showToolbar") == nil {
@@ -73,7 +93,6 @@ struct ProteinView: View {
                             Spacer()
                         }
                         .environmentObject(proteinViewModel.toolbarConfig)
-                        .environmentObject(proteinViewModel)
                         
                         // Scene controls
                         VStack(spacing: 12) {
@@ -103,7 +122,7 @@ struct ProteinView: View {
                     // Sidebar
                     if showSidebar && horizontalSizeClass != .compact {
                         sidebar
-                            .frame(width: 300)
+                            .frame(width: Constants.sidebarWidth)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
                             .transition(AnyTransition.move(edge: .trailing))
                     }
@@ -158,7 +177,6 @@ struct ProteinView: View {
         }
         // Inform command menus of focus changes
         .focusedValue(\.proteinViewModel, proteinViewModel)
-        .environmentObject(proteinViewModel)
     }
 
     // MARK: - Public functions

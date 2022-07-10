@@ -18,20 +18,20 @@ enum AtomTypeEnum: CaseIterable {
 }
 
 struct AtomType {
-    static let UNKNOWN: UInt8 = 0
-    static let HYDROGEN: UInt8 = 1
-    static let CARBON: UInt8 = 6
-    static let NITROGEN: UInt8 = 7
-    static let OXYGEN: UInt8 = 8
-    static let FLUORINE: UInt8 = 9
-    static let SULFUR: UInt8 = 16
-    static let POTASSIUM: UInt8 = 19
-    static let IRON: UInt8 = 26
+    static let UNKNOWN: UInt16 = 0
+    static let HYDROGEN: UInt16 = 1
+    static let CARBON: UInt16 = 6
+    static let NITROGEN: UInt16 = 7
+    static let OXYGEN: UInt16 = 8
+    static let FLUORINE: UInt16 = 9
+    static let SULFUR: UInt16 = 16
+    static let POTASSIUM: UInt16 = 19
+    static let IRON: UInt16 = 26
 }
 
 class AtomTypeUtilities {
     
-    static let atomTypeDict: [String: UInt8] =
+    static let atomTypeDict: [String: UInt16] =
         ["H": 1,
          "HE": 2,
          "LI": 3,
@@ -70,14 +70,14 @@ class AtomTypeUtilities {
          "KR": 36,
          "I": 53]
         
-    static func getAtomId(atomName: String) -> UInt8 {
+    static func getAtomId(atomName: String) -> UInt16 {
         return AtomTypeUtilities.atomTypeDict[atomName.uppercased(), default: AtomType.UNKNOWN]
     }
 
     /// Return atom Van Der Waals size in Armstrongs based on the type
     /// - Parameter atomType: Atom type identifier, defined in AtomType.swift
     /// - Returns: Atomic radius (in Armstrongs)
-    static func getAtomicVanDerWaalsRadius(atomType: UInt8) -> Float {
+    static func getAtomicVanDerWaalsRadius(atomType: UInt16) -> Float {
         
         switch atomType {
         case AtomType.CARBON:
@@ -100,7 +100,7 @@ class AtomTypeUtilities {
         }
     }
     
-    static func getAtomicColor(atomType: UInt8) -> Color {
+    static func getAtomicColor(atomType: UInt16) -> Color {
         
         switch atomType {
         case AtomType.CARBON:

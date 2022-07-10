@@ -26,6 +26,15 @@ extension ProteinRenderer {
         hqTextures.makeTextures(device: device, photoConfig: photoModeViewModel.photoConfig)
         impostorRenderPassDescriptor.depthAttachment.storeAction = .store
         
+        // Create the textures required for HQ depth pre-pass
+        var hqPrePassTextures = DepthPrePassTextures()
+        hqPrePassTextures.makeTextures(device: device,
+                                       textureWidth: photoModeViewModel.photoConfig.finalTextureSize,
+                                       textureHeight: photoModeViewModel.photoConfig.finalTextureSize)
+        hqPrePassTextures.makeShadowTextures(device: device,
+                                             shadowTextureWidth: photoModeViewModel.photoConfig.shadowTextureSize,
+                                             shadowTextureHeight: photoModeViewModel.photoConfig.shadowTextureSize)
+        
         // Create the textures required for HQ shadow casting
         var hqShadowTextures = ShadowTextures()
         hqShadowTextures.makeTextures(device: device,
@@ -33,6 +42,9 @@ extension ProteinRenderer {
                                       textureHeight: photoModeViewModel.photoConfig.shadowTextureSize)
         hqShadowTextures.makeShadowSampler(device: device)
         
+        // Create high quality shadow render pass pipeline state
+        makeShadowRenderPipelineState(device: device, highQuality: true)
+
         // Create high quality impostor render pass pipeline state
         switch scene.currentVisualization {
         case .solidSpheres:
@@ -84,7 +96,11 @@ extension ProteinRenderer {
         
         // MARK: - Shadow Map pass
         
-        shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: hqShadowTextures)
+        shadowRenderPass(commandBuffer: commandBuffer,
+                         uniformBuffer: &uniformBuffer,
+                         shadowTextures: hqShadowTextures,
+                         shadowDepthPrePassTexture: hqPrePassTextures.shadowColorTexture,
+                         highQuality: true)
         
         // MARK: - Getting drawable
         // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -95,12 +111,13 @@ extension ProteinRenderer {
                            uniformBuffer: &uniformBuffer,
                            drawableTexture: hqTextures.hqTexture,
                            depthTexture: hqTextures.hqDepthTexture,
+                           depthPrePassTexture: hqPrePassTextures.colorTexture,
                            shadowTextures: hqShadowTextures,
                            variant: .solidSpheresHQ,
                            renderBonds: scene.currentVisualization == .ballAndStick)
         
         // MARK: - Completion handler
-        commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
+        commandBuffer.addCompletedHandler({ [weak self] _ in
             guard let self = self else { return }
             // GPU work is complete, signal the semaphore to start the CPU work
             self.frameBoundarySemaphore.signal()

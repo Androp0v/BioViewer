@@ -20,25 +20,25 @@ struct InfoAtomsCapsule: View {
     @State var othersFraction: CGFloat = 0.0
         
     func setAtomFractions() {
-        guard let totalAtoms = proteinViewModel.dataSource.modelForFile(file: file)?.atomCount else {
+        guard let totalAtoms = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomCount else {
             return
         }
-        guard let carbonCount = proteinViewModel.dataSource.modelForFile(file: file)?.atomArrayComposition.carbonCount else {
+        guard let carbonCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.carbonCount else {
             return
         }
-        guard let hydrogenCount = proteinViewModel.dataSource.modelForFile(file: file)?.atomArrayComposition.hydrogenCount else {
+        guard let hydrogenCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.hydrogenCount else {
             return
         }
-        guard let nitrogenCount = proteinViewModel.dataSource.modelForFile(file: file)?.atomArrayComposition.nitrogenCount else {
+        guard let nitrogenCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.nitrogenCount else {
             return
         }
-        guard let oxygenCount = proteinViewModel.dataSource.modelForFile(file: file)?.atomArrayComposition.oxygenCount else {
+        guard let oxygenCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.oxygenCount else {
             return
         }
-        guard let sulfurCount = proteinViewModel.dataSource.modelForFile(file: file)?.atomArrayComposition.sulfurCount else {
+        guard let sulfurCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.sulfurCount else {
             return
         }
-        guard let othersCount = proteinViewModel.dataSource.modelForFile(file: file)?.atomArrayComposition.othersCount else {
+        guard let othersCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.othersCount else {
             return
         }
         

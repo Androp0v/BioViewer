@@ -52,6 +52,14 @@ func computeBoundingSphere(atoms: ContiguousArray<simd_float3>, extraMargin: Flo
     return BoundingSphere(center: center, radius: radius + extraMargin)
 }
 
+func computeBoundingSphere(proteins: [Protein], extraMargin: Float = 5) -> BoundingSphere {
+    var allAtoms = ContiguousArray<simd_float3>()
+    for protein in proteins {
+        allAtoms.append(contentsOf: protein.atoms)
+    }
+    return computeBoundingSphere(atoms: allAtoms, extraMargin: extraMargin)
+}
+
 func computeBoundingBox(atoms: ContiguousArray<simd_float3>) -> BoundingBox {
     var minX = Float32.infinity
     var maxX = -Float32.infinity
