@@ -29,15 +29,20 @@ class ProteinViewDataSource: ObservableObject {
             // Sum all subunit counts from all proteins in the datasource
             var newSubunitCount = 0
             for file in self.files {
-                if let protein = modelForFile(file: file) {
-                    newSubunitCount += protein.subunitCount
+                if let proteins = modelsForFile(file: file) {
+                    for protein in proteins {
+                        newSubunitCount += protein.subunitCount
+
+                    }
                 }
             }
             // Sum all atom counts from all proteins in the datasource
             var newTotalAtomCount = 0
             for file in self.files {
-                if let protein = modelForFile(file: file) {
-                    newTotalAtomCount += protein.atomCount
+                if let proteins = modelsForFile(file: file) {
+                    for protein in proteins {
+                        newTotalAtomCount += protein.atomCount
+                    }
                 }
             }
             // Publishers need to be updated in the main queue
@@ -65,7 +70,7 @@ class ProteinViewDataSource: ObservableObject {
     public func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
         // Initialize selected protein model to first model.
-        selectedModel.append(0)
+        selectedModel.append(-1)
         selectedModelIndexForFile[proteinFile.fileID] = selectedModel.count - 1
         
         // Add file to datasource.
@@ -73,13 +78,14 @@ class ProteinViewDataSource: ObservableObject {
         
         guard let proteinViewModel = proteinViewModel else { return }
         let scene = proteinViewModel.renderer.scene
-        guard let protein = modelForFile(file: proteinFile) else { return }
+        guard let proteins = modelsForFile(file: proteinFile) else { return }
         
         // Add protein configurations to the scene
-        scene.createConfigurationSelector(protein: protein)
+        scene.createConfigurationSelector(proteins: proteins)
         
         // Fit file in frustum
-        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: protein.boundingSphere.radius,
+        let boundingSphere = computeBoundingSphere(proteins: proteins)
+        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: boundingSphere.radius,
                                                                       aspectRatio: scene.aspectRatio)
         scene.updateCameraDistanceToModel(distanceToModel: cameraDistanceToFit,
                                           proteinDataSource: proteinViewModel.dataSource)
@@ -120,9 +126,11 @@ class ProteinViewDataSource: ObservableObject {
         guard let proteinViewModel = self.proteinViewModel else { return }
         proteinViewModel.visualizationBufferLoader.handleVisualizationChange(visualization: proteinViewModel.visualization,
                                                                              proteinViewModel: proteinViewModel)
+        guard let proteins = modelsForFile(file: getFirstFile()) else { return }
+        proteinViewModel.renderer.scene.createConfigurationSelector(proteins: proteins)
     }
         
-    func modelForFile(file: ProteinFile?) -> Protein? {
+    func modelsForFile(file: ProteinFile?) -> [Protein]? {
         guard let file = file else {
             return nil
         }
@@ -132,12 +140,20 @@ class ProteinViewDataSource: ObservableObject {
         guard selectedModel[selectedModelIndex] < file.models.count else {
             return nil
         }
-        return file.models[selectedModel[selectedModelIndex]]
+        if selectedModel[selectedModelIndex] == -1 {
+            return file.models
+        }
+        return [file.models[selectedModel[selectedModelIndex]]]
+    }
+    
+    // FIXME: Remove this function when multiple files are supported
+    func getFirstFile() -> ProteinFile? {
+        return files.first
     }
     
     // FIXME: Remove this function when multiple files are supported
     func getFirstProtein() -> Protein? {
-        return modelForFile(file: files.first)
+        return modelsForFile(file: files.first)?.first
     }
 
 }

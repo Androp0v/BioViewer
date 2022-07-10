@@ -57,7 +57,8 @@ struct FileSegmentProtein: View {
                                       pickerOptions: getModelNames(modelCount: file.models.count))
                         }
                         
-                        if let protein = proteinViewModel.dataSource.modelForFile(file: file) {
+                        // FIXME: Don't use first
+                        if let protein = proteinViewModel.dataSource.modelsForFile(file: file)?.first {
                             
                             InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
                                         value: "\(protein.subunitCount)")

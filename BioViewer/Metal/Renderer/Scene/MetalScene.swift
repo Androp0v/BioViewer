@@ -179,21 +179,25 @@ class MetalScene: ObservableObject {
     }
     
     // MARK: - Add protein to scene
-    func createConfigurationSelector(protein: Protein) {
+    func createConfigurationSelector(proteins: [Protein]) {
+        var totalAtomCount: Int = 0
         var subunitIndices = [Int]()
         var subunitLengths = [Int]()
-        if let subunits = protein.subunits {
-            for subunit in subunits {
-                subunitIndices.append(subunit.startIndex)
-                subunitLengths.append(subunit.atomCount)
+        for protein in proteins {
+            totalAtomCount += protein.atomCount
+            if let subunits = protein.subunits {
+                for subunit in subunits {
+                    subunitIndices.append(subunit.startIndex)
+                    subunitLengths.append(subunit.atomCount)
+                }
             }
         }
         self.configurationSelector = ConfigurationSelector(scene: self,
-                                                           atomsPerConfiguration: protein.atomCount,
+                                                           atomsPerConfiguration: totalAtomCount,
                                                            subunitIndices: subunitIndices,
                                                            subunitLengths: subunitLengths,
-                                                           configurationCount: protein.configurationCount)
-        self.frameData.atoms_per_configuration = Int32(protein.atomCount)
+                                                           configurationCount: proteins.first?.configurationCount ?? 1) // FIXME: Remove ?? 1
+        self.frameData.atoms_per_configuration = Int32(totalAtomCount)
     }
     
     // MARK: - Fit protein on screen

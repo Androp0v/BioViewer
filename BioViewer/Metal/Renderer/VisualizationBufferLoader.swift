@@ -112,13 +112,18 @@ class VisualizationBufferLoader {
     
     func populateImpostorSphereBuffers(atomRadii: AtomRadii) {
         
-        guard let proteinViewModel = proteinViewModel else { return }
-        guard let protein = proteinViewModel.dataSource.getFirstProtein() else {
+        guard let proteinViewModel = proteinViewModel else {
+            return
+        }
+        guard let proteinFile = proteinViewModel.dataSource.getFirstFile() else {
+            return
+        }
+        guard let proteins = proteinViewModel.dataSource.modelsForFile(file: proteinFile) else {
             return
         }
         
         // Generate a billboard quad for each atom in the protein
-        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,
+        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(proteins: proteins,
                                                                                                              atomRadii: atomRadii)
         guard let vertexData = vertexData else { return }
         guard let subunitData = subunitData else { return }
@@ -132,8 +137,8 @@ class VisualizationBufferLoader {
                                                          indexBuffer: indexData)
         
         // Create color buffer if needed
-        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0) / MemoryLayout<SIMD4<Int16>>.stride == protein.atoms.count) {
-            proteinViewModel.renderer.createAtomColorBuffer(protein: protein,
+        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0) / MemoryLayout<SIMD4<Int16>>.stride == proteins.combinedAtomCount) {
+            proteinViewModel.renderer.createAtomColorBuffer(proteins: proteins,
                                                             subunitBuffer: subunitData,
                                                             atomTypeBuffer: atomTypeData,
                                                             colorList: proteinViewModel.elementColors,

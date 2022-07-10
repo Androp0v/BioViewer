@@ -269,17 +269,20 @@ class ProteinRenderer: NSObject {
 
     // MARK: - Public functions
         
-    func createAtomColorBuffer(protein: Protein, subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) {
+    func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) {
         
         // Get the number of configurations
-        let configurationCount = protein.configurationCount
+        var atomAndConfigurationCount = 0
+        for protein in proteins {
+            atomAndConfigurationCount += protein.atomCount * protein.configurationCount
+        }
         
         // WORKAROUND: The memory layout should conform to simd_half3's stride, which is
         // syntactic sugar for SIMD3<Float16>, but Float16 is (still) unavailable on macOS
         // due to lack of support on x86. We assume SIMD3<Int16> is packed in the same way
         // Metal packs the half3 type.
         guard let generatedColorBuffer = device.makeBuffer(
-            length: protein.atomCount * configurationCount * MemoryLayout<SIMD3<Int16>>.stride
+            length: atomAndConfigurationCount * MemoryLayout<SIMD3<Int16>>.stride
         ) else { return }
         
         bufferResourceLock.lock()

@@ -65,30 +65,12 @@ class ConfigurationSelector {
         return BufferRegion(length: atomsPerConfiguration * 4,
                             offset: atomsPerConfiguration * 4 * currentConfiguration)
     }
-    
-    func getSubunitSplitImpostorVertexBufferRegions() -> [BufferRegion] {
-        var bufferRegions = [BufferRegion]()
-        for (subunitIndex, subunitLength) in zip(subunitIndices, subunitLengths) {
-            bufferRegions.append(BufferRegion(length: subunitLength * 4,
-                                              offset: subunitIndex * 4 + atomsPerConfiguration * 4 * currentConfiguration))
-        }
-        return bufferRegions
-    }
-    
+        
     func getImpostorIndexBufferRegion() -> BufferRegion {
         return BufferRegion(length: atomsPerConfiguration * 2 * 3,
                             offset: atomsPerConfiguration * 2 * 3 * currentConfiguration)
     }
-    
-    func getSubunitSplitImpostorIndexBufferRegions() -> [BufferRegion] {
-        var bufferRegions = [BufferRegion]()
-        for (subunitIndex, subunitLength) in zip(subunitIndices, subunitLengths) {
-            bufferRegions.append(BufferRegion(length: subunitLength * 2 * 3,
-                                              offset: subunitIndex * 2 * 3 + atomsPerConfiguration * 2 * 3 * currentConfiguration))
-        }
-        return bufferRegions
-    }
-    
+        
     func getBondsIndexBufferRegion() -> BufferRegion? {
         guard let bondsPerConfiguration = bondsPerConfiguration else { return nil }
         guard let bondArrayStarts = bondArrayStarts else { return nil }

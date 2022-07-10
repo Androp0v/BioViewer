@@ -14,49 +14,72 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(protein: Protein, atomRadii: AtomRadii) -> (vertexData: BillboardVertexBuffers?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(proteins: [Protein], atomRadii: AtomRadii) -> (vertexData: BillboardVertexBuffers?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
 
         let impostorTriangleCount = 2
         
         // Create subunit data array
         var subunitData = [Int16]()
-        guard let subunits = protein.subunits else {
-            NSLog("Unable to create subunit data array buffer: protein has no subunits")
-            return (nil, nil, nil, nil)
-        }
-        for index in 0..<protein.subunitCount {
-            subunitData.append(contentsOf: Array(repeating: Int16(index),
-                                                 count: subunits[index].atomCount))
+        for protein in proteins {
+            guard let subunits = protein.subunits else {
+                NSLog("Unable to create subunit data array buffer: protein has no subunits")
+                return (nil, nil, nil, nil)
+            }
+            for index in 0..<protein.subunitCount {
+                subunitData.append(contentsOf: Array(repeating: Int16(index),
+                                                     count: subunits[index].atomCount))
+            }
         }
         
-        // Get the number of configurations
-        let configurationCount = protein.configurationCount
+        // Create atom identifier array
+        var atomIdentifierData = [UInt16]()
+        for protein in proteins {
+            atomIdentifierData.append(contentsOf: protein.atomIdentifiers)
+        }
+        
+        // Create atom positions array
+        var atomPositionsData = [simd_float3]()
+        for protein in proteins {
+            atomPositionsData.append(contentsOf: protein.atoms)
+        }
+        
+        // Get the number of atoms and configurations
+        var bufferAtomAndConfigurationCount: Int = 0
+        var bufferAtomCount: Int = 0
+        var atomCounts = [Int]()
+        var configurationCounts = [Int]()
+        for protein in proteins {
+            bufferAtomAndConfigurationCount += protein.atomCount * protein.configurationCount
+            bufferAtomCount += protein.atomCount
+            atomCounts.append(protein.atomCount)
+            configurationCounts.append(protein.configurationCount)
+        }
 
         // Populate buffers
         let billboardVertexBuffers = BillboardVertexBuffers(device: device,
-                                                            atomCount: protein.atomCount,
-                                                            configurationCount: protein.configurationCount)
+                                                            atomCounts: atomCounts,
+                                                            configurationCounts: configurationCounts)
         let subunitBuffer = device.makeBuffer(
             bytes: subunitData,
-            length: protein.atomCount * MemoryLayout<Int16>.stride
+            length: subunitData.count * MemoryLayout<Int16>.stride
         )
         let atomTypeBuffer = device.makeBuffer(
-            bytes: protein.atomIdentifiers,
-            length: protein.atomCount * MemoryLayout<UInt16>.stride
+            bytes: atomIdentifierData,
+            length: bufferAtomCount * MemoryLayout<UInt16>.stride
         )
         let generatedIndexBuffer = device.makeBuffer(
-            length: protein.atomCount * configurationCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
+            length: bufferAtomAndConfigurationCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
         )
 
         metalDispatchQueue.sync {
             // Populate buffers
             let atomPositionsBuffer = device.makeBuffer(
-                bytes: Array(protein.atoms),
-                length: protein.atomCount * configurationCount * MemoryLayout<simd_float3>.stride
+                bytes: atomPositionsData,
+                length: bufferAtomAndConfigurationCount * MemoryLayout<simd_float3>.stride
             )
             let atomTypeBuffer = device.makeBuffer(
-                bytes: Array(protein.atomIdentifiers),
-                length: protein.atomCount * configurationCount * MemoryLayout<UInt16>.stride
+                bytes: atomIdentifierData,
+                length: bufferAtomAndConfigurationCount * MemoryLayout<UInt16>.stride
             )
 
             // Make Metal command buffer
@@ -110,7 +133,7 @@ extension MetalScheduler {
             
             // Set uniform buffer contents
             let uniformBuffer = device.makeBuffer(
-                bytes: Array([Int32(protein.atomCount)]),
+                bytes: Array([Int32(bufferAtomCount)]),
                 length: MemoryLayout<Int32>.stride
             )
             computeEncoder.setBuffer(uniformBuffer,
@@ -123,13 +146,13 @@ extension MetalScheduler {
             // Schedule the threads
             if device.supportsFamily(.common3) {
                 // Create threads and threadgroup sizes
-                let threadsPerArray = MTLSizeMake(protein.atomCount * configurationCount, 1, 1)
+                let threadsPerArray = MTLSizeMake(bufferAtomAndConfigurationCount, 1, 1)
                 let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
                 // Dispatch threads
                 computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
             } else {
                 // LEGACY: Older devices do not support non-uniform threadgroup sizes
-                let arrayLength = protein.atomCount * configurationCount
+                let arrayLength = bufferAtomAndConfigurationCount
                 MetalLegacySupport.legacyDispatchThreadsForArray(commandEncoder: computeEncoder,
                                                                  length: arrayLength,
                                                                  pipelineState: pipelineState)

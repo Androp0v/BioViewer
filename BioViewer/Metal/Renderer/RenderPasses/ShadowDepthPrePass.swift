@@ -12,7 +12,7 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func encodeShadowDepthPrePassStage(renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer)  {
+    func encodeShadowDepthPrePassStage(renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer) {
         
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
