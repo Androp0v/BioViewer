@@ -23,7 +23,7 @@ enum Transform {
     }
 
     /// A 4x4 rotation matrix specified by an angle and an axis or rotation.
-    static func rotationMatrix(radians: Float, axis: SIMD3<Float>) -> simd_float4x4 {
+    static func rotationMatrix(radians: Float, axis: SIMD3<Float>, around pivot: SIMD3<Float> = .zero) -> simd_float4x4 {
         let normalizedAxis = simd_normalize(axis)
 
         let ct = cosf(radians)
@@ -32,11 +32,34 @@ enum Transform {
         let x = normalizedAxis.x
         let y = normalizedAxis.y
         let z = normalizedAxis.z
+        let px = pivot.x
+        let py = pivot.y
+        let pz = pivot.z
 
-        let col0 = SIMD4<Float>(ct + x * x * ci, y * x * ci + z * st, z * x * ci - y * st, 0)
-        let col1 = SIMD4<Float>(x * y * ci - z * st, ct + y * y * ci, z * y * ci + x * st, 0)
-        let col2 = SIMD4<Float>(x * z * ci + y * st, y * z * ci - x * st, ct + z * z * ci, 0)
-        let col3 = SIMD4<Float>(0, 0, 0, 1)
+        let col0 = SIMD4<Float>(
+            ct + x * x * ci,
+            y * x * ci + z * st,
+            z * x * ci - y * st,
+            0
+        )
+        let col1 = SIMD4<Float>(
+            x * y * ci - z * st,
+            ct + y * y * ci,
+            z * y * ci + x * st,
+            0
+        )
+        let col2 = SIMD4<Float>(
+            x * z * ci + y * st,
+            y * z * ci - x * st,
+            ct + z * z * ci,
+            0
+        )
+        let col3 = SIMD4<Float>(
+            px - (ct + x * x * ci) * px - (x * y * ci - z * st) * py - (x * z * ci + y * st) * pz,
+            py - (y * x * ci + z * st) * px - (ct + y * y * ci) * py - (y * z * ci - x * st) * pz,
+            pz - (z * x * ci - y * st) * px - (z * y * ci + x * st) * py - (ct + z * z * ci) * pz,
+            1
+        )
 
         return .init(col0, col1, col2, col3)
     }

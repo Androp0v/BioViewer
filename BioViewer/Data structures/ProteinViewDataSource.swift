@@ -62,6 +62,8 @@ class ProteinViewDataSource: ObservableObject {
     
     /// Maps file ID to selected model array index (different files may have different selected models).
     var selectedModelIndexForFile = [String: Int]()
+    
+    var selectionBoundingSphere = BoundingSphere.init(center: .zero, radius: .zero)
         
     public weak var proteinViewModel: ProteinViewModel?
 
@@ -69,26 +71,15 @@ class ProteinViewDataSource: ObservableObject {
     
     public func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
+        guard let proteinViewModel = proteinViewModel else { return }
+        
         // Initialize selected protein model to first model.
         selectedModel.append(-1)
         selectedModelIndexForFile[proteinFile.fileID] = selectedModel.count - 1
         
         // Add file to datasource.
         files.append(proteinFile)
-        
-        guard let proteinViewModel = proteinViewModel else { return }
-        let scene = proteinViewModel.renderer.scene
-        guard let proteins = modelsForFile(file: proteinFile) else { return }
-        
-        // Add protein configurations to the scene
-        scene.createConfigurationSelector(proteins: proteins)
-        
-        // Fit file in frustum
-        let boundingSphere = computeBoundingSphere(proteins: proteins)
-        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(sphereRadius: boundingSphere.radius,
-                                                                      aspectRatio: scene.aspectRatio)
-        scene.updateCameraDistanceToModel(distanceToModel: cameraDistanceToFit,
-                                          proteinDataSource: proteinViewModel.dataSource)
+        updateFileModels()
         
         // Change visualization to trigger rendering
         // TO-DO: visualization should depend on file type too
@@ -128,6 +119,19 @@ class ProteinViewDataSource: ObservableObject {
                                                                              proteinViewModel: proteinViewModel)
         guard let proteins = modelsForFile(file: getFirstFile()) else { return }
         proteinViewModel.renderer.scene.createConfigurationSelector(proteins: proteins)
+        
+        self.selectionBoundingSphere = computeBoundingSphere(proteins: proteins)
+        
+        // Fit new selection in frustum
+        let scene = proteinViewModel.renderer.scene
+        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(
+            sphereRadius: selectionBoundingSphere.radius,
+            aspectRatio: scene.aspectRatio
+        )
+        scene.updateCameraDistanceToModel(
+            distanceToModel: cameraDistanceToFit,
+            proteinDataSource: proteinViewModel.dataSource
+        )
     }
         
     func modelsForFile(file: ProteinFile?) -> [Protein]? {

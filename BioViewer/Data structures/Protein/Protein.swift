@@ -81,6 +81,5 @@ public class Protein {
         self.atomCount = atomArrayComposition.totalCount
         self.sequence = sequence
         self.boundingSphere = computeBoundingSphere(atoms: atoms)
-        normalizeAtomPositions(atoms: &self.atoms, center: boundingSphere.center)
     }
 }

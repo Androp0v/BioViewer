@@ -52,6 +52,8 @@ class MetalScene: ObservableObject {
     private(set) var camera: Camera
     /// Position of the camera used to render the scene.
     private(set) var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
+    /// Bounding sphere of the visualised data.
+    var boundingSphere = BoundingSphere(center: .zero, radius: .zero)
     /// Rotation of the model applied by the user.
     var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true} }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on.
@@ -154,9 +156,11 @@ class MetalScene: ObservableObject {
         needsRedraw = false
         
         // TO-DO: Proper camera auto-rotation
+        /*
         updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
                                                                      axis: simd_float3(0, 1, 0)))
         needsRedraw = true
+        */
     }
     
     // MARK: - Update rotation
@@ -204,23 +208,23 @@ class MetalScene: ObservableObject {
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
         // TO-DO: Fit all files
-        guard let protein = proteinDataSource.getFirstProtein() else {
-            return
-        }
+        self.boundingSphere = proteinDataSource.selectionBoundingSphere
+        
         // Update camera far and near planes
-        self.camera.nearPlane = max(1, distanceToModel - protein.boundingSphere.radius)
-        self.camera.farPlane = distanceToModel + protein.boundingSphere.radius
+        self.camera.nearPlane = max(1, distanceToModel - boundingSphere.radius)
+        self.camera.farPlane = distanceToModel + boundingSphere.radius
         // Update camera position
-        self.cameraPosition.z = distanceToModel
+        self.cameraPosition.x = -boundingSphere.center.x
+        self.cameraPosition.y = -boundingSphere.center.y
+        self.cameraPosition.z = distanceToModel - boundingSphere.center.z
         
         // Update shadow projection to fit too
-        let boundingSphereRadius = protein.boundingSphere.radius
-        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphereRadius + 3.3,
-                                                                                  boundingSphereRadius - 3.3,
-                                                                                 -boundingSphereRadius + 3.3,
-                                                                                  boundingSphereRadius - 3.3,
-                                                                                 -boundingSphereRadius - 3.3,
-                                                                                  boundingSphereRadius + 3.3)
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphere.radius + 3.3,
+                                                                                  boundingSphere.radius - 3.3,
+                                                                                 -boundingSphere.radius + 3.3,
+                                                                                  boundingSphere.radius - 3.3,
+                                                                                 -boundingSphere.radius - 3.3,
+                                                                                  boundingSphere.radius + 3.3)
     }
     
     // MARK: - Move camera
@@ -231,8 +235,8 @@ class MetalScene: ObservableObject {
     
     func resetCamera() {
         // Undo translation
-        self.cameraPosition.x = 0
-        self.cameraPosition.y = 0
+        self.cameraPosition.x = -boundingSphere.center.x
+        self.cameraPosition.y = -boundingSphere.center.y
         // Undo rotation
         self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0,
                                                                 axis: simd_float3(1, 0, 0))
