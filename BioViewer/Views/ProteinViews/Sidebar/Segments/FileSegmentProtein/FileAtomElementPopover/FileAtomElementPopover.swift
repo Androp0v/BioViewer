@@ -12,6 +12,7 @@ struct FileAtomElementPopover: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
+    @State var atomArrayComposition = AtomArrayComposition()
     @State var carbonFraction: CGFloat = 0.0
     @State var hydrogenFraction: CGFloat = 0.0
     @State var nitrogenFraction: CGFloat = 0.0
@@ -24,39 +25,31 @@ struct FileAtomElementPopover: View {
     }
     
     func setAtomFractions() {
-        guard let totalAtoms = proteinViewModel.dataSource.getFirstProtein()?.atomCount else {
-            return
-        }
-        guard let carbonCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.carbonCount else {
-            return
-        }
-        guard let hydrogenCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.hydrogenCount else {
-            return
-        }
-        guard let nitrogenCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.nitrogenCount else {
-            return
-        }
-        guard let oxygenCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.oxygenCount else {
-            return
-        }
-        guard let sulfurCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.sulfurCount else {
-            return
-        }
-        guard let othersCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.othersCount else {
-            return
+                
+        guard let file = proteinViewModel.dataSource.getFirstFile() else { return }
+        guard let proteins = proteinViewModel.dataSource.modelsForFile(file: file) else { return }
+        atomArrayComposition = AtomArrayComposition()
+        for protein in proteins {
+            atomArrayComposition += protein.atomArrayComposition
         }
         
-        carbonFraction = CGFloat(carbonCount) / CGFloat(totalAtoms)
+        carbonFraction = CGFloat(atomArrayComposition.carbonCount)
+        / CGFloat(atomArrayComposition.totalCount)
         
-        hydrogenFraction = CGFloat(hydrogenCount) / CGFloat(totalAtoms) + carbonFraction
+        hydrogenFraction = CGFloat(atomArrayComposition.hydrogenCount)
+        / CGFloat(atomArrayComposition.totalCount) + carbonFraction
         
-        nitrogenFraction = CGFloat(nitrogenCount) / CGFloat(totalAtoms) + hydrogenFraction
+        nitrogenFraction = CGFloat(atomArrayComposition.nitrogenCount)
+        / CGFloat(atomArrayComposition.totalCount) + hydrogenFraction
         
-        oxygenFraction = CGFloat(oxygenCount) / CGFloat(totalAtoms) + nitrogenFraction
+        oxygenFraction = CGFloat(atomArrayComposition.oxygenCount)
+        / CGFloat(atomArrayComposition.totalCount) + nitrogenFraction
         
-        sulfurFraction = CGFloat(sulfurCount) / CGFloat(totalAtoms) + oxygenFraction
+        sulfurFraction = CGFloat(atomArrayComposition.sulfurCount)
+        / CGFloat(atomArrayComposition.totalCount) + oxygenFraction
         
-        othersFraction = CGFloat(othersCount) / CGFloat(totalAtoms) + sulfurFraction
+        othersFraction = CGFloat(atomArrayComposition.othersCount)
+        / CGFloat(atomArrayComposition.totalCount) + sulfurFraction
     }
     
     var body: some View {
@@ -117,6 +110,7 @@ struct FileAtomElementPopover: View {
                 Divider()
                 FileAtomElementRow(element: "Total", bold: true)
             }
+            .environmentObject(proteinViewModel)
             .padding(.bottom, 24)
         }
         .frame(minWidth: 350)

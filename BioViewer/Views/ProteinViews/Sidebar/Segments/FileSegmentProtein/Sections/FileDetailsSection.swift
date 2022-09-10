@@ -27,9 +27,18 @@ struct FileDetailsSection: View {
             // Dynamic XYZ Files
             LineGraphView(values: proteinViewModel.dataSource.getFirstProtein()?.configurationEnergies)
         }
-        Button(NSLocalizedString("View raw file", comment: ""), action: {
-            showFileSource.toggle()
-        })
+        Button(
+            action: {
+                withAnimation {
+                    showFileSource.toggle()
+                }
+            }, label: {
+                HStack {
+                    Image(systemName: "scroll.fill")
+                    Text(NSLocalizedString("View raw file", comment: ""))
+                }
+            }
+        )
         .sheet(isPresented: $showFileSource, onDismiss: nil, content: {
             let fileSourceViewModel = FileSourceViewModel(fileInfo: proteinFile?.fileInfo)
             FileSourceView(sourceViewModel: fileSourceViewModel)

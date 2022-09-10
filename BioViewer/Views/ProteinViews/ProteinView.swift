@@ -158,6 +158,7 @@ struct ProteinView: View {
                 ToolbarItem(placement: .principal) {
                     // Status bar component
                     StatusView(statusViewModel: proteinViewModel.statusViewModel)
+                    /*
                         .frame(minWidth: 96,
                                idealWidth: geometry.size.width * 0.6,
                                maxWidth: geometry.size.width * 0.6,
@@ -165,6 +166,7 @@ struct ProteinView: View {
                                idealHeight: StatusViewConstants.height,
                                maxHeight: StatusViewConstants.height,
                                alignment: .center)
+                     */
                 }
             }
             .sheet(isPresented: $toggleModalSidebar, content: {

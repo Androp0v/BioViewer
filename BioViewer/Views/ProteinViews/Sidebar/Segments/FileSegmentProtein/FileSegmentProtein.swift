@@ -57,15 +57,17 @@ struct FileSegmentProtein: View {
                                       pickerOptions: getModelNames(modelCount: file.models.count))
                         }
                         
-                        // FIXME: Don't use first
-                        if let protein = proteinViewModel.dataSource.modelsForFile(file: file)?.first {
-                            
-                            InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
-                                        value: "\(protein.subunitCount)")
-                            InfoAtomsRow(label: NSLocalizedString("Number of atoms:", comment: ""),
-                                         value: protein.atomCount,
-                                         isDisabled: false,
-                                         file: file)
+                        if let proteins = proteinViewModel.dataSource.modelsForFile(file: file) {
+                            InfoTextRow(
+                                text: NSLocalizedString("Number of subunits:", comment: ""),
+                                value: "\(proteins.reduce(0) { $0 + $1.subunitCount })"
+                            )
+                            InfoAtomsRow(
+                                label: NSLocalizedString("Number of atoms:", comment: ""),
+                                value: proteins.reduce(0) { $0 + $1.atomArrayComposition.totalCount },
+                                isDisabled: false,
+                                file: file
+                            )
                         }
                     }
                 }

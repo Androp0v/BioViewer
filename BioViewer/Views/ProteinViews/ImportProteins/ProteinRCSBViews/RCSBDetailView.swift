@@ -35,7 +35,7 @@ struct RCSBDetailView: View {
                     HStack {
                         if #available(iOS 16.0, *) {
                             Image(systemName: "arrow.down.doc")
-                                .bold()
+                                // FIXME: .bold()
                         }
                         Text(NSLocalizedString("Download", comment: ""))
                             .bold()

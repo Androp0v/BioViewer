@@ -97,6 +97,7 @@ struct StatusView: View {
                 }
             }
         }
+        .frame(maxWidth: 600)
         .frame(height: StatusViewConstants.height)
         .cornerRadius(StatusViewConstants.cornerRadius)
     }

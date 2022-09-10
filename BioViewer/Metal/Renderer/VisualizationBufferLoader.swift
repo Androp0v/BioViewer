@@ -137,7 +137,8 @@ class VisualizationBufferLoader {
                                                          indexBuffer: indexData)
         
         // Create color buffer if needed
-        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0) / MemoryLayout<SIMD4<Int16>>.stride == proteins.combinedAtomCount) {
+        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0)
+                / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
             proteinViewModel.renderer.createAtomColorBuffer(proteins: proteins,
                                                             subunitBuffer: subunitData,
                                                             atomTypeBuffer: atomTypeData,
