@@ -214,9 +214,9 @@ class MetalScene: ObservableObject {
         self.camera.nearPlane = max(1, distanceToModel - boundingSphere.radius)
         self.camera.farPlane = distanceToModel + boundingSphere.radius
         // Update camera position
-        self.cameraPosition.x = -boundingSphere.center.x
-        self.cameraPosition.y = -boundingSphere.center.y
-        self.cameraPosition.z = distanceToModel - boundingSphere.center.z
+        self.cameraPosition.x = 0
+        self.cameraPosition.y = 0
+        self.cameraPosition.z = distanceToModel
         
         // Update shadow projection to fit too
         self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphere.radius + 3.3,
@@ -235,11 +235,10 @@ class MetalScene: ObservableObject {
     
     func resetCamera() {
         // Undo translation
-        self.cameraPosition.x = -boundingSphere.center.x
-        self.cameraPosition.y = -boundingSphere.center.y
+        self.cameraPosition.x = 0
+        self.cameraPosition.y = 0
         // Undo rotation
-        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0,
-                                                                axis: simd_float3(1, 0, 0))
+        self.userModelRotationMatrix = Transform.translationMatrix(-boundingSphere.center)
         // TO-DO: Undo zoom
     }
     
