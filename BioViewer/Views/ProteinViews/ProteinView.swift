@@ -53,10 +53,6 @@ struct ProteinView: View {
         
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                // Future toolbar items will be here
-                Rectangle()
-                    .frame(height: 8)
-                    .foregroundColor(Color(UIColor.systemBackground))
                 // Separator
                 Rectangle()
                     .frame(height: 0.5)
@@ -162,7 +158,7 @@ struct ProteinView: View {
                 ToolbarItem(placement: .principal) {
                     // Status bar component
                     StatusView(statusViewModel: proteinViewModel.statusViewModel)
-                        .frame(minWidth: 0,
+                        .frame(minWidth: 96,
                                idealWidth: geometry.size.width * 0.6,
                                maxWidth: geometry.size.width * 0.6,
                                minHeight: StatusViewConstants.height,

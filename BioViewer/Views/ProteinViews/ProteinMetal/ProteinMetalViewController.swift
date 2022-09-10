@@ -13,6 +13,10 @@ import simd
 class ProteinMetalViewController: UIViewController {
 
     var device: MTLDevice!
+    
+    var rotationX: Float = 0.0
+    var rotationY: Float = 0.0
+    var currentRotationMatrix: simd_float4x4 = Transform.scaleMatrix(.one)
 
     var renderedView: MTKView!
     weak var renderDelegate: MTKViewDelegate?
@@ -98,26 +102,30 @@ class ProteinMetalViewController: UIViewController {
                 let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
                 let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
   
-                var rotationMatrix = self.proteinViewModel.renderer.scene.userModelRotationMatrix
-                let oldRotationMatrix = rotationMatrix
+                rotationX -= rotationSpeedX
+                rotationY -= rotationSpeedY
+                
+                var rotationMatrix = Transform.scaleMatrix(.one)
                 
                 // Revert the axis rotation before rotating through that axis
-                let inverseRotationMatrix = rotationMatrix.inverse
                 let boundingSphere = self.proteinViewModel.dataSource.selectionBoundingSphere
-                          
-                rotationMatrix *= Transform.rotationMatrix(
-                    radians: -rotationSpeedX,
-                    axis: (inverseRotationMatrix * simd_float4(0, 1, 0, 1)).xyz,
-                    around: .zero // (rotationMatrix * simd_float4(boundingSphere.center, 1)).xyz
-                )
                 
-                rotationMatrix *= Transform.rotationMatrix(
-                    radians: -rotationSpeedY,
-                    axis: (inverseRotationMatrix * simd_float4(1, 0, 0, 1)).xyz,
-                    around: .zero // (rotationMatrix * simd_float4(boundingSphere.center, 1.0)).xyz
+                let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
+                      
+                currentRotationMatrix *= Transform.rotationMatrix(
+                    radians: -rotationSpeedX,
+                    axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
                 )
                                 
-                self.proteinViewModel.renderer.scene.userModelRotationMatrix = rotationMatrix
+                currentRotationMatrix *= Transform.rotationMatrix(
+                    radians: -rotationSpeedY,
+                    axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
+                )
+                
+                let translateBackMatrix = Transform.translationMatrix(boundingSphere.center)
+                                
+                self.proteinViewModel.renderer.scene.userModelRotationMatrix =
+                    translateBackMatrix * currentRotationMatrix * translateToOriginMatrix
                 
             case CameraControlTool.move:
                 // TO-DO: Improve move tool
