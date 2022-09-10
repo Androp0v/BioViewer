@@ -107,9 +107,7 @@ class ProteinMetalViewController: UIViewController {
                                 
                 // Revert the axis rotation before rotating through that axis
                 let boundingSphere = self.proteinViewModel.dataSource.selectionBoundingSphere
-                
-                let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
-                      
+                                      
                 currentRotationMatrix *= Transform.rotationMatrix(
                     radians: -rotationSpeedX,
                     axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
@@ -120,7 +118,7 @@ class ProteinMetalViewController: UIViewController {
                     axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
                 )
                                                 
-                self.proteinViewModel.renderer.scene.userModelRotationMatrix = currentRotationMatrix * translateToOriginMatrix
+                self.proteinViewModel.renderer.scene.userModelRotationMatrix = currentRotationMatrix
                 
             case CameraControlTool.move:
                 // TO-DO: Improve move tool

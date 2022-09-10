@@ -14,6 +14,7 @@ struct InfoAtomsRow: View {
     let file: ProteinFile
     
     @State var buttonToggle: Bool = false
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     var body: some View {
         
@@ -48,6 +49,7 @@ struct InfoAtomsRow: View {
                 .disabled(isDisabled)
                 .popover(isPresented: $buttonToggle) {
                     FileAtomElementPopover()
+                        .environmentObject(proteinViewModel)
                 }
         }
     }

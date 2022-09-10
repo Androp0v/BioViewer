@@ -167,14 +167,16 @@ class MetalScene: ObservableObject {
     
     func updateModelRotation(rotationMatrix: simd_float4x4) {
         
+        let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
+
         // Update model rotation matrix
-        self.frameData.rotation_matrix = rotationMatrix
+        self.frameData.rotation_matrix = rotationMatrix * translateToOriginMatrix
         self.frameData.inverse_rotation_matrix = rotationMatrix.inverse
         
         // Update sun rotation matrix (model rotation + sun rotation)
         let sunRotation = Transform.rotationMatrix(radians: Float.pi / 2,
                                                    axis: simd_float3(-1.0, 0.0, 1.0))
-        self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix
+        self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix * translateToOriginMatrix
         
         // Update camera -> sun's coordinate transform
         self.frameData.camera_to_shadow_projection_matrix = self.frameData.shadowProjectionMatrix
