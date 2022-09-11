@@ -13,27 +13,40 @@ struct CameraControlToolbar: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
         
     var body: some View {
-        Picker("Rotation mode", selection: $config.selectedTool) {
-            Image(systemName: "rotate.3d")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: TopToolbar.Constants.buttonSize, height: TopToolbar.Constants.buttonSize)
-                .foregroundColor(.accentColor).tag(0)
-            Image(systemName: "move.3d")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: TopToolbar.Constants.buttonSize, height: TopToolbar.Constants.buttonSize)
-                .foregroundColor(.accentColor).tag(1)
-        }
-        .pickerStyle(SegmentedPickerStyle())
-        .foregroundColor(.accentColor)
-        .frame(width: 4 * TopToolbar.Constants.buttonSize)
-        .contextMenu {
-            Button(role: .destructive) {
-                proteinViewModel.renderer.scene.resetCamera()
-            } label: {
-                Label("Reset camera", systemImage: "arrow.uturn.backward")
+        HStack {
+            Picker("Rotation mode", selection: $config.selectedTool) {
+                Image(systemName: "rotate.3d")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: TopToolbar.Constants.buttonSize, height: TopToolbar.Constants.buttonSize)
+                    .foregroundColor(.accentColor).tag(0)
+                Image(systemName: "move.3d")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: TopToolbar.Constants.buttonSize, height: TopToolbar.Constants.buttonSize)
+                    .foregroundColor(.accentColor).tag(1)
             }
+            .pickerStyle(SegmentedPickerStyle())
+            .foregroundColor(.accentColor)
+            .frame(width: 4 * TopToolbar.Constants.buttonSize)
+            .disabled(proteinViewModel.autorotating)
+            .contextMenu {
+                Button(role: .destructive) {
+                    proteinViewModel.renderer.scene.resetCamera()
+                } label: {
+                    Label("Reset camera", systemImage: "arrow.uturn.backward")
+                }
+            }
+            Button(
+                action: {
+                    proteinViewModel.autorotating.toggle()
+                }, label: {
+                    Image(systemName: proteinViewModel.autorotating ? "arrow.triangle.2.circlepath.circle.fill"
+                                                                    : "arrow.triangle.2.circlepath.circle"
+                    )
+                    .foregroundColor(.accentColor)
+                }
+            )
         }
     }
 }

@@ -55,11 +55,13 @@ class MetalScene: ObservableObject {
     /// Bounding sphere of the visualised data.
     var boundingSphere = BoundingSphere(center: .zero, radius: .zero)
     /// Rotation of the model applied by the user.
-    var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true} }
+    var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true } }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on.
     var aspectRatio: Float { didSet { needsRedraw = true } }
     /// Subscriber to camera changes.
     var cameraChangedCancellable: AnyCancellable?
+    /// Whether the camera is autorotating.
+    var autorotating: Bool = false { didSet { needsRedraw = true } }
     
     // MARK: - Shadow properties
     
@@ -155,12 +157,12 @@ class MetalScene: ObservableObject {
         frame += 1
         needsRedraw = false
         
-        // TO-DO: Proper camera auto-rotation
-        /*
-        updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                     axis: simd_float3(0, 1, 0)))
-        needsRedraw = true
-        */
+        // Autorotation
+        if autorotating {
+            updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
+                                                                         axis: simd_float3(0, 1, 0)))
+            needsRedraw = true
+        }
     }
     
     // MARK: - Update rotation

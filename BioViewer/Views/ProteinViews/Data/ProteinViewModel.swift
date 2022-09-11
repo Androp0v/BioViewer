@@ -158,6 +158,12 @@ class ProteinViewModel: ObservableObject {
         }
     }
     
+    @Published var autorotating: Bool = false {
+        didSet {
+            renderer.scene.autorotating = autorotating
+        }
+    }
+    
     // MARK: - Initialization
 
     init() {

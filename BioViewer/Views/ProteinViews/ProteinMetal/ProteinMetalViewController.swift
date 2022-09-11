@@ -95,9 +95,11 @@ class ProteinMetalViewController: UIViewController {
     }
     
     @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
+        
+        proteinViewModel.autorotating = false
+        
         if gestureRecognizer.state == .changed {
             switch proteinViewModel.toolbarConfig.selectedTool {
-                
             case CameraControlTool.rotate:
                 let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
                 let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
