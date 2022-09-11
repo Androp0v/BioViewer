@@ -1813,6 +1813,8 @@
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BioViewer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1820,7 +1822,7 @@
 				);
 				MARKETING_VERSION = 1.3.2;
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.experimental;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -1851,6 +1853,8 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				INFOPLIST_FILE = BioViewer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1858,7 +1862,7 @@
 				);
 				MARKETING_VERSION = 1.3.2;
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.experimental;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
