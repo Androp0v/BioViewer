@@ -34,7 +34,6 @@ struct ColorSection: View {
                         // TO-DO: Show real subunit list
                         ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
                                        selectedColor: $proteinViewModel.subunitColors[subunit.id])
-                            .indentRow()
                     }
                 }
             }, label: {
