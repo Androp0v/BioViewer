@@ -183,29 +183,7 @@ class MetalScene: ObservableObject {
             * sunRotation
             * Transform.translationMatrix(cameraPosition).inverse
     }
-    
-    // MARK: - Add protein to scene
-    func createConfigurationSelector(proteins: [Protein]) {
-        var totalAtomCount: Int = 0
-        var subunitIndices = [Int]()
-        var subunitLengths = [Int]()
-        for protein in proteins {
-            totalAtomCount += protein.atomCount
-            if let subunits = protein.subunits {
-                for subunit in subunits {
-                    subunitIndices.append(subunit.startIndex)
-                    subunitLengths.append(subunit.atomCount)
-                }
-            }
-        }
-        self.configurationSelector = ConfigurationSelector(scene: self,
-                                                           atomsPerConfiguration: totalAtomCount,
-                                                           subunitIndices: subunitIndices,
-                                                           subunitLengths: subunitLengths,
-                                                           configurationCount: proteins.first?.configurationCount ?? 1) // FIXME: Remove ?? 1
-        self.frameData.atoms_per_configuration = Int32(totalAtomCount)
-    }
-    
+        
     // MARK: - Fit protein on screen
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {

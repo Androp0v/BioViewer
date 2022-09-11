@@ -301,7 +301,13 @@ class ProteinRenderer: NSObject {
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
-    func setBillboardingBuffers(billboardVertexBuffers: BillboardVertexBuffers, subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, indexBuffer: MTLBuffer) {
+    func setBillboardingBuffers(
+        billboardVertexBuffers: BillboardVertexBuffers,
+        subunitBuffer: MTLBuffer,
+        atomTypeBuffer: MTLBuffer,
+        indexBuffer: MTLBuffer,
+        configurationSelector: ConfigurationSelector
+    ) {
         bufferResourceLock.lock()
         self.billboardVertexBuffers = billboardVertexBuffers
         self.subunitBuffer = subunitBuffer
@@ -309,6 +315,7 @@ class ProteinRenderer: NSObject {
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
+        self.scene.configurationSelector = configurationSelector
         bufferResourceLock.unlock()
     }
     

@@ -32,7 +32,6 @@ class ProteinViewDataSource: ObservableObject {
                 if let proteins = modelsForFile(file: file) {
                     for protein in proteins {
                         newSubunitCount += protein.subunitCount
-
                     }
                 }
             }
@@ -71,7 +70,7 @@ class ProteinViewDataSource: ObservableObject {
     
     public func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
-        guard let proteinViewModel = proteinViewModel else { return }
+        guard let proteinViewModel = proteinViewModel else { return }
         
         // Initialize selected protein model to first model.
         selectedModel.append(-1)
@@ -115,11 +114,13 @@ class ProteinViewDataSource: ObservableObject {
     
     func updateFileModels() {
         guard let proteinViewModel = self.proteinViewModel else { return }
-        proteinViewModel.visualizationBufferLoader.handleVisualizationChange(visualization: proteinViewModel.visualization,
-                                                                             proteinViewModel: proteinViewModel)
-        guard let proteins = modelsForFile(file: getFirstFile()) else { return }
-        proteinViewModel.renderer.scene.createConfigurationSelector(proteins: proteins)
         
+        proteinViewModel.visualizationBufferLoader.handleVisualizationChange(
+            visualization: proteinViewModel.visualization,
+            proteinViewModel: proteinViewModel
+        )
+        
+        guard let proteins = modelsForFile(file: getFirstFile()) else { return }
         self.selectionBoundingSphere = computeBoundingSphere(proteins: proteins)
         
         // Fit new selection in frustum

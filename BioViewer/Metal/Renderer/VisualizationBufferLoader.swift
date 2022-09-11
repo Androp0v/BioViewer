@@ -130,11 +130,17 @@ class VisualizationBufferLoader {
         guard let atomTypeData = atomTypeData else { return }
         guard let indexData = indexData else { return }
         
+        // Create ConfigurationSelector for new data
+        guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
+        
         // Pass the new mesh to the renderer
-        proteinViewModel.renderer.setBillboardingBuffers(billboardVertexBuffers: vertexData,
-                                                         subunitBuffer: subunitData,
-                                                         atomTypeBuffer: atomTypeData,
-                                                         indexBuffer: indexData)
+        proteinViewModel.renderer.setBillboardingBuffers(
+            billboardVertexBuffers: vertexData,
+            subunitBuffer: subunitData,
+            atomTypeBuffer: atomTypeData,
+            indexBuffer: indexData,
+            configurationSelector: configurationSelector
+        )
         
         // Create color buffer if needed
         if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0)
@@ -145,5 +151,32 @@ class VisualizationBufferLoader {
                                                             colorList: proteinViewModel.elementColors,
                                                             colorBy: proteinViewModel.colorBy)
         }
+    }
+    
+    // MARK: - ConfigurationSelector
+    
+    func createConfigurationSelector(proteins: [Protein]) -> ConfigurationSelector? {
+        guard let proteinViewModel = proteinViewModel else { return nil }
+
+        var totalAtomCount: Int = 0
+        var subunitIndices = [Int]()
+        var subunitLengths = [Int]()
+        for protein in proteins {
+            totalAtomCount += protein.atomCount
+            if let subunits = protein.subunits {
+                for subunit in subunits {
+                    subunitIndices.append(subunit.startIndex)
+                    subunitLengths.append(subunit.atomCount)
+                }
+            }
+        }
+        return ConfigurationSelector(
+            scene: proteinViewModel.renderer.scene,
+            atomsPerConfiguration: totalAtomCount,
+            subunitIndices: subunitIndices,
+            subunitLengths: subunitLengths,
+            configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
+        )
+        // self.frameData.atoms_per_configuration = Int32(totalAtomCount)
     }
 }
