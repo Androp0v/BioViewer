@@ -89,7 +89,7 @@ class MetalScene: ObservableObject {
     init() {
         self.camera = Camera(nearPlane: 1, farPlane: 10000, focalLength: 200)
         self.cameraPosition = simd_float3(0, 0, 1000)
-        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0, axis: simd_float3(0, 1, 0))
+        self.userModelRotationMatrix = Transform.scaleMatrix(.one)
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()
         self.frame = 0
@@ -146,7 +146,9 @@ class MetalScene: ObservableObject {
         }
         
         // Update rotation matrices
-        updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
+        if !autorotating {
+            updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
+        }
         
         // Update shadow behaviour
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
@@ -159,8 +161,12 @@ class MetalScene: ObservableObject {
         
         // Autorotation
         if autorotating {
-            updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                         axis: simd_float3(0, 1, 0)))
+            let autorotationMatrix = Transform.rotationMatrix(
+                radians: -0.001,
+                axis: (self.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
+            )
+            self.userModelRotationMatrix *= autorotationMatrix
+            updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
             needsRedraw = true
         }
     }
@@ -169,6 +175,7 @@ class MetalScene: ObservableObject {
     
     func updateModelRotation(rotationMatrix: simd_float4x4) {
         
+        self.userModelRotationMatrix = rotationMatrix
         let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
 
         // Update model rotation matrix
