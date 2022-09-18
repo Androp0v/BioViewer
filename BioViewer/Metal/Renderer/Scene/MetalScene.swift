@@ -202,9 +202,7 @@ class MetalScene: ObservableObject {
         // Update camera far and near planes
         self.camera.nearPlane = max(1, distanceToModel - boundingSphere.radius)
         self.camera.farPlane = distanceToModel + boundingSphere.radius
-        // Update camera position
-        self.cameraPosition.x = 0
-        self.cameraPosition.y = 0
+        // Update camera z-position
         self.cameraPosition.z = distanceToModel
         
         // Update frameData's depth bias.
@@ -231,7 +229,7 @@ class MetalScene: ObservableObject {
         self.cameraPosition.x = 0
         self.cameraPosition.y = 0
         // Undo rotation
-        self.userModelRotationMatrix = Transform.translationMatrix(-boundingSphere.center)
+        updateModelRotation(rotationMatrix: Transform.scaleMatrix(.one))
         // TO-DO: Undo zoom
     }
     
