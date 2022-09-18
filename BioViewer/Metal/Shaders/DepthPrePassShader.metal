@@ -47,9 +47,6 @@ vertex DepthPrePassVertexOut depth_pre_pass_vertex(const device simd_half2 *vert
     // Transform the world space coordinates to eye space coordinates
     float4 eye_position = model_view_matrix * billboard_vertex_world;
     
-    // Depth bias of 2 Armstrongs to avoid artifacts
-    eye_position.z += 2; // FIXME: This introduces a perspective bug
-        
     // Transform the eye space coordinates to normalized device coordinates
     normalized_depth_pre_pass_vertex.position = projectionMatrix * eye_position;
 

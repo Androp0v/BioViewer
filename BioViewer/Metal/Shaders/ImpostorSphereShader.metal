@@ -119,7 +119,7 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     if (!is_high_quality_frame) {
         float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
         float primitiveDepth = impostor_vertex.position.z;
-        if (boundedDepth < primitiveDepth) {
+        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
             discard_fragment();
         }
     }

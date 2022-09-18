@@ -80,7 +80,7 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
     if (!is_high_quality_frame) {
         float boundedDepth = shadow_depth_bound_output.bounded_depth; // FIXME: Rename to depth
         float primitiveDepth = impostor_vertex.position.z;
-        if (boundedDepth < primitiveDepth) {
+        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
             discard_fragment();
         }
     }

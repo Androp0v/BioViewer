@@ -207,6 +207,10 @@ class MetalScene: ObservableObject {
         self.cameraPosition.y = 0
         self.cameraPosition.z = distanceToModel
         
+        // Update frameData's depth bias.
+        let armstrongsInBoundingSphere = camera.farPlane - camera.nearPlane
+        self.frameData.depth_bias = 2 / armstrongsInBoundingSphere
+        
         // Update shadow projection to fit too
         self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphere.radius + 3.3,
                                                                                   boundingSphere.radius - 3.3,
