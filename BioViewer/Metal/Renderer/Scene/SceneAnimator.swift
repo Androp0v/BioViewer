@@ -28,6 +28,8 @@ class SceneAnimator {
     
     init(scene: MetalScene) {
         self.scene = scene
+        self.displayLink = CADisplayLink(target: self, selector: #selector(updateAllAnimations))
+        displayLink?.add(to: .main, forMode: .default)
     }
     
     func animateRadiiChange(finalRadii: AtomRadii, duration: Double) {
@@ -36,7 +38,7 @@ class SceneAnimator {
                                           initialValue: scene.atom_radii,
                                           finalValue: finalRadii,
                                           duration: duration)
-        createDisplayLinkIfNeeded()
+        resumeDisplayLinkIfNeeded()
     }
     
     func animatedFillColorChange(initialColors: FillColorInput, finalColors: FillColorInput, duration: Double) {
@@ -44,14 +46,18 @@ class SceneAnimator {
                                           initialValue: initialColors,
                                           finalValue: finalColors,
                                           duration: duration)
-        createDisplayLinkIfNeeded()
+        resumeDisplayLinkIfNeeded()
     }
     
     // MARK: - Private
     
-    private func createDisplayLinkIfNeeded() {
-        self.displayLink = CADisplayLink(target: self, selector: #selector(updateAllAnimations))
-        displayLink?.add(to: .main, forMode: .default)
+    private func resumeDisplayLinkIfNeeded() {
+        displayLink?.isPaused = false
+    }
+    private func pauseDisplayLinkIfNeeded() {
+        guard radiiAnimation == nil else { return }
+        guard colorAnimation == nil else { return }
+        self.displayLink?.isPaused = true
     }
     
     private func getAnimationProgress(animation: inout RunningAnimation?) -> Double {
@@ -67,6 +73,8 @@ class SceneAnimator {
         }
     }
     
+    // MARK: - Update animations
+
     @objc private func updateAllAnimations() {
         guard !isBusy else { return }
         isBusy = true
@@ -82,8 +90,8 @@ class SceneAnimator {
             self.isBusy = false
         }
     }
-    
-    // MARK: - Update animations
+        
+    // MARK: - Radii animation
     
     private func updateRadiiAnimation() {
         
@@ -108,10 +116,13 @@ class SceneAnimator {
         
         bufferLoader?.populateImpostorSphereBuffers(atomRadii: scene.atom_radii)
         
-        if progress == 1 {
+        if progress >= 1 {
             self.radiiAnimation = nil
+            pauseDisplayLinkIfNeeded()
         }
     }
+    
+    // MARK: - Color animation
     
     private func updateColorAnimation() {
         
@@ -138,6 +149,7 @@ class SceneAnimator {
         if progress >= 1 {
             scene.colorFill = finalFill
             self.colorAnimation = nil
+            pauseDisplayLinkIfNeeded()
         }
     }
 

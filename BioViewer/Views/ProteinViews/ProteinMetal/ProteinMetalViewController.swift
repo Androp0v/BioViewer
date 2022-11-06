@@ -107,7 +107,6 @@ class ProteinMetalViewController: UIViewController {
                     radians: -rotationSpeedX,
                     axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
                 )
-                                
                 currentRotationMatrix *= Transform.rotationMatrix(
                     radians: -rotationSpeedY,
                     axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
