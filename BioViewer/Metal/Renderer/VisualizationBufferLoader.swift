@@ -157,6 +157,11 @@ class VisualizationBufferLoader {
     
     func createConfigurationSelector(proteins: [Protein]) -> ConfigurationSelector? {
         guard let proteinViewModel = proteinViewModel else { return nil }
+        
+        if let currentSelector = proteinViewModel.renderer.scene.configurationSelector,
+           currentSelector.proteins == proteins {
+            return currentSelector
+        }
 
         var totalAtomCount: Int = 0
         var subunitIndices = [Int]()
@@ -171,7 +176,8 @@ class VisualizationBufferLoader {
             }
         }
         return ConfigurationSelector(
-            scene: proteinViewModel.renderer.scene,
+            for: proteins,
+            in: proteinViewModel.renderer.scene,
             atomsPerConfiguration: totalAtomCount,
             subunitIndices: subunitIndices,
             subunitLengths: subunitLengths,

@@ -31,8 +31,10 @@ extension MetalScheduler {
 
         metalDispatchQueue.sync {
             // Populate buffers
-            let bondDataBuffer = device.makeBuffer(bytes: Array(bondData),
-                                                   length: bondCount * MemoryLayout<BondStruct>.stride)
+            let bondDataBuffer = device.makeBuffer(
+                bytes: Array(bondData),
+                length: bondCount * MemoryLayout<BondStruct>.stride
+            )
 
             // Make Metal command buffer
             guard let buffer = queue?.makeCommandBuffer() else { return }

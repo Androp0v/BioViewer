@@ -8,8 +8,13 @@
 import Foundation
 import simd
 
-/// Struct holding the contents of a protein.
+/// Class holding the contents of a protein.
 public class Protein {
+
+    // MARK: - UUID
+    
+    /// Internal-use unique identifier.
+    public var id = UUID()
 
     // MARK: - Sequence
 
@@ -81,5 +86,13 @@ public class Protein {
         self.atomCount = atomArrayComposition.totalCount
         self.sequence = sequence
         self.boundingSphere = computeBoundingSphere(atoms: atoms)
+    }
+}
+
+// MARK: - Equatable
+
+extension Protein: Equatable {
+    public static func == (lhs: Protein, rhs: Protein) -> Bool {
+        return lhs.id == rhs.id
     }
 }

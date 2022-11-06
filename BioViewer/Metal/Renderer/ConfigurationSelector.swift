@@ -14,6 +14,7 @@ struct BufferRegion {
 
 class ConfigurationSelector {
     weak var scene: MetalScene?
+    var proteins: [Protein]
     
     var atomsPerConfiguration: Int
     
@@ -28,7 +29,8 @@ class ConfigurationSelector {
     
     // MARK: - Initialization
     
-    init(scene: MetalScene, atomsPerConfiguration: Int, subunitIndices: [Int], subunitLengths: [Int], configurationCount: Int) {
+    init(for proteins: [Protein], in scene: MetalScene, atomsPerConfiguration: Int, subunitIndices: [Int], subunitLengths: [Int], configurationCount: Int) {
+        self.proteins = proteins
         self.scene = scene
         self.atomsPerConfiguration = atomsPerConfiguration
         self.subunitIndices = subunitIndices

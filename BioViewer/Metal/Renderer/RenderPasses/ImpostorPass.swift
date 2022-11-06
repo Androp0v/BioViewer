@@ -140,18 +140,20 @@ extension ProteinRenderer {
                                                    index: 1)
 
             // Don't render back-facing triangles (cull them)
-            renderCommandEncoder.setCullMode(.back)
+            renderCommandEncoder.setCullMode(.none)
             
             // Draw primitives
             guard let configurationSelector = scene.configurationSelector else {
                 return
             }
-            let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
+            guard let indexBufferRegion = configurationSelector.getBondsIndexBufferRegion() else {
+                return
+            }
             
             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
                                                        indexCount: indexBufferRegion.length,
                                                        indexType: .uint32,
-                                                       indexBuffer: impostorIndexBuffer,
+                                                       indexBuffer: impostorBondIndexBuffer,
                                                        indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
         }
         
