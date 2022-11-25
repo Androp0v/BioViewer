@@ -92,7 +92,9 @@ class ProteinMetalViewController: UIViewController {
     
     @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
         
-        proteinViewModel.autorotating = false
+        if proteinViewModel.autorotating {
+            proteinViewModel.autorotating = false
+        }
         
         if gestureRecognizer.state == .changed {
             switch proteinViewModel.toolbarConfig.selectedTool {
