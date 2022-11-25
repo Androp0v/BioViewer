@@ -1978,7 +1978,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.experimental.ProteinThumbnail;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.ProteinThumbnail;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
@@ -2010,7 +2010,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.experimental.ProteinThumbnail;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.ProteinThumbnail;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;

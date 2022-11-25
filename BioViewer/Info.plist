@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>CADisableMinimumFrameDuration</key>
 	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -9,7 +13,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>BioViewer EXP</string>
+	<string>BioViewer</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -112,10 +116,6 @@
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
-			<key>LSSupportsOpeningDocumentsInPlace</key>
-			<true/>
-			<key>UISupportsDocumentBrowser</key>
-			<true/>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -138,10 +138,6 @@
 			</dict>
 		</dict>
 		<dict>
-			<key>LSSupportsOpeningDocumentsInPlace</key>
-			<true/>
-			<key>UISupportsDocumentBrowser</key>
-			<true/>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -161,10 +157,6 @@
 			</dict>
 		</dict>
 		<dict>
-			<key>LSSupportsOpeningDocumentsInPlace</key>
-			<true/>
-			<key>UISupportsDocumentBrowser</key>
-			<string>1</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
