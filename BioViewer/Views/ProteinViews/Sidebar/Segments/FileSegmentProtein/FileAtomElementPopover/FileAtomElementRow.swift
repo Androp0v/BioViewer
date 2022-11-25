@@ -18,16 +18,8 @@ struct FileAtomElementRow: View {
     @State var totalAtom: Int?
     
     init(element: String, bold: Bool = false) {
-        
         self.element = element
         self.bold = bold
-    }
-    
-    func getAtomCountString() -> String {
-        guard let atomCount = atomCount, atomCount >= 0 else {
-            return "-"
-        }
-        return String(atomCount)
     }
     
     func getPercentageString() -> String {
@@ -54,7 +46,7 @@ struct FileAtomElementRow: View {
             if !bold {
                 Text(element)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(getAtomCountString())
+                Text("\(atomCount ?? 0)")
                     .frame(maxWidth: .infinity, alignment: .center)
                 Text(getPercentageString())
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -62,7 +54,7 @@ struct FileAtomElementRow: View {
                 Text(element)
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(getAtomCountString())
+                Text("\(atomCount ?? 0)")
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .center)
                 Text(getPercentageString())
@@ -71,34 +63,41 @@ struct FileAtomElementRow: View {
             }
         }
         .padding(.horizontal)
-        .onAppear {
+        .task {
+            guard let file = proteinViewModel.dataSource.getFirstFile() else { return }
+            guard let proteins = proteinViewModel.dataSource.modelsForFile(file: file) else { return }
+            var atomArrayComposition = AtomArrayComposition()
+            for protein in proteins {
+                atomArrayComposition += protein.atomArrayComposition
+            }
+            
             switch element.lowercased() {
             case "carbon":
-                self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.carbonCount
+                self.atomCount = atomArrayComposition.carbonCount
                 self.elementColor = proteinViewModel.elementColors[Int(AtomType.CARBON)]
             case "hydrogen":
-                self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.hydrogenCount
+                self.atomCount = atomArrayComposition.hydrogenCount
                 self.elementColor = proteinViewModel.elementColors[Int(AtomType.HYDROGEN)]
             case "nitrogen":
-                self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.nitrogenCount
+                self.atomCount = atomArrayComposition.nitrogenCount
                 self.elementColor = proteinViewModel.elementColors[Int(AtomType.NITROGEN)]
             case "oxygen":
-                self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.oxygenCount
+                self.atomCount = atomArrayComposition.oxygenCount
                 self.elementColor = proteinViewModel.elementColors[Int(AtomType.OXYGEN)]
             case "sulfur":
-                self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.sulfurCount
+                self.atomCount = atomArrayComposition.sulfurCount
                 self.elementColor = proteinViewModel.elementColors[Int(AtomType.SULFUR)]
             case "others":
-                self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomArrayComposition.othersCount
+                self.atomCount = atomArrayComposition.othersCount
                 self.elementColor = proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
             case "total":
-                self.atomCount = proteinViewModel.dataSource.getFirstProtein()?.atomCount
+                self.atomCount = atomArrayComposition.totalCount
                 self.elementColor = .clear
             default:
                 self.atomCount = -1
                 self.elementColor = .clear
             }
-            self.totalAtom = proteinViewModel.dataSource.getFirstProtein()?.atomCount
+            self.totalAtom = atomArrayComposition.totalCount
         }
     }
 }

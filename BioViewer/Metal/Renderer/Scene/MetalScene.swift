@@ -30,6 +30,8 @@ class MetalScene: ObservableObject {
     
     /// Struct with data passed to the GPU shader.
     var frameData: FrameData
+    /// Current atom radii configuration
+    var atom_radii: AtomRadii
     /// Frame count since the scene started.
     var frame: Int
     
@@ -50,12 +52,16 @@ class MetalScene: ObservableObject {
     private(set) var camera: Camera
     /// Position of the camera used to render the scene.
     private(set) var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
+    /// Bounding sphere of the visualised data.
+    var boundingSphere = BoundingSphere(center: .zero, radius: .zero)
     /// Rotation of the model applied by the user.
-    var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true} }
+    var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true } }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on.
     var aspectRatio: Float { didSet { needsRedraw = true } }
     /// Subscriber to camera changes.
     var cameraChangedCancellable: AnyCancellable?
+    /// Whether the camera is autorotating.
+    var autorotating: Bool = false { didSet { needsRedraw = true } }
     
     // MARK: - Shadow properties
     
@@ -83,7 +89,7 @@ class MetalScene: ObservableObject {
     init() {
         self.camera = Camera(nearPlane: 1, farPlane: 10000, focalLength: 200)
         self.cameraPosition = simd_float3(0, 0, 1000)
-        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0, axis: simd_float3(0, 1, 0))
+        self.userModelRotationMatrix = Transform.scaleMatrix(.one)
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.frameData = FrameData()
         self.frame = 0
@@ -91,7 +97,6 @@ class MetalScene: ObservableObject {
 
         // Setup initial values for FrameData
         self.frameData.model_view_matrix = Transform.translationMatrix(self.cameraPosition)
-        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
                 
         if AppState.hasSamplerCompareSupport() {
@@ -101,10 +106,11 @@ class MetalScene: ObservableObject {
         }
         self.hasDepthCueing = false
         
+        // Initial atom radii
+        self.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
+        
         self.frameData.shadow_strength = shadowStrength
         self.frameData.depth_cueing_strength = depthCueingStrength
-        
-        self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
         
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
@@ -119,10 +125,7 @@ class MetalScene: ObservableObject {
         // Pass cast shadows and depth cueing to FrameData
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
-        
-        // Initial atom radii
-        self.frameData.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
-                
+            
         // Create the animator
         self.animator = SceneAnimator(scene: self)
     }
@@ -133,7 +136,6 @@ class MetalScene: ObservableObject {
         guard needsRedraw || isPlaying else { return skipFrame() }
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
-        self.frameData.inverse_model_view_matrix = Transform.translationMatrix(cameraPosition).inverse
         self.frameData.projectionMatrix = self.camera.projectionMatrix
         
         // Update configuration
@@ -144,7 +146,9 @@ class MetalScene: ObservableObject {
         }
         
         // Update rotation matrices
-        updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
+        if !autorotating {
+            updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
+        }
         
         // Update shadow behaviour
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
@@ -155,63 +159,63 @@ class MetalScene: ObservableObject {
         frame += 1
         needsRedraw = false
         
-        // TO-DO: Proper camera auto-rotation
-        /*
-        updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: -0.001 * Float(frame),
-                                                                     axis: simd_float3(0,1,0)))
-        needsRedraw = true
-        */
+        // Autorotation
+        if autorotating {
+            let autorotationMatrix = Transform.rotationMatrix(
+                radians: -0.001,
+                axis: (self.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
+            )
+            self.userModelRotationMatrix *= autorotationMatrix
+            updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
+            needsRedraw = true
+        }
     }
     
     // MARK: - Update rotation
     
     func updateModelRotation(rotationMatrix: simd_float4x4) {
         
+        self.userModelRotationMatrix = rotationMatrix
+        let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
+
         // Update model rotation matrix
-        self.frameData.rotation_matrix = rotationMatrix
+        self.frameData.rotation_matrix = rotationMatrix * translateToOriginMatrix
         self.frameData.inverse_rotation_matrix = rotationMatrix.inverse
         
         // Update sun rotation matrix (model rotation + sun rotation)
         let sunRotation = Transform.rotationMatrix(radians: Float.pi / 2,
                                                    axis: simd_float3(-1.0, 0.0, 1.0))
-        self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix
-        self.frameData.inverse_sun_rotation_matrix = rotationMatrix.inverse * sunRotation.inverse
+        self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix * translateToOriginMatrix
         
         // Update camera -> sun's coordinate transform
         self.frameData.camera_to_shadow_projection_matrix = self.frameData.shadowProjectionMatrix
             * sunRotation
             * Transform.translationMatrix(cameraPosition).inverse
     }
-    
-    // MARK: - Add protein to scene
-    func createConfigurationSelector(protein: Protein) {
-        self.configurationSelector = ConfigurationSelector(scene: self,
-                                                           atomsPerConfiguration: protein.atomCount,
-                                                           configurationCount: protein.configurationCount)
-        self.frameData.atoms_per_configuration = Int32(protein.atomCount)
-    }
-    
+        
     // MARK: - Fit protein on screen
     
     func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
         // TO-DO: Fit all files
-        guard let protein = proteinDataSource.getFirstProtein() else {
-            return
-        }
+        self.boundingSphere = proteinDataSource.selectionBoundingSphere
+        
         // Update camera far and near planes
-        self.camera.nearPlane = max(1, distanceToModel - protein.boundingSphere.radius)
-        self.camera.farPlane = distanceToModel + protein.boundingSphere.radius
-        // Update camera position
+        self.camera.nearPlane = max(1, distanceToModel - boundingSphere.radius)
+        self.camera.farPlane = distanceToModel + boundingSphere.radius
+        // Update camera z-position
         self.cameraPosition.z = distanceToModel
         
+        // Update frameData's depth bias.
+        let armstrongsInBoundingSphere = camera.farPlane - camera.nearPlane
+        self.frameData.depth_bias = 2 / armstrongsInBoundingSphere
+        
         // Update shadow projection to fit too
-        let boundingSphereRadius = protein.boundingSphere.radius
-        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphereRadius + 3.3,
-                                                                                  boundingSphereRadius - 3.3,
-                                                                                 -boundingSphereRadius + 3.3,
-                                                                                  boundingSphereRadius - 3.3,
-                                                                                 -boundingSphereRadius - 3.3,
-                                                                                  boundingSphereRadius + 3.3)
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphere.radius + 3.3,
+                                                                                  boundingSphere.radius - 3.3,
+                                                                                 -boundingSphere.radius + 3.3,
+                                                                                  boundingSphere.radius - 3.3,
+                                                                                 -boundingSphere.radius - 3.3,
+                                                                                  boundingSphere.radius + 3.3)
     }
     
     // MARK: - Move camera
@@ -225,8 +229,7 @@ class MetalScene: ObservableObject {
         self.cameraPosition.x = 0
         self.cameraPosition.y = 0
         // Undo rotation
-        self.userModelRotationMatrix = Transform.rotationMatrix(radians: 0,
-                                                                axis: simd_float3(1, 0, 0))
+        updateModelRotation(rotationMatrix: Transform.scaleMatrix(.one))
         // TO-DO: Undo zoom
     }
     

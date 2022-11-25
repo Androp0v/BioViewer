@@ -2,35 +2,78 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>1.3.2</key>
-    <array>
+	<key>1.4</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Faster rendering</string>
+			<key>Subtitle</key>
+			<string>Renderer has been updated to be up to 70% on some devices and proteins.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Removed left sidebar</string>
+			<key>Subtitle</key>
+			<string>Removed left sidebar (initial screen on iPhone) since it&apos;s not currently being used.</string>
+		</dict>
         <dict>
             <key>Type</key>
-            <string>FIX</string>
+            <string>FEAT</string>
             <key>Title</key>
-            <string>Fix rendering bug</string>
+            <string>Option for showing all MODEL records at once</string>
             <key>Subtitle</key>
-            <string>Fixes shadow rendering bug on most devices.</string>
+            <string>PDBs containing several MODEL records of the same protein (for example, a biological assembly of a virus capsid) can now be shown at once.</string>
         </dict>
-        <dict>
-            <key>Type</key>
-            <string>FIX</string>
-            <key>Title</key>
-            <string>Fix crash on small proteins</string>
-            <key>Subtitle</key>
-            <string>Fixes crash when trying to display small proteins on older devices.</string>
-        </dict>
-    </array>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Support for more subunit colors</string>
+			<key>Subtitle</key>
+			<string>Support for up to 512 subunit colors.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Redesigned color options UI</string>
+			<key>Subtitle</key>
+			<string>Color options UI is now collapsible. Useful when dealing with proteins with many subunits, where scrolling to the bottom of the list to see other options was impractical.</string>
+		</dict>
+	</array>
+	<key>1.3.2</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Fix rendering bug</string>
+			<key>Subtitle</key>
+			<string>Fixes shadow rendering bug on most devices.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Fix crash on small proteins</string>
+			<key>Subtitle</key>
+			<string>Fixes crash when trying to display small proteins on older devices.</string>
+		</dict>
+	</array>
 	<key>1.3.1</key>
-    <array>
-        <dict>
-            <key>Type</key>
-            <string>FIX</string>
-            <key>Title</key>
-            <string>Fix rendering bug on Intel Macs</string>
-            <key>Subtitle</key>
-            <string>Fixes rendering bug on Intel Macs.</string>
-        </dict>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Fix rendering bug on Intel Macs</string>
+			<key>Subtitle</key>
+			<string>Fixes rendering bug on Intel Macs.</string>
+		</dict>
 	</array>
 	<key>1.3</key>
 	<array>

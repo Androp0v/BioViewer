@@ -7,6 +7,7 @@
 
 #include <metal_stdlib>
 #include "FrameData.h"
+#include "ShaderCommon.h"
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
@@ -16,14 +17,14 @@ using namespace metal;
 
 struct ImpostorVertexOut{
     float4 position [[position]];
-    float3 atomCenter;
-    half2 billboardMapping;
-    float atom_radius;
-    half3 color;
+    float3 atomCenter [[attribute(0)]];
+    half2 billboardMapping [[attribute(1)]];
+    half atom_radius [[attribute(2)]];
+    half3 color [[attribute(3)]];
 };
 
-// MARK: - Constants
-constant bool hq_sample_count [[ function_constant(0) ]];
+// MARK: - Build constants
+constant bool is_high_quality_frame [[ function_constant(0) ]];
 
 // MARK: - Functions
 
@@ -42,10 +43,12 @@ half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, floa
 
 // MARK: - Vertex function
 
-vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                         const device uint8_t *atomType [[ buffer(1) ]],
-                                         const device half3 *atomColor [[ buffer(2) ]],
-                                         const device FrameData& frameData [[ buffer(3) ]],
+vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_position [[ buffer(0) ]],
+                                         const device simd_float3 *billboard_world_center [[ buffer(1) ]],
+                                         const device simd_half2 *billboard_mapping [[ buffer(2) ]],
+                                         const device half *atom_radius [[ buffer(3) ]],
+                                         const device half3 *atomColor [[ buffer(4) ]],
+                                         constant FrameData& frameData [[ buffer(5) ]],
                                          unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
@@ -53,38 +56,34 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
     int verticesPerAtom = 4;
     int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
+    // Send vertex outside display bounds if disabled
+    /*
+    if (disabledAtoms[atom_id_configuration]) {
+        normalized_impostor_vertex.position = float4(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);
+        return normalized_impostor_vertex;
+    }
+    */
+    
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.xy);
-    normalized_impostor_vertex.atom_radius = vertex_buffer[vertex_id].atom_radius;
+    normalized_impostor_vertex.billboardMapping = billboard_mapping[vertex_id];
+    normalized_impostor_vertex.atom_radius = atom_radius[vertex_id];
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
-    simd_float4x4 inverse_rotation_matrix = frameData.inverse_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
-                                                           vertex_buffer[vertex_id].billboard_world_center.y,
-                                                           vertex_buffer[vertex_id].billboard_world_center.z,
-                                                           1.0);
+    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
-    // To rotate the billboards so they are facing the screen, first rotate them like the model,
-    // along the protein axis.
-    float4 rotated_model = rotation_matrix * float4(vertex_buffer[vertex_id].position.x,
-                                                    vertex_buffer[vertex_id].position.y,
-                                                    vertex_buffer[vertex_id].position.z,
-                                                    1.0);
-    // Then translate the triangle to the origin of coordinates
-    rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
-    // Reverse the rotation by rotating in the opposite rotation along the billboard axis, NOT
-    // the protein axis.
-    rotated_model = inverse_rotation_matrix * rotated_model;
-    // Translate the triangles back to their positions, now that they're already rotated
-    rotated_model.xyz = rotated_model.xyz + rotated_atom_centers.xyz;
+    // Get the billboard vertex position, relative to the atom center
+    float4 billboard_vertex = float4(float2(vertex_position[vertex_id].xy), 0.0, 1.0);
+    
+    // Translate the triangles to their (rotated) world positions
+    billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
     
     // Transform the world space coordinates to eye space coordinates
-    float4 eye_position = model_view_matrix * rotated_model;
+    float4 eye_position = model_view_matrix * billboard_vertex;
     
     // Transform the atom positions from world space to eye space
     normalized_impostor_vertex.atomCenter = (model_view_matrix * rotated_atom_centers).xyz;
@@ -103,17 +102,27 @@ vertex ImpostorVertexOut impostor_vertex(const device BillboardVertex *vertex_bu
 
 struct ImpostorFragmentOut{
     half4 color [[ color(0) ]];
-    float depth [[ depth(any) ]];
+    float depth [[ depth(less) ]];
 };
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
-                                               const device FrameData &frameData [[ buffer(1) ]],
-                                               depth2d<float> shadowMap [[ texture(0) ]],
-                                               sampler shadowSampler [[ sampler(0) ]]) {
+                                               constant FrameData &frameData [[ buffer(1) ]],
+                                               const depth2d<float> shadowMap [[ texture(1) ]],
+                                               sampler shadowSampler [[ sampler(0) ]],
+                                               DepthPrePassFragmentOut depth_pre_pass_output) {
     
     // Declare output
     ImpostorFragmentOut output;
+    
+    // Depth testing with precomputed depth upper bound
+    if (!is_high_quality_frame) {
+        float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
+        float primitiveDepth = impostor_vertex.position.z;
+        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
+            discard_fragment();
+        }
+    }
     
     // dot = x^2 + y^2
     half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
@@ -190,15 +199,15 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
         #else
         float sunlit_fraction = 0;
         int sample_count;
-        if (hq_sample_count) {
+        if (is_high_quality_frame) {
             sample_count = 128;
         } else {
             sample_count = 2;
         }
         for (int sample_index = 0; sample_index < sample_count; sample_index++) {
             // FIXME: 0.001 should be proportional to the typical atom size
-            // TO-DO: VogelDiskSample may be called with a random number instead of 0 for the rotation
-            half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 0);
+            // TO-DO: VogelDiskSample may be called with a random number instead of 3 for the rotation
+            half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 3);
             sunlit_fraction += shadowMap.sample_compare(shadowSampler,
                                                         sphereShadowClipPosition.xy + float2(sample_offset),
                                                         sphereShadowClipPosition.z);

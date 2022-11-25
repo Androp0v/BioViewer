@@ -14,6 +14,7 @@ struct FileSegmentProtein: View {
     
     private func getModelNames(modelCount: Int) -> [String] {
         var modelNames = [String]()
+        modelNames.append(NSLocalizedString("Show all", comment: ""))
         for modelIndex in 0..<modelCount {
             modelNames.append( NSLocalizedString("Model \(modelIndex + 1)", comment: ""))
         }
@@ -50,19 +51,23 @@ struct FileSegmentProtein: View {
                         
                         // Show model selector only if there's more than one model
                         if file.models.count > 1 {
-                            PickerRow(optionName: NSLocalizedString("Viewing:", comment: ""),
+                            PickerRow(optionName: NSLocalizedString("Model:", comment: ""),
                                       selectedOption: $proteinViewModel.dataSource.selectedModel[index],
+                                      startIndex: -1,
                                       pickerOptions: getModelNames(modelCount: file.models.count))
                         }
                         
-                        if let protein = proteinViewModel.dataSource.modelForFile(file: file) {
-                            
-                            InfoTextRow(text: NSLocalizedString("Number of subunits:", comment: ""),
-                                        value: "\(protein.subunitCount)")
-                            InfoAtomsRow(label: NSLocalizedString("Number of atoms:", comment: ""),
-                                         value: "\(protein.atomCount)",
-                                         isDisabled: false,
-                                         file: file)
+                        if let proteins = proteinViewModel.dataSource.modelsForFile(file: file) {
+                            InfoTextRow(
+                                text: NSLocalizedString("Number of subunits:", comment: ""),
+                                value: "\(proteins.reduce(0) { $0 + $1.subunitCount })"
+                            )
+                            InfoAtomsRow(
+                                label: NSLocalizedString("Number of atoms:", comment: ""),
+                                value: proteins.reduce(0) { $0 + $1.atomArrayComposition.totalCount },
+                                isDisabled: false,
+                                file: file
+                            )
                         }
                     }
                 }

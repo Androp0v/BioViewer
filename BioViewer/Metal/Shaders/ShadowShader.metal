@@ -7,6 +7,7 @@
 
 #include <metal_stdlib>
 #include "FrameData.h"
+#include "ShaderCommon.h"
 #include "../Meshes/GeneratedVertex.h"
 #include "../Meshes/AtomProperties.h"
 
@@ -17,55 +18,47 @@ using namespace metal;
 
 struct ShadowVertexOut{
     float4 position [[position]];
-    float3 atomCenter;
-    half2 billboardMapping;
-    float atom_radius;
+    float3 atomCenter [[attribute(0)]];
+    half2 billboardMapping [[attribute(1)]];
+    half atom_radius [[attribute(2)]];
 };
+
+// MARK: - Build constants
+constant bool is_high_quality_frame [[ function_constant(0) ]];
 
 // MARK: - Vertex function
 
-vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer [[ buffer(0) ]],
-                                     const device uint8_t *atomType [[ buffer(1) ]],
-                                     const device FrameData& frameData [[ buffer(2) ]],
+vertex ShadowVertexOut shadow_vertex(const device simd_half2 *vertex_position [[ buffer(0) ]],
+                                     const device simd_float3 *billboard_world_center [[ buffer(1) ]],
+                                     const device simd_half2 *billboard_mapping [[ buffer(2) ]],
+                                     const device half *atom_radius [[ buffer(3) ]],
+                                     constant FrameData& frameData [[ buffer(4) ]],
                                      unsigned int vertex_id [[ vertex_id ]]) {
 
     // Initialize the returned VertexOut structure
     ShadowVertexOut normalized_impostor_vertex;
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = half2(vertex_buffer[vertex_id].billboardMapping.x, vertex_buffer[vertex_id].billboardMapping.y);
-    normalized_impostor_vertex.atom_radius = vertex_buffer[vertex_id].atom_radius;
+    normalized_impostor_vertex.billboardMapping = billboard_mapping[vertex_id];
+    normalized_impostor_vertex.atom_radius = atom_radius[vertex_id];
 
     // Fetch the matrices
     simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
     simd_float4x4 sun_rotation_matrix = frameData.sun_rotation_matrix;
-    simd_float4x4 inverse_sun_rotation_matrix = frameData.inverse_sun_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = sun_rotation_matrix * float4(vertex_buffer[vertex_id].billboard_world_center.x,
-                                                               vertex_buffer[vertex_id].billboard_world_center.y,
-                                                               vertex_buffer[vertex_id].billboard_world_center.z,
-                                                               1.0);
+    float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
 
-    // To rotate the billboards so they are facing the screen, first rotate them like the model,
-    // along the protein axis.
-    float4 rotated_model = sun_rotation_matrix * float4(vertex_buffer[vertex_id].position.x,
-                                                                vertex_buffer[vertex_id].position.y,
-                                                                vertex_buffer[vertex_id].position.z,
-                                                                1.0);
-    // Then translate the triangle to the origin of coordinates
-    rotated_model.xyz = rotated_model.xyz - rotated_atom_centers.xyz;
-    // Reverse the rotation by rotating in the opposite rotation along the billboard axis, NOT
-    // the protein axis.
-    rotated_model = inverse_sun_rotation_matrix * rotated_model;
-    // Translate the triangles back to their positions, now that they're already rotated
-    rotated_model.xyz = rotated_model.xyz + rotated_atom_centers.xyz;
+    // Get the billboard vertex position, relative to the atom center
+    float4 billboard_vertex = float4(float2(vertex_position[vertex_id].xy), 0.0, 1.0);
+    // Translate the triangles to their (rotated) world positions
+    billboard_vertex.xyz = billboard_vertex.xyz + rotated_atom_centers.xyz;
         
     // For the ShadowShader, we use model coordinates instead of camera coordinates
     normalized_impostor_vertex.atomCenter = rotated_atom_centers.xyz;
     
     // Transform the model space coordinates to normalized device coordinates
-    normalized_impostor_vertex.position = shadow_projection_matrix * rotated_model;
+    normalized_impostor_vertex.position = shadow_projection_matrix * billboard_vertex;
 
     // Return the processed vertex
     return normalized_impostor_vertex;
@@ -74,14 +67,23 @@ vertex ShadowVertexOut shadow_vertex(const device BillboardVertex *vertex_buffer
 // MARK: - Fragment function
 
 struct ShadowFragmentOut{
-    float depth [[ depth(any) ]];
+    float depth [[ depth(less) ]];
 };
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[stage_in]],
-                                           const device FrameData& frameData [[ buffer(1) ]] ) {
+                                           constant FrameData& frameData [[ buffer(0) ]],
+                                           ShadowDepthPrePassFragmentOut shadow_depth_bound_output) {
     // Declare output
     ShadowFragmentOut output;
+    
+    if (!is_high_quality_frame) {
+        float boundedDepth = shadow_depth_bound_output.bounded_depth; // FIXME: Rename to depth
+        float primitiveDepth = impostor_vertex.position.z;
+        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
+            discard_fragment();
+        }
+    }
 
     // dot = x^2 + y^2
     half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);

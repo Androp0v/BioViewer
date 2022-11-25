@@ -24,7 +24,7 @@ extension FileParser {
         var oxygenArray = [simd_float3]()
         var sulfurArray = [simd_float3]()
         var othersArray = [simd_float3]()
-        var othersIDs = [UInt8]()
+        var othersIDs = [UInt16]()
         var atomArrayComposition = AtomArrayComposition()
         
         init(id: Int) {
@@ -37,7 +37,7 @@ extension FileParser {
         
         var atomArray = ContiguousArray<simd_float3>()
         var energyArray: [Float]?
-        var atomIdentifiers = [UInt8]()
+        var atomIdentifiers = [UInt16]()
         var atomArrayComposition = AtomArrayComposition()
         
         // Initialize empty configuration
@@ -184,7 +184,7 @@ extension FileParser {
         
         let proteinSubunits = [ProteinSubunit(id: firstConfiguration.id,
                                               atomCount: firstConfiguration.atomArrayComposition.totalCount,
-                                              indexStart: 0)]
+                                              startIndex: 0)]
         
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
         

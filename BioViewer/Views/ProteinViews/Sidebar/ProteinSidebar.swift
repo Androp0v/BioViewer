@@ -25,12 +25,18 @@ private struct ProteinSidebarContent: View {
         ZStack(alignment: .top) {
             // Options views go here
             switch selectedSegment {
-            case 0: FileSegmentProtein()
-            case 1: AppearanceSegmentProtein()
-            case 2: FunctionsSegmentProtein()
-            case 3: TrajectorySegmentProtein()
-            case 4: SettingsSegmentProtein()
-            default: Spacer()
+            case 0:
+                FileSegmentProtein()
+            case 1:
+                AppearanceSegmentProtein()
+            case 2:
+                FunctionsSegmentProtein()
+            case 3:
+                TrajectorySegmentProtein()
+            case 4:
+                SettingsSegmentProtein()
+            default:
+                Spacer()
             }
             // Top segmented control to switch between options
             VStack(spacing: 0) {

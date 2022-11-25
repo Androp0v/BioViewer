@@ -9,7 +9,7 @@ import Foundation
 import MetalKit
 import SwiftUI
 
-class ProteinRenderer: NSObject, ObservableObject {
+class ProteinRenderer: NSObject {
     
     // MARK: - Constants
     
@@ -28,30 +28,52 @@ class ProteinRenderer: NSObject, ObservableObject {
     /// Used to ensure buffers are untouched during frame rendering.
     let bufferResourceLock = NSLock()
     
+    /// Frame GPU execution time, exponentially averaged.
+    var lastFrameGPUTime = CFTimeInterval()
+    
     // MARK: - Metal variables
     
     /// GPU
     var device: MTLDevice
+    /// Command queue.
+    var commandQueue: MTLCommandQueue?
+    /// Resolution of the view
+    var viewResolution: CGSize?
+    
     /// Pipeline state for filling the color buffer.
     var fillColorComputePipelineState: MTLComputePipelineState?
+    
+    /// Pipeline state for the shadow depth pre-pass.
+    var shadowDepthPrePassRenderPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the directional shadow creation.
     var shadowRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the opaque geometry rendering.
+    /// Pipeline state for the directional shadow creation.
+    var shadowHQRenderingPipelineState: MTLRenderPipelineState?
+    
     var opaqueRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times).
+    
+    /// Pipeline state for the depth pre-pass.
+    var depthPrePassRenderPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for the opaque geometry rendering.
     var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorHQRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times).
+    ///
     var impostorBondRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorBondHQRenderingPipelineState: MTLRenderPipelineState?
+    
+    #if DEBUG
+    /// Pipeline to debug things using points.
+    var debugPointsRenderingPipelineState: MTLRenderPipelineState?
+    #endif
+    
     /// Shadow depth state.
     var shadowDepthState: MTLDepthStencilState?
     /// Depth state.
     var depthState: MTLDepthStencilState?
-    /// Command queue.
-    var commandQueue: MTLCommandQueue?
     
     // MARK: - Buffers
     
@@ -61,9 +83,15 @@ class ProteinRenderer: NSObject, ObservableObject {
     var opaqueIndexBuffer: MTLBuffer?
     
     /// Used to pass the geometry vertex data to the shader when using billboarding
-    var impostorVertexBuffer: MTLBuffer?
+    var billboardVertexBuffers: BillboardVertexBuffers?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
     var impostorIndexBuffer: MTLBuffer?
+    
+    #if DEBUG
+    /// Used to debug things displaying points
+    var debugPointVertexBuffer: MTLBuffer?
+    #endif
+    
     /// Used to pass the atomic type data to the shader (used for coloring, size...)
     var atomTypeBuffer: MTLBuffer?
     /// Used to pass the subunit index to the shader (used for coloring)
@@ -81,6 +109,7 @@ class ProteinRenderer: NSObject, ObservableObject {
     // MARK: - Textures
     
     var shadowTextures = ShadowTextures()
+    var depthPrePassTextures = DepthPrePassTextures()
 
     // MARK: - Runtime variables
     
@@ -120,20 +149,39 @@ class ProteinRenderer: NSObject, ObservableObject {
     
     let shadowRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
+        // Final shadow color texture, unused
         descriptor.colorAttachments[0].loadAction = .dontCare
         descriptor.colorAttachments[0].storeAction = .dontCare
+        // Depth-bound pre-pass texture
+        descriptor.colorAttachments[1].loadAction = .clear
+        descriptor.colorAttachments[1].storeAction = .dontCare
+        // Final depth texture (Shadow Map)
         descriptor.depthAttachment.loadAction = .clear
         descriptor.depthAttachment.storeAction = .store
         
-        descriptor.defaultRasterSampleCount = 0
         return descriptor
     }()
     
     let impostorRenderPassDescriptor: MTLRenderPassDescriptor = {
         let descriptor = MTLRenderPassDescriptor()
+        // Final drawable texture
         descriptor.colorAttachments[0].loadAction = .clear
         descriptor.colorAttachments[0].storeAction = .store
+        // Depth-bound pre-pass texture
+        descriptor.colorAttachments[1].loadAction = .clear
+        descriptor.colorAttachments[1].storeAction = .dontCare
+        // Final depth texture
         descriptor.depthAttachment.loadAction = .clear
+        descriptor.depthAttachment.storeAction = .dontCare
+        
+        return descriptor
+    }()
+    
+    let debugPointsRenderPassDescriptor: MTLRenderPassDescriptor = {
+        let descriptor = MTLRenderPassDescriptor()
+        descriptor.colorAttachments[0].loadAction = .load
+        descriptor.colorAttachments[0].storeAction = .store
+        descriptor.depthAttachment.loadAction = .load
         descriptor.depthAttachment.storeAction = .dontCare
         return descriptor
     }()
@@ -189,16 +237,30 @@ class ProteinRenderer: NSObject, ObservableObject {
         makeFillColorComputePipelineState(device: device)
         
         // Create render pipeline states
-        makeShadowRenderPipelineState(device: device, useFixedRadius: false)
+        makeShadowRenderPipelineState(device: device, highQuality: false)
+        if AppState.hasDepthPrePasses() {
+            makeShadowDepthPrePassRenderPipelineState(device: device)
+            makeDepthPrePassRenderPipelineState(device: device)
+        }
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
         makeImpostorBondRenderPipelineState(device: device, variant: .solidSpheres)
+        #if DEBUG
+        makeDebugPointsPipelineState(device: device)
+        #endif
         
         // Create shadow textures and sampler
         shadowTextures.makeTextures(device: device,
                                     textureWidth: ShadowTextures.defaultTextureWidth,
                                     textureHeight: ShadowTextures.defaultTextureHeight)
         shadowTextures.makeShadowSampler(device: device)
+        
+        // Create texture for depth-bound shadow render pass pre-pass
+        if AppState.hasDepthPrePasses() {
+            depthPrePassTextures.makeShadowTextures(device: device,
+                                                    shadowTextureWidth: ShadowTextures.defaultTextureWidth,
+                                                    shadowTextureHeight: ShadowTextures.defaultTextureHeight)
+        }
         
         // Depth state
         shadowDepthState = device.makeDepthStencilState(descriptor: depthDescriptor)
@@ -207,17 +269,20 @@ class ProteinRenderer: NSObject, ObservableObject {
 
     // MARK: - Public functions
         
-    func createAtomColorBuffer(protein: Protein, subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) {
+    func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) {
         
         // Get the number of configurations
-        let configurationCount = protein.configurationCount
+        var atomAndConfigurationCount = 0
+        for protein in proteins {
+            atomAndConfigurationCount += protein.atomCount * protein.configurationCount
+        }
         
         // WORKAROUND: The memory layout should conform to simd_half3's stride, which is
         // syntactic sugar for SIMD3<Float16>, but Float16 is (still) unavailable on macOS
         // due to lack of support on x86. We assume SIMD3<Int16> is packed in the same way
         // Metal packs the half3 type.
         guard let generatedColorBuffer = device.makeBuffer(
-            length: protein.atomCount * configurationCount * MemoryLayout<SIMD3<Int16>>.stride
+            length: atomAndConfigurationCount * MemoryLayout<SIMD3<Int16>>.stride
         ) else { return }
         
         bufferResourceLock.lock()
@@ -236,14 +301,21 @@ class ProteinRenderer: NSObject, ObservableObject {
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
-    func setBillboardingBuffers(vertexBuffer: inout MTLBuffer, subunitBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    func setBillboardingBuffers(
+        billboardVertexBuffers: BillboardVertexBuffers,
+        subunitBuffer: MTLBuffer,
+        atomTypeBuffer: MTLBuffer,
+        indexBuffer: MTLBuffer,
+        configurationSelector: ConfigurationSelector
+    ) {
         bufferResourceLock.lock()
-        self.impostorVertexBuffer = vertexBuffer
+        self.billboardVertexBuffers = billboardVertexBuffers
         self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
+        self.scene.configurationSelector = configurationSelector
         bufferResourceLock.unlock()
     }
     
@@ -263,6 +335,15 @@ class ProteinRenderer: NSObject, ObservableObject {
         bufferResourceLock.unlock()
     }
     
+    #if DEBUG
+    func setDebugPointsBuffer(vertexBuffer: inout MTLBuffer) {
+        bufferResourceLock.lock()
+        self.debugPointVertexBuffer = vertexBuffer
+        self.scene.needsRedraw = true
+        bufferResourceLock.unlock()
+    }
+    #endif
+    
     /// Deallocates the MTLBuffers used to render a protein
     func removeBuffers() {
         bufferResourceLock.lock()
@@ -277,11 +358,6 @@ class ProteinRenderer: NSObject, ObservableObject {
     func remakeImpostorPipelineForVariant(variant: ImpostorRenderPassVariant) {
         makeImpostorRenderPipelineState(device: self.device, variant: variant)
     }
-    
-    /// Make new shadow pipeline variant.
-    func remakeShadowPipelineForVariant(useFixedRadius: Bool) {
-        makeShadowRenderPipelineState(device: self.device, useFixedRadius: useFixedRadius)
-    }
 }
 
 // MARK: - Drawing
@@ -292,7 +368,15 @@ extension ProteinRenderer: MTKViewDelegate {
         // TO-DO: Update G-Buffer texture size to match view size
         self.scene.camera.updateProjection(drawableSize: size)
         self.scene.aspectRatio = Float(size.width / size.height)
-
+        
+        self.viewResolution = size
+        
+        if AppState.hasDepthPrePasses() {
+            depthPrePassTextures.makeTextures(device: device,
+                                            textureWidth: Int(size.width),
+                                            textureHeight: Int(size.height))
+        }
+        
         // TO-DO: Enqueue draw calls so this doesn't drop the FPS
         view.draw()
     }
@@ -384,7 +468,12 @@ extension ProteinRenderer: MTKViewDelegate {
             
             // MARK: - Shadow Map pass
             
-            self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer, shadowTextures: self.shadowTextures)
+            if self.scene.hasShadows {
+                self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
+                                      shadowTextures: self.shadowTextures,
+                                      shadowDepthPrePassTexture: self.depthPrePassTextures.shadowColorTexture,
+                                      highQuality: false)
+            }
             
             // GETTING THE DRAWABLE
             // The final pass can only render if a drawable is available, otherwise it needs to skip
@@ -397,10 +486,19 @@ extension ProteinRenderer: MTKViewDelegate {
                                         uniformBuffer: &uniformBuffer,
                                         drawableTexture: drawable.texture,
                                         depthTexture: view.depthStencilTexture,
+                                        depthPrePassTexture: self.depthPrePassTextures.colorTexture,
                                         shadowTextures: self.shadowTextures,
                                         variant: .solidSpheres,
                                         renderBonds: self.scene.currentVisualization == .ballAndStick)
-                                
+                                                
+                // MARK: - Debug points pass
+                #if DEBUG
+                self.pointsRenderPass(commandBuffer: commandBuffer,
+                                      uniformBuffer: &uniformBuffer,
+                                      drawableTexture: drawable.texture,
+                                      depthTexture: view.depthStencilTexture)
+                #endif
+                
                 // Schedule a drawable presentation to occur after the GPU completes its work
                 // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
                 commandBuffer.present(drawable)
@@ -410,6 +508,8 @@ extension ProteinRenderer: MTKViewDelegate {
             
             commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
                 guard let self = self else { return }
+                // Store the time required to render the frame
+                self.lastFrameGPUTime = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
                 // GPU work is complete, signal the semaphore to start the CPU work
                 self.frameBoundarySemaphore.signal()
             })

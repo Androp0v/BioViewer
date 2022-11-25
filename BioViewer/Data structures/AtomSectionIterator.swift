@@ -14,7 +14,7 @@ import Foundation
 /// ```AtomArrayComposition``` array) and the length of the section.
 public struct AtomSection {
     // The atom element identifier
-    var atomIdentifier: UInt8
+    var atomIdentifier: UInt16
     // The starting index for that element
     var startsAt: Int
     // The length of the section (number of atoms of that element)

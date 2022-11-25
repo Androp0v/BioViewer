@@ -28,7 +28,7 @@ extension MetalScheduler {
             )
             let atomTypeBuffer = device.makeBuffer(
                 bytes: Array(protein.atomIdentifiers),
-                length: protein.atomCount * protein.configurationCount * MemoryLayout<UInt8>.stride
+                length: protein.atomCount * protein.configurationCount * MemoryLayout<UInt16>.stride
             )
 
             // Make Metal command buffer
@@ -61,6 +61,25 @@ extension MetalScheduler {
             computeEncoder.setBuffer(generatedSDFBuffer,
                                      offset: 0,
                                      index: 2)
+            
+            // Set uniform buffer contents
+            let sdfGridBuffer = device.makeBuffer(
+                bytes: Array([SDFGrid(grid_resolution: Int32(gridResolution),
+                                      grid_size: boxSize,
+                                      number_of_atoms: Int32(protein.atoms.count))]),
+                length: MemoryLayout<SDFGrid>.stride
+            )
+            computeEncoder.setBuffer(sdfGridBuffer,
+                                     offset: 0,
+                                     index: 3)
+            
+            let atomRadiiBuffer = device.makeBuffer(
+                bytes: Array([AtomRadiiGenerator.vanDerWaalsRadii()]),
+                length: MemoryLayout<AtomRadii>.stride
+            )
+            computeEncoder.setBuffer(atomRadiiBuffer,
+                                     offset: 0,
+                                     index: 4)
                         
             // Schedule the threads
             if device.supportsFamily(.common3) {

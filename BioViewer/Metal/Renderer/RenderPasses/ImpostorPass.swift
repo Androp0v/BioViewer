@@ -12,16 +12,24 @@ import MetalKit
 
 extension ProteinRenderer {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
+    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthPrePassTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
         
         // Ensure transparent buffers are loaded
-        guard let impostorVertexBuffer = self.impostorVertexBuffer else { return }
+        guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
         impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
         impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
+        
+        if AppState.hasDepthPrePasses() {
+            // Attach textures. colorAttachments[1] is the depth pre-pass GBuffer texture
+            impostorRenderPassDescriptor.colorAttachments[1].texture = depthPrePassTexture
+            // Clear the depth texture using the equivalent to 1.0 (max depth)
+            impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        }
+                
         // Attach depth texture.
         impostorRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
@@ -31,8 +39,20 @@ extension ProteinRenderer {
         guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
             return
         }
+        renderCommandEncoder.label = "Depth Pre-pass & Billboard Shading"
+        
+        // Set depth state
+        renderCommandEncoder.setDepthStencilState(depthState)
+        
+        // MARK: - Depth pre-pass stage
+        
+        if AppState.hasDepthPrePasses() {
+            self.encodeDepthBoundStage(renderCommandEncoder: renderCommandEncoder,
+                                       uniformBuffer: &uniformBuffer)
+        }
         
         // MARK: - Impostor sphere rendering
+        
         // Set pipeline state for the variant
         var variantPipelineState: MTLRenderPipelineState?
         switch variant {
@@ -46,28 +66,23 @@ extension ProteinRenderer {
         }
         renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
 
-        // Set depth state
-        renderCommandEncoder.setDepthStencilState(depthState)
-
-        // Add buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(impostorVertexBuffer,
-                                             offset: 0,
-                                             index: 0)
-        renderCommandEncoder.setVertexBuffer(atomTypeBuffer,
-                                             offset: 0,
-                                             index: 1)
-        renderCommandEncoder.setVertexBuffer(atomColorBuffer,
+        // Add other buffers to pipeline
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.billboardMappingBuffer,
                                              offset: 0,
                                              index: 2)
-        renderCommandEncoder.setVertexBuffer(uniformBuffer,
+        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomRadiusBuffer,
                                              offset: 0,
                                              index: 3)
+        
+        renderCommandEncoder.setVertexBuffer(atomColorBuffer,
+                                             offset: 0,
+                                             index: 4)
         
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,
                                                index: 1)
         renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
-                                                index: 0)
+                                                index: 1)
         renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
                                                      index: 0)
 
@@ -75,17 +90,16 @@ extension ProteinRenderer {
         renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        guard let indexBufferLength = scene.configurationSelector?.getImpostorIndexBufferRegion().length else {
+        guard let configurationSelector = scene.configurationSelector else {
             return
         }
-        guard let indexBufferOffset = scene.configurationSelector?.getImpostorIndexBufferRegion().offset else {
-            return
-        }
+        let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
+
         renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                   indexCount: indexBufferLength,
+                                                   indexCount: indexBufferRegion.length,
                                                    indexType: .uint32,
                                                    indexBuffer: impostorIndexBuffer,
-                                                   indexBufferOffset: indexBufferOffset * MemoryLayout<UInt32>.stride)
+                                                   indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
         
         // MARK: - Bond rendering
         if renderBonds {
@@ -126,22 +140,21 @@ extension ProteinRenderer {
                                                    index: 1)
 
             // Don't render back-facing triangles (cull them)
-            renderCommandEncoder.setCullMode(.back)
+            renderCommandEncoder.setCullMode(.none)
             
             // Draw primitives
-            guard let indexBufferLength = scene.configurationSelector?.getBondsIndexBufferRegion()?.length else {
-                renderCommandEncoder.endEncoding()
+            guard let configurationSelector = scene.configurationSelector else {
                 return
             }
-            guard let indexBufferOffset = scene.configurationSelector?.getBondsIndexBufferRegion()?.offset else {
-                renderCommandEncoder.endEncoding()
+            guard let indexBufferRegion = configurationSelector.getBondsIndexBufferRegion() else {
                 return
             }
+            
             renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                       indexCount: indexBufferLength,
+                                                       indexCount: indexBufferRegion.length,
                                                        indexType: .uint32,
                                                        indexBuffer: impostorBondIndexBuffer,
-                                                       indexBufferOffset: indexBufferOffset * MemoryLayout<UInt32>.stride)
+                                                       indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
         }
         
         // MARK: - End encoding

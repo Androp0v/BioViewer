@@ -12,8 +12,8 @@ using namespace metal;
 
 kernel void fill_color_buffer(device half3 *atom_color [[ buffer(0) ]],
                               const device int16_t *subunitIndex [[ buffer(1) ]],
-                              const device uint8_t *atom_type [[ buffer(2) ]],
-                              constant FillColorInput &color_input [[buffer(3)]],
+                              const device uint16_t *atom_type [[ buffer(2) ]],
+                              device FillColorInput &color_input [[buffer(3)]],
                               uint i [[ thread_position_in_grid ]],
                               uint l [[ thread_position_in_threadgroup ]]) {
     half3 final_color;

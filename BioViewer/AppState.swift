@@ -46,6 +46,16 @@ class AppState: ObservableObject {
         }
     }
     
+    static let hasDepthPrePasses = { () -> Bool in
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return false
+        }
+        if !device.supportsFamily(.apple1) {
+            return false
+        }
+        return true
+    }
+    
     // MARK: - Version
     
     func version() -> String {

@@ -66,6 +66,8 @@
 		C501C74827CA2C3E008CDA25 /* ComputePipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74427C3FE93008CDA25 /* ComputePipelines.swift */; };
 		C501C74927CA2C4C008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
 		C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
+		C5035EEC283FE72F009CE87D /* DepthPrePassTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */; };
+		C5035EED283FE738009CE87D /* DepthPrePassStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5412FF0283D9E8C00234403 /* DepthPrePassStage.swift */; };
 		C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405744B2663DC74008527D1 /* ProteinMetalViewController.swift */; };
 		C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */ = {isa = PBXBuildFile; fileRef = C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */; };
 		C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
@@ -88,6 +90,7 @@
 		C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
 		C515EFC3274FEA0900B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
 		C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
+		C518AEDC27E7999400145571 /* ComputeSDFGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */; };
 		C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
 		C51D4ED9276596EE00C69B3D /* EmptyFileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */; };
 		C51D4EDB2765985000C69B3D /* 3JBT.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C51D4EDA2765985000C69B3D /* 3JBT.pdb */; };
@@ -106,6 +109,8 @@
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
 		C52AE375279D80A900BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
+		C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
+		C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* RCSBImportView.swift */; };
 		C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */; };
@@ -117,6 +122,12 @@
 		C5406700274D387200710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406701274D38C100710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5406703274D656700710CFC /* SettingsSegmentProtein.swift */; };
+		C540EE12284B747100153200 /* ShadowDepthPrePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C540EE11284B747100153200 /* ShadowDepthPrePass.swift */; };
+		C540EE14284B74B700153200 /* ShadowDepthPrePassShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C540EE13284B74B700153200 /* ShadowDepthPrePassShader.metal */; };
+		C5412FEC283AB63100234403 /* ResolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5412FEB283AB63100234403 /* ResolutionView.swift */; };
+		C5412FEF283D9D0400234403 /* DepthPrePassShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5412FEE283D9D0400234403 /* DepthPrePassShader.metal */; };
+		C5412FF1283D9E8C00234403 /* DepthPrePassStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5412FF0283D9E8C00234403 /* DepthPrePassStage.swift */; };
+		C54270252863374B00EE9AB0 /* ProteinExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54270242863374B00EE9AB0 /* ProteinExtensions.swift */; };
 		C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */; };
 		C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */; };
 		C5433F3B2770EABA00607B20 /* ImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3A2770EABA00607B20 /* ImageExporter.swift */; };
@@ -126,6 +137,15 @@
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
 		C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */; };
 		C5546DAB27E4DF9F00F607F2 /* ComputeSDFGrid.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */; };
+		C555EC7E282A7513001281CD /* DebugPointShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C555EC7D282A7513001281CD /* DebugPointShader.metal */; };
+		C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
+		C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
+		C555EC86282A9616001281CD /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
+		C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
+		C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
+		C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
+		C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */; };
+		C5626AE2283116AA00CFE7DC /* FPSCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */; };
 		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
@@ -176,9 +196,11 @@
 		C57F9964275EBE04001DE6D6 /* WorkspaceExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9963275EBE04001DE6D6 /* WorkspaceExporter.swift */; };
 		C57FCE8D277E60AF001A7B4A /* CreateBondsGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */; };
 		C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */; };
+		C581ACCC282C0195001DD4BB /* BioViewerLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
+		C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5883E872857B8D000C97818 /* RCSBDetailView.swift */; };
 		C59550BE2781C24700129F9B /* VisualizationPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */; };
 		C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
@@ -190,6 +212,7 @@
 		C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */; };
 		C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A61275D902E00CCC941 /* FileRow.swift */; };
 		C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */; };
+		C5AC7D64283EB4310089572D /* DepthPrePassTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */; };
 		C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
 		C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
@@ -212,6 +235,7 @@
 		C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
 		C5E7AF9B2760FF950065F6AD /* ShadowShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF9A2760FF950065F6AD /* ShadowShader.metal */; };
+		C5E9BF0C284B78DB00F56D30 /* ShadowDepthPrePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C540EE11284B747100153200 /* ShadowDepthPrePass.swift */; };
 		C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AB276DE4B9005737C1 /* TopToolbar.swift */; };
 		C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AD276E0198005737C1 /* TrajectorySegmentProtein.swift */; };
 		C5EEE9B0276E0448005737C1 /* InputWithButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AF276E0448005737C1 /* InputWithButtonRow.swift */; };
@@ -224,13 +248,14 @@
 		C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */; };
 		C5EEE9C3276FFC02005737C1 /* HQTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C2276FFC02005737C1 /* HQTextures.swift */; };
 		C5EEE9C52770043D005737C1 /* PhotoModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */; };
+		C5F6D2232853A45700C1962F /* ColorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F6D2222853A45700C1962F /* ColorSection.swift */; };
 		C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */; };
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
 		C5F7D30F27579615008A0517 /* RCSBSuggestionData.json in Resources */ = {isa = PBXBuildFile; fileRef = C5F7D30E27579615008A0517 /* RCSBSuggestionData.json */; };
 		C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */; };
 		C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC734277C744200E348BD /* ImpostorBondShader.metal */; };
-		C5FEC737277C8EA800E348BD /* CreateImpostorLinks.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC736277C8EA800E348BD /* CreateImpostorLinks.metal */; };
+		C5FEC737277C8EA800E348BD /* CreateImpostorBonds.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */; };
 		C5FEC739277C977A00E348BD /* CreateBondsGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */; };
 /* End PBXBuildFile section */
 
@@ -367,6 +392,7 @@
 		C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorPass.swift; sourceTree = "<group>"; };
 		C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FillColorBuffer.metal; sourceTree = "<group>"; };
 		C52AE373279D7CE900BEE11B /* FillColorInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillColorInput.h; sourceTree = "<group>"; };
+		C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillboardVertexBuffers.swift; sourceTree = "<group>"; };
 		C5385325278998A0007A8368 /* SharedDataStructs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedDataStructs.h; sourceTree = "<group>"; };
 		C53A118B2736D17500119BE6 /* RCSBImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportView.swift; sourceTree = "<group>"; };
 		C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRowView.swift; sourceTree = "<group>"; };
@@ -377,6 +403,12 @@
 		C54066F9274D1C7900710CFC /* ParsePDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsePDB.swift; sourceTree = "<group>"; };
 		C54066FF274D387200710CFC /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
 		C5406703274D656700710CFC /* SettingsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSegmentProtein.swift; sourceTree = "<group>"; };
+		C540EE11284B747100153200 /* ShadowDepthPrePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowDepthPrePass.swift; sourceTree = "<group>"; };
+		C540EE13284B74B700153200 /* ShadowDepthPrePassShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShadowDepthPrePassShader.metal; sourceTree = "<group>"; };
+		C5412FEB283AB63100234403 /* ResolutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolutionView.swift; sourceTree = "<group>"; };
+		C5412FEE283D9D0400234403 /* DepthPrePassShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DepthPrePassShader.metal; sourceTree = "<group>"; };
+		C5412FF0283D9E8C00234403 /* DepthPrePassStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthPrePassStage.swift; sourceTree = "<group>"; };
+		C54270242863374B00EE9AB0 /* ProteinExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinExtensions.swift; sourceTree = "<group>"; };
 		C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeContentHeaderView.swift; sourceTree = "<group>"; };
 		C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeConfig.swift; sourceTree = "<group>"; };
 		C5433F3A2770EABA00607B20 /* ImageExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExporter.swift; sourceTree = "<group>"; };
@@ -387,6 +419,11 @@
 		C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeSDFGrid.swift; sourceTree = "<group>"; };
 		C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeSDFGrid.metal; sourceTree = "<group>"; };
 		C5546DAC27E4E18E00F607F2 /* SDFGrid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDFGrid.h; sourceTree = "<group>"; };
+		C555EC7D282A7513001281CD /* DebugPointShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DebugPointShader.metal; sourceTree = "<group>"; };
+		C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeMolecularSurfaceUtility.swift; sourceTree = "<group>"; };
+		C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeBufferFromArray.swift; sourceTree = "<group>"; };
+		C555EC85282A9616001281CD /* PointsPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsPass.swift; sourceTree = "<group>"; };
+		C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPSCounterView.swift; sourceTree = "<group>"; };
 		C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinVisualizationOption.swift; sourceTree = "<group>"; };
 		C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationBufferLoader.swift; sourceTree = "<group>"; };
 		C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomRadiiGenerator.swift; sourceTree = "<group>"; };
@@ -414,9 +451,11 @@
 		C57F995D275E8E31001DE6D6 /* BioViewerWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerWorkspace.swift; sourceTree = "<group>"; };
 		C57F9960275EAD6C001DE6D6 /* ExportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportError.swift; sourceTree = "<group>"; };
 		C57F9963275EBE04001DE6D6 /* WorkspaceExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceExporter.swift; sourceTree = "<group>"; };
+		C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerLogger.swift; sourceTree = "<group>"; };
 		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
+		C5883E872857B8D000C97818 /* RCSBDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBDetailView.swift; sourceTree = "<group>"; };
 		C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationPickerRow.swift; sourceTree = "<group>"; };
 		C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterAnimator.swift; sourceTree = "<group>"; };
 		C59792CD277210570019ABD3 /* ShutterClosed.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterClosed.aiff; sourceTree = "<group>"; };
@@ -426,6 +465,7 @@
 		C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTrackedAction.swift; sourceTree = "<group>"; };
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRow.swift; sourceTree = "<group>"; };
+		C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthPrePassTextures.swift; sourceTree = "<group>"; };
 		C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSolidSpheresRadiusOptions.swift; sourceTree = "<group>"; };
 		C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidSpheresRadiiPickerRow.swift; sourceTree = "<group>"; };
 		C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProteinBallAndStickRadiusOptions.swift; sourceTree = "<group>"; };
@@ -453,13 +493,15 @@
 		C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinHighQualityRender.swift; sourceTree = "<group>"; };
 		C5EEE9C2276FFC02005737C1 /* HQTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HQTextures.swift; sourceTree = "<group>"; };
 		C5EEE9C42770043D005737C1 /* PhotoModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewModel.swift; sourceTree = "<group>"; };
+		C5EF9B542854B9BC007DA93A /* ShaderCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderCommon.h; sourceTree = "<group>"; };
+		C5F6D2222853A45700C1962F /* ColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSection.swift; sourceTree = "<group>"; };
 		C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsView.swift; sourceTree = "<group>"; };
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
 		C5F7D30E27579615008A0517 /* RCSBSuggestionData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RCSBSuggestionData.json; sourceTree = "<group>"; };
 		C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityGenerator.swift; sourceTree = "<group>"; };
 		C5FEC734277C744200E348BD /* ImpostorBondShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorBondShader.metal; sourceTree = "<group>"; };
-		C5FEC736277C8EA800E348BD /* CreateImpostorLinks.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorLinks.metal; sourceTree = "<group>"; };
+		C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorBonds.metal; sourceTree = "<group>"; };
 		C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBondsGeometry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -504,6 +546,7 @@
 				C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */,
 				C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */,
 				C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */,
+				C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */,
 				C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */,
 				C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */,
 			);
@@ -523,10 +566,14 @@
 			isa = PBXGroup;
 			children = (
 				C49D9D33271C4A8C00E12E2F /* FrameData.h */,
-				C405744E2663DD58008527D1 /* BasicShader.metal */,
+				C5EF9B542854B9BC007DA93A /* ShaderCommon.h */,
+				C540EE13284B74B700153200 /* ShadowDepthPrePassShader.metal */,
+				C5E7AF9A2760FF950065F6AD /* ShadowShader.metal */,
+				C5412FEE283D9D0400234403 /* DepthPrePassShader.metal */,
 				C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */,
 				C5FEC734277C744200E348BD /* ImpostorBondShader.metal */,
-				C5E7AF9A2760FF950065F6AD /* ShadowShader.metal */,
+				C405744E2663DD58008527D1 /* BasicShader.metal */,
+				C555EC7F282A751A001281CD /* DebugShader */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -630,6 +677,7 @@
 				C5433F3F2770FA9200607B20 /* LineGraphView.swift */,
 				C440856E2648200500DC5009 /* VisualEffectView.swift */,
 				C464C356265A569800E66C3E /* CoffeeViews */,
+				C5412FED283AB63600234403 /* Debug Views */,
 			);
 			path = UtilityViews;
 			sourceTree = "<group>";
@@ -665,6 +713,7 @@
 				C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */,
 				C44FC0712641AF1B00459E01 /* BioViewerApp.swift */,
 				C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */,
+				C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */,
 				C44D0558266BAA6E00BAFDCD /* AppState.swift */,
 				C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */,
 				C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */,
@@ -770,9 +819,10 @@
 			children = (
 				C49D9D38271C6BEF00E12E2F /* AtomProperties.h */,
 				C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */,
+				C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */,
 				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 				C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */,
-				C5FEC736277C8EA800E348BD /* CreateImpostorLinks.metal */,
+				C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
@@ -859,8 +909,11 @@
 			isa = PBXGroup;
 			children = (
 				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
+				C540EE11284B747100153200 /* ShadowDepthPrePass.swift */,
 				C51D4EE0276912AE00C69B3D /* ShadowPass.swift */,
+				C5412FF0283D9E8C00234403 /* DepthPrePassStage.swift */,
 				C51D4EE42769137500C69B3D /* ImpostorPass.swift */,
+				C555EC84282A9604001281CD /* DebugPass */,
 				C51D4EE72769151100C69B3D /* Computed once */,
 			);
 			path = RenderPasses;
@@ -878,6 +931,7 @@
 			isa = PBXGroup;
 			children = (
 				C544D39F277016270060B30D /* TextureToImage.swift */,
+				C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */,
 				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
 				C5EEE9C2276FFC02005737C1 /* HQTextures.swift */,
 				C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */,
@@ -892,6 +946,7 @@
 				C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */,
 				C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */,
 				C5546DAC27E4E18E00F607F2 /* SDFGrid.h */,
+				C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */,
 				C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */,
 			);
 			path = Compute;
@@ -904,6 +959,7 @@
 				C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */,
 				C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */,
 				C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */,
+				C5883E872857B8D000C97818 /* RCSBDetailView.swift */,
 				C5F7D307275776EC008A0517 /* RCSBSuggestionsView.swift */,
 				C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */,
 			);
@@ -940,12 +996,37 @@
 			path = Sidebar;
 			sourceTree = "<group>";
 		};
+		C5412FED283AB63600234403 /* Debug Views */ = {
+			isa = PBXGroup;
+			children = (
+				C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */,
+				C5412FEB283AB63100234403 /* ResolutionView.swift */,
+			);
+			path = "Debug Views";
+			sourceTree = "<group>";
+		};
 		C5433F3E2770F9CA00607B20 /* Sections */ = {
 			isa = PBXGroup;
 			children = (
 				C5433F3C2770F9C600607B20 /* FileDetailsSection.swift */,
 			);
 			path = Sections;
+			sourceTree = "<group>";
+		};
+		C555EC7F282A751A001281CD /* DebugShader */ = {
+			isa = PBXGroup;
+			children = (
+				C555EC7D282A7513001281CD /* DebugPointShader.metal */,
+			);
+			path = DebugShader;
+			sourceTree = "<group>";
+		};
+		C555EC84282A9604001281CD /* DebugPass */ = {
+			isa = PBXGroup;
+			children = (
+				C555EC85282A9616001281CD /* PointsPass.swift */,
+			);
+			path = DebugPass;
 			sourceTree = "<group>";
 		};
 		C565A7DF277F76B40086E2C3 /* Scene */ = {
@@ -1000,6 +1081,7 @@
 				C4B1F81E26457CF80035D739 /* Protein.swift */,
 				C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */,
 				C572BD192741372600FF010D /* ProteinFileInfo.swift */,
+				C54270242863374B00EE9AB0 /* ProteinExtensions.swift */,
 			);
 			path = Protein;
 			sourceTree = "<group>";
@@ -1022,9 +1104,8 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
-				C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */,
-				C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */,
-				C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */,
+				C5F6D2222853A45700C1962F /* ColorSection.swift */,
+				C5F6D22128536AB100C1962F /* AppearancePickers */,
 			);
 			path = AppearanceSegmentProtein;
 			sourceTree = "<group>";
@@ -1087,6 +1168,16 @@
 				C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */,
 			);
 			path = "Top toolbar";
+			sourceTree = "<group>";
+		};
+		C5F6D22128536AB100C1962F /* AppearancePickers */ = {
+			isa = PBXGroup;
+			children = (
+				C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */,
+				C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */,
+				C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */,
+			);
+			path = AppearancePickers;
 			sourceTree = "<group>";
 		};
 		C5F7D30B275786DA008A0517 /* JSONs */ = {
@@ -1306,10 +1397,12 @@
 				C51D4EE92769153200C69B3D /* AmbientOcclusionRenderer.swift in Sources */,
 				C455362A265D869D006D980B /* AtomArrayComposition.swift in Sources */,
 				C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */,
+				C5AC7D64283EB4310089572D /* DepthPrePassTextures.swift in Sources */,
 				C5EEE9C3276FFC02005737C1 /* HQTextures.swift in Sources */,
 				C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */,
 				C5C7514327DBF8CB004CEE8E /* NewsRow.swift in Sources */,
 				C57F995E275E8E31001DE6D6 /* BioViewerWorkspace.swift in Sources */,
+				C5412FEC283AB63100234403 /* ResolutionView.swift in Sources */,
 				C5E7AF9B2760FF950065F6AD /* ShadowShader.metal in Sources */,
 				C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */,
 				C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */,
@@ -1317,8 +1410,9 @@
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
 				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
-				C5FEC737277C8EA800E348BD /* CreateImpostorLinks.metal in Sources */,
+				C5FEC737277C8EA800E348BD /* CreateImpostorBonds.metal in Sources */,
 				C5C7514727DC1859004CEE8E /* WhatsNewViewModel.swift in Sources */,
+				C5412FF1283D9E8C00234403 /* DepthPrePassStage.swift in Sources */,
 				C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */,
 				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
@@ -1330,6 +1424,8 @@
 				C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
 				C5546DAB27E4DF9F00F607F2 /* ComputeSDFGrid.metal in Sources */,
+				C5412FEF283D9D0400234403 /* DepthPrePassShader.metal in Sources */,
+				C5F6D2232853A45700C1962F /* ColorSection.swift in Sources */,
 				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
 				C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */,
 				C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */,
@@ -1348,11 +1444,13 @@
 				C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */,
 				C5C7514927DC33D5004CEE8E /* InfoAtomsRow.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
+				C581ACCC282C0195001DD4BB /* BioViewerLogger.swift in Sources */,
 				C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */,
 				C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */,
 				C45BAC4526497A3300B36026 /* DynamicStructureControlView.swift in Sources */,
 				C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */,
 				C50E02532763D1B2005D7F06 /* IndentRow.swift in Sources */,
+				C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */,
 				C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
 				C5EEE9BA276F8616005737C1 /* CameraControlToolbar.swift in Sources */,
@@ -1365,6 +1463,7 @@
 				C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
+				C555EC86282A9616001281CD /* PointsPass.swift in Sources */,
 				C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */,
 				C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */,
 				C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
@@ -1372,10 +1471,13 @@
 				C50E02552764B5BE005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
+				C54270252863374B00EE9AB0 /* ProteinExtensions.swift in Sources */,
+				C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */,
 				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
 				C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */,
+				C540EE12284B747100153200 /* ShadowDepthPrePass.swift in Sources */,
 				C5EEE9B5276F6031005737C1 /* PhotoModeContent.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
 				C5FEC739277C977A00E348BD /* CreateBondsGeometry.swift in Sources */,
@@ -1384,6 +1486,8 @@
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */,
 				C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */,
+				C555EC7E282A7513001281CD /* DebugPointShader.metal in Sources */,
+				C540EE14284B74B700153200 /* ShadowDepthPrePassShader.metal in Sources */,
 				C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */,
 				C50AF7B927CB84A000768E4D /* SelectedAtom.swift in Sources */,
 				C500EEB4272DA57300A60317 /* FocalLengthRow.swift in Sources */,
@@ -1393,6 +1497,8 @@
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */,
+				C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */,
+				C5626AE2283116AA00CFE7DC /* FPSCounterView.swift in Sources */,
 				C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */,
 				C405744C2663DC74008527D1 /* ProteinMetalViewController.swift in Sources */,
 				C57F9964275EBE04001DE6D6 /* WorkspaceExporter.swift in Sources */,
@@ -1400,6 +1506,7 @@
 				C51D4EE52769137500C69B3D /* ImpostorPass.swift in Sources */,
 				C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */,
 				C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */,
+				C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */,
 				C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */,
 				C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
@@ -1476,14 +1583,18 @@
 				C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */,
 				C572BD362741655700FF010D /* Protein.swift in Sources */,
 				C5C7514127DBF71E004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */,
+				C5035EED283FE738009CE87D /* DepthPrePassStage.swift in Sources */,
 				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
+				C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */,
 				C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */,
+				C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */,
 				C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */,
 				C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */,
 				C56E87E1278D896B004BAEE2 /* SceneAnimator.swift in Sources */,
 				C572BD442741661300FF010D /* MatrixTransform.swift in Sources */,
+				C518AEDC27E7999400145571 /* ComputeSDFGrid.swift in Sources */,
 				C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */,
 				C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */,
 				C5E593B8281D8C4500CFFAA2 /* MetalLegacySupport.swift in Sources */,
@@ -1496,14 +1607,18 @@
 				C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */,
 				C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */,
 				C56E87E4278DB906004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
+				C5E9BF0C284B78DB00F56D30 /* ShadowDepthPrePass.swift in Sources */,
 				C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */,
 				C572BD3A2741657B00FF010D /* AtomType.swift in Sources */,
 				C51D4EED276919B200C69B3D /* AmbientOcclusionTextures.swift in Sources */,
 				C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */,
+				C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */,
 				C572BD352741653E00FF010D /* FileParser.swift in Sources */,
 				C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */,
 				C57F9962275EADAC001DE6D6 /* ImportDroppedFilesDelegate.swift in Sources */,
 				C572BD40274165F500FF010D /* Camera.swift in Sources */,
+				C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */,
+				C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */,
 				C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */,
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
 				C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */,
@@ -1514,6 +1629,7 @@
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,
 				C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */,
 				C54066FB274D1CA600710CFC /* ParsePDB.swift in Sources */,
+				C5035EEC283FE72F009CE87D /* DepthPrePassTextures.swift in Sources */,
 				C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */,
 				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
 				C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */,
@@ -1688,23 +1804,27 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BioViewer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.4;
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1723,24 +1843,28 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				INFOPLIST_FILE = BioViewer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.4;
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";

@@ -33,7 +33,8 @@ struct AppearanceSegmentProtein: View {
                         .padding(.bottom, 4), content: {
                 VisualizationPickerRow()
                 // TO-DO: Surface representation
-                /* SwitchRow(title: "Show solvent-accessible surface", toggledVariable: $proteinViewModel.showSurface) */
+                
+                SwitchRow(title: "Show solvent-excluded surface", toggledVariable: $proteinViewModel.showSurface)
                 
                 if proteinViewModel.visualization == .solidSpheres {
                     SolidSpheresRadiiPickerRow()
@@ -78,48 +79,8 @@ struct AppearanceSegmentProtein: View {
             
             // MARK: - Color section
             
-            if proteinViewModel.visualization == ProteinVisualizationOption.solidSpheres
-                || proteinViewModel.visualization == ProteinVisualizationOption.ballAndStick {
-                Section(header: Text(NSLocalizedString("Color", comment: ""))
-                            .padding(.bottom, 4), content: {
-                    // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption
-                    PickerRow(optionName: "Color by",
-                              selectedOption: $proteinViewModel.colorBy,
-                              pickerOptions: ["Element",
-                                              "Subunit"])
-                    // TO-DO: Make color palette work
-                    /*
-                    ColorPaletteRow(colorPalette: ColorPalette(.default))
-                    */
-                     
-                    if proteinViewModel.colorBy == ProteinColorByOption.element {
-                        ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.CARBON)])
-                            .indentRow()
-                        ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.HYDROGEN)])
-                            .indentRow()
-                        ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.NITROGEN)])
-                            .indentRow()
-                        ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.OXYGEN)])
-                            .indentRow()
-                        ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.SULFUR)])
-                            .indentRow()
-                        ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
-                                       selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)])
-                            .indentRow()
-                    } else if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
-                        ForEach(subunits, id: \.id) { subunit in
-                            // TO-DO: Show real subunit list
-                            ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
-                                           selectedColor: $proteinViewModel.subunitColors[subunit.id])
-                                .indentRow()
-                        }
-                    }
-                })
+            if proteinViewModel.visualization == .solidSpheres || proteinViewModel.visualization == .ballAndStick {
+                ColorSection()
             }
             
             // MARK: - Shadows section

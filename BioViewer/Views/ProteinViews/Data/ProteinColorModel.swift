@@ -23,7 +23,7 @@ extension ProteinViewModel {
         // Preselected element color palette
         elementColors = []
         for atomType in 0..<ATOM_TYPE_COUNT {
-            elementColors.append(AtomTypeUtilities.getAtomicColor(atomType: UInt8(atomType)))
+            elementColors.append(AtomTypeUtilities.getAtomicColor(atomType: UInt16(atomType)))
         }
     }
     

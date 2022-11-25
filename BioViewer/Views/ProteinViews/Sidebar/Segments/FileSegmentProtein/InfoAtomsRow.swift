@@ -9,11 +9,12 @@ import SwiftUI
 
 struct InfoAtomsRow: View {
     let label: String
-    let value: String
+    let value: Int
     let isDisabled: Bool
     let file: ProteinFile
     
     @State var buttonToggle: Bool = false
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     var body: some View {
         
@@ -22,7 +23,7 @@ struct InfoAtomsRow: View {
             VStack {
                 HStack {
                     Text(label)
-                    Text(value)
+                    Text("\(value)")
                         .foregroundColor(Color(uiColor: .secondaryLabel))
                     Spacer()
                 }
@@ -48,6 +49,7 @@ struct InfoAtomsRow: View {
                 .disabled(isDisabled)
                 .popover(isPresented: $buttonToggle) {
                     FileAtomElementPopover()
+                        .environmentObject(proteinViewModel)
                 }
         }
     }

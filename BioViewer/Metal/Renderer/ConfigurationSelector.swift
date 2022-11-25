@@ -14,8 +14,13 @@ struct BufferRegion {
 
 class ConfigurationSelector {
     weak var scene: MetalScene?
+    var proteins: [Protein]
     
     var atomsPerConfiguration: Int
+    
+    var subunitIndices: [Int]
+    var subunitLengths: [Int]
+    
     var bondsPerConfiguration: [Int]?
     var bondArrayStarts: [Int]?
     
@@ -24,9 +29,12 @@ class ConfigurationSelector {
     
     // MARK: - Initialization
     
-    init(scene: MetalScene, atomsPerConfiguration: Int, configurationCount: Int) {
+    init(for proteins: [Protein], in scene: MetalScene, atomsPerConfiguration: Int, subunitIndices: [Int], subunitLengths: [Int], configurationCount: Int) {
+        self.proteins = proteins
         self.scene = scene
         self.atomsPerConfiguration = atomsPerConfiguration
+        self.subunitIndices = subunitIndices
+        self.subunitLengths = subunitLengths
         self.lastConfiguration = configurationCount - 1
     }
     
@@ -59,12 +67,12 @@ class ConfigurationSelector {
         return BufferRegion(length: atomsPerConfiguration * 4,
                             offset: atomsPerConfiguration * 4 * currentConfiguration)
     }
-    
+        
     func getImpostorIndexBufferRegion() -> BufferRegion {
         return BufferRegion(length: atomsPerConfiguration * 2 * 3,
                             offset: atomsPerConfiguration * 2 * 3 * currentConfiguration)
     }
-    
+        
     func getBondsIndexBufferRegion() -> BufferRegion? {
         guard let bondsPerConfiguration = bondsPerConfiguration else { return nil }
         guard let bondArrayStarts = bondArrayStarts else { return nil }

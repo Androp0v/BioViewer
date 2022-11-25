@@ -136,7 +136,17 @@ class ProteinViewModel: ObservableObject {
     /// Whether to show the structure surface..
     @Published var showSurface: Bool = false {
         didSet {
-            // TO-DO
+            if showSurface {
+                Task {
+                    guard var debugBuffer = ComputeMolecularSurfaceUtility(protein: (dataSource.files.first?.models.first)!)
+                            .createMolecularSurface() else {
+                        return
+                    }
+                    #if DEBUG
+                    renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
+                    #endif
+                }
+            }
         }
     }
     
@@ -145,6 +155,12 @@ class ProteinViewModel: ObservableObject {
         didSet {
             renderer.scene.camera.updateFocalLength(focalLength: cameraFocalLength,
                                                     aspectRatio: renderer.scene.aspectRatio)
+        }
+    }
+    
+    @Published var autorotating: Bool = false {
+        didSet {
+            renderer.scene.autorotating = autorotating
         }
     }
     

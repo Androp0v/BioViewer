@@ -32,6 +32,14 @@ struct ProteinView: View {
     // UI constants
     private enum Constants {
         static let compactSequenceViewWidth: CGFloat = 32
+        
+        #if targetEnvironment(macCatalyst)
+        // macOS sidebar
+        static let sidebarWidth: CGFloat = 300
+        #else
+        // iPadOS sidebar
+        static let sidebarWidth: CGFloat = 350
+        #endif
     }
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -45,10 +53,6 @@ struct ProteinView: View {
         
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                // Future toolbar items will be here
-                Rectangle()
-                    .frame(height: 8)
-                    .foregroundColor(Color(UIColor.systemBackground))
                 // Separator
                 Rectangle()
                     .frame(height: 0.5)
@@ -63,6 +67,18 @@ struct ProteinView: View {
                             .background(.black)
                             .edgesIgnoringSafeArea([.top, .bottom])
                         
+                        #if DEBUG
+                        HStack {
+                            VStack(spacing: .zero) {
+                                Spacer()
+                                ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
+                                FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
+                                    .padding()
+                            }
+                            Spacer()
+                        }
+                        #endif
+                        
                         // Top toolbar
                         VStack {
                             if UserDefaults.standard.value(forKey: "showToolbar") == nil {
@@ -73,7 +89,6 @@ struct ProteinView: View {
                             Spacer()
                         }
                         .environmentObject(proteinViewModel.toolbarConfig)
-                        .environmentObject(proteinViewModel)
                         
                         // Scene controls
                         VStack(spacing: 12) {
@@ -103,7 +118,7 @@ struct ProteinView: View {
                     // Sidebar
                     if showSidebar && horizontalSizeClass != .compact {
                         sidebar
-                            .frame(width: 300)
+                            .frame(width: Constants.sidebarWidth)
                             .edgesIgnoringSafeArea([.horizontal, .bottom])
                             .transition(AnyTransition.move(edge: .trailing))
                     }
@@ -143,13 +158,15 @@ struct ProteinView: View {
                 ToolbarItem(placement: .principal) {
                     // Status bar component
                     StatusView(statusViewModel: proteinViewModel.statusViewModel)
-                        .frame(minWidth: 0,
+                    /*
+                        .frame(minWidth: 96,
                                idealWidth: geometry.size.width * 0.6,
                                maxWidth: geometry.size.width * 0.6,
                                minHeight: StatusViewConstants.height,
                                idealHeight: StatusViewConstants.height,
                                maxHeight: StatusViewConstants.height,
                                alignment: .center)
+                     */
                 }
             }
             .sheet(isPresented: $toggleModalSidebar, content: {
@@ -158,7 +175,6 @@ struct ProteinView: View {
         }
         // Inform command menus of focus changes
         .focusedValue(\.proteinViewModel, proteinViewModel)
-        .environmentObject(proteinViewModel)
     }
 
     // MARK: - Public functions

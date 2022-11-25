@@ -13,11 +13,11 @@ import simd
 class ProteinMetalViewController: UIViewController {
 
     var device: MTLDevice!
-
+    
     var renderedView: MTKView!
     weak var renderDelegate: MTKViewDelegate?
     var proteinViewModel: ProteinViewModel
-
+    
     init(proteinViewModel: ProteinViewModel) {
         self.proteinViewModel = proteinViewModel
         super.init(nibName: nil, bundle: nil)
@@ -54,6 +54,15 @@ class ProteinMetalViewController: UIViewController {
 
         // Create depth texture for view
         renderedView.depthStencilPixelFormat = .depth32Float
+        
+        // FIXME: This breaks PhotoMode, but would be useful
+        /*if #available(iOS 16.0, *) {
+            if device.supportsFamily(.apple1) {
+                renderedView.depthStencilStorageMode = .memoryless
+            } else {
+                renderedView.depthStencilStorageMode = .private
+            }
+        }*/
 
         // Add gesture recognition
         renderedView.isUserInteractionEnabled = true
@@ -82,15 +91,30 @@ class ProteinMetalViewController: UIViewController {
     }
     
     @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
+        
+        if proteinViewModel.autorotating {
+            proteinViewModel.autorotating = false
+        }
+        
         if gestureRecognizer.state == .changed {
             switch proteinViewModel.toolbarConfig.selectedTool {
-                
             case CameraControlTool.rotate:
                 let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
                 let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                                  
+                var currentRotationMatrix = self.proteinViewModel.renderer.scene.userModelRotationMatrix
+                
                 // Revert the axis rotation before rotating through that axis
-                self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedX, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz )
-                self.proteinViewModel.renderer.scene.userModelRotationMatrix *= Transform.rotationMatrix(radians: -rotationSpeedY, axis: (self.proteinViewModel.renderer.scene.userModelRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz )
+                currentRotationMatrix *= Transform.rotationMatrix(
+                    radians: -rotationSpeedX,
+                    axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
+                )
+                currentRotationMatrix *= Transform.rotationMatrix(
+                    radians: -rotationSpeedY,
+                    axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
+                )
+                                                
+                self.proteinViewModel.renderer.scene.userModelRotationMatrix = currentRotationMatrix
                 
             case CameraControlTool.move:
                 // TO-DO: Improve move tool

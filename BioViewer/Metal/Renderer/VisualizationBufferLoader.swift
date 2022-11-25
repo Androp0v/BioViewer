@@ -51,12 +51,6 @@ class VisualizationBufferLoader {
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
             
-            if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
-            } else {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
-            }
-            
             // Animate radii changes
             animator.bufferLoader = self
             if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
@@ -101,11 +95,6 @@ class VisualizationBufferLoader {
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
-            if proteinViewModel.ballAndStickRadiusOption == .fixed {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: true)
-            } else {
-                proteinViewModel.renderer.remakeShadowPipelineForVariant(useFixedRadius: false)
-            }
             
             // Animate radii changes
             animator.bufferLoader = self
@@ -123,32 +112,77 @@ class VisualizationBufferLoader {
     
     func populateImpostorSphereBuffers(atomRadii: AtomRadii) {
         
-        guard let proteinViewModel = proteinViewModel else { return }
-        guard let protein = proteinViewModel.dataSource.getFirstProtein() else {
+        guard let proteinViewModel = proteinViewModel else {
+            return
+        }
+        guard let proteinFile = proteinViewModel.dataSource.getFirstFile() else {
+            return
+        }
+        guard let proteins = proteinViewModel.dataSource.modelsForFile(file: proteinFile) else {
             return
         }
         
         // Generate a billboard quad for each atom in the protein
-        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(protein: protein,
+        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(proteins: proteins,
                                                                                                              atomRadii: atomRadii)
-        guard var vertexData = vertexData else { return }
-        guard var subunitData = subunitData else { return }
-        guard var atomTypeData = atomTypeData else { return }
-        guard var indexData = indexData else { return }
+        guard let vertexData = vertexData else { return }
+        guard let subunitData = subunitData else { return }
+        guard let atomTypeData = atomTypeData else { return }
+        guard let indexData = indexData else { return }
+        
+        // Create ConfigurationSelector for new data
+        guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
         
         // Pass the new mesh to the renderer
-        proteinViewModel.renderer.setBillboardingBuffers(vertexBuffer: &vertexData,
-                                                         subunitBuffer: &subunitData,
-                                                         atomTypeBuffer: &atomTypeData,
-                                                         indexBuffer: &indexData)
+        proteinViewModel.renderer.setBillboardingBuffers(
+            billboardVertexBuffers: vertexData,
+            subunitBuffer: subunitData,
+            atomTypeBuffer: atomTypeData,
+            indexBuffer: indexData,
+            configurationSelector: configurationSelector
+        )
         
         // Create color buffer if needed
-        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0) / MemoryLayout<SIMD4<Int16>>.stride == protein.atoms.count) {
-            proteinViewModel.renderer.createAtomColorBuffer(protein: protein,
+        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0)
+                / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
+            proteinViewModel.renderer.createAtomColorBuffer(proteins: proteins,
                                                             subunitBuffer: subunitData,
                                                             atomTypeBuffer: atomTypeData,
                                                             colorList: proteinViewModel.elementColors,
                                                             colorBy: proteinViewModel.colorBy)
         }
+    }
+    
+    // MARK: - ConfigurationSelector
+    
+    func createConfigurationSelector(proteins: [Protein]) -> ConfigurationSelector? {
+        guard let proteinViewModel = proteinViewModel else { return nil }
+        
+        if let currentSelector = proteinViewModel.renderer.scene.configurationSelector,
+           currentSelector.proteins == proteins {
+            return currentSelector
+        }
+
+        var totalAtomCount: Int = 0
+        var subunitIndices = [Int]()
+        var subunitLengths = [Int]()
+        for protein in proteins {
+            totalAtomCount += protein.atomCount
+            if let subunits = protein.subunits {
+                for subunit in subunits {
+                    subunitIndices.append(subunit.startIndex)
+                    subunitLengths.append(subunit.atomCount)
+                }
+            }
+        }
+        return ConfigurationSelector(
+            for: proteins,
+            in: proteinViewModel.renderer.scene,
+            atomsPerConfiguration: totalAtomCount,
+            subunitIndices: subunitIndices,
+            subunitLengths: subunitLengths,
+            configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
+        )
+        // self.frameData.atoms_per_configuration = Int32(totalAtomCount)
     }
 }
