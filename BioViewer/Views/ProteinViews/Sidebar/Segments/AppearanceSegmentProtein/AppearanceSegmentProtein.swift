@@ -32,10 +32,12 @@ struct AppearanceSegmentProtein: View {
             Section(header: Text(NSLocalizedString("Visualization", comment: ""))
                         .padding(.bottom, 4), content: {
                 VisualizationPickerRow()
-                // TO-DO: Surface representation
-                
+                            
+                // TODO: Surface representation
+                /*
                 SwitchRow(title: "Show solvent-excluded surface", toggledVariable: $proteinViewModel.showSurface)
-                
+                 */
+                            
                 if proteinViewModel.visualization == .solidSpheres {
                     SolidSpheresRadiiPickerRow()
                         .indentRow()
