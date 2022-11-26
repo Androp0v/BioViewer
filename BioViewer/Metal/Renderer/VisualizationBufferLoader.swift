@@ -54,11 +54,15 @@ class VisualizationBufferLoader {
             // Animate radii changes
             animator.bufferLoader = self
             if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
-                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.solidSpheresVDWScale),
-                                            duration: 0.15)
+                animator.animateRadiiChange(
+                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.solidSpheresVDWScale),
+                    duration: 0.15
+                )
             } else {
-                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.solidSpheresFixedAtomRadii),
-                                            duration: 0.15)
+                animator.animateRadiiChange(
+                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.solidSpheresFixedAtomRadii),
+                    duration: 0.15
+                )
             }
             
         // MARK: - Ball and stick
@@ -81,17 +85,24 @@ class VisualizationBufferLoader {
             // Update configuration selector with bonds
             guard let bondsPerConfiguration = protein.bondsPerConfiguration else { return }
             guard let bondsConfigurationArrayStart = protein.bondsConfigurationArrayStart else { return }
-            proteinViewModel.renderer.scene.configurationSelector?.addBonds(bondsPerConfiguration: bondsPerConfiguration,
-                                                                            bondArrayStarts: bondsConfigurationArrayStart)
+            proteinViewModel.renderer.scene.configurationSelector?.addBonds(
+                bondsPerConfiguration: bondsPerConfiguration,
+                bondArrayStarts: bondsConfigurationArrayStart
+            )
             
-            // Add bond buffers to the structure
-            let (bondVertexBuffer, bondIndexBuffer) = MetalScheduler.shared.createBondsGeometry(bondData: bondData)
-            guard var bondVertexBuffer = bondVertexBuffer else { return }
-            guard var bondIndexBuffer = bondIndexBuffer else { return }
-            
-            // Pass bond buffers to the renderer
-            proteinViewModel.renderer.setBillboardingBonds(vertexBuffer: &bondVertexBuffer,
-                                                           indexBuffer: &bondIndexBuffer)
+            // Avoid trying to create a buffer with 0 length if no bonds are found (causes a crash)
+            if !bondData.isEmpty {
+                // Add bond buffers to the structure
+                let (bondVertexBuffer, bondIndexBuffer) = MetalScheduler.shared.createBondsGeometry(bondData: bondData)
+                guard var bondVertexBuffer = bondVertexBuffer else { return }
+                guard var bondIndexBuffer = bondIndexBuffer else { return }
+                
+                // Pass bond buffers to the renderer
+                proteinViewModel.renderer.setBillboardingBonds(
+                    vertexBuffer: &bondVertexBuffer,
+                    indexBuffer: &bondIndexBuffer
+                )
+            }
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
@@ -99,11 +110,15 @@ class VisualizationBufferLoader {
             // Animate radii changes
             animator.bufferLoader = self
             if proteinViewModel.ballAndStickRadiusOption == .fixed {
-                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksFixedAtomRadii),
-                                            duration: 0.15)
+                animator.animateRadiiChange(
+                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksFixedAtomRadii),
+                    duration: 0.15
+                )
             } else {
-                animator.animateRadiiChange(finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.ballAndSticksVDWScale),
-                                            duration: 0.15)
+                animator.animateRadiiChange(
+                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.ballAndSticksVDWScale),
+                    duration: 0.15
+                )
             }
         }
     }
@@ -123,8 +138,10 @@ class VisualizationBufferLoader {
         }
         
         // Generate a billboard quad for each atom in the protein
-        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(proteins: proteins,
-                                                                                                             atomRadii: atomRadii)
+        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(
+            proteins: proteins,
+            atomRadii: atomRadii
+        )
         guard let vertexData = vertexData else { return }
         guard let subunitData = subunitData else { return }
         guard let atomTypeData = atomTypeData else { return }

@@ -45,12 +45,19 @@ class ConnectivityGenerator {
                     let atomA = protein.atoms[indexA]
                     let atomB = protein.atoms[indexB]
                     // FIXME: This should use the atom's covalent radius
+                    print(atomA)
+                    print(atomB)
+                    print(distance(atomA, atomB))
                     if distance(atomA, atomB) < 1.6 {
                         // Atoms close enough, create an impostor cylinder
-                        computedBonds.append(BondStruct(atom_A: atomA,
-                                                        atom_B: atomB,
-                                                        cylinder_center: (atomA + atomB) / 2,
-                                                        bond_radius: 0.05))
+                        computedBonds.append(
+                            BondStruct(
+                                atom_A: atomA,
+                                atom_B: atomB,
+                                cylinder_center: (atomA + atomB) / 2,
+                                bond_radius: 0.05
+                            )
+                        )
                         bondCountInCurrentConfiguration += 1
                     }
                 }
