@@ -31,52 +31,57 @@ struct AppearanceSegmentProtein: View {
             
             Section(header: Text(NSLocalizedString("Visualization", comment: ""))
                         .padding(.bottom, 4), content: {
-                VisualizationPickerRow()
+                
+                DisclosureGroup(
+                    content: {
+                        if proteinViewModel.visualization == .solidSpheres {
+                            SolidSpheresRadiiPickerRow()
+                            if proteinViewModel.solidSpheresRadiusOption == .fixed {
+                                SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
+                                          value: $proteinViewModel.solidSpheresFixedAtomRadii,
+                                          minValue: 0.2,
+                                          maxValue: 2.0)
+                                    .indentRow()
+                            } else if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
+                                SliderRow(title: NSLocalizedString("Scale", comment: ""),
+                                          value: $proteinViewModel.solidSpheresVDWScale,
+                                          minValue: 0.1,
+                                          maxValue: 1.5)
+                                    .indentRow()
+                            }
+                        }
+                        
+                        if proteinViewModel.visualization == .ballAndStick {
+                            BallAndStickRadiiPickerRow()
+                            if proteinViewModel.ballAndStickRadiusOption == .fixed {
+                                SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
+                                          value: $proteinViewModel.ballAndSticksFixedAtomRadii,
+                                          minValue: 0.2,
+                                          maxValue: 0.6)
+                                    .indentRow()
+                            } else if proteinViewModel.ballAndStickRadiusOption == .scaledVDW {
+                                SliderRow(title: NSLocalizedString("Scale", comment: ""),
+                                          value: $proteinViewModel.ballAndSticksVDWScale,
+                                          minValue: 0.2,
+                                          maxValue: 0.4)
+                                    .indentRow()
+                            }
+                        }
+                    },
+                    label: {
+                        VisualizationPickerRow()
+                            #if targetEnvironment(macCatalyst)
+                            .padding(.leading, 12)
+                            #else
+                            .padding(.trailing, 16)
+                            #endif
+                    }
+                )
                             
                 // TODO: Surface representation
                 /*
                 SwitchRow(title: "Show solvent-excluded surface", toggledVariable: $proteinViewModel.showSurface)
                  */
-                            
-                if proteinViewModel.visualization == .solidSpheres {
-                    SolidSpheresRadiiPickerRow()
-                        .indentRow()
-                    if proteinViewModel.solidSpheresRadiusOption == .fixed {
-                        SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
-                                  value: $proteinViewModel.solidSpheresFixedAtomRadii,
-                                  minValue: 0.2,
-                                  maxValue: 2.0)
-                            .indentRow()
-                            .indentRow()
-                    } else if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
-                        SliderRow(title: NSLocalizedString("Scale", comment: ""),
-                                  value: $proteinViewModel.solidSpheresVDWScale,
-                                  minValue: 0.1,
-                                  maxValue: 1.5)
-                            .indentRow()
-                            .indentRow()
-                    }
-                }
-                
-                if proteinViewModel.visualization == .ballAndStick {
-                    BallAndStickRadiiPickerRow()
-                        .indentRow()
-                    if proteinViewModel.ballAndStickRadiusOption == .fixed {
-                        SliderRow(title: NSLocalizedString("Fixed radii", comment: ""),
-                                  value: $proteinViewModel.ballAndSticksFixedAtomRadii,
-                                  minValue: 0.2,
-                                  maxValue: 0.6)
-                            .indentRow()
-                            .indentRow()
-                    } else if proteinViewModel.ballAndStickRadiusOption == .scaledVDW {
-                        SliderRow(title: NSLocalizedString("Scale", comment: ""),
-                                  value: $proteinViewModel.ballAndSticksVDWScale,
-                                  minValue: 0.2,
-                                  maxValue: 0.4)
-                            .indentRow()
-                            .indentRow()
-                    }
-                }
             })
             
             // MARK: - Color section

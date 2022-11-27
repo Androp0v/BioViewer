@@ -52,6 +52,7 @@ class FileSourceViewModel: ObservableObject {
         }
         let startRange = batchCount * batchSize
         let endRange = startRange + batchSize
+        // FIXME: Sometimes this crashes with Index out of range
         loadedLines?.append(contentsOf: sourceLines[startRange..<endRange])
         batchCount += 1
     }

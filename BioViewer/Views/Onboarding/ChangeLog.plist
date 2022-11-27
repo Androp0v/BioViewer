@@ -2,6 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>1.4.1</key>
+    <array>
+        <dict>
+            <key>Type</key>
+            <string>FIX</string>
+            <key>Title</key>
+            <string>Fix crash on Ball and Sticks mode</string>
+            <key>Subtitle</key>
+            <string>Fix crash on Ball and Sticks visualization mode when the file contained no bonds.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>More atom types recognized</string>
+            <key>Subtitle</key>
+            <string>Added more atom types that are recognized and show the correct Van der Waals radius (Na, P, Cl, Ca).</string>
+        </dict>
+    </array>
 	<key>1.4</key>
 	<array>
 		<dict>
@@ -20,14 +39,14 @@
 			<key>Subtitle</key>
 			<string>Removed left sidebar (initial screen on iPhone) since it&apos;s not currently being used.</string>
 		</dict>
-        <dict>
-            <key>Type</key>
-            <string>FEAT</string>
-            <key>Title</key>
-            <string>Option for showing all MODEL records at once</string>
-            <key>Subtitle</key>
-            <string>PDBs containing several MODEL records of the same protein (for example, a biological assembly of a virus capsid) can now be shown at once.</string>
-        </dict>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Option for showing all MODEL records at once</string>
+			<key>Subtitle</key>
+			<string>PDBs containing several MODEL records of the same protein (for example, a biological assembly of a virus capsid) can now be shown at once.</string>
+		</dict>
 		<dict>
 			<key>Type</key>
 			<string>FEAT</string>

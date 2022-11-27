@@ -17,31 +17,50 @@ struct ColorSection: View {
             
             DisclosureGroup(content: {
                 if proteinViewModel.colorBy == ProteinColorByOption.element {
-                    ColorPickerRow(title: NSLocalizedString("C atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.elementColors[Int(AtomType.CARBON)])
-                    ColorPickerRow(title: NSLocalizedString("H atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.elementColors[Int(AtomType.HYDROGEN)])
-                    ColorPickerRow(title: NSLocalizedString("N atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.elementColors[Int(AtomType.NITROGEN)])
-                    ColorPickerRow(title: NSLocalizedString("O atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.elementColors[Int(AtomType.OXYGEN)])
-                    ColorPickerRow(title: NSLocalizedString("S atom color", comment: ""),
-                                   selectedColor: $proteinViewModel.elementColors[Int(AtomType.SULFUR)])
-                    ColorPickerRow(title: NSLocalizedString("Other atoms", comment: ""),
-                                   selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)])
+                    ColorPickerRow(
+                        title: NSLocalizedString("C atom color", comment: ""),
+                        selectedColor: $proteinViewModel.elementColors[Int(AtomType.CARBON)]
+                    )
+                    ColorPickerRow(
+                        title: NSLocalizedString("H atom color", comment: ""),
+                        selectedColor: $proteinViewModel.elementColors[Int(AtomType.HYDROGEN)]
+                    )
+                    ColorPickerRow(
+                        title: NSLocalizedString("N atom color", comment: ""),
+                        selectedColor: $proteinViewModel.elementColors[Int(AtomType.NITROGEN)]
+                    )
+                    ColorPickerRow(
+                        title: NSLocalizedString("O atom color", comment: ""),
+                        selectedColor: $proteinViewModel.elementColors[Int(AtomType.OXYGEN)]
+                    )
+                    ColorPickerRow(
+                        title: NSLocalizedString("S atom color", comment: ""),
+                        selectedColor: $proteinViewModel.elementColors[Int(AtomType.SULFUR)]
+                    )
+                    ColorPickerRow(
+                        title: NSLocalizedString("Other atoms", comment: ""),
+                        selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
+                    )
                 } else if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
                     ForEach(subunits, id: \.id) { subunit in
                         // TO-DO: Show real subunit list
-                        ColorPickerRow(title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
-                                       selectedColor: $proteinViewModel.subunitColors[subunit.id])
+                        ColorPickerRow(
+                            title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
+                            selectedColor: $proteinViewModel.subunitColors[subunit.id]
+                        )
                     }
                 }
             }, label: {
                 // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption
-                PickerRow(optionName: "Color by",
-                          selectedOption: $proteinViewModel.colorBy,
-                          pickerOptions: ["Element",
-                                          "Subunit"])
+                PickerRow(
+                    optionName: "Color by",
+                    selectedOption: $proteinViewModel.colorBy,
+                    pickerOptions:
+                        [
+                            "Element",
+                            "Subunit"
+                        ]
+                )
                 #if targetEnvironment(macCatalyst)
                 .padding(.leading, 12)
                 #else
