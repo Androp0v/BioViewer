@@ -24,8 +24,12 @@ struct AtomType {
     static let NITROGEN: UInt16 = 7
     static let OXYGEN: UInt16 = 8
     static let FLUORINE: UInt16 = 9
+    static let SODIUM: UInt16 = 11
+    static let PHOSPHORUS: UInt16 = 15
     static let SULFUR: UInt16 = 16
+    static let CHLORINE: UInt16 = 17
     static let POTASSIUM: UInt16 = 19
+    static let CALCIUM: UInt16 = 20
     static let IRON: UInt16 = 26
 }
 
@@ -90,10 +94,18 @@ class AtomTypeUtilities {
             return 1.52
         case AtomType.FLUORINE:
             return 1.47
+        case AtomType.SODIUM:
+            return 2.27
+        case AtomType.PHOSPHORUS:
+            return 1.80
         case AtomType.SULFUR:
             return 1.80
+        case AtomType.CHLORINE:
+            return 1.75
         case AtomType.POTASSIUM:
             return 2.80
+        case AtomType.CALCIUM:
+            return 2.31
         case AtomType.IRON:
             return 1.94
         default: return 1.0
