@@ -36,7 +36,7 @@ struct VisualizationSection: View {
                                 content: {
                                     if proteinViewModel.solidSpheresRadiusOption == .fixed {
                                         SliderRow(
-                                            title: NSLocalizedString("Fixed radii", comment: ""),
+                                            title: NSLocalizedString("Size", comment: ""),
                                             value: $proteinViewModel.solidSpheresFixedAtomRadii,
                                             minValue: 0.2,
                                             maxValue: 2.0
@@ -53,7 +53,7 @@ struct VisualizationSection: View {
                                 label: {
                                     SolidSpheresRadiiPickerRow()
                                         #if targetEnvironment(macCatalyst)
-                                        .padding(.leading, 12)
+                                        .padding(.leading, 8)
                                         #else
                                         .padding(.trailing, 16)
                                         #endif
@@ -68,7 +68,7 @@ struct VisualizationSection: View {
                                 content: {
                                     if proteinViewModel.ballAndStickRadiusOption == .fixed {
                                         SliderRow(
-                                            title: NSLocalizedString("Fixed radii", comment: ""),
+                                            title: NSLocalizedString("Size", comment: ""),
                                             value: $proteinViewModel.ballAndSticksFixedAtomRadii,
                                             minValue: 0.2,
                                             maxValue: 0.6
@@ -85,7 +85,7 @@ struct VisualizationSection: View {
                                 label: {
                                     BallAndStickRadiiPickerRow()
                                         #if targetEnvironment(macCatalyst)
-                                        .padding(.leading, 12)
+                                        .padding(.leading, 8)
                                         #else
                                         .padding(.trailing, 16)
                                         #endif
@@ -96,7 +96,7 @@ struct VisualizationSection: View {
                     label: {
                         VisualizationPickerRow()
                             #if targetEnvironment(macCatalyst)
-                            .padding(.leading, 12)
+                            .padding(.leading, 8)
                             #else
                             .padding(.trailing, 16)
                             #endif

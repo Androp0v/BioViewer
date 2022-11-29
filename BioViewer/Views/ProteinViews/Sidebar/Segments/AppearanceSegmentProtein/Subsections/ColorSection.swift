@@ -12,6 +12,8 @@ struct ColorSection: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @AppStorage("colorGroupExpanded") var colorGroupExpanded: Bool = true
     
+    @State var presentPeriodicTable: Bool = false
+    
     var body: some View {
         Section(
             header: Text(NSLocalizedString("Color", comment: ""))
@@ -79,10 +81,24 @@ struct ColorSection: View {
                                 ]
                         )
                         #if targetEnvironment(macCatalyst)
-                        .padding(.leading, 12)
+                        .padding(.leading, 8)
                         #else
                         .padding(.trailing, 16)
                         #endif
+                    }
+                )
+                ButtonRow(
+                    action: {
+                        withAnimation {
+                            presentPeriodicTable.toggle()
+                        }
+                    },
+                    text: NSLocalizedString("Configure defaults...", comment: "")
+                )
+                .sheet(
+                    isPresented: $presentPeriodicTable,
+                    content: {
+                        PeriodicTableView()
                     }
                 )
             }

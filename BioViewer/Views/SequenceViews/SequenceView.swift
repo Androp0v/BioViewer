@@ -60,7 +60,6 @@ struct SequenceView: View {
                 }
                 .background(Color(UIColor.secondarySystemBackground))
                 .edgesIgnoringSafeArea([.top, .bottom])
-                //.onDrop(of: [.data], delegate: nil)
                 .navigationTitle("")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

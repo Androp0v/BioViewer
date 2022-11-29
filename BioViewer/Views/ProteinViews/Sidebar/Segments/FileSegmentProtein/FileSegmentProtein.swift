@@ -51,7 +51,7 @@ struct FileSegmentProtein: View {
                         
                         // Show model selector only if there's more than one model
                         if file.models.count > 1 {
-                            PickerRow(optionName: NSLocalizedString("Model:", comment: ""),
+                            PickerRow(optionName: NSLocalizedString("Model", comment: ""),
                                       selectedOption: $proteinViewModel.dataSource.selectedModel[index],
                                       startIndex: -1,
                                       pickerOptions: getModelNames(modelCount: file.models.count))
@@ -103,7 +103,7 @@ struct FileSegmentProtein: View {
             })
         }
         .environment(\.defaultMinListHeaderHeight, 0)
-        .listStyle(GroupedListStyle())
+        .listStyle(InsetGroupedListStyle())
     }
 }
 

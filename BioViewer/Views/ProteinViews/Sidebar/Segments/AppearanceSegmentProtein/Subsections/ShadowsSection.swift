@@ -28,7 +28,7 @@ struct ShadowsSection: View {
                             minValue: 0.0,
                             maxValue: 1.0
                         )
-                        .disabled(proteinViewModel.renderer.scene.hasShadows)
+                        .disabled(!proteinViewModel.renderer.scene.hasShadows)
                     },
                     label: {
                         SwitchRow(
@@ -36,7 +36,7 @@ struct ShadowsSection: View {
                             toggledVariable: $proteinViewModel.renderer.scene.hasShadows
                         )
                         #if targetEnvironment(macCatalyst)
-                        .padding(.leading, 12)
+                        .padding(.leading, 8)
                         #else
                         .padding(.trailing, 16)
                         #endif
@@ -53,14 +53,14 @@ struct ShadowsSection: View {
                         minValue: 0.0,
                         maxValue: 1.0
                     )
+                    .disabled(!proteinViewModel.renderer.scene.hasDepthCueing)
                 }, label: {
                     SwitchRow(
                         title: NSLocalizedString("Depth cueing", comment: ""),
                         toggledVariable: $proteinViewModel.renderer.scene.hasDepthCueing
                     )
-                    .disabled(proteinViewModel.renderer.scene.hasDepthCueing)
                     #if targetEnvironment(macCatalyst)
-                    .padding(.leading, 12)
+                    .padding(.leading, 8)
                     #else
                     .padding(.trailing, 16)
                     #endif

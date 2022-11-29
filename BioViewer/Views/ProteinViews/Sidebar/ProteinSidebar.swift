@@ -12,7 +12,9 @@ private struct SidebarItem: View {
     let tag: Int
 
     var body: some View {
-        Image(systemName: image).tag(tag)
+        Image(systemName: image)
+            .symbolRenderingMode(.monochrome)
+            .tag(tag)
     }
 }
 
@@ -23,7 +25,6 @@ private struct ProteinSidebarContent: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            // Options views go here
             switch selectedSegment {
             case 0:
                 FileSegmentProtein()

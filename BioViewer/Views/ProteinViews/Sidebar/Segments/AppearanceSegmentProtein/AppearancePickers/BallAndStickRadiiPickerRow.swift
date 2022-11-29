@@ -22,7 +22,7 @@ struct BallAndStickRadiiPickerRow: View {
     }
     
     var body: some View {
-        PickerRow(optionName: NSLocalizedString("Atom radius", comment: ""),
+        PickerRow(optionName: NSLocalizedString("Radius", comment: ""),
                   selectedOption: ballAndStickRadiusProxy,
                   pickerOptions: ProteinBallAndStickRadiusOptions.getPickerOptions())
     }

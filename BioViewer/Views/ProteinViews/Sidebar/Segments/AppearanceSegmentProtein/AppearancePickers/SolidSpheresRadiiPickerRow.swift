@@ -22,7 +22,7 @@ struct SolidSpheresRadiiPickerRow: View {
     }
     
     var body: some View {
-        PickerRow(optionName: NSLocalizedString("Atom radius", comment: ""),
+        PickerRow(optionName: NSLocalizedString("Radius", comment: ""),
                   selectedOption: solidSpheresRadiusProxy,
                   pickerOptions: ProteinSolidSpheresRadiusOptions.getPickerOptions())
     }

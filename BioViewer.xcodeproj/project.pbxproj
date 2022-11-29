@@ -137,6 +137,9 @@
 		C553B7912932FAA400294BB4 /* VisualizationSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B7902932FAA400294BB4 /* VisualizationSection.swift */; };
 		C553B79529360CF600294BB4 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79429360CF600294BB4 /* UserDefaults+Extension.swift */; };
 		C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79729361A9E00294BB4 /* ShadowsSection.swift */; };
+		C553B79A2936218000294BB4 /* ButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B7992936218000294BB4 /* ButtonRow.swift */; };
+		C553B79D2936237700294BB4 /* PeriodicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79C2936237700294BB4 /* PeriodicTableView.swift */; };
+		C553B79F293624D900294BB4 /* PeriodicTableContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79E293624D900294BB4 /* PeriodicTableContentView.swift */; };
 		C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */; };
 		C5546DAB27E4DF9F00F607F2 /* ComputeSDFGrid.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */; };
 		C555EC7E282A7513001281CD /* DebugPointShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C555EC7D282A7513001281CD /* DebugPointShader.metal */; };
@@ -420,6 +423,9 @@
 		C553B7902932FAA400294BB4 /* VisualizationSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationSection.swift; sourceTree = "<group>"; };
 		C553B79429360CF600294BB4 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		C553B79729361A9E00294BB4 /* ShadowsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowsSection.swift; sourceTree = "<group>"; };
+		C553B7992936218000294BB4 /* ButtonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonRow.swift; sourceTree = "<group>"; };
+		C553B79C2936237700294BB4 /* PeriodicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodicTableView.swift; sourceTree = "<group>"; };
+		C553B79E293624D900294BB4 /* PeriodicTableContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodicTableContentView.swift; sourceTree = "<group>"; };
 		C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeSDFGrid.swift; sourceTree = "<group>"; };
 		C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeSDFGrid.metal; sourceTree = "<group>"; };
 		C5546DAC27E4E18E00F607F2 /* SDFGrid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDFGrid.h; sourceTree = "<group>"; };
@@ -589,9 +595,9 @@
 				C5C7513D27DBF6D3004CEE8E /* Onboarding */,
 				C59D6A5E275D807900CCC941 /* StatusView */,
 				C44085632647153200DC5009 /* ProteinViews */,
+				C553B79B2936235C00294BB4 /* PresentedViews */,
 				C44085612647151A00DC5009 /* SequenceViews */,
 				C464C357265A56CC00E66C3E /* SettingsView.swift */,
-				C45BAC41264954FF00B36026 /* Rows */,
 				C440856D26481FD800DC5009 /* UtilityViews */,
 			);
 			path = Views;
@@ -644,12 +650,12 @@
 		C44085632647153200DC5009 /* ProteinViews */ = {
 			isa = PBXGroup;
 			children = (
+				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
+				C45BAC4426497A3300B36026 /* DynamicStructureControlView.swift */,
 				C41A0567264D5D47006F551C /* Data */,
 				C5406702274D651B00710CFC /* Sidebar */,
 				C464C363265D361300E66C3E /* ImportProteins */,
 				C405744A2663DC4C008527D1 /* ProteinMetal */,
-				C44FC0732641AF1B00459E01 /* ProteinView.swift */,
-				C45BAC4426497A3300B36026 /* DynamicStructureControlView.swift */,
 				C5EEE9B8276F8605005737C1 /* Top toolbar */,
 				C50AF7B727CB848000768E4D /* SelectTool */,
 				C5EEE9B3276F6022005737C1 /* PhotoMode */,
@@ -767,6 +773,7 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
+				C553B7992936218000294BB4 /* ButtonRow.swift */,
 				C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */,
 				C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */,
 				C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */,
@@ -1032,8 +1039,18 @@
 			isa = PBXGroup;
 			children = (
 				C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */,
+				C45BAC41264954FF00B36026 /* Rows */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		C553B79B2936235C00294BB4 /* PresentedViews */ = {
+			isa = PBXGroup;
+			children = (
+				C553B79C2936237700294BB4 /* PeriodicTableView.swift */,
+				C553B79E293624D900294BB4 /* PeriodicTableContentView.swift */,
+			);
+			path = PresentedViews;
 			sourceTree = "<group>";
 		};
 		C555EC7F282A751A001281CD /* DebugShader */ = {
@@ -1453,10 +1470,12 @@
 				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
 				C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */,
 				C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */,
+				C553B79D2936237700294BB4 /* PeriodicTableView.swift in Sources */,
 				C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */,
 				C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */,
 				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,
 				C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */,
+				C553B79F293624D900294BB4 /* PeriodicTableContentView.swift in Sources */,
 				C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */,
 				C51D4EEC2769199600C69B3D /* AmbientOcclusionTextures.swift in Sources */,
 				C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */,
@@ -1550,6 +1569,7 @@
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
 				C54066FA274D1C7900710CFC /* ParsePDB.swift in Sources */,
 				C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */,
+				C553B79A2936218000294BB4 /* ButtonRow.swift in Sources */,
 				C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */,
 				C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */,
 				C56E87E0278D895B004BAEE2 /* SceneAnimator.swift in Sources */,
@@ -1751,7 +1771,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1807,7 +1827,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1835,7 +1855,7 @@
 				INFOPLIST_FILE = BioViewer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1875,7 +1895,7 @@
 				INFOPLIST_FILE = BioViewer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
