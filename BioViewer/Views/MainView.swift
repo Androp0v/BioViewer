@@ -18,10 +18,14 @@ struct MainView: View {
         // selectedSegmentTintColor does not work on macCatalyst :(
         #else
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.accentColor)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white],
-                                                               for: .selected)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(Color.accentColor)],
-                                                               for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes(
+            [.foregroundColor: UIColor.white],
+            for: .selected
+        )
+        UISegmentedControl.appearance().setTitleTextAttributes(
+            [.foregroundColor: UIColor(Color.accentColor)],
+            for: .normal
+        )
         #endif
     }
 

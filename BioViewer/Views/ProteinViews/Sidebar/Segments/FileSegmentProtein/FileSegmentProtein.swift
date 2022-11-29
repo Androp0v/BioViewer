@@ -41,7 +41,7 @@ struct FileSegmentProtein: View {
                         .padding(.top, 52)
                         .padding(.bottom, 4)) {
                 if proteinViewModel.dataSource.files.count == 0 {
-                    EmptyFileRow()
+                    EmptyDataRow(text: NSLocalizedString("No imported files", comment: ""))
                 } else {
                     ForEach(Array(proteinViewModel.dataSource.files.enumerated()), id: \.offset) { index, file in
                         FileRow(fileName: file.fileName,

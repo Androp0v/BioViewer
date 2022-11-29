@@ -1,5 +1,5 @@
 //
-//  EmptyFileRow.swift
+//  EmptyDataRow.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 12/12/21.
@@ -7,18 +7,21 @@
 
 import SwiftUI
 
-struct EmptyFileRow: View {
+struct EmptyDataRow: View {
+    
+    let text: String
+    
     var body: some View {
-        Text(NSLocalizedString("No imported files", comment: ""))
+        Text(text)
             .foregroundColor(.secondary)
             .italic()
     }
 }
 
-struct EmptyFileRow_Previews: PreviewProvider {
+struct EmptyDataRow_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            EmptyFileRow()
+            EmptyDataRow(text: NSLocalizedString("No data", comment: ""))
         }
     }
 }

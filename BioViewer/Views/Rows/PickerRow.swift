@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PickerRow: View {
 
-    var optionName: String
+    let optionName: String
     @Binding var selectedOption: Int
     let pickerOptions: [String]
     let startIndex: Int
@@ -31,52 +31,19 @@ struct PickerRow: View {
         // On macOS, this uses the (beautiful) NSPopUpButton instead of
         // navigating to the option.
         Picker(optionName, selection: $selectedOption) {
-            ForEach(startIndex..<endIndex) { index in
+            ForEach(startIndex..<endIndex, id: \.self) { index in
                 // SwiftUI detects selection by tag
-                Text(self.pickerOptions[index - startIndex]).tag(index)
+                Text(self.pickerOptions[index - startIndex])
+                    .tag(index)
             }
         }
         .pickerStyle(MenuPickerStyle())
         #else
-        if horizontalSizeClass == .compact {
-            // This works great for compact size classes, where the sidebar
-            // is on its own NavigationView and pickers can navigate to a
-            // new screen with the selection.
-            Picker(optionName, selection: $selectedOption) {
-                // We don't use .animation() here since on iPhone this is
-                // presented on a different view (through navigation).
-                ForEach(0..<endIndex) { index in
-                    // SwiftUI detects selection by tag
-                    Text(self.pickerOptions[index - startIndex]).tag(index)
-                }
-            }
-            .pickerStyle(DefaultPickerStyle())
-        } else {
-            if #available(iOS 16.0, *) {
-                Picker(optionName, selection: $selectedOption.animation()) {
-                    ForEach(startIndex..<endIndex) { index in
-                        // SwiftUI detects selection by tag
-                        Text(self.pickerOptions[index - startIndex]).tag(index)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-            } else {
-                // Custom picker for iPadOS pre iOS 16 (default MenuPickerStyle
-                // on iPadOS did not show the option name pre iOS 16 so it's not
-                // very intuitive for our typical options).
-                HStack {
-                    Text(optionName)
-                    Spacer()
-                    // We use .animation() here (iPadOS) but not on macOS because
-                    // big animations are generally less used on macOS.
-                    Picker(optionName, selection: $selectedOption.animation()) {
-                        ForEach(startIndex..<endIndex) { index in
-                            // SwiftUI detects selection by tag
-                            Text(self.pickerOptions[index - startIndex]).tag(index)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                }
+        Picker(optionName, selection: $selectedOption.animation()) {
+            ForEach(startIndex..<endIndex, id: \.self) { index in
+                // SwiftUI detects selection by tag
+                Text(self.pickerOptions[index - startIndex])
+                    .tag(index)
             }
         }
         #endif

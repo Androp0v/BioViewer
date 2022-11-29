@@ -80,7 +80,6 @@
 		C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */; };
 		C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024D27639B43005D7F06 /* SliderRow.swift */; };
 		C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024F2763CB0C005D7F06 /* RangeRow.swift */; };
-		C50E02532763D1B2005D7F06 /* IndentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02522763D1B2005D7F06 /* IndentRow.swift */; };
 		C50E02552764B5BE005D7F06 /* PDBLikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */; };
 		C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */; };
 		C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */; };
@@ -92,7 +91,7 @@
 		C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
 		C518AEDC27E7999400145571 /* ComputeSDFGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */; };
 		C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
-		C51D4ED9276596EE00C69B3D /* EmptyFileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */; };
+		C51D4ED9276596EE00C69B3D /* EmptyDataRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */; };
 		C51D4EDB2765985000C69B3D /* 3JBT.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C51D4EDA2765985000C69B3D /* 3JBT.pdb */; };
 		C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */; };
 		C51D4EDE27679A5200C69B3D /* ParseXYZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */; };
@@ -135,6 +134,9 @@
 		C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3F2770FA9200607B20 /* LineGraphView.swift */; };
 		C5433F422771667200607B20 /* PhotoModeViewfinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F412771667200607B20 /* PhotoModeViewfinder.swift */; };
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
+		C553B7912932FAA400294BB4 /* VisualizationSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B7902932FAA400294BB4 /* VisualizationSection.swift */; };
+		C553B79529360CF600294BB4 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79429360CF600294BB4 /* UserDefaults+Extension.swift */; };
+		C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79729361A9E00294BB4 /* ShadowsSection.swift */; };
 		C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */; };
 		C5546DAB27E4DF9F00F607F2 /* ComputeSDFGrid.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */; };
 		C555EC7E282A7513001281CD /* DebugPointShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C555EC7D282A7513001281CD /* DebugPointShader.metal */; };
@@ -374,14 +376,13 @@
 		C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoLongTextRow.swift; sourceTree = "<group>"; };
 		C50E024D27639B43005D7F06 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C50E024F2763CB0C005D7F06 /* RangeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeRow.swift; sourceTree = "<group>"; };
-		C50E02522763D1B2005D7F06 /* IndentRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndentRow.swift; sourceTree = "<group>"; };
 		C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDBLikeConstants.swift; sourceTree = "<group>"; };
 		C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementPopover.swift; sourceTree = "<group>"; };
 		C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementRow.swift; sourceTree = "<group>"; };
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
 		C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSubunit.swift; sourceTree = "<group>"; };
 		C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinColorModel.swift; sourceTree = "<group>"; };
-		C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyFileRow.swift; sourceTree = "<group>"; };
+		C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataRow.swift; sourceTree = "<group>"; };
 		C51D4EDA2765985000C69B3D /* 3JBT.pdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3JBT.pdb; sourceTree = "<group>"; };
 		C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseXYZ.swift; sourceTree = "<group>"; };
 		C51D4EE0276912AE00C69B3D /* ShadowPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowPass.swift; sourceTree = "<group>"; };
@@ -416,6 +417,9 @@
 		C5433F3F2770FA9200607B20 /* LineGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraphView.swift; sourceTree = "<group>"; };
 		C5433F412771667200607B20 /* PhotoModeViewfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewfinder.swift; sourceTree = "<group>"; };
 		C544D39F277016270060B30D /* TextureToImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToImage.swift; sourceTree = "<group>"; };
+		C553B7902932FAA400294BB4 /* VisualizationSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationSection.swift; sourceTree = "<group>"; };
+		C553B79429360CF600294BB4 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		C553B79729361A9E00294BB4 /* ShadowsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowsSection.swift; sourceTree = "<group>"; };
 		C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeSDFGrid.swift; sourceTree = "<group>"; };
 		C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeSDFGrid.metal; sourceTree = "<group>"; };
 		C5546DAC27E4E18E00F607F2 /* SDFGrid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDFGrid.h; sourceTree = "<group>"; };
@@ -719,8 +723,10 @@
 				C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */,
 				C54066F8274D1C6100710CFC /* Files */,
 				C4B1F82026457D020035D739 /* Data structures */,
+				C553B79629360F9900294BB4 /* Components */,
 				C4187E342642E0CA009E2CBA /* Views */,
 				C41A056A2658948B006F551C /* Metal */,
+				C553B79329360CE200294BB4 /* Extensions */,
 				C44FC0752641AF1E00459E01 /* Assets.xcassets */,
 				C57303F6273022B300D5B0A6 /* Localizable.strings */,
 				C59792CC277210490019ABD3 /* Media Assets */,
@@ -760,7 +766,6 @@
 		C45BAC41264954FF00B36026 /* Rows */ = {
 			isa = PBXGroup;
 			children = (
-				C50E02512763D19C005D7F06 /* RowModifiers */,
 				C45BAC422649550C00B36026 /* ColorPickerRow.swift */,
 				C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */,
 				C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */,
@@ -876,14 +881,6 @@
 				C50AF7B827CB84A000768E4D /* SelectedAtom.swift */,
 			);
 			path = SelectTool;
-			sourceTree = "<group>";
-		};
-		C50E02512763D19C005D7F06 /* RowModifiers */ = {
-			isa = PBXGroup;
-			children = (
-				C50E02522763D1B2005D7F06 /* IndentRow.swift */,
-			);
-			path = RowModifiers;
 			sourceTree = "<group>";
 		};
 		C515EFB7274D9DE800B6F7DB /* FileSource */ = {
@@ -1013,6 +1010,32 @@
 			path = Sections;
 			sourceTree = "<group>";
 		};
+		C553B7922932FC5E00294BB4 /* Subsections */ = {
+			isa = PBXGroup;
+			children = (
+				C553B7902932FAA400294BB4 /* VisualizationSection.swift */,
+				C5F6D2222853A45700C1962F /* ColorSection.swift */,
+				C553B79729361A9E00294BB4 /* ShadowsSection.swift */,
+			);
+			path = Subsections;
+			sourceTree = "<group>";
+		};
+		C553B79329360CE200294BB4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C553B79429360CF600294BB4 /* UserDefaults+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C553B79629360F9900294BB4 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		C555EC7F282A751A001281CD /* DebugShader */ = {
 			isa = PBXGroup;
 			children = (
@@ -1048,7 +1071,6 @@
 				C57F994A275DAA38001DE6D6 /* WorkspaceRow.swift */,
 				C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */,
 				C59D6A61275D902E00CCC941 /* FileRow.swift */,
-				C51D4ED8276596EE00C69B3D /* EmptyFileRow.swift */,
 				C515EFBA274E313E00B6F7DB /* FileAtomElementPopover */,
 				C515EFB7274D9DE800B6F7DB /* FileSource */,
 			);
@@ -1104,7 +1126,7 @@
 			isa = PBXGroup;
 			children = (
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
-				C5F6D2222853A45700C1962F /* ColorSection.swift */,
+				C553B7922932FC5E00294BB4 /* Subsections */,
 				C5F6D22128536AB100C1962F /* AppearancePickers */,
 			);
 			path = AppearanceSegmentProtein;
@@ -1407,6 +1429,7 @@
 				C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */,
 				C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */,
 				C5EEE9B2276F5BCD005737C1 /* PhotoModeView.swift in Sources */,
+				C553B79529360CF600294BB4 /* UserDefaults+Extension.swift in Sources */,
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
 				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
@@ -1417,6 +1440,7 @@
 				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
+				C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */,
 				C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
@@ -1449,7 +1473,6 @@
 				C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */,
 				C45BAC4526497A3300B36026 /* DynamicStructureControlView.swift in Sources */,
 				C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */,
-				C50E02532763D1B2005D7F06 /* IndentRow.swift in Sources */,
 				C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */,
 				C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */,
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
@@ -1530,8 +1553,9 @@
 				C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */,
 				C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */,
 				C56E87E0278D895B004BAEE2 /* SceneAnimator.swift in Sources */,
+				C553B7912932FAA400294BB4 /* VisualizationSection.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
-				C51D4ED9276596EE00C69B3D /* EmptyFileRow.swift in Sources */,
+				C51D4ED9276596EE00C69B3D /* EmptyDataRow.swift in Sources */,
 				C572BD1E27413AFB00FF010D /* FileSourceViewModel.swift in Sources */,
 				C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */,
 				C5433F3D2770F9C600607B20 /* FileDetailsSection.swift in Sources */,

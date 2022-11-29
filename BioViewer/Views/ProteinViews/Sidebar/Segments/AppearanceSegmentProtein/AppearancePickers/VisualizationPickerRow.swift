@@ -22,9 +22,11 @@ struct VisualizationPickerRow: View {
     }
     
     var body: some View {
-        PickerRow(optionName: NSLocalizedString("View as", comment: ""),
-                  selectedOption: visualizationProxy,
-                  pickerOptions: ProteinVisualizationOption.getPickerOptions())
+        PickerRow(
+            optionName: NSLocalizedString("View as", comment: ""),
+            selectedOption: visualizationProxy,
+            pickerOptions: ProteinVisualizationOption.getPickerOptions()
+        )
     }
 }
 

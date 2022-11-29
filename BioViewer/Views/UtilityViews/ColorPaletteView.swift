@@ -27,14 +27,6 @@ struct ColorPaletteView: View {
             }
             .padding(4)
         }
-        #if targetEnvironment(macCatalyst)
-        .frame(width: 88, height: 28)
-        .background(Rectangle()
-                    .stroke(Color(uiColor: .darkGray),
-                            style: StrokeStyle(lineWidth: 1))
-                    .background(Rectangle()
-                                    .fill(Color(uiColor: .tertiarySystemFill))))
-        #else
         .frame(width: 88, height: 36)
         .mask(RoundedRectangle(cornerRadius: 4)
                 .padding(4))
@@ -43,7 +35,6 @@ struct ColorPaletteView: View {
                             style: StrokeStyle(lineWidth: 1))
                     .background(RoundedRectangle(cornerRadius: 8)
                                     .fill(Color(uiColor: .tertiarySystemFill))))
-        #endif
     }
 }
 
