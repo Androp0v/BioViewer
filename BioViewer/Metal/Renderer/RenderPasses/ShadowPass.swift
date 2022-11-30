@@ -18,8 +18,8 @@ extension ProteinRenderer {
         
         // Attach textures
         shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
-        shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
         shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
         if AppState.hasDepthPrePasses() {
             // colorAttachments[1] is the shadow depth pre-pass texture
             shadowRenderPassDescriptor.colorAttachments[1].texture = shadowDepthPrePassTexture
