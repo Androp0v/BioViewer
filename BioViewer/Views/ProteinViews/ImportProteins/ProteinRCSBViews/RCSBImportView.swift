@@ -33,63 +33,66 @@ struct RCSBImportView: View {
         NavigationView {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(Color(UIColor.secondarySystemBackground))
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                            TextField("None",
-                                      text: $searchText,
-                                      prompt: Text(NSLocalizedString("Enter RCSB ID", comment: "")))
-                                .frame(maxHeight: .infinity)
-                                .disableAutocorrection(true)
-                                .alert(alertText, isPresented: $showingAlert) {
-                                    Button("OK", role: .cancel) { }
-                                }
-                                .onSubmit {
-                                    Task {
-                                        await withThrowingTaskGroup(of: Void.self, body: { group in
-                                            group.addTask {
-                                                do {
-                                                    try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
-                                                } catch let error {
-                                                    await showAlert(text: error.localizedDescription)
-                                                }
-                                            }
-                                            group.addTask {
-                                                do {
-                                                    try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
-                                                } catch let error {
-                                                    await showAlert(text: error.localizedDescription)
-                                                }
-                                            }
-                                        })
+                    Image(systemName: "magnifyingglass")
+                        .padding(.leading, 8)
+                        .padding(.vertical, 8)
+                    TextField(
+                        "None",
+                        text: $searchText,
+                        prompt: Text(NSLocalizedString("Enter RCSB ID", comment: ""))
+                    )
+                    .padding(.vertical, 8)
+                    .disableAutocorrection(true)
+                    .alert(alertText, isPresented: $showingAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
+                    .onSubmit {
+                        Task {
+                            await withThrowingTaskGroup(of: Void.self, body: { group in
+                                group.addTask {
+                                    do {
+                                        try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
+                                    } catch let error {
+                                        await showAlert(text: error.localizedDescription)
                                     }
                                 }
+                                group.addTask {
+                                    do {
+                                        try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
+                                    } catch let error {
+                                        await showAlert(text: error.localizedDescription)
+                                    }
+                                }
+                            })
                         }
-                        .foregroundColor(.gray)
-                        .padding(.leading, 8)
                     }
-                    .frame(height: 40)
-                    .cornerRadius(13)
                 }
-                .padding(.horizontal)
+                .clipped()
+                .background {
+                    Color(UIColor.secondarySystemBackground)
+                        .cornerRadius(12)
+                }
+                .foregroundColor(.gray)
+                .padding()
                 
-                if !searchText.isEmpty {
-                    List {
-                        if self.proteinRCSBImportViewModel.showRow {
-                            RCSBRowView(title: proteinRCSBImportViewModel.foundProteinName,
-                                        description: proteinRCSBImportViewModel.foundProteinDescription,
-                                        authors: proteinRCSBImportViewModel.foundProteinAuthors,
-                                        image: proteinRCSBImportViewModel.foundProteinImage,
-                                        rcsbShowSheet: $rcsbShowSheet)
+                Group {
+                    if !searchText.isEmpty {
+                        List {
+                            if self.proteinRCSBImportViewModel.showRow {
+                                RCSBRowView(title: proteinRCSBImportViewModel.foundProteinName,
+                                            description: proteinRCSBImportViewModel.foundProteinDescription,
+                                            authors: proteinRCSBImportViewModel.foundProteinAuthors,
+                                            image: proteinRCSBImportViewModel.foundProteinImage,
+                                            rcsbShowSheet: $rcsbShowSheet)
+                            }
                         }
+                        .listStyle(.insetGrouped)
+                        .edgesIgnoringSafeArea(.all)
+                    } else {
+                        RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
                     }
-                    .listStyle(.insetGrouped)
-                    .edgesIgnoringSafeArea(.all)
-                } else {
-                    RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
                 }
+                .frame(maxHeight: .infinity)
                 
             }
             .navigationTitle(NSLocalizedString("RCSB ID", comment: ""))

@@ -46,7 +46,13 @@ extension ProteinRenderer {
         constantValues.setConstantValue(&isHighQuality, type: .bool, index: 0)
         
         let vertexProgram = defaultLibrary.makeFunction(name: "shadow_vertex")
-        guard let fragmentProgram = try? defaultLibrary.makeFunction(name: "shadow_fragment", constantValues: constantValues) else {
+        var fragmentProgram: MTLFunction?
+        if AppState.hasDepthPrePasses() {
+            fragmentProgram = try? defaultLibrary.makeFunction(name: "shadow_fragment", constantValues: constantValues)
+        } else {
+            fragmentProgram = try? defaultLibrary.makeFunction(name: "shadow_fragment_no_prepass", constantValues: constantValues)
+        }
+        guard let fragmentProgram else {
             return
         }
 
@@ -57,7 +63,9 @@ extension ProteinRenderer {
         // Specify the format of the depth textures
         pipelineStateDescriptor.depthAttachmentPixelFormat = ShadowTextures.shadowDepthTexturePixelFormat
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = ShadowTextures.shadowTexturePixelFormat
-        pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
+        if AppState.hasDepthPrePasses() {
+            pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
+        }
 
         pipelineStateDescriptor.label = "Shadow map impostor shading"
         
@@ -82,7 +90,9 @@ extension ProteinRenderer {
         pipelineStateDescriptor.vertexFunction = vertexProgram
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
+        if AppState.hasDepthPrePasses() {
+            pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
+        }
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
@@ -138,16 +148,28 @@ extension ProteinRenderer {
             var useHighShadowSampleCount: Bool = true
             constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
         }
+        var hasDepthPrePass: Bool = AppState.hasDepthPrePasses()
+        constantValues.setConstantValue(&hasDepthPrePass, type: .bool, index: 1)
         
         // Vertex and fragment functions
         let vertexProgram = defaultLibrary.makeFunction(name: "impostor_vertex")
-        let fragmentProgram = try? defaultLibrary.makeFunction(name: "impostor_fragment", constantValues: constantValues)
+        var fragmentProgram: MTLFunction?
+        if AppState.hasDepthPrePasses() {
+            fragmentProgram = try? defaultLibrary.makeFunction(name: "impostor_fragment", constantValues: constantValues)
+        } else {
+            fragmentProgram = try? defaultLibrary.makeFunction(name: "impostor_fragment_no_prepass", constantValues: constantValues)
+        }
+        guard let fragmentProgram else {
+            return
+        }
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
+        if AppState.hasDepthPrePasses() {
+            pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
+        }
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float

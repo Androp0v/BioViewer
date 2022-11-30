@@ -9,7 +9,27 @@ import SwiftUI
 
 struct PeriodicTableContentView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        GeometryReader { geometryProxy in
+            ScrollView(.horizontal) {
+                VStack(spacing: 2) {
+                    ForEach(0..<6) { _ in
+                        HStack(spacing: 2) {
+                            ForEach(0..<17, id: \.self) { _ in
+                                ZStack {
+                                    Rectangle()
+                                        .aspectRatio(1.0, contentMode: .fit)
+                                    Text("He")
+                                        .foregroundColor(.white)
+                                }
+                                .frame(minWidth: 24)
+                            }
+                        }
+                    }
+                }
+                .padding()
+                .frame(idealWidth: geometryProxy.size.width)
+            }
+        }
     }
 }
 

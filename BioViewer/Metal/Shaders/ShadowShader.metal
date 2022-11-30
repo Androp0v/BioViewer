@@ -70,21 +70,10 @@ struct ShadowFragmentOut{
     float depth [[ depth(less) ]];
 };
 
-// [[stage_in]] uses the output from the basic_vertex vertex function
-fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[stage_in]],
-                                           constant FrameData& frameData [[ buffer(0) ]],
-                                           ShadowDepthPrePassFragmentOut shadow_depth_bound_output) {
+ShadowFragmentOut shadow_fragment_common(ShadowVertexOut impostor_vertex, constant FrameData &frameData) {
     // Declare output
     ShadowFragmentOut output;
     
-    if (!is_high_quality_frame) {
-        float boundedDepth = shadow_depth_bound_output.bounded_depth; // FIXME: Rename to depth
-        float primitiveDepth = impostor_vertex.position.z;
-        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
-            discard_fragment();
-        }
-    }
-
     // dot = x^2 + y^2
     half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
     
@@ -113,4 +102,26 @@ fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[sta
     output.depth = sphereClipPosition.z + DEPTH_OFFSET;
     
     return output;
+}
+
+// [[stage_in]] uses the output from the basic_vertex vertex function
+fragment ShadowFragmentOut shadow_fragment(ShadowVertexOut impostor_vertex [[stage_in]],
+                                           constant FrameData& frameData [[ buffer(0) ]],
+                                           ShadowDepthPrePassFragmentOut shadow_depth_bound_output) {
+    
+    if (!is_high_quality_frame) {
+        float boundedDepth = shadow_depth_bound_output.bounded_depth; // FIXME: Rename to depth
+        float primitiveDepth = impostor_vertex.position.z;
+        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
+            discard_fragment();
+        }
+    }
+    
+    return shadow_fragment_common(impostor_vertex, frameData);
+}
+
+// [[stage_in]] uses the output from the basic_vertex vertex function
+fragment ShadowFragmentOut shadow_fragment_no_prepass(ShadowVertexOut impostor_vertex [[stage_in]],
+                                                      constant FrameData& frameData [[ buffer(0) ]]) {
+    return shadow_fragment_common(impostor_vertex, frameData);
 }

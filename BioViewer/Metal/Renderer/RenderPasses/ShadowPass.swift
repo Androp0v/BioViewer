@@ -46,6 +46,17 @@ extension ProteinRenderer {
         if AppState.hasDepthPrePasses() && self.scene.hasShadows {
             self.encodeShadowDepthPrePassStage(renderCommandEncoder: renderCommandEncoder,
                                                uniformBuffer: &uniformBuffer)
+        } else {
+            // Add buffers to pipeline
+            renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
+                                                 offset: 0,
+                                                 index: 0)
+            renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomWorldCenterBuffer,
+                                                 offset: 0,
+                                                 index: 1)
+            renderCommandEncoder.setVertexBuffer(uniformBuffer,
+                                                 offset: 0,
+                                                 index: 4)
         }
         
         // MARK: - Shadow map creation

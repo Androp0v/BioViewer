@@ -105,24 +105,12 @@ struct ImpostorFragmentOut{
     float depth [[ depth(less) ]];
 };
 
-// [[stage_in]] uses the output from the basic_vertex vertex function
-fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
-                                               constant FrameData &frameData [[ buffer(1) ]],
-                                               const depth2d<float> shadowMap [[ texture(1) ]],
-                                               sampler shadowSampler [[ sampler(0) ]],
-                                               DepthPrePassFragmentOut depth_pre_pass_output) {
-    
+ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
+                                             constant FrameData &frameData,
+                                             const depth2d<float> shadowMap,
+                                             sampler shadowSampler) {
     // Declare output
     ImpostorFragmentOut output;
-    
-    // Depth testing with precomputed depth upper bound
-    if (!is_high_quality_frame) {
-        float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
-        float primitiveDepth = impostor_vertex.position.z;
-        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
-            discard_fragment();
-        }
-    }
     
     // dot = x^2 + y^2
     half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
@@ -222,4 +210,28 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
     output.color = half4(shadedColor.rgb, 1.0);
     
     return output;
+}
+
+// [[stage_in]] uses the output from the basic_vertex vertex function
+fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
+                                               constant FrameData &frameData [[ buffer(1) ]],
+                                               const depth2d<float> shadowMap [[ texture(1) ]],
+                                               sampler shadowSampler [[ sampler(0) ]],
+                                               DepthPrePassFragmentOut depth_pre_pass_output) {
+    // Depth testing with precomputed depth upper bound
+    if (!is_high_quality_frame) {
+        float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
+        float primitiveDepth = impostor_vertex.position.z;
+        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
+            discard_fragment();
+        }
+    }
+    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler);
+}
+
+fragment ImpostorFragmentOut impostor_fragment_no_prepass(ImpostorVertexOut impostor_vertex [[stage_in]],
+                                                          constant FrameData &frameData [[ buffer(1) ]],
+                                                          const depth2d<float> shadowMap [[ texture(1) ]],
+                                                          sampler shadowSampler [[ sampler(0) ]]) {
+    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler);
 }

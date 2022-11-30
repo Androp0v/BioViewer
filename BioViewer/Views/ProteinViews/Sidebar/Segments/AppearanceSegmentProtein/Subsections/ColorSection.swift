@@ -87,20 +87,22 @@ struct ColorSection: View {
                         #endif
                     }
                 )
-                ButtonRow(
-                    action: {
-                        withAnimation {
-                            presentPeriodicTable.toggle()
+                if proteinViewModel.colorBy == ProteinColorByOption.element {
+                    ButtonRow(
+                        action: {
+                            withAnimation {
+                                presentPeriodicTable.toggle()
+                            }
+                        },
+                        text: NSLocalizedString("Configure defaults...", comment: "")
+                    )
+                    .sheet(
+                        isPresented: $presentPeriodicTable,
+                        content: {
+                            PeriodicTableView()
                         }
-                    },
-                    text: NSLocalizedString("Configure defaults...", comment: "")
-                )
-                .sheet(
-                    isPresented: $presentPeriodicTable,
-                    content: {
-                        PeriodicTableView()
-                    }
-                )
+                    )
+                }
             }
         )
     }
