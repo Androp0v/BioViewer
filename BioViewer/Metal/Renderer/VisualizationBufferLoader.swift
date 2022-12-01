@@ -137,27 +137,70 @@ class VisualizationBufferLoader {
             return
         }
         
-        // Generate a billboard quad for each atom in the protein
-        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(
-            proteins: proteins,
-            atomRadii: atomRadii
-        )
-        guard let vertexData = vertexData else { return }
+        var subunitData: MTLBuffer?
+        var atomTypeData: MTLBuffer?
+        
+        if AppState.hasExpandableBillboardSupport {
+            // Generate a billboard object for each atom in the protein
+            let (newExpandableBillboardData, newSubunitData, newAtomTypeData) = MetalScheduler.shared.createExpandableSphereImpostors(
+                proteins: proteins,
+                atomRadii: atomRadii
+            )
+            subunitData = newSubunitData
+            atomTypeData = newAtomTypeData
+            
+            guard let expandableBillboardData = newExpandableBillboardData else {
+                return
+            }
+            guard let subunitData = subunitData else {
+                return
+            }
+            guard let atomTypeData = atomTypeData else {
+                return
+            }
+            
+            // Create ConfigurationSelector for new data
+            guard let configurationSelector = createConfigurationSelector(proteins: proteins) else {
+                return
+            }
+            
+            proteinViewModel.renderer.setExpandableBillboardBuffers(
+                expandableBillboardBuffers: expandableBillboardData,
+                subunitBuffer: subunitData,
+                atomTypeBuffer: atomTypeData,
+                configurationSelector: configurationSelector
+            )
+        }
+        
+        // FIXME: Handle this too
+        if true {
+            // Generate a billboard quad for each atom in the protein
+            let (newVertexData, newSubunitData, newAtomTypeData, newIndexData) = MetalScheduler.shared.createImpostorSpheres(
+                proteins: proteins,
+                atomRadii: atomRadii
+            )
+            subunitData = newSubunitData
+            atomTypeData = newAtomTypeData
+            
+            guard let vertexData = newVertexData else { return }
+            guard let indexData = newIndexData else { return }
+            guard let subunitData = subunitData else { return }
+            guard let atomTypeData = atomTypeData else { return }
+            
+            // Create ConfigurationSelector for new data
+            guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
+            
+            // Pass the new mesh to the renderer
+            proteinViewModel.renderer.setBillboardingBuffers(
+                billboardVertexBuffers: vertexData,
+                subunitBuffer: subunitData,
+                atomTypeBuffer: atomTypeData,
+                indexBuffer: indexData,
+                configurationSelector: configurationSelector
+            )
+        }
         guard let subunitData = subunitData else { return }
         guard let atomTypeData = atomTypeData else { return }
-        guard let indexData = indexData else { return }
-        
-        // Create ConfigurationSelector for new data
-        guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
-        
-        // Pass the new mesh to the renderer
-        proteinViewModel.renderer.setBillboardingBuffers(
-            billboardVertexBuffers: vertexData,
-            subunitBuffer: subunitData,
-            atomTypeBuffer: atomTypeData,
-            indexBuffer: indexData,
-            configurationSelector: configurationSelector
-        )
         
         // Create color buffer if needed
         if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0)

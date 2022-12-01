@@ -98,6 +98,187 @@ vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_positio
     return normalized_impostor_vertex;
 }
 
+// MARK: - Mesh Object Stage function
+
+struct MeshObjectOutput{
+    float4 position [[position]];
+    half2 billboardMapping;
+};
+
+struct payload_t
+{
+    MeshObjectOutput vertices[4];
+    float3 atomCenter;
+    half atom_radius;
+    half3 color;
+    
+    uint8_t primitiveCount;
+    uint8_t vertexCount;
+    uint8_t indices[6];
+};
+
+[[object]]
+void impostorMeshObjectStageFunction(object_data payload_t &payload [[payload]],
+                                     mesh_grid_properties meshGridProperties,
+                                     const device simd_float3 *billboard_world_center [[ buffer(1) ]],
+                                     const device half *atom_radius [[ buffer(3) ]],
+                                     const device half3 *atomColor [[ buffer(4) ]],
+                                     device float4 *debugOutput [[ buffer(30)]],
+                                     constant FrameData& frameData [[ buffer(5) ]],
+                                     uint3 positionInGrid [[threadgroup_position_in_grid]]) {
+    
+    uint atom_index = positionInGrid.x;
+    
+    // Set attributes
+    payload.vertices[0].billboardMapping = simd_half2(1, 1);
+    payload.vertices[1].billboardMapping = simd_half2(-1, 1);
+    payload.vertices[2].billboardMapping = simd_half2(-1, -1);
+    payload.vertices[3].billboardMapping = simd_half2(1, -1);
+    
+    // Set color and radius
+    half radius = atom_radius[atom_index];
+    payload.atom_radius = radius;
+    payload.color = atomColor[atom_index];
+    
+    // Fetch the matrices
+    simd_float4x4 model_view_matrix = frameData.model_view_matrix;
+    // FIXME:
+    /*
+    model_view_matrix = simd_float4x4(
+                                      simd_float4(1, 0, 0, 0),
+                                      simd_float4(0, 1, 0, 0),
+                                      simd_float4(0, 0, 1, 0),
+                                      simd_float4(0, 0, 57.60942, 1)
+                                      );
+     */
+    simd_float4x4 projectionMatrix = frameData.projectionMatrix;
+    // FIXME:
+    /*
+    projectionMatrix = simd_float4x4(
+                                     simd_float4(9.129419, 0.0, 0.0, 0.0),
+                                     simd_float4(0.0, 9.237875, 0.0, 0.0),
+                                     simd_float4(0.0, 0.0, 5.145922, -1.0),
+                                     simd_float4(0.0, 0.0, -247.48123, 0.0)
+                                     );
+     */
+    simd_float4x4 rotation_matrix = frameData.rotation_matrix;
+    
+    // Rotate the model in world space
+    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[atom_index].xyz, 1.0);
+    
+    // Get the billboard vertex position, relative to the atom center
+    float4 billboard_vertex[4];
+    billboard_vertex[0] = float4(radius, radius, 0.0, 1.0);
+    billboard_vertex[1] = float4(-radius, radius, 0.0, 1.0);
+    billboard_vertex[2] = float4(-radius, -radius, 0.0, 1.0);
+    billboard_vertex[3] = float4(radius, -radius, 0.0, 1.0);
+    
+    // Translate the triangles to their (rotated) world positions
+    for (int i = 0; i < 4; i++) {
+        billboard_vertex[i].xyz = billboard_vertex[i].xyz + rotated_atom_centers.xyz;
+    }
+    
+    // Transform the world space coordinates to eye space coordinates
+    float4 eye_position[4];
+    for (int i = 0; i < 4; i++) {
+        // Transform the world space coordinates to eye space coordinates
+        eye_position[i] = model_view_matrix * billboard_vertex[i];
+    }
+    
+    // Transform the atom positions from world space to eye space
+    payload.atomCenter = (model_view_matrix * rotated_atom_centers).xyz;
+    
+    // Transform the eye space coordinates to normalized device coordinates
+    for (int i = 0; i < 4; i++) {
+        payload.vertices[i].position = projectionMatrix * eye_position[i];
+    }
+    debugOutput[atom_index] = float4(1.0, 1.0, 1.0, 1.0);
+    // FIXME:
+    /*
+    payload.vertices[0].position = float4((rotated_atom_centers.xy + float2(0.25, 0.25)).xy, 0.5, 1.0);
+    payload.vertices[1].position = float4((rotated_atom_centers.xy + float2(-0.25, 0.25)).xy, 0.5, 1.0);
+    payload.vertices[2].position = float4((rotated_atom_centers.xy + float2(-0.25, -0.25)).xy, 0.5, 1.0);
+    payload.vertices[3].position = float4((rotated_atom_centers.xy + float2(0.25, -0.25)).xy, 0.5, 1.0);
+     */
+    /*
+    payload.vertices[0].position.z = 0.5;
+    payload.vertices[0].position.x = 0.0;
+    payload.vertices[0].position.y = 0.0;
+    payload.vertices[1].position.z = 0.5;
+    payload.vertices[2].position.z = 0.5;
+    payload.vertices[3].position.z = 0.5;
+     */
+
+    // Set the indices
+    
+    // Triangle 1
+    payload.indices[0] = 0;
+    payload.indices[1] = 2;
+    payload.indices[2] = 1;
+    
+    // Triangle 2
+    payload.indices[3] = 2;
+    payload.indices[4] = 0;
+    payload.indices[5] = 3;
+    
+    // Mesh properties
+    
+    // Output is a quad, only 2 triangles
+    payload.primitiveCount = 2;
+    // Output is a quad, only 4 vertices
+    payload.vertexCount = 4;
+    
+    // Set the output submesh count for the mesh shader.
+    // Because the mesh shader is only producing one mesh, the threadgroup grid size is 1 x 1 x 1.
+    meshGridProperties.set_threadgroups_per_grid(uint3(1, 1, 1));
+}
+
+// MARK: - Mesh Mesh Stage function
+
+// Per-vertex output
+struct MeshVertexOut{
+    float4 position [[position]];
+    half2 billboardMapping;
+};
+
+// Per-primitive output
+struct MeshPrimitiveOut{
+    float3 atomCenter;
+    half atom_radius;
+    half3 color;
+};
+
+[[mesh]]
+void impostorMeshShaderMeshStageFunction(metal::mesh<MeshVertexOut, MeshPrimitiveOut, 4, 2, metal::topology::triangle> output,
+                                         const object_data payload_t& payload [[payload]],
+                                         uint lid [[thread_index_in_threadgroup]]) {
+    // Set the number of primitives for the entire mesh.
+    output.set_primitive_count(payload.primitiveCount);
+    
+    // Set vertex data
+    if (lid < payload.vertexCount) {
+        MeshVertexOut vertex_out;
+        vertex_out.position = payload.vertices[lid].position;
+        vertex_out.billboardMapping = payload.vertices[lid].billboardMapping;
+        output.set_vertex(lid, vertex_out);
+    }
+    
+    // Set primitive data
+    if (lid < payload.primitiveCount) {
+        MeshPrimitiveOut primitive_out;
+        primitive_out.atomCenter = payload.atomCenter;
+        primitive_out.atom_radius = payload.atom_radius;
+        primitive_out.color = payload.color;
+        output.set_primitive(lid, primitive_out);
+        
+        // Set the output indices.
+        uint i = (3*lid);
+        output.set_index(i+0, payload.indices[i+0]);
+        output.set_index(i+1, payload.indices[i+1]);
+        output.set_index(i+2, payload.indices[i+2]);
+    }
+}
+
 // MARK: - Fragment function
 
 struct ImpostorFragmentOut{
@@ -212,6 +393,48 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
     return output;
 }
 
+struct MeshFragmentIn
+{
+    MeshVertexOut vertex_out;
+    MeshPrimitiveOut primitive_out;
+};
+
+// [[stage_in]] uses the output from the basic_vertex vertex function
+fragment ImpostorFragmentOut impostor_fragment_mesh(MeshFragmentIn impostor_mesh_vertex [[stage_in]],
+                                                    constant FrameData &frameData [[ buffer(1) ]],
+                                                    const depth2d<float> shadowMap [[ texture(1) ]],
+                                                    sampler shadowSampler [[ sampler(0) ]]
+                                                    // FIXME: DepthPrePassFragmentOut depth_pre_pass_output) {
+                                                    ) {
+    // FIXME: Re-implement this
+    /*
+    // Depth testing with precomputed depth upper bound
+    if (!is_high_quality_frame) {
+        float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
+        float primitiveDepth = impostor_mesh_vertex.vertex_out.position.z;
+        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
+            discard_fragment();
+        }
+    }
+    // FIXME:
+
+    ImpostorVertexOut workaroundVertex;
+    
+    workaroundVertex.position = impostor_mesh_vertex.vertex_out.position;
+    workaroundVertex.billboardMapping = impostor_mesh_vertex.vertex_out.billboardMapping;
+    
+    workaroundVertex.atom_radius = impostor_mesh_vertex.primitive_out.atom_radius;
+    workaroundVertex.atomCenter = impostor_mesh_vertex.primitive_out.atomCenter;
+    workaroundVertex.color = impostor_mesh_vertex.primitive_out.color;
+    
+    return impostor_fragment_common(workaroundVertex, frameData, shadowMap, shadowSampler);
+     */
+    ImpostorFragmentOut fragment_out;
+    fragment_out.color = half4(impostor_mesh_vertex.vertex_out.position.y / 1000, 0.0, 1.0, 1.0);
+    fragment_out.depth = impostor_mesh_vertex.vertex_out.position.z;
+    return fragment_out;
+}
+
 // [[stage_in]] uses the output from the basic_vertex vertex function
 fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex [[stage_in]],
                                                constant FrameData &frameData [[ buffer(1) ]],
@@ -235,3 +458,5 @@ fragment ImpostorFragmentOut impostor_fragment_no_prepass(ImpostorVertexOut impo
                                                           sampler shadowSampler [[ sampler(0) ]]) {
     return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler);
 }
+
+

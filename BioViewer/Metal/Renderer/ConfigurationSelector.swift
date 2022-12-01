@@ -64,19 +64,25 @@ class ConfigurationSelector {
     // MARK: - Get buffer regions
     
     func getImpostorVertexBufferRegion() -> BufferRegion {
-        return BufferRegion(length: atomsPerConfiguration * 4,
-                            offset: atomsPerConfiguration * 4 * currentConfiguration)
+        return BufferRegion(
+            length: atomsPerConfiguration * 4,
+            offset: atomsPerConfiguration * 4 * currentConfiguration
+        )
     }
         
     func getImpostorIndexBufferRegion() -> BufferRegion {
-        return BufferRegion(length: atomsPerConfiguration * 2 * 3,
-                            offset: atomsPerConfiguration * 2 * 3 * currentConfiguration)
+        return BufferRegion(
+            length: atomsPerConfiguration * 2 * 3,
+            offset: atomsPerConfiguration * 2 * 3 * currentConfiguration
+        )
     }
         
     func getBondsIndexBufferRegion() -> BufferRegion? {
         guard let bondsPerConfiguration = bondsPerConfiguration else { return nil }
         guard let bondArrayStarts = bondArrayStarts else { return nil }
-        return BufferRegion(length: bondsPerConfiguration[currentConfiguration] * 8 * 3,
-                            offset: bondArrayStarts[currentConfiguration] * 8 * 3)
+        return BufferRegion(
+            length: bondsPerConfiguration[currentConfiguration] * 8 * 3,
+            offset: bondArrayStarts[currentConfiguration] * 8 * 3
+        )
     }
 }

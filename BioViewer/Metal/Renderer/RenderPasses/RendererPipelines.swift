@@ -132,6 +132,42 @@ extension ProteinRenderer {
         case ballAndSticksHQ
     }
     
+    func makeImpostorMeshRenderPipelineState(device: MTLDevice) {
+        // Setup pipeline
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
+            fatalError()
+        }
+        
+        // Constant values to avoid unwanted branching
+        let constantValues = MTLFunctionConstantValues()
+        var useHighShadowSampleCount: Bool = false
+        constantValues.setConstantValue(&useHighShadowSampleCount, type: .bool, index: 0)
+        var hasDepthPrePass: Bool = AppState.hasDepthPrePasses()
+        constantValues.setConstantValue(&hasDepthPrePass, type: .bool, index: 1)
+        
+        // Vertex and fragment functions
+        let meshObjectProgram = defaultLibrary.makeFunction(name: "impostorMeshObjectStageFunction")
+        let meshStageProgram = defaultLibrary.makeFunction(name: "impostorMeshShaderMeshStageFunction")
+        let fragmentProgram = try? defaultLibrary.makeFunction(name: "impostor_fragment_mesh", constantValues: constantValues)
+
+        let pipelineStateDescriptor = MTLMeshRenderPipelineDescriptor()
+        pipelineStateDescriptor.objectFunction = meshObjectProgram
+        pipelineStateDescriptor.meshFunction = meshStageProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        if AppState.hasDepthPrePasses() {
+            pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
+        }
+
+        // Specify the format of the depth texture
+        pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
+        
+        pipelineStateDescriptor.label = "Impostor geometry shading"
+        // Save to the appropriate pipeline state
+        let options = MTLPipelineOption()
+        impostorMeshRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor, options: options).0
+    }
+    
     func makeImpostorRenderPipelineState(device: MTLDevice, variant: ImpostorRenderPassVariant) {
         // Setup pipeline
         guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {

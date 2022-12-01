@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -63,16 +63,6 @@
 		C500EEB4272DA57300A60317 /* FocalLengthRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB3272DA57300A60317 /* FocalLengthRow.swift */; };
 		C501C74527C3FE93008CDA25 /* ComputePipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74427C3FE93008CDA25 /* ComputePipelines.swift */; };
 		C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
-		C501C74827CA2C3E008CDA25 /* ComputePipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74427C3FE93008CDA25 /* ComputePipelines.swift */; };
-		C501C74927CA2C4C008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
-		C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
-		C5035EEC283FE72F009CE87D /* DepthPrePassTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */; };
-		C5035EED283FE738009CE87D /* DepthPrePassStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5412FF0283D9E8C00234403 /* DepthPrePassStage.swift */; };
-		C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405744B2663DC74008527D1 /* ProteinMetalViewController.swift */; };
-		C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */ = {isa = PBXBuildFile; fileRef = C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */; };
-		C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
-		C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */; };
-		C504C9C627418769002D4E6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C504C9C527418769002D4E6A /* Assets.xcassets */; };
 		C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C504C9C7274294A7002D4E6A /* RCSBError.swift */; };
 		C50AF7B927CB84A000768E4D /* SelectedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50AF7B827CB84A000768E4D /* SelectedAtom.swift */; };
 		C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D4273753E50002E089 /* StatusWarningPopover.swift */; };
@@ -81,35 +71,23 @@
 		C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024D27639B43005D7F06 /* SliderRow.swift */; };
 		C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024F2763CB0C005D7F06 /* RangeRow.swift */; };
 		C50E02552764B5BE005D7F06 /* PDBLikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */; };
-		C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBLikeConstants.swift */; };
 		C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */; };
 		C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */; };
 		C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBD274E691800B6F7DB /* InfoTextRow.swift */; };
 		C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
-		C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
 		C515EFC3274FEA0900B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
-		C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
-		C518AEDC27E7999400145571 /* ComputeSDFGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */; };
-		C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
 		C51D4ED9276596EE00C69B3D /* EmptyDataRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */; };
 		C51D4EDB2765985000C69B3D /* 3JBT.pdb in Resources */ = {isa = PBXBuildFile; fileRef = C51D4EDA2765985000C69B3D /* 3JBT.pdb */; };
 		C51D4EDD276776FC00C69B3D /* ParseXYZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */; };
-		C51D4EDE27679A5200C69B3D /* ParseXYZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */; };
-		C51D4EDF27679B1100C69B3D /* DynamicStructureControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC4426497A3300B36026 /* DynamicStructureControlView.swift */; };
 		C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE0276912AE00C69B3D /* ShadowPass.swift */; };
-		C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE0276912AE00C69B3D /* ShadowPass.swift */; };
 		C51D4EE52769137500C69B3D /* ImpostorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE42769137500C69B3D /* ImpostorPass.swift */; };
-		C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE42769137500C69B3D /* ImpostorPass.swift */; };
 		C51D4EE92769153200C69B3D /* AmbientOcclusionRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE82769153200C69B3D /* AmbientOcclusionRenderer.swift */; };
 		C51D4EEC2769199600C69B3D /* AmbientOcclusionTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */; };
-		C51D4EED276919B200C69B3D /* AmbientOcclusionTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */; };
 		C51D4EEF276D073200C69B3D /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
 		C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
-		C52AE375279D80A900BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
 		C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
-		C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* RCSBImportView.swift */; };
 		C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */; };
@@ -117,9 +95,7 @@
 		C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */; };
 		C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066ED274BBD6A00710CFC /* ProteinImportViewModel.swift */; };
 		C54066FA274D1C7900710CFC /* ParsePDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066F9274D1C7900710CFC /* ParsePDB.swift */; };
-		C54066FB274D1CA600710CFC /* ParsePDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066F9274D1C7900710CFC /* ParsePDB.swift */; };
 		C5406700274D387200710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
-		C5406701274D38C100710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5406703274D656700710CFC /* SettingsSegmentProtein.swift */; };
 		C540EE12284B747100153200 /* ShadowDepthPrePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C540EE11284B747100153200 /* ShadowDepthPrePass.swift */; };
 		C540EE14284B74B700153200 /* ShadowDepthPrePassShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C540EE13284B74B700153200 /* ShadowDepthPrePassShader.metal */; };
@@ -146,43 +122,16 @@
 		C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
 		C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
 		C555EC86282A9616001281CD /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
-		C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
-		C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
-		C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
-		C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */; };
 		C5626AE2283116AA00CFE7DC /* FPSCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */; };
 		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
 		C56E87E0278D895B004BAEE2 /* SceneAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */; };
-		C56E87E1278D896B004BAEE2 /* SceneAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */; };
-		C56E87E4278DB906004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
 		C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */; };
 		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
 		C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
 		C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1B2741386300FF010D /* FileSourceRow.swift */; };
 		C572BD1E27413AFB00FF010D /* FileSourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1D27413AFB00FF010D /* FileSourceViewModel.swift */; };
-		C572BD28274160C900FF010D /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C572BD27274160C900FF010D /* QuickLookThumbnailing.framework */; };
-		C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD2A274160C900FF010D /* ThumbnailProvider.swift */; };
-		C572BD2F274160C900FF010D /* ProteinThumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C572BD25274160C900FF010D /* ProteinThumbnail.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		C572BD352741653E00FF010D /* FileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0561264C2853006F551C /* FileParser.swift */; };
-		C572BD362741655700FF010D /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
-		C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
-		C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4553629265D869D006D980B /* AtomArrayComposition.swift */; };
-		C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
-		C572BD3A2741657B00FF010D /* AtomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomType.swift */; };
-		C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
-		C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
-		C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
-		C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D9D31271C469100E12E2F /* MetalScene.swift */; };
-		C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEAF272D58A400A60317 /* StatusViewModel.swift */; };
-		C572BD40274165F500FF010D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46435612669313A00434CC6 /* Camera.swift */; };
-		C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
-		C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */; };
-		C572BD442741661300FF010D /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
-		C572BD452741663000FF010D /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44D0558266BAA6E00BAFDCD /* AppState.swift */; };
-		C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */; };
-		C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
 		C57303F4273022B300D5B0A6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C57303F6273022B300D5B0A6 /* Localizable.strings */; };
 		C57303F92730401E00D5B0A6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C57303F82730401E00D5B0A6 /* README.md */; };
 		C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F994A275DAA38001DE6D6 /* WorkspaceRow.swift */; };
@@ -192,23 +141,15 @@
 		C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */; };
 		C57F9955275E3D29001DE6D6 /* WorkspaceHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9954275E3D29001DE6D6 /* WorkspaceHelp.swift */; };
 		C57F9958275E59D1001DE6D6 /* ProteinFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9957275E59D1001DE6D6 /* ProteinFile.swift */; };
-		C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9957275E59D1001DE6D6 /* ProteinFile.swift */; };
-		C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
-		C57F995B275E8DC7001DE6D6 /* DocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */; };
 		C57F995E275E8E31001DE6D6 /* BioViewerWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F995D275E8E31001DE6D6 /* BioViewerWorkspace.swift */; };
 		C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9960275EAD6C001DE6D6 /* ExportError.swift */; };
-		C57F9962275EADAC001DE6D6 /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
 		C57F9964275EBE04001DE6D6 /* WorkspaceExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9963275EBE04001DE6D6 /* WorkspaceExporter.swift */; };
-		C57FCE8D277E60AF001A7B4A /* CreateBondsGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */; };
-		C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */; };
 		C581ACCC282C0195001DD4BB /* BioViewerLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
 		C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5883E872857B8D000C97818 /* RCSBDetailView.swift */; };
 		C59550BE2781C24700129F9B /* VisualizationPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */; };
-		C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
-		C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */; };
 		C59792CF277210580019ABD3 /* ShutterClosed.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CD277210570019ABD3 /* ShutterClosed.aiff */; };
 		C59792D0277210580019ABD3 /* ShutterOpen.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CE277210570019ABD3 /* ShutterOpen.aiff */; };
@@ -218,16 +159,11 @@
 		C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A61275D902E00CCC941 /* FileRow.swift */; };
 		C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */; };
 		C5AC7D64283EB4310089572D /* DepthPrePassTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */; };
-		C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
-		C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
-		C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
 		C5C7513627DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */; };
 		C5C7513827DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */; };
 		C5C7513A27DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */; };
 		C5C7513C27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */; };
 		C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */; };
-		C5C7514027DBF716004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */; };
-		C5C7514127DBF71E004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */; };
 		C5C7514327DBF8CB004CEE8E /* NewsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514227DBF8CB004CEE8E /* NewsRow.swift */; };
 		C5C7514527DC16A4004CEE8E /* ChangeLog.plist in Resources */ = {isa = PBXBuildFile; fileRef = C5C7514427DC16A4004CEE8E /* ChangeLog.plist */; };
 		C5C7514727DC1859004CEE8E /* WhatsNewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514627DC1859004CEE8E /* WhatsNewViewModel.swift */; };
@@ -235,12 +171,10 @@
 		C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514A27DC35BF004CEE8E /* InfoAtomsCapsule.swift */; };
 		C5C7514D27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514C27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift */; };
 		C5E593B7281D793E00CFFAA2 /* MetalLegacySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */; };
-		C5E593B8281D8C4500CFFAA2 /* MetalLegacySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */; };
 		C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
 		C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
 		C5E7AF9B2760FF950065F6AD /* ShadowShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF9A2760FF950065F6AD /* ShadowShader.metal */; };
-		C5E9BF0C284B78DB00F56D30 /* ShadowDepthPrePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C540EE11284B747100153200 /* ShadowDepthPrePass.swift */; };
 		C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AB276DE4B9005737C1 /* TopToolbar.swift */; };
 		C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AD276E0198005737C1 /* TrajectorySegmentProtein.swift */; };
 		C5EEE9B0276E0448005737C1 /* InputWithButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9AF276E0448005737C1 /* InputWithButtonRow.swift */; };
@@ -248,7 +182,6 @@
 		C5EEE9B5276F6031005737C1 /* PhotoModeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B4276F6031005737C1 /* PhotoModeContent.swift */; };
 		C5EEE9BA276F8616005737C1 /* CameraControlToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */; };
 		C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */; };
-		C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BB276FB0CB005737C1 /* ToolbarConfig.swift */; };
 		C5EEE9BF276FCC65005737C1 /* PhotoModeFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9BE276FCC65005737C1 /* PhotoModeFooter.swift */; };
 		C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C0276FFB11005737C1 /* ProteinHighQualityRender.swift */; };
 		C5EEE9C3276FFC02005737C1 /* HQTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EEE9C2276FFC02005737C1 /* HQTextures.swift */; };
@@ -258,6 +191,9 @@
 		C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */; };
 		C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */; };
 		C5F7D30F27579615008A0517 /* RCSBSuggestionData.json in Resources */ = {isa = PBXBuildFile; fileRef = C5F7D30E27579615008A0517 /* RCSBSuggestionData.json */; };
+		C5FBD3F72937BAB6006E6390 /* ExpandableBillboardBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FBD3F62937BAB6006E6390 /* ExpandableBillboardBuffers.swift */; };
+		C5FBD3F92937BC5D006E6390 /* CreateExpandableSphereImpostors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FBD3F82937BC5D006E6390 /* CreateExpandableSphereImpostors.swift */; };
+		C5FBD3FB2937BDCA006E6390 /* CreateExpandableBillboardSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FBD3FA2937BDCA006E6390 /* CreateExpandableBillboardSpheres.metal */; };
 		C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */; };
 		C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC734277C744200E348BD /* ImpostorBondShader.metal */; };
 		C5FEC737277C8EA800E348BD /* CreateImpostorBonds.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */; };
@@ -279,13 +215,6 @@
 			remoteGlobalIDString = C44FC06D2641AF1B00459E01;
 			remoteInfo = "PDB Viewer";
 		};
-		C572BD2D274160C900FF010D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C44FC0662641AF1B00459E01 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C572BD24274160C900FF010D;
-			remoteInfo = ProteinThumbnail;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -295,7 +224,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				C572BD2F274160C900FF010D /* ProteinThumbnail.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,7 +371,6 @@
 		C572BD192741372600FF010D /* ProteinFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinFileInfo.swift; sourceTree = "<group>"; };
 		C572BD1B2741386300FF010D /* FileSourceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceRow.swift; sourceTree = "<group>"; };
 		C572BD1D27413AFB00FF010D /* FileSourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceViewModel.swift; sourceTree = "<group>"; };
-		C572BD25274160C900FF010D /* ProteinThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ProteinThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C572BD27274160C900FF010D /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
 		C572BD2A274160C900FF010D /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
 		C572BD2C274160C900FF010D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -509,6 +436,9 @@
 		C5F7D309275785E4008A0517 /* RCSBSuggestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBSuggestionsViewModel.swift; sourceTree = "<group>"; };
 		C5F7D30C2757893A008A0517 /* RCSBEmptyImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBEmptyImportView.swift; sourceTree = "<group>"; };
 		C5F7D30E27579615008A0517 /* RCSBSuggestionData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RCSBSuggestionData.json; sourceTree = "<group>"; };
+		C5FBD3F62937BAB6006E6390 /* ExpandableBillboardBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableBillboardBuffers.swift; sourceTree = "<group>"; };
+		C5FBD3F82937BC5D006E6390 /* CreateExpandableSphereImpostors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateExpandableSphereImpostors.swift; sourceTree = "<group>"; };
+		C5FBD3FA2937BDCA006E6390 /* CreateExpandableBillboardSpheres.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateExpandableBillboardSpheres.metal; sourceTree = "<group>"; };
 		C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityGenerator.swift; sourceTree = "<group>"; };
 		C5FEC734277C744200E348BD /* ImpostorBondShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorBondShader.metal; sourceTree = "<group>"; };
 		C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorBonds.metal; sourceTree = "<group>"; };
@@ -537,14 +467,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C572BD22274160C900FF010D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C572BD28274160C900FF010D /* QuickLookThumbnailing.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -554,6 +476,7 @@
 				C4A69AAE265936A2001C0490 /* MetalScheduler.swift */,
 				C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */,
 				C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */,
+				C5FBD3F82937BC5D006E6390 /* CreateExpandableSphereImpostors.swift */,
 				C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */,
 				C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */,
 				C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */,
@@ -710,7 +633,6 @@
 				C44FC06E2641AF1B00459E01 /* BioViewer.app */,
 				C44FC07F2641AF1E00459E01 /* BioViewerTests.xctest */,
 				C44FC08A2641AF1E00459E01 /* BioViewerUITests.xctest */,
-				C572BD25274160C900FF010D /* ProteinThumbnail.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -832,8 +754,10 @@
 				C49D9D38271C6BEF00E12E2F /* AtomProperties.h */,
 				C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */,
 				C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */,
+				C5FBD3F62937BAB6006E6390 /* ExpandableBillboardBuffers.swift */,
 				C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */,
 				C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */,
+				C5FBD3FA2937BDCA006E6390 /* CreateExpandableBillboardSpheres.metal */,
 				C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */,
 			);
 			path = Meshes;
@@ -1243,7 +1167,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C572BD2E274160C900FF010D /* PBXTargetDependency */,
 			);
 			name = BioViewer;
 			productName = "PDB Viewer";
@@ -1286,23 +1209,6 @@
 			productReference = C44FC08A2641AF1E00459E01 /* BioViewerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		C572BD24274160C900FF010D /* ProteinThumbnail */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C572BD31274160C900FF010D /* Build configuration list for PBXNativeTarget "ProteinThumbnail" */;
-			buildPhases = (
-				C572BD21274160C900FF010D /* Sources */,
-				C572BD22274160C900FF010D /* Frameworks */,
-				C572BD23274160C900FF010D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ProteinThumbnail;
-			productName = ProteinThumbnail;
-			productReference = C572BD25274160C900FF010D /* ProteinThumbnail.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1324,9 +1230,6 @@
 						CreatedOnToolsVersion = 12.5;
 						TestTargetID = C44FC06D2641AF1B00459E01;
 					};
-					C572BD24274160C900FF010D = {
-						CreatedOnToolsVersion = 13.1;
-					};
 				};
 			};
 			buildConfigurationList = C44FC0692641AF1B00459E01 /* Build configuration list for PBXProject "BioViewer" */;
@@ -1346,7 +1249,6 @@
 				C44FC06D2641AF1B00459E01 /* BioViewer */,
 				C44FC07E2641AF1E00459E01 /* BioViewerTests */,
 				C44FC0892641AF1E00459E01 /* BioViewerUITests */,
-				C572BD24274160C900FF010D /* ProteinThumbnail */,
 			);
 		};
 /* End PBXProject section */
@@ -1379,14 +1281,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C572BD23274160C900FF010D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C504C9C627418769002D4E6A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1460,6 +1354,7 @@
 				C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */,
 				C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
+				C5FBD3F92937BC5D006E6390 /* CreateExpandableSphereImpostors.swift in Sources */,
 				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C501C74527C3FE93008CDA25 /* ComputePipelines.swift in Sources */,
 				C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */,
@@ -1484,6 +1379,7 @@
 				C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */,
 				C5C7513C27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
+				C5FBD3F72937BAB6006E6390 /* ExpandableBillboardBuffers.swift in Sources */,
 				C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */,
 				C5C7514927DC33D5004CEE8E /* InfoAtomsRow.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
@@ -1512,6 +1408,7 @@
 				C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */,
 				C50E02552764B5BE005D7F06 /* PDBLikeConstants.swift in Sources */,
 				C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */,
+				C5FBD3FB2937BDCA006E6390 /* CreateExpandableBillboardSpheres.metal in Sources */,
 				C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */,
 				C54270252863374B00EE9AB0 /* ProteinExtensions.swift in Sources */,
 				C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */,
@@ -1614,77 +1511,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C572BD21274160C900FF010D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C57F995B275E8DC7001DE6D6 /* DocumentPickerViewController.swift in Sources */,
-				C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */,
-				C51D4EDF27679B1100C69B3D /* DynamicStructureControlView.swift in Sources */,
-				C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */,
-				C501C74827CA2C3E008CDA25 /* ComputePipelines.swift in Sources */,
-				C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */,
-				C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */,
-				C572BD362741655700FF010D /* Protein.swift in Sources */,
-				C5C7514127DBF71E004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */,
-				C5035EED283FE738009CE87D /* DepthPrePassStage.swift in Sources */,
-				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
-				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
-				C572BD452741663000FF010D /* AppState.swift in Sources */,
-				C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */,
-				C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */,
-				C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */,
-				C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */,
-				C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */,
-				C56E87E1278D896B004BAEE2 /* SceneAnimator.swift in Sources */,
-				C572BD442741661300FF010D /* MatrixTransform.swift in Sources */,
-				C518AEDC27E7999400145571 /* ComputeSDFGrid.swift in Sources */,
-				C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */,
-				C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */,
-				C5E593B8281D8C4500CFFAA2 /* MetalLegacySupport.swift in Sources */,
-				C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */,
-				C5C7514027DBF716004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */,
-				C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */,
-				C51D4EDE27679A5200C69B3D /* ParseXYZ.swift in Sources */,
-				C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */,
-				C57FCE8D277E60AF001A7B4A /* CreateBondsGeometry.swift in Sources */,
-				C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */,
-				C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */,
-				C56E87E4278DB906004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
-				C5E9BF0C284B78DB00F56D30 /* ShadowDepthPrePass.swift in Sources */,
-				C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */,
-				C572BD3A2741657B00FF010D /* AtomType.swift in Sources */,
-				C51D4EED276919B200C69B3D /* AmbientOcclusionTextures.swift in Sources */,
-				C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */,
-				C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */,
-				C572BD352741653E00FF010D /* FileParser.swift in Sources */,
-				C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */,
-				C57F9962275EADAC001DE6D6 /* ImportDroppedFilesDelegate.swift in Sources */,
-				C572BD40274165F500FF010D /* Camera.swift in Sources */,
-				C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */,
-				C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */,
-				C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */,
-				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
-				C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */,
-				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
-				C501C74927CA2C4C008CDA25 /* FillColorInputUtility.swift in Sources */,
-				C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */,
-				C50E02562764B5C4005D7F06 /* PDBLikeConstants.swift in Sources */,
-				C5406701274D38C100710CFC /* ImportError.swift in Sources */,
-				C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */,
-				C54066FB274D1CA600710CFC /* ParsePDB.swift in Sources */,
-				C5035EEC283FE72F009CE87D /* DepthPrePassTextures.swift in Sources */,
-				C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */,
-				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
-				C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */,
-				C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */,
-				C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */,
-				C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */,
-				C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */,
-				C52AE375279D80A900BEE11B /* BasicShader.metal in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1697,12 +1523,6 @@
 			isa = PBXTargetDependency;
 			target = C44FC06D2641AF1B00459E01 /* BioViewer */;
 			targetProxy = C44FC08B2641AF1E00459E01 /* PBXContainerItemProxy */;
-		};
-		C572BD2E274160C900FF010D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			platformFilter = ios;
-			target = C572BD24274160C900FF010D /* ProteinThumbnail */;
-			targetProxy = C572BD2D274160C900FF010D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2001,70 +1821,6 @@
 			};
 			name = Release;
 		};
-		C572BD32274160C900FF010D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_ENTITLEMENTS = ProteinThumbnail/ProteinThumbnail.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4ND4CZC2FK;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ProteinThumbnail/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ProteinThumbnail;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.ProteinThumbnail;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
-			};
-			name = Debug;
-		};
-		C572BD33274160C900FF010D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_ENTITLEMENTS = ProteinThumbnail/ProteinThumbnail.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4ND4CZC2FK;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ProteinThumbnail/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ProteinThumbnail;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.raulmonton.bioviewer.ProteinThumbnail;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2100,15 +1856,6 @@
 			buildConfigurations = (
 				C44FC09A2641AF1E00459E01 /* Debug */,
 				C44FC09B2641AF1E00459E01 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C572BD31274160C900FF010D /* Build configuration list for PBXNativeTarget "ProteinThumbnail" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C572BD32274160C900FF010D /* Debug */,
-				C572BD33274160C900FF010D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

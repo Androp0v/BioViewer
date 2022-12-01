@@ -47,12 +47,18 @@ class AppState: ObservableObject {
     }
     
     static let hasDepthPrePasses = { () -> Bool in
+        // FIXME: 
+        return false
         guard let device = MTLCreateSystemDefaultDevice() else {
             return false
         }
         if !device.supportsFamily(.apple1) {
             return false
         }
+        return true
+    }
+    
+    static var hasExpandableBillboardSupport: Bool {
         return true
     }
     

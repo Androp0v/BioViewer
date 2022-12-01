@@ -65,29 +65,64 @@ extension ProteinRenderer {
         // MARK: - Impostor sphere rendering
         
         // Set pipeline state for the variant
-        var variantPipelineState: MTLRenderPipelineState?
-        switch variant {
-        case .solidSpheres, .ballAndSticks:
-            variantPipelineState = impostorRenderingPipelineState
-        case .solidSpheresHQ, .ballAndSticksHQ:
-            variantPipelineState = impostorHQRenderingPipelineState
+        if AppState.hasExpandableBillboardSupport {
+            guard let impostorMeshRenderingPipelineState else {
+                return
+            }
+            renderCommandEncoder.setRenderPipelineState(impostorMeshRenderingPipelineState)
+            
+        } else {
+            var variantPipelineState: MTLRenderPipelineState?
+            switch variant {
+            case .solidSpheres, .ballAndSticks:
+                variantPipelineState = impostorRenderingPipelineState
+            case .solidSpheresHQ, .ballAndSticksHQ:
+                variantPipelineState = impostorHQRenderingPipelineState
+            }
+            guard let impostorRenderingPipelineState = variantPipelineState else {
+                return
+            }
+            renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
         }
-        guard let impostorRenderingPipelineState = variantPipelineState else {
-            return
-        }
-        renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
 
         // Add other buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.billboardMappingBuffer,
-                                             offset: 0,
-                                             index: 2)
-        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomRadiusBuffer,
-                                             offset: 0,
-                                             index: 3)
-        
-        renderCommandEncoder.setVertexBuffer(atomColorBuffer,
-                                             offset: 0,
-                                             index: 4)
+        if AppState.hasExpandableBillboardSupport {
+            guard let expandableBillboardBuffers else {
+                renderCommandEncoder.endEncoding()
+                return
+            }
+            renderCommandEncoder.setObjectBuffer(
+                expandableBillboardBuffers.atomWorldCenterBuffer,
+                offset: 0,
+                index: 1
+            )
+            renderCommandEncoder.setObjectBuffer(
+                uniformBuffer,
+                offset: 0,
+                index: 5
+            )
+            renderCommandEncoder.setObjectBuffer(
+                expandableBillboardBuffers.atomRadiusBuffer,
+                offset: 0,
+                index: 3
+            )
+            renderCommandEncoder.setObjectBuffer(
+                atomColorBuffer,
+                offset: 0,
+                index: 4
+            )
+        } else {
+            renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.billboardMappingBuffer,
+                                                 offset: 0,
+                                                 index: 2)
+            renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomRadiusBuffer,
+                                                 offset: 0,
+                                                 index: 3)
+            
+            renderCommandEncoder.setVertexBuffer(atomColorBuffer,
+                                                 offset: 0,
+                                                 index: 4)
+        }
         
         renderCommandEncoder.setFragmentBuffer(uniformBuffer,
                                                offset: 0,
@@ -105,12 +140,29 @@ extension ProteinRenderer {
             return
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
+        
+        // FIXME:
+        let debugBuffer = device.makeBuffer(length: 8 * MemoryLayout<simd_float4>.stride)
+        renderCommandEncoder.setObjectBuffer(debugBuffer, offset: 0, index: 30)
 
-        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                   indexCount: indexBufferRegion.length,
-                                                   indexType: .uint32,
-                                                   indexBuffer: impostorIndexBuffer,
-                                                   indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+        if AppState.hasExpandableBillboardSupport {
+            let oGroups   = MTLSize(width: configurationSelector.atomsPerConfiguration, height: 1, depth: 1)
+            let oThreads  = MTLSize(width: 1, height: 1, depth: 1)
+            let mThreads  = MTLSize(width: 4, height: 1, depth: 1)
+            renderCommandEncoder.drawMeshThreadgroups(oGroups, threadsPerObjectThreadgroup: oThreads, threadsPerMeshThreadgroup: mThreads)
+        } else {
+            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
+                                                       indexCount: indexBufferRegion.length,
+                                                       indexType: .uint32,
+                                                       indexBuffer: impostorIndexBuffer,
+                                                       indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+        }
+        
+        // FIXME:
+        let randomBufferToSwift = debugBuffer!.contents().assumingMemoryBound(to: simd_float4.self)
+        for i in 0..<8 {
+            print(randomBufferToSwift[i])
+        }
         
         // MARK: - Bond rendering
         if renderBonds {

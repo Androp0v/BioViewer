@@ -55,7 +55,9 @@ class ProteinRenderer: NSObject {
     
     /// Pipeline state for the depth pre-pass.
     var depthPrePassRenderPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the opaque geometry rendering.
+    /// Pipeline state for mesh-based impostor geometry rendering.
+    var impostorMeshRenderingPipelineState: MTLRenderPipelineState?
+    /// Pipeline state for impostor geometry rendering.
     var impostorRenderingPipelineState: MTLRenderPipelineState?
     /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
     var impostorHQRenderingPipelineState: MTLRenderPipelineState?
@@ -82,6 +84,8 @@ class ProteinRenderer: NSObject {
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader when using a dense mesh
     var opaqueIndexBuffer: MTLBuffer?
     
+    /// Used to pass the geometry data to the shader when using expandable billboards
+    var expandableBillboardBuffers: ExpandableBillboardBuffers?
     /// Used to pass the geometry vertex data to the shader when using billboarding
     var billboardVertexBuffers: BillboardVertexBuffers?
     /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
@@ -244,6 +248,9 @@ class ProteinRenderer: NSObject {
         }
         makeOpaqueRenderPipelineState(device: device)
         makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
+        if AppState.hasExpandableBillboardSupport {
+            makeImpostorMeshRenderPipelineState(device: device)
+        }
         makeImpostorBondRenderPipelineState(device: device, variant: .solidSpheres)
         #if DEBUG
         makeDebugPointsPipelineState(device: device)
@@ -267,7 +274,7 @@ class ProteinRenderer: NSObject {
         depthState = device.makeDepthStencilState(descriptor: depthDescriptor)
     }
 
-    // MARK: - Public functions
+    // MARK: - Buffer handling
         
     func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) {
         
@@ -320,6 +327,23 @@ class ProteinRenderer: NSObject {
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
+    func setExpandableBillboardBuffers(
+        expandableBillboardBuffers: ExpandableBillboardBuffers,
+        subunitBuffer: MTLBuffer,
+        atomTypeBuffer: MTLBuffer,
+        configurationSelector: ConfigurationSelector
+    ) {
+        bufferResourceLock.lock()
+        self.expandableBillboardBuffers = expandableBillboardBuffers
+        self.subunitBuffer = subunitBuffer
+        self.atomTypeBuffer = atomTypeBuffer
+        self.scene.needsRedraw = true
+        self.scene.lastColorPassRequest = CACurrentMediaTime()
+        self.scene.configurationSelector = configurationSelector
+        bufferResourceLock.unlock()
+    }
+    
+    /// Sets the necessary buffers to display a protein in the renderer using billboarding
     func setColorBuffer(colorBuffer: inout MTLBuffer) {
         bufferResourceLock.lock()
         self.atomColorBuffer = colorBuffer
@@ -353,6 +377,8 @@ class ProteinRenderer: NSObject {
         self.scene.needsRedraw = true
         bufferResourceLock.unlock()
     }
+    
+    // MARK: - Remake pipelines
     
     /// Make new impostor pipeline variant.
     func remakeImpostorPipelineForVariant(variant: ImpostorRenderPassVariant) {

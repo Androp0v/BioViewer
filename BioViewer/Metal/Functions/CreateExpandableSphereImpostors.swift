@@ -1,8 +1,8 @@
 //
-//  CreateImpostorSpheres.swift
+//  CreateExpandableSphereImpostors.swift
 //  BioViewer
 //
-//  Created by Raúl Montón Pinillos on 21/10/21.
+//  Created by Raúl Montón Pinillos on 30/11/22.
 //
 
 import Foundation
@@ -14,24 +14,21 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(
+    public func createExpandableSphereImpostors(
         proteins: [Protein],
         atomRadii: AtomRadii
     ) -> (
-        vertexData: BillboardVertexBuffers?,
+        vertexData: ExpandableBillboardBuffers?,
         subunitData: MTLBuffer?,
-        atomTypeData: MTLBuffer?,
-        indexData: MTLBuffer?
+        atomTypeData: MTLBuffer?
     ) {
-
-        let impostorTriangleCount = 2
         
         // Create subunit data array
         var subunitData = [Int16]()
         for protein in proteins {
             guard let subunits = protein.subunits else {
                 NSLog("Unable to create subunit data array buffer: protein has no subunits")
-                return (nil, nil, nil, nil)
+                return (nil, nil, nil)
             }
             for index in 0..<protein.subunitCount {
                 subunitData.append(contentsOf: Array(repeating: Int16(index),
@@ -64,7 +61,7 @@ extension MetalScheduler {
         }
 
         // Populate buffers
-        let billboardVertexBuffers = BillboardVertexBuffers(
+        let expandableBillboardBuffers = ExpandableBillboardBuffers(
             device: device,
             atomCounts: atomCounts,
             configurationCounts: configurationCounts
@@ -77,9 +74,6 @@ extension MetalScheduler {
         let atomTypeBuffer = device.makeBuffer(
             bytes: atomIdentifierData,
             length: bufferAtomCount * MemoryLayout<UInt16>.stride
-        )
-        let generatedIndexBuffer = device.makeBuffer(
-            length: bufferAtomAndConfigurationCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
         )
 
         metalDispatchQueue.sync {
@@ -104,13 +98,13 @@ extension MetalScheduler {
             }
 
             // Check if the function needs to be compiled
-            if createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
-                createSphereModelBundle.createPipelineState(functionName: "createImpostorSpheres",
+            if createExpandableSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
+                createExpandableSphereModelBundle.createPipelineState(functionName: "createExpandableBillboardSpheres",
                                                             library: self.library,
                                                             device: self.device,
                                                             constantValues: nil)
             }
-            guard let pipelineState = createSphereModelBundle.getPipelineState(functionParameters: nil) else {
+            guard let pipelineState = createExpandableSphereModelBundle.getPipelineState(functionParameters: nil) else {
                 return
             }
 
@@ -124,23 +118,13 @@ extension MetalScheduler {
             computeEncoder.setBuffer(atomTypeBuffer,
                                      offset: 0,
                                      index: 1)
-            
-            computeEncoder.setBuffer(billboardVertexBuffers?.positionBuffer,
-                                     offset: 0,
-                                     index: 2)
-            computeEncoder.setBuffer(billboardVertexBuffers?.atomWorldCenterBuffer,
+
+            computeEncoder.setBuffer(expandableBillboardBuffers?.atomWorldCenterBuffer,
                                      offset: 0,
                                      index: 3)
-            computeEncoder.setBuffer(billboardVertexBuffers?.billboardMappingBuffer,
-                                     offset: 0,
-                                     index: 4)
-            computeEncoder.setBuffer(billboardVertexBuffers?.atomRadiusBuffer,
+            computeEncoder.setBuffer(expandableBillboardBuffers?.atomRadiusBuffer,
                                      offset: 0,
                                      index: 5)
-            
-            computeEncoder.setBuffer(generatedIndexBuffer,
-                                     offset: 0,
-                                     index: 6)
             
             // Set uniform buffer contents
             let uniformBuffer = device.makeBuffer(
@@ -155,19 +139,11 @@ extension MetalScheduler {
             computeEncoder.setBytes(&atomRadii, length: MemoryLayout<AtomRadii>.stride, index: 8)
             
             // Schedule the threads
-            if device.supportsFamily(.common3) {
-                // Create threads and threadgroup sizes
-                let threadsPerArray = MTLSizeMake(bufferAtomAndConfigurationCount, 1, 1)
-                let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
-                // Dispatch threads
-                computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
-            } else {
-                // LEGACY: Older devices do not support non-uniform threadgroup sizes
-                let arrayLength = bufferAtomAndConfigurationCount
-                MetalLegacySupport.legacyDispatchThreadsForArray(commandEncoder: computeEncoder,
-                                                                 length: arrayLength,
-                                                                 pipelineState: pipelineState)
-            }
+            // Create threads and threadgroup sizes
+            let threadsPerArray = MTLSizeMake(bufferAtomAndConfigurationCount, 1, 1)
+            let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
+            // Dispatch threads
+            computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
 
             // REQUIRED: End the compute encoder encoding
             computeEncoder.endEncoding()
@@ -178,6 +154,6 @@ extension MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (billboardVertexBuffers, subunitBuffer, atomTypeBuffer, generatedIndexBuffer)
+        return (expandableBillboardBuffers, subunitBuffer, atomTypeBuffer)
     }
 }
