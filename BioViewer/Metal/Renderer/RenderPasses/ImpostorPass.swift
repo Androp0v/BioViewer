@@ -141,27 +141,19 @@ extension ProteinRenderer {
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
         
-        // FIXME:
-        let debugBuffer = device.makeBuffer(length: 8 * MemoryLayout<simd_float4>.stride)
-        renderCommandEncoder.setObjectBuffer(debugBuffer, offset: 0, index: 30)
-
         if AppState.hasExpandableBillboardSupport {
             let oGroups   = MTLSize(width: configurationSelector.atomsPerConfiguration, height: 1, depth: 1)
             let oThreads  = MTLSize(width: 1, height: 1, depth: 1)
             let mThreads  = MTLSize(width: 4, height: 1, depth: 1)
             renderCommandEncoder.drawMeshThreadgroups(oGroups, threadsPerObjectThreadgroup: oThreads, threadsPerMeshThreadgroup: mThreads)
         } else {
-            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                       indexCount: indexBufferRegion.length,
-                                                       indexType: .uint32,
-                                                       indexBuffer: impostorIndexBuffer,
-                                                       indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
-        }
-        
-        // FIXME:
-        let randomBufferToSwift = debugBuffer!.contents().assumingMemoryBound(to: simd_float4.self)
-        for i in 0..<8 {
-            print(randomBufferToSwift[i])
+            renderCommandEncoder.drawIndexedPrimitives(
+                type: .triangle,
+                indexCount: indexBufferRegion.length,
+                indexType: .uint32,
+                indexBuffer: impostorIndexBuffer,
+                indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride
+            )
         }
         
         // MARK: - Bond rendering

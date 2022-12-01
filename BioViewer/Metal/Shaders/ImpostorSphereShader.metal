@@ -117,13 +117,12 @@ struct payload_t
     uint8_t indices[6];
 };
 
-[[object]]
+[[object, max_total_threads_per_threadgroup(1), max_total_threadgroups_per_mesh_grid(4)]]
 void impostorMeshObjectStageFunction(object_data payload_t &payload [[payload]],
                                      mesh_grid_properties meshGridProperties,
                                      const device simd_float3 *billboard_world_center [[ buffer(1) ]],
                                      const device half *atom_radius [[ buffer(3) ]],
                                      const device half3 *atomColor [[ buffer(4) ]],
-                                     device float4 *debugOutput [[ buffer(30)]],
                                      constant FrameData& frameData [[ buffer(5) ]],
                                      uint3 positionInGrid [[threadgroup_position_in_grid]]) {
     
@@ -142,25 +141,7 @@ void impostorMeshObjectStageFunction(object_data payload_t &payload [[payload]],
     
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
-    // FIXME:
-    /*
-    model_view_matrix = simd_float4x4(
-                                      simd_float4(1, 0, 0, 0),
-                                      simd_float4(0, 1, 0, 0),
-                                      simd_float4(0, 0, 1, 0),
-                                      simd_float4(0, 0, 57.60942, 1)
-                                      );
-     */
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
-    // FIXME:
-    /*
-    projectionMatrix = simd_float4x4(
-                                     simd_float4(9.129419, 0.0, 0.0, 0.0),
-                                     simd_float4(0.0, 9.237875, 0.0, 0.0),
-                                     simd_float4(0.0, 0.0, 5.145922, -1.0),
-                                     simd_float4(0.0, 0.0, -247.48123, 0.0)
-                                     );
-     */
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
     
     // Rotate the model in world space
@@ -192,22 +173,6 @@ void impostorMeshObjectStageFunction(object_data payload_t &payload [[payload]],
     for (int i = 0; i < 4; i++) {
         payload.vertices[i].position = projectionMatrix * eye_position[i];
     }
-    debugOutput[atom_index] = float4(1.0, 1.0, 1.0, 1.0);
-    // FIXME:
-    /*
-    payload.vertices[0].position = float4((rotated_atom_centers.xy + float2(0.25, 0.25)).xy, 0.5, 1.0);
-    payload.vertices[1].position = float4((rotated_atom_centers.xy + float2(-0.25, 0.25)).xy, 0.5, 1.0);
-    payload.vertices[2].position = float4((rotated_atom_centers.xy + float2(-0.25, -0.25)).xy, 0.5, 1.0);
-    payload.vertices[3].position = float4((rotated_atom_centers.xy + float2(0.25, -0.25)).xy, 0.5, 1.0);
-     */
-    /*
-    payload.vertices[0].position.z = 0.5;
-    payload.vertices[0].position.x = 0.0;
-    payload.vertices[0].position.y = 0.0;
-    payload.vertices[1].position.z = 0.5;
-    payload.vertices[2].position.z = 0.5;
-    payload.vertices[3].position.z = 0.5;
-     */
 
     // Set the indices
     
@@ -239,16 +204,21 @@ void impostorMeshObjectStageFunction(object_data payload_t &payload [[payload]],
 struct MeshVertexOut{
     float4 position [[position]];
     half2 billboardMapping;
+    
+    // FIXME: This should be per-primitive
+    half3 color;
+    float3 atomCenter;
+    half atom_radius;
 };
 
 // Per-primitive output
 struct MeshPrimitiveOut{
-    float3 atomCenter;
-    half atom_radius;
-    half3 color;
+    //float3 atomCenter;
+    //half atom_radius;
+    // half3 color;
 };
 
-[[mesh]]
+[[mesh, max_total_threads_per_threadgroup(4)]]
 void impostorMeshShaderMeshStageFunction(metal::mesh<MeshVertexOut, MeshPrimitiveOut, 4, 2, metal::topology::triangle> output,
                                          const object_data payload_t& payload [[payload]],
                                          uint lid [[thread_index_in_threadgroup]]) {
@@ -260,15 +230,21 @@ void impostorMeshShaderMeshStageFunction(metal::mesh<MeshVertexOut, MeshPrimitiv
         MeshVertexOut vertex_out;
         vertex_out.position = payload.vertices[lid].position;
         vertex_out.billboardMapping = payload.vertices[lid].billboardMapping;
+        
+        // FIXME: This should be per-primitive
+        vertex_out.color = payload.color;
+        vertex_out.atomCenter = payload.atomCenter;
+        vertex_out.atom_radius = payload.atom_radius;
+        
         output.set_vertex(lid, vertex_out);
     }
     
     // Set primitive data
     if (lid < payload.primitiveCount) {
         MeshPrimitiveOut primitive_out;
-        primitive_out.atomCenter = payload.atomCenter;
-        primitive_out.atom_radius = payload.atom_radius;
-        primitive_out.color = payload.color;
+        // primitive_out.atomCenter = payload.atomCenter;
+        // primitive_out.atom_radius = payload.atom_radius;
+        // primitive_out.color = payload.color;
         output.set_primitive(lid, primitive_out);
         
         // Set the output indices.
@@ -286,7 +262,11 @@ struct ImpostorFragmentOut{
     float depth [[ depth(less) ]];
 };
 
-ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
+ImpostorFragmentOut impostor_fragment_common(float4 position,
+                                             float3 atomCenter,
+                                             half2 billboardMapping,
+                                             half atom_radius,
+                                             half3 color,
                                              constant FrameData &frameData,
                                              const depth2d<float> shadowMap,
                                              sampler shadowSampler) {
@@ -294,7 +274,7 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
     ImpostorFragmentOut output;
     
     // dot = x^2 + y^2
-    half xy_squared_length = dot(impostor_vertex.billboardMapping, impostor_vertex.billboardMapping);
+    half xy_squared_length = dot(billboardMapping, billboardMapping);
     
     // Discard pixels outside the sphere center (no need to do the sqrt)
     if (xy_squared_length > 1) {
@@ -306,15 +286,15 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
     half reflectivity = 0.3;
     
     // Add base color
-    half3 shadedColor = impostor_vertex.color.rgb;
+    half3 shadedColor = color.rgb;
     
     // Compute the normal in atom space
-    half3 normal = half3(impostor_vertex.billboardMapping.x,
-                         impostor_vertex.billboardMapping.y,
+    half3 normal = half3(billboardMapping.x,
+                         billboardMapping.y,
                          -sqrt(1.0 - xy_squared_length));
     
     // Compute the position of the fragment in camera space
-    float3 spherePosition = (float3(normal) * impostor_vertex.atom_radius) + impostor_vertex.atomCenter;
+    float3 spherePosition = (float3(normal) * atom_radius) + atomCenter;
     
     // Compute Phong diffuse component
     half phongDiffuse = dot(normal, sunRayDirection) * reflectivity;
@@ -407,8 +387,8 @@ fragment ImpostorFragmentOut impostor_fragment_mesh(MeshFragmentIn impostor_mesh
                                                     // FIXME: DepthPrePassFragmentOut depth_pre_pass_output) {
                                                     ) {
     // FIXME: Re-implement this
-    /*
     // Depth testing with precomputed depth upper bound
+    /*
     if (!is_high_quality_frame) {
         float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
         float primitiveDepth = impostor_mesh_vertex.vertex_out.position.z;
@@ -416,6 +396,8 @@ fragment ImpostorFragmentOut impostor_fragment_mesh(MeshFragmentIn impostor_mesh
             discard_fragment();
         }
     }
+     */
+    
     // FIXME:
 
     ImpostorVertexOut workaroundVertex;
@@ -423,16 +405,18 @@ fragment ImpostorFragmentOut impostor_fragment_mesh(MeshFragmentIn impostor_mesh
     workaroundVertex.position = impostor_mesh_vertex.vertex_out.position;
     workaroundVertex.billboardMapping = impostor_mesh_vertex.vertex_out.billboardMapping;
     
-    workaroundVertex.atom_radius = impostor_mesh_vertex.primitive_out.atom_radius;
-    workaroundVertex.atomCenter = impostor_mesh_vertex.primitive_out.atomCenter;
-    workaroundVertex.color = impostor_mesh_vertex.primitive_out.color;
+    workaroundVertex.atom_radius = impostor_mesh_vertex.vertex_out.atom_radius;
+    workaroundVertex.atomCenter = impostor_mesh_vertex.vertex_out.atomCenter;
+    workaroundVertex.color = impostor_mesh_vertex.vertex_out.color;
     
-    return impostor_fragment_common(workaroundVertex, frameData, shadowMap, shadowSampler);
-     */
-    ImpostorFragmentOut fragment_out;
-    fragment_out.color = half4(impostor_mesh_vertex.vertex_out.position.y / 1000, 0.0, 1.0, 1.0);
-    fragment_out.depth = impostor_mesh_vertex.vertex_out.position.z;
-    return fragment_out;
+    return impostor_fragment_common(impostor_mesh_vertex.vertex_out.position,
+                                    impostor_mesh_vertex.vertex_out.atomCenter,
+                                    impostor_mesh_vertex.vertex_out.billboardMapping,
+                                    impostor_mesh_vertex.vertex_out.atom_radius,
+                                    impostor_mesh_vertex.vertex_out.color,
+                                    frameData,
+                                    shadowMap,
+                                    shadowSampler);
 }
 
 // [[stage_in]] uses the output from the basic_vertex vertex function
@@ -449,14 +433,28 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
             discard_fragment();
         }
     }
-    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler);
+    return impostor_fragment_common(impostor_vertex.position,
+                                    impostor_vertex.atomCenter,
+                                    impostor_vertex.billboardMapping,
+                                    impostor_vertex.atom_radius,
+                                    impostor_vertex.color,
+                                    frameData,
+                                    shadowMap,
+                                    shadowSampler);
 }
 
 fragment ImpostorFragmentOut impostor_fragment_no_prepass(ImpostorVertexOut impostor_vertex [[stage_in]],
                                                           constant FrameData &frameData [[ buffer(1) ]],
                                                           const depth2d<float> shadowMap [[ texture(1) ]],
                                                           sampler shadowSampler [[ sampler(0) ]]) {
-    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler);
+    return impostor_fragment_common(impostor_vertex.position,
+                                    impostor_vertex.atomCenter,
+                                    impostor_vertex.billboardMapping,
+                                    impostor_vertex.atom_radius,
+                                    impostor_vertex.color,
+                                    frameData,
+                                    shadowMap,
+                                    shadowSampler);
 }
 
 
