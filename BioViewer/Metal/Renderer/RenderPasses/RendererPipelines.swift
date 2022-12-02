@@ -158,6 +158,9 @@ extension ProteinRenderer {
         if AppState.hasDepthPrePasses() {
             pipelineStateDescriptor.colorAttachments[1].pixelFormat = DepthPrePassTextures.pixelFormat
         }
+        
+        // Specify the mesh payload size
+        pipelineStateDescriptor.payloadMemoryLength = 16 * 1024
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float

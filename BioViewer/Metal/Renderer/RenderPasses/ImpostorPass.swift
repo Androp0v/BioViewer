@@ -142,9 +142,10 @@ extension ProteinRenderer {
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
         
         if AppState.hasExpandableBillboardSupport {
-            let oGroups   = MTLSize(width: configurationSelector.atomsPerConfiguration, height: 1, depth: 1)
-            let oThreads  = MTLSize(width: 1, height: 1, depth: 1)
-            let mThreads  = MTLSize(width: 4, height: 1, depth: 1)
+            // FIXME: All this
+            let oGroups   = MTLSize(width: 443, height: 1, depth: 1)
+            let oThreads  = MTLSize(width: 512, height: 1, depth: 1)
+            let mThreads  = MTLSize(width: 64, height: 1, depth: 1)
             renderCommandEncoder.drawMeshThreadgroups(oGroups, threadsPerObjectThreadgroup: oThreads, threadsPerMeshThreadgroup: mThreads)
         } else {
             renderCommandEncoder.drawIndexedPrimitives(

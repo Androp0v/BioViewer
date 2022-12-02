@@ -100,102 +100,56 @@ vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_positio
 
 // MARK: - Mesh Object Stage function
 
-struct MeshObjectOutput{
-    float4 position [[position]];
-    half2 billboardMapping;
-};
-
-struct payload_t
+struct atom_block_payload_t
 {
-    MeshObjectOutput vertices[4];
-    float3 atomCenter;
-    half atom_radius;
-    half3 color;
+    float3 rotated_atom_centers[512];
+    half atom_radius[512];
+    half3 color[512];
     
-    uint8_t primitiveCount;
-    uint8_t vertexCount;
-    uint8_t indices[6];
+    uint16_t atom_count;
+    simd_float4x4 model_view_matrix;
+    simd_float4x4 projection_matrix;
 };
 
-[[object, max_total_threads_per_threadgroup(1), max_total_threadgroups_per_mesh_grid(4)]]
-void impostorMeshObjectStageFunction(object_data payload_t &payload [[payload]],
+[[object, max_total_threads_per_threadgroup(512), max_total_threadgroups_per_mesh_grid(8)]]
+void impostorMeshObjectStageFunction(object_data atom_block_payload_t &payload [[payload]],
                                      mesh_grid_properties meshGridProperties,
-                                     const device simd_float3 *billboard_world_center [[ buffer(1) ]],
+                                     const device simd_float3 *atom_world_centers [[ buffer(1) ]],
                                      const device half *atom_radius [[ buffer(3) ]],
                                      const device half3 *atomColor [[ buffer(4) ]],
                                      constant FrameData& frameData [[ buffer(5) ]],
-                                     uint3 positionInGrid [[threadgroup_position_in_grid]]) {
+                                     uint lid [[thread_index_in_threadgroup]],
+                                     uint3 positionInGrid [[threadgroup_position_in_grid]])
+{
+    uint atom_index = lid + positionInGrid.x * 512;
+    uint atom_block_index = lid;
     
-    uint atom_index = positionInGrid.x;
-    
-    // Set attributes
-    payload.vertices[0].billboardMapping = simd_half2(1, 1);
-    payload.vertices[1].billboardMapping = simd_half2(-1, 1);
-    payload.vertices[2].billboardMapping = simd_half2(-1, -1);
-    payload.vertices[3].billboardMapping = simd_half2(1, -1);
+    // Set output number of atoms
+    payload.atom_count = 512;
     
     // Set color and radius
-    half radius = atom_radius[atom_index];
-    payload.atom_radius = radius;
-    payload.color = atomColor[atom_index];
+    payload.atom_radius[atom_block_index] = atom_radius[atom_index];
+    payload.color[atom_block_index] = atomColor[atom_index];
     
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
     
-    // Rotate the model in world space
-    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[atom_index].xyz, 1.0);
+    // Rotate the model in world space once per atom
+    payload.rotated_atom_centers[atom_block_index] = (rotation_matrix * float4(atom_world_centers[atom_index].xyz, 1.0)).xyz;
     
-    // Get the billboard vertex position, relative to the atom center
-    float4 billboard_vertex[4];
-    billboard_vertex[0] = float4(radius, radius, 0.0, 1.0);
-    billboard_vertex[1] = float4(-radius, radius, 0.0, 1.0);
-    billboard_vertex[2] = float4(-radius, -radius, 0.0, 1.0);
-    billboard_vertex[3] = float4(radius, -radius, 0.0, 1.0);
-    
-    // Translate the triangles to their (rotated) world positions
-    for (int i = 0; i < 4; i++) {
-        billboard_vertex[i].xyz = billboard_vertex[i].xyz + rotated_atom_centers.xyz;
-    }
-    
-    // Transform the world space coordinates to eye space coordinates
-    float4 eye_position[4];
-    for (int i = 0; i < 4; i++) {
-        // Transform the world space coordinates to eye space coordinates
-        eye_position[i] = model_view_matrix * billboard_vertex[i];
-    }
-    
-    // Transform the atom positions from world space to eye space
-    payload.atomCenter = (model_view_matrix * rotated_atom_centers).xyz;
-    
-    // Transform the eye space coordinates to normalized device coordinates
-    for (int i = 0; i < 4; i++) {
-        payload.vertices[i].position = projectionMatrix * eye_position[i];
-    }
-
-    // Set the indices
-    
-    // Triangle 1
-    payload.indices[0] = 0;
-    payload.indices[1] = 2;
-    payload.indices[2] = 1;
-    
-    // Triangle 2
-    payload.indices[3] = 2;
-    payload.indices[4] = 0;
-    payload.indices[5] = 3;
-    
-    // Mesh properties
-    
-    // Output is a quad, only 2 triangles
-    payload.primitiveCount = 2;
-    // Output is a quad, only 4 vertices
-    payload.vertexCount = 4;
+    // Save the matrices
+    payload.model_view_matrix = model_view_matrix;
+    payload.projection_matrix = projectionMatrix;
     
     // Set the output submesh count for the mesh shader.
-    // Because the mesh shader is only producing one mesh, the threadgroup grid size is 1 x 1 x 1.
-    meshGridProperties.set_threadgroups_per_grid(uint3(1, 1, 1));
+    //
+    // Each atom block has up to 512 atoms, each mesh can handle up to
+    // 64 atoms, so 512 / 64 = 8 threadgroups are needed, and 8 meshes
+    // are created (1 mesh per threadgroup).
+    // FIXME: meshGridProperties.set_threadgroups_per_grid(uint3(8, 1, 1));
+    meshGridProperties.set_threadgroups_per_grid(uint3(8, 1, 1));
 }
 
 // MARK: - Mesh Mesh Stage function
@@ -218,40 +172,88 @@ struct MeshPrimitiveOut{
     // half3 color;
 };
 
-[[mesh, max_total_threads_per_threadgroup(4)]]
-void impostorMeshShaderMeshStageFunction(metal::mesh<MeshVertexOut, MeshPrimitiveOut, 4, 2, metal::topology::triangle> output,
-                                         const object_data payload_t& payload [[payload]],
-                                         uint lid [[thread_index_in_threadgroup]]) {
+[[mesh, max_total_threads_per_threadgroup(64)]]
+void impostorMeshShaderMeshStageFunction(metal::mesh<MeshVertexOut, MeshPrimitiveOut, 256, 128, metal::topology::triangle> output,
+                                         const object_data atom_block_payload_t &payload [[payload]],
+                                         uint lid [[thread_index_in_threadgroup]],
+                                         uint tid [[threadgroup_position_in_grid]]) {
     // Set the number of primitives for the entire mesh.
-    output.set_primitive_count(payload.primitiveCount);
+    output.set_primitive_count(payload.atom_count * 2);
     
-    // Set vertex data
-    if (lid < payload.vertexCount) {
-        MeshVertexOut vertex_out;
-        vertex_out.position = payload.vertices[lid].position;
-        vertex_out.billboardMapping = payload.vertices[lid].billboardMapping;
+    uint atom_index_in_payload = lid + tid * 64;
+    
+    // Set vertex data. Each mesh thread processes one atom, creating 4 vertices.
+    if (lid < payload.atom_count * 4) {
+        
+        MeshVertexOut atom_vertices[4];
+        
+        // Set attributes
+        atom_vertices[0].billboardMapping = simd_half2(1, 1);
+        atom_vertices[1].billboardMapping = simd_half2(-1, 1);
+        atom_vertices[2].billboardMapping = simd_half2(-1, -1);
+        atom_vertices[3].billboardMapping = simd_half2(1, -1);
+        
+        // Get the billboard vertex position, relative to the atom center
+        half radius = payload.atom_radius[atom_index_in_payload];
+        float4 billboard_vertex[4];
+        billboard_vertex[0] = float4(radius, radius, 0.0, 1.0);
+        billboard_vertex[1] = float4(-radius, radius, 0.0, 1.0);
+        billboard_vertex[2] = float4(-radius, -radius, 0.0, 1.0);
+        billboard_vertex[3] = float4(radius, -radius, 0.0, 1.0);
+        
+        // Translate the triangles to their (rotated) world positions
+        for (int i = 0; i < 4; i++) {
+            billboard_vertex[i].xyz = billboard_vertex[i].xyz + payload.rotated_atom_centers[atom_index_in_payload].xyz;
+        }
+        
+        // Transform the world space coordinates to eye space coordinates
+        float4 eye_position[4];
+        for (int i = 0; i < 4; i++) {
+            // Transform the world space coordinates to eye space coordinates
+            eye_position[i] = payload.model_view_matrix * billboard_vertex[i];
+        }
+        
+        // Transform the atom positions from world space to eye space
+        float3 atomCenter = (payload.model_view_matrix * float4(payload.rotated_atom_centers[atom_index_in_payload], 1.0)).xyz;
+        
+        // Transform the eye space coordinates to normalized device coordinates
+        for (int i = 0; i < 4; i++) {
+            atom_vertices[i].position = payload.projection_matrix * eye_position[i];
+        }
         
         // FIXME: This should be per-primitive
-        vertex_out.color = payload.color;
-        vertex_out.atomCenter = payload.atomCenter;
-        vertex_out.atom_radius = payload.atom_radius;
+        for (int i = 0; i < 4; i++) {
+            atom_vertices[i].color = payload.color[atom_index_in_payload];
+            atom_vertices[i].atomCenter = atomCenter;
+            atom_vertices[i].atom_radius = payload.atom_radius[atom_index_in_payload];
+        }
         
-        output.set_vertex(lid, vertex_out);
+        // Add vertex data to mesh
+        for (int i = 0; i < 4; i++) {
+            output.set_vertex(4 * lid + i, atom_vertices[i]);
+        }
     }
     
     // Set primitive data
-    if (lid < payload.primitiveCount) {
+    if (lid < payload.atom_count * 2) {
         MeshPrimitiveOut primitive_out;
         // primitive_out.atomCenter = payload.atomCenter;
         // primitive_out.atom_radius = payload.atom_radius;
         // primitive_out.color = payload.color;
-        output.set_primitive(lid, primitive_out);
+        output.set_primitive(2 * lid + 0, primitive_out);
+        output.set_primitive(2 * lid + 1, primitive_out);
         
         // Set the output indices.
-        uint i = (3*lid);
-        output.set_index(i+0, payload.indices[i+0]);
-        output.set_index(i+1, payload.indices[i+1]);
-        output.set_index(i+2, payload.indices[i+2]);
+        
+        // Triangle 1
+        output.set_index(6 * lid + 0, 4 * lid + 0);
+        output.set_index(6 * lid + 1, 4 * lid + 2);
+        output.set_index(6 * lid + 2, 4 * lid + 1);
+        
+        // Triangle 2
+        output.set_index(6 * lid + 3, 4 * lid + 2);
+        output.set_index(6 * lid + 4, 4 * lid + 0);
+        output.set_index(6 * lid + 5, 4 * lid + 3);
     }
 }
 
@@ -400,15 +402,6 @@ fragment ImpostorFragmentOut impostor_fragment_mesh(MeshFragmentIn impostor_mesh
     
     // FIXME:
 
-    ImpostorVertexOut workaroundVertex;
-    
-    workaroundVertex.position = impostor_mesh_vertex.vertex_out.position;
-    workaroundVertex.billboardMapping = impostor_mesh_vertex.vertex_out.billboardMapping;
-    
-    workaroundVertex.atom_radius = impostor_mesh_vertex.vertex_out.atom_radius;
-    workaroundVertex.atomCenter = impostor_mesh_vertex.vertex_out.atomCenter;
-    workaroundVertex.color = impostor_mesh_vertex.vertex_out.color;
-    
     return impostor_fragment_common(impostor_mesh_vertex.vertex_out.position,
                                     impostor_mesh_vertex.vertex_out.atomCenter,
                                     impostor_mesh_vertex.vertex_out.billboardMapping,
