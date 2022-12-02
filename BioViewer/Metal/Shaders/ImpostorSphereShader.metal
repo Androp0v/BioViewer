@@ -385,12 +385,10 @@ struct MeshFragmentIn
 fragment ImpostorFragmentOut impostor_fragment_mesh(MeshFragmentIn impostor_mesh_vertex [[stage_in]],
                                                     constant FrameData &frameData [[ buffer(1) ]],
                                                     const depth2d<float> shadowMap [[ texture(1) ]],
-                                                    sampler shadowSampler [[ sampler(0) ]]
-                                                    // FIXME: DepthPrePassFragmentOut depth_pre_pass_output) {
-                                                    ) {
+                                                    sampler shadowSampler [[ sampler(0) ]],
+                                                    DepthPrePassFragmentOut depth_pre_pass_output) {
     // FIXME: Re-implement this
     // Depth testing with precomputed depth upper bound
-    /*
     if (!is_high_quality_frame) {
         float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
         float primitiveDepth = impostor_mesh_vertex.vertex_out.position.z;
@@ -398,7 +396,6 @@ fragment ImpostorFragmentOut impostor_fragment_mesh(MeshFragmentIn impostor_mesh
             discard_fragment();
         }
     }
-     */
     
     // FIXME:
 

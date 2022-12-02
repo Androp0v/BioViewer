@@ -160,7 +160,7 @@ extension ProteinRenderer {
         }
         
         // Specify the mesh payload size
-        pipelineStateDescriptor.payloadMemoryLength = 16 * 1024
+        pipelineStateDescriptor.payloadMemoryLength = 15 * 1024
 
         // Specify the format of the depth texture
         pipelineStateDescriptor.depthAttachmentPixelFormat = .depth32Float
