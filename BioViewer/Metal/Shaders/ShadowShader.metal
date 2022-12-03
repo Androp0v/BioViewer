@@ -41,7 +41,7 @@ vertex ShadowVertexOut shadow_vertex(const device simd_half2 *vertex_position [[
     int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = billboard_mapping[atom_id_configuration];
+    normalized_impostor_vertex.billboardMapping = billboard_mapping[vertex_id];
     normalized_impostor_vertex.atom_radius = atom_radius[atom_id_configuration];
 
     // Fetch the matrices
