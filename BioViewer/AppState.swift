@@ -47,7 +47,6 @@ class AppState: ObservableObject {
     }
     
     static let hasDepthPrePasses = { () -> Bool in
-        return false
         guard let device = MTLCreateSystemDefaultDevice() else {
             return false
         }
