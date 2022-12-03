@@ -37,17 +37,19 @@ vertex ShadowVertexOut shadow_vertex(const device simd_half2 *vertex_position [[
 
     // Initialize the returned VertexOut structure
     ShadowVertexOut normalized_impostor_vertex;
+    int verticesPerAtom = 4;
+    int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Set attributes
-    normalized_impostor_vertex.billboardMapping = billboard_mapping[vertex_id];
-    normalized_impostor_vertex.atom_radius = atom_radius[vertex_id];
+    normalized_impostor_vertex.billboardMapping = billboard_mapping[atom_id_configuration];
+    normalized_impostor_vertex.atom_radius = atom_radius[atom_id_configuration];
 
     // Fetch the matrices
     simd_float4x4 shadow_projection_matrix = frameData.shadowProjectionMatrix;
     simd_float4x4 sun_rotation_matrix = frameData.sun_rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
+    float4 rotated_atom_centers = sun_rotation_matrix * float4(billboard_world_center[atom_id_configuration].xyz, 1.0);
 
     // Get the billboard vertex position, relative to the atom center
     float4 billboard_vertex = float4(float2(vertex_position[vertex_id].xy), 0.0, 1.0);

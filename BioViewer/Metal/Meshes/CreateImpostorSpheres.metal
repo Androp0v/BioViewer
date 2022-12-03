@@ -50,17 +50,11 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
     
     // MARK: - Atom centers
     
-    generatedAtomCenters[index+0] = position;
-    generatedAtomCenters[index+1] = position;
-    generatedAtomCenters[index+2] = position;
-    generatedAtomCenters[index+3] = position;
+    generatedAtomCenters[i] = position;
     
     // MARK: - Radius
     
-    generatedAtomRadius[index+0] = half(radius);
-    generatedAtomRadius[index+1] = half(radius);
-    generatedAtomRadius[index+2] = half(radius);
-    generatedAtomRadius[index+3] = half(radius);
+    generatedAtomRadius[i] = half(radius);
     
     // MARK: - Indices
 
