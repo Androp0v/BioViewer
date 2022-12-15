@@ -31,6 +31,9 @@ struct AppearanceSegmentProtein: View {
                     selectedColor: $proteinViewModel.backgroundColor
                 )
             }
+            #if targetEnvironment(macCatalyst)
+            .listRowInsets(EdgeInsets(top: .zero, leading: 12, bottom: .zero, trailing: 12))
+            #endif
             
             // MARK: - Visualization section
             

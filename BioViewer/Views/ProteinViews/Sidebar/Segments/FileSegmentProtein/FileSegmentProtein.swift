@@ -79,9 +79,7 @@ struct FileSegmentProtein: View {
                 }
             }
             #if targetEnvironment(macCatalyst)
-            .listRowInsets(EdgeInsets())
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
             #endif
                 
             // MARK: - Loaded models
@@ -100,9 +98,7 @@ struct FileSegmentProtein: View {
                         FileDetailsSection()
             })
             #if targetEnvironment(macCatalyst)
-            .listRowInsets(EdgeInsets())
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
             #endif
             
             // MARK: - Remove files
@@ -118,13 +114,11 @@ struct FileSegmentProtein: View {
                         .disabled(proteinViewModel.proteinCount == 0)
             })
             #if targetEnvironment(macCatalyst)
-            .listRowInsets(EdgeInsets())
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .listRowInsets(EdgeInsets(top: .zero, leading: 12, bottom: .zero, trailing: 12))
             #endif
         }
         .environment(\.defaultMinListHeaderHeight, 0)
-        .listStyle(InsetGroupedListStyle())
+        .listStyle(DefaultListStyle())
     }
 }
 
