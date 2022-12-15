@@ -55,6 +55,7 @@ vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_positio
     ImpostorVertexOut normalized_impostor_vertex;
     int verticesPerAtom = 4;
     int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
+    // int vertex_id_in_billboard = vertex_id - atom_id_configuration * 4;
     
     // Send vertex outside display bounds if disabled
     /*
@@ -66,7 +67,7 @@ vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_positio
     
     // Set attributes
     normalized_impostor_vertex.billboardMapping = billboard_mapping[vertex_id];
-    normalized_impostor_vertex.atom_radius = atom_radius[vertex_id];
+    normalized_impostor_vertex.atom_radius = atom_radius[atom_id_configuration];
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -74,7 +75,7 @@ vertex ImpostorVertexOut impostor_vertex(const device simd_half2 *vertex_positio
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
+    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[atom_id_configuration].xyz, 1.0);
 
     // Get the billboard vertex position, relative to the atom center
     float4 billboard_vertex = float4(float2(vertex_position[vertex_id].xy), 0.0, 1.0);
@@ -108,7 +109,8 @@ struct ImpostorFragmentOut{
 ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
                                              constant FrameData &frameData,
                                              const depth2d<float> shadowMap,
-                                             sampler shadowSampler) {
+                                             sampler shadowSampler,
+                                             float prepass_depth) {
     // Declare output
     ImpostorFragmentOut output;
     
@@ -120,13 +122,6 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
         discard_fragment();
     }
     
-    // Phong diffuse shading
-    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
-    half reflectivity = 0.3;
-    
-    // Add base color
-    half3 shadedColor = impostor_vertex.color.rgb;
-    
     // Compute the normal in atom space
     half3 normal = half3(impostor_vertex.billboardMapping.x,
                          impostor_vertex.billboardMapping.y,
@@ -135,10 +130,6 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
     // Compute the position of the fragment in camera space
     float3 spherePosition = (float3(normal) * impostor_vertex.atom_radius) + impostor_vertex.atomCenter;
     
-    // Compute Phong diffuse component
-    half phongDiffuse = dot(normal, sunRayDirection) * reflectivity;
-    shadedColor = saturate(shadedColor + phongDiffuse);
-    
     // Recompute fragment depth
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
     float4 sphereClipPosition = ( projectionMatrix * float4(spherePosition.x,
@@ -146,8 +137,22 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
                                                             spherePosition.z,
                                                             1.0) );
     float normalizedDeviceCoordinatesDepth = sphereClipPosition.z / sphereClipPosition.w;
+    if (normalizedDeviceCoordinatesDepth > prepass_depth) {
+        discard_fragment();
+    }
     output.depth = normalizedDeviceCoordinatesDepth;
     
+    // Phong diffuse shading
+    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
+    half reflectivity = 0.3;
+    
+    // Add base color
+    half3 shadedColor = impostor_vertex.color.rgb;
+    
+    // Compute Phong diffuse component
+    half phongDiffuse = dot(normal, sunRayDirection) * reflectivity;
+    shadedColor = saturate(shadedColor + phongDiffuse);
+        
     // Depth cueing
     if (frameData.has_depth_cueing) {
         // Rescale depth so only the part of the model that has a depth ranging 0.5 to 1.0
@@ -219,19 +224,20 @@ fragment ImpostorFragmentOut impostor_fragment(ImpostorVertexOut impostor_vertex
                                                sampler shadowSampler [[ sampler(0) ]],
                                                DepthPrePassFragmentOut depth_pre_pass_output) {
     // Depth testing with precomputed depth upper bound
+    float bounded_depth = 1.0;
     if (!is_high_quality_frame) {
-        float boundedDepth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
+        bounded_depth = depth_pre_pass_output.bounded_depth; // FIXME: Rename to depth
         float primitiveDepth = impostor_vertex.position.z;
-        if (boundedDepth + frameData.depth_bias < primitiveDepth) {
+        if (bounded_depth + frameData.depth_bias < primitiveDepth) {
             discard_fragment();
         }
     }
-    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler);
+    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler, bounded_depth);
 }
 
 fragment ImpostorFragmentOut impostor_fragment_no_prepass(ImpostorVertexOut impostor_vertex [[stage_in]],
                                                           constant FrameData &frameData [[ buffer(1) ]],
                                                           const depth2d<float> shadowMap [[ texture(1) ]],
                                                           sampler shadowSampler [[ sampler(0) ]]) {
-    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler);
+    return impostor_fragment_common(impostor_vertex, frameData, shadowMap, shadowSampler, 1.0);
 }

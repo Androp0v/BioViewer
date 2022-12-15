@@ -26,6 +26,8 @@ vertex DepthPrePassVertexOut depth_pre_pass_vertex(const device simd_half2 *vert
 
     // Initialize the returned DepthPrePassVertexOut structure
     DepthPrePassVertexOut normalized_depth_pre_pass_vertex;
+    int verticesPerAtom = 4;
+    int atom_id_configuration = (vertex_id / verticesPerAtom) % frameData.atoms_per_configuration;
     
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
@@ -33,7 +35,7 @@ vertex DepthPrePassVertexOut depth_pre_pass_vertex(const device simd_half2 *vert
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
     
     // Rotate the model in world space
-    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[vertex_id].xyz, 1.0);
+    float4 rotated_atom_centers = rotation_matrix * float4(billboard_world_center[atom_id_configuration].xyz, 1.0);
 
     // Get the billboard vertex position, relative to the atom center
     half3 billboard_vertex = half3(vertex_position[vertex_id].xy, 0.0);
