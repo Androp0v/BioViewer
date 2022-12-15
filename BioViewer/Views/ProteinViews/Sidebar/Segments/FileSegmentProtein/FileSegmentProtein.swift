@@ -37,24 +37,30 @@ struct FileSegmentProtein: View {
             // MARK: - Loaded files
             // First section hast 64pt padding to account for the
             // space under the segmented control.
-            Section(header: Text(NSLocalizedString("Loaded files", comment: ""))
+            Section(
+                header: Text(NSLocalizedString("Loaded files", comment: ""))
                         .padding(.top, 52)
-                        .padding(.bottom, 4)) {
+                        .padding(.bottom, 4)
+            ) {
                 if proteinViewModel.dataSource.files.count == 0 {
                     EmptyDataRow(text: NSLocalizedString("No imported files", comment: ""))
                 } else {
                     ForEach(Array(proteinViewModel.dataSource.files.enumerated()), id: \.offset) { index, file in
-                        FileRow(fileName: file.fileName,
-                                fileExtension: file.fileExtension,
-                                fileIndex: index,
-                                byteSize: file.byteSize)
+                        FileRow(
+                            fileName: file.fileName,
+                            fileExtension: file.fileExtension,
+                            fileIndex: index,
+                            byteSize: file.byteSize
+                        )
                         
                         // Show model selector only if there's more than one model
                         if file.models.count > 1 {
-                            PickerRow(optionName: NSLocalizedString("Model", comment: ""),
-                                      selectedOption: $proteinViewModel.dataSource.selectedModel[index],
-                                      startIndex: -1,
-                                      pickerOptions: getModelNames(modelCount: file.models.count))
+                            PickerRow(
+                                optionName: NSLocalizedString("Model", comment: ""),
+                                selectedOption: $proteinViewModel.dataSource.selectedModel[index],
+                                startIndex: -1,
+                                pickerOptions: getModelNames(modelCount: file.models.count)
+                            )
                         }
                         
                         if let proteins = proteinViewModel.dataSource.modelsForFile(file: file) {
@@ -72,6 +78,11 @@ struct FileSegmentProtein: View {
                     }
                 }
             }
+            #if targetEnvironment(macCatalyst)
+            .listRowInsets(EdgeInsets())
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            #endif
                 
             // MARK: - Loaded models
             /*
@@ -88,6 +99,11 @@ struct FileSegmentProtein: View {
                     content: {
                         FileDetailsSection()
             })
+            #if targetEnvironment(macCatalyst)
+            .listRowInsets(EdgeInsets())
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            #endif
             
             // MARK: - Remove files
             Section(header: Text(NSLocalizedString("Remove files", comment: ""))
@@ -101,6 +117,11 @@ struct FileSegmentProtein: View {
                         .foregroundColor(.red)
                         .disabled(proteinViewModel.proteinCount == 0)
             })
+            #if targetEnvironment(macCatalyst)
+            .listRowInsets(EdgeInsets())
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            #endif
         }
         .environment(\.defaultMinListHeaderHeight, 0)
         .listStyle(InsetGroupedListStyle())

@@ -12,12 +12,13 @@ struct PeriodicTableView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                Divider()
-                PeriodicTableContentView()
-                Spacer()
-            }
+        if #available(iOS 16, *) {
+            NavigationStack {
+                VStack {
+                    Divider()
+                    PeriodicTableContentView()
+                    Spacer()
+                }
                 .navigationTitle("Elements")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(
@@ -30,6 +31,9 @@ struct PeriodicTableView: View {
                         }
                     )
                 )
+            }
+        } else {
+            EmptyView()
         }
     }
 }

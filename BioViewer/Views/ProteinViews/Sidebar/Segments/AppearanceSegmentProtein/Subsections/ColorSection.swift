@@ -87,6 +87,8 @@ struct ColorSection: View {
                         #endif
                     }
                 )
+                // TODO: Change color defaults
+                /*
                 if proteinViewModel.colorBy == ProteinColorByOption.element {
                     ButtonRow(
                         action: {
@@ -103,6 +105,7 @@ struct ColorSection: View {
                         }
                     )
                 }
+                 */
             }
         )
     }
