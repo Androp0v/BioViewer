@@ -11,16 +11,15 @@ import SwiftUI
 struct ShadowsSection: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @AppStorage("shadowGroupExpanded") var shadowGroupExpanded: Bool = false
-    @AppStorage("depthCueingGroupExpanded") var depthCueingGroupExpanded: Bool = false
     
     var body: some View {
         Section(header: Text(NSLocalizedString("Shadows", comment: ""))
                     .padding(.bottom, 4)
         ) {
             if AppState.hasSamplerCompareSupport() {
-                DisclosureGroup(
-                    isExpanded: $shadowGroupExpanded,
+                PersistentDisclosureGroup(
+                    for: .shadowGroup,
+                    defaultOpen: false,
                     content: {
                         SliderRow(
                             title: NSLocalizedString("Strength", comment: ""),
@@ -44,8 +43,9 @@ struct ShadowsSection: View {
                 )
             }
             
-            DisclosureGroup(
-                isExpanded: $depthCueingGroupExpanded,
+            PersistentDisclosureGroup(
+                for: .depthCueingGroup,
+                defaultOpen: false,
                 content: {
                     SliderRow(
                         title: NSLocalizedString("Strength", comment: ""),

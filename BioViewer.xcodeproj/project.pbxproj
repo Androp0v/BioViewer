@@ -201,6 +201,7 @@
 		C57F9964275EBE04001DE6D6 /* WorkspaceExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57F9963275EBE04001DE6D6 /* WorkspaceExporter.swift */; };
 		C57FCE8D277E60AF001A7B4A /* CreateBondsGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */; };
 		C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */; };
+		C580F257294B9BD60073B01B /* PersistentDisclosureGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C580F256294B9BD60073B01B /* PersistentDisclosureGroup.swift */; };
 		C581ACCC282C0195001DD4BB /* BioViewerLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */; };
 		C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */; };
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
@@ -461,6 +462,7 @@
 		C57F995D275E8E31001DE6D6 /* BioViewerWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerWorkspace.swift; sourceTree = "<group>"; };
 		C57F9960275EAD6C001DE6D6 /* ExportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportError.swift; sourceTree = "<group>"; };
 		C57F9963275EBE04001DE6D6 /* WorkspaceExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceExporter.swift; sourceTree = "<group>"; };
+		C580F256294B9BD60073B01B /* PersistentDisclosureGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDisclosureGroup.swift; sourceTree = "<group>"; };
 		C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerLogger.swift; sourceTree = "<group>"; };
 		C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsSegmentProtein.swift; sourceTree = "<group>"; };
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
@@ -1039,6 +1041,7 @@
 			isa = PBXGroup;
 			children = (
 				C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */,
+				C580F256294B9BD60073B01B /* PersistentDisclosureGroup.swift */,
 				C45BAC41264954FF00B36026 /* Rows */,
 			);
 			path = Components;
@@ -1431,6 +1434,7 @@
 				C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */,
 				C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */,
 				C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */,
+				C580F257294B9BD60073B01B /* PersistentDisclosureGroup.swift in Sources */,
 				C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C51D4EE92769153200C69B3D /* AmbientOcclusionRenderer.swift in Sources */,

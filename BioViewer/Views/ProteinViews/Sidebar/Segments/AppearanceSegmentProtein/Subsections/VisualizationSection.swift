@@ -11,9 +11,6 @@ import SwiftUI
 struct VisualizationSection: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @AppStorage("visualizationGroupExpanded") var visualizationGroupExpanded: Bool = true
-    @AppStorage("solidSpheresRadiusGroupExpanded") var solidSpheresRadiusGroupExpanded: Bool = false
-    @AppStorage("ballAndStickRadiusGroupExpanded") var ballAndStickRadiusGroupExpanded: Bool = false
     
     var body: some View {
         Section(
@@ -22,8 +19,9 @@ struct VisualizationSection: View {
                     .padding(.bottom, 4),
             content: {
             
-                DisclosureGroup(
-                    isExpanded: $visualizationGroupExpanded,
+                PersistentDisclosureGroup(
+                    for: .visualizationGroup,
+                    defaultOpen: true,
                     content: {
                         
                         switch proteinViewModel.visualization {
@@ -31,8 +29,9 @@ struct VisualizationSection: View {
                             
                             // MARK: - Solid spheres
                             
-                            DisclosureGroup(
-                                isExpanded: $solidSpheresRadiusGroupExpanded,
+                            PersistentDisclosureGroup(
+                                for: .solidSpheresRadiusGroup,
+                                defaultOpen: false,
                                 content: {
                                     if proteinViewModel.solidSpheresRadiusOption == .fixed {
                                         SliderRow(
@@ -63,8 +62,9 @@ struct VisualizationSection: View {
                             
                             // MARK: - Ball and Stick
                             
-                            DisclosureGroup(
-                                isExpanded: $ballAndStickRadiusGroupExpanded,
+                            PersistentDisclosureGroup(
+                                for: .ballAndStickRadiusGroup,
+                                defaultOpen: false,
                                 content: {
                                     if proteinViewModel.ballAndStickRadiusOption == .fixed {
                                         SliderRow(

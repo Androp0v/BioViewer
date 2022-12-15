@@ -10,7 +10,6 @@ import SwiftUI
 struct ColorSection: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @AppStorage("colorGroupExpanded") var colorGroupExpanded: Bool = true
     
     @State var presentPeriodicTable: Bool = false
     
@@ -19,8 +18,9 @@ struct ColorSection: View {
             header: Text(NSLocalizedString("Color", comment: ""))
                     .padding(.bottom, 4),
             content: {
-                DisclosureGroup(
-                    isExpanded: $colorGroupExpanded,
+                PersistentDisclosureGroup(
+                    for: .colorGroup,
+                    defaultOpen: true,
                     content: {
                         // MARK: - Color by element
                         if proteinViewModel.colorBy == ProteinColorByOption.element {
