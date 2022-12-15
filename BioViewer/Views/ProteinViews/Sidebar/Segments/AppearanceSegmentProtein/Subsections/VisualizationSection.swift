@@ -109,5 +109,9 @@ struct VisualizationSection: View {
                  */
             }
         )
+        #if targetEnvironment(macCatalyst)
+        .listRowInsets(EdgeInsets())
+        .padding(.horizontal, 8)
+        #endif
     }
 }

@@ -80,8 +80,7 @@ struct FileSegmentProtein: View {
             }
             #if targetEnvironment(macCatalyst)
             .listRowInsets(EdgeInsets())
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(8)
             #endif
                 
             // MARK: - Loaded models
@@ -101,8 +100,7 @@ struct FileSegmentProtein: View {
             })
             #if targetEnvironment(macCatalyst)
             .listRowInsets(EdgeInsets())
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(8)
             #endif
             
             // MARK: - Remove files
@@ -119,8 +117,7 @@ struct FileSegmentProtein: View {
             })
             #if targetEnvironment(macCatalyst)
             .listRowInsets(EdgeInsets())
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(8)
             #endif
         }
         .environment(\.defaultMinListHeaderHeight, 0)

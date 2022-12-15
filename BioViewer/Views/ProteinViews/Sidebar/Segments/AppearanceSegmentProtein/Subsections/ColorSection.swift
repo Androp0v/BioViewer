@@ -108,6 +108,10 @@ struct ColorSection: View {
                  */
             }
         )
+        #if targetEnvironment(macCatalyst)
+        .listRowInsets(EdgeInsets())
+        .padding(.horizontal, 8)
+        #endif
     }
 }
 
