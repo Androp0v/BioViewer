@@ -45,7 +45,7 @@ struct RCSBInfo: Decodable {
     }
 }
 
-struct PDBInfo: Identifiable {
+struct PDBInfo: Identifiable, Hashable {
     let id: UUID
     let rcsbID: String
     let title: String
@@ -86,13 +86,13 @@ struct RCSBSearchInput: Encodable {
     }
 }
 
+struct RCSBSearchResult: Decodable {
+    let identifier: String
+    let score: Double
+}
+
 struct RCSBSearchResults: Decodable {
     let result_set: [RCSBSearchResult]
-    
-    struct RCSBSearchResult: Decodable {
-        let identifier: String
-        let score: Double
-    }
 }
 
 // MARK: - Fetch
@@ -101,6 +101,8 @@ struct RCSBSearchResults: Decodable {
 class RCSBFetch {
     
     static func search(_ text: String) async throws -> [PDBInfo] {
+        
+        guard !text.isEmpty else { return [] }
         
         let searchInput = RCSBSearchInput(searchText: text)
         let jsonData = try JSONEncoder().encode(searchInput)
@@ -118,6 +120,8 @@ class RCSBFetch {
         switch (response as? HTTPURLResponse)?.statusCode {
         case 200:
             break
+        case 204:
+            return []
         case 404:
             throw RCSBError.notFound
         case 500:
@@ -126,11 +130,11 @@ class RCSBFetch {
             throw RCSBError.unknown
         }
         
-        let searchResults = try JSONDecoder().decode(RCSBSearchResults.self, from: data)
+        let searchResults = try JSONDecoder().decode(RCSBSearchResults.self, from: data).result_set
         
         let pdbInfoResults = await withTaskGroup(of: RCSBInfo?.self, body: { group in
             var tempResults = [PDBInfo]()
-            for result in searchResults.result_set {
+            for result in searchResults {
                 group.addTask {
                     return try? await fetchPDBInfo(rcsbid: result.identifier)
                 }
@@ -142,7 +146,17 @@ class RCSBFetch {
             }
             return tempResults
         })
-        return pdbInfoResults
+        
+        // Sort by score
+        let sortedResults = searchResults.sorted { $0.score > $1.score }
+        var pdbInfoSorted = [PDBInfo]()
+        for sortedResult in sortedResults {
+            if let pdbInfoForID = pdbInfoResults.first(where: {$0.rcsbID == sortedResult.identifier}) {
+                pdbInfoSorted.append(pdbInfoForID)
+            }
+        }
+        
+        return pdbInfoSorted
     }
     
     // MARK: - Info

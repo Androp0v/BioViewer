@@ -33,28 +33,34 @@ struct RCSBImportView: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: .zero) {
+            VStack(alignment: .center, spacing: .zero) {
                 searchBar
                 Divider()
-                if !searchText.isEmpty && !proteinRCSBImportViewModel.results.isEmpty {
-                    List {
-                        ForEach(proteinRCSBImportViewModel.results) { result in
-                            RCSBRowView(
-                                pdbInfo: result,
-                                rcsbShowSheet: $rcsbShowSheet
-                            )
+                Group {
+                    if let results = proteinRCSBImportViewModel.results {
+                        if !results.isEmpty {
+                            List {
+                                ForEach(results) { result in
+                                    RCSBRowView(
+                                        pdbInfo: result,
+                                        searchTerm: searchText,
+                                        rcsbShowSheet: $rcsbShowSheet
+                                    )
+                                }
+                            }
+                            .listStyle(.plain)
+                            .edgesIgnoringSafeArea(.all)
+                        } else {
+                            Text(NSLocalizedString("No results", comment: ""))
+                                .foregroundColor(.secondary)
                         }
+                    } else {
+                        RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
                     }
-                    .listStyle(.plain)
-                    .edgesIgnoringSafeArea(.all)
-                    .frame(maxHeight: .infinity)
-                } else {
-                    RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
-                        .frame(maxHeight: .infinity)
                 }
-                
+                .frame(maxHeight: .infinity)
             }
-            .navigationTitle(NSLocalizedString("RCSB ID", comment: ""))
+            .navigationTitle(NSLocalizedString("RCSB Search", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button(action: {
                 rcsbShowSheet = false
@@ -78,7 +84,7 @@ struct RCSBImportView: View {
             TextField(
                 "None",
                 text: $searchText,
-                prompt: Text(NSLocalizedString("Enter RCSB ID", comment: ""))
+                prompt: Text(NSLocalizedString("Enter search term or RCSB ID", comment: ""))
             )
             .padding(.vertical, 8)
             .disableAutocorrection(true)
@@ -92,25 +98,6 @@ struct RCSBImportView: View {
                     } catch let error {
                         showAlert(text: error.localizedDescription)
                     }
-                    // FIXME: Remove
-                    /*
-                    await withThrowingTaskGroup(of: Void.self, body: { group in
-                        group.addTask {
-                            do {
-                                try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
-                            } catch let error {
-                                await showAlert(text: error.localizedDescription)
-                            }
-                        }
-                        group.addTask {
-                            do {
-                                try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
-                            } catch let error {
-                                await showAlert(text: error.localizedDescription)
-                            }
-                        }
-                    })
-                     */
                 }
             }
         }

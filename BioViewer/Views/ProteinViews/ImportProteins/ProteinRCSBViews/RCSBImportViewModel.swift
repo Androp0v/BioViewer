@@ -17,13 +17,15 @@ struct RCSBEntry {
 
 class RCSBImportViewModel: ObservableObject {
         
-    @Published private(set) var results = [PDBInfo]()
+    @Published private(set) var results: [PDBInfo]?
+    @Published var resultImages = [PDBInfo: Image]()
     
     func search(text: String) async throws {
         let searchResult = try await RCSBFetch.search(text)
         Task { @MainActor in
             withAnimation {
                 results = searchResult
+                resultImages = [:]
             }
         }
     }

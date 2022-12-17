@@ -10,6 +10,7 @@ import SwiftUI
 struct RCSBRowView: View {
     
     var pdbInfo: PDBInfo
+    var searchTerm: String?
     @State var image: Image?
     @State var showError: Bool = false
         
@@ -33,7 +34,7 @@ struct RCSBRowView: View {
                 if showError {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
+                        .aspectRatio(contentMode: .fit)
                         .padding()
                         .foregroundColor(.red)
                 }
@@ -46,43 +47,87 @@ struct RCSBRowView: View {
                 RoundedRectangle(cornerRadius: Constants.imageCornerRadius)
                     .stroke(Color(uiColor: .separator),
                             style: StrokeStyle(lineWidth: 2))
-                    .opacity(0.2)
+                    .opacity(0.5)
             }
             .cornerRadius(Constants.imageCornerRadius)
             .aspectRatio(1.0, contentMode: .fit)
             .frame(width: 96)
-            .padding(8)
+            .padding(.vertical)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(pdbInfo.rcsbID)
-                    .font(.title2)
-                    .bold()
-                Text(pdbInfo.title)
-                    .font(.headline)
-                Text(pdbInfo.description)
+                rcsbIDText(pdbInfo.rcsbID)
+                titleText(pdbInfo.title)
+                descriptionText(pdbInfo.description)
                 Text(pdbInfo.authors)
                     .foregroundColor(Color(uiColor: .secondaryLabel))
                     .italic()
             }
             .padding()
         }
-        .listRowInsets(EdgeInsets())
         .onTapGesture {
             Task {
                 try await rcsbImportViewModel.fetchPDBFile(pdbInfo: pdbInfo, proteinViewModel: proteinViewModel)
             }
             rcsbShowSheet = false
         }
-        .task {
-            var newImage: Image?
-            do {
-                newImage = try await RCSBFetch.fetchPDBImage(rcsbid: pdbInfo.rcsbID)
-            } catch {
-                showError = true
+        .onAppear {
+            // Check if image had been downloaded before, to avoid re-fetching on
+            // list reuse.
+            if let existingImage = rcsbImportViewModel.resultImages[pdbInfo] {
+                image = existingImage
+                return
             }
-            withAnimation {
-                image = newImage
+            Task {
+                var newImage: Image?
+                do {
+                    newImage = try await RCSBFetch.fetchPDBImage(rcsbid: pdbInfo.rcsbID)
+                    rcsbImportViewModel.resultImages[pdbInfo] = newImage
+                } catch {
+                    showError = true
+                }
+                withAnimation {
+                    image = newImage
+                }
             }
         }
+    }
+    
+    private func rcsbIDText(_ rcsbID: String) -> some View {
+        Group {
+            if rcsbID.lowercased() == searchTerm?.lowercased() {
+                Text(rcsbID)
+                    .foregroundColor(.accentColor)
+            } else {
+                Text(rcsbID)
+            }
+        }
+        .font(.title2)
+        .bold()
+    }
+    
+    private func titleText(_ title: String) -> some View {
+        Group {
+            title.components(separatedBy: .whitespaces).reduce(Text(""), { currentText, nextWord in
+                if let searchTerm, nextWord.localizedCaseInsensitiveContains(searchTerm) {
+                    return currentText + Text(nextWord).foregroundColor(.accentColor) + Text(" ")
+                } else {
+                    return currentText + Text(nextWord) + Text(" ")
+                }
+            })
+        }
+        .font(.headline)
+    }
+    
+    private func descriptionText(_ description: String) -> some View {
+        Group {
+            description.components(separatedBy: .whitespaces).reduce(Text(""), { currentText, nextWord in
+                if let searchTerm, nextWord.localizedCaseInsensitiveContains(searchTerm) {
+                    return currentText + Text(nextWord).foregroundColor(.accentColor) + Text(" ")
+                } else {
+                    return currentText + Text(nextWord) + Text(" ")
+                }
+            })
+        }
+        .lineLimit(5)
     }
 }
