@@ -89,6 +89,8 @@ struct FileRow: View {
     }
 }
 
+// MARK: - Previews
+
 struct FileRow_Previews: PreviewProvider {
     static var previews: some View {
         List {

@@ -37,11 +37,14 @@ struct RCSBSuggestionsView: View {
                     Section(content: {
                         if let rcsbRows = section.rowData {
                             ForEach(rcsbRows, id: \.self) { rcsbRow in
+                                // FIXME: Add this back
+                                /*
                                 RCSBRowView(title: rcsbRow.rcsbid,
                                             description: NSLocalizedString(rcsbRow.description, comment: ""),
                                             authors: NSLocalizedString(rcsbRow.authors, comment: ""),
                                             image: rcsbRow.pdbImage,
                                             rcsbShowSheet: $rcsbShowSheet)
+                                 */
                             }
                         }
                     }, header: {

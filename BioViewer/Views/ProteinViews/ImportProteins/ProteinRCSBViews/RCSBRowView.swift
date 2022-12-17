@@ -9,10 +9,9 @@ import SwiftUI
 
 struct RCSBRowView: View {
     
-    var title: String?
-    var description: String?
-    var authors: String?
-    var image: Image?
+    var pdbInfo: PDBInfo
+    @State var image: Image?
+    @State var showError: Bool = false
         
     @Binding var rcsbShowSheet: Bool
     
@@ -31,10 +30,19 @@ struct RCSBRowView: View {
         HStack(alignment: .top, spacing: 0) {
             ZStack {
                 Color.white
-                image?
-                    .resizable()
-                    .aspectRatio(1.0, contentMode: .fit)
-                    .frame(width: 96)
+                if showError {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .padding()
+                        .foregroundColor(.red)
+                }
+                if let image, !showError {
+                    image
+                        .resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .frame(width: 96)
+                }
                 RoundedRectangle(cornerRadius: Constants.imageCornerRadius)
                     .stroke(Color(uiColor: .separator),
                             style: StrokeStyle(lineWidth: 2))
@@ -46,40 +54,35 @@ struct RCSBRowView: View {
             .padding(8)
             
             VStack(alignment: .leading, spacing: 4) {
-                if let title = title {
-                    Text(title)
-                        .font(.headline)
-                }
-                if let description = description {
-                    Text(description)
-                }
-                if let authors = authors {
-                    Text(authors)
-                        .foregroundColor(Color(uiColor: .secondaryLabel))
-                        .italic()
-                }
+                Text(pdbInfo.rcsbID)
+                    .font(.title2)
+                    .bold()
+                Text(pdbInfo.title)
+                    .font(.headline)
+                Text(pdbInfo.description)
+                Text(pdbInfo.authors)
+                    .foregroundColor(Color(uiColor: .secondaryLabel))
+                    .italic()
             }
-            .padding(.vertical, 8)
+            .padding()
         }
         .listRowInsets(EdgeInsets())
         .onTapGesture {
             Task {
-                guard let rcsbid = title else { return }
-                try await rcsbImportViewModel.fetchPDBFile(rcsbid: rcsbid, proteinViewModel: proteinViewModel)
+                try await rcsbImportViewModel.fetchPDBFile(pdbInfo: pdbInfo, proteinViewModel: proteinViewModel)
             }
             rcsbShowSheet = false
         }
-    }
-}
-
-struct RCSBRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            RCSBRowView(title: "2OGM",
-                        description: "The crystal structure of the large ribosomal subunit from Deinococcus radiodurans complexed with the pleuromutilin derivative SB-571519",
-                        authors: "Davidovich, C., Bashan, A., Auerbach-Nevo, T., Yonath, A.",
-                        image: nil,
-                        rcsbShowSheet: .constant(true))
+        .task {
+            var newImage: Image?
+            do {
+                newImage = try await RCSBFetch.fetchPDBImage(rcsbid: pdbInfo.rcsbID)
+            } catch {
+                showError = true
+            }
+            withAnimation {
+                image = newImage
+            }
         }
     }
 }

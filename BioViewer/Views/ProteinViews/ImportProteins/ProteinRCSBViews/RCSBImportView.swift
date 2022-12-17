@@ -29,70 +29,29 @@ struct RCSBImportView: View {
         }
     }
     
+    // MARK: - View body
+    
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .padding(.leading, 8)
-                        .padding(.vertical, 8)
-                    TextField(
-                        "None",
-                        text: $searchText,
-                        prompt: Text(NSLocalizedString("Enter RCSB ID", comment: ""))
-                    )
-                    .padding(.vertical, 8)
-                    .disableAutocorrection(true)
-                    .alert(alertText, isPresented: $showingAlert) {
-                        Button("OK", role: .cancel) { }
-                    }
-                    .onSubmit {
-                        Task {
-                            await withThrowingTaskGroup(of: Void.self, body: { group in
-                                group.addTask {
-                                    do {
-                                        try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
-                                    } catch let error {
-                                        await showAlert(text: error.localizedDescription)
-                                    }
-                                }
-                                group.addTask {
-                                    do {
-                                        try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
-                                    } catch let error {
-                                        await showAlert(text: error.localizedDescription)
-                                    }
-                                }
-                            })
+            VStack(alignment: .leading, spacing: .zero) {
+                searchBar
+                Divider()
+                if !searchText.isEmpty && !proteinRCSBImportViewModel.results.isEmpty {
+                    List {
+                        ForEach(proteinRCSBImportViewModel.results) { result in
+                            RCSBRowView(
+                                pdbInfo: result,
+                                rcsbShowSheet: $rcsbShowSheet
+                            )
                         }
                     }
+                    .listStyle(.plain)
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(maxHeight: .infinity)
+                } else {
+                    RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
+                        .frame(maxHeight: .infinity)
                 }
-                .clipped()
-                .background {
-                    Color(UIColor.secondarySystemBackground)
-                        .cornerRadius(12)
-                }
-                .foregroundColor(.gray)
-                .padding()
-                
-                Group {
-                    if !searchText.isEmpty {
-                        List {
-                            if self.proteinRCSBImportViewModel.showRow {
-                                RCSBRowView(title: proteinRCSBImportViewModel.foundProteinName,
-                                            description: proteinRCSBImportViewModel.foundProteinDescription,
-                                            authors: proteinRCSBImportViewModel.foundProteinAuthors,
-                                            image: proteinRCSBImportViewModel.foundProteinImage,
-                                            rcsbShowSheet: $rcsbShowSheet)
-                            }
-                        }
-                        .listStyle(.insetGrouped)
-                        .edgesIgnoringSafeArea(.all)
-                    } else {
-                        RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
-                    }
-                }
-                .frame(maxHeight: .infinity)
                 
             }
             .navigationTitle(NSLocalizedString("RCSB ID", comment: ""))
@@ -108,7 +67,64 @@ struct RCSBImportView: View {
         }
         .environmentObject(proteinRCSBImportViewModel)
     }
+    
+    // MARK: - SearchBar
+    
+    private var searchBar: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .padding(.leading, 8)
+                .padding(.vertical, 8)
+            TextField(
+                "None",
+                text: $searchText,
+                prompt: Text(NSLocalizedString("Enter RCSB ID", comment: ""))
+            )
+            .padding(.vertical, 8)
+            .disableAutocorrection(true)
+            .alert(alertText, isPresented: $showingAlert) {
+                Button("OK", role: .cancel) { }
+            }
+            .onSubmit {
+                Task {
+                    do {
+                        try await proteinRCSBImportViewModel.search(text: searchText)
+                    } catch let error {
+                        showAlert(text: error.localizedDescription)
+                    }
+                    // FIXME: Remove
+                    /*
+                    await withThrowingTaskGroup(of: Void.self, body: { group in
+                        group.addTask {
+                            do {
+                                try await self.proteinRCSBImportViewModel.getPDBInfo(rcsbid: searchText)
+                            } catch let error {
+                                await showAlert(text: error.localizedDescription)
+                            }
+                        }
+                        group.addTask {
+                            do {
+                                try await self.proteinRCSBImportViewModel.getPDBImage(rcsbid: searchText)
+                            } catch let error {
+                                await showAlert(text: error.localizedDescription)
+                            }
+                        }
+                    })
+                     */
+                }
+            }
+        }
+        .clipped()
+        .background {
+            Color(UIColor.secondarySystemBackground)
+                .cornerRadius(12)
+        }
+        .foregroundColor(.gray)
+        .padding()
+    }
 }
+
+// MARK: - Previews
 
 struct RCSBImportView_Previews: PreviewProvider {
     static var previews: some View {

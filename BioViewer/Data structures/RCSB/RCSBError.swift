@@ -12,8 +12,9 @@ enum RCSBError: Error {
     case malformedURL
     case notFound
     case internalServerError
-    case unknown
     case badImageData
+    case malformedInput
+    case unknown
 }
 
 extension RCSBError: LocalizedError {
@@ -29,6 +30,8 @@ extension RCSBError: LocalizedError {
             return NSLocalizedString("There seems to be a problem with the server", comment: "")
         case .badImageData:
             return NSLocalizedString("Invalid image data", comment: "")
+        case .malformedInput:
+            return NSLocalizedString("Invalid input", comment: "")
         case .unknown:
             return NSLocalizedString("Unknown error", comment: "")
         }

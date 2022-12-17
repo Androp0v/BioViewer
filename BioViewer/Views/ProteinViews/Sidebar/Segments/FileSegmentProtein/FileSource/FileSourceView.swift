@@ -15,7 +15,6 @@ struct FileSourceView: View {
     var body: some View {
         NavigationView {
             if let loadedLines = sourceViewModel.loadedLines {
-                // TO-DO: This has terrible performance for big files
                 List {
                     ForEach(loadedLines.indices, id: \.self) { lineIndex in
                         FileSourceRow(lineNumber: lineIndex + 1,
