@@ -59,6 +59,14 @@ struct PDBInfo: Identifiable, Hashable {
         self.description = rcsbInfo.struct.pdbx_descriptor
         self.authors = rcsbInfo.audit_author.map { $0.name }.joined(separator: ", ")
     }
+    
+    init(suggestion: ProteinSuggestionRowData) {
+        self.id = UUID()
+        self.rcsbID = suggestion.rcsbid
+        self.title = ""
+        self.description = suggestion.description
+        self.authors = suggestion.authors
+    }
 }
 
 // MARK: - SearchInput
