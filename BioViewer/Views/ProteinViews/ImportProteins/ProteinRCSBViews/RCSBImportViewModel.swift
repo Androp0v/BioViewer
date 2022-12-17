@@ -21,6 +21,15 @@ class RCSBImportViewModel: ObservableObject {
     @Published var resultImages = [PDBInfo: Image]()
     
     func search(text: String) async throws {
+        guard !text.isEmpty else {
+            Task { @MainActor in
+                withAnimation {
+                    results = nil
+                    resultImages = [:]
+                }
+            }
+            return
+        }
         let searchResult = try await RCSBFetch.search(text)
         Task { @MainActor in
             withAnimation {
