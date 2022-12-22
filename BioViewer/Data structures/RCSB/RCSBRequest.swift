@@ -69,7 +69,7 @@ struct PDBInfo: Identifiable, Hashable {
     }
 }
 
-// MARK: - SearchInput
+// MARK: - Search Input
 
 struct RCSBSearchQuery: Encodable {
     let type: String = "terminal"
@@ -85,14 +85,34 @@ struct RCSBSearchQuery: Encodable {
     }
 }
 
-struct RCSBSearchInput: Encodable {
-    let query: RCSBSearchQuery
-    let return_type: String = "entry"
+struct RCSBPagination: Encodable {
+    let start: Int
+    let rows: Int
+}
+
+struct RCSBRequestOptions: Encodable {
+    let paginate: RCSBPagination
     
-    init(searchText: String) {
-        self.query = RCSBSearchQuery(searchText: searchText)
+    init(startRow: Int, numberOfRows: Int) {
+        self.paginate = RCSBPagination(start: startRow, rows: numberOfRows)
     }
 }
+
+struct RCSBSearchInput: Encodable {
+    let query: RCSBSearchQuery
+    let request_options: RCSBRequestOptions
+    let return_type: String = "entry"
+    
+    init(searchText: String, startRow: Int, numberOfRows: Int = 20) {
+        self.query = RCSBSearchQuery(searchText: searchText)
+        self.request_options = RCSBRequestOptions(
+            startRow: startRow,
+            numberOfRows: numberOfRows
+        )
+    }
+}
+
+// MARK: - Search Result
 
 struct RCSBSearchResult: Decodable {
     let identifier: String
@@ -100,6 +120,7 @@ struct RCSBSearchResult: Decodable {
 }
 
 struct RCSBSearchResults: Decodable {
+    let total_count: Int
     let result_set: [RCSBSearchResult]
 }
 
@@ -108,11 +129,11 @@ struct RCSBSearchResults: Decodable {
 /// Handles requests and queries to the RCSB database for PDB files
 class RCSBFetch {
     
-    static func search(_ text: String) async throws -> [PDBInfo] {
+    static func search(_ text: String, startRow: Int = 0) async throws -> [PDBInfo] {
         
-        guard !text.isEmpty else { return [] }
+        guard !text.isEmpty else { return [] }
         
-        let searchInput = RCSBSearchInput(searchText: text)
+        let searchInput = RCSBSearchInput(searchText: text, startRow: startRow)
         let jsonData = try JSONEncoder().encode(searchInput)
         let jsonString = String(data: jsonData, encoding: .utf8)
         guard let parameterString = jsonString?.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else {

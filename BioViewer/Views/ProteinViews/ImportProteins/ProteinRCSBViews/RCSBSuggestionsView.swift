@@ -46,10 +46,10 @@ struct RCSBSuggestionsView: View {
                             }
                         }
                     }, header: {
-                        RCSBSuggestionHeaderView(title: NSLocalizedString(section.sectionTitle,
-                                                                          comment: ""),
-                                                 description: NSLocalizedString(section.sectionDescription,
-                                                                                comment: ""))
+                        RCSBSuggestionHeaderView(
+                            title: NSLocalizedString(section.sectionTitle, comment: ""),
+                            description: NSLocalizedString(section.sectionDescription, comment: "")
+                        )
                     })
                 }
             }

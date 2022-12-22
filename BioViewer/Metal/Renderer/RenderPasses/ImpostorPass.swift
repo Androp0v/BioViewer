@@ -106,11 +106,13 @@ extension ProteinRenderer {
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
 
-        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                   indexCount: indexBufferRegion.length,
-                                                   indexType: .uint32,
-                                                   indexBuffer: impostorIndexBuffer,
-                                                   indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+        renderCommandEncoder.drawIndexedPrimitives(
+            type: .triangle,
+            indexCount: indexBufferRegion.length,
+            indexType: .uint32,
+            indexBuffer: impostorIndexBuffer,
+            indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride
+        )
         
         // MARK: - Bond rendering
         if renderBonds {

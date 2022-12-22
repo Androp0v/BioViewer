@@ -134,6 +134,7 @@ class PDBParser {
                 let resName = line[rangeResName].replacingOccurrences(of: " ", with: "")
                 
                 // Ignore water molecules
+                // FIXME: Why?
                 if resName.contains("HOH") {
                     return
                 }
