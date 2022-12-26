@@ -19,10 +19,19 @@ class RCSBImportViewModel: ObservableObject {
         
     @Published private(set) var results: [PDBInfo]?
     @Published var resultImages = [PDBInfo: Image]()
+    @Published var isLoading: Bool = false
+    
+    struct OngoingSearch {
+        let searchString: String
+        let lastRow: Int
+        let totalCount: Int
+    }
+    var currentSearch: OngoingSearch?
     
     func search(text: String) async throws {
         guard !text.isEmpty else {
             Task { @MainActor in
+                currentSearch = nil
                 withAnimation {
                     results = nil
                     resultImages = [:]
@@ -32,10 +41,39 @@ class RCSBImportViewModel: ObservableObject {
         }
         let searchResult = try await RCSBFetch.search(text)
         Task { @MainActor in
+            currentSearch = OngoingSearch(
+                searchString: text,
+                lastRow: 0,
+                totalCount: searchResult.totalCount
+            )
             withAnimation {
-                results = searchResult
+                results = searchResult.results
                 resultImages = [:]
             }
+        }
+    }
+    
+    @MainActor func loadNextPageIfNeeded() {
+        guard let currentSearch else { return }
+        guard currentSearch.lastRow < (currentSearch.totalCount - 1) else { return }
+        guard !isLoading else { return }
+        withAnimation {
+            isLoading = true
+        }
+        Task {
+            let nextSearchPage = try await RCSBFetch.search(
+                currentSearch.searchString,
+                startRow: currentSearch.lastRow + 1
+            )
+            withAnimation {
+                results?.append(contentsOf: nextSearchPage.results)
+                isLoading = false
+            }
+            self.currentSearch = OngoingSearch(
+                searchString: currentSearch.searchString,
+                lastRow: nextSearchPage.results.count - 1,
+                totalCount: currentSearch.totalCount
+            )
         }
     }
     

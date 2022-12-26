@@ -20,7 +20,7 @@ struct RCSBImportView: View {
     @State var alertText: String = ""
     @State var showingAlert: Bool = false
     
-    @StateObject var proteinRCSBImportViewModel = RCSBImportViewModel()
+    @StateObject var rcsbImportViewModel = RCSBImportViewModel()
     
     func showAlert(text: String) {
         DispatchQueue.main.async {
@@ -37,16 +37,38 @@ struct RCSBImportView: View {
                 searchBar
                 Divider()
                 Group {
-                    if let results = proteinRCSBImportViewModel.results {
+                    if let results = rcsbImportViewModel.results {
                         if !results.isEmpty {
                             List {
-                                ForEach(results) { result in
-                                    RCSBRowView(
-                                        pdbInfo: result,
-                                        searchTerm: searchText,
-                                        rcsbShowSheet: $rcsbShowSheet
-                                    )
-                                }
+                                Section(
+                                    content: {
+                                        ForEach(results) { result in
+                                            RCSBRowView(
+                                                pdbInfo: result,
+                                                searchTerm: searchText,
+                                                rcsbShowSheet: $rcsbShowSheet
+                                            )
+                                            .onAppear {
+                                                if result == results.last {
+                                                    rcsbImportViewModel.loadNextPageIfNeeded()
+                                                }
+                                            }
+                                        }
+                                    },
+                                    footer: {
+                                        if rcsbImportViewModel.isLoading {
+                                            HStack {
+                                                Spacer()
+                                                Text("Loading")
+                                                    .italic()
+                                                    .foregroundColor(.secondary)
+                                                Spacer()
+                                            }
+                                            .padding()
+                                            .padding(.bottom, 24)
+                                        }
+                                    }
+                                )
                             }
                             .listStyle(.plain)
                             .edgesIgnoringSafeArea(.all)
@@ -71,7 +93,7 @@ struct RCSBImportView: View {
                 Image(systemName: "lightbulb.circle")
             })
         }
-        .environmentObject(proteinRCSBImportViewModel)
+        .environmentObject(rcsbImportViewModel)
     }
     
     // MARK: - SearchBar
@@ -94,7 +116,7 @@ struct RCSBImportView: View {
             .onSubmit {
                 Task {
                     do {
-                        try await proteinRCSBImportViewModel.search(text: searchText)
+                        try await rcsbImportViewModel.search(text: searchText)
                     } catch let error {
                         showAlert(text: error.localizedDescription)
                     }

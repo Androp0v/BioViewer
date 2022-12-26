@@ -51,7 +51,7 @@ struct RCSBRowView: View {
             }
             .cornerRadius(Constants.imageCornerRadius)
             .aspectRatio(1.0, contentMode: .fit)
-            .frame(width: 96)
+            .frame(width: 96, height: 96)
             .padding(.vertical)
             
             VStack(alignment: .leading, spacing: 4) {
@@ -64,6 +64,7 @@ struct RCSBRowView: View {
             }
             .padding()
         }
+        .frame(minHeight: 108)
         .onTapGesture {
             Task {
                 try await rcsbImportViewModel.fetchPDBFile(pdbInfo: pdbInfo, proteinViewModel: proteinViewModel)

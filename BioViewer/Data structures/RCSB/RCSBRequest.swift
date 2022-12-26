@@ -103,7 +103,7 @@ struct RCSBSearchInput: Encodable {
     let request_options: RCSBRequestOptions
     let return_type: String = "entry"
     
-    init(searchText: String, startRow: Int, numberOfRows: Int = 20) {
+    init(searchText: String, startRow: Int, numberOfRows: Int = 25) {
         self.query = RCSBSearchQuery(searchText: searchText)
         self.request_options = RCSBRequestOptions(
             startRow: startRow,
@@ -124,14 +124,19 @@ struct RCSBSearchResults: Decodable {
     let result_set: [RCSBSearchResult]
 }
 
+struct PDBSearchResult {
+    let totalCount: Int
+    let results: [PDBInfo]
+}
+
 // MARK: - Fetch
 
 /// Handles requests and queries to the RCSB database for PDB files
 class RCSBFetch {
     
-    static func search(_ text: String, startRow: Int = 0) async throws -> [PDBInfo] {
+    static func search(_ text: String, startRow: Int = 0) async throws -> PDBSearchResult {
         
-        guard !text.isEmpty else { return [] }
+        guard !text.isEmpty else { return PDBSearchResult(totalCount: .zero, results: []) }
         
         let searchInput = RCSBSearchInput(searchText: text, startRow: startRow)
         let jsonData = try JSONEncoder().encode(searchInput)
@@ -150,7 +155,7 @@ class RCSBFetch {
         case 200:
             break
         case 204:
-            return []
+            return PDBSearchResult(totalCount: .zero, results: [])
         case 404:
             throw RCSBError.notFound
         case 500:
@@ -159,7 +164,8 @@ class RCSBFetch {
             throw RCSBError.unknown
         }
         
-        let searchResults = try JSONDecoder().decode(RCSBSearchResults.self, from: data).result_set
+        let searchResult = try JSONDecoder().decode(RCSBSearchResults.self, from: data)
+        let searchResults = searchResult.result_set
         
         let pdbInfoResults = await withTaskGroup(of: RCSBInfo?.self, body: { group in
             var tempResults = [PDBInfo]()
@@ -185,7 +191,7 @@ class RCSBFetch {
             }
         }
         
-        return pdbInfoSorted
+        return PDBSearchResult(totalCount: searchResult.total_count, results: pdbInfoSorted)
     }
     
     // MARK: - Info
