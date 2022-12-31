@@ -2,52 +2,60 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>1.4.2</key>
-    <array>
-        <dict>
-            <key>Type</key>
-            <string>FEAT</string>
-            <key>Title</key>
-            <string>Improved RCSB Search</string>
-            <key>Subtitle</key>
-            <string>Improved RCSB Search: allows searching for keywords in addition to searching by RCSB ID only.</string>
-        </dict>
-    </array>
+	<key>1.4.2</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Improved RCSB Search</string>
+			<key>Subtitle</key>
+			<string>Improved RCSB Search: allows searching for keywords in addition to searching by RCSB ID only.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Rendering on Intel Macs</string>
+			<key>Subtitle</key>
+			<string>Fixes Intel Macs rendering a black screen instead of the actual protein</string>
+		</dict>
+	</array>
 	<key>1.4.1</key>
-    <array>
-        <dict>
-            <key>Type</key>
-            <string>FIX</string>
-            <key>Title</key>
-            <string>Fix crash on Ball and Sticks mode</string>
-            <key>Subtitle</key>
-            <string>Fix crash on Ball and Sticks visualization mode when the file contained no bonds.</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>FIX</string>
-            <key>Title</key>
-            <string>Show all models missing</string>
-            <key>Subtitle</key>
-            <string>Fix "Show all models" option missing on iPhone when working with multi-MODEL files.</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>FEAT</string>
-            <key>Title</key>
-            <string>Collapsible options</string>
-            <key>Subtitle</key>
-            <string>Subsections of options in the Appearance tab are now collapsible.</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>FEAT</string>
-            <key>Title</key>
-            <string>More atom types recognized</string>
-            <key>Subtitle</key>
-            <string>Added more atom types that are recognized and show the correct Van der Waals radius (Na, P, Cl, Ca).</string>
-        </dict>
-    </array>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Fix crash on Ball and Sticks mode</string>
+			<key>Subtitle</key>
+			<string>Fix crash on Ball and Sticks visualization mode when the file contained no bonds.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Show all models missing</string>
+			<key>Subtitle</key>
+			<string>Fix &quot;Show all models&quot; option missing on iPhone when working with multi-MODEL files.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Collapsible options</string>
+			<key>Subtitle</key>
+			<string>Subsections of options in the Appearance tab are now collapsible.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>More atom types recognized</string>
+			<key>Subtitle</key>
+			<string>Added more atom types that are recognized and show the correct Van der Waals radius (Na, P, Cl, Ca).</string>
+		</dict>
+	</array>
 	<key>1.4</key>
 	<array>
 		<dict>

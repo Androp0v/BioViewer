@@ -316,6 +316,7 @@ class ProteinRenderer: NSObject {
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
         self.scene.configurationSelector = configurationSelector
+        self.scene.frameData.atoms_per_configuration = Int32(configurationSelector.atomsPerConfiguration)
         bufferResourceLock.unlock()
     }
     

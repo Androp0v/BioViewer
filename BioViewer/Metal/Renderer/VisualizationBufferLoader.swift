@@ -200,6 +200,5 @@ class VisualizationBufferLoader {
             subunitLengths: subunitLengths,
             configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
         )
-        // self.frameData.atoms_per_configuration = Int32(totalAtomCount)
     }
 }
