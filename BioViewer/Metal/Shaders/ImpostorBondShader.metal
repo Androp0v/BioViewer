@@ -112,7 +112,7 @@ fragment ImpostorBondFragmentOut impostor_bond_fragment(ImpostorBondVertexOut im
     half reflectivity = 0.3;
     
     // Add base color
-    half3 shadedColor = half3(0.5, 0.5, 0.5);
+    half3 shadedColor = half3(frameData.bond_color.r, frameData.bond_color.g, frameData.bond_color.b);
     
     /*
     // dot = x^2 + y^2

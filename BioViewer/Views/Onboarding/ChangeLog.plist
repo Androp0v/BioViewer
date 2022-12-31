@@ -2,6 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>1.4.3</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>FEAT</string>
+			<key>Title</key>
+			<string>Customizable bond color</string>
+			<key>Subtitle</key>
+			<string>Bond color can now be customized in the Ball and Stick visualization mode.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>FIX</string>
+			<key>Title</key>
+			<string>Stability Improvements</string>
+			<key>Subtitle</key>
+			<string>Solved several stability issues on all devices on Ball and Stick mode.</string>
+		</dict>
+	</array>
 	<key>1.4.2</key>
 	<array>
 		<dict>

@@ -45,6 +45,10 @@ typedef struct {
     
     /// Transform from camera coordinates to sun's perspective coordinates.
     simd_float4x4 camera_to_shadow_projection_matrix;
+    
+    // MARK: - Bonds
+    
+    simd_float3 bond_color;
         
     // MARK: - Shadows
     

@@ -76,6 +76,19 @@ class MetalScene: ObservableObject {
     
     /// Background color of the view.
     var backgroundColor: CGColor { didSet { needsRedraw = true } }
+    /// Color used for bonds in ball and sticks mode.
+    var bondColor: CGColor {
+        didSet {
+            if let components = bondColor.components {
+                frameData.bond_color = simd_float3(
+                    Float(components[0]),
+                    Float(components[1]),
+                    Float(components[2])
+                )
+            }
+            needsRedraw = true
+        }
+    }
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     var colorFill = FillColorInput() {
         didSet {
@@ -91,6 +104,7 @@ class MetalScene: ObservableObject {
         self.cameraPosition = simd_float3(0, 0, 1000)
         self.userModelRotationMatrix = Transform.scaleMatrix(.one)
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
+        self.bondColor = .init(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
         self.frameData = FrameData()
         self.frame = 0
         self.aspectRatio = 1.0
@@ -121,6 +135,15 @@ class MetalScene: ObservableObject {
         // Initial rotation matrix values
         updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: 0.0,
                                                                      axis: simd_float3(0.0, 1.0, 0.0)))
+        
+        // Set initial FrameData bond color
+        if let components = bondColor.components {
+            self.frameData.bond_color = simd_float3(
+                Float(components[0]),
+                Float(components[1]),
+                Float(components[2])
+            )
+        }
         
         // Pass cast shadows and depth cueing to FrameData
         self.frameData.has_shadows = self.hasShadows ? 1 : 0

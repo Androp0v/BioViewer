@@ -120,6 +120,16 @@ class ProteinViewModel: ObservableObject {
     }
     
     /// Color used for each subunit when coloring by element.
+    @Published var bondColor: Color = .gray {
+        didSet {
+            // TODO: Animation
+            if let newColor = bondColor.cgColor {
+                self.renderer.scene.bondColor = newColor
+            }
+        }
+    }
+    
+    /// Color used for each subunit when coloring by element.
     @Published var elementColors: [Color] = [Color]() {
         didSet {
             self.renderer.scene.colorFill = updatedFillColor()

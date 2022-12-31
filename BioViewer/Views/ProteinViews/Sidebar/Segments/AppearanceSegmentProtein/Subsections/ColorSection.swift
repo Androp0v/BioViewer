@@ -18,6 +18,12 @@ struct ColorSection: View {
             header: Text(NSLocalizedString("Color", comment: ""))
                     .padding(.bottom, 4),
             content: {
+                if proteinViewModel.visualization == .ballAndStick {
+                    ColorPickerRow(
+                        title: NSLocalizedString("Bond color", comment: ""),
+                        selectedColor: $proteinViewModel.bondColor
+                    )
+                }
                 PersistentDisclosureGroup(
                     for: .colorGroup,
                     defaultOpen: true,
