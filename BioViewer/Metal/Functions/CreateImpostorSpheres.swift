@@ -152,10 +152,11 @@ extension MetalScheduler {
                 computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
             } else {
                 // LEGACY: Older devices do not support non-uniform threadgroup sizes
-                let arrayLength = bufferAtomAndConfigurationCount
-                MetalLegacySupport.legacyDispatchThreadsForArray(commandEncoder: computeEncoder,
-                                                                 length: arrayLength,
-                                                                 pipelineState: pipelineState)
+                MetalLegacySupport.legacyDispatchThreadsForArray(
+                    commandEncoder: computeEncoder,
+                    length: bufferAtomAndConfigurationCount,
+                    pipelineState: pipelineState
+                )
             }
 
             // REQUIRED: End the compute encoder encoding

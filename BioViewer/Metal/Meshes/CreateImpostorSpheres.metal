@@ -25,7 +25,11 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
                                   constant AtomRadii &atom_radii [[buffer(8)]],
                                   uint i [[ thread_position_in_grid ]],
                                   uint l [[ thread_position_in_threadgroup ]]) {
-    // TO-DO
+    
+    // TODO: Remove once all devices have non-uniform threadgroup size support
+    if (i >= totalAtomCount) {
+        return;
+    }
     
     // Retrieve the radius and position of the atom
     const simd_float3 position = atomPoints[i];

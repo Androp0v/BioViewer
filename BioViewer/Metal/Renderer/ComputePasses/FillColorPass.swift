@@ -52,6 +52,18 @@ extension ProteinRenderer {
                                  offset: 0,
                                  index: 3)
         
+        // Total number of threads (used for legacy devices)
+        // TODO: Remove once all devices have non-uniform threadgroup size support
+        let uniformBuffer = device.makeBuffer(
+            bytes: Array([Int32(colorBuffer.length / MemoryLayout<SIMD3<Int16>>.stride)]),
+            length: MemoryLayout<Int32>.stride
+        )
+        computeEncoder.setBuffer(
+            uniformBuffer,
+            offset: 0,
+            index: 4
+        )
+        
         // Schedule the threads
         if device.supportsFamily(.common3) {
             // Create threads and threadgroup sizes

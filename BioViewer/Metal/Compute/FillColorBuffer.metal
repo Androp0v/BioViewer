@@ -13,9 +13,15 @@ using namespace metal;
 kernel void fill_color_buffer(device half3 *atom_color [[ buffer(0) ]],
                               const device int16_t *subunitIndex [[ buffer(1) ]],
                               const device uint16_t *atom_type [[ buffer(2) ]],
-                              device FillColorInput &color_input [[buffer(3)]],
+                              device FillColorInput &color_input [[ buffer(3) ]],
+                              constant uint32_t & totalAtomCount [[ buffer(4) ]],
                               uint i [[ thread_position_in_grid ]],
                               uint l [[ thread_position_in_threadgroup ]]) {
+    // TODO: Remove once all devices have non-uniform threadgroup size support
+    if (i >= totalAtomCount) {
+        return;
+    }
+    
     half3 final_color;
     
     // NOTE: To blend the colors we 'should' use the standard Gamma of 2.2. Instead
