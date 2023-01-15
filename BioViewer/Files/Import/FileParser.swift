@@ -17,7 +17,7 @@ class FileParser {
         case "pdb", "PDB", "pdb1", "PDB1":
             proteinViewModel?.statusUpdate(statusText: "Importing file")
             do {
-                let proteinFile = try PDBParser().parsePDB(fileName: fileName,
+                let proteinFile = try LegacyPDBParser().parsePDB(fileName: fileName,
                                                            fileExtension: fileExtension,
                                                            byteSize: byteSize,
                                                            rawText: rawText,

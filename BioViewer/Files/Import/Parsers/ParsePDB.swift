@@ -8,7 +8,7 @@
 import Foundation
 import simd
 
-class PDBParser {
+class LegacyPDBParser {
     
     private class ParsedSubunit {
         var id: Int
@@ -26,20 +26,19 @@ class PDBParser {
     
     private var fileInfo: ProteinFileInfo?
     
-    private var atomArray = ContiguousArray<simd_float3>()
-    private var atomIdentifiers = [UInt16]()
-    private var totalAtomArrayComposition = AtomArrayComposition()
-    
     // Protein model list
     private var proteins = [Protein]()
+    
+    private var currentAtomArray = ContiguousArray<simd_float3>()
+    private var currentAtomIdentifiers = [UInt16]()
+    private var currentTotalAtomArrayComposition = AtomArrayComposition()
+    
     // Protein subunit list
-    private var subunits: [ParsedSubunit] = [ParsedSubunit(id: 0)]
+    private var currentSubunits: [ParsedSubunit] = [ParsedSubunit(id: 0)]
+    private var currentSubunitCount: Int = 0
+    private var currentSequenceArray = [String]()
+    private var currentSequenceIdentifiers = [Int]()
     
-    private var subunitCount: Int = 0
-    
-    private var sequenceArray = [String]()
-    private var sequenceIdentifiers = [Int]()
-
     private var currentResId: Int = -1
     private var currentLine: Int = 0
     
@@ -99,6 +98,18 @@ class PDBParser {
         }
     }
     
+    // MARK: - Parse HELIX
+    
+    private func parseHelix(line: String) {
+        
+    }
+    
+    // MARK: - Parse SHEET
+    
+    private func parseSheet(line: String) {
+        
+    }
+    
     // MARK: - Parse ATOM/HETATM
     
     private func parseAtom(line: String) {
@@ -122,7 +133,7 @@ class PDBParser {
             // Avoid adding the residue id more than once
             if self.currentResId != resId {
                 self.currentResId = resId
-                self.sequenceIdentifiers.append(resId)
+                self.currentSequenceIdentifiers.append(resId)
 
                 // Get residue name (ALA, GLN, LYS...) for current atom, now that we know it
                 // belongs to a different residue than the last one.
@@ -134,12 +145,12 @@ class PDBParser {
                 let resName = line[rangeResName].replacingOccurrences(of: " ", with: "")
                 
                 // Ignore water molecules
-                // FIXME: Why?
+                // TODO: Option to toggle water visibility on/off
                 if resName.contains("HOH") {
                     return
                 }
                 
-                self.sequenceArray.append(resName)
+                self.currentSequenceArray.append(resName)
             }
         } else {
             proteinViewModel?.statusViewModel.setWarning(
@@ -194,8 +205,8 @@ class PDBParser {
         z = -z
 
         // Save atom position to array
-        self.subunits.last?.subunitAtomTypes.append(element)
-        self.subunits.last?.subunitAtomPositions.append(simd_float3(x, y, z))
+        self.currentSubunits.last?.subunitAtomTypes.append(element)
+        self.currentSubunits.last?.subunitAtomPositions.append(simd_float3(x, y, z))
     }
     
     // MARK: - Create Protein object
@@ -203,23 +214,23 @@ class PDBParser {
     func createNewProtein() {
         // Add element array contents into the contiguous array
         var totalCount: Int = 0
-        for subunit in subunits {
+        for subunit in currentSubunits {
             totalCount += subunit.subunitAtomPositions.count
         }
-        atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
+        currentAtomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount)
         
-        for subunit in subunits {
-            atomArray.append(contentsOf: subunit.subunitAtomPositions)
-            atomIdentifiers.append(contentsOf: subunit.subunitAtomTypes)
+        for subunit in currentSubunits {
+            currentAtomArray.append(contentsOf: subunit.subunitAtomPositions)
+            currentAtomIdentifiers.append(contentsOf: subunit.subunitAtomTypes)
         }
         
-        for subunit in subunits {
-            totalAtomArrayComposition += AtomArrayComposition(atomTypes: subunit.subunitAtomTypes)
+        for subunit in currentSubunits {
+            currentTotalAtomArrayComposition += AtomArrayComposition(atomTypes: subunit.subunitAtomTypes)
         }
         
         var subunitIndex = 0
         var proteinSubunits = [ProteinSubunit]()
-        for subunit in subunits {
+        for subunit in currentSubunits {
             // The last 'parsed' subunit may be empty, discard it
             guard subunit.subunitAtomPositions.count != 0 else {
                 continue
@@ -230,15 +241,17 @@ class PDBParser {
             subunitIndex += subunit.subunitAtomPositions.count
         }
         
-        let protein = Protein(configurationCount: 1,
-                              configurationEnergies: nil,
-                              subunitCount: proteinSubunits.count,
-                              subunits: proteinSubunits,
-                              hasNonChainSubunit: true,
-                              atoms: &atomArray,
-                              atomArrayComposition: &totalAtomArrayComposition,
-                              atomIdentifiers: atomIdentifiers,
-                              sequence: sequenceArray)
+        let protein = Protein(
+            configurationCount: 1,
+            configurationEnergies: nil,
+            subunitCount: proteinSubunits.count,
+            subunits: proteinSubunits,
+            hasNonChainSubunit: true,
+            atoms: &currentAtomArray,
+            atomArrayComposition: &currentTotalAtomArrayComposition,
+            atomIdentifiers: currentAtomIdentifiers,
+            sequence: currentSequenceArray
+        )
         
         proteins.append(protein)
         
@@ -256,13 +269,13 @@ class PDBParser {
     // MARK: - Reset variables
     
     private func resetProteinVariables() {
-        atomArray = ContiguousArray<simd_float3>()
-        atomIdentifiers = [UInt16]()
-        totalAtomArrayComposition = AtomArrayComposition()
-        subunits = [ParsedSubunit(id: 0)]
-        subunitCount = 0
-        sequenceArray = [String]()
-        sequenceIdentifiers = [Int]()
+        currentAtomArray = ContiguousArray<simd_float3>()
+        currentAtomIdentifiers = [UInt16]()
+        currentTotalAtomArrayComposition = AtomArrayComposition()
+        currentSubunits = [ParsedSubunit(id: 0)]
+        currentSubunitCount = 0
+        currentSequenceArray = [String]()
+        currentSequenceIdentifiers = [Int]()
         currentResId = -1
     }
     
@@ -290,66 +303,67 @@ class PDBParser {
         }
         
         // MARK: - Line iteration
-        
-        rawText.enumerateLines { [weak self] line, _ in
-            
-            guard let self = self else { return }
-            
-            self.currentLine += 1
+        for line in rawText.split(separator: "\n").map({ String($0) }) {
+            currentLine += 1
             proteinViewModel?.statusProgress(progress: progress)
             
-            // MARK: - HEADER
-            
-            // TO-DO: Do this in parallel with the ATOM decoding
-            if line.starts(with: "HEADER") {
+            if line.starts(with: "ATOM") || line.starts(with: "HETATM") {
+                // MARK: - ATOM/HETATM
+                
+                parseAtom(line: line)
+                
+            } else if line.starts(with: "HELIX") {
+                // MARK: - HELIX
+                
+                parseHelix(line: line)
+                
+            } else if line.starts(with: "SHEET") {
+                // MARK: - SHEET
+                
+                parseSheet(line: line)
+                
+            } else if line.starts(with: "HEADER") {
+                // MARK: - HEADER
+                // TO-DO: Do this in parallel with the ATOM decoding
+                
                 guard originalFileInfo?.pdbID == nil else {
                     // We already know the PDB ID, don't overwrite it
-                    return
+                    continue
                 }
-                self.parseHeaderLine(line: line)
-            }
-            
-            // MARK: - TITLE
-            
-            // Try to retrieve the protein info from the headers
-            // TO-DO: Do this in parallel with the ATOM decoding
-            if line.starts(with: "TITLE") {
+                parseHeaderLine(line: line)
+                
+            } else if line.starts(with: "TITLE") {
+                // MARK: - TITLE
+                // Try to retrieve the protein info from the headers
+                // TO-DO: Do this in parallel with the ATOM decoding
+
                 guard originalFileInfo?.description == nil else {
                     // We already know the protein description, don't overwrite it
-                    return
+                    continue
                 }
-                self.parseTitleLine(line: line)
-            }
-            
-            // MARK: - AUTHOR
-            
-            // Retrieve authors
-            // TO-DO: Do this in parallel with the ATOM decoding
-            if line.starts(with: "AUTHOR") {
+                parseTitleLine(line: line)
+                
+            } else if line.starts(with: "AUTHOR") {
+                // MARK: - AUTHOR
+                // Retrieve authors
+                // TO-DO: Do this in parallel with the ATOM decoding
+                
                 guard originalFileInfo?.authors == nil else {
                     // We already know the PDB authors, don't overwrite them
-                    return
+                    continue
                 }
-                self.parseAuthorLine(line: line)
-            }
-            
-            // MARK: - TER
-            
-            // Check if this line marks the end of a subunit
-            if line.starts(with: "TER") {
-                self.subunitCount += 1
-                self.subunits.append(ParsedSubunit(id: self.subunitCount))
-            }
-            
-            // MARK: - ATOM/HETATM
-            // We're only interested in the lines that contain atom positions
-            if line.starts(with: "ATOM") || line.starts(with: "HETATM") {
-                self.parseAtom(line: line)
-            }
-            
-            // MARK: - ENDMDL
-            if line.starts(with: "ENDMDL") {
-                self.createNewProtein()
+                parseAuthorLine(line: line)
+                
+            } else if line.starts(with: "TER") {
+                // MARK: - TER
+                // Check if this line marks the end of a subunit
+                currentSubunitCount += 1
+                currentSubunits.append(ParsedSubunit(id: self.currentSubunitCount))
+                
+            } else if line.starts(with: "ENDMDL") {
+                // MARK: - ENDMDL
+
+                createNewProtein()
             }
         }
         
@@ -365,11 +379,13 @@ class PDBParser {
         
         fileInfo?.sourceLines = rawText.components(separatedBy: .newlines)
         
-        return ProteinFile(fileType: .staticStructure,
-                           fileName: fileName,
-                           fileExtension: fileExtension,
-                           models: proteins,
-                           fileInfo: fileInfo!,
-                           byteSize: byteSize)
+        return ProteinFile(
+            fileType: .staticStructure,
+            fileName: fileName,
+            fileExtension: fileExtension,
+            models: proteins,
+            fileInfo: fileInfo!,
+            byteSize: byteSize
+        )
     }
 }
