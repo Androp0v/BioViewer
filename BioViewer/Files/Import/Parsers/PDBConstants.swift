@@ -1,5 +1,5 @@
 //
-//  PDBLikeConstants.swift
+//  PDBConstants.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 11/12/21.
@@ -15,8 +15,8 @@ enum PDBConstants {
     static let expectedLineLength: Int = 78
     
     // PDB ID location in HEADER record
-    static let pdbIdStart: Int = 62
-    static let pdbIdEnd: Int = 66
+    static let pdbIDStart: Int = 62
+    static let pdbIDEnd: Int = 66
     
     // Spacing after the TITLE keyword in header until the start
     // of the data.
@@ -27,8 +27,8 @@ enum PDBConstants {
     static let resNameEnd: Int = 20
 
     // Start and end of the residue identifier
-    static let resIdStart: Int = 22
-    static let resIdEnd: Int = 26
+    static let resIDStart: Int = 22
+    static let resIDEnd: Int = 26
 
     // Start and end of the x coordinate positions
     static let xPositionStart: Int = 30

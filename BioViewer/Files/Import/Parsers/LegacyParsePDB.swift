@@ -45,8 +45,8 @@ class LegacyPDBParser {
     // MARK: - Parse HEADER
     
     private func parseHeaderLine(line: String) {
-        let startPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIdStart)
-        let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIdEnd)
+        let startPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIDStart)
+        let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIDEnd)
         let rangePDBID = startPDBID..<endPDBID
 
         let pdbIDString = line[rangePDBID].replacingOccurrences(of: " ", with: "")
@@ -125,8 +125,8 @@ class LegacyPDBParser {
         // same length, due to Unicode and stuff).
 
         // Get residue id (1, 2, 3...) for current atom
-        let startResId = line.index(line.startIndex, offsetBy: PDBConstants.resIdStart)
-        let endResId = line.index(line.startIndex, offsetBy: PDBConstants.resIdEnd)
+        let startResId = line.index(line.startIndex, offsetBy: PDBConstants.resIDStart)
+        let endResId = line.index(line.startIndex, offsetBy: PDBConstants.resIDEnd)
         let rangeResId = startResId..<endResId
 
         if let resId = Int( line[rangeResId].replacingOccurrences(of: " ", with: "") ) {
