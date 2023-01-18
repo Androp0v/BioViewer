@@ -120,11 +120,13 @@ struct ProteinImportView: View {
                 // Disable import actions while processing this action
                 willLoadProtein = true
                 // Dispatch on background queue, file loading can be slow
-                DispatchQueue.global(qos: .userInitiated).async {
+                Task(priority: .userInitiated) {
                     do {
-                        try FileImporter.importFromFileURL(fileURL: fileURL,
-                                                           proteinViewModel: proteinViewModel,
-                                                           fileInfo: nil)
+                        try await FileImporter.importFromFileURL(
+                            fileURL: fileURL,
+                            proteinViewModel: proteinViewModel,
+                            fileInfo: nil
+                        )
                     } catch {
                         failedToLoad()
                     }
@@ -163,15 +165,17 @@ struct ProteinImportView: View {
             // Disable import actions while processing this action
             willLoadProtein = true
             // Dispatch on background queue, file loading can be slow
-            DispatchQueue.global(qos: .userInitiated).async {
+            Task(priority: .userInitiated) {
                 guard let fileURL = Bundle.main.url(forResource: "3JBT", withExtension: "pdb") else {
                     failedToLoad()
                     return
                 }
                 do {
-                    try FileImporter.importFromFileURL(fileURL: fileURL,
-                                                       proteinViewModel: proteinViewModel,
-                                                       fileInfo: nil)
+                    try await FileImporter.importFromFileURL(
+                        fileURL: fileURL,
+                        proteinViewModel: proteinViewModel,
+                        fileInfo: nil
+                    )
                 } catch {
                     failedToLoad()
                 }

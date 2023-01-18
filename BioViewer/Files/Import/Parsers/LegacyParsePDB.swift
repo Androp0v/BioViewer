@@ -246,10 +246,10 @@ class LegacyPDBParser {
             configurationEnergies: nil,
             subunitCount: proteinSubunits.count,
             subunits: proteinSubunits,
-            hasNonChainSubunit: true,
-            atoms: &currentAtomArray,
-            atomArrayComposition: &currentTotalAtomArrayComposition,
+            atoms: currentAtomArray,
+            atomArrayComposition: currentTotalAtomArrayComposition,
             atomIdentifiers: currentAtomIdentifiers,
+            atomResidues: nil,
             sequence: currentSequenceArray
         )
         

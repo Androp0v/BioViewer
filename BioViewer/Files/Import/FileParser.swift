@@ -10,19 +10,21 @@ import Foundation
 // MARK: - File parsing
 
 class FileParser {
-    func parseTextFile(rawText: String, fileName: String, fileExtension: String, byteSize: Int?, fileInfo: ProteinFileInfo?, proteinViewModel: ProteinViewModel?) throws -> ProteinFile {
+    func parseTextFile(rawText: String, fileName: String, fileExtension: String, byteSize: Int?, fileInfo: ProteinFileInfo?, proteinViewModel: ProteinViewModel?) async throws -> ProteinFile {
         
         switch fileExtension {
         // MARK: - PDB Files
         case "pdb", "PDB", "pdb1", "PDB1":
             proteinViewModel?.statusUpdate(statusText: "Importing file")
             do {
-                let proteinFile = try LegacyPDBParser().parsePDB(fileName: fileName,
-                                                           fileExtension: fileExtension,
-                                                           byteSize: byteSize,
-                                                           rawText: rawText,
-                                                           proteinViewModel: proteinViewModel,
-                                                           originalFileInfo: fileInfo)
+                let proteinFile = try await PDBParser().parsePDB(
+                    fileName: fileName,
+                    fileExtension: fileExtension,
+                    byteSize: byteSize,
+                    rawText: rawText,
+                    proteinViewModel: proteinViewModel,
+                    originalFileInfo: fileInfo
+                )
                 return proteinFile
             } catch let error as ImportError {
                 proteinViewModel?.statusFinished(importError: error)

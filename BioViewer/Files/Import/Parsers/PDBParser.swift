@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Records
+
 private struct PDBAtomLine {
     let line: Int
     let atomType: UInt16
@@ -23,6 +25,8 @@ private struct PDBSubunitEndLine {
     let line: Int
 }
 
+// MARK: - Blocks
+
 private final class ParsedBlock {
     var atomRecords = [PDBAtomLine]()
     var modelStartRecord = [PDBModelStartLine]()
@@ -34,6 +38,34 @@ extension ParsedBlock {
         lhs.atomRecords.append(contentsOf: rhs.atomRecords)
         lhs.modelStartRecord.append(contentsOf: rhs.modelStartRecord)
         lhs.subunitEndRecords.append(contentsOf: rhs.subunitEndRecords)
+    }
+}
+
+// MARK: - Models and subunits
+
+private class ParsedModel {
+    let startLine: Int
+    let endLine: Int
+    var subunits = [ParsedSubunit]()
+    
+    var atomPositions = [simd_float3]()
+    var atomTypes = [UInt16]()
+    var atomResType = [Residue]()
+    
+    init(startLine: Int, endLine: Int) {
+        self.startLine = startLine
+        self.endLine = endLine
+    }
+}
+
+private class ParsedSubunit {
+    let startLine: Int
+    let endLine: Int
+    var atomCount: Int = 0
+    
+    init(startLine: Int, endLine: Int) {
+        self.startLine = startLine
+        self.endLine = endLine
     }
 }
 
@@ -52,12 +84,14 @@ class PDBParser {
         rawText: String,
         proteinViewModel: ProteinViewModel?,
         originalFileInfo: ProteinFileInfo? = nil
-    ) async throws -> ProteinFile? {
+    ) async throws -> ProteinFile {
         
         let rawLines = rawText.split(separator: "\n").map({ String($0) })
         let lineCount = rawLines.count
         let blockCount = Int(ceil(Double(lineCount) / Double(PDBParser.lineBlockSize)))
         
+        var finalProteins = [Protein]()
+
         // Create a TaskGroup so the file can be parsed simultaneously using multiple threads.
         await withTaskGroup(of: ParsedBlock.self) { taskGroup in
             // Lines to parse are batched into blocks to avoid creating too many tasks with
@@ -77,16 +111,81 @@ class PDBParser {
             }
             
             // Reduce the parsed blocks into a single one
-            var parsedFile = ParsedBlock()
+            var mergedBlocks = ParsedBlock()
             for await parsedBlock in taskGroup {
-                parsedFile += parsedBlock
+                mergedBlocks += parsedBlock
             }
             
-            // Create the objects
-            let models = 
+            // Number of MODELs (proteins) in the file. If empty, assume the entire
+            // file contains a single protein model.
+            var parsedModels = [ParsedModel]()
+            if mergedBlocks.modelStartRecord.count == 0 {
+                parsedModels.append(ParsedModel(startLine: 0, endLine: rawLines.count - 1))
+            } else {
+                fatalError("Multiple protein models parsing not implemented!")
+            }
+            
+            // Number of TER (subunits) in the file. If empty, assume there's at
+            // least one subunit.
+            if mergedBlocks.subunitEndRecords.count == 0 {
+                for model in parsedModels {
+                    model.subunits.append(ParsedSubunit(startLine: model.startLine, endLine: model.endLine))
+                }
+            } else {
+                fatalError("Multiple protein subunits parsing not implemented!")
+            }
+                        
+            // Use atom record data
+            for model in parsedModels {
+                for subunit in model.subunits {
+                    let subunitRecords =  mergedBlocks.atomRecords.filter {
+                        $0.line >= subunit.startLine && $0.line <= subunit.endLine
+                    }
+                    for record in subunitRecords {
+                        model.atomPositions.append(record.position)
+                        model.atomResType.append(record.resType)
+                        model.atomTypes.append(record.atomType)
+                    }
+                    subunit.atomCount = subunitRecords.count
+                }
+            }
+            
+            for model in parsedModels {
+                var finalSubunits = [ProteinSubunit]()
+                var atomIndex = 0
+                for subunit in model.subunits {
+                    finalSubunits.append(ProteinSubunit(
+                        id: atomIndex,
+                        atomCount: subunit.atomCount,
+                        startIndex: atomIndex
+                    ))
+                    atomIndex += subunit.atomCount
+                }
+                
+                let atomArrayComposition = AtomArrayComposition(atomTypes: model.atomTypes)
+                
+                finalProteins.append(Protein(
+                    configurationCount: 1,
+                    configurationEnergies: nil,
+                    subunitCount: finalSubunits.count,
+                    subunits: finalSubunits,
+                    atoms: ContiguousArray(model.atomPositions),
+                    atomArrayComposition: atomArrayComposition,
+                    atomIdentifiers: model.atomTypes,
+                    atomResidues: model.atomResType
+                ))
+            }
+            
         }
         
-        return nil
+        return ProteinFile(
+            fileType: .staticStructure,
+            fileName: "TODO",
+            fileExtension: "TODO",
+            models: finalProteins,
+            fileInfo: ProteinFileInfo(),
+            byteSize: byteSize
+        )
     }
     
     // MARK: - Parse line

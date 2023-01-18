@@ -32,9 +32,6 @@ class Protein {
     /// List of all subunits in the protein
     var subunits: [ProteinSubunit]?
     
-    /// Whether the last subunit is just a collection of non-chain atoms.
-    var hasNonChainSubunit: Bool
-
     // MARK: - Atoms
     
     /// Number of atoms in the protein.
@@ -51,6 +48,9 @@ class Protein {
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     var atomIdentifiers: [UInt16]
+    
+    /// Residue type of each atom.
+    var atomResidues: [Residue]?
     
     // MARK: - Bonds
     
@@ -79,15 +79,15 @@ class Protein {
     
     // MARK: - Initialization
 
-    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], hasNonChainSubunit: Bool, atoms: inout ContiguousArray<simd_float3>, atomArrayComposition: inout AtomArrayComposition, atomIdentifiers: [UInt16], sequence: [String]? = nil) {
+    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], atoms: ContiguousArray<simd_float3>, atomArrayComposition: AtomArrayComposition, atomIdentifiers: [UInt16], atomResidues: [Residue]?, sequence: [String]? = nil) {
         self.configurationCount = configurationCount
         self.configurationEnergies = configurationEnergies
         self.subunitCount = subunitCount
         self.subunits = subunits
-        self.hasNonChainSubunit = hasNonChainSubunit
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
         self.atomIdentifiers = atomIdentifiers
+        self.atomResidues = atomResidues
         self.atomCount = atomArrayComposition.totalCount
         self.sequence = sequence
         self.boundingSphere = computeBoundingSphere(atoms: atoms)

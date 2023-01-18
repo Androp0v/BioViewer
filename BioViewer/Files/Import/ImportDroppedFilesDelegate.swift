@@ -85,12 +85,16 @@ class ImportDroppedFilesDelegate: DropDelegate {
             let byteSize = (data as NSData).length
 
             // Parse file
-            try? FileImporter.importFileFromRawText(rawText: rawFileText,
-                                                    proteinViewModel: proteinViewModel,
-                                                    fileInfo: nil,
-                                                    fileName: fileName,
-                                                    fileExtension: fileExtension,
-                                                    byteSize: byteSize)
+            Task {
+                try? await FileImporter.importFileFromRawText(
+                    rawText: rawFileText,
+                    proteinViewModel: proteinViewModel,
+                    fileInfo: nil,
+                    fileName: fileName,
+                    fileExtension: fileExtension,
+                    byteSize: byteSize
+                )
+            }
         }
 
         return true

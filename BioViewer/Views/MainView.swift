@@ -51,9 +51,13 @@ struct MainView: View {
         }
         // Open documents in view from other apps
         .onOpenURL { fileURL in
-            try? FileImporter.importFromFileURL(fileURL: fileURL,
-                                                proteinViewModel: proteinViewModel,
-                                                fileInfo: nil)
+            Task {
+                try? await FileImporter.importFromFileURL(
+                    fileURL: fileURL,
+                    proteinViewModel: proteinViewModel,
+                    fileInfo: nil
+                )
+            }
         }
     }
 }

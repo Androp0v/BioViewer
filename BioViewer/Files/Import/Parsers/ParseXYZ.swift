@@ -193,10 +193,10 @@ extension FileParser {
                               configurationEnergies: energyArray,
                               subunitCount: 1,
                               subunits: proteinSubunits,
-                              hasNonChainSubunit: false,
-                              atoms: &atomArray,
-                              atomArrayComposition: &atomArrayComposition,
+                              atoms: atomArray,
+                              atomArrayComposition: atomArrayComposition,
                               atomIdentifiers: atomIdentifiers,
+                              atomResidues: nil,
                               sequence: nil)
         
         let fileType: ProteinFileType = configurations.count > 1 ? .dynamicStructure : .staticStructure
