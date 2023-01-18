@@ -28,7 +28,9 @@ struct ColorSection: View {
                     for: .colorGroup,
                     defaultOpen: true,
                     content: {
+                        
                         // MARK: - Color by element
+                        
                         if proteinViewModel.colorBy == ProteinColorByOption.element {
                             // TO-DO: Make color palette work
                             /*
@@ -59,9 +61,11 @@ struct ColorSection: View {
                                 title: NSLocalizedString("Other atoms", comment: ""),
                                 selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
                             )
-                        } else {
+                        } else if proteinViewModel.colorBy == ProteinColorByOption.subunit {
+                            
+                            // MARK: - Color by subunit
+                            
                             if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
-                                // MARK: - Color by subunit
                                 ForEach(subunits, id: \.id) { subunit in
                                     // TO-DO: Show real subunit list
                                     ColorPickerRow(
@@ -73,6 +77,16 @@ struct ColorSection: View {
                                 EmptyDataRow(text: NSLocalizedString("No subunits found", comment: ""))
                                     .padding(.vertical, 2)
                             }
+                        } else {
+                            
+                            // MARK: - Color by residue
+                            
+                            ForEach(Array(zip(Residue.allCases.indices, Residue.allCases)), id: \.0) { index, residue in
+                                ColorPickerRow(
+                                    title: residue.name,
+                                    selectedColor: $proteinViewModel.residueColors[index]
+                                )
+                            }
                         }
                     },
                     label: {
@@ -83,7 +97,8 @@ struct ColorSection: View {
                             pickerOptions:
                                 [
                                     "Element",
-                                    "Subunit"
+                                    "Subunit",
+                                    "Residue"
                                 ]
                         )
                         #if targetEnvironment(macCatalyst)

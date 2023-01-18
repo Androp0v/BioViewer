@@ -44,13 +44,20 @@ extension ProteinRenderer {
         computeEncoder.setBuffer(atomTypeBuffer,
                                  offset: 0,
                                  index: 2)
-        
-        // Create fillColor buffer and fill with data
-        let fillColorBuffer = device.makeBuffer(bytes: &colorFillData,
-                                                length: MemoryLayout<FillColorInput>.stride)
-        computeEncoder.setBuffer(fillColorBuffer,
+        computeEncoder.setBuffer(atomResidueBuffer,
                                  offset: 0,
                                  index: 3)
+        
+        // Create fillColor buffer and fill with data
+        let fillColorBuffer = device.makeBuffer(
+            bytes: &colorFillData,
+            length: MemoryLayout<FillColorInput>.size
+        )
+        computeEncoder.setBuffer(
+            fillColorBuffer,
+            offset: 0,
+            index: 4
+        )
         
         // Total number of threads (used for legacy devices)
         // TODO: Remove once all devices have non-uniform threadgroup size support
@@ -61,7 +68,7 @@ extension ProteinRenderer {
         computeEncoder.setBuffer(
             uniformBuffer,
             offset: 0,
-            index: 4
+            index: 5
         )
         
         // Schedule the threads

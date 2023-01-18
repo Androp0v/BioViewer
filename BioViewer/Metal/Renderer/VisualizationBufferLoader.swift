@@ -138,7 +138,7 @@ class VisualizationBufferLoader {
         }
         
         // Generate a billboard quad for each atom in the protein
-        let (vertexData, subunitData, atomTypeData, indexData) = MetalScheduler.shared.createImpostorSpheres(
+        let (vertexData, subunitData, atomTypeData, atomResidueData, indexData) = MetalScheduler.shared.createImpostorSpheres(
             proteins: proteins,
             atomRadii: atomRadii
         )
@@ -155,6 +155,7 @@ class VisualizationBufferLoader {
             billboardVertexBuffers: vertexData,
             subunitBuffer: subunitData,
             atomTypeBuffer: atomTypeData,
+            atomResidueBuffer: atomResidueData,
             indexBuffer: indexData,
             configurationSelector: configurationSelector
         )

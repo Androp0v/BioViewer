@@ -94,6 +94,8 @@ class ProteinRenderer: NSObject {
     
     /// Used to pass the atomic type data to the shader (used for coloring, size...)
     var atomTypeBuffer: MTLBuffer?
+    /// Used to pass the residue data for each atom to the shader (used for coloring, size...)
+    var atomResidueBuffer: MTLBuffer?
     /// Used to pass the subunit index to the shader (used for coloring)
     var subunitBuffer: MTLBuffer?
     /// Used to pass the atom base color to the shader (used for coloring, size...)
@@ -305,6 +307,7 @@ class ProteinRenderer: NSObject {
         billboardVertexBuffers: BillboardVertexBuffers,
         subunitBuffer: MTLBuffer,
         atomTypeBuffer: MTLBuffer,
+        atomResidueBuffer: MTLBuffer?,
         indexBuffer: MTLBuffer,
         configurationSelector: ConfigurationSelector
     ) {
@@ -312,6 +315,7 @@ class ProteinRenderer: NSObject {
         self.billboardVertexBuffers = billboardVertexBuffers
         self.subunitBuffer = subunitBuffer
         self.atomTypeBuffer = atomTypeBuffer
+        self.atomResidueBuffer = atomResidueBuffer
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
@@ -458,11 +462,13 @@ extension ProteinRenderer: MTKViewDelegate {
             // MARK: - Fill color pass
             
             if self.scene.lastColorPassRequest > self.scene.lastColorPass {
-                self.fillColorPass(commandBuffer: commandBuffer,
-                                   colorBuffer: self.atomColorBuffer,
-                                   subunitBuffer: self.subunitBuffer,
-                                   atomTypeBuffer: self.atomTypeBuffer,
-                                   colorFill: self.scene.colorFill)
+                self.fillColorPass(
+                    commandBuffer: commandBuffer,
+                    colorBuffer: self.atomColorBuffer,
+                    subunitBuffer: self.subunitBuffer,
+                    atomTypeBuffer: self.atomTypeBuffer,
+                    colorFill: self.scene.colorFill
+                )
             }
             
             /*- RENDER PASSES -*/

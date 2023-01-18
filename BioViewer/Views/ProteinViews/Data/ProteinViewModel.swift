@@ -113,9 +113,11 @@ class ProteinViewModel: ObservableObject {
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     @Published var colorBy: Int {
         didSet {
-            self.renderer.scene.animator?.animatedFillColorChange(initialColors: self.renderer.scene.colorFill,
-                                                                  finalColors: updatedFillColor(),
-                                                                  duration: 0.15)
+            self.renderer.scene.animator?.animatedFillColorChange(
+                initialColors: self.renderer.scene.colorFill,
+                finalColors: updatedFillColor(),
+                duration: 0.15
+            )
         }
     }
     
@@ -129,8 +131,15 @@ class ProteinViewModel: ObservableObject {
         }
     }
     
-    /// Color used for each subunit when coloring by element.
+    /// Color used for each element when coloring by element.
     @Published var elementColors: [Color] = [Color]() {
+        didSet {
+            self.renderer.scene.colorFill = updatedFillColor()
+        }
+    }
+    
+    /// Color used for each residue when coloring by residue.
+    @Published var residueColors: [Color] = [Color]() {
         didSet {
             self.renderer.scene.colorFill = updatedFillColor()
         }
@@ -205,6 +214,7 @@ class ProteinViewModel: ObservableObject {
         
         // Initialize colors
         initElementColors()
+        initResidueColors()
         initSubunitColors()
         renderer.scene.colorFill = updatedFillColor()
     }

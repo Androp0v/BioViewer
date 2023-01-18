@@ -42,10 +42,12 @@ class SceneAnimator {
     }
     
     func animatedFillColorChange(initialColors: FillColorInput, finalColors: FillColorInput, duration: Double) {
-        colorAnimation = RunningAnimation(currentTime: CACurrentMediaTime(),
-                                          initialValue: initialColors,
-                                          finalValue: finalColors,
-                                          duration: duration)
+        colorAnimation = RunningAnimation(
+            currentTime: CACurrentMediaTime(),
+            initialValue: initialColors,
+            finalValue: finalColors,
+            duration: duration
+        )
         resumeDisplayLinkIfNeeded()
     }
     
@@ -143,9 +145,11 @@ class SceneAnimator {
         
         let progress = getAnimationProgress(animation: &self.colorAnimation)
         
-        scene.colorFill = FillColorInputUtility.interpolateFillColorInput(start: initialFill,
-                                                                          end: finalFill,
-                                                                          fraction: Float(progress))
+        scene.colorFill = FillColorInputUtility.interpolateFillColorInput(
+            start: initialFill,
+            end: finalFill,
+            fraction: Float(progress)
+        )
         if progress >= 1 {
             scene.colorFill = finalFill
             self.colorAnimation = nil

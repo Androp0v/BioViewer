@@ -14,7 +14,7 @@ extension MetalScheduler {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(proteins: [Protein], atomRadii: AtomRadii) -> (vertexData: BillboardVertexBuffers?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(proteins: [Protein], atomRadii: AtomRadii) -> (vertexData: BillboardVertexBuffers?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, atomResidueData: MTLBuffer?, indexData: MTLBuffer?) {
 
         let impostorTriangleCount = 2
         
@@ -23,7 +23,7 @@ extension MetalScheduler {
         for protein in proteins {
             guard let subunits = protein.subunits else {
                 NSLog("Unable to create subunit data array buffer: protein has no subunits")
-                return (nil, nil, nil, nil)
+                return (nil, nil, nil, nil, nil)
             }
             for index in 0..<protein.subunitCount {
                 subunitData.append(contentsOf: Array(repeating: Int16(index),
@@ -35,6 +35,14 @@ extension MetalScheduler {
         var atomIdentifierData = [UInt16]()
         for protein in proteins {
             atomIdentifierData.append(contentsOf: protein.atomIdentifiers)
+        }
+        
+        // Create atom residue type array
+        var atomResidueType = [UInt8]()
+        for protein in proteins {
+            if let proteinResidues = protein.atomResidues {
+                atomResidueType.append(contentsOf: proteinResidues.map { $0.rawValue })
+            }
         }
         
         // Create atom positions array
@@ -56,9 +64,11 @@ extension MetalScheduler {
         }
 
         // Populate buffers
-        let billboardVertexBuffers = BillboardVertexBuffers(device: device,
-                                                            atomCounts: atomCounts,
-                                                            configurationCounts: configurationCounts)
+        let billboardVertexBuffers = BillboardVertexBuffers(
+            device: device,
+            atomCounts: atomCounts,
+            configurationCounts: configurationCounts
+        )
         let subunitBuffer = device.makeBuffer(
             bytes: subunitData,
             length: subunitData.count * MemoryLayout<Int16>.stride
@@ -67,6 +77,13 @@ extension MetalScheduler {
             bytes: atomIdentifierData,
             length: bufferAtomCount * MemoryLayout<UInt16>.stride
         )
+        var atomResidueBuffer: MTLBuffer?
+        if !atomResidueType.isEmpty {
+            atomResidueBuffer = device.makeBuffer(
+                bytes: atomResidueType,
+                length: bufferAtomCount * MemoryLayout<UInt8>.stride
+            )
+        }
         let generatedIndexBuffer = device.makeBuffer(
             length: bufferAtomAndConfigurationCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
         )
@@ -76,10 +93,6 @@ extension MetalScheduler {
             let atomPositionsBuffer = device.makeBuffer(
                 bytes: atomPositionsData,
                 length: bufferAtomAndConfigurationCount * MemoryLayout<simd_float3>.stride
-            )
-            let atomTypeBuffer = device.makeBuffer(
-                bytes: atomIdentifierData,
-                length: bufferAtomAndConfigurationCount * MemoryLayout<UInt16>.stride
             )
 
             // Make Metal command buffer
@@ -94,10 +107,12 @@ extension MetalScheduler {
 
             // Check if the function needs to be compiled
             if createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
-                createSphereModelBundle.createPipelineState(functionName: "createImpostorSpheres",
-                                                            library: self.library,
-                                                            device: self.device,
-                                                            constantValues: nil)
+                createSphereModelBundle.createPipelineState(
+                    functionName: "createImpostorSpheres",
+                    library: self.library,
+                    device: self.device,
+                    constantValues: nil
+                )
             }
             guard let pipelineState = createSphereModelBundle.getPipelineState(functionParameters: nil) else {
                 return
@@ -107,29 +122,43 @@ extension MetalScheduler {
             computeEncoder.setComputePipelineState(pipelineState)
 
             // Set buffer contents
-            computeEncoder.setBuffer(atomPositionsBuffer,
-                                     offset: 0,
-                                     index: 0)
-            computeEncoder.setBuffer(atomTypeBuffer,
-                                     offset: 0,
-                                     index: 1)
+            computeEncoder.setBuffer(
+                atomPositionsBuffer,
+                offset: 0,
+                index: 0
+            )
+            computeEncoder.setBuffer(
+                atomTypeBuffer,
+                offset: 0,
+                index: 1
+            )
             
-            computeEncoder.setBuffer(billboardVertexBuffers?.positionBuffer,
-                                     offset: 0,
-                                     index: 2)
-            computeEncoder.setBuffer(billboardVertexBuffers?.atomWorldCenterBuffer,
-                                     offset: 0,
-                                     index: 3)
-            computeEncoder.setBuffer(billboardVertexBuffers?.billboardMappingBuffer,
-                                     offset: 0,
-                                     index: 4)
-            computeEncoder.setBuffer(billboardVertexBuffers?.atomRadiusBuffer,
-                                     offset: 0,
-                                     index: 5)
+            computeEncoder.setBuffer(
+                billboardVertexBuffers?.positionBuffer,
+                offset: 0,
+                index: 2
+            )
+            computeEncoder.setBuffer(
+                billboardVertexBuffers?.atomWorldCenterBuffer,
+                offset: 0,
+                index: 3
+            )
+            computeEncoder.setBuffer(
+                billboardVertexBuffers?.billboardMappingBuffer,
+                offset: 0,
+                index: 4
+            )
+            computeEncoder.setBuffer(
+                billboardVertexBuffers?.atomRadiusBuffer,
+                offset: 0,
+                index: 5
+            )
             
-            computeEncoder.setBuffer(generatedIndexBuffer,
-                                     offset: 0,
-                                     index: 6)
+            computeEncoder.setBuffer(
+                generatedIndexBuffer,
+                offset: 0,
+                index: 6
+            )
             
             // Set uniform buffer contents
             let uniformBuffer = device.makeBuffer(
@@ -168,6 +197,6 @@ extension MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (billboardVertexBuffers, subunitBuffer, atomTypeBuffer, generatedIndexBuffer)
+        return (billboardVertexBuffers, subunitBuffer, atomTypeBuffer, atomResidueBuffer, generatedIndexBuffer)
     }
 }

@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
 
-enum Residue: UInt8 {
+enum Residue: UInt8, CaseIterable {
     case Arg
     case His
     case Lys
@@ -53,6 +54,32 @@ enum Residue: UInt8 {
         case .Phe: return "Phenylalanine"
         case .Tyr: return "Tyrosine"
         case .Trp: return "Tryptophan"
+        }
+    }
+    
+    var defaultColor: Color {
+        switch self {
+        case .Arg: return Color(red: 0.000, green: 0.050, blue: 0.466)
+        case .His: return Color(red: 0.419, green: 0.462, blue: 0.968)
+        case .Lys: return Color(red: 0.262, green: 0.298, blue: 0.698)
+        case .Asp: return Color(red: 0.592, green: 0.125, blue: 0.258)
+        case .Glu: return Color(red: 0.376, green: 0.005, blue: 0.002)
+        case .Ser: return Color(red: 0.956, green: 0.474, blue: 0.305)
+        case .Thr: return Color(red: 0.690, green: 0.325, blue: 0.109)
+        case .Asn: return Color(red: 0.960, green: 0.517, blue: 0.458)
+        case .Gln: return Color(red: 0.952, green: 0.360, blue: 0.321)
+        case .Cys: return Color(red: 1.000, green: 0.992, blue: 0.517)
+        case .Sec: return Color(red: 1.000, green: 0.776, blue: 0.278)
+        case .Gly: return Color(red: 0.900, green: 0.900, blue: 0.900)
+        case .Pro: return Color(red: 0.321, green: 0.321, blue: 0.321)
+        case .Ala: return Color(red: 0.635, green: 0.980, blue: 0.596)
+        case .Val: return Color(red: 0.956, green: 0.588, blue: 0.976)
+        case .Ile: return Color(red: 0.009, green: 0.290, blue: 0.006)
+        case .Leu: return Color(red: 0.286, green: 0.364, blue: 0.278)
+        case .Met: return Color(red: 0.713, green: 0.627, blue: 0.313)
+        case .Phe: return Color(red: 0.321, green: 0.298, blue: 0.321)
+        case .Tyr: return Color(red: 0.541, green: 0.443, blue: 0.313)
+        case .Trp: return Color(red: 0.309, green: 0.274, blue: 0.062)
         }
     }
     
