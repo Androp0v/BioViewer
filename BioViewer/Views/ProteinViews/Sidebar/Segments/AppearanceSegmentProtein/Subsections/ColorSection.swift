@@ -29,9 +29,10 @@ struct ColorSection: View {
                     defaultOpen: true,
                     content: {
                         
-                        // MARK: - Color by element
+                        switch proteinViewModel.colorBy {
                         
-                        if proteinViewModel.colorBy == ProteinColorByOption.element {
+                        // MARK: - Color by element
+                        case .element:
                             // TO-DO: Make color palette work
                             /*
                             ColorPaletteRow(colorPalette: ColorPalette(.default))
@@ -61,10 +62,9 @@ struct ColorSection: View {
                                 title: NSLocalizedString("Other atoms", comment: ""),
                                 selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
                             )
-                        } else if proteinViewModel.colorBy == ProteinColorByOption.subunit {
                             
-                            // MARK: - Color by subunit
-                            
+                        // MARK: - Color by subunit
+                        case .subunit:
                             if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
                                 ForEach(subunits, id: \.id) { subunit in
                                     // TO-DO: Show real subunit list
@@ -77,7 +77,7 @@ struct ColorSection: View {
                                 EmptyDataRow(text: NSLocalizedString("No subunits found", comment: ""))
                                     .padding(.vertical, 2)
                             }
-                        } else {
+                        case .residue:
                             
                             // MARK: - Color by residue
                             
@@ -157,13 +157,7 @@ struct ColorSection: View {
                         // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption
                         PickerRow(
                             optionName: "Color by",
-                            selectedOption: $proteinViewModel.colorBy,
-                            pickerOptions:
-                                [
-                                    "Element",
-                                    "Subunit",
-                                    "Residue"
-                                ]
+                            selection: $proteinViewModel.colorBy
                         )
                         #if targetEnvironment(macCatalyst)
                         .padding(.leading, 8)

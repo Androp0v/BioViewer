@@ -55,7 +55,7 @@ struct FileSegmentProtein: View {
                         
                         // Show model selector only if there's more than one model
                         if file.models.count > 1 {
-                            PickerRow(
+                            LegacyPickerRow(
                                 optionName: NSLocalizedString("Model", comment: ""),
                                 selectedOption: $proteinViewModel.dataSource.selectedModel[index],
                                 startIndex: -1,

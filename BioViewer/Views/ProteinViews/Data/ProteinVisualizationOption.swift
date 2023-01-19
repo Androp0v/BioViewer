@@ -7,20 +7,16 @@
 
 import Foundation
 
-enum ProteinVisualizationOption: Int, CaseIterable {
-    case solidSpheres = 0
-    case ballAndStick = 1
+enum ProteinVisualizationOption: PickableEnum {
+    case solidSpheres
+    case ballAndStick
     
-    static func getPickerOptions() -> [String] {
-        var optionNames = [String]()
-        ProteinVisualizationOption.allCases.forEach { option in
-            switch option {
-            case .solidSpheres:
-                optionNames.append("Space-filling spheres")
-            case .ballAndStick:
-                optionNames.append("Ball and stick (beta)")
-            }
+    var displayName: String {
+        switch self {
+        case .solidSpheres:
+            return NSLocalizedString("Space-filling spheres", comment: "")
+        case .ballAndStick:
+            return NSLocalizedString("Ball and stick (beta)", comment: "")
         }
-        return optionNames
     }
 }

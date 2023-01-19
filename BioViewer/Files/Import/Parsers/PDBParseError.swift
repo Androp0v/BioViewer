@@ -10,6 +10,5 @@ import Foundation
 enum PDBParseError: Error {
     case unexpectedLineLength
     case missingResidueID
-    case invalidResidueName
     case invalidAtomCoordinates
 }

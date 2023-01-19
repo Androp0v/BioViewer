@@ -55,15 +55,12 @@ struct BioViewerCommands: Commands {
         // MARK: - Color
         CommandMenu(NSLocalizedString("Color", comment: "")) {
             Section {
-                Button(NSLocalizedString("Color by element", comment: "")) {
-                    AppState.shared.focusedViewModel?.colorBy = ProteinColorByOption.element
+                ForEach(ProteinColorByOption.allCases, id: \.self) { colorOption in
+                    Button(NSLocalizedString("Color by \(colorOption.displayName.lowercased())", comment: "")) {
+                        AppState.shared.focusedViewModel?.colorBy = colorOption
+                    }
+                    .keyboardShortcut(colorOption.shortcutKey, modifiers: [.option])
                 }
-                .keyboardShortcut("1", modifiers: [.command, .shift])
-                
-                Button(NSLocalizedString("Color by subunit", comment: "")) {
-                    AppState.shared.focusedViewModel?.colorBy = ProteinColorByOption.subunit
-                }
-                .keyboardShortcut("2", modifiers: [.command, .shift])
             }
         }
     }

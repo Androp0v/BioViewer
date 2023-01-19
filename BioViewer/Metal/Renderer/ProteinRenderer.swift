@@ -271,7 +271,7 @@ class ProteinRenderer: NSObject {
 
     // MARK: - Public functions
         
-    func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: Int?) {
+    func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: ProteinColorByOption?) {
         
         // Get the number of configurations
         var atomAndConfigurationCount = 0

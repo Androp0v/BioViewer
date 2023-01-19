@@ -9,11 +9,33 @@ import Foundation
 import simd
 import SwiftUI
 
-public enum ProteinColorByOption {
-    static let none: Int = -1
-    static let element: Int = 0
-    static let subunit: Int = 1
-    static let residue: Int = 2
+enum ProteinColorByOption: PickableEnum {
+    case element
+    case subunit
+    case residue
+    
+    var displayName: String {
+        switch self {
+        case .element:
+            return NSLocalizedString("Element", comment: "")
+        case .subunit:
+            return NSLocalizedString("Subunit", comment: "")
+        case .residue:
+            return NSLocalizedString("Residue", comment: "")
+        }
+    }
+    
+    var shortcutKey: KeyEquivalent {
+        switch self {
+        case .element:
+            return "1"
+        case .subunit:
+            return "2"
+        case .residue:
+            return "3"
+        }
+    }
+
 }
 
 extension ProteinViewModel {
@@ -72,11 +94,11 @@ extension ProteinViewModel {
         fillColor.colorBySubunit = 0.0
         
         switch colorBy {
-        case ProteinColorByOption.element:
+        case .element:
             fillColor.colorByElement = 1.0
-        case ProteinColorByOption.residue:
+        case .residue:
             fillColor.colorByResidue = 1.0
-        case ProteinColorByOption.subunit:
+        case .subunit:
             fillColor.colorBySubunit = 1.0
         default:
             break

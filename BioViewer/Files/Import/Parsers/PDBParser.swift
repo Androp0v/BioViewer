@@ -17,7 +17,7 @@ private struct PDBAtomLine {
     let position: simd_float3
 }
 
-private struct PDBModelStartLine {
+private struct PDBModelEndLine {
     let line: Int
 }
 
@@ -29,14 +29,14 @@ private struct PDBSubunitEndLine {
 
 private final class ParsedBlock {
     var atomRecords = [PDBAtomLine]()
-    var modelStartRecord = [PDBModelStartLine]()
+    var modelEndRecord = [PDBModelEndLine]()
     var subunitEndRecords = [PDBSubunitEndLine]()
 }
 
 extension ParsedBlock {
     static func += (lhs: inout ParsedBlock, rhs: ParsedBlock) {
         lhs.atomRecords.append(contentsOf: rhs.atomRecords)
-        lhs.modelStartRecord.append(contentsOf: rhs.modelStartRecord)
+        lhs.modelEndRecord.append(contentsOf: rhs.modelEndRecord)
         lhs.subunitEndRecords.append(contentsOf: rhs.subunitEndRecords)
     }
 }
@@ -119,10 +119,18 @@ class PDBParser {
             // Number of MODELs (proteins) in the file. If empty, assume the entire
             // file contains a single protein model.
             var parsedModels = [ParsedModel]()
-            if mergedBlocks.modelStartRecord.count == 0 {
+            if mergedBlocks.modelEndRecord.count == 0 {
                 parsedModels.append(ParsedModel(startLine: 0, endLine: rawLines.count - 1))
             } else {
-                fatalError("Multiple protein models parsing not implemented!")
+                let sortedModelRecords = mergedBlocks.modelEndRecord.sorted(by: { $0.line < $1.line })
+                var lastModelStart: Int = 0
+                for modelRecord in sortedModelRecords {
+                    parsedModels.append(ParsedModel(
+                        startLine: lastModelStart + 1,
+                        endLine: modelRecord.line
+                    ))
+                    lastModelStart = modelRecord.line
+                }
             }
             
             // Number of TER (subunits) in the file. If empty, assume there's at
@@ -132,33 +140,51 @@ class PDBParser {
                     model.subunits.append(ParsedSubunit(startLine: model.startLine, endLine: model.endLine))
                 }
             } else {
-                fatalError("Multiple protein subunits parsing not implemented!")
+                let sortedSubunitRecords = mergedBlocks.subunitEndRecords.sorted(by: { $0.line < $1.line })
+                for model in parsedModels {
+                    var lastSubunitStart: Int = model.startLine
+                    for subunitRecord in sortedSubunitRecords {
+                        if subunitRecord.line >= model.startLine && subunitRecord.line <= model.endLine {
+                            model.subunits.append(ParsedSubunit(
+                                startLine: lastSubunitStart + 1,
+                                endLine: subunitRecord.line
+                            ))
+                            lastSubunitStart = subunitRecord.line
+                        }
+                    }
+                }
             }
                         
             // Use atom record data
-            for model in parsedModels {
-                for subunit in model.subunits {
-                    let subunitRecords =  mergedBlocks.atomRecords.filter {
-                        $0.line >= subunit.startLine && $0.line <= subunit.endLine
+            await withTaskGroup(of: Void.self) { [mergedBlocks] taskGroup in
+                for model in parsedModels {
+                    taskGroup.addTask {
+                        for subunit in model.subunits {
+                            let subunitRecords =  mergedBlocks.atomRecords.filter {
+                                $0.line >= subunit.startLine && $0.line <= subunit.endLine
+                            }
+                            for record in subunitRecords {
+                                model.atomPositions.append(record.position)
+                                model.atomResType.append(record.resType)
+                                model.atomTypes.append(record.atomType)
+                            }
+                            subunit.atomCount = subunitRecords.count
+                        }
                     }
-                    for record in subunitRecords {
-                        model.atomPositions.append(record.position)
-                        model.atomResType.append(record.resType)
-                        model.atomTypes.append(record.atomType)
-                    }
-                    subunit.atomCount = subunitRecords.count
                 }
             }
             
             for model in parsedModels {
                 var finalSubunits = [ProteinSubunit]()
+                var subunitIndex = 0
                 var atomIndex = 0
                 for subunit in model.subunits {
                     finalSubunits.append(ProteinSubunit(
-                        id: atomIndex,
+                        id: subunitIndex,
                         atomCount: subunit.atomCount,
                         startIndex: atomIndex
                     ))
+                    subunitIndex += 1
                     atomIndex += subunit.atomCount
                 }
                 
@@ -197,8 +223,8 @@ class PDBParser {
             }
         } else if line.starts(with: "TER") {
             parsedBlock.subunitEndRecords.append(PDBSubunitEndLine(line: lineIndex))
-        } else if line.starts(with: "MODEL") {
-            parsedBlock.modelStartRecord.append(PDBModelStartLine(line: lineIndex))
+        } else if line.starts(with: "ENDMDL") {
+            parsedBlock.modelEndRecord.append(PDBModelEndLine(line: lineIndex))
         }
     }
     

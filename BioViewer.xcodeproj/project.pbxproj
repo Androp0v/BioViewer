@@ -45,7 +45,7 @@
 		C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C357265A56CC00E66C3E /* SettingsView.swift */; };
 		C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C359265A57E900E66C3E /* BuyCoffeeView.swift */; };
 		C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */; };
-		C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35D265A883C00E66C3E /* PickerRow.swift */; };
+		C464C35E265A883C00E66C3E /* LegacyPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35D265A883C00E66C3E /* LegacyPickerRow.swift */; };
 		C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35F265B0CA900E66C3E /* CoffeeRow.swift */; };
 		C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C361265D311200E66C3E /* ProteinImportView.swift */; };
 		C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
@@ -104,6 +104,15 @@
 		C51D4EEC2769199600C69B3D /* AmbientOcclusionTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */; };
 		C51D4EED276919B200C69B3D /* AmbientOcclusionTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */; };
 		C51D4EEF276D073200C69B3D /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
+		C5277FBC2979564B00291AF7 /* ResidueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D97E0E29746A8000EF1D5A /* ResidueType.swift */; };
+		C5277FBD2979565300291AF7 /* CartoonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384242972DD73007E45E1 /* CartoonModel.swift */; };
+		C5277FBE2979565700291AF7 /* CartoonHelix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553841F2972DCBC007E45E1 /* CartoonHelix.swift */; };
+		C5277FBF2979565900291AF7 /* CartoonSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384222972DD0C007E45E1 /* CartoonSheet.swift */; };
+		C5277FC02979565B00291AF7 /* CartoonLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384262972DE79007E45E1 /* CartoonLoop.swift */; };
+		C5277FC12979566200291AF7 /* CartoonStructureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384282972DEF6007E45E1 /* CartoonStructureType.swift */; };
+		C5277FC22979566900291AF7 /* PDBParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D97E0A2974549C00EF1D5A /* PDBParser.swift */; };
+		C5277FC32979567500291AF7 /* PDBParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D97E0C297466C000EF1D5A /* PDBParseError.swift */; };
+		C5277FC529795A2F00291AF7 /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC429795A2F00291AF7 /* PickerRow.swift */; };
 		C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
@@ -212,7 +221,6 @@
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
 		C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5883E872857B8D000C97818 /* RCSBDetailView.swift */; };
-		C59550BE2781C24700129F9B /* VisualizationPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */; };
 		C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */; };
@@ -227,13 +235,11 @@
 		C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */; };
 		C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */; };
 		C5B76AD72761AE95004199A9 /* BoundingVolumes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */; };
-		C5C7513627DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */; };
-		C5C7513827DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */; };
-		C5C7513A27DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */; };
-		C5C7513C27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */; };
+		C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */; };
+		C5C7513A27DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */; };
 		C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */; };
-		C5C7514027DBF716004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */; };
-		C5C7514127DBF71E004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */; };
+		C5C7514027DBF716004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */; };
+		C5C7514127DBF71E004CEE8E /* BallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */; };
 		C5C7514327DBF8CB004CEE8E /* NewsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514227DBF8CB004CEE8E /* NewsRow.swift */; };
 		C5C7514527DC16A4004CEE8E /* ChangeLog.plist in Resources */ = {isa = PBXBuildFile; fileRef = C5C7514427DC16A4004CEE8E /* ChangeLog.plist */; };
 		C5C7514727DC1859004CEE8E /* WhatsNewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7514627DC1859004CEE8E /* WhatsNewViewModel.swift */; };
@@ -358,7 +364,7 @@
 		C464C357265A56CC00E66C3E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C464C359265A57E900E66C3E /* BuyCoffeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyCoffeeView.swift; sourceTree = "<group>"; };
 		C464C35B265A5A1D00E66C3E /* CoffeeTipRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeTipRow.swift; sourceTree = "<group>"; };
-		C464C35D265A883C00E66C3E /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
+		C464C35D265A883C00E66C3E /* LegacyPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyPickerRow.swift; sourceTree = "<group>"; };
 		C464C35F265B0CA900E66C3E /* CoffeeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeRow.swift; sourceTree = "<group>"; };
 		C464C361265D311200E66C3E /* ProteinImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportView.swift; sourceTree = "<group>"; };
 		C495B2382663E195004995C2 /* ProteinRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderer.swift; sourceTree = "<group>"; };
@@ -402,6 +408,7 @@
 		C51D4EE82769153200C69B3D /* AmbientOcclusionRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientOcclusionRenderer.swift; sourceTree = "<group>"; };
 		C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientOcclusionTextures.swift; sourceTree = "<group>"; };
 		C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationSelector.swift; sourceTree = "<group>"; };
+		C5277FC429795A2F00291AF7 /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorPass.swift; sourceTree = "<group>"; };
 		C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FillColorBuffer.metal; sourceTree = "<group>"; };
 		C52AE373279D7CE900BEE11B /* FillColorInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillColorInput.h; sourceTree = "<group>"; };
@@ -481,7 +488,6 @@
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
 		C5883E872857B8D000C97818 /* RCSBDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBDetailView.swift; sourceTree = "<group>"; };
-		C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationPickerRow.swift; sourceTree = "<group>"; };
 		C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterAnimator.swift; sourceTree = "<group>"; };
 		C59792CD277210570019ABD3 /* ShutterClosed.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterClosed.aiff; sourceTree = "<group>"; };
 		C59792CE277210570019ABD3 /* ShutterOpen.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterOpen.aiff; sourceTree = "<group>"; };
@@ -491,10 +497,8 @@
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRow.swift; sourceTree = "<group>"; };
 		C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthPrePassTextures.swift; sourceTree = "<group>"; };
-		C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSolidSpheresRadiusOptions.swift; sourceTree = "<group>"; };
-		C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidSpheresRadiiPickerRow.swift; sourceTree = "<group>"; };
-		C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProteinBallAndStickRadiusOptions.swift; sourceTree = "<group>"; };
-		C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallAndStickRadiiPickerRow.swift; sourceTree = "<group>"; };
+		C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidSpheresRadiusOptions.swift; sourceTree = "<group>"; };
+		C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallAndStickRadiusOptions.swift; sourceTree = "<group>"; };
 		C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		C5C7514227DBF8CB004CEE8E /* NewsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRow.swift; sourceTree = "<group>"; };
 		C5C7514427DC16A4004CEE8E /* ChangeLog.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ChangeLog.plist; sourceTree = "<group>"; };
@@ -627,8 +631,8 @@
 				C41A0568264D5D58006F551C /* ProteinViewModel.swift */,
 				C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */,
 				C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */,
-				C5C7513527DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift */,
-				C5C7513927DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift */,
+				C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */,
+				C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -802,7 +806,8 @@
 				C50E024D27639B43005D7F06 /* SliderRow.swift */,
 				C5EEE9AF276E0448005737C1 /* InputWithButtonRow.swift */,
 				C50E024F2763CB0C005D7F06 /* RangeRow.swift */,
-				C464C35D265A883C00E66C3E /* PickerRow.swift */,
+				C464C35D265A883C00E66C3E /* LegacyPickerRow.swift */,
+				C5277FC429795A2F00291AF7 /* PickerRow.swift */,
 			);
 			path = Rows;
 			sourceTree = "<group>";
@@ -1179,7 +1184,6 @@
 			children = (
 				C45BAC3F2648A93500B36026 /* AppearanceSegmentProtein.swift */,
 				C553B7922932FC5E00294BB4 /* Subsections */,
-				C5F6D22128536AB100C1962F /* AppearancePickers */,
 			);
 			path = AppearanceSegmentProtein;
 			sourceTree = "<group>";
@@ -1242,16 +1246,6 @@
 				C5EEE9B9276F8616005737C1 /* CameraControlToolbar.swift */,
 			);
 			path = "Top toolbar";
-			sourceTree = "<group>";
-		};
-		C5F6D22128536AB100C1962F /* AppearancePickers */ = {
-			isa = PBXGroup;
-			children = (
-				C59550BD2781C24700129F9B /* VisualizationPickerRow.swift */,
-				C5C7513727DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift */,
-				C5C7513B27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift */,
-			);
-			path = AppearancePickers;
 			sourceTree = "<group>";
 		};
 		C5F7D30B275786DA008A0517 /* JSONs */ = {
@@ -1454,7 +1448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C5EEE9C52770043D005737C1 /* PhotoModeViewModel.swift in Sources */,
-				C464C35E265A883C00E66C3E /* PickerRow.swift in Sources */,
+				C464C35E265A883C00E66C3E /* LegacyPickerRow.swift in Sources */,
 				C5EEE9BF276FCC65005737C1 /* PhotoModeFooter.swift in Sources */,
 				C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */,
 				C515EFC3274FEA0900B6F7DB /* ProteinColorModel.swift in Sources */,
@@ -1502,6 +1496,7 @@
 				C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
 				C5546DAB27E4DF9F00F607F2 /* ComputeSDFGrid.metal in Sources */,
+				C5277FC529795A2F00291AF7 /* PickerRow.swift in Sources */,
 				C5412FEF283D9D0400234403 /* DepthPrePassShader.metal in Sources */,
 				C5F6D2232853A45700C1962F /* ColorSection.swift in Sources */,
 				C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */,
@@ -1519,7 +1514,6 @@
 				C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */,
 				C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */,
 				C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */,
-				C5C7513C27DBC683004CEE8E /* BallAndStickRadiiPickerRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
 				C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */,
 				C5C7514927DC33D5004CEE8E /* InfoAtomsRow.swift in Sources */,
@@ -1575,7 +1569,6 @@
 				C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */,
 				C55384272972DE79007E45E1 /* CartoonLoop.swift in Sources */,
 				C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */,
-				C5C7513827DBC194004CEE8E /* SolidSpheresRadiiPickerRow.swift in Sources */,
 				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C5C7514B27DC35BF004CEE8E /* InfoAtomsCapsule.swift in Sources */,
@@ -1602,7 +1595,7 @@
 				C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */,
 				C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */,
 				C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */,
-				C5C7513A27DBC5FC004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */,
+				C5C7513A27DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift in Sources */,
 				C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */,
 				C5D97E0B2974549C00EF1D5A /* PDBParser.swift in Sources */,
 				C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */,
@@ -1626,7 +1619,6 @@
 				C55384252972DD73007E45E1 /* CartoonModel.swift in Sources */,
 				C572BD1A2741372600FF010D /* ProteinFileInfo.swift in Sources */,
 				C5433F3B2770EABA00607B20 /* ImageExporter.swift in Sources */,
-				C59550BE2781C24700129F9B /* VisualizationPickerRow.swift in Sources */,
 				C572BD182740222800FF010D /* FileSourceView.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
@@ -1636,7 +1628,7 @@
 				C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */,
 				C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */,
 				C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */,
-				C5C7513627DBBFD4004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */,
+				C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */,
 				C544D3A0277016270060B30D /* TextureToImage.swift in Sources */,
 				C5EEE9B0276E0448005737C1 /* InputWithButtonRow.swift in Sources */,
 			);
@@ -1663,15 +1655,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				C57F995B275E8DC7001DE6D6 /* DocumentPickerViewController.swift in Sources */,
+				C5277FBC2979564B00291AF7 /* ResidueType.swift in Sources */,
 				C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */,
 				C51D4EDF27679B1100C69B3D /* DynamicStructureControlView.swift in Sources */,
+				C5277FC22979566900291AF7 /* PDBParser.swift in Sources */,
 				C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */,
 				C501C74827CA2C3E008CDA25 /* ComputePipelines.swift in Sources */,
 				C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */,
 				C504C9BF274175D8002D4E6A /* CreateImpostorSpheres.metal in Sources */,
 				C572BD362741655700FF010D /* Protein.swift in Sources */,
-				C5C7514127DBF71E004CEE8E /* ProteinBallAndStickRadiusOptions.swift in Sources */,
+				C5C7514127DBF71E004CEE8E /* BallAndStickRadiusOptions.swift in Sources */,
 				C5035EED283FE738009CE87D /* DepthPrePassStage.swift in Sources */,
+				C5277FBE2979565700291AF7 /* CartoonHelix.swift in Sources */,
 				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
@@ -1680,16 +1675,19 @@
 				C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */,
 				C572BD482741680100FF010D /* SIMDExtensions.swift in Sources */,
 				C572BD462741663C00FF010D /* CreateImpostorSpheres.swift in Sources */,
+				C5277FBF2979565900291AF7 /* CartoonSheet.swift in Sources */,
 				C56E87E1278D896B004BAEE2 /* SceneAnimator.swift in Sources */,
 				C572BD442741661300FF010D /* MatrixTransform.swift in Sources */,
 				C518AEDC27E7999400145571 /* ComputeSDFGrid.swift in Sources */,
+				C5277FBD2979565300291AF7 /* CartoonModel.swift in Sources */,
 				C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */,
 				C572BD3F274165F000FF010D /* StatusViewModel.swift in Sources */,
 				C5E593B8281D8C4500CFFAA2 /* MetalLegacySupport.swift in Sources */,
 				C5B76AD62761AE8C004199A9 /* RendererPipelines.swift in Sources */,
-				C5C7514027DBF716004CEE8E /* ProteinSolidSpheresRadiusOptions.swift in Sources */,
+				C5C7514027DBF716004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */,
 				C572BD432741660B00FF010D /* PipelineStateBundle.swift in Sources */,
 				C51D4EDE27679A5200C69B3D /* ParseXYZ.swift in Sources */,
+				C5277FC32979567500291AF7 /* PDBParseError.swift in Sources */,
 				C572BD41274165FE00FF010D /* MetalScheduler.swift in Sources */,
 				C57FCE8D277E60AF001A7B4A /* CreateBondsGeometry.swift in Sources */,
 				C57F995A275E788A001DE6D6 /* FileImporter.swift in Sources */,
@@ -1713,6 +1711,7 @@
 				C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */,
 				C501C74927CA2C4C008CDA25 /* FillColorInputUtility.swift in Sources */,
 				C51B8644276D24E100601890 /* ConfigurationSelector.swift in Sources */,
+				C5277FC02979565B00291AF7 /* CartoonLoop.swift in Sources */,
 				C50E02562764B5C4005D7F06 /* PDBConstants.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,
 				C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */,
@@ -1725,6 +1724,7 @@
 				C504C9BC27416C78002D4E6A /* ProteinMetalViewController.swift in Sources */,
 				C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */,
 				C504C9BE274175D5002D4E6A /* CreateAtomMesh.metal in Sources */,
+				C5277FC12979566200291AF7 /* CartoonStructureType.swift in Sources */,
 				C52AE375279D80A900BEE11B /* BasicShader.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

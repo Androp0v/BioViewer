@@ -47,18 +47,22 @@ class ProteinViewModel: ObservableObject {
     /// Visualization option for protein representation.
     @Published var visualization: ProteinVisualizationOption = .solidSpheres {
         didSet {
-            visualizationBufferLoader.handleVisualizationChange(visualization: visualization,
-                                                                proteinViewModel: self)
+            visualizationBufferLoader.handleVisualizationChange(
+                visualization: visualization,
+                proteinViewModel: self
+            )
         }
     }
     
     /// Radius option for solid spheres.
-    @Published var solidSpheresRadiusOption: ProteinSolidSpheresRadiusOptions = .vanDerWaals {
+    @Published var solidSpheresRadiusOption: SolidSpheresRadiusOptions = .vanDerWaals {
         didSet {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
-                                                                         proteinViewModel: self)
+                self.visualizationBufferLoader.handleVisualizationChange(
+                    visualization: self.visualization,
+                    proteinViewModel: self
+                )
             }
         }
     }
@@ -66,8 +70,10 @@ class ProteinViewModel: ObservableObject {
         didSet {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
-                                                                         proteinViewModel: self)
+                self.visualizationBufferLoader.handleVisualizationChange(
+                    visualization: self.visualization,
+                    proteinViewModel: self
+                )
             }
         }
     }
@@ -75,19 +81,23 @@ class ProteinViewModel: ObservableObject {
         didSet {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
-                                                                         proteinViewModel: self)
+                self.visualizationBufferLoader.handleVisualizationChange(
+                    visualization: self.visualization,
+                    proteinViewModel: self
+                )
             }
         }
     }
     
     /// Radius option for ball and stick.
-    @Published var ballAndStickRadiusOption: ProteinBallAndStickRadiusOptions = .fixed {
+    @Published var ballAndStickRadiusOption: BallAndStickRadiusOptions = .fixed {
         didSet {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
-                                                                         proteinViewModel: self)
+                self.visualizationBufferLoader.handleVisualizationChange(
+                    visualization: self.visualization,
+                    proteinViewModel: self
+                )
             }
         }
     }
@@ -95,8 +105,10 @@ class ProteinViewModel: ObservableObject {
         didSet {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(visualization: self.visualization,
-                                                                         proteinViewModel: self)
+                self.visualizationBufferLoader.handleVisualizationChange(
+                    visualization: self.visualization,
+                    proteinViewModel: self
+                )
             }
         }
     }
@@ -111,7 +123,7 @@ class ProteinViewModel: ObservableObject {
     }
     
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
-    @Published var colorBy: Int {
+    @Published var colorBy: ProteinColorByOption {
         didSet {
             self.renderer.scene.animator?.animatedFillColorChange(
                 initialColors: self.renderer.scene.colorFill,
@@ -203,7 +215,7 @@ class ProteinViewModel: ObservableObject {
         self.statusViewModel = StatusViewModel()
         
         // Setup coloring scheme
-        self.colorBy = ProteinColorByOption.element
+        self.colorBy = .element
 
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dataSource.proteinViewModel = self

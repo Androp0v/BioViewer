@@ -28,12 +28,12 @@ struct PhotoModeContent: View {
             Divider()
             List {
                 Section {
-                    PickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
+                    LegacyPickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
                               selectedOption: $photoModeViewModel.finalTextureSizeOption,
                               pickerOptions: ["1024x1024",
                                               "2048x2048",
                                               "4096x4096"])
-                    PickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
+                    LegacyPickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
                               selectedOption: $photoModeViewModel.shadowResolution,
                               pickerOptions: ["Normal",
                                               "High",

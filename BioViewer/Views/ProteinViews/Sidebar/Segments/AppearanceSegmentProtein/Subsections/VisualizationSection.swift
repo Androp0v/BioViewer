@@ -50,7 +50,10 @@ struct VisualizationSection: View {
                                     }
                                 },
                                 label: {
-                                    SolidSpheresRadiiPickerRow()
+                                    PickerRow(
+                                        optionName: "Radius",
+                                        selection: $proteinViewModel.solidSpheresRadiusOption
+                                    )
                                         #if targetEnvironment(macCatalyst)
                                         .padding(.leading, 8)
                                         #else
@@ -83,7 +86,10 @@ struct VisualizationSection: View {
                                     }
                                 },
                                 label: {
-                                    BallAndStickRadiiPickerRow()
+                                    PickerRow(
+                                        optionName: "Radius",
+                                        selection: $proteinViewModel.ballAndStickRadiusOption
+                                    )
                                         #if targetEnvironment(macCatalyst)
                                         .padding(.leading, 8)
                                         #else
@@ -94,7 +100,10 @@ struct VisualizationSection: View {
                         }
                     },
                     label: {
-                        VisualizationPickerRow()
+                        PickerRow(
+                            optionName: "View as",
+                            selection: $proteinViewModel.visualization
+                        )
                             #if targetEnvironment(macCatalyst)
                             .padding(.leading, 8)
                             #else
