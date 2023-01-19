@@ -31,6 +31,7 @@ struct AtomType {
     static let POTASSIUM: UInt16 = 19
     static let CALCIUM: UInt16 = 20
     static let IRON: UInt16 = 26
+    static let ZINC: UInt16 = 30
 }
 
 class AtomTypeUtilities {
@@ -108,6 +109,8 @@ class AtomTypeUtilities {
             return 2.31
         case AtomType.IRON:
             return 1.94
+        case AtomType.ZINC:
+            return 1.39
         default: return 1.0
         }
     }

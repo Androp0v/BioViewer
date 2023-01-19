@@ -8,7 +8,12 @@
 import Foundation
 import SwiftUI
 
+// swiftlint:disable all
+
 enum Residue: UInt8, CaseIterable {
+    
+    // MARK: - Amino acids
+    
     case Arg
     case His
     case Lys
@@ -30,6 +35,51 @@ enum Residue: UInt8, CaseIterable {
     case Phe
     case Tyr
     case Trp
+    
+    // MARK: - Nucleobases (ribonucleic)
+    
+    case A
+    case C
+    case G
+    case T
+    case U
+    case I
+    
+    // MARK: - Nucleobases (deoxyribonucleic)
+    
+    case DA
+    case DC
+    case DG
+    case DT
+    case DU
+    case DI
+    
+    
+    // MARK: - Other
+    
+    case unknown
+    
+    // MARK: - Computed properties
+    
+    enum ResidueKind {
+        case aminoAcid
+        case rnaNucleobase
+        case dnaNucleobase
+        case unknown
+    }
+    
+    var kind: ResidueKind {
+        switch self {
+        case .Arg, .His, .Lys, .Asp, .Glu, .Ser, .Thr, .Asn, .Gln, .Cys, .Sec, .Gly, .Pro, .Ala, .Val, .Ile, .Leu, .Met, .Phe, .Tyr, .Trp:
+            return .aminoAcid
+        case .A, .C, .G, .T, .U, .I:
+            return .rnaNucleobase
+        case .DA, .DC, .DG, .DT, .DU, .DI:
+            return .dnaNucleobase
+        case .unknown:
+            return .unknown
+        }
+    }
     
     var name: String {
         switch self {
@@ -54,6 +104,22 @@ enum Residue: UInt8, CaseIterable {
         case .Phe: return "Phenylalanine"
         case .Tyr: return "Tyrosine"
         case .Trp: return "Tryptophan"
+            
+        case .A: return "Adenine (RNA)"
+        case .C: return "Cytosine (RNA)"
+        case .G: return "Guanine (RNA)"
+        case .T: return "Thymine (RNA)"
+        case .U: return "Uracil (RNA)"
+        case .I: return "Inosine (RNA)"
+            
+        case .DA: return "Adenine (DNA)"
+        case .DC: return "Cytosine (DNA)"
+        case .DG: return "Guanine (DNA)"
+        case .DT: return "Thymine (DNA)"
+        case .DU: return "Uracil (DNA)"
+        case .DI: return "Inosine (DNA)"
+            
+        case .unknown: return "Unknown"
         }
     }
     
@@ -80,10 +146,26 @@ enum Residue: UInt8, CaseIterable {
         case .Phe: return Color(red: 0.321, green: 0.298, blue: 0.321)
         case .Tyr: return Color(red: 0.541, green: 0.443, blue: 0.313)
         case .Trp: return Color(red: 0.309, green: 0.274, blue: 0.062)
+            
+        case .A: return Color(red: 1.000, green: 0.309, blue: 1.000)
+        case .C: return Color(red: 0.412, green: 1.000, blue: 0.225)
+        case .G: return Color(red: 0.222, green: 0.348, blue: 1.000)
+        case .T: return Color(red: 1.000, green: 0.534, blue: 0.202)
+        case .U: return Color(red: 1.000, green: 0.325, blue: 0.287)
+        case .I: return Color(red: 1.000, green: 1.000, blue: 1.000)
+            
+        case .DA: return Color(red: 1.000, green: 0.309, blue: 1.000)
+        case .DC: return Color(red: 0.412, green: 1.000, blue: 0.225)
+        case .DG: return Color(red: 0.222, green: 0.348, blue: 1.000)
+        case .DT: return Color(red: 1.000, green: 0.534, blue: 0.202)
+        case .DU: return Color(red: 1.000, green: 0.325, blue: 0.287)
+        case .DI: return Color(red: 1.000, green: 1.000, blue: 1.000)
+            
+        case .unknown: return Color(red: 0.500, green: 0.500, blue: 0.500)
         }
     }
     
-    init?(string: String) {
+    init(string: String) {
         switch string {
         case "ARG": self = .Arg
         case "HIS": self = .His
@@ -106,7 +188,19 @@ enum Residue: UInt8, CaseIterable {
         case "PHE": self = .Phe
         case "TYR": self = .Tyr
         case "TRP": self = .Trp
-        default: return nil
+        case "A": self = .A
+        case "C": self = .C
+        case "G": self = .G
+        case "T": self = .T
+        case "U": self = .U
+        case "I": self = .I
+        case "DA": self = .DA
+        case "DC": self = .DC
+        case "DG": self = .DG
+        case "DT": self = .DT
+        case "DU": self = .DU
+        case "DI": self = .DI
+        default: self = .unknown
         }
     }
 }

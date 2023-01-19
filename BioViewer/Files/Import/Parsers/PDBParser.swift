@@ -229,9 +229,7 @@ class PDBParser {
         let endResName = line.index(line.startIndex, offsetBy: PDBConstants.resNameEnd)
         let rangeResName = startResName..<endResName
         let resName = line[rangeResName].trimmingCharacters(in: .whitespaces)
-        guard let resType = Residue(string: resName) else {
-            throw PDBParseError.invalidResidueName
-        }
+        let resType = Residue(string: resName)
         
         // Ignore water molecules
         // TODO: Option to toggle water visibility on/off

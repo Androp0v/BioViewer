@@ -11,7 +11,7 @@
 /// Maximum number of colours that can be passed down to the GPU.
 #define MAX_SUBUNIT_COLORS 512
 #define MAX_ELEMENT_COLORS 128
-#define MAX_RESIDUE_COLORS 20
+#define MAX_RESIDUE_COLORS 34
 
 typedef struct {
     
