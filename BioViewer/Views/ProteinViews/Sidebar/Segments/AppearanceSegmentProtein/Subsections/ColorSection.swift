@@ -69,7 +69,7 @@ struct ColorSection: View {
                                 ForEach(subunits, id: \.id) { subunit in
                                     // TO-DO: Show real subunit list
                                     ColorPickerRow(
-                                        title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
+                                        title: NSLocalizedString("\(subunit.subunitName)", comment: ""),
                                         selectedColor: $proteinViewModel.subunitColors[subunit.id]
                                     )
                                 }

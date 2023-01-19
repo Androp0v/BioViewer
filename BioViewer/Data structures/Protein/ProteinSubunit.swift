@@ -10,7 +10,14 @@ import Foundation
 /// Struct holding the contents of a protein subunit.
 public class ProteinSubunit {
     
-    public var id: Int
+    let id: Int
+    
+    enum SubunitKind {
+        case chain
+        case nonChain
+        case unknown
+    }
+    let kind: SubunitKind
 
     // MARK: - Atoms
     
@@ -22,14 +29,15 @@ public class ProteinSubunit {
     
     // MARK: - Initialization
     
-    init(id: Int, atomCount: Int, startIndex: Int) {
+    init(id: Int, kind: SubunitKind, atomCount: Int, startIndex: Int) {
         self.id = id
+        self.kind = kind
         self.atomCount = atomCount
         self.startIndex = startIndex
     }
     
     // MARK: - Functions
-    func getUppercaseName() -> String {
+    var subunitName: String {
         let letters = ["A",
                        "B",
                        "C",
@@ -56,10 +64,15 @@ public class ProteinSubunit {
                        "X",
                        "Y",
                        "Z"]
-        if id < 26 {
-            return letters[id]
-        } else {
-            return String(id)
+        switch self.kind {
+        case .chain, .unknown:
+            if id < 26 {
+                return "Subunit \(letters[id])"
+            } else {
+                return "Subunit \(id)"
+            }
+        case .nonChain:
+            return "Non-chain atoms"
         }
     }
 }

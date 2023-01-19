@@ -183,6 +183,7 @@ extension FileParser {
         atomArrayComposition = firstConfiguration.atomArrayComposition
         
         let proteinSubunits = [ProteinSubunit(id: firstConfiguration.id,
+                                              kind: .unknown,
                                               atomCount: firstConfiguration.atomArrayComposition.totalCount,
                                               startIndex: 0)]
         

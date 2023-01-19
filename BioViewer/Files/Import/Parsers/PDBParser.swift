@@ -25,9 +25,16 @@ private struct PDBSubunitEndLine {
     let line: Int
 }
 
+private struct PDBTitleLine {
+    let line: Int
+    let text: String
+}
+
 // MARK: - Blocks
 
 private final class ParsedBlock {
+    var pdbID: String?
+    var titleRecords = [PDBTitleLine]()
     var atomRecords = [PDBAtomLine]()
     var modelEndRecord = [PDBModelEndLine]()
     var subunitEndRecords = [PDBSubunitEndLine]()
@@ -35,6 +42,10 @@ private final class ParsedBlock {
 
 extension ParsedBlock {
     static func += (lhs: inout ParsedBlock, rhs: ParsedBlock) {
+        if let rhsPDBID = rhs.pdbID {
+            lhs.pdbID = rhsPDBID
+        }
+        lhs.titleRecords.append(contentsOf: rhs.titleRecords)
         lhs.atomRecords.append(contentsOf: rhs.atomRecords)
         lhs.modelEndRecord.append(contentsOf: rhs.modelEndRecord)
         lhs.subunitEndRecords.append(contentsOf: rhs.subunitEndRecords)
@@ -59,13 +70,16 @@ private class ParsedModel {
 }
 
 private class ParsedSubunit {
+    let id = UUID()
+    let isPartOfChain: Bool
     let startLine: Int
     let endLine: Int
     var atomCount: Int = 0
     
-    init(startLine: Int, endLine: Int) {
+    init(startLine: Int, endLine: Int, isPartOfChain: Bool) {
         self.startLine = startLine
         self.endLine = endLine
+        self.isPartOfChain = isPartOfChain
     }
 }
 
@@ -91,6 +105,7 @@ class PDBParser {
         let blockCount = Int(ceil(Double(lineCount) / Double(PDBParser.lineBlockSize)))
         
         var finalProteins = [Protein]()
+        var finalProteinInfo = ProteinFileInfo()
 
         // Create a TaskGroup so the file can be parsed simultaneously using multiple threads.
         await withTaskGroup(of: ParsedBlock.self) { taskGroup in
@@ -115,6 +130,7 @@ class PDBParser {
             for await parsedBlock in taskGroup {
                 mergedBlocks += parsedBlock
             }
+            finalProteinInfo.pdbID = mergedBlocks.pdbID
             
             // Number of MODELs (proteins) in the file. If empty, assume the entire
             // file contains a single protein model.
@@ -137,7 +153,11 @@ class PDBParser {
             // least one subunit.
             if mergedBlocks.subunitEndRecords.count == 0 {
                 for model in parsedModels {
-                    model.subunits.append(ParsedSubunit(startLine: model.startLine, endLine: model.endLine))
+                    model.subunits.append(ParsedSubunit(
+                        startLine: model.startLine,
+                        endLine: model.endLine,
+                        isPartOfChain: true
+                    ))
                 }
             } else {
                 let sortedSubunitRecords = mergedBlocks.subunitEndRecords.sorted(by: { $0.line < $1.line })
@@ -147,28 +167,60 @@ class PDBParser {
                         if subunitRecord.line >= model.startLine && subunitRecord.line <= model.endLine {
                             model.subunits.append(ParsedSubunit(
                                 startLine: lastSubunitStart + 1,
-                                endLine: subunitRecord.line
+                                endLine: subunitRecord.line,
+                                isPartOfChain: true
                             ))
                             lastSubunitStart = subunitRecord.line
                         }
                     }
                 }
             }
+            
+            // Sort all atom records
+            mergedBlocks.atomRecords = mergedBlocks.atomRecords.sorted(by: { $0.line < $1.line })
                         
             // Use atom record data
             await withTaskGroup(of: Void.self) { [mergedBlocks] taskGroup in
                 for model in parsedModels {
                     taskGroup.addTask {
+                        let modelRecords = mergedBlocks.atomRecords.filter {
+                            $0.line >= model.startLine && $0.line <= model.endLine
+                        }
+                        
+                        // Add regular ATOM records if present
+                        var lastParsedLine: Int = 0
                         for subunit in model.subunits {
-                            let subunitRecords =  mergedBlocks.atomRecords.filter {
+                            let subunitRecords =  modelRecords.filter {
                                 $0.line >= subunit.startLine && $0.line <= subunit.endLine
                             }
                             for record in subunitRecords {
                                 model.atomPositions.append(record.position)
                                 model.atomResType.append(record.resType)
                                 model.atomTypes.append(record.atomType)
+                                lastParsedLine = record.line
                             }
                             subunit.atomCount = subunitRecords.count
+                        }
+                        
+                        // Add non-chain HETATM records if present
+                        let nonChainRecords = modelRecords.filter {
+                            $0.line > lastParsedLine && $0.line < model.endLine
+                        }
+                        if !nonChainRecords.isEmpty,
+                           let firstHETATMLine = nonChainRecords.first?.line,
+                           let lastHETATMLine = nonChainRecords.last?.line {
+                            let nonChainSubunit = ParsedSubunit(
+                                startLine: firstHETATMLine,
+                                endLine: lastHETATMLine,
+                                isPartOfChain: false
+                            )
+                            model.subunits.append(nonChainSubunit)
+                            for record in nonChainRecords {
+                                model.atomPositions.append(record.position)
+                                model.atomResType.append(record.resType)
+                                model.atomTypes.append(record.atomType)
+                            }
+                            nonChainSubunit.atomCount = nonChainRecords.count
                         }
                     }
                 }
@@ -181,6 +233,7 @@ class PDBParser {
                 for subunit in model.subunits {
                     finalSubunits.append(ProteinSubunit(
                         id: subunitIndex,
+                        kind: subunit.isPartOfChain ? .chain : .nonChain,
                         atomCount: subunit.atomCount,
                         startIndex: atomIndex
                     ))
@@ -206,10 +259,10 @@ class PDBParser {
         
         return ProteinFile(
             fileType: .staticStructure,
-            fileName: "TODO",
-            fileExtension: "TODO",
+            fileName: originalFileInfo?.pdbID ?? finalProteinInfo.pdbID ?? NSLocalizedString("Unknown", comment: ""),
+            fileExtension: "pdb",
             models: finalProteins,
-            fileInfo: ProteinFileInfo(),
+            fileInfo: finalProteinInfo,
             byteSize: byteSize
         )
     }
@@ -225,6 +278,8 @@ class PDBParser {
             parsedBlock.subunitEndRecords.append(PDBSubunitEndLine(line: lineIndex))
         } else if line.starts(with: "ENDMDL") {
             parsedBlock.modelEndRecord.append(PDBModelEndLine(line: lineIndex))
+        } else if line.starts(with: "HEADER") {
+            parsedBlock.pdbID = parseHeader(line: line)
         }
     }
     
@@ -304,5 +359,14 @@ class PDBParser {
             resType: resType,
             position: simd_float3(x, y, z)
         )
+    }
+    
+    // MARK: - Parse HEADER
+    
+    private func parseHeader(line: String) -> String {
+        let startPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIDStart)
+        let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIDEnd)
+        let rangePDBID = startPDBID..<endPDBID
+        return line[rangePDBID].trimmingCharacters(in: .whitespaces)
     }
 }

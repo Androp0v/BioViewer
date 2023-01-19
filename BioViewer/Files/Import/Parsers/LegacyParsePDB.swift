@@ -236,6 +236,7 @@ class LegacyPDBParser {
                 continue
             }
             proteinSubunits.append(ProteinSubunit(id: subunit.id,
+                                                  kind: .unknown,
                                                   atomCount: subunit.subunitAtomPositions.count,
                                                   startIndex: subunitIndex))
             subunitIndex += subunit.subunitAtomPositions.count
