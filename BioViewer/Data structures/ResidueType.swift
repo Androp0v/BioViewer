@@ -61,7 +61,7 @@ enum Residue: UInt8, CaseIterable {
     
     // MARK: - Computed properties
     
-    enum ResidueKind {
+    enum ResidueKind: CaseIterable {
         case aminoAcid
         case rnaNucleobase
         case dnaNucleobase

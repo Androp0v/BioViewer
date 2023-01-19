@@ -81,12 +81,76 @@ struct ColorSection: View {
                             
                             // MARK: - Color by residue
                             
-                            ForEach(Array(zip(Residue.allCases.indices, Residue.allCases)), id: \.0) { index, residue in
-                                ColorPickerRow(
-                                    title: residue.name,
-                                    selectedColor: $proteinViewModel.residueColors[index]
-                                )
-                            }
+                            PersistentDisclosureGroup(
+                                for: .residueColoringAminoAcid,
+                                defaultOpen: false,
+                                content: {
+                                    let aminoAcids = Residue.allCases.filter({ $0.kind == .aminoAcid})
+                                    ForEach(aminoAcids, id: \.rawValue) { residue in
+                                        ColorPickerRow(
+                                            title: residue.name,
+                                            selectedColor: $proteinViewModel.residueColors[Int(residue.rawValue)]
+                                        )
+                                    }
+                                },
+                                label: {
+                                    Text(NSLocalizedString("Amino acids", comment: ""))
+                                        #if targetEnvironment(macCatalyst)
+                                        .padding(.leading, 8)
+                                        #else
+                                        .padding(.trailing, 16)
+                                        #endif
+                                }
+                            )
+                            
+                            PersistentDisclosureGroup(
+                                for: .residueColoringDNANucleobase,
+                                defaultOpen: false,
+                                content: {
+                                    let aminoAcids = Residue.allCases.filter({ $0.kind == .dnaNucleobase})
+                                    ForEach(aminoAcids, id: \.rawValue) { residue in
+                                        ColorPickerRow(
+                                            title: residue.name,
+                                            selectedColor: $proteinViewModel.residueColors[Int(residue.rawValue)]
+                                        )
+                                    }
+                                },
+                                label: {
+                                    Text(NSLocalizedString("Deoxyribonucleotides", comment: ""))
+                                        #if targetEnvironment(macCatalyst)
+                                        .padding(.leading, 8)
+                                        #else
+                                        .padding(.trailing, 16)
+                                        #endif
+                                }
+                            )
+                            
+                            PersistentDisclosureGroup(
+                                for: .residueColoringRNANucleobase,
+                                defaultOpen: false,
+                                content: {
+                                    let aminoAcids = Residue.allCases.filter({ $0.kind == .rnaNucleobase})
+                                    ForEach(aminoAcids, id: \.rawValue) { residue in
+                                        ColorPickerRow(
+                                            title: residue.name,
+                                            selectedColor: $proteinViewModel.residueColors[Int(residue.rawValue)]
+                                        )
+                                    }
+                                },
+                                label: {
+                                    Text(NSLocalizedString("Ribonucleotides", comment: ""))
+                                        #if targetEnvironment(macCatalyst)
+                                        .padding(.leading, 8)
+                                        #else
+                                        .padding(.trailing, 16)
+                                        #endif
+                                }
+                            )
+                            
+                            ColorPickerRow(
+                                title: Residue.unknown.name,
+                                selectedColor: $proteinViewModel.residueColors[Int(Residue.unknown.rawValue)]
+                            )
                         }
                     },
                     label: {

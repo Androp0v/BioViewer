@@ -14,6 +14,9 @@ enum PersistentGroupName: String {
     case ballAndStickRadiusGroup
     case shadowGroup
     case depthCueingGroup
+    case residueColoringAminoAcid
+    case residueColoringDNANucleobase
+    case residueColoringRNANucleobase
 }
 
 struct PersistentDisclosureGroup<Content: View, LabelContent: View>: View {
