@@ -2,6 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>1.5</key>
+    <array>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Color by Residue</string>
+            <key>Subtitle</key>
+            <string>Protein atoms can now be colored based on their residue (ARG, HIS, LYS...).</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>More atom element colors</string>
+            <key>Subtitle</key>
+            <string>Several more elements can have their colors customized within the app: F, Na, P, Cl, K, Ca, Fe and Zn.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Faster file reading</string>
+            <key>Subtitle</key>
+            <string>PDB file reading is now multithreaded, making the opening of bigger files much faster.</string>
+        </dict>
+    </array>
 	<key>1.4.3</key>
 	<array>
 		<dict>

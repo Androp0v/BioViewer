@@ -59,20 +59,23 @@ struct ColorSection: View {
                                 }
                             }
                             
-                            if !showMoreElements {
-                                ButtonRow(
-                                    action: {
-                                        withAnimation {
-                                            showMoreElements.toggle()
-                                        }
-                                    },
-                                    text: NSLocalizedString("Show more", comment: "")
-                                )
-                            }
-                            
                             ColorPickerRow(
                                 title: NSLocalizedString("Other atoms", comment: ""),
                                 selectedColor: $proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
+                            )
+                            
+                            ButtonRow(
+                                action: {
+                                    withAnimation {
+                                        showMoreElements.toggle()
+                                    }
+                                },
+                                text: NSLocalizedString(
+                                    showMoreElements
+                                        ? NSLocalizedString("Show less", comment: "")
+                                        : NSLocalizedString("Show more", comment: ""),
+                                    comment: ""
+                                )
                             )
                             
                         // MARK: - Color by subunit
