@@ -70,7 +70,7 @@ struct FileSegmentProtein: View {
                             )
                             InfoAtomsRow(
                                 label: NSLocalizedString("Number of atoms:", comment: ""),
-                                value: proteins.reduce(0) { $0 + $1.atomArrayComposition.totalCount },
+                                value: proteins.reduce(0) { $0 + $1.elementComposition.totalCount },
                                 isDisabled: false,
                                 file: file
                             )

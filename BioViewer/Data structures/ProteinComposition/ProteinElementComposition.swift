@@ -1,5 +1,5 @@
 //
-//  AtomArrayComposition.swift
+//  ProteinElementComposition.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 25/5/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class AtomArrayComposition {
+class ProteinElementComposition {
     
     var elementCounts = [AtomElement: Int]()
 
@@ -27,7 +27,7 @@ public class AtomArrayComposition {
         return sum
     }
     
-    static func +=(lhs: inout AtomArrayComposition, rhs: AtomArrayComposition) {
+    static func +=(lhs: inout ProteinElementComposition, rhs: ProteinElementComposition) {
         lhs.elementCounts.merge(rhs.elementCounts, uniquingKeysWith: { lhsCount, rhsCount in
             return lhsCount + rhsCount
         })

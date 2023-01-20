@@ -52,9 +52,9 @@ struct FileAtomElementRow: View {
         .task {
             guard let file = proteinViewModel.dataSource.getFirstFile() else { return }
             guard let proteins = proteinViewModel.dataSource.modelsForFile(file: file) else { return }
-            var atomArrayComposition = AtomArrayComposition()
+            var atomArrayComposition = ProteinElementComposition()
             for protein in proteins {
-                atomArrayComposition += protein.atomArrayComposition
+                atomArrayComposition += protein.elementComposition
             }
             self.atomCount = atomArrayComposition.elementCounts[element]
             self.elementColor = proteinViewModel.elementColors[Int(element.rawValue)]

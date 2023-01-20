@@ -44,7 +44,10 @@ class Protein {
     var atoms: ContiguousArray<simd_float3>
 
     /// Number of atoms of each element.
-    var atomArrayComposition: AtomArrayComposition
+    var elementComposition: ProteinElementComposition
+    
+    /// Number of atoms of each kind.
+    var residueComposition: ProteinResidueComposition?
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     var atomElements: [AtomElement]
@@ -79,16 +82,17 @@ class Protein {
     
     // MARK: - Initialization
 
-    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], atoms: ContiguousArray<simd_float3>, atomArrayComposition: AtomArrayComposition, atomElements: [AtomElement], atomResidues: [Residue]?, sequence: [String]? = nil) {
+    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], atoms: ContiguousArray<simd_float3>, elementComposition: ProteinElementComposition, atomElements: [AtomElement], residueComposition: ProteinResidueComposition?, atomResidues: [Residue]?, sequence: [String]? = nil) {
         self.configurationCount = configurationCount
         self.configurationEnergies = configurationEnergies
         self.subunitCount = subunitCount
         self.subunits = subunits
         self.atoms = atoms
-        self.atomArrayComposition = atomArrayComposition
+        self.elementComposition = elementComposition
         self.atomElements = atomElements
+        self.residueComposition = residueComposition
         self.atomResidues = atomResidues
-        self.atomCount = atomArrayComposition.totalCount
+        self.atomCount = elementComposition.totalCount
         self.sequence = sequence
         self.boundingSphere = computeBoundingSphere(atoms: atoms)
     }

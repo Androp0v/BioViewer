@@ -25,7 +25,7 @@ extension FileParser {
         var sulfurArray = [simd_float3]()
         var othersArray = [simd_float3]()
         var atomElements = [AtomElement]()
-        var atomArrayComposition = AtomArrayComposition()
+        var atomArrayComposition = ProteinElementComposition()
         
         init(id: Int) {
             self.id = id
@@ -38,7 +38,7 @@ extension FileParser {
         var atomArray = ContiguousArray<simd_float3>()
         var energyArray: [Float]?
         var atomElements = [AtomElement]()
-        var atomArrayComposition = AtomArrayComposition()
+        var atomArrayComposition = ProteinElementComposition()
         
         // Initialize empty configuration
         var configurations: [ParsedConfiguration] = [ParsedConfiguration(id: 0)]
@@ -161,7 +161,7 @@ extension FileParser {
         }
 
         atomElements.append(contentsOf: firstConfiguration.atomElements)
-        atomArrayComposition = AtomArrayComposition(elements: atomElements)
+        atomArrayComposition = ProteinElementComposition(elements: atomElements)
         
         let proteinSubunits = [ProteinSubunit(id: firstConfiguration.id,
                                               kind: .unknown,
@@ -176,8 +176,9 @@ extension FileParser {
                               subunitCount: 1,
                               subunits: proteinSubunits,
                               atoms: atomArray,
-                              atomArrayComposition: atomArrayComposition,
+                              elementComposition: atomArrayComposition,
                               atomElements: atomElements,
+                              residueComposition: nil,
                               atomResidues: nil,
                               sequence: nil)
         

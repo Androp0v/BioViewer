@@ -40,7 +40,7 @@ struct FileAtomTotalsRow: View {
             guard let proteins = proteinViewModel.dataSource.modelsForFile(file: file) else { return }
             var totalAtomCount: Int = 0
             for protein in proteins {
-                totalAtomCount += protein.atomArrayComposition.totalCount
+                totalAtomCount += protein.elementComposition.totalCount
             }
             self.total = totalAtomCount
         }

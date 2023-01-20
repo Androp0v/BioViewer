@@ -68,7 +68,7 @@ private class ParsedModel {
     
     var atomPositions = [simd_float3]()
     var atomElements = [AtomElement]()
-    var atomResType = [Residue]()
+    var atomResidues = [Residue]()
     
     init(startLine: Int, endLine: Int) {
         self.startLine = startLine
@@ -158,6 +158,7 @@ class PDBParser {
                     finalProteinInfo.authors = authorsText
                 }
             }
+            finalProteinInfo.sourceLines = rawLines
             
             // Number of MODELs (proteins) in the file. If empty, assume the entire
             // file contains a single protein model.
@@ -222,7 +223,7 @@ class PDBParser {
                             }
                             for record in subunitRecords {
                                 model.atomPositions.append(record.position)
-                                model.atomResType.append(record.resType)
+                                model.atomResidues.append(record.resType)
                                 model.atomElements.append(record.element)
                                 lastParsedLine = record.line
                             }
@@ -244,7 +245,7 @@ class PDBParser {
                             model.subunits.append(nonChainSubunit)
                             for record in nonChainRecords {
                                 model.atomPositions.append(record.position)
-                                model.atomResType.append(record.resType)
+                                model.atomResidues.append(record.resType)
                                 model.atomElements.append(record.element)
                             }
                             nonChainSubunit.atomCount = nonChainRecords.count
@@ -268,7 +269,8 @@ class PDBParser {
                     atomIndex += subunit.atomCount
                 }
                 
-                let atomArrayComposition = AtomArrayComposition(elements: model.atomElements)
+                let elementComposition = ProteinElementComposition(elements: model.atomElements)
+                let residueComposition = ProteinResidueComposition(residues: model.atomResidues)
                 
                 finalProteins.append(Protein(
                     configurationCount: 1,
@@ -276,9 +278,10 @@ class PDBParser {
                     subunitCount: finalSubunits.count,
                     subunits: finalSubunits,
                     atoms: ContiguousArray(model.atomPositions),
-                    atomArrayComposition: atomArrayComposition,
+                    elementComposition: elementComposition,
                     atomElements: model.atomElements,
-                    atomResidues: model.atomResType
+                    residueComposition: residueComposition,
+                    atomResidues: model.atomResidues
                 ))
             }
             

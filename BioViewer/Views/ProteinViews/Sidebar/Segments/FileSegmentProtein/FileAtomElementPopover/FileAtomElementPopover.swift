@@ -12,7 +12,7 @@ struct FileAtomElementPopover: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    @State var atomArrayComposition = AtomArrayComposition()
+    @State var atomArrayComposition = ProteinElementComposition()
     @State var carbonFraction: CGFloat = 0.0
     @State var hydrogenFraction: CGFloat = 0.0
     @State var nitrogenFraction: CGFloat = 0.0
@@ -28,9 +28,9 @@ struct FileAtomElementPopover: View {
                 
         guard let file = proteinViewModel.dataSource.getFirstFile() else { return }
         guard let proteins = proteinViewModel.dataSource.modelsForFile(file: file) else { return }
-        atomArrayComposition = AtomArrayComposition()
+        atomArrayComposition = ProteinElementComposition()
         for protein in proteins {
-            atomArrayComposition += protein.atomArrayComposition
+            atomArrayComposition += protein.elementComposition
         }
         
         withAnimation(Animation.easeInOut(duration: AnimationConstants.duration)) {
