@@ -27,7 +27,12 @@ private struct PDBSubunitEndLine {
 
 private struct PDBTitleLine {
     let line: Int
-    let text: String
+    let rawText: String
+}
+
+private struct PDBAuthorLine {
+    let line: Int
+    let rawText: String
 }
 
 // MARK: - Blocks
@@ -35,6 +40,7 @@ private struct PDBTitleLine {
 private final class ParsedBlock {
     var pdbID: String?
     var titleRecords = [PDBTitleLine]()
+    var authorRecords = [PDBAuthorLine]()
     var atomRecords = [PDBAtomLine]()
     var modelEndRecord = [PDBModelEndLine]()
     var subunitEndRecords = [PDBSubunitEndLine]()
@@ -46,6 +52,7 @@ extension ParsedBlock {
             lhs.pdbID = rhsPDBID
         }
         lhs.titleRecords.append(contentsOf: rhs.titleRecords)
+        lhs.authorRecords.append(contentsOf: rhs.authorRecords)
         lhs.atomRecords.append(contentsOf: rhs.atomRecords)
         lhs.modelEndRecord.append(contentsOf: rhs.modelEndRecord)
         lhs.subunitEndRecords.append(contentsOf: rhs.subunitEndRecords)
@@ -105,7 +112,7 @@ class PDBParser {
         let blockCount = Int(ceil(Double(lineCount) / Double(PDBParser.lineBlockSize)))
         
         var finalProteins = [Protein]()
-        var finalProteinInfo = ProteinFileInfo()
+        let finalProteinInfo = originalFileInfo ?? ProteinFileInfo()
 
         // Create a TaskGroup so the file can be parsed simultaneously using multiple threads.
         await withTaskGroup(of: ParsedBlock.self) { taskGroup in
@@ -131,6 +138,26 @@ class PDBParser {
                 mergedBlocks += parsedBlock
             }
             finalProteinInfo.pdbID = mergedBlocks.pdbID
+            
+            // Process file info
+            if finalProteinInfo.description == nil {
+                var descriptionText: String = ""
+                for titleRecord in mergedBlocks.titleRecords.sorted(by: {$0.line < $1.line}) {
+                    descriptionText += titleRecord.rawText
+                }
+                if !descriptionText.isEmpty {
+                    finalProteinInfo.description = descriptionText
+                }
+            }
+            if finalProteinInfo.authors == nil {
+                var authorsText: String = ""
+                for authorRecord in mergedBlocks.authorRecords.sorted(by: {$0.line < $1.line}) {
+                    authorsText += authorRecord.rawText
+                }
+                if !authorsText.isEmpty {
+                    finalProteinInfo.authors = authorsText
+                }
+            }
             
             // Number of MODELs (proteins) in the file. If empty, assume the entire
             // file contains a single protein model.
@@ -259,7 +286,7 @@ class PDBParser {
         
         return ProteinFile(
             fileType: .staticStructure,
-            fileName: originalFileInfo?.pdbID ?? finalProteinInfo.pdbID ?? NSLocalizedString("Unknown", comment: ""),
+            fileName: fileName,
             fileExtension: "pdb",
             models: finalProteins,
             fileInfo: finalProteinInfo,
@@ -278,6 +305,10 @@ class PDBParser {
             parsedBlock.subunitEndRecords.append(PDBSubunitEndLine(line: lineIndex))
         } else if line.starts(with: "ENDMDL") {
             parsedBlock.modelEndRecord.append(PDBModelEndLine(line: lineIndex))
+        } else if line.starts(with: "AUTHOR") {
+            parsedBlock.authorRecords.append(parseAuthor(line: line, lineIndex: lineIndex))
+        } else if line.starts(with: "TITLE") {
+            parsedBlock.titleRecords.append(parseTitle(line: line, lineIndex: lineIndex))
         } else if line.starts(with: "HEADER") {
             parsedBlock.pdbID = parseHeader(line: line)
         }
@@ -368,5 +399,37 @@ class PDBParser {
         let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIDEnd)
         let rangePDBID = startPDBID..<endPDBID
         return line[rangePDBID].trimmingCharacters(in: .whitespaces)
+    }
+    
+    // MARK: - Parse TITLE
+    
+    private func parseTitle(line: String, lineIndex: Int) -> PDBTitleLine {
+        var rawTitleLine = String(line.dropFirst(PDBConstants.titleKeywordLength))
+        
+        // Strip trailing newline
+        rawTitleLine = String(rawTitleLine.trimmingCharacters(in: .newlines))
+        
+        // Strip trailing whitespaces
+        while (rawTitleLine.last?.isWhitespace) ?? false {
+            rawTitleLine = String(rawTitleLine.dropLast())
+        }
+        
+        return PDBTitleLine(line: lineIndex, rawText: rawTitleLine)
+    }
+    
+    // MARK: - Parse AUTHOR
+    
+    private func parseAuthor(line: String, lineIndex: Int) -> PDBAuthorLine {
+        var rawTitleLine = String(line.dropFirst(PDBConstants.titleKeywordLength))
+        
+        // Strip trailing newline
+        rawTitleLine = String(rawTitleLine.trimmingCharacters(in: .newlines))
+        
+        // Strip trailing whitespaces
+        while (rawTitleLine.last?.isWhitespace) ?? false {
+            rawTitleLine = String(rawTitleLine.dropLast())
+        }
+        
+        return PDBAuthorLine(line: lineIndex, rawText: rawTitleLine)
     }
 }

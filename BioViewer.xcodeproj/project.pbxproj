@@ -125,8 +125,6 @@
 		C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11922736F79900119BE6 /* RCSBRequest.swift */; };
 		C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */; };
 		C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066ED274BBD6A00710CFC /* ProteinImportViewModel.swift */; };
-		C54066FA274D1C7900710CFC /* LegacyParsePDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066F9274D1C7900710CFC /* LegacyParsePDB.swift */; };
-		C54066FB274D1CA600710CFC /* LegacyParsePDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066F9274D1C7900710CFC /* LegacyParsePDB.swift */; };
 		C5406700274D387200710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406701274D38C100710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5406703274D656700710CFC /* SettingsSegmentProtein.swift */; };
@@ -420,7 +418,6 @@
 		C53A11922736F79900119BE6 /* RCSBRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRequest.swift; sourceTree = "<group>"; };
 		C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerViewController.swift; sourceTree = "<group>"; };
 		C54066ED274BBD6A00710CFC /* ProteinImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportViewModel.swift; sourceTree = "<group>"; };
-		C54066F9274D1C7900710CFC /* LegacyParsePDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyParsePDB.swift; sourceTree = "<group>"; };
 		C54066FF274D387200710CFC /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
 		C5406703274D656700710CFC /* SettingsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSegmentProtein.swift; sourceTree = "<group>"; };
 		C540EE11284B747100153200 /* ShadowDepthPrePass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowDepthPrePass.swift; sourceTree = "<group>"; };
@@ -1009,7 +1006,6 @@
 			isa = PBXGroup;
 			children = (
 				C50E02542764B5BE005D7F06 /* PDBConstants.swift */,
-				C54066F9274D1C7900710CFC /* LegacyParsePDB.swift */,
 				C5D97E0A2974549C00EF1D5A /* PDBParser.swift */,
 				C5D97E0C297466C000EF1D5A /* PDBParseError.swift */,
 				C51D4EDC276776FC00C69B3D /* ParseXYZ.swift */,
@@ -1601,7 +1597,6 @@
 				C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */,
 				C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */,
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
-				C54066FA274D1C7900710CFC /* LegacyParsePDB.swift in Sources */,
 				C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */,
 				C553B79A2936218000294BB4 /* ButtonRow.swift in Sources */,
 				C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */,
@@ -1715,7 +1710,6 @@
 				C50E02562764B5C4005D7F06 /* PDBConstants.swift in Sources */,
 				C5406701274D38C100710CFC /* ImportError.swift in Sources */,
 				C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */,
-				C54066FB274D1CA600710CFC /* LegacyParsePDB.swift in Sources */,
 				C5035EEC283FE72F009CE87D /* DepthPrePassTextures.swift in Sources */,
 				C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */,
 				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
