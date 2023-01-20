@@ -32,9 +32,9 @@ extension MetalScheduler {
         }
         
         // Create atom identifier array
-        var atomIdentifierData = [UInt16]()
+        var atomElementData = [AtomElement]()
         for protein in proteins {
-            atomIdentifierData.append(contentsOf: protein.atomIdentifiers)
+            atomElementData.append(contentsOf: protein.atomElements)
         }
         
         // Create atom residue type array
@@ -74,14 +74,14 @@ extension MetalScheduler {
             length: subunitData.count * MemoryLayout<Int16>.stride
         )
         let atomTypeBuffer = device.makeBuffer(
-            bytes: atomIdentifierData,
-            length: bufferAtomCount * MemoryLayout<UInt16>.stride
+            bytes: atomElementData.map { $0.rawValue },
+            length: bufferAtomCount * MemoryLayout<AtomElement.RawValue>.stride
         )
         var atomResidueBuffer: MTLBuffer?
         if !atomResidueType.isEmpty {
             atomResidueBuffer = device.makeBuffer(
                 bytes: atomResidueType,
-                length: bufferAtomCount * MemoryLayout<UInt8>.stride
+                length: bufferAtomCount * MemoryLayout<Residue.RawValue>.stride
             )
         }
         let generatedIndexBuffer = device.makeBuffer(

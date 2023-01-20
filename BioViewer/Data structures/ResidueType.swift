@@ -168,6 +168,8 @@ enum Residue: UInt8, CaseIterable {
         }
     }
     
+    // MARK: - Init
+    
     init(string: String) {
         switch string {
         case "ARG": self = .Arg

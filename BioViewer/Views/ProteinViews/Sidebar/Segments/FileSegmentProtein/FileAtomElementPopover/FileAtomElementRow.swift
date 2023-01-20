@@ -74,22 +74,22 @@ struct FileAtomElementRow: View {
             switch element.lowercased() {
             case "carbon":
                 self.atomCount = atomArrayComposition.carbonCount
-                self.elementColor = proteinViewModel.elementColors[Int(AtomType.CARBON)]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomElement.carbon.rawValue)]
             case "hydrogen":
                 self.atomCount = atomArrayComposition.hydrogenCount
-                self.elementColor = proteinViewModel.elementColors[Int(AtomType.HYDROGEN)]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomElement.hydrogen.rawValue)]
             case "nitrogen":
                 self.atomCount = atomArrayComposition.nitrogenCount
-                self.elementColor = proteinViewModel.elementColors[Int(AtomType.NITROGEN)]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomElement.nitrogen.rawValue)]
             case "oxygen":
                 self.atomCount = atomArrayComposition.oxygenCount
-                self.elementColor = proteinViewModel.elementColors[Int(AtomType.OXYGEN)]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomElement.oxygen.rawValue)]
             case "sulfur":
                 self.atomCount = atomArrayComposition.sulfurCount
-                self.elementColor = proteinViewModel.elementColors[Int(AtomType.SULFUR)]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomElement.sulfur.rawValue)]
             case "others":
                 self.atomCount = atomArrayComposition.othersCount
-                self.elementColor = proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
+                self.elementColor = proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
             case "total":
                 self.atomCount = atomArrayComposition.totalCount
                 self.elementColor = .clear

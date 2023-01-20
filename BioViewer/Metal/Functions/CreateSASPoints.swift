@@ -41,7 +41,7 @@ extension MetalScheduler {
             for atomSection in AtomSectionSequence(protein: protein) {
 
                 // Set the apropiate radius and probe radius as function constants
-                var atomRadius = AtomTypeUtilities.getAtomicVanDerWaalsRadius(atomType: atomSection.atomIdentifier)
+                var atomRadius = atomSection.atomElement.vanDerWaalsRadius
 
                 guard atomSection.length != 0 else { continue }
 
@@ -117,8 +117,8 @@ extension MetalScheduler {
 
             // Create atomRadius buffer
             var atomRadius = [Float32]()
-            protein.atomIdentifiers.forEach { atomId in
-                atomRadius.append(AtomTypeUtilities.getAtomicVanDerWaalsRadius(atomType: atomId))
+            protein.atomElements.forEach { atomElement in
+                atomRadius.append(atomElement.vanDerWaalsRadius)
             }
             let atomRadiusBuffer = device.makeBuffer(
                 bytes: atomRadius,

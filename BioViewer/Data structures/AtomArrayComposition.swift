@@ -32,18 +32,18 @@ public class AtomArrayComposition {
         
     }
     
-    init(atomTypes: [UInt16]) {
-        for atomType in atomTypes {
-            switch atomType {
-            case AtomType.CARBON:
+    init(elements: [AtomElement]) {
+        for element in elements {
+            switch element {
+            case .carbon:
                 carbonCount += 1
-            case AtomType.NITROGEN:
+            case .nitrogen:
                 nitrogenCount += 1
-            case AtomType.HYDROGEN:
+            case .hydrogen:
                 hydrogenCount += 1
-            case AtomType.OXYGEN:
+            case .oxygen:
                 oxygenCount += 1
-            case AtomType.SULFUR:
+            case .sulfur:
                 sulfurCount += 1
             default:
                 othersCount += 1

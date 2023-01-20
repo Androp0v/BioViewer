@@ -15,7 +15,7 @@ using namespace metal;
 // MARK: - Kernels
 
 kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer(0) ]],
-                                  const device uint16_t *atomType [[ buffer(1) ]],
+                                  const device uint8_t *atom_element [[ buffer(1) ]],
                                   device simd_half2 *generatedPositions [[ buffer(2) ]],
                                   device simd_float3 *generatedAtomCenters [[ buffer(3) ]],
                                   device simd_half2 *generatedBillboardMapping [[ buffer(4) ]],
@@ -36,7 +36,7 @@ kernel void createImpostorSpheres(const device simd_float3 *atomPoints [[ buffer
     const uint32_t index = i * 4;
     const uint32_t index_2 = i * 6;
     
-    float radius = atom_radii.atomRadius[atomType[i % totalAtomCount]];
+    float radius = atom_radii.atomRadius[atom_element[i % totalAtomCount]];
     
     // MARK: - Vertices
 

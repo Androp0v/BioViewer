@@ -14,7 +14,7 @@ import Foundation
 /// ```AtomArrayComposition``` array) and the length of the section.
 public struct AtomSection {
     // The atom element identifier
-    var atomIdentifier: UInt16
+    var atomElement: AtomElement
     // The starting index for that element
     var startsAt: Int
     // The length of the section (number of atoms of that element)
@@ -22,8 +22,7 @@ public struct AtomSection {
 }
 
 // MARK: - AtomSectionSequence
-
-/// Use this class to safely iterate over all the ```AtomSection```s in an array of atoms
+/// Use this class to safely iterate over all the `AtomSection`s in an array of atoms
 class AtomSectionSequence: Sequence {
 
     var atomArrayComposition: AtomArrayComposition
@@ -47,32 +46,32 @@ class AtomSectionSequence: Sequence {
 
             switch currentSection {
             case 0:
-                atomSection = AtomSection(atomIdentifier: AtomType.CARBON,
+                atomSection = AtomSection(atomElement: .carbon,
                                           startsAt: currentOffset,
                                           length: atomArrayComposition.carbonCount)
                 currentOffset += atomArrayComposition.carbonCount
             case 1:
-                atomSection = AtomSection(atomIdentifier: AtomType.NITROGEN,
+                atomSection = AtomSection(atomElement: .nitrogen,
                                           startsAt: currentOffset,
                                           length: atomArrayComposition.nitrogenCount)
                 currentOffset += atomArrayComposition.nitrogenCount
             case 2:
-                atomSection = AtomSection(atomIdentifier: AtomType.HYDROGEN,
+                atomSection = AtomSection(atomElement: .hydrogen,
                                           startsAt: currentOffset,
                                           length: atomArrayComposition.hydrogenCount)
                 currentOffset += atomArrayComposition.hydrogenCount
             case 3:
-                atomSection = AtomSection(atomIdentifier: AtomType.OXYGEN,
+                atomSection = AtomSection(atomElement: .oxygen,
                                           startsAt: currentOffset,
                                           length: atomArrayComposition.oxygenCount)
                 currentOffset += atomArrayComposition.oxygenCount
             case 4:
-                atomSection = AtomSection(atomIdentifier: AtomType.SULFUR,
+                atomSection = AtomSection(atomElement: .sulfur,
                                           startsAt: currentOffset,
                                           length: atomArrayComposition.sulfurCount)
                 currentOffset += atomArrayComposition.sulfurCount
             case 5:
-                atomSection = AtomSection(atomIdentifier: AtomType.UNKNOWN,
+                atomSection = AtomSection(atomElement: .unknown,
                                           startsAt: currentOffset,
                                           length: atomArrayComposition.othersCount)
                 currentOffset += atomArrayComposition.othersCount

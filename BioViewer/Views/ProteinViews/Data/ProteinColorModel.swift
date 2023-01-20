@@ -45,8 +45,12 @@ extension ProteinViewModel {
     func initElementColors() {
         // Preselected element color palette
         elementColors = []
-        for atomType in 0..<ATOM_TYPE_COUNT {
-            elementColors.append(AtomTypeUtilities.getAtomicColor(atomType: UInt16(atomType)))
+        for atomElementIndex in 0..<ATOM_TYPE_COUNT {
+            if let element = AtomElement(rawValue: UInt8(atomElementIndex)) {
+                elementColors.append(element.defaultColor)
+            } else {
+                elementColors.append(AtomElement.unknown.defaultColor)
+            }
         }
     }
     

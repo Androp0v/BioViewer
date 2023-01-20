@@ -11,7 +11,7 @@ import Foundation
 
 private struct PDBAtomLine {
     let line: Int
-    let atomType: UInt16
+    let element: AtomElement
     let resID: Int
     let resType: Residue
     let position: simd_float3
@@ -67,7 +67,7 @@ private class ParsedModel {
     var subunits = [ParsedSubunit]()
     
     var atomPositions = [simd_float3]()
-    var atomTypes = [UInt16]()
+    var atomElements = [AtomElement]()
     var atomResType = [Residue]()
     
     init(startLine: Int, endLine: Int) {
@@ -223,7 +223,7 @@ class PDBParser {
                             for record in subunitRecords {
                                 model.atomPositions.append(record.position)
                                 model.atomResType.append(record.resType)
-                                model.atomTypes.append(record.atomType)
+                                model.atomElements.append(record.element)
                                 lastParsedLine = record.line
                             }
                             subunit.atomCount = subunitRecords.count
@@ -245,7 +245,7 @@ class PDBParser {
                             for record in nonChainRecords {
                                 model.atomPositions.append(record.position)
                                 model.atomResType.append(record.resType)
-                                model.atomTypes.append(record.atomType)
+                                model.atomElements.append(record.element)
                             }
                             nonChainSubunit.atomCount = nonChainRecords.count
                         }
@@ -268,7 +268,7 @@ class PDBParser {
                     atomIndex += subunit.atomCount
                 }
                 
-                let atomArrayComposition = AtomArrayComposition(atomTypes: model.atomTypes)
+                let atomArrayComposition = AtomArrayComposition(elements: model.atomElements)
                 
                 finalProteins.append(Protein(
                     configurationCount: 1,
@@ -277,7 +277,7 @@ class PDBParser {
                     subunits: finalSubunits,
                     atoms: ContiguousArray(model.atomPositions),
                     atomArrayComposition: atomArrayComposition,
-                    atomIdentifiers: model.atomTypes,
+                    atomElements: model.atomElements,
                     atomResidues: model.atomResType
                 ))
             }
@@ -354,7 +354,7 @@ class PDBParser {
         let endElement = line.index(line.startIndex, offsetBy: PDBConstants.elementEnd)
         let rangeElement = startElement..<endElement
         let elementString = line[rangeElement].trimmingCharacters(in: .whitespaces)
-        let element = AtomTypeUtilities.getAtomId(atomName: String(elementString))
+        let element = AtomElement(string: elementString)
         
         // Get atom coordinates
         let startX = line.index(line.startIndex, offsetBy: PDBConstants.xPositionStart)
@@ -385,7 +385,7 @@ class PDBParser {
         
         return PDBAtomLine(
             line: lineIndex,
-            atomType: element,
+            element: element,
             resID: resID,
             resType: resType,
             position: simd_float3(x, y, z)

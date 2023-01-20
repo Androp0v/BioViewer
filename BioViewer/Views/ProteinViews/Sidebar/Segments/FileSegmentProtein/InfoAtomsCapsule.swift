@@ -59,22 +59,22 @@ struct InfoAtomsCapsule: View {
         ZStack {
             GeometryReader { geometry in
                 // Others
-                proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
+                proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
                     .frame(width: othersFraction * geometry.size.width)
                 // Sulfur
-                proteinViewModel.elementColors[Int(AtomType.SULFUR)]
+                proteinViewModel.elementColors[Int(AtomElement.sulfur.rawValue)]
                     .frame(width: sulfurFraction * geometry.size.width)
                 // Oxygen
-                proteinViewModel.elementColors[Int(AtomType.OXYGEN)]
+                proteinViewModel.elementColors[Int(AtomElement.oxygen.rawValue)]
                     .frame(width: oxygenFraction * geometry.size.width)
                 // Nitrogen
-                proteinViewModel.elementColors[Int(AtomType.NITROGEN)]
+                proteinViewModel.elementColors[Int(AtomElement.nitrogen.rawValue)]
                     .frame(width: nitrogenFraction * geometry.size.width)
                 // Hydrogen
-                proteinViewModel.elementColors[Int(AtomType.HYDROGEN)]
+                proteinViewModel.elementColors[Int(AtomElement.hydrogen.rawValue)]
                     .frame(width: hydrogenFraction * geometry.size.width)
                 // Carbon
-                proteinViewModel.elementColors[Int(AtomType.CARBON)]
+                proteinViewModel.elementColors[Int(AtomElement.carbon.rawValue)]
                     .frame(width: carbonFraction * geometry.size.width)
             }
         }

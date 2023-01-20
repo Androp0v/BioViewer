@@ -58,37 +58,37 @@ struct FileAtomElementPopover: View {
                 // Others
                 Circle()
                     .trim(from: 0, to: othersFraction)
-                    .stroke(proteinViewModel.elementColors[Int(AtomType.UNKNOWN)],
+                    .stroke(proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Sulfur
                 Circle()
                     .trim(from: 0, to: sulfurFraction)
-                    .stroke(proteinViewModel.elementColors[Int(AtomType.SULFUR)],
+                    .stroke(proteinViewModel.elementColors[Int(AtomElement.sulfur.rawValue)],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Oxygen
                 Circle()
                     .trim(from: 0, to: oxygenFraction)
-                    .stroke(proteinViewModel.elementColors[Int(AtomType.OXYGEN)],
+                    .stroke(proteinViewModel.elementColors[Int(AtomElement.oxygen.rawValue)],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Nitrogen
                 Circle()
                     .trim(from: 0, to: nitrogenFraction)
-                    .stroke(proteinViewModel.elementColors[Int(AtomType.NITROGEN)],
+                    .stroke(proteinViewModel.elementColors[Int(AtomElement.nitrogen.rawValue)],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Hydrogen
                 Circle()
                     .trim(from: 0, to: hydrogenFraction)
-                    .stroke(proteinViewModel.elementColors[Int(AtomType.HYDROGEN)],
+                    .stroke(proteinViewModel.elementColors[Int(AtomElement.hydrogen.rawValue)],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
                 // Carbon
                 Circle()
                     .trim(from: 0, to: carbonFraction)
-                    .stroke(proteinViewModel.elementColors[Int(AtomType.CARBON)],
+                    .stroke(proteinViewModel.elementColors[Int(AtomElement.carbon.rawValue)],
                             style: StrokeStyle(lineWidth: 40) )
                     .rotationEffect(.degrees(-90))
             }

@@ -12,6 +12,7 @@ struct ColorSection: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     
     @State var presentPeriodicTable: Bool = false
+    @State var showMoreElements: Bool = false
     
     var body: some View {
         Section(
@@ -38,29 +39,40 @@ struct ColorSection: View {
                             ColorPaletteRow(colorPalette: ColorPalette(.default))
                             */
                             
-                            ColorPickerRow(
-                                title: NSLocalizedString("C atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.CARBON)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("H atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.HYDROGEN)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("N atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.NITROGEN)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("O atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.OXYGEN)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("S atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.SULFUR)]
-                            )
+                            let importantElements: [AtomElement] = [.carbon, .hydrogen, .nitrogen, .oxygen, .sulfur]
+                            ForEach(importantElements, id: \.self) { element in
+                                ColorPickerRow(
+                                    title: NSLocalizedString("\(element.name) atom color", comment: ""),
+                                    selectedColor: $proteinViewModel.elementColors[Int(element.rawValue)]
+                                )
+                            }
+                            
+                            if showMoreElements {
+                                let moreElements = AtomElement.allCases.filter {
+                                    !(importantElements.contains($0)) && ($0 != .unknown)
+                                }
+                                ForEach(moreElements, id: \.self) { element in
+                                    ColorPickerRow(
+                                        title: NSLocalizedString("\(element.name) atom color", comment: ""),
+                                        selectedColor: $proteinViewModel.elementColors[Int(element.rawValue)]
+                                    )
+                                }
+                            }
+                            
+                            if !showMoreElements {
+                                ButtonRow(
+                                    action: {
+                                        withAnimation {
+                                            showMoreElements.toggle()
+                                        }
+                                    },
+                                    text: NSLocalizedString("Show more", comment: "")
+                                )
+                            }
+                            
                             ColorPickerRow(
                                 title: NSLocalizedString("Other atoms", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
+                                selectedColor: $proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
                             )
                             
                         // MARK: - Color by subunit

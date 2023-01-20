@@ -16,10 +16,9 @@
 		C4187E332642E0C2009E2CBA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E322642E0C2009E2CBA /* MainView.swift */; };
 		C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */; };
 		C418BAFC2645A8C20031C6F0 /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
-		C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomType.swift */; };
+		C418BAFE2645B1210031C6F0 /* AtomElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomElement.swift */; };
 		C41A0560264ACBF0006F551C /* InfoPopoverRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */; };
 		C41A0562264C2853006F551C /* FileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0561264C2853006F551C /* FileParser.swift */; };
-		C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */; };
 		C41A0566264C7B97006F551C /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0565264C7B97006F551C /* StatusView.swift */; };
 		C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
 		C440856026470A0700DC5009 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440855F26470A0700DC5009 /* SequenceView.swift */; };
@@ -182,7 +181,7 @@
 		C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
 		C572BD382741656500FF010D /* AtomArrayComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4553629265D869D006D980B /* AtomArrayComposition.swift */; };
 		C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
-		C572BD3A2741657B00FF010D /* AtomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomType.swift */; };
+		C572BD3A2741657B00FF010D /* AtomElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomElement.swift */; };
 		C572BD3B2741658700FF010D /* ProteinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */; };
 		C572BD3C2741658D00FF010D /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
 		C572BD3D2741659400FF010D /* ProteinViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BAC482649C18000B36026 /* ProteinViewDataSource.swift */; };
@@ -326,10 +325,9 @@
 		C4187E322642E0C2009E2CBA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportDroppedFilesDelegate.swift; path = BioViewer/Files/Import/ImportDroppedFilesDelegate.swift; sourceTree = SOURCE_ROOT; };
 		C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMath.swift; sourceTree = "<group>"; };
-		C418BAFD2645B1210031C6F0 /* AtomType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomType.swift; sourceTree = "<group>"; };
+		C418BAFD2645B1210031C6F0 /* AtomElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomElement.swift; sourceTree = "<group>"; };
 		C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopoverRow.swift; sourceTree = "<group>"; };
 		C41A0561264C2853006F551C /* FileParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FileParser.swift; path = BioViewer/Files/Import/FileParser.swift; sourceTree = SOURCE_ROOT; };
-		C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomMaterialProvider.swift; sourceTree = "<group>"; };
 		C41A0565264C7B97006F551C /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		C41A0568264D5D58006F551C /* ProteinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewModel.swift; sourceTree = "<group>"; };
 		C440855F26470A0700DC5009 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
@@ -876,8 +874,7 @@
 				C57F9956275E59C0001DE6D6 /* Protein */,
 				C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */,
 				C4553629265D869D006D980B /* AtomArrayComposition.swift */,
-				C418BAFD2645B1210031C6F0 /* AtomType.swift */,
-				C41A0563264C5C32006F551C /* AtomMaterialProvider.swift */,
+				C418BAFD2645B1210031C6F0 /* AtomElement.swift */,
 				C4A69AB326598783001C0490 /* AtomSectionIterator.swift */,
 				C5D97E0E29746A8000EF1D5A /* ResidueType.swift */,
 				C504C9C9274294FE002D4E6A /* RCSB */,
@@ -1487,7 +1484,6 @@
 				C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */,
 				C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
-				C41A0564264C5C32006F551C /* AtomMaterialProvider.swift in Sources */,
 				C501C74527C3FE93008CDA25 /* ComputePipelines.swift in Sources */,
 				C57F994B275DAA38001DE6D6 /* WorkspaceRow.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,
@@ -1587,7 +1583,7 @@
 				C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */,
 				C57F9953275E3B46001DE6D6 /* ColorPalettes.swift in Sources */,
 				C57F9955275E3D29001DE6D6 /* WorkspaceHelp.swift in Sources */,
-				C418BAFE2645B1210031C6F0 /* AtomType.swift in Sources */,
+				C418BAFE2645B1210031C6F0 /* AtomElement.swift in Sources */,
 				C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */,
 				C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */,
 				C464C35C265A5A1D00E66C3E /* CoffeeTipRow.swift in Sources */,
@@ -1690,7 +1686,7 @@
 				C56E87E4278DB906004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
 				C5E9BF0C284B78DB00F56D30 /* ShadowDepthPrePass.swift in Sources */,
 				C572BD3E2741659D00FF010D /* MetalScene.swift in Sources */,
-				C572BD3A2741657B00FF010D /* AtomType.swift in Sources */,
+				C572BD3A2741657B00FF010D /* AtomElement.swift in Sources */,
 				C51D4EED276919B200C69B3D /* AmbientOcclusionTextures.swift in Sources */,
 				C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */,
 				C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */,

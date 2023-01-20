@@ -24,7 +24,7 @@ extension FileParser {
         var oxygenArray = [simd_float3]()
         var sulfurArray = [simd_float3]()
         var othersArray = [simd_float3]()
-        var othersIDs = [UInt16]()
+        var othersElements = [AtomElement]()
         var atomArrayComposition = AtomArrayComposition()
         
         init(id: Int) {
@@ -37,7 +37,7 @@ extension FileParser {
         
         var atomArray = ContiguousArray<simd_float3>()
         var energyArray: [Float]?
-        var atomIdentifiers = [UInt16]()
+        var atomElements = [AtomElement]()
         var atomArrayComposition = AtomArrayComposition()
         
         // Initialize empty configuration
@@ -93,7 +93,7 @@ extension FileParser {
             let elementString = lineElements[0].replacingOccurrences(of: " ", with: "")
 
             // Normalize atom element, might be of "UNKNOWN" type
-            let element = AtomTypeUtilities.getAtomId(atomName: String(elementString))
+            let element = AtomElement(string: elementString)
 
             // Get atom coordinates
 
@@ -114,25 +114,25 @@ extension FileParser {
             
             // Save atom position to array based on element
             switch element {
-            case AtomType.CARBON:
+            case .carbon:
                 configurations.last?.atomArrayComposition.carbonCount += 1
                 configurations.last?.carbonArray.append(simd_float3(x, y, z))
-            case AtomType.NITROGEN:
+            case .nitrogen:
                 configurations.last?.atomArrayComposition.nitrogenCount += 1
                 configurations.last?.nitrogenArray.append(simd_float3(x, y, z))
-            case AtomType.HYDROGEN:
+            case .hydrogen:
                 configurations.last?.atomArrayComposition.hydrogenCount += 1
                 configurations.last?.hydrogenArray.append(simd_float3(x, y, z))
-            case AtomType.OXYGEN:
+            case .oxygen:
                 configurations.last?.atomArrayComposition.oxygenCount += 1
                 configurations.last?.oxygenArray.append(simd_float3(x, y, z))
-            case AtomType.SULFUR:
+            case .sulfur:
                 configurations.last?.atomArrayComposition.sulfurCount += 1
                 configurations.last?.sulfurArray.append(simd_float3(x, y, z))
             default:
                 configurations.last?.atomArrayComposition.othersCount += 1
                 configurations.last?.othersArray.append(simd_float3(x, y, z))
-                configurations.last?.othersIDs.append(element)
+                configurations.last?.othersElements.append(element)
             }
         })
                 
@@ -168,17 +168,27 @@ extension FileParser {
         
         // Add atom identifiers codes in the right order (so atomArray[i] corresponds
         // has an atomIdentifiers[i] identifier.
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.CARBON,
-                                                 count: firstConfiguration.atomArrayComposition.carbonCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.NITROGEN,
-                                                 count: firstConfiguration.atomArrayComposition.nitrogenCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.HYDROGEN,
-                                                 count: firstConfiguration.atomArrayComposition.hydrogenCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.OXYGEN,
-                                                 count: firstConfiguration.atomArrayComposition.oxygenCount))
-        atomIdentifiers.append(contentsOf: Array(repeating: AtomType.SULFUR,
-                                                 count: firstConfiguration.atomArrayComposition.sulfurCount))
-        atomIdentifiers.append(contentsOf: firstConfiguration.othersIDs)
+        atomElements.append(contentsOf: Array(
+            repeating: AtomElement.carbon,
+            count: firstConfiguration.atomArrayComposition.carbonCount
+        ))
+        atomElements.append(contentsOf: Array(
+            repeating: AtomElement.nitrogen,
+            count: firstConfiguration.atomArrayComposition.nitrogenCount
+        ))
+        atomElements.append(contentsOf: Array(
+            repeating: AtomElement.hydrogen,
+            count: firstConfiguration.atomArrayComposition.hydrogenCount
+        ))
+        atomElements.append(contentsOf: Array(
+            repeating: AtomElement.oxygen,
+            count: firstConfiguration.atomArrayComposition.oxygenCount
+        ))
+        atomElements.append(contentsOf: Array(
+            repeating: AtomElement.sulfur,
+            count: firstConfiguration.atomArrayComposition.sulfurCount
+        ))
+        atomElements.append(contentsOf: firstConfiguration.othersElements)
         
         atomArrayComposition = firstConfiguration.atomArrayComposition
         
@@ -196,7 +206,7 @@ extension FileParser {
                               subunits: proteinSubunits,
                               atoms: atomArray,
                               atomArrayComposition: atomArrayComposition,
-                              atomIdentifiers: atomIdentifiers,
+                              atomElements: atomElements,
                               atomResidues: nil,
                               sequence: nil)
         

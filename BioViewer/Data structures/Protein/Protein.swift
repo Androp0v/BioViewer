@@ -47,7 +47,7 @@ class Protein {
     var atomArrayComposition: AtomArrayComposition
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
-    var atomIdentifiers: [UInt16]
+    var atomElements: [AtomElement]
     
     /// Residue type of each atom.
     var atomResidues: [Residue]?
@@ -79,14 +79,14 @@ class Protein {
     
     // MARK: - Initialization
 
-    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], atoms: ContiguousArray<simd_float3>, atomArrayComposition: AtomArrayComposition, atomIdentifiers: [UInt16], atomResidues: [Residue]?, sequence: [String]? = nil) {
+    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], atoms: ContiguousArray<simd_float3>, atomArrayComposition: AtomArrayComposition, atomElements: [AtomElement], atomResidues: [Residue]?, sequence: [String]? = nil) {
         self.configurationCount = configurationCount
         self.configurationEnergies = configurationEnergies
         self.subunitCount = subunitCount
         self.subunits = subunits
         self.atoms = atoms
         self.atomArrayComposition = atomArrayComposition
-        self.atomIdentifiers = atomIdentifiers
+        self.atomElements = atomElements
         self.atomResidues = atomResidues
         self.atomCount = atomArrayComposition.totalCount
         self.sequence = sequence

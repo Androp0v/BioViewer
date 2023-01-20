@@ -21,7 +21,8 @@ class AtomRadiiGenerator {
                     return
                 }
                 let ptr = (ptrAddress + MemoryLayout<Float>.stride * index).assumingMemoryBound(to: Float.self)
-                ptr.pointee = AtomTypeUtilities.getAtomicVanDerWaalsRadius(atomType: UInt16(index)) * scale
+                let element = AtomElement(index: index)
+                ptr.pointee = element.vanDerWaalsRadius * scale
             }
         }
         
