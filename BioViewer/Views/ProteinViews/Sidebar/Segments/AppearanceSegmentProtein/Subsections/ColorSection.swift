@@ -39,8 +39,7 @@ struct ColorSection: View {
                             ColorPaletteRow(colorPalette: ColorPalette(.default))
                             */
                             
-                            let importantElements: [AtomElement] = [.carbon, .hydrogen, .nitrogen, .oxygen, .sulfur]
-                            ForEach(importantElements, id: \.self) { element in
+                            ForEach(AtomElement.importantElements, id: \.self) { element in
                                 ColorPickerRow(
                                     title: NSLocalizedString("\(element.name) atom color", comment: ""),
                                     selectedColor: $proteinViewModel.elementColors[Int(element.rawValue)]
@@ -48,10 +47,7 @@ struct ColorSection: View {
                             }
                             
                             if showMoreElements {
-                                let moreElements = AtomElement.allCases.filter {
-                                    !(importantElements.contains($0)) && ($0 != .unknown)
-                                }
-                                ForEach(moreElements, id: \.self) { element in
+                                ForEach(AtomElement.otherElements, id: \.self) { element in
                                     ColorPickerRow(
                                         title: NSLocalizedString("\(element.name) atom color", comment: ""),
                                         selectedColor: $proteinViewModel.elementColors[Int(element.rawValue)]

@@ -16,6 +16,7 @@ enum AtomElement: UInt8, CaseIterable {
     case oxygen = 8
     case fluorine = 9
     case sodium = 11
+    case magnesium = 12
     case phosphorus = 15
     case sulfur = 16
     case chlorine = 17
@@ -23,6 +24,16 @@ enum AtomElement: UInt8, CaseIterable {
     case calcium = 20
     case iron = 26
     case zinc = 30
+    case iodine = 52
+    
+    static let importantElements: [AtomElement] = {
+        return [.carbon, .hydrogen, .nitrogen, .oxygen, .sulfur]
+    }()
+    static let otherElements: [AtomElement] = {
+        return AtomElement.allCases.filter({
+            !AtomElement.importantElements.contains($0) && $0 != .unknown
+        })
+    }()
     
     var name: String {
         switch self {
@@ -33,6 +44,7 @@ enum AtomElement: UInt8, CaseIterable {
         case .oxygen: return "O"
         case .fluorine: return "F"
         case .sodium: return "Na"
+        case .magnesium: return "Mg"
         case .phosphorus: return "P"
         case .sulfur: return "S"
         case .chlorine: return "Cl"
@@ -40,6 +52,28 @@ enum AtomElement: UInt8, CaseIterable {
         case .calcium: return "Ca"
         case .iron: return "Fe"
         case .zinc: return "Zn"
+        case .iodine: return "I"
+        }
+    }
+    
+    var longName: String {
+        switch self {
+        case .unknown: return NSLocalizedString("Unknown", comment: "")
+        case .hydrogen: return "Hydrogen"
+        case .carbon: return "Carbon"
+        case .nitrogen: return "Nitrogen"
+        case .oxygen: return "Oxygen"
+        case .fluorine: return "Fluorine"
+        case .sodium: return "Sodium"
+        case .magnesium: return "Magnesium"
+        case .phosphorus: return "Phosphorus"
+        case .sulfur: return "Sulfur"
+        case .chlorine: return "Chlorine"
+        case .potassium: return "Potassium"
+        case .calcium: return "Calcium"
+        case .iron: return "Iron"
+        case .zinc: return "Zinc"
+        case .iodine: return "Iodine"
         }
     }
     
@@ -63,6 +97,7 @@ enum AtomElement: UInt8, CaseIterable {
         case .oxygen: return 1.52
         case .fluorine: return 1.47
         case .sodium: return 2.27
+        case .magnesium: return 1.73
         case .phosphorus: return 1.80
         case .sulfur: return 1.80
         case .chlorine: return 1.75
@@ -70,6 +105,7 @@ enum AtomElement: UInt8, CaseIterable {
         case .calcium: return 2.31
         case .iron: return 1.94
         case .zinc: return 1.39
+        case .iodine: return 1.98
         }
     }
     
@@ -89,6 +125,7 @@ enum AtomElement: UInt8, CaseIterable {
         case "O": self = .oxygen
         case "F": self = .fluorine
         case "NA": self = .sodium
+        case "MG": self = .magnesium
         case "P": self = .phosphorus
         case "S": self = .sulfur
         case "Cl": self = .chlorine
@@ -96,6 +133,7 @@ enum AtomElement: UInt8, CaseIterable {
         case "CA": self = .calcium
         case "FE": self = .iron
         case "ZN": self = .zinc
+        case "I": self = .iodine
         default: self = .unknown
         }
     }

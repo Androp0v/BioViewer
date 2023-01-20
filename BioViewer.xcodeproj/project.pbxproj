@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C400E2012721ED75004DFCA8 /* CreateSphereModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */; };
-		C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */; };
 		C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */; };
 		C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C405740A265FF69A008527D1 /* SwitchRow.swift */; };
 		C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40574482663D756008527D1 /* ProteinMetalView.swift */; };
@@ -53,7 +52,6 @@
 		C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D9D31271C469100E12E2F /* MetalScene.swift */; };
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */; };
-		C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB326598783001C0490 /* AtomSectionIterator.swift */; };
 		C4B1F81F26457CF80035D739 /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
 		C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
 		C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */; };
@@ -112,6 +110,7 @@
 		C5277FC22979566900291AF7 /* PDBParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D97E0A2974549C00EF1D5A /* PDBParser.swift */; };
 		C5277FC32979567500291AF7 /* PDBParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D97E0C297466C000EF1D5A /* PDBParseError.swift */; };
 		C5277FC529795A2F00291AF7 /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC429795A2F00291AF7 /* PickerRow.swift */; };
+		C5277FC7297B0B2100291AF7 /* FileAtomTotalsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */; };
 		C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
@@ -316,7 +315,6 @@
 
 /* Begin PBXFileReference section */
 		C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSphereModel.swift; sourceTree = "<group>"; };
-		C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSASPoints.swift; sourceTree = "<group>"; };
 		C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateImpostorSpheres.swift; sourceTree = "<group>"; };
 		C405740A265FF69A008527D1 /* SwitchRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRow.swift; sourceTree = "<group>"; };
 		C40574482663D756008527D1 /* ProteinMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinMetalView.swift; sourceTree = "<group>"; };
@@ -373,7 +371,6 @@
 		C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedVertex.h; sourceTree = "<group>"; };
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineStateBundle.swift; sourceTree = "<group>"; };
-		C4A69AB326598783001C0490 /* AtomSectionIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSectionIterator.swift; sourceTree = "<group>"; };
 		C4B1F81E26457CF80035D739 /* Protein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protein.swift; sourceTree = "<group>"; };
 		C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorSpheres.metal; sourceTree = "<group>"; };
 		C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorSphereShader.metal; sourceTree = "<group>"; };
@@ -405,6 +402,7 @@
 		C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientOcclusionTextures.swift; sourceTree = "<group>"; };
 		C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationSelector.swift; sourceTree = "<group>"; };
 		C5277FC429795A2F00291AF7 /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
+		C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomTotalsRow.swift; sourceTree = "<group>"; };
 		C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorPass.swift; sourceTree = "<group>"; };
 		C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FillColorBuffer.metal; sourceTree = "<group>"; };
 		C52AE373279D7CE900BEE11B /* FillColorInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillColorInput.h; sourceTree = "<group>"; };
@@ -575,7 +573,6 @@
 				C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */,
 				C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */,
 				C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */,
-				C400E2022721EE73004DFCA8 /* CreateSASPoints.swift */,
 			);
 			path = Functions;
 			sourceTree = "<group>";
@@ -875,7 +872,6 @@
 				C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */,
 				C4553629265D869D006D980B /* AtomArrayComposition.swift */,
 				C418BAFD2645B1210031C6F0 /* AtomElement.swift */,
-				C4A69AB326598783001C0490 /* AtomSectionIterator.swift */,
 				C5D97E0E29746A8000EF1D5A /* ResidueType.swift */,
 				C504C9C9274294FE002D4E6A /* RCSB */,
 			);
@@ -923,6 +919,7 @@
 			children = (
 				C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */,
 				C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */,
+				C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */,
 			);
 			path = FileAtomElementPopover;
 			sourceTree = "<group>";
@@ -1480,7 +1477,6 @@
 				C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */,
 				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
-				C400E2032721EE73004DFCA8 /* CreateSASPoints.swift in Sources */,
 				C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */,
 				C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */,
 				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
@@ -1594,6 +1590,7 @@
 				C45BAC492649C18000B36026 /* ProteinViewDataSource.swift in Sources */,
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
 				C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */,
+				C5277FC7297B0B2100291AF7 /* FileAtomTotalsRow.swift in Sources */,
 				C553B79A2936218000294BB4 /* ButtonRow.swift in Sources */,
 				C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */,
 				C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */,
@@ -1617,7 +1614,6 @@
 				C55384202972DCBC007E45E1 /* CartoonHelix.swift in Sources */,
 				C55384292972DEF6007E45E1 /* CartoonStructureType.swift in Sources */,
 				C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */,
-				C4A69AB426598783001C0490 /* AtomSectionIterator.swift in Sources */,
 				C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */,
 				C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */,
 				C544D3A0277016270060B30D /* TextureToImage.swift in Sources */,

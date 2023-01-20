@@ -24,7 +24,7 @@ extension FileParser {
         var oxygenArray = [simd_float3]()
         var sulfurArray = [simd_float3]()
         var othersArray = [simd_float3]()
-        var othersElements = [AtomElement]()
+        var atomElements = [AtomElement]()
         var atomArrayComposition = AtomArrayComposition()
         
         init(id: Int) {
@@ -115,25 +115,19 @@ extension FileParser {
             // Save atom position to array based on element
             switch element {
             case .carbon:
-                configurations.last?.atomArrayComposition.carbonCount += 1
                 configurations.last?.carbonArray.append(simd_float3(x, y, z))
             case .nitrogen:
-                configurations.last?.atomArrayComposition.nitrogenCount += 1
                 configurations.last?.nitrogenArray.append(simd_float3(x, y, z))
             case .hydrogen:
-                configurations.last?.atomArrayComposition.hydrogenCount += 1
                 configurations.last?.hydrogenArray.append(simd_float3(x, y, z))
             case .oxygen:
-                configurations.last?.atomArrayComposition.oxygenCount += 1
                 configurations.last?.oxygenArray.append(simd_float3(x, y, z))
             case .sulfur:
-                configurations.last?.atomArrayComposition.sulfurCount += 1
                 configurations.last?.sulfurArray.append(simd_float3(x, y, z))
             default:
-                configurations.last?.atomArrayComposition.othersCount += 1
                 configurations.last?.othersArray.append(simd_float3(x, y, z))
-                configurations.last?.othersElements.append(element)
             }
+            configurations.last?.atomElements.append(element)
         })
                 
         guard let firstConfiguration = configurations.first else {
@@ -165,32 +159,9 @@ extension FileParser {
         guard atomArray.count > 0 else {
             throw ImportError.emptyAtomCount
         }
-        
-        // Add atom identifiers codes in the right order (so atomArray[i] corresponds
-        // has an atomIdentifiers[i] identifier.
-        atomElements.append(contentsOf: Array(
-            repeating: AtomElement.carbon,
-            count: firstConfiguration.atomArrayComposition.carbonCount
-        ))
-        atomElements.append(contentsOf: Array(
-            repeating: AtomElement.nitrogen,
-            count: firstConfiguration.atomArrayComposition.nitrogenCount
-        ))
-        atomElements.append(contentsOf: Array(
-            repeating: AtomElement.hydrogen,
-            count: firstConfiguration.atomArrayComposition.hydrogenCount
-        ))
-        atomElements.append(contentsOf: Array(
-            repeating: AtomElement.oxygen,
-            count: firstConfiguration.atomArrayComposition.oxygenCount
-        ))
-        atomElements.append(contentsOf: Array(
-            repeating: AtomElement.sulfur,
-            count: firstConfiguration.atomArrayComposition.sulfurCount
-        ))
-        atomElements.append(contentsOf: firstConfiguration.othersElements)
-        
-        atomArrayComposition = firstConfiguration.atomArrayComposition
+
+        atomElements.append(contentsOf: firstConfiguration.atomElements)
+        atomArrayComposition = AtomArrayComposition(elements: atomElements)
         
         let proteinSubunits = [ProteinSubunit(id: firstConfiguration.id,
                                               kind: .unknown,

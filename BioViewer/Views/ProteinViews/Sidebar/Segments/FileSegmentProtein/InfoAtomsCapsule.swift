@@ -20,27 +20,16 @@ struct InfoAtomsCapsule: View {
     @State var othersFraction: CGFloat = 0.0
         
     func setAtomFractions() {
-        guard let totalAtoms = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomCount else {
+        guard let protein = proteinViewModel.dataSource.modelsForFile(file: file)?.first else {
             return
         }
-        guard let carbonCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.carbonCount else {
-            return
-        }
-        guard let hydrogenCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.hydrogenCount else {
-            return
-        }
-        guard let nitrogenCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.nitrogenCount else {
-            return
-        }
-        guard let oxygenCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.oxygenCount else {
-            return
-        }
-        guard let sulfurCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.sulfurCount else {
-            return
-        }
-        guard let othersCount = proteinViewModel.dataSource.modelsForFile(file: file)?.first?.atomArrayComposition.othersCount else {
-            return
-        }
+        let totalAtoms = protein.atomCount
+        let carbonCount = protein.atomArrayComposition.elementCounts[.carbon] ?? 0
+        let hydrogenCount = protein.atomArrayComposition.elementCounts[.hydrogen] ?? 0
+        let nitrogenCount = protein.atomArrayComposition.elementCounts[.nitrogen] ?? 0
+        let oxygenCount = protein.atomArrayComposition.elementCounts[.oxygen] ?? 0
+        let sulfurCount = protein.atomArrayComposition.elementCounts[.sulfur] ?? 0
+        let othersCount = totalAtoms - protein.atomArrayComposition.importantElementCount
         
         carbonFraction = CGFloat(carbonCount) / CGFloat(totalAtoms)
         
