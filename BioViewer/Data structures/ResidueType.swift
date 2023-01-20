@@ -35,6 +35,7 @@ enum Residue: UInt8, CaseIterable {
     case Phe
     case Tyr
     case Trp
+    case Pyl
     
     // MARK: - Nucleobases (ribonucleic)
     
@@ -70,7 +71,7 @@ enum Residue: UInt8, CaseIterable {
     
     var kind: ResidueKind {
         switch self {
-        case .Arg, .His, .Lys, .Asp, .Glu, .Ser, .Thr, .Asn, .Gln, .Cys, .Sec, .Gly, .Pro, .Ala, .Val, .Ile, .Leu, .Met, .Phe, .Tyr, .Trp:
+        case .Arg, .His, .Lys, .Asp, .Glu, .Ser, .Thr, .Asn, .Gln, .Cys, .Sec, .Gly, .Pro, .Ala, .Val, .Ile, .Leu, .Met, .Phe, .Tyr, .Trp, .Pyl:
             return .aminoAcid
         case .A, .C, .G, .T, .U, .I:
             return .rnaNucleobase
@@ -104,6 +105,7 @@ enum Residue: UInt8, CaseIterable {
         case .Phe: return "Phenylalanine"
         case .Tyr: return "Tyrosine"
         case .Trp: return "Tryptophan"
+        case .Pyl: return "Pyrrolysine"
             
         case .A: return "Adenine (RNA)"
         case .C: return "Cytosine (RNA)"
@@ -146,6 +148,7 @@ enum Residue: UInt8, CaseIterable {
         case .Phe: return Color(red: 0.407, green: 0.376, blue: 0.407)
         case .Tyr: return Color(red: 0.654, green: 0.549, blue: 0.396)
         case .Trp: return Color(red: 0.392, green: 0.349, blue: 0.098)
+        case .Pyl: return Color(red: 0.231, green: 0.595, blue: 0.800)
             
         case .A: return Color(red: 1.000, green: 0.309, blue: 1.000)
         case .C: return Color(red: 0.412, green: 1.000, blue: 0.225)
@@ -188,6 +191,7 @@ enum Residue: UInt8, CaseIterable {
         case "PHE": self = .Phe
         case "TYR": self = .Tyr
         case "TRP": self = .Trp
+        case "PYR": self = .Pyl
         case "A": self = .A
         case "C": self = .C
         case "G": self = .G
