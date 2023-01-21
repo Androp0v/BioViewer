@@ -113,6 +113,8 @@
 		C5277FC7297B0B2100291AF7 /* FileAtomTotalsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */; };
 		C5277FC9297B107E00291AF7 /* ProteinResidueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC8297B107E00291AF7 /* ProteinResidueComposition.swift */; };
 		C5277FCA297B117500291AF7 /* ProteinResidueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC8297B107E00291AF7 /* ProteinResidueComposition.swift */; };
+		C5277FCE297B28B000291AF7 /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC429795A2F00291AF7 /* PickerRow.swift */; };
+		C5277FCF297B28C000291AF7 /* LegacyPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35D265A883C00E66C3E /* LegacyPickerRow.swift */; };
 		C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
@@ -137,7 +139,7 @@
 		C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */; };
 		C5433F3927709AEA00607B20 /* PhotoModeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */; };
 		C5433F3B2770EABA00607B20 /* ImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3A2770EABA00607B20 /* ImageExporter.swift */; };
-		C5433F3D2770F9C600607B20 /* FileDetailsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3C2770F9C600607B20 /* FileDetailsSection.swift */; };
+		C5433F3D2770F9C600607B20 /* FileDetailsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3C2770F9C600607B20 /* FileDetailsComponent.swift */; };
 		C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3F2770FA9200607B20 /* LineGraphView.swift */; };
 		C5433F422771667200607B20 /* PhotoModeViewfinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F412771667200607B20 /* PhotoModeViewfinder.swift */; };
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
@@ -428,7 +430,7 @@
 		C5433F362770908E00607B20 /* PhotoModeContentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeContentHeaderView.swift; sourceTree = "<group>"; };
 		C5433F3827709AEA00607B20 /* PhotoModeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeConfig.swift; sourceTree = "<group>"; };
 		C5433F3A2770EABA00607B20 /* ImageExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExporter.swift; sourceTree = "<group>"; };
-		C5433F3C2770F9C600607B20 /* FileDetailsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDetailsSection.swift; sourceTree = "<group>"; };
+		C5433F3C2770F9C600607B20 /* FileDetailsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDetailsComponent.swift; sourceTree = "<group>"; };
 		C5433F3F2770FA9200607B20 /* LineGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraphView.swift; sourceTree = "<group>"; };
 		C5433F412771667200607B20 /* PhotoModeViewfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewfinder.swift; sourceTree = "<group>"; };
 		C544D39F277016270060B30D /* TextureToImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToImage.swift; sourceTree = "<group>"; };
@@ -1040,7 +1042,7 @@
 		C5433F3E2770F9CA00607B20 /* Sections */ = {
 			isa = PBXGroup;
 			children = (
-				C5433F3C2770F9C600607B20 /* FileDetailsSection.swift */,
+				C5433F3C2770F9C600607B20 /* FileDetailsComponent.swift */,
 			);
 			path = Sections;
 			sourceTree = "<group>";
@@ -1613,7 +1615,7 @@
 				C51D4ED9276596EE00C69B3D /* EmptyDataRow.swift in Sources */,
 				C572BD1E27413AFB00FF010D /* FileSourceViewModel.swift in Sources */,
 				C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */,
-				C5433F3D2770F9C600607B20 /* FileDetailsSection.swift in Sources */,
+				C5433F3D2770F9C600607B20 /* FileDetailsComponent.swift in Sources */,
 				C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */,
 				C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */,
 				C5406700274D387200710CFC /* ImportError.swift in Sources */,
@@ -1706,6 +1708,8 @@
 				C572BD40274165F500FF010D /* Camera.swift in Sources */,
 				C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */,
 				C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */,
+				C5277FCE297B28B000291AF7 /* PickerRow.swift in Sources */,
+				C5277FCF297B28C000291AF7 /* LegacyPickerRow.swift in Sources */,
 				C57F9959275E5B63001DE6D6 /* ProteinFile.swift in Sources */,
 				C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */,
 				C51D4EE32769133400C69B3D /* ShadowPass.swift in Sources */,

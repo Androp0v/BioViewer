@@ -49,12 +49,13 @@ struct PickerRow<T: PickableEnum>: View {
                 }
             } label: {
                 HStack(spacing: 4) {
-                    Text(pickerOptions[selectedOption - startIndex])
+                    Text(selection.displayName)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 8)
                         .background(Color.accentColor)
                         .foregroundColor(.white)
                         .cornerRadius(4)
+                    
                 }
             }
         }

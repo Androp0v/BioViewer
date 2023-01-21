@@ -75,6 +75,8 @@ struct FileSegmentProtein: View {
                                 file: file
                             )
                         }
+                        
+                        FileDetailsComponent(file: file)
                     }
                 }
             }
@@ -90,16 +92,6 @@ struct FileSegmentProtein: View {
                             value: "\(proteinViewModel.proteinCount)")
             }
             */
-            
-            // MARK: - File details
-            Section(header: Text(NSLocalizedString("File details", comment: ""))
-                        .padding(.bottom, 4),
-                    content: {
-                        FileDetailsSection()
-            })
-            #if targetEnvironment(macCatalyst)
-            .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
-            #endif
             
             // MARK: - Remove files
             Section(header: Text(NSLocalizedString("Remove files", comment: ""))
