@@ -101,7 +101,7 @@ struct FileCompositionView: View {
             FileAtomTotalsRow()
                 .padding(.vertical, 8)
         }
-        .frame(minWidth: 350)
+        .frame(idealWidth: 450)
     }
     
     // MARK: - Fractions
