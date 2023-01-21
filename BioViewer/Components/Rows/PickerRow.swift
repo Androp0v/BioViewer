@@ -27,37 +27,13 @@ struct PickerRow<T: PickableEnum>: View {
         #if targetEnvironment(macCatalyst)
         HStack(spacing: .zero) {
             Text(optionName)
-            Picker("", selection: $selection.animation()) {
-                ForEach(Array(T.allCases), id: \.self) {
-                    Text($0.displayName)
-                        .tag($0)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .frame(maxWidth: .infinity)
+            BioViewerPicker(selection: $selection)
         }
         #else
         HStack {
             Text(optionName + ":")
             Spacer()
-            Menu {
-                Picker("", selection: $selection.animation()) {
-                    ForEach(Array(T.allCases), id: \.self) {
-                        Text($0.displayName)
-                            .tag($0)
-                    }
-                }
-            } label: {
-                HStack(spacing: 4) {
-                    Text(selection.displayName)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(4)
-                    
-                }
-            }
+            BioViewerPicker(selection: $selection)
         }
         #endif
     }

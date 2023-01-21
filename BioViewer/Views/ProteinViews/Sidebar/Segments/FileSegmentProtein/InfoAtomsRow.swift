@@ -52,7 +52,7 @@ struct InfoAtomsRow: View {
                         .buttonStyle(PlainButtonStyle())
                         .disabled(isDisabled)
                         .popover(isPresented: $buttonToggle) {
-                            FileAtomElementPopover()
+                            ProteinCompositionView()
                                 .environmentObject(proteinViewModel)
                         }
                 }

@@ -79,7 +79,7 @@
 		C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024F2763CB0C005D7F06 /* RangeRow.swift */; };
 		C50E02552764B5BE005D7F06 /* PDBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBConstants.swift */; };
 		C50E02562764B5C4005D7F06 /* PDBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBConstants.swift */; };
-		C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */; };
+		C515EFB9274D9E0A00B6F7DB /* ProteinCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* ProteinCompositionView.swift */; };
 		C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */; };
 		C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBD274E691800B6F7DB /* InfoTextRow.swift */; };
 		C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
@@ -115,6 +115,8 @@
 		C5277FCA297B117500291AF7 /* ProteinResidueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC8297B107E00291AF7 /* ProteinResidueComposition.swift */; };
 		C5277FCE297B28B000291AF7 /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC429795A2F00291AF7 /* PickerRow.swift */; };
 		C5277FCF297B28C000291AF7 /* LegacyPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C464C35D265A883C00E66C3E /* LegacyPickerRow.swift */; };
+		C5277FD1297B6F9D00291AF7 /* BioViewerPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FD0297B6F9D00291AF7 /* BioViewerPicker.swift */; };
+		C5277FD2297B6FAF00291AF7 /* BioViewerPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FD0297B6F9D00291AF7 /* BioViewerPicker.swift */; };
 		C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
@@ -392,7 +394,7 @@
 		C50E024D27639B43005D7F06 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C50E024F2763CB0C005D7F06 /* RangeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeRow.swift; sourceTree = "<group>"; };
 		C50E02542764B5BE005D7F06 /* PDBConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDBConstants.swift; sourceTree = "<group>"; };
-		C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementPopover.swift; sourceTree = "<group>"; };
+		C515EFB8274D9E0A00B6F7DB /* ProteinCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinCompositionView.swift; sourceTree = "<group>"; };
 		C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementRow.swift; sourceTree = "<group>"; };
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
 		C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSubunit.swift; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 		C5277FC429795A2F00291AF7 /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
 		C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomTotalsRow.swift; sourceTree = "<group>"; };
 		C5277FC8297B107E00291AF7 /* ProteinResidueComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinResidueComposition.swift; sourceTree = "<group>"; };
+		C5277FD0297B6F9D00291AF7 /* BioViewerPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerPicker.swift; sourceTree = "<group>"; };
 		C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorPass.swift; sourceTree = "<group>"; };
 		C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FillColorBuffer.metal; sourceTree = "<group>"; };
 		C52AE373279D7CE900BEE11B /* FillColorInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillColorInput.h; sourceTree = "<group>"; };
@@ -922,7 +925,7 @@
 		C515EFBA274E313E00B6F7DB /* FileAtomElementPopover */ = {
 			isa = PBXGroup;
 			children = (
-				C515EFB8274D9E0A00B6F7DB /* FileAtomElementPopover.swift */,
+				C515EFB8274D9E0A00B6F7DB /* ProteinCompositionView.swift */,
 				C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */,
 				C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */,
 			);
@@ -1082,6 +1085,7 @@
 			children = (
 				C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */,
 				C580F256294B9BD60073B01B /* PersistentDisclosureGroup.swift */,
+				C5277FD0297B6F9D00291AF7 /* BioViewerPicker.swift */,
 				C45BAC41264954FF00B36026 /* Rows */,
 			);
 			path = Components;
@@ -1462,6 +1466,7 @@
 				C5E7AF972760E6D40065F6AD /* RendererPipelines.swift in Sources */,
 				C405740B265FF69A008527D1 /* SwitchRow.swift in Sources */,
 				C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */,
+				C5277FD1297B6F9D00291AF7 /* BioViewerPicker.swift in Sources */,
 				C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */,
 				C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */,
 				C580F257294B9BD60073B01B /* PersistentDisclosureGroup.swift in Sources */,
@@ -1585,7 +1590,7 @@
 				C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */,
 				C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */,
 				C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */,
-				C515EFB9274D9E0A00B6F7DB /* FileAtomElementPopover.swift in Sources */,
+				C515EFB9274D9E0A00B6F7DB /* ProteinCompositionView.swift in Sources */,
 				C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
 				C59D1F3827E08B43000B6020 /* PhotoModeShareButton.swift in Sources */,
@@ -1673,6 +1678,7 @@
 				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
+				C5277FD2297B6FAF00291AF7 /* BioViewerPicker.swift in Sources */,
 				C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */,
 				C51D4EE62769139100C69B3D /* ImpostorPass.swift in Sources */,
 				C5626AE0282E8F3A00CFE7DC /* BioViewerLogger.swift in Sources */,

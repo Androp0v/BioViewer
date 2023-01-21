@@ -50,7 +50,7 @@ struct InformationRow_Previews: PreviewProvider {
             InfoPopoverRow(label: "Número de átomos",
                                   value: "58336",
                                   isDisabled: false,
-                                  content: { FileAtomElementPopover() })
+                                  content: { ProteinCompositionView() })
         }
     }
 }

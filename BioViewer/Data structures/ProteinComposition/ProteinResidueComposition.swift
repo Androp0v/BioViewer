@@ -19,6 +19,14 @@ class ProteinResidueComposition {
         return sum
     }
     
+    static func +=(lhs: inout ProteinResidueComposition, rhs: ProteinResidueComposition) {
+        lhs.residueCounts.merge(rhs.residueCounts, uniquingKeysWith: { lhsCount, rhsCount in
+            return lhsCount + rhsCount
+        })
+    }
+    
+    init() {}
+    
     init(residues: [Residue]) {
         for residue in residues {
             if let currentCount = residueCounts[residue] {
