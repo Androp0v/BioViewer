@@ -79,8 +79,8 @@
 		C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024F2763CB0C005D7F06 /* RangeRow.swift */; };
 		C50E02552764B5BE005D7F06 /* PDBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBConstants.swift */; };
 		C50E02562764B5C4005D7F06 /* PDBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBConstants.swift */; };
-		C515EFB9274D9E0A00B6F7DB /* ProteinCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* ProteinCompositionView.swift */; };
-		C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */; };
+		C515EFB9274D9E0A00B6F7DB /* FileCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */; };
+		C515EFBC274E316A00B6F7DB /* FileCompositionItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */; };
 		C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBD274E691800B6F7DB /* InfoTextRow.swift */; };
 		C515EFC0274F7DA400B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
 		C515EFC1274F9BF900B6F7DB /* ProteinSubunit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */; };
@@ -394,8 +394,8 @@
 		C50E024D27639B43005D7F06 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C50E024F2763CB0C005D7F06 /* RangeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeRow.swift; sourceTree = "<group>"; };
 		C50E02542764B5BE005D7F06 /* PDBConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDBConstants.swift; sourceTree = "<group>"; };
-		C515EFB8274D9E0A00B6F7DB /* ProteinCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinCompositionView.swift; sourceTree = "<group>"; };
-		C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomElementRow.swift; sourceTree = "<group>"; };
+		C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionView.swift; sourceTree = "<group>"; };
+		C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionItemRow.swift; sourceTree = "<group>"; };
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
 		C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSubunit.swift; sourceTree = "<group>"; };
 		C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinColorModel.swift; sourceTree = "<group>"; };
@@ -925,8 +925,8 @@
 		C515EFBA274E313E00B6F7DB /* FileAtomElementPopover */ = {
 			isa = PBXGroup;
 			children = (
-				C515EFB8274D9E0A00B6F7DB /* ProteinCompositionView.swift */,
-				C515EFBB274E316A00B6F7DB /* FileAtomElementRow.swift */,
+				C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */,
+				C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */,
 				C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */,
 			);
 			path = FileAtomElementPopover;
@@ -1519,7 +1519,7 @@
 				C51D4EEC2769199600C69B3D /* AmbientOcclusionTextures.swift in Sources */,
 				C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */,
 				C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */,
-				C515EFBC274E316A00B6F7DB /* FileAtomElementRow.swift in Sources */,
+				C515EFBC274E316A00B6F7DB /* FileCompositionItemRow.swift in Sources */,
 				C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
 				C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */,
@@ -1590,7 +1590,7 @@
 				C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */,
 				C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */,
 				C555EC83282A91D7001281CD /* MakeBufferFromArray.swift in Sources */,
-				C515EFB9274D9E0A00B6F7DB /* ProteinCompositionView.swift in Sources */,
+				C515EFB9274D9E0A00B6F7DB /* FileCompositionView.swift in Sources */,
 				C5546DA927E4DD4E00F607F2 /* ComputeSDFGrid.swift in Sources */,
 				C400E2052721EEE8004DFCA8 /* CreateImpostorSpheres.swift in Sources */,
 				C59D1F3827E08B43000B6020 /* PhotoModeShareButton.swift in Sources */,
