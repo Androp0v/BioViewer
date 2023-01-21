@@ -27,13 +27,21 @@ struct FileDetailsComponent: View {
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     Spacer()
+                    Text("PDB")
+                        .font(.footnote.smallCaps())
+                        .padding(.horizontal, 4)
+                        .background {
+                            RoundedRectangle(cornerRadius: 6)
+                                .foregroundColor(Color(uiColor: .systemFill))
+                        }
+                        .padding(.trailing, 4)
                 }
                 .background(Color(uiColor: .tertiarySystemFill))
             }
             
             Divider()
 
-            VStack {
+            VStack(spacing: 4) {
                 if file.fileType == .staticStructure {
                     InfoLongTextRow(
                         title: NSLocalizedString("Description: ", comment: ""),

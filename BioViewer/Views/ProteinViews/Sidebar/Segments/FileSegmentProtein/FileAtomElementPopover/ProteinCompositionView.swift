@@ -117,7 +117,7 @@ struct ProteinCompositionView: View {
                 importantTotal += elementFraction
             }
             newSegments.append(InfoCapsuleSegment(
-                fraction: 1 - importantTotal,
+                fraction: 1.0,
                 color: proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
             ))
         case .residue:
