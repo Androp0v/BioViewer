@@ -64,9 +64,18 @@ enum Residue: UInt8, CaseIterable {
     
     enum ResidueKind: CaseIterable {
         case aminoAcid
-        case rnaNucleobase
         case dnaNucleobase
+        case rnaNucleobase
         case unknown
+        
+        var name: String {
+            switch self {
+            case .aminoAcid: return "Amino acids"
+            case .dnaNucleobase: return "Deoxyribonucleotides"
+            case .rnaNucleobase: return "Ribonucleotides"
+            case .unknown: return "Unknown"
+            }
+        }
     }
     
     var kind: ResidueKind {
