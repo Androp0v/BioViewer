@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FunctionsSegmentProtein: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
     
     var body: some View {
         List {
@@ -24,7 +24,7 @@ struct FunctionsSegmentProtein: View {
                                     value: .constant(8842.4),
                                     errorInterval: .constant(26.1))
             })
-                .disabled(proteinViewModel.proteinCount == 0)
+                .disabled(proteinDataSource.proteinCount == 0)
             
         }
         .environment(\.defaultMinListHeaderHeight, 0)

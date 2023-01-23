@@ -118,7 +118,7 @@ class ProteinRenderer: NSObject {
     /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
     var scene = MetalScene()
     /// Data source with the proteins that back the rendering.
-    var proteinDataSource: ProteinViewDataSource?
+    var proteinDataSource: ProteinDataSource?
     
     /// If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
     var getCurrentDrawable: (() -> CAMetalDrawable?)?

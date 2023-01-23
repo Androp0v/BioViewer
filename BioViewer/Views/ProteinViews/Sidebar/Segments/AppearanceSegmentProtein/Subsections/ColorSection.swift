@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ColorSection: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @EnvironmentObject var colorViewModel: ProteinColorViewModel
+    @EnvironmentObject var visualizationViewModel: ProteinVisualizationViewModel
     
     @State var presentPeriodicTable: Bool = false
     @State var showMoreElements: Bool = false
@@ -19,10 +21,10 @@ struct ColorSection: View {
             header: Text(NSLocalizedString("Color", comment: ""))
                     .padding(.bottom, 4),
             content: {
-                if proteinViewModel.visualization == .ballAndStick {
+                if visualizationViewModel.visualization == .ballAndStick {
                     ColorPickerRow(
                         title: NSLocalizedString("Bond color", comment: ""),
-                        selectedColor: $proteinViewModel.bondColor
+                        selectedColor: $colorViewModel.bondColor
                     )
                 }
                 PersistentDisclosureGroup(
@@ -30,7 +32,7 @@ struct ColorSection: View {
                     defaultOpen: true,
                     content: {
                         
-                        switch proteinViewModel.colorBy {
+                        switch colorViewModel.colorBy {
                         
                         // MARK: - Color by element
                         case .element:
@@ -42,7 +44,7 @@ struct ColorSection: View {
                             ForEach(AtomElement.importantElements, id: \.self) { element in
                                 ColorPickerRow(
                                     title: NSLocalizedString("\(element.name) atom color", comment: ""),
-                                    selectedColor: $proteinViewModel.elementColors[Int(element.rawValue)]
+                                    selectedColor: $colorViewModel.elementColors[Int(element.rawValue)]
                                 )
                             }
                             
@@ -50,14 +52,14 @@ struct ColorSection: View {
                                 ForEach(AtomElement.otherElements, id: \.self) { element in
                                     ColorPickerRow(
                                         title: NSLocalizedString("\(element.name) atom color", comment: ""),
-                                        selectedColor: $proteinViewModel.elementColors[Int(element.rawValue)]
+                                        selectedColor: $colorViewModel.elementColors[Int(element.rawValue)]
                                     )
                                 }
                             }
                             
                             ColorPickerRow(
                                 title: NSLocalizedString("Other atoms", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
+                                selectedColor: $colorViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
                             )
                             
                             ButtonRow(
@@ -76,12 +78,12 @@ struct ColorSection: View {
                             
                         // MARK: - Color by subunit
                         case .subunit:
-                            if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
+                            if let subunits = proteinDataSource.getFirstProtein()?.subunits {
                                 ForEach(subunits, id: \.id) { subunit in
                                     // TO-DO: Show real subunit list
                                     ColorPickerRow(
                                         title: NSLocalizedString("\(subunit.subunitName)", comment: ""),
-                                        selectedColor: $proteinViewModel.subunitColors[subunit.id]
+                                        selectedColor: $colorViewModel.subunitColors[subunit.id]
                                     )
                                 }
                             } else {
@@ -112,7 +114,7 @@ struct ColorSection: View {
                                         ForEach(aminoAcids, id: \.rawValue) { residue in
                                             ColorPickerRow(
                                                 title: residue.name,
-                                                selectedColor: $proteinViewModel.residueColors[Int(residue.rawValue)]
+                                                selectedColor: $colorViewModel.residueColors[Int(residue.rawValue)]
                                             )
                                         }
                                     },
@@ -129,14 +131,14 @@ struct ColorSection: View {
                             
                             ColorPickerRow(
                                 title: Residue.unknown.name,
-                                selectedColor: $proteinViewModel.residueColors[Int(Residue.unknown.rawValue)]
+                                selectedColor: $colorViewModel.residueColors[Int(Residue.unknown.rawValue)]
                             )
                         }
                     },
                     label: {
                         PickerRow(
                             optionName: "Color by",
-                            selection: $proteinViewModel.colorBy
+                            selection: $colorViewModel.colorBy
                         )
                         #if targetEnvironment(macCatalyst)
                         .padding(.leading, 8)
@@ -147,7 +149,7 @@ struct ColorSection: View {
                 )
                 // TODO: Change color defaults
                 /*
-                if proteinViewModel.colorBy == ProteinColorByOption.element {
+                if colorViewModel.colorBy == ProteinColorByOption.element {
                     ButtonRow(
                         action: {
                             withAnimation {

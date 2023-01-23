@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ShadowsSection: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var shadowsViewModel: ProteinShadowsViewModel
     
     var body: some View {
         Section(
@@ -24,16 +24,16 @@ struct ShadowsSection: View {
                         content: {
                             SliderRow(
                                 title: NSLocalizedString("Strength", comment: ""),
-                                value: $proteinViewModel.renderer.scene.shadowStrength,
+                                value: $shadowsViewModel.shadowStrength,
                                 minValue: 0.0,
                                 maxValue: 1.0
                             )
-                            .disabled(!proteinViewModel.renderer.scene.hasShadows)
+                            .disabled(!shadowsViewModel.hasShadows)
                         },
                         label: {
                             SwitchRow(
                                 title: NSLocalizedString("Cast shadows", comment: ""),
-                                toggledVariable: $proteinViewModel.renderer.scene.hasShadows
+                                toggledVariable: $shadowsViewModel.hasShadows
                             )
                             #if targetEnvironment(macCatalyst)
                             .padding(.leading, 8)
@@ -50,15 +50,15 @@ struct ShadowsSection: View {
                     content: {
                         SliderRow(
                             title: NSLocalizedString("Strength", comment: ""),
-                            value: $proteinViewModel.renderer.scene.depthCueingStrength,
+                            value: $shadowsViewModel.depthCueingStrength,
                             minValue: 0.0,
                             maxValue: 1.0
                         )
-                        .disabled(!proteinViewModel.renderer.scene.hasDepthCueing)
+                        .disabled(!shadowsViewModel.hasDepthCueing)
                     }, label: {
                         SwitchRow(
                             title: NSLocalizedString("Depth cueing", comment: ""),
-                            toggledVariable: $proteinViewModel.renderer.scene.hasDepthCueing
+                            toggledVariable: $shadowsViewModel.hasDepthCueing
                         )
                         #if targetEnvironment(macCatalyst)
                         .padding(.leading, 8)

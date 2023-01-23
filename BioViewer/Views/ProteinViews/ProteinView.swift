@@ -15,6 +15,9 @@ struct ProteinView: View {
     // MARK: - Properties
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @EnvironmentObject var colorViewModel: ProteinColorViewModel
+    @StateObject var toolbarConfig = ToolbarConfig()
     
     // Sidebar
     @State private var showSidebar = UserDefaults.standard.bool(forKey: "showSidebar") {
@@ -87,14 +90,18 @@ struct ProteinView: View {
                             }
                             Spacer()
                         }
-                        .environmentObject(proteinViewModel.toolbarConfig)
+                        .environmentObject(toolbarConfig)
+                        .onAppear {
+                            proteinViewModel.toolbarConfig = toolbarConfig
+                            toolbarConfig.proteinViewModel = proteinViewModel
+                        }
                         
                         // Scene controls
                         VStack(spacing: 12) {
                             Spacer()
-                            if proteinViewModel.dataSource.files.first?.fileType == .dynamicStructure {
+                            if proteinDataSource.files.first?.fileType == .dynamicStructure {
                                 DynamicStructureControlView()
-                                    .environmentObject(proteinViewModel.renderer.scene)
+                                    .environmentObject(proteinViewModel)
                             }
                             /*
                              if toggleSequenceView {
@@ -107,7 +114,7 @@ struct ProteinView: View {
                         .padding(.bottom, 12)
                         
                         // Import view
-                        if proteinViewModel.proteinCount == 0 {
+                        if proteinDataSource.proteinCount == 0 {
                             ProteinImportView()
                                 .edgesIgnoringSafeArea(.bottom)
                         }

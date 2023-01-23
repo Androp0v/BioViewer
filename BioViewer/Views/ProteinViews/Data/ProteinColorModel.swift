@@ -38,7 +38,7 @@ enum ProteinColorByOption: PickableEnum {
 
 }
 
-extension ProteinViewModel {
+extension ProteinColorViewModel {
     
     // MARK: - Initialization
     

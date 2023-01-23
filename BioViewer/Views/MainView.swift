@@ -9,10 +9,14 @@ import SwiftUI
 
 struct MainView: View {
     
+    @StateObject var proteinViewModel = ProteinViewModel()
+    @StateObject var proteinDataSource = ProteinDataSource()
+    @StateObject var colorViewModel = ProteinColorViewModel()
+    @StateObject var visualizationViewModel = ProteinVisualizationViewModel()
+    @StateObject var shadowsViewModel = ProteinShadowsViewModel()
     @State var isPresentingNews = false
             
     init() {
-        
         // Custom segmented controls in the app
         #if targetEnvironment(macCatalyst)
         // selectedSegmentTintColor does not work on macCatalyst :(
@@ -31,11 +35,26 @@ struct MainView: View {
 
     var body: some View {
         
-        let proteinViewModel = ProteinViewModel()
-        
         NavigationView {
             ProteinView()
                 .environmentObject(proteinViewModel)
+                .environmentObject(proteinDataSource)
+                .environmentObject(colorViewModel)
+                .environmentObject(visualizationViewModel)
+                .environmentObject(shadowsViewModel)
+                .onAppear {
+                    
+                    proteinDataSource.proteinViewModel = proteinViewModel
+                    proteinViewModel.dataSource = proteinDataSource
+                    
+                    colorViewModel.proteinViewModel = proteinViewModel
+                    proteinViewModel.colorViewModel = colorViewModel
+                    
+                    visualizationViewModel.proteinViewModel = proteinViewModel
+                    proteinViewModel.visualizationViewModel = visualizationViewModel
+                    
+                    shadowsViewModel.proteinViewModel = proteinViewModel
+                }
             
                 .sheet(isPresented: $isPresentingNews, onDismiss: {
                     AppState.shared.userHasSeenWhatsNew()

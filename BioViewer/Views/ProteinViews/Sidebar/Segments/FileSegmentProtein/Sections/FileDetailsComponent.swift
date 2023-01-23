@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FileDetailsComponent: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
     @State var showFileSource: Bool = false
     
     let file: ProteinFile
@@ -53,7 +53,7 @@ struct FileDetailsComponent: View {
                     )
                 } else if file.fileType == .dynamicStructure {
                     // Dynamic XYZ Files
-                    LineGraphView(values: proteinViewModel.dataSource.getFirstProtein()?.configurationEnergies)
+                    LineGraphView(values: proteinDataSource.getFirstProtein()?.configurationEnergies)
                 }
             }
             .opacity(0.75)

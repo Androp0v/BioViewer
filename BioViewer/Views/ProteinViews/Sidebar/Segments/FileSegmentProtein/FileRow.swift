@@ -14,7 +14,7 @@ struct FileRow: View {
     let fileIndex: Int
     let byteSize: Int?
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)
@@ -76,7 +76,7 @@ struct FileRow: View {
                 .buttonStyle(PlainButtonStyle())
             */
             Button(action: {
-                proteinViewModel.dataSource.removeAllFilesFromDatasource()
+                proteinDataSource.removeAllFilesFromDatasource()
             }, label: {
                 Image(systemName: "trash")
                     .resizable()

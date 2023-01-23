@@ -41,6 +41,7 @@ class FileImporter {
     
     static func importFileFromRawText(rawText: String, proteinViewModel: ProteinViewModel, fileInfo: ProteinFileInfo?, fileName: String, fileExtension: String, byteSize: Int?) async throws {
         do {
+            guard let dataSource = proteinViewModel.dataSource else { return }
             let proteinFile = try await FileParser().parseTextFile(
                 rawText: rawText,
                 fileName: fileName,
@@ -49,7 +50,7 @@ class FileImporter {
                 fileInfo: fileInfo,
                 proteinViewModel: proteinViewModel
             )
-            proteinViewModel.dataSource.addProteinFileToDataSource(proteinFile: proteinFile)
+            await dataSource.addProteinFileToDataSource(proteinFile: proteinFile)
         } catch let error as ImportError {
             proteinViewModel.statusFinished(importError: error)
             throw error

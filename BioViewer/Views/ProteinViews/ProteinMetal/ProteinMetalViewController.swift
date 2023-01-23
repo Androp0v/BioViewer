@@ -80,24 +80,29 @@ class ProteinMetalViewController: UIViewController {
     // MARK: - Private functions
 
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
+        guard let dataSource = proteinViewModel.dataSource else { return }
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let currentCameraPosition = self.proteinViewModel.renderer.scene.cameraPosition
             // TO-DO: Proper zooming
             let newDistance = currentCameraPosition.z / Float(gestureRecognizer.scale)
-            self.proteinViewModel.renderer.scene.updateCameraDistanceToModel(distanceToModel: newDistance,
-                                                                             proteinDataSource: proteinViewModel.dataSource)
+            self.proteinViewModel.renderer.scene.updateCameraDistanceToModel(
+                distanceToModel: newDistance,
+                proteinDataSource: dataSource
+            )
             gestureRecognizer.scale = 1.0
        }
     }
     
     @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
         
-        if proteinViewModel.autorotating {
-            proteinViewModel.autorotating = false
+        guard let toolbarConfig = proteinViewModel.toolbarConfig else { return }
+        
+        if toolbarConfig.autorotating {
+            proteinViewModel.toolbarConfig?.autorotating = false
         }
         
         if gestureRecognizer.state == .changed {
-            switch proteinViewModel.toolbarConfig.selectedTool {
+            switch toolbarConfig.selectedTool {
             case CameraControlTool.rotate:
                 let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
                 let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000

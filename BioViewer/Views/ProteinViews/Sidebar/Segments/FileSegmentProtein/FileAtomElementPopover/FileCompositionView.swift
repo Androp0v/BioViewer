@@ -21,7 +21,8 @@ private enum CompositionOption: PickableEnum {
 
 struct FileCompositionView: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @EnvironmentObject var colorViewModel: ProteinColorViewModel
     
     @State private var compositionOption: CompositionOption = .element
     @State private var compositionSections = [[CompositionItem]]()
@@ -88,10 +89,10 @@ struct FileCompositionView: View {
     // MARK: - Fractions
     
     func computeFractions() {
-        guard let file = proteinViewModel.dataSource.getFirstFile() else {
+        guard let file = proteinDataSource.getFirstFile() else {
             return
         }
-        guard let proteins = proteinViewModel.dataSource.modelsForFile(file: file) else { return }
+        guard let proteins = proteinDataSource.modelsForFile(file: file) else { return }
         
         var newListSections = [[CompositionItem]]()
         
@@ -109,8 +110,7 @@ struct FileCompositionView: View {
                 var elementItems = [CompositionItem]()
                 for element in elementSection {
                     let elementCount = elementComposition.elementCounts[element] ?? 0
-                    let elementFraction = Double(elementCount) / Double(totalAtoms)
-                    let elementColor = proteinViewModel.elementColors[Int(element.rawValue)]
+                    let elementColor = colorViewModel.elementColors[Int(element.rawValue)]
                     elementItems.append(CompositionItem(
                         name: element.longName,
                         color: elementColor,
@@ -125,13 +125,12 @@ struct FileCompositionView: View {
                 var residueSegments = [CompositionItem]()
                 for residue in Residue.allCases.filter({ $0.kind == residueKind }) {
                     let residueCount = residueComposition.residueCounts[residue] ?? 0
-                    let residueFraction = Double(residueCount) / Double(totalAtoms)
-                    let residueColor = proteinViewModel.residueColors[Int(residue.rawValue)]
+                    let residueColor = colorViewModel.residueColors[Int(residue.rawValue)]
                     residueSegments.append(CompositionItem(
                         name: residue.name,
                         color: residueColor,
                         count: residueCount,
-                        fraction: residueFraction
+                        fraction: Double(residueCount) / Double(totalAtoms)
                     ))
                 }
                 if residueSegments.contains(where: {$0.count != 0}) {

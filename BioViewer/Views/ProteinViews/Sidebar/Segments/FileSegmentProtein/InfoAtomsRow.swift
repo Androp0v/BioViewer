@@ -14,7 +14,8 @@ struct InfoAtomsRow: View {
     let file: ProteinFile
     
     @State var buttonToggle: Bool = false
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @EnvironmentObject var colorViewModel: ProteinColorViewModel
 
     var body: some View {
                     
@@ -34,7 +35,7 @@ struct InfoAtomsRow: View {
                             InfoSegmentedCapsule(segments: getAtomElementSegments())
                                 .shadow(color: .black.opacity(0.1), radius: 4)
                             
-                            if let proteins = proteinViewModel.dataSource.modelsForFile(file: file),
+                            if let proteins = proteinDataSource.modelsForFile(file: file),
                                proteins.first(where: { $0.residueComposition != nil }) != nil {
                                 InfoSegmentedCapsule(segments: getAtomResiduesSegments())
                                     .shadow(color: .black.opacity(0.1), radius: 4)
@@ -53,14 +54,15 @@ struct InfoAtomsRow: View {
                         .disabled(isDisabled)
                         .popover(isPresented: $buttonToggle) {
                             FileCompositionView()
-                                .environmentObject(proteinViewModel)
+                                .environmentObject(proteinDataSource)
+                                .environmentObject(colorViewModel)
                         }
                 }
             }
     }
     
     private func getAtomElementSegments() -> [InfoCapsuleSegment] {
-        guard let protein = proteinViewModel.dataSource.modelsForFile(file: file)?.first else {
+        guard let protein = proteinDataSource.modelsForFile(file: file)?.first else {
             return []
         }
         var segments = [InfoCapsuleSegment]()
@@ -69,19 +71,19 @@ struct InfoAtomsRow: View {
             let elementFraction = Double(protein.elementComposition.elementCounts[element] ?? 0) / Double(protein.atomCount)
             segments.append(InfoCapsuleSegment(
                 fraction: elementFraction,
-                color: proteinViewModel.elementColors[Int(element.rawValue)]
+                color: colorViewModel.elementColors[Int(element.rawValue)]
             ))
             importantTotal += elementFraction
         }
         segments.append(InfoCapsuleSegment(
             fraction: 1 - importantTotal,
-            color: proteinViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
+            color: colorViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
         ))
         return segments
     }
     
     private func getAtomResiduesSegments() -> [InfoCapsuleSegment] {
-        guard let protein = proteinViewModel.dataSource.modelsForFile(file: file)?.first else {
+        guard let protein = proteinDataSource.modelsForFile(file: file)?.first else {
             return []
         }
         guard let residueComposition = protein.residueComposition else {
@@ -92,7 +94,7 @@ struct InfoAtomsRow: View {
             let residueFraction = Double(residueComposition.residueCounts[residue] ?? 0) / Double(residueComposition.totalCount)
             segments.append(InfoCapsuleSegment(
                 fraction: residueFraction,
-                color: proteinViewModel.residueColors[Int(residue.rawValue)]
+                color: colorViewModel.residueColors[Int(residue.rawValue)]
             ))
         }
         return segments

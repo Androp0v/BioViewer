@@ -19,7 +19,7 @@ class WorkspaceExporter {
         let fileURL = dataDir.appendingPathComponent("Workspace").appendingPathExtension("bioviewer")
 
         let archive = BioViewerWorkspace(fileURL: fileURL)
-        archive.testContent = proteinViewModel.dataSource.files.first?.fileInfo.pdbID ?? "Unknown PDB ID"
+        archive.testContent = proteinViewModel.dataSource?.files.first?.fileInfo.pdbID ?? "Unknown PDB ID"
         
         Task {
             let success = await archive.save(to: archive.fileURL, for: .forCreating)

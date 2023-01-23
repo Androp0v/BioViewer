@@ -10,7 +10,6 @@ import SwiftUI
 struct CameraControlToolbar: View {
     
     @EnvironmentObject var config: ToolbarConfig
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
         
     var body: some View {
         HStack {
@@ -29,20 +28,21 @@ struct CameraControlToolbar: View {
             .pickerStyle(SegmentedPickerStyle())
             .foregroundColor(.accentColor)
             .frame(width: 4 * TopToolbar.Constants.buttonSize)
-            .disabled(proteinViewModel.autorotating)
+            .disabled(config.autorotating)
             .contextMenu {
                 Button(role: .destructive) {
-                    proteinViewModel.renderer.scene.resetCamera()
+                    config.resetCamera()
                 } label: {
                     Label("Reset camera", systemImage: "arrow.uturn.backward")
                 }
             }
             Button(
                 action: {
-                    proteinViewModel.autorotating.toggle()
+                    config.autorotating.toggle()
                 }, label: {
-                    Image(systemName: proteinViewModel.autorotating ? "arrow.triangle.2.circlepath.circle.fill"
-                                                                    : "arrow.triangle.2.circlepath.circle"
+                    Image(systemName: config.autorotating
+                          ? "arrow.triangle.2.circlepath.circle.fill"
+                          : "arrow.triangle.2.circlepath.circle"
                     )
                     .foregroundColor(.accentColor)
                 }

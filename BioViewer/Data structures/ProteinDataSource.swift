@@ -13,9 +13,16 @@ import SwiftUI
 /// Handle all source data for a ```ProteinView``` that is not related to the
 /// scene nor the appearance, like the ```Protein``` objects that have been
 /// imported or computed values.
-class ProteinViewDataSource: ObservableObject {
+class ProteinDataSource: ObservableObject {
     
     // MARK: - Properties
+    
+    /// Total protein count in view.
+    @Published var proteinCount: Int = 0
+    /// Total subunit count in view.
+    @Published var totalSubunitCount: Int = 0
+    /// Total atom count in view.
+    @Published var totalAtomCount: Int = 0
     
     /// Files in the scene.
     private(set) var files: [ProteinFile] = [ProteinFile]() {
@@ -24,7 +31,7 @@ class ProteinViewDataSource: ObservableObject {
             // Publishers need to be updated in the main queue
             DispatchQueue.main.async {
                 // FIXME: This is number of files, not proteins
-                self.proteinViewModel?.proteinCount = self.files.count
+                self.proteinCount = self.files.count
             }
             // Sum all subunit counts from all proteins in the datasource
             var newSubunitCount = 0
@@ -46,8 +53,8 @@ class ProteinViewDataSource: ObservableObject {
             }
             // Publishers need to be updated in the main queue
             DispatchQueue.main.async {
-                self.proteinViewModel?.totalSubunitCount = newSubunitCount
-                self.proteinViewModel?.totalAtomCount = newTotalAtomCount
+                self.totalSubunitCount = newSubunitCount
+                self.totalAtomCount = newTotalAtomCount
             }
         }
     }
@@ -64,11 +71,12 @@ class ProteinViewDataSource: ObservableObject {
     
     var selectionBoundingSphere = BoundingSphere.init(center: .zero, radius: .zero)
         
-    public weak var proteinViewModel: ProteinViewModel?
+    weak var proteinViewModel: ProteinViewModel?
 
     // MARK: - Add files
     
-    public func addProteinFileToDataSource(proteinFile: ProteinFile) {
+    @MainActor
+    func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
         guard let proteinViewModel = proteinViewModel else { return }
         
@@ -83,7 +91,7 @@ class ProteinViewDataSource: ObservableObject {
         // Change visualization to trigger rendering
         // TO-DO: visualization should depend on file type too
         DispatchQueue.main.async {
-            proteinViewModel.visualization = .solidSpheres
+            proteinViewModel.visualizationViewModel?.visualization = .solidSpheres
         }
         
         // File import finished
@@ -113,10 +121,12 @@ class ProteinViewDataSource: ObservableObject {
     // MARK: - Update model
     
     func updateFileModels() {
-        guard let proteinViewModel = self.proteinViewModel else { return }
+        guard let proteinViewModel = self.proteinViewModel,
+              let visualizationViewModel = proteinViewModel.visualizationViewModel
+        else { return }
         
-        proteinViewModel.visualizationBufferLoader.handleVisualizationChange(
-            visualization: proteinViewModel.visualization,
+        visualizationViewModel.visualizationBufferLoader.handleVisualizationChange(
+            visualization: visualizationViewModel.visualization,
             proteinViewModel: proteinViewModel
         )
         
@@ -131,7 +141,7 @@ class ProteinViewDataSource: ObservableObject {
         )
         scene.updateCameraDistanceToModel(
             distanceToModel: cameraDistanceToFit,
-            proteinDataSource: proteinViewModel.dataSource
+            proteinDataSource: self
         )
     }
         

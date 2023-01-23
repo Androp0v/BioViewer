@@ -10,7 +10,7 @@ import simd
 
 struct FileSegmentProtein: View {
 
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
     
     private func getModelNames(modelCount: Int) -> [String] {
         var modelNames = [String]()
@@ -42,10 +42,10 @@ struct FileSegmentProtein: View {
                         .padding(.top, 52)
                         .padding(.bottom, 4)
             ) {
-                if proteinViewModel.dataSource.files.count == 0 {
+                if proteinDataSource.files.count == 0 {
                     EmptyDataRow(text: NSLocalizedString("No imported files", comment: ""))
                 } else {
-                    ForEach(Array(proteinViewModel.dataSource.files.enumerated()), id: \.offset) { index, file in
+                    ForEach(Array(proteinDataSource.files.enumerated()), id: \.offset) { index, file in
                         FileRow(
                             fileName: file.fileName,
                             fileExtension: file.fileExtension,
@@ -57,13 +57,13 @@ struct FileSegmentProtein: View {
                         if file.models.count > 1 {
                             LegacyPickerRow(
                                 optionName: NSLocalizedString("Model", comment: ""),
-                                selectedOption: $proteinViewModel.dataSource.selectedModel[index],
+                                selectedOption: $proteinDataSource.selectedModel[index],
                                 startIndex: -1,
                                 pickerOptions: getModelNames(modelCount: file.models.count)
                             )
                         }
                         
-                        if let proteins = proteinViewModel.dataSource.modelsForFile(file: file) {
+                        if let proteins = proteinDataSource.modelsForFile(file: file) {
                             InfoTextRow(
                                 text: NSLocalizedString("Number of subunits:", comment: ""),
                                 value: "\(proteins.reduce(0) { $0 + $1.subunitCount })"
@@ -99,11 +99,11 @@ struct FileSegmentProtein: View {
                     content: {
                         
                         Button(NSLocalizedString("Remove all", comment: ""), action: {
-                            proteinViewModel.removeAllFiles()
+                            proteinDataSource.proteinViewModel?.removeAllFiles()
                         })
                         .buttonStyle(PlainButtonStyle())
                         .foregroundColor(.red)
-                        .disabled(proteinViewModel.proteinCount == 0)
+                        .disabled(proteinDataSource.proteinCount == 0)
             })
             #if targetEnvironment(macCatalyst)
             .listRowInsets(EdgeInsets(top: .zero, leading: 12, bottom: .zero, trailing: 12))

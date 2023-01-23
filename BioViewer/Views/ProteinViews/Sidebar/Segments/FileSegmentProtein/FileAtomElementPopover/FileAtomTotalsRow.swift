@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FileAtomTotalsRow: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
     @State var total: Int?
 
     var body: some View {
@@ -36,8 +36,8 @@ struct FileAtomTotalsRow: View {
         }
         .padding(.horizontal)
         .task {
-            guard let file = proteinViewModel.dataSource.getFirstFile() else { return }
-            guard let proteins = proteinViewModel.dataSource.modelsForFile(file: file) else { return }
+            guard let file = proteinDataSource.getFirstFile() else { return }
+            guard let proteins = proteinDataSource.modelsForFile(file: file) else { return }
             var totalAtomCount: Int = 0
             for protein in proteins {
                 totalAtomCount += protein.elementComposition.totalCount

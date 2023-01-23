@@ -254,6 +254,7 @@ class PDBParser {
                 }
             }
             
+            // Convert parsed objects to final objects
             for model in parsedModels {
                 var finalSubunits = [ProteinSubunit]()
                 var subunitIndex = 0
@@ -394,6 +395,8 @@ class PDBParser {
             position: simd_float3(x, y, z)
         )
     }
+    
+    // MARK: - Parse HELIX
     
     // MARK: - Parse HEADER
     

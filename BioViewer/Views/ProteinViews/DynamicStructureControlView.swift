@@ -9,7 +9,8 @@ import SwiftUI
 
 struct DynamicStructureControlView: View {
     
-    @EnvironmentObject var scene: MetalScene
+    @State var isPlaying: Bool = false
+    @EnvironmentObject var proteinViewModel: ProteinViewModel
     
     private struct Constants {
         #if targetEnvironment(macCatalyst)
@@ -26,7 +27,7 @@ struct DynamicStructureControlView: View {
     var body: some View {
         HStack(spacing: Constants.spacing) {
             Button(action: {
-                scene.configurationSelector?.previousConfiguration()
+                proteinViewModel.renderer.scene.configurationSelector?.previousConfiguration()
             }, label: {
                 Image(systemName: "backward.frame.fill")
                     .resizable()
@@ -34,12 +35,13 @@ struct DynamicStructureControlView: View {
             })
                 .frame(width: Constants.buttonSize, height: Constants.buttonSize)
                 .buttonStyle(CameraControlButtonStyle())
-                .disabled(scene.isPlaying)
+                .disabled(isPlaying)
             
             Button(action: {
-                scene.isPlaying.toggle()
+                isPlaying.toggle()
+                proteinViewModel.renderer.scene.isPlaying.toggle()
             }, label: {
-                Image(systemName: scene.isPlaying ? "pause.fill" : "play.fill")
+                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             })
@@ -47,7 +49,7 @@ struct DynamicStructureControlView: View {
                 .buttonStyle(CameraControlButtonStyle())
             
             Button(action: {
-                scene.configurationSelector?.nextConfiguration()
+                proteinViewModel.renderer.scene.configurationSelector?.nextConfiguration()
             }, label: {
                 Image(systemName: "forward.frame.fill")
                     .resizable()
@@ -55,7 +57,7 @@ struct DynamicStructureControlView: View {
             })
                 .frame(width: Constants.buttonSize, height: Constants.buttonSize)
                 .buttonStyle(CameraControlButtonStyle())
-                .disabled(scene.isPlaying)
+                .disabled(isPlaying)
         }
         .padding(Constants.outerPadding)
         .background(.regularMaterial)

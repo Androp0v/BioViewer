@@ -21,7 +21,6 @@ private struct SidebarItem: View {
 private struct ProteinSidebarContent: View {
 
     @Binding var selectedSegment: Int
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -70,7 +69,6 @@ private struct ProteinSidebarContent: View {
 struct ProteinSidebar: View {
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
     @Environment(\.dismiss) var dismiss
     @Binding var selectedSegment: Int
 
@@ -84,7 +82,6 @@ struct ProteinSidebar: View {
                     .navigationBarItems(leading: Button(NSLocalizedString("Close", comment: "")) {
                         dismiss()
                     })
-                    .environmentObject(proteinViewModel)
             }
         } else {
             HStack(spacing: 0) {
@@ -99,6 +96,5 @@ struct ProteinSidebar_Previews: PreviewProvider {
     static var previews: some View {
         ProteinSidebar(selectedSegment: .constant(0))
             .previewLayout(.sizeThatFits)
-            .environmentObject(ProteinViewModel())
     }
 }

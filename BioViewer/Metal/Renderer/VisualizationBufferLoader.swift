@@ -15,7 +15,10 @@ class VisualizationBufferLoader {
     var currentTask: Task<Void, Never>?
     weak var proteinViewModel: ProteinViewModel?
     
-    func handleVisualizationChange(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) {
+    func handleVisualizationChange(
+        visualization: ProteinVisualizationOption,
+        proteinViewModel: ProteinViewModel
+    ) {
         
         // Save reference to proteinViewModel
         self.proteinViewModel = proteinViewModel
@@ -38,10 +41,9 @@ class VisualizationBufferLoader {
     
     private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
-        guard let protein = proteinViewModel.dataSource.getFirstProtein() else {
-            return
-        }
-        guard let animator = proteinViewModel.renderer.scene.animator else { return }
+        guard let protein = proteinViewModel.dataSource?.getFirstProtein(),
+              let animator = proteinViewModel.renderer.scene.animator,
+              let visualizationViewModel = proteinViewModel.visualizationViewModel else { return }
 
         switch visualization {
         
@@ -53,14 +55,14 @@ class VisualizationBufferLoader {
             
             // Animate radii changes
             animator.bufferLoader = self
-            if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
+            if visualizationViewModel.solidSpheresRadiusOption == .vanDerWaals {
                 animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.solidSpheresVDWScale),
+                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: visualizationViewModel.solidSpheresVDWScale),
                     duration: 0.15
                 )
             } else {
                 animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.solidSpheresFixedAtomRadii),
+                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: visualizationViewModel.solidSpheresFixedAtomRadii),
                     duration: 0.15
                 )
             }
@@ -109,14 +111,14 @@ class VisualizationBufferLoader {
             
             // Animate radii changes
             animator.bufferLoader = self
-            if proteinViewModel.ballAndStickRadiusOption == .fixed {
+            if visualizationViewModel.ballAndStickRadiusOption == .fixed {
                 animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: proteinViewModel.ballAndSticksFixedAtomRadii),
+                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: visualizationViewModel.ballAndSticksFixedAtomRadii),
                     duration: 0.15
                 )
             } else {
                 animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: proteinViewModel.ballAndSticksVDWScale),
+                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: visualizationViewModel.ballAndSticksVDWScale),
                     duration: 0.15
                 )
             }
@@ -127,13 +129,10 @@ class VisualizationBufferLoader {
     
     func populateImpostorSphereBuffers(atomRadii: AtomRadii) {
         
-        guard let proteinViewModel = proteinViewModel else {
-            return
-        }
-        guard let proteinFile = proteinViewModel.dataSource.getFirstFile() else {
-            return
-        }
-        guard let proteins = proteinViewModel.dataSource.modelsForFile(file: proteinFile) else {
+        guard let proteinViewModel = proteinViewModel,
+              let colorViewModel = proteinViewModel.colorViewModel,
+              let proteinFile = proteinViewModel.dataSource?.getFirstFile(),
+              let proteins = proteinViewModel.dataSource?.modelsForFile(file: proteinFile) else {
             return
         }
         
@@ -167,8 +166,8 @@ class VisualizationBufferLoader {
                 proteins: proteins,
                 subunitBuffer: subunitData,
                 atomTypeBuffer: atomTypeData,
-                colorList: proteinViewModel.elementColors,
-                colorBy: proteinViewModel.colorBy
+                colorList: colorViewModel.elementColors,
+                colorBy: colorViewModel.colorBy
             )
         }
     }

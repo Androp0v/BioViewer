@@ -11,7 +11,7 @@ import Foundation
 import simd
 import SwiftUI
 
-class MetalScene: ObservableObject {
+class MetalScene {
 
     // MARK: - Properties
         
@@ -24,7 +24,7 @@ class MetalScene: ObservableObject {
     var lastColorPass: CFTimeInterval = .zero
     
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
-    @Published var isPlaying: Bool = false
+    var isPlaying: Bool = false
     /// Class used to animate changes in scene properties.
     var animator: SceneAnimator?
     
@@ -66,11 +66,11 @@ class MetalScene: ObservableObject {
     // MARK: - Shadow properties
     
     /// Whether shadows should be casted between geometry elements.
-    @Published var hasShadows: Bool { didSet { needsRedraw = true } }
-    @Published var shadowStrength: Float = 0.4 { didSet { needsRedraw = true } }
+    var hasShadows: Bool { didSet { needsRedraw = true } }
+    var shadowStrength: Float = 0.4 { didSet { needsRedraw = true } }
     /// Whether depth cueing should be used in the scene.
-    @Published var hasDepthCueing: Bool { didSet { needsRedraw = true } }
-    @Published var depthCueingStrength: Float = 0.3 { didSet { needsRedraw = true } }
+    var hasDepthCueing: Bool { didSet { needsRedraw = true } }
+    var depthCueingStrength: Float = 0.3 { didSet { needsRedraw = true } }
     
     // MARK: - Color properties
     
@@ -218,7 +218,7 @@ class MetalScene: ObservableObject {
         
     // MARK: - Fit protein on screen
     
-    func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinViewDataSource) {
+    func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinDataSource) {
         // TO-DO: Fit all files
         self.boundingSphere = proteinDataSource.selectionBoundingSphere
         

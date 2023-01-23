@@ -11,7 +11,8 @@ struct AppearanceSegmentProtein: View {
     
     // MARK: - Properties
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var colorViewModel: ProteinColorViewModel
+    @EnvironmentObject var visualizationViewModel: ProteinVisualizationViewModel
             
     // MARK: - View
     
@@ -28,7 +29,7 @@ struct AppearanceSegmentProtein: View {
 
                 ColorPickerRow(
                     title: NSLocalizedString("Background color", comment: ""),
-                    selectedColor: $proteinViewModel.backgroundColor
+                    selectedColor: $colorViewModel.backgroundColor
                 )
             }
             #if targetEnvironment(macCatalyst)
@@ -41,9 +42,7 @@ struct AppearanceSegmentProtein: View {
             
             // MARK: - Color section
             
-            if proteinViewModel.visualization == .solidSpheres || proteinViewModel.visualization == .ballAndStick {
-                ColorSection()
-            }
+            ColorSection()
             
             // MARK: - Shadows section
             
@@ -53,7 +52,7 @@ struct AppearanceSegmentProtein: View {
             Section(header: Text(NSLocalizedString("Focal distance", comment: ""))
                         .padding(.bottom, 4)
             ) {
-                FocalLengthRow(focalLength: $proteinViewModel.cameraFocalLength)
+                FocalLengthRow(focalLength: $visualizationViewModel.cameraFocalLength)
             }
 
         }
@@ -68,6 +67,5 @@ struct AppearanceSegmentProtein_Previews: PreviewProvider {
         AppearanceSegmentProtein()
             .previewDevice("iPhone SE (2nd generation)")
             .previewLayout(.sizeThatFits)
-            .environmentObject(ProteinViewModel())
     }
 }
