@@ -164,14 +164,16 @@ struct ProteinView: View {
                 #if targetEnvironment(macCatalyst)
                 ToolbarItem(placement: .navigationBarLeading) {
                     // Status bar component
-                    StatusView(statusViewModel: proteinViewModel.statusViewModel)
-                    .frame(minWidth: 96,
-                           idealWidth: geometryProxy.size.width * 0.6,
-                           maxWidth: geometryProxy.size.width * 0.6,
-                           minHeight: StatusViewConstants.height,
-                           idealHeight: StatusViewConstants.height,
-                           maxHeight: StatusViewConstants.height,
-                           alignment: .center)
+                    StatusView()
+                    .frame(
+                        minWidth: 96,
+                        idealWidth: geometryProxy.size.width * 0.6,
+                        maxWidth: geometryProxy.size.width * 0.6,
+                        minHeight: StatusViewConstants.height,
+                        idealHeight: StatusViewConstants.height,
+                        maxHeight: StatusViewConstants.height,
+                        alignment: .center
+                    )
                 }
                 #else
                 ToolbarItem(placement: .principal) {

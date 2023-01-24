@@ -10,50 +10,58 @@ import Foundation
 // MARK: - File parsing
 
 class FileParser {
-    func parseTextFile(rawText: String, fileName: String, fileExtension: String, byteSize: Int?, fileInfo: ProteinFileInfo?, proteinViewModel: ProteinViewModel?) async throws -> ProteinFile {
+    func parseTextFile(
+        rawText: String,
+        fileName: String,
+        fileExtension: String,
+        byteSize: Int?,
+        fileInfo: ProteinFileInfo?,
+        statusViewModel: StatusViewModel
+    ) async throws -> ProteinFile {
         
         switch fileExtension {
         // MARK: - PDB Files
         case "pdb", "PDB", "pdb1", "PDB1":
-            proteinViewModel?.statusUpdate(statusText: "Importing file")
+            statusViewModel.statusUpdate(statusText: "Importing file")
             do {
                 let proteinFile = try await PDBParser().parsePDB(
                     fileName: fileName,
                     fileExtension: fileExtension,
                     byteSize: byteSize,
                     rawText: rawText,
-                    proteinViewModel: proteinViewModel,
                     originalFileInfo: fileInfo
                 )
                 return proteinFile
             } catch let error as ImportError {
-                proteinViewModel?.statusFinished(importError: error)
+                statusViewModel.statusFinished(importError: error)
                 throw ImportError.emptyAtomCount
             } catch {
-                proteinViewModel?.statusFinished(importError: ImportError.unknownError)
+                statusViewModel.statusFinished(importError: ImportError.unknownError)
                 throw ImportError.unknownError
             }
         // MARK: - XYZ Files
         case "xyz", "XYZ":
-            proteinViewModel?.statusUpdate(statusText: "Importing file")
+            statusViewModel.statusUpdate(statusText: "Importing file")
             do {
-                let proteinFile = try parseXYZ(fileName: fileName,
-                                               fileExtension: fileExtension,
-                                               byteSize: byteSize,
-                                               rawText: rawText,
-                                               proteinViewModel: proteinViewModel,
-                                               originalFileInfo: fileInfo)
+                let proteinFile = try parseXYZ(
+                    fileName: fileName,
+                    fileExtension: fileExtension,
+                    byteSize: byteSize,
+                    rawText: rawText,
+                    statusViewModel: statusViewModel,
+                    originalFileInfo: fileInfo
+                )
                 return proteinFile
             } catch let error as ImportError {
-                proteinViewModel?.statusFinished(importError: error)
+                statusViewModel.statusFinished(importError: error)
                 throw ImportError.emptyAtomCount
             } catch {
-                proteinViewModel?.statusFinished(importError: ImportError.unknownError)
+                statusViewModel.statusFinished(importError: ImportError.unknownError)
                 throw ImportError.unknownError
             }
         // MARK: - Unknown Files
         default:
-            proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
+            statusViewModel.statusFinished(importError: ImportError.unknownFileType)
             throw ImportError.unknownFileType
         }
     }

@@ -9,21 +9,26 @@ import Foundation
 
 class FileImporter {
     
-    static func importFromFileURL(fileURL: URL, proteinViewModel: ProteinViewModel, fileInfo: ProteinFileInfo?) async throws {
+    static func importFromFileURL(
+        fileURL: URL,
+        proteinDataSource: ProteinDataSource,
+        statusViewModel: StatusViewModel,
+        fileInfo: ProteinFileInfo?
+    ) async throws {
         
         guard let proteinData = try? Data(contentsOf: fileURL) else {
-            proteinViewModel.statusFinished(importError: ImportError.unknownError)
+            statusViewModel.statusFinished(importError: ImportError.unknownError)
             throw ImportError.unknownError
         }
         
-        proteinViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
+        statusViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
         
         let rawText = String(decoding: proteinData, as: UTF8.self)
         let fileName = fileURL.deletingPathExtension().lastPathComponent
         let fileExtension = fileURL.pathExtension
         
         guard !fileExtension.isEmpty else {
-            proteinViewModel.statusFinished(importError: ImportError.unknownError)
+            statusViewModel.statusFinished(importError: ImportError.unknownError)
             throw ImportError.unknownFileExtension
         }
         
@@ -31,7 +36,8 @@ class FileImporter {
         
         try await importFileFromRawText(
             rawText: rawText,
-            proteinViewModel: proteinViewModel,
+            proteinDataSource: proteinDataSource,
+            statusViewModel: statusViewModel,
             fileInfo: fileInfo,
             fileName: fileName,
             fileExtension: fileExtension,
@@ -39,23 +45,32 @@ class FileImporter {
         )
     }
     
-    static func importFileFromRawText(rawText: String, proteinViewModel: ProteinViewModel, fileInfo: ProteinFileInfo?, fileName: String, fileExtension: String, byteSize: Int?) async throws {
+    static func importFileFromRawText(
+        rawText: String,
+        proteinDataSource: ProteinDataSource,
+        statusViewModel: StatusViewModel,
+        fileInfo: ProteinFileInfo?,
+        fileName: String,
+        fileExtension: String,
+        byteSize: Int?
+    ) async throws {
         do {
-            guard let dataSource = proteinViewModel.dataSource else { return }
             let proteinFile = try await FileParser().parseTextFile(
                 rawText: rawText,
                 fileName: fileName,
                 fileExtension: fileExtension,
                 byteSize: byteSize,
                 fileInfo: fileInfo,
-                proteinViewModel: proteinViewModel
+                statusViewModel: statusViewModel
             )
-            await dataSource.addProteinFileToDataSource(proteinFile: proteinFile)
+            await proteinDataSource.addProteinFileToDataSource(proteinFile: proteinFile)
+            // File import finished
+            statusViewModel.statusFinished(action: StatusAction.importFile)
         } catch let error as ImportError {
-            proteinViewModel.statusFinished(importError: error)
+            statusViewModel.statusFinished(importError: error)
             throw error
         } catch {
-            proteinViewModel.statusFinished(importError: ImportError.unknownError)
+            statusViewModel.statusFinished(importError: ImportError.unknownError)
             throw error
         }
     }

@@ -15,6 +15,8 @@ enum StatusAction {
 
 class StatusViewModel: ObservableObject {
     
+    weak var proteinViewModel: ProteinViewModel?
+    
     // MARK: - UI properties
     // Published variables used by the UI
     @Published private(set) var statusText: String = NSLocalizedString("Idle", comment: "")
@@ -103,5 +105,38 @@ class StatusViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.statusError = nil
         }
+    }
+    
+    // MARK: - Status handling
+
+    func statusUpdate(statusText: String) {
+        self.setStatusText(text: statusText)
+        self.setRunningStatus(running: true)
+    }
+
+    func statusProgress(progress: Float) {
+        self.setProgress(progress: progress)
+    }
+
+    func statusFinished(action: StatusAction) {
+        self.setProgress(progress: 0)
+        self.setRunningStatus(running: false)
+        switch action {
+        case .importFile:
+            self.removeImportError()
+        case .geometryGeneration:
+            // TO-DO
+            break
+        }
+    }
+    
+    func statusFinished(importError: ImportError) {
+        self.setProgress(progress: 0)
+        self.setRunningStatus(running: false)
+        self.setImportError(error: importError)
+    }
+    
+    func statusWarning(warningText: String) {
+        
     }
 }

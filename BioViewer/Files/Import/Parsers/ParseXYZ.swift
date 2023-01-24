@@ -33,7 +33,14 @@ extension FileParser {
     }
     
     // MARK: - Parse XYZ
-    func parseXYZ(fileName: String, fileExtension: String, byteSize: Int?, rawText: String, proteinViewModel: ProteinViewModel?, originalFileInfo: ProteinFileInfo? = nil) throws -> ProteinFile {
+    func parseXYZ(
+        fileName: String,
+        fileExtension: String,
+        byteSize: Int?,
+        rawText: String,
+        statusViewModel: StatusViewModel,
+        originalFileInfo: ProteinFileInfo? = nil
+    ) throws -> ProteinFile {
         
         var atomArray = ContiguousArray<simd_float3>()
         var energyArray: [Float]?
@@ -71,7 +78,7 @@ extension FileParser {
         rawText.enumerateLines(invoking: { line, _ in
             
             currentLine += 1
-            proteinViewModel?.statusProgress(progress: progress)
+            statusViewModel.statusProgress(progress: progress)
             
             let lineElements = line.components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
             guard lineElements.count >= XYZConstants.atomLineNumberOfComponents else {

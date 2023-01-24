@@ -23,11 +23,11 @@ class ProteinViewModel: ObservableObject {
     var visualizationViewModel: ProteinVisualizationViewModel?
     /// Toolbar view model.
     var toolbarConfig: ToolbarConfig?
+    /// Reference to the status view model for updates.
+    var statusViewModel: StatusViewModel?
     
     /// Delegate to handle dropped files in view.
     var dropHandler: ImportDroppedFilesDelegate
-    /// Reference to the status view model for updates.
-    var statusViewModel: StatusViewModel
     
     // MARK: - Initialization
 
@@ -41,9 +41,6 @@ class ProteinViewModel: ObservableObject {
         // Setup drop delegate
         self.dropHandler = ImportDroppedFilesDelegate()
 
-        // Setup view status
-        self.statusViewModel = StatusViewModel()
-
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dropHandler.proteinViewModel = self
         
@@ -55,40 +52,7 @@ class ProteinViewModel: ObservableObject {
 
     func removeAllFiles() {
         self.dataSource?.removeAllFilesFromDatasource()
-        self.statusViewModel.removeAllWarnings()
-        self.statusViewModel.removeAllErrors()
-    }
-
-    // MARK: - Status handling
-
-    func statusUpdate(statusText: String) {
-        self.statusViewModel.setStatusText(text: statusText)
-        self.statusViewModel.setRunningStatus(running: true)
-    }
-
-    func statusProgress(progress: Float) {
-        self.statusViewModel.setProgress(progress: progress)
-    }
-
-    func statusFinished(action: StatusAction) {
-        self.statusViewModel.setProgress(progress: 0)
-        self.statusViewModel.setRunningStatus(running: false)
-        switch action {
-        case .importFile:
-            self.statusViewModel.removeImportError()
-        case .geometryGeneration:
-            // TO-DO
-            break
-        }
-    }
-    
-    func statusFinished(importError: ImportError) {
-        self.statusViewModel.setProgress(progress: 0)
-        self.statusViewModel.setRunningStatus(running: false)
-        self.statusViewModel.setImportError(error: importError)
-    }
-    
-    func statusWarning(warningText: String) {
-        
+        self.statusViewModel?.removeAllWarnings()
+        self.statusViewModel?.removeAllErrors()
     }
 }

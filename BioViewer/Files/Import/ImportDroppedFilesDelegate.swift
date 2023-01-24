@@ -24,7 +24,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
         guard let itemProvider = info.itemProviders(for: [.data,
                                                           .item]).first else {
-            self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
+            self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownFileType)
             NSLog("No itemProvider available for the given type.")
             return false
         }
@@ -43,7 +43,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
         
         // Ensure that a type has been found at all
         guard let typeIdentifier = typeIdentifier else {
-            self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
+            self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownFileType)
             NSLog("Item provider has no associated type identifier.")
             return false
         }
@@ -51,7 +51,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
         itemProvider.loadDataRepresentation(forTypeIdentifier: typeIdentifier) { data, error in
 
             guard let data = data else {
-                self.proteinViewModel?.statusFinished(importError: ImportError.unknownError)
+                self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownError)
                 return
             }
             
@@ -74,7 +74,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
             
             // Check that either the suggestedName or the itemProvider type have a valid path extension
             guard let fileExtension = fileExtension else {
-                self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileExtension)
+                self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownFileExtension)
                 return
             }
 
@@ -86,9 +86,12 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
             // Parse file
             Task {
+                guard let dataSource = proteinViewModel.dataSource else { return }
+                guard let statusViewModel = proteinViewModel.statusViewModel else { return }
                 try? await FileImporter.importFileFromRawText(
                     rawText: rawFileText,
-                    proteinViewModel: proteinViewModel,
+                    proteinDataSource: dataSource,
+                    statusViewModel: statusViewModel,
                     fileInfo: nil,
                     fileName: fileName,
                     fileExtension: fileExtension,

@@ -38,7 +38,7 @@ class ConnectivityGenerator {
                 if Task.isCancelled { return }
                 
                 // Update progress
-                proteinViewModel?.statusProgress(progress: progress)
+                proteinViewModel?.statusViewModel?.statusProgress(progress: progress)
                 
                 // Compute a new matrix row
                 for indexB in configurationStartIndex..<indexA {

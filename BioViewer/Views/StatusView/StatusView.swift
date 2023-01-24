@@ -25,7 +25,7 @@ public struct StatusViewConstants {
 
 struct StatusView: View {
 
-    @ObservedObject var statusViewModel: StatusViewModel
+    @EnvironmentObject var statusViewModel: StatusViewModel
     @State var showErrorPopover: Bool = false
     @State var showWarningPopover: Bool = false
 
@@ -106,8 +106,8 @@ struct StatusView: View {
 
 struct StatusView_Previews: PreviewProvider {
     static var previews: some View {
-        StatusView(statusViewModel: StatusViewModel())
+        StatusView()
             .frame(width: 300, height: 32)
-            .environmentObject(ProteinViewModel())
+            .environmentObject(StatusViewModel())
     }
 }

@@ -93,9 +93,6 @@ class ProteinDataSource: ObservableObject {
         DispatchQueue.main.async {
             proteinViewModel.visualizationViewModel?.visualization = .solidSpheres
         }
-        
-        // File import finished
-        proteinViewModel.statusFinished(action: StatusAction.importFile)
     }
     
     // MARK: - Remove files

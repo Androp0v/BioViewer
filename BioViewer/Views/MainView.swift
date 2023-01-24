@@ -14,6 +14,7 @@ struct MainView: View {
     @StateObject var colorViewModel = ProteinColorViewModel()
     @StateObject var visualizationViewModel = ProteinVisualizationViewModel()
     @StateObject var shadowsViewModel = ProteinShadowsViewModel()
+    @StateObject var statusViewModel = StatusViewModel()
     @State var isPresentingNews = false
             
     init() {
@@ -42,6 +43,7 @@ struct MainView: View {
                 .environmentObject(colorViewModel)
                 .environmentObject(visualizationViewModel)
                 .environmentObject(shadowsViewModel)
+                .environmentObject(statusViewModel)
                 .onAppear {
                     
                     proteinDataSource.proteinViewModel = proteinViewModel
@@ -54,6 +56,9 @@ struct MainView: View {
                     proteinViewModel.visualizationViewModel = visualizationViewModel
                     
                     shadowsViewModel.proteinViewModel = proteinViewModel
+                    
+                    statusViewModel.proteinViewModel = proteinViewModel
+                    proteinViewModel.statusViewModel = statusViewModel
                 }
             
                 .sheet(isPresented: $isPresentingNews, onDismiss: {
@@ -73,7 +78,8 @@ struct MainView: View {
             Task {
                 try? await FileImporter.importFromFileURL(
                     fileURL: fileURL,
-                    proteinViewModel: proteinViewModel,
+                    proteinDataSource: proteinDataSource,
+                    statusViewModel: statusViewModel,
                     fileInfo: nil
                 )
             }

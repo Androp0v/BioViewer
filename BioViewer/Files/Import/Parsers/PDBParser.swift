@@ -103,7 +103,6 @@ class PDBParser {
         fileExtension: String,
         byteSize: Int?,
         rawText: String,
-        proteinViewModel: ProteinViewModel?,
         originalFileInfo: ProteinFileInfo? = nil
     ) async throws -> ProteinFile {
         
