@@ -7,7 +7,6 @@
 
 import Combine
 import SwiftUI
-import UIKit
 import UniformTypeIdentifiers
 
 struct ProteinView: View {

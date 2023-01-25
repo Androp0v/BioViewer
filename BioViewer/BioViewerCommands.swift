@@ -24,10 +24,22 @@ extension FocusedValues {
 }
 
 struct BioViewerCommands: Commands {
+    
+    @Environment(\.openWindow) private var openWindow
         
     var body: some Commands {
         
+        // MARK: - App
+        
+        CommandGroup(before: .appSettings) {
+            Button(NSLocalizedString("Benchmark", comment: "")) {
+                openWindow(id: "BioBench")
+            }
+            .keyboardShortcut("B")
+        }
+        
         // MARK: - Files
+        
         CommandGroup(after: .newItem) {
             Button(NSLocalizedString("Remove all files", comment: "")) {
                 AppState.shared.focusedViewModel?.dataSource?.removeAllFilesFromDatasource()
@@ -36,6 +48,7 @@ struct BioViewerCommands: Commands {
         }
         
         // MARK: - View
+        
         CommandGroup(before: CommandGroupPlacement.toolbar) {
             
             Section {

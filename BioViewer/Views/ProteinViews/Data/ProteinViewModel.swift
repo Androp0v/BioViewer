@@ -31,12 +31,12 @@ class ProteinViewModel: ObservableObject {
     
     // MARK: - Initialization
 
-    init() {
+    init(isBenchmark: Bool = false) {
         // Setup Metal renderer
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
         }
-        self.renderer = ProteinRenderer(device: device)
+        self.renderer = ProteinRenderer(device: device, isBenchmark: isBenchmark)
 
         // Setup drop delegate
         self.dropHandler = ImportDroppedFilesDelegate()

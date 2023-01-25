@@ -31,6 +31,16 @@ class ProteinRenderer: NSObject {
     /// Frame GPU execution time, exponentially averaged.
     var lastFrameGPUTime = CFTimeInterval()
     
+    // MARK: - Benchmark
+    
+    /// Whether the current `ProteinRenderer` is part of a benchmark.
+    var isBenchmark: Bool
+    /// The GPU execution times for the las N frames in benchmark mode.
+    /// Property is `nil` when not in benchmark mode.
+    var benchmarkTimes: [CFTimeInterval]?
+    /// Number of benchmarked frames.
+    var benchmarkedFrames: Int = 0
+    
     // MARK: - Metal variables
     
     /// GPU
@@ -110,6 +120,7 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Textures
     
+    var benchmarkTextures = BenchmarkTextures()
     var shadowTextures = ShadowTextures()
     var depthPrePassTextures = DepthPrePassTextures()
 
@@ -206,7 +217,7 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Initialization
 
-    init(device: MTLDevice) {
+    init(device: MTLDevice, isBenchmark: Bool) {
 
         self.device = device
         
@@ -219,6 +230,9 @@ class ProteinRenderer: NSObject {
         // Create frame boundary semaphore
         self.frameBoundarySemaphore = DispatchSemaphore(value: maxBuffersInFlight)
         self.currentFrameIndex = 0
+        
+        // Benchmark code
+        self.isBenchmark = isBenchmark
         
         // Call super initializer
         super.init()
@@ -234,7 +248,7 @@ class ProteinRenderer: NSObject {
             }
             uniformBuffers?.append(uniformBuffer)
         }
-        
+                
         // Create compute pipeline states
         makeFillColorComputePipelineState(device: device)
         
@@ -251,17 +265,32 @@ class ProteinRenderer: NSObject {
         makeDebugPointsPipelineState(device: device)
         #endif
         
+        // Benchmark textures
+        if isBenchmark {
+            benchmarkTextures.makeTextures(device: device)
+            depthPrePassTextures.makeTextures(
+                device: device,
+                textureWidth: BenchmarkTextures.benchmarkResolution,
+                textureHeight: BenchmarkTextures.benchmarkResolution
+            )
+            benchmarkTimes = [CFTimeInterval](repeating: .zero, count: BioBenchConfig.numberOfFrames)
+        }
+        
         // Create shadow textures and sampler
-        shadowTextures.makeTextures(device: device,
-                                    textureWidth: ShadowTextures.defaultTextureWidth,
-                                    textureHeight: ShadowTextures.defaultTextureHeight)
+        shadowTextures.makeTextures(
+            device: device,
+            textureWidth: ShadowTextures.defaultTextureWidth,
+            textureHeight: ShadowTextures.defaultTextureHeight
+        )
         shadowTextures.makeShadowSampler(device: device)
         
         // Create texture for depth-bound shadow render pass pre-pass
         if AppState.hasDepthPrePasses() {
-            depthPrePassTextures.makeShadowTextures(device: device,
-                                                    shadowTextureWidth: ShadowTextures.defaultTextureWidth,
-                                                    shadowTextureHeight: ShadowTextures.defaultTextureHeight)
+            depthPrePassTextures.makeShadowTextures(
+                device: device,
+                shadowTextureWidth: ShadowTextures.defaultTextureWidth,
+                shadowTextureHeight: ShadowTextures.defaultTextureHeight
+            )
         }
         
         // Depth state
@@ -377,9 +406,11 @@ extension ProteinRenderer: MTKViewDelegate {
         self.viewResolution = size
         
         if AppState.hasDepthPrePasses() {
-            depthPrePassTextures.makeTextures(device: device,
-                                            textureWidth: Int(size.width),
-                                            textureHeight: Int(size.height))
+            depthPrePassTextures.makeTextures(
+                device: device,
+                textureWidth: Int(size.width),
+                textureHeight: Int(size.height)
+            )
         }
         
         // TO-DO: Enqueue draw calls so this doesn't drop the FPS
@@ -485,14 +516,25 @@ extension ProteinRenderer: MTKViewDelegate {
             // GETTING THE DRAWABLE
             // The final pass can only render if a drawable is available, otherwise it needs to skip
             // rendering this frame. Get the drawable as late as possible.
-            if let drawable = view.currentDrawable {
-                    
+            var viewTexture: MTLTexture?
+            var viewDepthTexture: MTLTexture?
+            var drawable: CAMetalDrawable? = view.currentDrawable
+            if !self.isBenchmark {
+                drawable = view.currentDrawable
+                viewTexture = drawable?.texture
+                viewDepthTexture = view.depthStencilTexture
+            } else {
+                viewTexture = self.benchmarkTextures.colorTexture
+                viewDepthTexture = self.benchmarkTextures.depthTexture
+            }
+            
+            if let viewTexture, let viewDepthTexture {
                 // MARK: - Impostor pass
                 
                 self.impostorRenderPass(commandBuffer: commandBuffer,
                                         uniformBuffer: &uniformBuffer,
-                                        drawableTexture: drawable.texture,
-                                        depthTexture: view.depthStencilTexture,
+                                        drawableTexture: viewTexture,
+                                        depthTexture: viewDepthTexture,
                                         depthPrePassTexture: self.depthPrePassTextures.colorTexture,
                                         shadowTextures: self.shadowTextures,
                                         variant: .solidSpheres,
@@ -502,13 +544,15 @@ extension ProteinRenderer: MTKViewDelegate {
                 #if DEBUG
                 self.pointsRenderPass(commandBuffer: commandBuffer,
                                       uniformBuffer: &uniformBuffer,
-                                      drawableTexture: drawable.texture,
-                                      depthTexture: view.depthStencilTexture)
+                                      drawableTexture: viewTexture,
+                                      depthTexture: viewDepthTexture)
                 #endif
                 
                 // Schedule a drawable presentation to occur after the GPU completes its work
                 // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
-                commandBuffer.present(drawable)
+                if let drawable {
+                    commandBuffer.present(drawable)
+                }
             }
             
             // MARK: - Triple buffering
@@ -517,6 +561,11 @@ extension ProteinRenderer: MTKViewDelegate {
                 guard let self = self else { return }
                 // Store the time required to render the frame
                 self.lastFrameGPUTime = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
+                if self.isBenchmark,
+                   self.benchmarkedFrames < BioBenchConfig.numberOfFrames {
+                    self.benchmarkTimes?[self.benchmarkedFrames] = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
+                    self.benchmarkedFrames += 1
+                }
                 // GPU work is complete, signal the semaphore to start the CPU work
                 self.frameBoundarySemaphore.signal()
             })

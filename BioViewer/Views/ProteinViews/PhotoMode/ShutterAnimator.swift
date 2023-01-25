@@ -8,7 +8,6 @@
 import AVFoundation
 import Foundation
 import SwiftUI
-import UIKit
 
 class ShutterAnimator: ObservableObject {
     

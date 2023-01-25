@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -189,7 +189,7 @@
 		C572BD1E27413AFB00FF010D /* FileSourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD1D27413AFB00FF010D /* FileSourceViewModel.swift */; };
 		C572BD28274160C900FF010D /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C572BD27274160C900FF010D /* QuickLookThumbnailing.framework */; };
 		C572BD2B274160C900FF010D /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD2A274160C900FF010D /* ThumbnailProvider.swift */; };
-		C572BD2F274160C900FF010D /* ProteinThumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C572BD25274160C900FF010D /* ProteinThumbnail.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C572BD2F274160C900FF010D /* ProteinThumbnail.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C572BD25274160C900FF010D /* ProteinThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C572BD352741653E00FF010D /* FileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0561264C2853006F551C /* FileParser.swift */; };
 		C572BD362741655700FF010D /* Protein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B1F81E26457CF80035D739 /* Protein.swift */; };
 		C572BD372741656000FF010D /* ProteinFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD192741372600FF010D /* ProteinFileInfo.swift */; };
@@ -288,6 +288,11 @@
 		C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC734277C744200E348BD /* ImpostorBondShader.metal */; };
 		C5FEC737277C8EA800E348BD /* CreateImpostorBonds.metal in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */; };
 		C5FEC739277C977A00E348BD /* CreateBondsGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */; };
+		C5FF9AD62980351C00D583A2 /* BioBenchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FF9AD52980351C00D583A2 /* BioBenchView.swift */; };
+		C5FF9AD829816AE000D583A2 /* BenchmarkTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FF9AD729816AE000D583A2 /* BenchmarkTextures.swift */; };
+		C5FF9AD929816C5400D583A2 /* BenchmarkTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FF9AD729816AE000D583A2 /* BenchmarkTextures.swift */; };
+		C5FF9ADB29817B4300D583A2 /* BioBenchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FF9ADA29817B4300D583A2 /* BioBenchConfig.swift */; };
+		C5FF9ADC29817B8B00D583A2 /* BioBenchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FF9ADA29817B4300D583A2 /* BioBenchConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -551,6 +556,9 @@
 		C5FEC734277C744200E348BD /* ImpostorBondShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorBondShader.metal; sourceTree = "<group>"; };
 		C5FEC736277C8EA800E348BD /* CreateImpostorBonds.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorBonds.metal; sourceTree = "<group>"; };
 		C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBondsGeometry.swift; sourceTree = "<group>"; };
+		C5FF9AD52980351C00D583A2 /* BioBenchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioBenchView.swift; sourceTree = "<group>"; };
+		C5FF9AD729816AE000D583A2 /* BenchmarkTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkTextures.swift; sourceTree = "<group>"; };
+		C5FF9ADA29817B4300D583A2 /* BioBenchConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioBenchConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -770,6 +778,7 @@
 				C54066F8274D1C6100710CFC /* Files */,
 				C4B1F82026457D020035D739 /* Data structures */,
 				C553B79629360F9900294BB4 /* Components */,
+				C5FF9AD42980350700D583A2 /* BioBench */,
 				C4187E342642E0CA009E2CBA /* Views */,
 				C41A056A2658948B006F551C /* Metal */,
 				C553B79329360CE200294BB4 /* Extensions */,
@@ -980,6 +989,7 @@
 			children = (
 				C544D39F277016270060B30D /* TextureToImage.swift */,
 				C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */,
+				C5FF9AD729816AE000D583A2 /* BenchmarkTextures.swift */,
 				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
 				C5EEE9C2276FFC02005737C1 /* HQTextures.swift */,
 				C51D4EEB2769199600C69B3D /* AmbientOcclusionTextures.swift */,
@@ -1285,6 +1295,15 @@
 			path = JSONs;
 			sourceTree = "<group>";
 		};
+		C5FF9AD42980350700D583A2 /* BioBench */ = {
+			isa = PBXGroup;
+			children = (
+				C5FF9AD52980351C00D583A2 /* BioBenchView.swift */,
+				C5FF9ADA29817B4300D583A2 /* BioBenchConfig.swift */,
+			);
+			path = BioBench;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1508,6 +1527,7 @@
 				C55CA715297EAB8300BEDFA4 /* ProteinColorViewModel.swift in Sources */,
 				C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */,
 				C5EEE9B2276F5BCD005737C1 /* PhotoModeView.swift in Sources */,
+				C5FF9AD62980351C00D583A2 /* BioBenchView.swift in Sources */,
 				C553B79529360CF600294BB4 /* UserDefaults+Extension.swift in Sources */,
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
@@ -1538,6 +1558,7 @@
 				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,
 				C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */,
 				C55CA71A297EB60700BEDFA4 /* ProteinVisualizationViewModel.swift in Sources */,
+				C5FF9ADB29817B4300D583A2 /* BioBenchConfig.swift in Sources */,
 				C553B79F293624D900294BB4 /* PeriodicTableContentView.swift in Sources */,
 				C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */,
 				C51D4EEC2769199600C69B3D /* AmbientOcclusionTextures.swift in Sources */,
@@ -1589,6 +1610,7 @@
 				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
 				C5FEC739277C977A00E348BD /* CreateBondsGeometry.swift in Sources */,
 				C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */,
+				C5FF9AD829816AE000D583A2 /* BenchmarkTextures.swift in Sources */,
 				C5E593B7281D793E00CFFAA2 /* MetalLegacySupport.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C5D97E0F29746A8000EF1D5A /* ResidueType.swift in Sources */,
@@ -1703,6 +1725,7 @@
 				C5035EED283FE738009CE87D /* DepthPrePassStage.swift in Sources */,
 				C5277FBE2979565700291AF7 /* CartoonHelix.swift in Sources */,
 				C501C74A27CA2C53008CDA25 /* FillColorPass.swift in Sources */,
+				C5FF9ADC29817B8B00D583A2 /* BioBenchConfig.swift in Sources */,
 				C5B76AD52761AE86004199A9 /* ShadowTextures.swift in Sources */,
 				C572BD452741663000FF010D /* AppState.swift in Sources */,
 				C5277FD2297B6FAF00291AF7 /* BioViewerPicker.swift in Sources */,
@@ -1757,6 +1780,7 @@
 				C515EFC4274FEA8400B6F7DB /* ProteinColorModel.swift in Sources */,
 				C5035EEC283FE72F009CE87D /* DepthPrePassTextures.swift in Sources */,
 				C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */,
+				C5FF9AD929816C5400D583A2 /* BenchmarkTextures.swift in Sources */,
 				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
 				C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */,
 				C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */,
@@ -1784,7 +1808,6 @@
 		};
 		C572BD2E274160C900FF010D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			platformFilter = ios;
 			target = C572BD24274160C900FF010D /* ProteinThumbnail */;
 			targetProxy = C572BD2D274160C900FF010D /* PBXContainerItemProxy */;
 		};
