@@ -18,18 +18,23 @@ struct BioBenchView: View {
     @StateObject var shadowsViewModel = ProteinShadowsViewModel()
     @StateObject var statusViewModel = StatusViewModel()
     
+    @State var currentImage: CGImage?
     @State var benchmarkedProteins = [BenchmarkedProtein]()
     
-    struct BenchmarkedProtein: Hashable {
+    struct BenchmarkedProtein: Equatable {
         let id = UUID()
         let name: String
         let atoms: Int
         let time: Double
-        let std: Double
+        let std: (Double, Double)
+        
+        static func == (lhs: BioBenchView.BenchmarkedProtein, rhs: BioBenchView.BenchmarkedProtein) -> Bool {
+            return lhs.id == rhs.id
+        }
     }
     
     var body: some View {
-        HStack {
+        HStack(spacing: .zero) {
             ZStack(alignment: .bottom) {
                 ProteinMetalView(proteinViewModel: proteinViewModel)
                     .frame(width: Self.benchmarkResolution / 2, height: Self.benchmarkResolution / 2)
@@ -51,6 +56,12 @@ struct BioBenchView: View {
                         statusViewModel.proteinViewModel = proteinViewModel
                         proteinViewModel.statusViewModel = statusViewModel
                     }
+                
+                if let currentImage {
+                    Image(uiImage: UIImage(cgImage: currentImage))
+                        .resizable()
+                        .border(.red)
+                }
                 
                 ZStack(alignment: .bottomLeading) {
                     HStack {
@@ -77,14 +88,24 @@ struct BioBenchView: View {
                 )
                 .padding()
             }
+            .padding()
             
-            List(benchmarkedProteins, id: \.self) { benchmark in
-                HStack {
-                    Text(benchmark.name)
+            List(benchmarkedProteins, id: \.id) { benchmark in
+                VStack(alignment: .leading) {
+                    Text("Name: ")
+                        .bold()
+                    Text("\(benchmark.name)")
+                    Text("Atom count: ")
+                        .bold()
                     Text("\(benchmark.atoms)")
-                    Text("\(benchmark.time) (\(Int(1.0 / (benchmark.time / 100.0))))")
-                    Text("\(benchmark.std)")
+                    Text("GPU time: ")
+                        .bold()
+                    Text("\(benchmark.time * 1000) ms (\(toFPS(benchmark.time)) fps)")
+                    Text("Standard deviation (ms): ")
+                        .bold()
+                    Text("\((benchmark.std.0 - benchmark.std.1) * 1000) (\(benchmark.std.0 * 1000), \(benchmark.std.1 * 1000))")
                 }
+                .padding(.vertical)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -93,44 +114,113 @@ struct BioBenchView: View {
     
     // MARK: - Functions
     private func runBenchmark() async {
-        guard let fileURL = Bundle.main.url(forResource: "3JBT", withExtension: "pdb") else {
-            return
-        }
-        proteinDataSource.removeAllFilesFromDatasource()
-        try? await FileImporter.importFromFileURL(
-            fileURL: fileURL,
-            proteinDataSource: proteinDataSource,
-            statusViewModel: statusViewModel,
-            fileInfo: nil
-        )
-        proteinViewModel.renderer.scene.autorotating = true
-        proteinViewModel.renderer.benchmarkedFrames = 0
-        let waitTask = Task.detached {
-            while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
-                // Wait
+        proteinViewModel.colorViewModel?.colorBy = .subunit
+        for pdbID in [
+            "1AL0",
+            "1CD3",
+            "1F8V",
+            "1HB5",
+            "1IHM",
+            "1K4R",
+            "1LD4",
+            "1M1C",
+            "1OHF",
+            "1OHG",
+            "1SID",
+            "1SIE",
+            "1SVA",
+            "1Z7Z",
+            "1Z8Y",
+            "2CSE",
+            "2FRP",
+            "2FS3",
+            "2FSY",
+            "2FT1",
+            "2GH8",
+            "2GP1",
+            "2QQP",
+            "2W0C"
+            /*
+            "5YH2",
+            "6S7O",
+            "5T89",
+            "1N8Z",
+            "6PV7",
+            "4FXF",
+            "1JEY",
+            "3CHN",
+            "5XTH",
+            "5HZG",
+            "7TPT",
+            "1Q83"
+             */
+             /*
+            "1KF1",
+            "1A3N",
+            "2OGM",
+            "3JBT",
+            "1CWP",
+            "6P4L",
+            "5IRE",
+            "5FUA",
+            "1UF2"
+              */
+        ] {
+            guard let (rawText, byteSize) = try? await RCSBFetch.fetchPDBFile(rcsbid: pdbID) else {
+                continue
             }
-        }
-        _ = await waitTask.result
-        guard let benchmarkedTimes = proteinViewModel.renderer.benchmarkTimes else { return }
-        let meanTime = meanTime(measuredTimes: benchmarkedTimes)
-        let stdTime = stdTime(measuredTimes: benchmarkedTimes, mean: meanTime)
-        benchmarkedProteins.append(
-            BenchmarkedProtein(
-                name: "3JBT",
-                atoms: proteinDataSource.totalAtomCount,
-                time: meanTime * 100,
-                std: stdTime * 100
+            let fileInfo = ProteinFileInfo(
+                pdbID: pdbID,
+                description: "",
+                authors: "",
+                sourceLines: nil
             )
-        )
-        proteinViewModel.renderer.scene.autorotating = false
+            proteinDataSource.removeAllFilesFromDatasource()
+            try? await FileImporter.importFileFromRawText(
+                rawText: rawText,
+                proteinDataSource: proteinDataSource,
+                statusViewModel: statusViewModel,
+                fileInfo: fileInfo,
+                fileName: pdbID,
+                fileExtension: "pdb",
+                byteSize: byteSize
+            )
+            proteinViewModel.renderer.scene.autorotating = true
+            proteinViewModel.renderer.benchmarkedFrames = 0
+            let waitTask = Task.detached {
+                while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
+                    // Wait
+                }
+            }
+            _ = await waitTask.result
+            guard let benchmarkedTimes = proteinViewModel.renderer.benchmarkTimes else { continue }
+            let meanTime = meanTime(measuredTimes: benchmarkedTimes)
+            let stdTime = stdTime(measuredTimes: benchmarkedTimes, mean: meanTime)
+            benchmarkedProteins.append(
+                BenchmarkedProtein(
+                    name: pdbID,
+                    atoms: proteinDataSource.totalAtomCount,
+                    time: meanTime,
+                    std: stdTime
+                )
+            )
+            print("BioBench (\(pdbID)): \(proteinDataSource.totalAtomCount), \(meanTime), \(stdTime)")
+            proteinViewModel.renderer.scene.autorotating = false
+            currentImage = proteinViewModel.renderer.benchmarkTextures.colorTexture.getCGImage()
+        }
     }
     
     private func meanTime(measuredTimes: [CFTimeInterval]) -> Double {
         return measuredTimes.reduce(0.0, { $0 + Double($1) }) / Double(BioBenchConfig.numberOfFrames)
     }
     
-    private func stdTime(measuredTimes: [CFTimeInterval], mean: Double) -> Double {
-        return sqrt( measuredTimes.reduce(0.0, { $0 + pow($1 - mean, 2) }) / Double(BioBenchConfig.numberOfFrames) )
+    private func stdTime(measuredTimes: [CFTimeInterval], mean: Double) -> (Double, Double) {
+        let deviation = sqrt( measuredTimes.reduce(0.0, { $0 + pow($1 - mean, 2) }) / Double(BioBenchConfig.numberOfFrames) )
+        return (mean - deviation, mean + deviation)
+    }
+    
+    private func toFPS(_ milliseconds: Double) -> Int {
+        return Int(1.0 / milliseconds)
     }
 }
 
