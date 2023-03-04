@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// swiftlint:disable all
 struct BioBenchView: View {
     
     static let benchmarkResolution: CGFloat = 1440
@@ -116,45 +117,6 @@ struct BioBenchView: View {
     private func runBenchmark() async {
         proteinViewModel.colorViewModel?.colorBy = .subunit
         for pdbID in [
-            "1AL0",
-            "1CD3",
-            "1F8V",
-            "1HB5",
-            "1IHM",
-            "1K4R",
-            "1LD4",
-            "1M1C",
-            "1OHF",
-            "1OHG",
-            "1SID",
-            "1SIE",
-            "1SVA",
-            "1Z7Z",
-            "1Z8Y",
-            "2CSE",
-            "2FRP",
-            "2FS3",
-            "2FSY",
-            "2FT1",
-            "2GH8",
-            "2GP1",
-            "2QQP",
-            "2W0C"
-            /*
-            "5YH2",
-            "6S7O",
-            "5T89",
-            "1N8Z",
-            "6PV7",
-            "4FXF",
-            "1JEY",
-            "3CHN",
-            "5XTH",
-            "5HZG",
-            "7TPT",
-            "1Q83"
-             */
-             /*
             "1KF1",
             "1A3N",
             "2OGM",
@@ -164,7 +126,6 @@ struct BioBenchView: View {
             "5IRE",
             "5FUA",
             "1UF2"
-              */
         ] {
             guard let (rawText, byteSize) = try? await RCSBFetch.fetchPDBFile(rcsbid: pdbID) else {
                 continue
@@ -185,6 +146,10 @@ struct BioBenchView: View {
                 fileExtension: "pdb",
                 byteSize: byteSize
             )
+            proteinViewModel.renderer.scene.updateCameraDistanceToModel(
+                distanceToModel: proteinViewModel.renderer.scene.cameraPosition.z * 0.8,
+                proteinDataSource: proteinDataSource
+            )
             proteinViewModel.renderer.scene.autorotating = true
             proteinViewModel.renderer.benchmarkedFrames = 0
             let waitTask = Task.detached {
@@ -204,7 +169,7 @@ struct BioBenchView: View {
                     std: stdTime
                 )
             )
-            print("BioBench (\(pdbID)): \(proteinDataSource.totalAtomCount), \(meanTime), \(stdTime)")
+            print("BioBench \(benchmarkedProteins.count) (\(pdbID)): \(proteinDataSource.totalAtomCount), \(meanTime), \(stdTime.0), \(stdTime.1)")
             proteinViewModel.renderer.scene.autorotating = false
             currentImage = proteinViewModel.renderer.benchmarkTextures.colorTexture.getCGImage()
         }
