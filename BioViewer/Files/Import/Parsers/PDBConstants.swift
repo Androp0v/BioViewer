@@ -68,4 +68,15 @@ enum PDBConstants {
         /// Column index range of the final residue identifier.
         static let finalResIDRange: Range<Int> = 33..<37
     }
+    
+    enum SheetRecord {
+        /// Column index range of the chainID where the helix starts.
+        static let initChainIDRange: Range<Int> = 21..<22
+        /// Column index range of the initial residue identifier.
+        static let initResIDRange: Range<Int> = 22..<26
+        /// Column index range of the chainID where the helix ends.
+        static let finalChainIDRange: Range<Int> = 32..<33
+        /// Column index range of the final residue identifier.
+        static let finalResIDRange: Range<Int> = 33..<37
+    }
 }

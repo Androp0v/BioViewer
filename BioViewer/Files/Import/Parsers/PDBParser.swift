@@ -18,12 +18,31 @@ private struct PDBAtomLine {
     let position: simd_float3
 }
 
-private struct PDBHelixLine {
+protocol PDBSecondaryStructureLine {
+    var line: Int { get }
+    var initChainID: String { get }
+    var initResID: Int { get }
+    var finalChainID: String { get }
+    var finalResID: Int { get }
+    var underlyingType: SecondaryStructure { get }
+}
+
+private struct PDBHelixLine: PDBSecondaryStructureLine {
     let line: Int
     let initChainID: String
     let initResID: Int
     let finalChainID: String
     let finalResID: Int
+    let underlyingType: SecondaryStructure = .helix
+}
+
+private struct PDBSheetLine: PDBSecondaryStructureLine {
+    let line: Int
+    let initChainID: String
+    let initResID: Int
+    let finalChainID: String
+    let finalResID: Int
+    let underlyingType: SecondaryStructure = .sheet
 }
 
 private struct PDBModelEndLine {
@@ -52,6 +71,7 @@ private final class ParsedBlock {
     var authorRecords = [PDBAuthorLine]()
     var atomRecords = [PDBAtomLine]()
     var helixRecords = [PDBHelixLine]()
+    var sheetRecords = [PDBSheetLine]()
     var modelEndRecord = [PDBModelEndLine]()
     var subunitEndRecords = [PDBSubunitEndLine]()
 }
@@ -65,6 +85,7 @@ extension ParsedBlock {
         lhs.authorRecords.append(contentsOf: rhs.authorRecords)
         lhs.atomRecords.append(contentsOf: rhs.atomRecords)
         lhs.helixRecords.append(contentsOf: rhs.helixRecords)
+        lhs.sheetRecords.append(contentsOf: rhs.sheetRecords)
         lhs.modelEndRecord.append(contentsOf: rhs.modelEndRecord)
         lhs.subunitEndRecords.append(contentsOf: rhs.subunitEndRecords)
     }
@@ -104,23 +125,45 @@ private class ParsedSubunit {
 
 private class SecondaryStructureIterator {
     private let helixRecords: [PDBHelixLine]
-    private var currentStructureIndex: Int = -1
-    private var finishedCurrentStructure: Bool = false
+    private let sheetRecords: [PDBSheetLine]
+    private var currentHelixIndex: Int = -1
+    private var finishedCurrentHelix: Bool = false
+    private var currentSheetIndex: Int = -1
+    private var finishedCurrentSheet: Bool = false
     private var lastChainID: String?
     private var lastResID: Int?
     
-    init(_ helixRecords: [PDBHelixLine]) {
-        self.helixRecords = helixRecords
+    init(helixRecords: [PDBHelixLine], sheetRecords: [PDBSheetLine]) {
+        self.helixRecords = helixRecords.sorted(by: { lhsHelix, rhsHelix in
+            if lhsHelix.initChainID == rhsHelix.initChainID {
+                return lhsHelix.initResID < rhsHelix.initResID
+            }
+            return false
+        })
+        self.sheetRecords = sheetRecords.sorted(by: { lhsSheet, rhsSheet in
+            if lhsSheet.initChainID == rhsSheet.initChainID {
+                return lhsSheet.initResID < rhsSheet.initResID
+            }
+            return false
+        })
     }
     
-    private func getCurrentStructure() -> PDBHelixLine? {
-        guard currentStructureIndex >= 0 else { return nil }
-        guard !finishedCurrentStructure else { return nil }
-        return helixRecords[currentStructureIndex]
+    private func getCurrentStructure() -> (any PDBSecondaryStructureLine)? {
+        if currentHelixIndex >= 0 && !finishedCurrentHelix {
+            return helixRecords[currentHelixIndex]
+        }
+        if currentSheetIndex >= 0 && !finishedCurrentSheet {
+            return sheetRecords[currentSheetIndex]
+        }
+        return nil
     }
-    private func getNextStructure() -> PDBHelixLine? {
-        guard currentStructureIndex + 1 < helixRecords.count else { return nil }
-        return helixRecords[currentStructureIndex + 1]
+    private func getNextHelix() -> (any PDBSecondaryStructureLine)? {
+        guard currentHelixIndex + 1 < helixRecords.count else { return nil }
+        return helixRecords[currentHelixIndex + 1]
+    }
+    private func getNextSheet() -> (any PDBSecondaryStructureLine)? {
+        guard currentSheetIndex + 1 < sheetRecords.count else { return nil }
+        return sheetRecords[currentSheetIndex + 1]
     }
     
     func advanceAndGetCurrentStructure(chainID: String, resID: Int) -> SecondaryStructure {
@@ -130,50 +173,66 @@ private class SecondaryStructureIterator {
                 && lastResID == currentStructure.finalResID
                 && (chainID != lastChainID || resID != lastResID) {
                 // Outside the bounds of last structure
-                finishedCurrentStructure = true
+                if currentStructure.underlyingType == .helix {
+                    finishedCurrentHelix = true
+                } else {
+                    finishedCurrentSheet = true
+                }
             }
         }
         
         if let currentStructure = getCurrentStructure() {
-            if let nextStructure = getNextStructure(),
-               chainID == nextStructure.initChainID
-                && resID == nextStructure.initResID {
-                // Inside the bounds of next structure, without finishing the last structure
-                finishedCurrentStructure = false
-                currentStructureIndex += 1
-                lastChainID = chainID
-                lastResID = resID
-                return .helix
-            } else {
-                // Still inside last structure
+            if let nextHelix = getNextHelix(),
+               chainID == nextHelix.initChainID
+                && resID == nextHelix.initResID {
+                // Inside the bounds of next helix, without finishing the last structure
+                finishedCurrentHelix = false
+                currentHelixIndex += 1
                 lastChainID = chainID
                 lastResID = resID
                 return .helix
             }
+            if let nextSheet = getNextSheet(),
+               chainID == nextSheet.initChainID
+                && resID == nextSheet.initResID {
+               // Inside the bounds of next sheet, without finishing the last structure
+               finishedCurrentSheet = false
+               currentSheetIndex += 1
+               lastChainID = chainID
+               lastResID = resID
+               return .sheet
+            }
+            // Still inside last structure
+            lastChainID = chainID
+            lastResID = resID
+            return currentStructure.underlyingType
         } else {
             // Check if we're now inside the bounds of the next structure
-            if let nextStructure = getNextStructure() {
-                if chainID == nextStructure.initChainID && resID == nextStructure.initResID {
-                    // Inside the bounds of next structure
-                    finishedCurrentStructure = false
-                    currentStructureIndex += 1
-                    lastChainID = chainID
-                    lastResID = resID
-                    return .helix
-                } else {
-                    // Not yet inside the bounds of next structure
-                    lastChainID = chainID
-                    lastResID = resID
-                    return .loop
-                }
-            } else {
-                // No current structure, no next structure. There must be
-                // no structures left in the iterator.
+            if let nextHelix = getNextHelix(),
+               chainID == nextHelix.initChainID
+                && resID == nextHelix.initResID {
+                // Inside the bounds of next structure
+                finishedCurrentHelix = false
+                currentHelixIndex += 1
                 lastChainID = chainID
                 lastResID = resID
-                return .loop
+                return .helix
+            }
+            if let nextSheet = getNextSheet(),
+               chainID == nextSheet.initChainID
+                && resID == nextSheet.initResID {
+                // Inside the bounds of next structure
+                finishedCurrentSheet = false
+                currentSheetIndex += 1
+                lastChainID = chainID
+                lastResID = resID
+                return .sheet
             }
         }
+        // All other cases: we must be in a loop
+        lastChainID = chainID
+        lastResID = resID
+        return .loop
     }
 }
 
@@ -298,7 +357,10 @@ class PDBParser {
                 for model in parsedModels {
                     taskGroup.addTask {
                         // FIXME: mergedBlocks -> something dependent on model
-                        let structureIterator = SecondaryStructureIterator(mergedBlocks.helixRecords)
+                        let structureIterator = SecondaryStructureIterator(
+                            helixRecords: mergedBlocks.helixRecords,
+                            sheetRecords: mergedBlocks.sheetRecords
+                        )
                         let modelRecords = mergedBlocks.atomRecords.filter {
                             $0.line >= model.startLine && $0.line <= model.endLine
                         }
@@ -403,6 +465,10 @@ class PDBParser {
         } else if line.starts(with: "HELIX") {
             if let helix = try? parseHelix(line: line, lineIndex: lineIndex) {
                 parsedBlock.helixRecords.append(helix)
+            }
+        } else if line.starts(with: "SHEET") {
+            if let sheet = try? parseSheet(line: line, lineIndex: lineIndex) {
+                parsedBlock.sheetRecords.append(sheet)
             }
         } else if line.starts(with: "TER") {
             parsedBlock.subunitEndRecords.append(PDBSubunitEndLine(line: lineIndex))
@@ -525,6 +591,45 @@ class PDBParser {
         )
         
         return PDBHelixLine(
+            line: lineIndex,
+            initChainID: initChainID,
+            initResID: initResID,
+            finalChainID: finalChainID,
+            finalResID: finalResID
+        )
+    }
+    
+    // MARK: - Parse SHEET
+    
+    private func parseSheet(line: String, lineIndex: Int) throws -> PDBSheetLine {
+        // Get chain id (1, 2, 3...) for initial chain in helix
+        let initChainID = extract(
+            from: line,
+            range: PDBConstants.SheetRecord.initChainIDRange
+        )
+        // Get residue id (1, 2, 3...) for initial residue in helix
+        let initResID = Int( extract(
+            from: line,
+            range: PDBConstants.SheetRecord.initResIDRange)
+        )
+        guard let initResID else {
+            throw PDBParseError.missingHELIXInitResidueID
+        }
+        // Get residue id (1, 2, 3...) for final residue in helix
+        let finalResID = Int( extract(
+            from: line,
+            range: PDBConstants.SheetRecord.finalResIDRange)
+        )
+        guard let finalResID else {
+            throw PDBParseError.missingHELIXFinalResidueID
+        }
+        // Get chain id (1, 2, 3...) for initial chain in helix
+        let finalChainID = extract(
+            from: line,
+            range: PDBConstants.SheetRecord.finalChainIDRange
+        )
+        
+        return PDBSheetLine(
             line: lineIndex,
             initChainID: initChainID,
             initResID: initResID,
