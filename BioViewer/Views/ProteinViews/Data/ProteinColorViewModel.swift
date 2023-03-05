@@ -43,6 +43,13 @@ class ProteinColorViewModel: ObservableObject {
         }
     }
     
+    /// Color used for each subunit when coloring by subunit.
+    @Published var subunitColors: [Color] = [Color]() {
+        didSet {
+            proteinViewModel?.renderer.scene.colorFill = updatedFillColor()
+        }
+    }
+    
     /// Color used for each residue when coloring by residue.
     @Published var residueColors: [Color] = [Color]() {
         didSet {
@@ -50,8 +57,8 @@ class ProteinColorViewModel: ObservableObject {
         }
     }
     
-    /// Color used for each subunit when coloring by subunit.
-    @Published var subunitColors: [Color] = [Color]() {
+    /// Color used for each residue when coloring by residue.
+    @Published var structureColors: [Color] = [Color]() {
         didSet {
             proteinViewModel?.renderer.scene.colorFill = updatedFillColor()
         }
@@ -76,7 +83,8 @@ class ProteinColorViewModel: ObservableObject {
         
         // Initialize colors
         initElementColors()
-        initResidueColors()
         initSubunitColors()
+        initResidueColors()
+        initStructureColors()
     }
 }

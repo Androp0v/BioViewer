@@ -8,13 +8,25 @@
 import Foundation
 import Metal
 
+struct CreateImpostorSpheresOutput {
+    let vertexBuffer: BillboardVertexBuffers
+    let subunitBuffer: MTLBuffer
+    let atomElementBuffer: MTLBuffer
+    let atomResidueBuffer: MTLBuffer?
+    let atomSecondaryStructureBuffer: MTLBuffer?
+    let indexBuffer: MTLBuffer
+}
+
 extension MetalScheduler {
     
     /// Create vertex and index data for a protein given the atom positions.
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createImpostorSpheres(proteins: [Protein], atomRadii: AtomRadii) -> (vertexData: BillboardVertexBuffers?, subunitData: MTLBuffer?, atomTypeData: MTLBuffer?, atomResidueData: MTLBuffer?, indexData: MTLBuffer?) {
+    public func createImpostorSpheres(
+        proteins: [Protein],
+        atomRadii: AtomRadii
+    ) -> CreateImpostorSpheresOutput? {
 
         let impostorTriangleCount = 2
         
@@ -23,7 +35,7 @@ extension MetalScheduler {
         for protein in proteins {
             guard let subunits = protein.subunits else {
                 NSLog("Unable to create subunit data array buffer: protein has no subunits")
-                return (nil, nil, nil, nil, nil)
+                return nil
             }
             for index in 0..<protein.subunitCount {
                 subunitData.append(contentsOf: Array(repeating: Int16(index),
@@ -42,6 +54,14 @@ extension MetalScheduler {
         for protein in proteins {
             if let proteinResidues = protein.atomResidues {
                 atomResidueType.append(contentsOf: proteinResidues.map { $0.rawValue })
+            }
+        }
+        
+        // Create atom residue type array
+        var atomSecondaryStructureType = [UInt8]()
+        for protein in proteins {
+            if let proteinSecondaryStructure = protein.atomSecondaryStructure {
+                atomSecondaryStructureType.append(contentsOf: proteinSecondaryStructure.map { $0.rawValue })
             }
         }
         
@@ -64,19 +84,22 @@ extension MetalScheduler {
         }
 
         // Populate buffers
-        let billboardVertexBuffers = BillboardVertexBuffers(
+        guard let billboardVertexBuffers = BillboardVertexBuffers(
             device: device,
             atomCounts: atomCounts,
             configurationCounts: configurationCounts
-        )
-        let subunitBuffer = device.makeBuffer(
+        ) else { return nil }
+        
+        guard let subunitBuffer = device.makeBuffer(
             bytes: subunitData,
             length: subunitData.count * MemoryLayout<Int16>.stride
-        )
-        let atomTypeBuffer = device.makeBuffer(
+        ) else { return nil }
+        
+        guard let atomTypeBuffer = device.makeBuffer(
             bytes: atomElementData.map { $0.rawValue },
             length: bufferAtomCount * MemoryLayout<AtomElement.RawValue>.stride
-        )
+        ) else { return nil }
+        
         var atomResidueBuffer: MTLBuffer?
         if !atomResidueType.isEmpty {
             atomResidueBuffer = device.makeBuffer(
@@ -84,9 +107,18 @@ extension MetalScheduler {
                 length: bufferAtomCount * MemoryLayout<Residue.RawValue>.stride
             )
         }
-        let generatedIndexBuffer = device.makeBuffer(
+        
+        var atomSecondaryStructureBuffer: MTLBuffer?
+        if !atomSecondaryStructureType.isEmpty {
+            atomSecondaryStructureBuffer = device.makeBuffer(
+                bytes: atomSecondaryStructureType,
+                length: bufferAtomCount * MemoryLayout<SecondaryStructure.RawValue>.stride
+            )
+        }
+        
+        guard let generatedIndexBuffer = device.makeBuffer(
             length: bufferAtomAndConfigurationCount * impostorTriangleCount * 3 * MemoryLayout<UInt32>.stride
-        )
+        ) else { return nil }
 
         metalDispatchQueue.sync {
             // Populate buffers
@@ -134,22 +166,22 @@ extension MetalScheduler {
             )
             
             computeEncoder.setBuffer(
-                billboardVertexBuffers?.positionBuffer,
+                billboardVertexBuffers.positionBuffer,
                 offset: 0,
                 index: 2
             )
             computeEncoder.setBuffer(
-                billboardVertexBuffers?.atomWorldCenterBuffer,
+                billboardVertexBuffers.atomWorldCenterBuffer,
                 offset: 0,
                 index: 3
             )
             computeEncoder.setBuffer(
-                billboardVertexBuffers?.billboardMappingBuffer,
+                billboardVertexBuffers.billboardMappingBuffer,
                 offset: 0,
                 index: 4
             )
             computeEncoder.setBuffer(
-                billboardVertexBuffers?.atomRadiusBuffer,
+                billboardVertexBuffers.atomRadiusBuffer,
                 offset: 0,
                 index: 5
             )
@@ -165,9 +197,11 @@ extension MetalScheduler {
                 bytes: Array([Int32(bufferAtomCount)]),
                 length: MemoryLayout<Int32>.stride
             )
-            computeEncoder.setBuffer(uniformBuffer,
-                                     offset: 0,
-                                     index: 7)
+            computeEncoder.setBuffer(
+                uniformBuffer,
+                offset: 0,
+                index: 7
+            )
             
             var atomRadii = atomRadii
             computeEncoder.setBytes(&atomRadii, length: MemoryLayout<AtomRadii>.stride, index: 8)
@@ -197,6 +231,13 @@ extension MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (billboardVertexBuffers, subunitBuffer, atomTypeBuffer, atomResidueBuffer, generatedIndexBuffer)
+        return CreateImpostorSpheresOutput(
+            vertexBuffer: billboardVertexBuffers,
+            subunitBuffer: subunitBuffer,
+            atomElementBuffer: atomTypeBuffer,
+            atomResidueBuffer: atomResidueBuffer,
+            atomSecondaryStructureBuffer: atomSecondaryStructureBuffer,
+            indexBuffer: generatedIndexBuffer
+        )
     }
 }

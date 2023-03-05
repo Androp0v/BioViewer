@@ -137,25 +137,22 @@ class VisualizationBufferLoader {
         }
         
         // Generate a billboard quad for each atom in the protein
-        let (vertexData, subunitData, atomTypeData, atomResidueData, indexData) = MetalScheduler.shared.createImpostorSpheres(
+        guard let generatedImpostorData = MetalScheduler.shared.createImpostorSpheres(
             proteins: proteins,
             atomRadii: atomRadii
-        )
-        guard let vertexData = vertexData else { return }
-        guard let subunitData = subunitData else { return }
-        guard let atomTypeData = atomTypeData else { return }
-        guard let indexData = indexData else { return }
+        ) else { return }
         
         // Create ConfigurationSelector for new data
         guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
         
         // Pass the new mesh to the renderer
         proteinViewModel.renderer.setBillboardingBuffers(
-            billboardVertexBuffers: vertexData,
-            subunitBuffer: subunitData,
-            atomTypeBuffer: atomTypeData,
-            atomResidueBuffer: atomResidueData,
-            indexBuffer: indexData,
+            billboardVertexBuffers: generatedImpostorData.vertexBuffer,
+            subunitBuffer: generatedImpostorData.subunitBuffer,
+            atomTypeBuffer: generatedImpostorData.atomElementBuffer,
+            atomResidueBuffer: generatedImpostorData.atomResidueBuffer,
+            atomSecondaryStructureBuffer: generatedImpostorData.atomSecondaryStructureBuffer,
+            indexBuffer: generatedImpostorData.indexBuffer,
             configurationSelector: configurationSelector
         )
         
@@ -164,8 +161,8 @@ class VisualizationBufferLoader {
                 / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
             proteinViewModel.renderer.createAtomColorBuffer(
                 proteins: proteins,
-                subunitBuffer: subunitData,
-                atomTypeBuffer: atomTypeData,
+                subunitBuffer: generatedImpostorData.subunitBuffer,
+                atomElementBuffer: generatedImpostorData.atomElementBuffer,
                 colorList: colorViewModel.elementColors,
                 colorBy: colorViewModel.colorBy
             )

@@ -13,12 +13,19 @@ extension ProteinRenderer {
 
     // MARK: - Update existing color buffer
     
-    public func fillColorPass(commandBuffer: MTLCommandBuffer, colorBuffer: MTLBuffer?, subunitBuffer: MTLBuffer?, atomTypeBuffer: MTLBuffer?, colorFill: FillColorInput) {
+    public func fillColorPass(
+        commandBuffer: MTLCommandBuffer,
+        colorBuffer: MTLBuffer?,
+        subunitBuffer: MTLBuffer?,
+        atomElementBuffer: MTLBuffer?,
+        colorFill: FillColorInput
+    ) {
           
         var colorFillData = colorFill
-        guard let colorBuffer = colorBuffer else { return }
-        guard let subunitBuffer = subunitBuffer else { return }
-        guard let atomTypeBuffer = atomTypeBuffer else { return }
+        guard let colorBuffer else { return }
+        guard let subunitBuffer else { return }
+        guard let atomElementBuffer else { return }
+        guard let atomSecondaryStructureBuffer else { return }
                 
         // Set Metal compute encoder
         guard let computeEncoder = commandBuffer.makeComputeCommandEncoder() else {
@@ -35,18 +42,31 @@ extension ProteinRenderer {
         computeEncoder.setComputePipelineState(pipelineState)
 
         // Set buffer contents
-        computeEncoder.setBuffer(colorBuffer,
-                                 offset: 0,
-                                 index: 0)
-        computeEncoder.setBuffer(subunitBuffer,
-                                 offset: 0,
-                                 index: 1)
-        computeEncoder.setBuffer(atomTypeBuffer,
-                                 offset: 0,
-                                 index: 2)
-        computeEncoder.setBuffer(atomResidueBuffer,
-                                 offset: 0,
-                                 index: 3)
+        computeEncoder.setBuffer(
+            colorBuffer,
+            offset: 0,
+            index: 0
+        )
+        computeEncoder.setBuffer(
+            subunitBuffer,
+            offset: 0,
+            index: 1
+        )
+        computeEncoder.setBuffer(
+            atomElementBuffer,
+            offset: 0,
+            index: 2
+        )
+        computeEncoder.setBuffer(
+            atomResidueBuffer,
+            offset: 0,
+            index: 3
+        )
+        computeEncoder.setBuffer(
+            atomSecondaryStructureBuffer,
+            offset: 0,
+            index: 4
+        )
         
         // Create fillColor buffer and fill with data
         let fillColorBuffer = device.makeBuffer(
@@ -56,7 +76,7 @@ extension ProteinRenderer {
         computeEncoder.setBuffer(
             fillColorBuffer,
             offset: 0,
-            index: 4
+            index: 5
         )
         
         // Total number of threads (used for legacy devices)
@@ -68,7 +88,7 @@ extension ProteinRenderer {
         computeEncoder.setBuffer(
             uniformBuffer,
             offset: 0,
-            index: 5
+            index: 6
         )
         
         // Schedule the threads

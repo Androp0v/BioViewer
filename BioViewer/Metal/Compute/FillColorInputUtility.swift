@@ -18,12 +18,14 @@ class FillColorInputUtility {
         var endFill = end
         
         fillColor.colorByElement = start.colorByElement * (1 - fraction) + end.colorByElement * fraction
-        fillColor.colorByResidue = start.colorByResidue * (1 - fraction) + end.colorByResidue * fraction
         fillColor.colorBySubunit = start.colorBySubunit * (1 - fraction) + end.colorBySubunit * fraction
+        fillColor.colorByResidue = start.colorByResidue * (1 - fraction) + end.colorByResidue * fraction
+        fillColor.colorBySecondaryStructure = start.colorBySecondaryStructure * (1 - fraction) + end.colorBySecondaryStructure * fraction
         
         var elementColors = [simd_float4](repeating: .zero, count: Int(MAX_ELEMENT_COLORS))
-        var residueColors = [simd_float4](repeating: .zero, count: Int(MAX_RESIDUE_COLORS))
         var subunitColors = [simd_float4](repeating: .zero, count: Int(MAX_SUBUNIT_COLORS))
+        var residueColors = [simd_float4](repeating: .zero, count: Int(MAX_RESIDUE_COLORS))
+        var secondaryStructureColors = [simd_float4](repeating: .zero, count: Int(MAX_SECONDARY_STRUCTURE_COLORS))
         
         // MARK: - Element colors
         
@@ -75,6 +77,31 @@ class FillColorInputUtility {
             }
         }
         
+        // MARK: - Secondary structure colors
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &startFill.secondary_structure_color) { rawPtr -> Void in
+            for index in 0..<Int(MAX_SECONDARY_STRUCTURE_COLORS) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                secondaryStructureColors[index] += ptr.pointee * (1 - fraction)
+            }
+        }
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &endFill.secondary_structure_color) { rawPtr -> Void in
+            for index in 0..<Int(MAX_SECONDARY_STRUCTURE_COLORS) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                secondaryStructureColors[index] += ptr.pointee * fraction
+            }
+        }
+        
         // MARK: - Subunit colors
         
         // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
@@ -123,6 +150,18 @@ class FillColorInputUtility {
                 }
                 let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
                 ptr.pointee = residueColors[index]
+            }
+        }
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &fillColor.secondary_structure_color) { rawPtr -> Void in
+            for index in 0..<min(secondaryStructureColors.count, Int(MAX_SECONDARY_STRUCTURE_COLORS)) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                ptr.pointee = secondaryStructureColors[index]
             }
         }
         

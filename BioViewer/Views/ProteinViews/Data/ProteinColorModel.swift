@@ -13,6 +13,7 @@ enum ProteinColorByOption: PickableEnum {
     case element
     case subunit
     case residue
+    case secondaryStructure
     
     var displayName: String {
         switch self {
@@ -22,6 +23,8 @@ enum ProteinColorByOption: PickableEnum {
             return NSLocalizedString("Subunit", comment: "")
         case .residue:
             return NSLocalizedString("Residue", comment: "")
+        case .secondaryStructure:
+            return NSLocalizedString("Secondary structure", comment: "")
         }
     }
     
@@ -33,6 +36,8 @@ enum ProteinColorByOption: PickableEnum {
             return "2"
         case .residue:
             return "3"
+        case .secondaryStructure:
+            return "4"
         }
     }
 
@@ -59,6 +64,13 @@ extension ProteinColorViewModel {
         residueColors = []
         for residue in Residue.allCases {
             residueColors.append(residue.defaultColor)
+        }
+    }
+    
+    func initStructureColors() {
+        structureColors = []
+        for structure in SecondaryStructure.allCases {
+            structureColors.append(structure.defaultColor)
         }
     }
     
@@ -96,6 +108,7 @@ extension ProteinColorViewModel {
         fillColor.colorByElement = 0.0
         fillColor.colorByResidue = 0.0
         fillColor.colorBySubunit = 0.0
+        fillColor.colorBySecondaryStructure = 0.0
         
         switch colorBy {
         case .element:
@@ -104,8 +117,8 @@ extension ProteinColorViewModel {
             fillColor.colorByResidue = 1.0
         case .subunit:
             fillColor.colorBySubunit = 1.0
-        default:
-            break
+        case .secondaryStructure:
+            fillColor.colorBySecondaryStructure = 1.0
         }
         
         // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
@@ -136,6 +149,23 @@ extension ProteinColorViewModel {
                 // TO-DO:
                 guard let simdColor = getSIMDColor(atomColor: residueColors[index].cgColor) else {
                     NSLog("Unable to get SIMD color from CGColor for residue coloring.")
+                    return
+                }
+                ptr.pointee = simdColor
+            }
+        }
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &fillColor.secondary_structure_color) { rawPtr -> Void in
+            for index in 0..<min(structureColors.count, Int(MAX_SECONDARY_STRUCTURE_COLORS)) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                // TO-DO:
+                guard let simdColor = getSIMDColor(atomColor: structureColors[index].cgColor) else {
+                    NSLog("Unable to get SIMD color from CGColor for secondary structure coloring.")
                     return
                 }
                 ptr.pointee = simdColor

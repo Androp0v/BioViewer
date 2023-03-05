@@ -102,15 +102,17 @@ class ProteinRenderer: NSObject {
     var debugPointVertexBuffer: MTLBuffer?
     #endif
     
-    /// Used to pass the atomic type data to the shader (used for coloring, size...)
-    var atomTypeBuffer: MTLBuffer?
-    /// Used to pass the residue data for each atom to the shader (used for coloring, size...)
+    /// Used to pass the atomic element data to the shader (used for coloring, size...).
+    var atomElementBuffer: MTLBuffer?
+    /// Used to pass the residue data for each atom to the shader (used for coloring, size...).
     var atomResidueBuffer: MTLBuffer?
-    /// Used to pass the subunit index to the shader (used for coloring)
+    /// Used to pass the secondary structure data for each atom to the shader (used for coloring, size...).
+    var atomSecondaryStructureBuffer: MTLBuffer?
+    /// Used to pass the subunit index to the shader (used for coloring).
     var subunitBuffer: MTLBuffer?
-    /// Used to pass the atom base color to the shader (used for coloring, size...)
+    /// Used to pass the atom base color to the shader (used for coloring, size...).
     var atomColorBuffer: MTLBuffer?
-    /// Used to pass constant frame data to the shader
+    /// Used to pass constant frame data to the shader.
     var uniformBuffers: [MTLBuffer]?
     
     /// Used to pass the geometry vertex data to the shader when using billboarding bonds
@@ -300,7 +302,7 @@ class ProteinRenderer: NSObject {
 
     // MARK: - Public functions
         
-    func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomTypeBuffer: MTLBuffer, colorList: [Color]?, colorBy: ProteinColorByOption?) {
+    func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomElementBuffer: MTLBuffer, colorList: [Color]?, colorBy: ProteinColorByOption?) {
         
         // Get the number of configurations
         var atomAndConfigurationCount = 0
@@ -325,7 +327,7 @@ class ProteinRenderer: NSObject {
     func addOpaqueBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
         bufferResourceLock.lock()
         self.opaqueVertexBuffer = vertexBuffer
-        self.atomTypeBuffer = atomTypeBuffer
+        self.atomElementBuffer = atomTypeBuffer
         self.opaqueIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         bufferResourceLock.unlock()
@@ -337,14 +339,16 @@ class ProteinRenderer: NSObject {
         subunitBuffer: MTLBuffer,
         atomTypeBuffer: MTLBuffer,
         atomResidueBuffer: MTLBuffer?,
+        atomSecondaryStructureBuffer: MTLBuffer?,
         indexBuffer: MTLBuffer,
         configurationSelector: ConfigurationSelector
     ) {
         bufferResourceLock.lock()
         self.billboardVertexBuffers = billboardVertexBuffers
         self.subunitBuffer = subunitBuffer
-        self.atomTypeBuffer = atomTypeBuffer
+        self.atomElementBuffer = atomTypeBuffer
         self.atomResidueBuffer = atomResidueBuffer
+        self.atomSecondaryStructureBuffer = atomSecondaryStructureBuffer
         self.impostorIndexBuffer = indexBuffer
         self.scene.needsRedraw = true
         self.scene.lastColorPassRequest = CACurrentMediaTime()
@@ -382,7 +386,7 @@ class ProteinRenderer: NSObject {
     func removeBuffers() {
         bufferResourceLock.lock()
         self.opaqueVertexBuffer = nil
-        self.atomTypeBuffer = nil
+        self.atomElementBuffer = nil
         self.opaqueIndexBuffer = nil
         self.scene.needsRedraw = true
         bufferResourceLock.unlock()
@@ -437,7 +441,7 @@ extension ProteinRenderer: MTKViewDelegate {
             self.bufferResourceLock.lock()
             
             // Assure buffers are loaded
-            guard self.atomTypeBuffer != nil else {
+            guard self.atomElementBuffer != nil else {
                 self.isProcessingFrame = false
                 self.bufferResourceLock.unlock()
                 return
@@ -497,7 +501,7 @@ extension ProteinRenderer: MTKViewDelegate {
                     commandBuffer: commandBuffer,
                     colorBuffer: self.atomColorBuffer,
                     subunitBuffer: self.subunitBuffer,
-                    atomTypeBuffer: self.atomTypeBuffer,
+                    atomElementBuffer: self.atomElementBuffer,
                     colorFill: self.scene.colorFill
                 )
             }

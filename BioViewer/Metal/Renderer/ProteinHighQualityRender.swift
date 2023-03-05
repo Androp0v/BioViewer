@@ -60,7 +60,7 @@ extension ProteinRenderer {
         self.scene.aspectRatio = 1.0
         
         // Assure buffers are loaded
-        guard self.atomTypeBuffer != nil else { throw HQRenderingError.nonLoadedBuffer }
+        guard self.atomElementBuffer != nil else { throw HQRenderingError.nonLoadedBuffer }
         guard let uniformBuffers = self.uniformBuffers else { throw HQRenderingError.nonLoadedBuffer }
         
         // Wait until the inflight command buffer has completed its work

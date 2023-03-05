@@ -133,6 +133,13 @@ struct ColorSection: View {
                                 title: Residue.unknown.name,
                                 selectedColor: $colorViewModel.residueColors[Int(Residue.unknown.rawValue)]
                             )
+                        case .secondaryStructure:
+                            ForEach(SecondaryStructure.allCases, id: \.self) { structure in
+                                ColorPickerRow(
+                                    title: structure.name,
+                                    selectedColor: $colorViewModel.structureColors[Int(structure.rawValue)]
+                                )
+                            }
                         }
                     },
                     label: {
