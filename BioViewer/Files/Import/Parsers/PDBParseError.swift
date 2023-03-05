@@ -11,4 +11,6 @@ enum PDBParseError: Error {
     case unexpectedLineLength
     case missingResidueID
     case invalidAtomCoordinates
+    case missingHELIXInitResidueID
+    case missingHELIXFinalResidueID
 }

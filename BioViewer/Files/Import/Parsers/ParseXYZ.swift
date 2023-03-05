@@ -178,16 +178,19 @@ extension FileParser {
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
         
         // Return ProteinFile
-        let protein = Protein(configurationCount: configurationCount,
-                              configurationEnergies: energyArray,
-                              subunitCount: 1,
-                              subunits: proteinSubunits,
-                              atoms: atomArray,
-                              elementComposition: atomArrayComposition,
-                              atomElements: atomElements,
-                              residueComposition: nil,
-                              atomResidues: nil,
-                              sequence: nil)
+        let protein = Protein(
+            configurationCount: configurationCount,
+            configurationEnergies: energyArray,
+            subunitCount: 1,
+            subunits: proteinSubunits,
+            atoms: atomArray,
+            elementComposition: atomArrayComposition,
+            atomElements: atomElements,
+            residueComposition: nil,
+            atomResidues: nil,
+            atomSecondaryStructure: nil,
+            sequence: nil
+        )
         
         let fileType: ProteinFileType = configurations.count > 1 ? .dynamicStructure : .staticStructure
         

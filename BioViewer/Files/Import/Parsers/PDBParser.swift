@@ -12,9 +12,18 @@ import Foundation
 private struct PDBAtomLine {
     let line: Int
     let element: AtomElement
+    let chainID: String
     let resID: Int
     let resType: Residue
     let position: simd_float3
+}
+
+private struct PDBHelixLine {
+    let line: Int
+    let initChainID: String
+    let initResID: Int
+    let finalChainID: String
+    let finalResID: Int
 }
 
 private struct PDBModelEndLine {
@@ -42,6 +51,7 @@ private final class ParsedBlock {
     var titleRecords = [PDBTitleLine]()
     var authorRecords = [PDBAuthorLine]()
     var atomRecords = [PDBAtomLine]()
+    var helixRecords = [PDBHelixLine]()
     var modelEndRecord = [PDBModelEndLine]()
     var subunitEndRecords = [PDBSubunitEndLine]()
 }
@@ -54,6 +64,7 @@ extension ParsedBlock {
         lhs.titleRecords.append(contentsOf: rhs.titleRecords)
         lhs.authorRecords.append(contentsOf: rhs.authorRecords)
         lhs.atomRecords.append(contentsOf: rhs.atomRecords)
+        lhs.helixRecords.append(contentsOf: rhs.helixRecords)
         lhs.modelEndRecord.append(contentsOf: rhs.modelEndRecord)
         lhs.subunitEndRecords.append(contentsOf: rhs.subunitEndRecords)
     }
@@ -69,6 +80,7 @@ private class ParsedModel {
     var atomPositions = [simd_float3]()
     var atomElements = [AtomElement]()
     var atomResidues = [Residue]()
+    var atomSecondaryStructure = [SecondaryStructure]()
     
     init(startLine: Int, endLine: Int) {
         self.startLine = startLine
@@ -87,6 +99,68 @@ private class ParsedSubunit {
         self.startLine = startLine
         self.endLine = endLine
         self.isPartOfChain = isPartOfChain
+    }
+}
+
+private class SecondaryStructureIterator {
+    private let helixRecords: [PDBHelixLine]
+    private var currentStructureIndex: Int = -1
+    private var finishedCurrentStructure: Bool = false
+    private var lastChainID: String?
+    private var lastResID: Int?
+    
+    init(_ helixRecords: [PDBHelixLine]) {
+        self.helixRecords = helixRecords
+    }
+    
+    private func getCurrentStructure() -> PDBHelixLine? {
+        guard currentStructureIndex >= 0 else { return nil }
+        guard !finishedCurrentStructure else { return nil }
+        return helixRecords[currentStructureIndex]
+    }
+    private func getNextStructure() -> PDBHelixLine? {
+        guard currentStructureIndex + 1 < helixRecords.count else { return nil }
+        return helixRecords[currentStructureIndex + 1]
+    }
+    
+    func advanceAndGetCurrentStructure(chainID: String, resID: Int) -> SecondaryStructure {
+        if let currentStructure = getCurrentStructure() {
+            // Check if we're now outside the bounds of the structure
+            if lastChainID == currentStructure.finalChainID
+                && lastResID == currentStructure.finalResID
+                && (chainID != lastChainID || resID != lastResID) {
+                // Outside the bounds of last structure
+                finishedCurrentStructure = true
+            }
+        }
+        
+        if let currentStructure = getCurrentStructure() {
+            // Still inside last structure
+            lastChainID = chainID
+            lastResID = resID
+            return .helix
+        } else {
+            // Check if we're now inside the bounds of the next structure
+            if let nextStructure = getNextStructure() {
+                if chainID == nextStructure.initChainID && resID == nextStructure.initResID {
+                    // Inside the bounds of next structure
+                    finishedCurrentStructure = false
+                    currentStructureIndex += 1
+                    lastChainID = chainID
+                    lastResID = resID
+                    return .helix
+                } else {
+                    // Not yet inside the bounds of next structure
+                    return .loop
+                }
+            } else {
+                // No current structure, no next structure. There must be
+                // no structures left in the iterator.
+                lastChainID = chainID
+                lastResID = resID
+                return .loop
+            }
+        }
     }
 }
 
@@ -210,6 +284,8 @@ class PDBParser {
             await withTaskGroup(of: Void.self) { [mergedBlocks] taskGroup in
                 for model in parsedModels {
                     taskGroup.addTask {
+                        // FIXME: mergedBlocks -> something dependent on model
+                        let structureIterator = SecondaryStructureIterator(mergedBlocks.helixRecords)
                         let modelRecords = mergedBlocks.atomRecords.filter {
                             $0.line >= model.startLine && $0.line <= model.endLine
                         }
@@ -224,6 +300,11 @@ class PDBParser {
                                 model.atomPositions.append(record.position)
                                 model.atomResidues.append(record.resType)
                                 model.atomElements.append(record.element)
+                                let structure = structureIterator.advanceAndGetCurrentStructure(
+                                    chainID: record.chainID,
+                                    resID: record.resID
+                                )
+                                model.atomSecondaryStructure.append(structure)
                                 lastParsedLine = record.line
                             }
                             subunit.atomCount = subunitRecords.count
@@ -281,7 +362,8 @@ class PDBParser {
                     elementComposition: elementComposition,
                     atomElements: model.atomElements,
                     residueComposition: residueComposition,
-                    atomResidues: model.atomResidues
+                    atomResidues: model.atomResidues,
+                    atomSecondaryStructure: model.atomSecondaryStructure
                 ))
             }
             
@@ -303,6 +385,10 @@ class PDBParser {
         if line.starts(with: "ATOM") || line.starts(with: "HETATM") {
             if let atom = try? parseAtom(line: line, lineIndex: lineIndex) {
                 parsedBlock.atomRecords.append(atom)
+            }
+        } else if line.starts(with: "HELIX") {
+            if let helix = try? parseHelix(line: line, lineIndex: lineIndex) {
+                parsedBlock.helixRecords.append(helix)
             }
         } else if line.starts(with: "TER") {
             parsedBlock.subunitEndRecords.append(PDBSubunitEndLine(line: lineIndex))
@@ -326,13 +412,11 @@ class PDBParser {
             throw PDBParseError.unexpectedLineLength
         }
         
-        // Swift strings can't be indexed using Int and have to use Index
-        // instead (since under the hood not all string characters are the
-        // same length, due to Unicode and stuff).
+        let chainID = extract(from: line, range: PDBConstants.AtomRecord.chainIDRange)
         
         // Get residue id (1, 2, 3...) for current atom in the current chain
-        let startResID = line.index(line.startIndex, offsetBy: PDBConstants.resIDStart)
-        let endResID = line.index(line.startIndex, offsetBy: PDBConstants.resIDEnd)
+        let startResID = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.resIDStart)
+        let endResID = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.resIDEnd)
         let rangeResID = startResID..<endResID
         let resID = Int( line[rangeResID].trimmingCharacters(in: .whitespaces) )
         guard let resID else {
@@ -340,8 +424,8 @@ class PDBParser {
         }
         
         // Get residue name (ALA, GLN, LYS...) for current atom
-        let startResName = line.index(line.startIndex, offsetBy: PDBConstants.resNameStart)
-        let endResName = line.index(line.startIndex, offsetBy: PDBConstants.resNameEnd)
+        let startResName = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.resNameStart)
+        let endResName = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.resNameEnd)
         let rangeResName = startResName..<endResName
         let resName = line[rangeResName].trimmingCharacters(in: .whitespaces)
         let resType = Residue(string: resName)
@@ -353,23 +437,23 @@ class PDBParser {
         }
         
         // Get atom element
-        let startElement = line.index(line.startIndex, offsetBy: PDBConstants.elementStart)
-        let endElement = line.index(line.startIndex, offsetBy: PDBConstants.elementEnd)
+        let startElement = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.elementStart)
+        let endElement = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.elementEnd)
         let rangeElement = startElement..<endElement
         let elementString = line[rangeElement].trimmingCharacters(in: .whitespaces)
         let element = AtomElement(string: elementString)
         
         // Get atom coordinates
-        let startX = line.index(line.startIndex, offsetBy: PDBConstants.xPositionStart)
-        let endX = line.index(line.startIndex, offsetBy: PDBConstants.xPositionEnd)
+        let startX = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.xPositionStart)
+        let endX = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.xPositionEnd)
         let rangeX = startX..<endX
 
-        let startY = line.index(line.startIndex, offsetBy: PDBConstants.yPositionStart)
-        let endY = line.index(line.startIndex, offsetBy: PDBConstants.yPositionEnd)
+        let startY = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.yPositionStart)
+        let endY = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.yPositionEnd)
         let rangeY = startY..<endY
 
-        let startZ = line.index(line.startIndex, offsetBy: PDBConstants.zPositionStart)
-        let endZ = line.index(line.startIndex, offsetBy: PDBConstants.zPositionEnd)
+        let startZ = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.zPositionStart)
+        let endZ = line.index(line.startIndex, offsetBy: PDBConstants.AtomRecord.zPositionEnd)
         let rangeZ = startZ..<endZ
         
         // Check that all 3 coordinates are non-nil so we don't end up
@@ -389,6 +473,7 @@ class PDBParser {
         return PDBAtomLine(
             line: lineIndex,
             element: element,
+            chainID: chainID,
             resID: resID,
             resType: resType,
             position: simd_float3(x, y, z)
@@ -397,11 +482,48 @@ class PDBParser {
     
     // MARK: - Parse HELIX
     
+    private func parseHelix(line: String, lineIndex: Int) throws -> PDBHelixLine {
+        // Get chain id (1, 2, 3...) for initial chain in helix
+        let initChainID = extract(
+            from: line,
+            range: PDBConstants.HelixRecord.initChainIDRange
+        )
+        // Get residue id (1, 2, 3...) for initial residue in helix
+        let initResID = Int( extract(
+            from: line,
+            range: PDBConstants.HelixRecord.initResIDRange)
+        )
+        guard let initResID else {
+            throw PDBParseError.missingHELIXInitResidueID
+        }
+        // Get residue id (1, 2, 3...) for final residue in helix
+        let finalResID = Int( extract(
+            from: line,
+            range: PDBConstants.HelixRecord.finalResIDRange)
+        )
+        guard let finalResID else {
+            throw PDBParseError.missingHELIXFinalResidueID
+        }
+        // Get chain id (1, 2, 3...) for initial chain in helix
+        let finalChainID = extract(
+            from: line,
+            range: PDBConstants.HelixRecord.finalChainIDRange
+        )
+        
+        return PDBHelixLine(
+            line: lineIndex,
+            initChainID: initChainID,
+            initResID: initResID,
+            finalChainID: finalChainID,
+            finalResID: finalResID
+        )
+    }
+    
     // MARK: - Parse HEADER
     
     private func parseHeader(line: String) -> String {
-        let startPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIDStart)
-        let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.pdbIDEnd)
+        let startPDBID = line.index(line.startIndex, offsetBy: PDBConstants.HeaderRecord.pdbIDStart)
+        let endPDBID = line.index(line.startIndex, offsetBy: PDBConstants.HeaderRecord.pdbIDEnd)
         let rangePDBID = startPDBID..<endPDBID
         return line[rangePDBID].trimmingCharacters(in: .whitespaces)
     }
@@ -436,5 +558,13 @@ class PDBParser {
         }
         
         return PDBAuthorLine(line: lineIndex, rawText: rawTitleLine)
+    }
+    
+    // MARK: - Utility func
+    func extract(from line: String, range: Range<Int>) -> String {
+        let startIndex = line.index(line.startIndex, offsetBy: range.startIndex)
+        let endIndex = line.index(line.startIndex, offsetBy: range.endIndex)
+        let stringRange = startIndex..<endIndex
+        return line[stringRange].trimmingCharacters(in: .whitespaces)
     }
 }

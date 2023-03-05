@@ -55,6 +55,9 @@ class Protein {
     /// Residue type of each atom.
     var atomResidues: [Residue]?
     
+    /// Secondary structure of which each atom is part of.
+    var atomSecondaryStructure: [SecondaryStructure]?
+    
     // MARK: - Bonds
     
     /// Array with bond data for the structure.
@@ -82,7 +85,19 @@ class Protein {
     
     // MARK: - Initialization
 
-    init(configurationCount: Int, configurationEnergies: [Float]?, subunitCount: Int, subunits: [ProteinSubunit], atoms: ContiguousArray<simd_float3>, elementComposition: ProteinElementComposition, atomElements: [AtomElement], residueComposition: ProteinResidueComposition?, atomResidues: [Residue]?, sequence: [String]? = nil) {
+    init(
+        configurationCount: Int,
+        configurationEnergies: [Float]?,
+        subunitCount: Int,
+        subunits: [ProteinSubunit],
+        atoms: ContiguousArray<simd_float3>,
+        elementComposition: ProteinElementComposition,
+        atomElements: [AtomElement],
+        residueComposition: ProteinResidueComposition?,
+        atomResidues: [Residue]?,
+        atomSecondaryStructure: [SecondaryStructure]?,
+        sequence: [String]? = nil
+    ) {
         self.configurationCount = configurationCount
         self.configurationEnergies = configurationEnergies
         self.subunitCount = subunitCount
@@ -92,6 +107,7 @@ class Protein {
         self.atomElements = atomElements
         self.residueComposition = residueComposition
         self.atomResidues = atomResidues
+        self.atomSecondaryStructure = atomSecondaryStructure
         self.atomCount = elementComposition.totalCount
         self.sequence = sequence
         self.boundingSphere = computeBoundingSphere(atoms: atoms)
