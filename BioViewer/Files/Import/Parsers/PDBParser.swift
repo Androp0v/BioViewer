@@ -135,10 +135,21 @@ private class SecondaryStructureIterator {
         }
         
         if let currentStructure = getCurrentStructure() {
-            // Still inside last structure
-            lastChainID = chainID
-            lastResID = resID
-            return .helix
+            if let nextStructure = getNextStructure(),
+               chainID == nextStructure.initChainID
+                && resID == nextStructure.initResID {
+                // Inside the bounds of next structure, without finishing the last structure
+                finishedCurrentStructure = false
+                currentStructureIndex += 1
+                lastChainID = chainID
+                lastResID = resID
+                return .helix
+            } else {
+                // Still inside last structure
+                lastChainID = chainID
+                lastResID = resID
+                return .helix
+            }
         } else {
             // Check if we're now inside the bounds of the next structure
             if let nextStructure = getNextStructure() {
@@ -151,6 +162,8 @@ private class SecondaryStructureIterator {
                     return .helix
                 } else {
                     // Not yet inside the bounds of next structure
+                    lastChainID = chainID
+                    lastResID = resID
                     return .loop
                 }
             } else {
@@ -327,6 +340,7 @@ class PDBParser {
                                 model.atomPositions.append(record.position)
                                 model.atomResidues.append(record.resType)
                                 model.atomElements.append(record.element)
+                                model.atomSecondaryStructure.append(.nonChain)
                             }
                             nonChainSubunit.atomCount = nonChainRecords.count
                         }
