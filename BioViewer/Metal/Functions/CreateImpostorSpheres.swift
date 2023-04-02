@@ -10,8 +10,8 @@ import Metal
 
 struct CreateImpostorSpheresOutput {
     let vertexBuffer: BillboardVertexBuffers
-    let subunitBuffer: MTLBuffer
     let atomElementBuffer: MTLBuffer
+    let subunitBuffer: MTLBuffer?
     let atomResidueBuffer: MTLBuffer?
     let atomSecondaryStructureBuffer: MTLBuffer?
     let indexBuffer: MTLBuffer
@@ -83,16 +83,12 @@ extension MetalScheduler {
             configurationCounts.append(protein.configurationCount)
         }
 
-        // Populate buffers
+        // Populate mandatory buffers
+        
         guard let billboardVertexBuffers = BillboardVertexBuffers(
             device: device,
             atomCounts: atomCounts,
             configurationCounts: configurationCounts
-        ) else { return nil }
-        
-        guard let subunitBuffer = device.makeBuffer(
-            bytes: subunitData,
-            length: subunitData.count * MemoryLayout<Int16>.stride
         ) else { return nil }
         
         guard let atomTypeBuffer = device.makeBuffer(
@@ -100,6 +96,16 @@ extension MetalScheduler {
             length: bufferAtomCount * MemoryLayout<AtomElement.RawValue>.stride
         ) else { return nil }
         
+        // Populate optional buffers
+        
+        var subunitBuffer: MTLBuffer?
+        if !subunitData.isEmpty {
+            subunitBuffer = device.makeBuffer(
+                bytes: subunitData,
+                length: subunitData.count * MemoryLayout<Int16>.stride
+            )
+        }
+                
         var atomResidueBuffer: MTLBuffer?
         if !atomResidueType.isEmpty {
             atomResidueBuffer = device.makeBuffer(
@@ -233,8 +239,8 @@ extension MetalScheduler {
         }
         return CreateImpostorSpheresOutput(
             vertexBuffer: billboardVertexBuffers,
-            subunitBuffer: subunitBuffer,
             atomElementBuffer: atomTypeBuffer,
+            subunitBuffer: subunitBuffer,
             atomResidueBuffer: atomResidueBuffer,
             atomSecondaryStructureBuffer: atomSecondaryStructureBuffer,
             indexBuffer: generatedIndexBuffer

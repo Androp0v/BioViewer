@@ -104,12 +104,12 @@ class ProteinRenderer: NSObject {
     
     /// Used to pass the atomic element data to the shader (used for coloring, size...).
     var atomElementBuffer: MTLBuffer?
+    /// Used to pass the subunit index to the shader (used for coloring).
+    var atomSubunitBuffer: MTLBuffer?
     /// Used to pass the residue data for each atom to the shader (used for coloring, size...).
     var atomResidueBuffer: MTLBuffer?
     /// Used to pass the secondary structure data for each atom to the shader (used for coloring, size...).
     var atomSecondaryStructureBuffer: MTLBuffer?
-    /// Used to pass the subunit index to the shader (used for coloring).
-    var subunitBuffer: MTLBuffer?
     /// Used to pass the atom base color to the shader (used for coloring, size...).
     var atomColorBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader.
@@ -302,7 +302,11 @@ class ProteinRenderer: NSObject {
 
     // MARK: - Public functions
         
-    func createAtomColorBuffer(proteins: [Protein], subunitBuffer: MTLBuffer, atomElementBuffer: MTLBuffer, colorList: [Color]?, colorBy: ProteinColorByOption?) {
+    func createAtomColorBuffer(
+        proteins: [Protein],
+        colorList: [Color]?,
+        colorBy: ProteinColorByOption?
+    ) {
         
         // Get the number of configurations
         var atomAndConfigurationCount = 0
@@ -336,8 +340,8 @@ class ProteinRenderer: NSObject {
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
     func setBillboardingBuffers(
         billboardVertexBuffers: BillboardVertexBuffers,
-        subunitBuffer: MTLBuffer,
-        atomTypeBuffer: MTLBuffer,
+        atomElementBuffer: MTLBuffer,
+        subunitBuffer: MTLBuffer?,
         atomResidueBuffer: MTLBuffer?,
         atomSecondaryStructureBuffer: MTLBuffer?,
         indexBuffer: MTLBuffer,
@@ -345,8 +349,8 @@ class ProteinRenderer: NSObject {
     ) {
         bufferResourceLock.lock()
         self.billboardVertexBuffers = billboardVertexBuffers
-        self.subunitBuffer = subunitBuffer
-        self.atomElementBuffer = atomTypeBuffer
+        self.atomElementBuffer = atomElementBuffer
+        self.atomSubunitBuffer = subunitBuffer
         self.atomResidueBuffer = atomResidueBuffer
         self.atomSecondaryStructureBuffer = atomSecondaryStructureBuffer
         self.impostorIndexBuffer = indexBuffer
@@ -500,7 +504,7 @@ extension ProteinRenderer: MTKViewDelegate {
                 self.fillColorPass(
                     commandBuffer: commandBuffer,
                     colorBuffer: self.atomColorBuffer,
-                    subunitBuffer: self.subunitBuffer,
+                    subunitBuffer: self.atomSubunitBuffer,
                     atomElementBuffer: self.atomElementBuffer,
                     colorFill: self.scene.colorFill
                 )

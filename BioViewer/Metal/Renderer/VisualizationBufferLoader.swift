@@ -148,8 +148,8 @@ class VisualizationBufferLoader {
         // Pass the new mesh to the renderer
         proteinViewModel.renderer.setBillboardingBuffers(
             billboardVertexBuffers: generatedImpostorData.vertexBuffer,
+            atomElementBuffer: generatedImpostorData.atomElementBuffer,
             subunitBuffer: generatedImpostorData.subunitBuffer,
-            atomTypeBuffer: generatedImpostorData.atomElementBuffer,
             atomResidueBuffer: generatedImpostorData.atomResidueBuffer,
             atomSecondaryStructureBuffer: generatedImpostorData.atomSecondaryStructureBuffer,
             indexBuffer: generatedImpostorData.indexBuffer,
@@ -161,8 +161,6 @@ class VisualizationBufferLoader {
                 / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
             proteinViewModel.renderer.createAtomColorBuffer(
                 proteins: proteins,
-                subunitBuffer: generatedImpostorData.subunitBuffer,
-                atomElementBuffer: generatedImpostorData.atomElementBuffer,
                 colorList: colorViewModel.elementColors,
                 colorBy: colorViewModel.colorBy
             )

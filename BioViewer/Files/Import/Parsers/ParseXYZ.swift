@@ -194,12 +194,14 @@ extension FileParser {
         
         let fileType: ProteinFileType = configurations.count > 1 ? .dynamicStructure : .staticStructure
         
-        return ProteinFile(fileType: fileType,
-                           fileName: fileName,
-                           fileExtension: fileExtension,
-                           models: [protein],
-                           fileInfo: fileInfo,
-                           byteSize: byteSize)
+        return ProteinFile(
+            fileType: fileType,
+            fileName: fileName,
+            fileExtension: fileExtension,
+            models: [protein],
+            fileInfo: fileInfo,
+            byteSize: byteSize
+        )
     }
     
 }
