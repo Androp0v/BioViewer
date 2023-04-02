@@ -148,6 +148,18 @@ private class SecondaryStructureIterator {
         })
     }
     
+    private func getCurrentHelix() -> PDBHelixLine? {
+        if currentHelixIndex >= 0 && !finishedCurrentHelix {
+            return helixRecords[currentHelixIndex]
+        }
+        return nil
+    }
+    private func getCurrentSheet() -> PDBSheetLine? {
+        if currentSheetIndex >= 0 && !finishedCurrentSheet {
+            return sheetRecords[currentSheetIndex]
+        }
+        return nil
+    }
     private func getCurrentStructure() -> (any PDBSecondaryStructureLine)? {
         if currentHelixIndex >= 0 && !finishedCurrentHelix {
             return helixRecords[currentHelixIndex]
@@ -165,74 +177,77 @@ private class SecondaryStructureIterator {
         guard currentSheetIndex + 1 < sheetRecords.count else { return nil }
         return sheetRecords[currentSheetIndex + 1]
     }
+    private func goToNextHelix() {
+        finishedCurrentHelix = false
+        currentHelixIndex += 1
+    }
+    private func goToNextSheet() {
+        finishedCurrentSheet = false
+        currentSheetIndex += 1
+    }
     
     func advanceAndGetCurrentStructure(chainID: String, resID: Int) -> SecondaryStructure {
-        if let currentStructure = getCurrentStructure() {
-            // Check if we're now outside the bounds of the structure
-            if lastChainID == currentStructure.finalChainID
-                && lastResID == currentStructure.finalResID
-                && (chainID != lastChainID || resID != lastResID) {
-                // Outside the bounds of last structure
-                if currentStructure.underlyingType == .helix {
-                    finishedCurrentHelix = true
-                } else {
-                    finishedCurrentSheet = true
-                }
-            }
+        if let currentHelix = getCurrentHelix(),
+           lastChainID == currentHelix.finalChainID
+            && lastResID == currentHelix.finalResID
+            && (chainID != lastChainID || resID != lastResID) {
+            // Outside the bounds of last helix
+            finishedCurrentHelix = true
+        }
+        if let currentSheet = getCurrentSheet(),
+           lastChainID == currentSheet.finalChainID
+            && lastResID == currentSheet.finalResID
+            && (chainID != lastChainID || resID != lastResID) {
+            // Outside the bounds of last sheet
+            finishedCurrentSheet = true
         }
         
+        var returnValue: SecondaryStructure = .loop
+        
         if let currentStructure = getCurrentStructure() {
+            var insideNextHelix: Bool = false
+            var insideNextSheet: Bool = false
             if let nextHelix = getNextHelix(),
                chainID == nextHelix.initChainID
                 && resID == nextHelix.initResID {
                 // Inside the bounds of next helix, without finishing the last structure
-                finishedCurrentHelix = false
-                currentHelixIndex += 1
-                lastChainID = chainID
-                lastResID = resID
-                return .helix
+                insideNextHelix = true
+                goToNextHelix()
+                returnValue = .helix
             }
             if let nextSheet = getNextSheet(),
                chainID == nextSheet.initChainID
                 && resID == nextSheet.initResID {
-               // Inside the bounds of next sheet, without finishing the last structure
-               finishedCurrentSheet = false
-               currentSheetIndex += 1
-               lastChainID = chainID
-               lastResID = resID
-               return .sheet
+                // Inside the bounds of next sheet, without finishing the last structure
+                insideNextSheet = true
+                goToNextSheet()
+                returnValue = .sheet
             }
-            // Still inside last structure
-            lastChainID = chainID
-            lastResID = resID
-            return currentStructure.underlyingType
+            if !insideNextHelix && !insideNextSheet {
+                // Still inside last structure
+                returnValue = currentStructure.underlyingType
+            }
         } else {
             // Check if we're now inside the bounds of the next structure
             if let nextHelix = getNextHelix(),
                chainID == nextHelix.initChainID
                 && resID == nextHelix.initResID {
                 // Inside the bounds of next structure
-                finishedCurrentHelix = false
-                currentHelixIndex += 1
-                lastChainID = chainID
-                lastResID = resID
-                return .helix
+                goToNextHelix()
+                returnValue = .helix
             }
             if let nextSheet = getNextSheet(),
                chainID == nextSheet.initChainID
                 && resID == nextSheet.initResID {
                 // Inside the bounds of next structure
-                finishedCurrentSheet = false
-                currentSheetIndex += 1
-                lastChainID = chainID
-                lastResID = resID
-                return .sheet
+                goToNextSheet()
+                returnValue = .sheet
             }
         }
         // All other cases: we must be in a loop
         lastChainID = chainID
         lastResID = resID
-        return .loop
+        return returnValue
     }
 }
 
