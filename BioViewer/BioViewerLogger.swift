@@ -8,12 +8,18 @@
 import Foundation
 import os
 
-class BioViewerLogger: ObservableObject {
+class BioViewerLogger {
 
     static let shared = BioViewerLogger()
     
-    private lazy var computeSurfaceUtilityLogger = Logger(subsystem: "BioViewer",
-                                                          category: "ComputeSurfaceUtility")
+    private var rendererLogger = Logger(
+        subsystem: "BioViewer",
+        category: "ProteinRenderer"
+    )
+    private var computeSurfaceUtilityLogger = Logger(
+        subsystem: "BioViewer",
+        category: "ComputeSurfaceUtility"
+    )
     
     private init() {
         
@@ -25,8 +31,10 @@ class BioViewerLogger: ObservableObject {
         #if DEBUG
         var logger: Logger
         switch category {
-        case .ComputeSurfaceUtility:
+        case .computeSurfaceUtility:
             logger = computeSurfaceUtilityLogger
+        case .proteinRenderer:
+            logger = rendererLogger
         }
         
         switch type {
@@ -49,5 +57,6 @@ enum LogType {
 }
 
 enum LogCategory {
-    case ComputeSurfaceUtility
+    case proteinRenderer
+    case computeSurfaceUtility
 }

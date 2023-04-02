@@ -50,7 +50,7 @@ class ComputeMolecularSurfaceUtility {
         let optimalSize = Float(numberOfCells) * neighbourCellSize
         
         BioViewerLogger.shared.log(type: .info,
-                                   category: .ComputeSurfaceUtility,
+                                   category: .computeSurfaceUtility,
                                    message: """
                                             NeighbourGrid has \(numberOfCells * numberOfCells * numberOfCells)
                                             (\(numberOfCells)x\(numberOfCells)x\(numberOfCells)) cells.

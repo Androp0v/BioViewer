@@ -16,16 +16,30 @@ extension ProteinRenderer {
     public func fillColorPass(
         commandBuffer: MTLCommandBuffer,
         colorBuffer: MTLBuffer?,
-        subunitBuffer: MTLBuffer?,
-        atomElementBuffer: MTLBuffer?,
         colorFill: FillColorInput
     ) {
           
         var colorFillData = colorFill
-        guard let colorBuffer else { return }
-        guard let subunitBuffer else { return }
-        guard let atomElementBuffer else { return }
-        guard let atomSecondaryStructureBuffer else { return }
+        guard let colorBuffer else {
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "Missing color buffer at FillColorPass Compute Pass."
+            )
+            return
+        }
+        guard let atomElementBuffer else {
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "Missing atom element buffer at FillColorPass Compute Pass."
+            )
+            return
+        }
+        
+        let useSimpleShader = atomSubunitBuffer == nil
+            || atomResidueBuffer == nil
+            || atomSecondaryStructureBuffer == nil
                 
         // Set Metal compute encoder
         guard let computeEncoder = commandBuffer.makeComputeCommandEncoder() else {
@@ -33,7 +47,13 @@ extension ProteinRenderer {
         }
 
         // Retrieve pipeline state
-        guard let pipelineState = fillColorComputePipelineState else {
+        var pipelineState: MTLComputePipelineState?
+        if useSimpleShader {
+            pipelineState = simpleFillColorComputePipelineState
+        } else {
+            pipelineState = fillColorComputePipelineState
+        }
+        guard let pipelineState else {
             computeEncoder.endEncoding()
             return
         }
@@ -48,25 +68,27 @@ extension ProteinRenderer {
             index: 0
         )
         computeEncoder.setBuffer(
-            subunitBuffer,
+            atomElementBuffer,
             offset: 0,
             index: 1
         )
-        computeEncoder.setBuffer(
-            atomElementBuffer,
-            offset: 0,
-            index: 2
-        )
-        computeEncoder.setBuffer(
-            atomResidueBuffer,
-            offset: 0,
-            index: 3
-        )
-        computeEncoder.setBuffer(
-            atomSecondaryStructureBuffer,
-            offset: 0,
-            index: 4
-        )
+        if !useSimpleShader {
+            computeEncoder.setBuffer(
+                atomSubunitBuffer,
+                offset: 0,
+                index: 2
+            )
+            computeEncoder.setBuffer(
+                atomResidueBuffer,
+                offset: 0,
+                index: 3
+            )
+            computeEncoder.setBuffer(
+                atomSecondaryStructureBuffer,
+                offset: 0,
+                index: 4
+            )
+        }
         
         // Create fillColor buffer and fill with data
         let fillColorBuffer = device.makeBuffer(
@@ -101,9 +123,11 @@ extension ProteinRenderer {
         } else {
             // LEGACY: Older devices do not support non-uniform threadgroup sizes
             let arrayLength = colorBuffer.length / MemoryLayout<SIMD4<Int16>>.stride
-            MetalLegacySupport.legacyDispatchThreadsForArray(commandEncoder: computeEncoder,
-                                                             length: arrayLength,
-                                                             pipelineState: pipelineState)
+            MetalLegacySupport.legacyDispatchThreadsForArray(
+                commandEncoder: computeEncoder,
+                length: arrayLength,
+                pipelineState: pipelineState
+            )
         }
 
         // REQUIRED: End the compute encoder encoding

@@ -50,7 +50,9 @@ class ProteinRenderer: NSObject {
     /// Resolution of the view
     var viewResolution: CGSize?
     
-    /// Pipeline state for filling the color buffer.
+    /// Pipeline state for filling the color buffer (common options: element).
+    var simpleFillColorComputePipelineState: MTLComputePipelineState?
+    /// Pipeline state for filling the color buffer (extra options: residue, secondary structure...).
     var fillColorComputePipelineState: MTLComputePipelineState?
     
     /// Pipeline state for the shadow depth pre-pass.
@@ -252,6 +254,7 @@ class ProteinRenderer: NSObject {
         }
                 
         // Create compute pipeline states
+        makeSimpleFillColorComputePipelineState(device: device)
         makeFillColorComputePipelineState(device: device)
         
         // Create render pipeline states
@@ -504,8 +507,6 @@ extension ProteinRenderer: MTKViewDelegate {
                 self.fillColorPass(
                     commandBuffer: commandBuffer,
                     colorBuffer: self.atomColorBuffer,
-                    subunitBuffer: self.atomSubunitBuffer,
-                    atomElementBuffer: self.atomElementBuffer,
                     colorFill: self.scene.colorFill
                 )
             }
