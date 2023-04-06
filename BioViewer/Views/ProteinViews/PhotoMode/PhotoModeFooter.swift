@@ -18,10 +18,13 @@ struct PhotoModeFooter: View {
             Divider()
             Button(action: {
                 photoModeViewModel.shutterAnimator.openShutter()
-                // TO-DO: Error handling
-                DispatchQueue.global(qos: .userInitiated).async {
-                    try? proteinViewModel.renderer.drawHighQualityFrame(size: CGSize(width: 2048, height: 2048),
-                                                                        photoModeViewModel: photoModeViewModel)
+                // TODO: Error handling
+                Task {
+                    try? await proteinViewModel.renderer.mutableStateActor.drawHighQualityFrame(
+                        renderer: proteinViewModel.renderer,
+                        size: CGSize(width: 2048, height: 2048),
+                        photoModeViewModel: photoModeViewModel
+                    )
                 }
             }, label: {
                 HStack {

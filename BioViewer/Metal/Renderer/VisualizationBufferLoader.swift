@@ -100,7 +100,7 @@ class VisualizationBufferLoader {
                 guard var bondIndexBuffer = bondIndexBuffer else { return }
                 
                 // Pass bond buffers to the renderer
-                proteinViewModel.renderer.setBillboardingBonds(
+                await proteinViewModel.renderer.setBillboardingBonds(
                     vertexBuffer: &bondVertexBuffer,
                     indexBuffer: &bondIndexBuffer
                 )
@@ -127,7 +127,7 @@ class VisualizationBufferLoader {
     
     // MARK: - Impostor sphere buffer
     
-    func populateImpostorSphereBuffers(atomRadii: AtomRadii) {
+    func populateImpostorSphereBuffers(atomRadii: AtomRadii) async {
         
         guard let proteinViewModel = proteinViewModel,
               let colorViewModel = proteinViewModel.colorViewModel,
@@ -146,7 +146,7 @@ class VisualizationBufferLoader {
         guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
         
         // Pass the new mesh to the renderer
-        proteinViewModel.renderer.setBillboardingBuffers(
+        await proteinViewModel.renderer.setBillboardingBuffers(
             billboardVertexBuffers: generatedImpostorData.vertexBuffer,
             atomElementBuffer: generatedImpostorData.atomElementBuffer,
             subunitBuffer: generatedImpostorData.subunitBuffer,
@@ -157,9 +157,11 @@ class VisualizationBufferLoader {
         )
         
         // Create color buffer if needed
-        if !((proteinViewModel.renderer.atomColorBuffer?.length ?? 0)
+        // TODO: Improve API
+        let colorBufferLength = await proteinViewModel.renderer.mutableStateActor.atomColorBuffer?.length
+        if !((colorBufferLength ?? 0)
                 / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
-            proteinViewModel.renderer.createAtomColorBuffer(
+            await proteinViewModel.renderer.createAtomColorBuffer(
                 proteins: proteins,
                 colorList: colorViewModel.elementColors,
                 colorBy: colorViewModel.colorBy

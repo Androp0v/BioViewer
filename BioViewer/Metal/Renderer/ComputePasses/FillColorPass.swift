@@ -9,11 +9,12 @@ import Foundation
 import Metal
 import SwiftUI
 
-extension ProteinRenderer {
+extension ProteinRenderer.MutableState {
 
     // MARK: - Update existing color buffer
     
     public func fillColorPass(
+        renderer: ProteinRenderer,
         commandBuffer: MTLCommandBuffer,
         colorBuffer: MTLBuffer?,
         colorFill: FillColorInput
@@ -49,9 +50,9 @@ extension ProteinRenderer {
         // Retrieve pipeline state
         var pipelineState: MTLComputePipelineState?
         if useSimpleShader {
-            pipelineState = simpleFillColorComputePipelineState
+            pipelineState = renderer.simpleFillColorComputePipelineState
         } else {
-            pipelineState = fillColorComputePipelineState
+            pipelineState = renderer.fillColorComputePipelineState
         }
         guard let pipelineState else {
             computeEncoder.endEncoding()
@@ -134,6 +135,6 @@ extension ProteinRenderer {
         computeEncoder.endEncoding()
         
         // Mark color pass as performed (doesn't mean it has displayed yet)
-        self.scene.lastColorPass = CACurrentMediaTime()
+        renderer.scene.lastColorPass = CACurrentMediaTime()
     }
 }

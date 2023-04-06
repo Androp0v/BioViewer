@@ -31,7 +31,7 @@ class ProteinViewModel: ObservableObject {
     
     // MARK: - Initialization
 
-    init(isBenchmark: Bool = false) {
+    @MainActor init(isBenchmark: Bool = false) {
         // Setup Metal renderer
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
@@ -50,8 +50,8 @@ class ProteinViewModel: ObservableObject {
 
     // MARK: - Public functions
 
-    func removeAllFiles() {
-        self.dataSource?.removeAllFilesFromDatasource()
+    func removeAllFiles() async {
+        await self.dataSource?.removeAllFilesFromDatasource()
         self.statusViewModel?.removeAllWarnings()
         self.statusViewModel?.removeAllErrors()
     }

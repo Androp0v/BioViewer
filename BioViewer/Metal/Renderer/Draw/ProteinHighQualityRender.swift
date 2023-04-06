@@ -17,14 +17,14 @@ enum HQRenderingError: Error {
     case unknownError
 }
 
-extension ProteinRenderer {
+extension ProteinRenderer.MutableState {
     
-    func drawHighQualityFrame(size: CGSize, photoModeViewModel: PhotoModeViewModel) throws {
+    func drawHighQualityFrame(renderer: ProteinRenderer, size: CGSize, photoModeViewModel: PhotoModeViewModel) throws {
         
         // Create the textures required for HQ rendering
         var hqTextures = HQTextures()
         hqTextures.makeTextures(device: device, photoConfig: photoModeViewModel.photoConfig)
-        impostorRenderPassDescriptor.depthAttachment.storeAction = .store
+        renderer.impostorRenderPassDescriptor.depthAttachment.storeAction = .store
         
         // Create the textures required for HQ depth pre-pass
         var hqPrePassTextures = DepthPrePassTextures()
@@ -43,47 +43,47 @@ extension ProteinRenderer {
         hqShadowTextures.makeShadowSampler(device: device)
         
         // Create high quality shadow render pass pipeline state
-        makeShadowRenderPipelineState(device: device, highQuality: true)
+        renderer.makeShadowRenderPipelineState(device: device, highQuality: true)
 
         // Create high quality impostor render pass pipeline state
-        switch scene.currentVisualization {
+        switch renderer.scene.currentVisualization {
         case .solidSpheres:
-            makeImpostorRenderPipelineState(device: device, variant: .solidSpheresHQ)
+            renderer.makeImpostorRenderPipelineState(device: device, variant: .solidSpheresHQ)
         case .ballAndStick:
-            makeImpostorRenderPipelineState(device: device, variant: .ballAndSticksHQ)
+            renderer.makeImpostorRenderPipelineState(device: device, variant: .ballAndSticksHQ)
         }
         
         // Change the image aspect ratio
-        self.scene.camera.updateProjection(drawableSize: CGSize(width: photoModeViewModel.photoConfig.finalTextureSize,
+        renderer.scene.camera.updateProjection(drawableSize: CGSize(width: photoModeViewModel.photoConfig.finalTextureSize,
                                                                 height: photoModeViewModel.photoConfig.finalTextureSize))
-        let oldAspectRatio = self.scene.aspectRatio
-        self.scene.aspectRatio = 1.0
+        let oldAspectRatio = renderer.scene.aspectRatio
+        renderer.scene.aspectRatio = 1.0
         
         // Assure buffers are loaded
         guard self.atomElementBuffer != nil else { throw HQRenderingError.nonLoadedBuffer }
         guard let uniformBuffers = self.uniformBuffers else { throw HQRenderingError.nonLoadedBuffer }
         
         // Wait until the inflight command buffer has completed its work
-        _ = frameBoundarySemaphore.wait(timeout: .distantFuture)
-
+        _ = renderer.frameBoundarySemaphore.wait(timeout: .distantFuture)
+        
         // MARK: - Update uniforms buffer
         
         // Ensure the uniform buffer is loaded
         var uniformBuffer = uniformBuffers[currentFrameIndex]
         
         // Update current frame index
-        currentFrameIndex = (currentFrameIndex + 1) % maxBuffersInFlight
+        currentFrameIndex = (currentFrameIndex + 1) % renderer.maxBuffersInFlight
                 
         // Update uniform buffer
-        self.scene.updateScene()
-        withUnsafePointer(to: self.scene.frameData) {
+        renderer.scene.updateScene()
+        withUnsafePointer(to: renderer.scene.frameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
         }
         
         // MARK: - Command buffer & depth
         
-        guard let commandQueue = commandQueue else {
+        guard let commandQueue = renderer.commandQueue else {
             NSLog("Command queue is nil.")
             throw HQRenderingError.unknownError
         }
@@ -96,31 +96,36 @@ extension ProteinRenderer {
         
         // MARK: - Shadow Map pass
         
-        shadowRenderPass(commandBuffer: commandBuffer,
-                         uniformBuffer: &uniformBuffer,
-                         shadowTextures: hqShadowTextures,
-                         shadowDepthPrePassTexture: hqPrePassTextures.shadowColorTexture,
-                         highQuality: true)
+        shadowRenderPass(
+            renderer: renderer,
+            commandBuffer: commandBuffer,
+            uniformBuffer: &uniformBuffer,
+            shadowTextures: hqShadowTextures,
+            shadowDepthPrePassTexture: hqPrePassTextures.shadowColorTexture,
+            highQuality: true
+        )
         
         // MARK: - Getting drawable
         // The final pass can only render if a drawable is available, otherwise it needs to skip
         // rendering this frame. Get the drawable as late as possible.
                 
         // MARK: - Transparent geometry pass
-        impostorRenderPass(commandBuffer: commandBuffer,
-                           uniformBuffer: &uniformBuffer,
-                           drawableTexture: hqTextures.hqTexture,
-                           depthTexture: hqTextures.hqDepthTexture,
-                           depthPrePassTexture: hqPrePassTextures.colorTexture,
-                           shadowTextures: hqShadowTextures,
-                           variant: .solidSpheresHQ,
-                           renderBonds: scene.currentVisualization == .ballAndStick)
+        impostorRenderPass(
+            renderer: renderer,
+            commandBuffer: commandBuffer,
+            uniformBuffer: &uniformBuffer,
+            drawableTexture: hqTextures.hqTexture,
+            depthTexture: hqTextures.hqDepthTexture,
+            depthPrePassTexture: hqPrePassTextures.colorTexture,
+            shadowTextures: hqShadowTextures,
+            variant: .solidSpheresHQ,
+            renderBonds: renderer.scene.currentVisualization == .ballAndStick
+        )
         
         // MARK: - Completion handler
-        commandBuffer.addCompletedHandler({ [weak self] _ in
-            guard let self = self else { return }
+        commandBuffer.addCompletedHandler({ _ in
             // GPU work is complete, signal the semaphore to start the CPU work
-            self.frameBoundarySemaphore.signal()
+            renderer.frameBoundarySemaphore.signal()
             // Display the image
             DispatchQueue.global(qos: .userInteractive).async {
                 photoModeViewModel.shutterAnimator.closeShutter()
@@ -133,7 +138,7 @@ extension ProteinRenderer {
                     photoModeViewModel.isPreviewCreated = true
                 }
             }
-            self.scene.aspectRatio = oldAspectRatio
+            renderer.scene.aspectRatio = oldAspectRatio
         })
         
         // MARK: - Commit buffer

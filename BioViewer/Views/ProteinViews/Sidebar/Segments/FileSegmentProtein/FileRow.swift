@@ -76,7 +76,9 @@ struct FileRow: View {
                 .buttonStyle(PlainButtonStyle())
             */
             Button(action: {
-                proteinDataSource.removeAllFilesFromDatasource()
+                Task {
+                    await proteinDataSource.removeAllFilesFromDatasource()
+                }
             }, label: {
                 Image(systemName: "trash")
                     .resizable()

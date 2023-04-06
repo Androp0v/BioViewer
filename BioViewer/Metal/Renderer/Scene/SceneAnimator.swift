@@ -81,10 +81,9 @@ class SceneAnimator {
         guard !isBusy else { return }
         isBusy = true
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+        Task { @MainActor in
             if self.radiiAnimation != nil {
-                self.updateRadiiAnimation()
+                await self.updateRadiiAnimation()
             }
             if self.colorAnimation != nil {
                 self.updateColorAnimation()
@@ -95,7 +94,7 @@ class SceneAnimator {
         
     // MARK: - Radii animation
     
-    private func updateRadiiAnimation() {
+    private func updateRadiiAnimation() async {
         
         self.radiiAnimation?.currentTime = CACurrentMediaTime()
 
@@ -116,7 +115,7 @@ class SceneAnimator {
                 
         scene.atom_radii = AtomRadiiGenerator.interpolatedRadii(initial: initialRadii, final: finalRadii, progress: Float(progress))
         
-        bufferLoader?.populateImpostorSphereBuffers(atomRadii: scene.atom_radii)
+        await bufferLoader?.populateImpostorSphereBuffers(atomRadii: scene.atom_radii)
         
         if progress >= 1 {
             self.radiiAnimation = nil

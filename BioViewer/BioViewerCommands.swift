@@ -42,7 +42,9 @@ struct BioViewerCommands: Commands {
         
         CommandGroup(after: .newItem) {
             Button(NSLocalizedString("Remove all files", comment: "")) {
-                AppState.shared.focusedViewModel?.dataSource?.removeAllFilesFromDatasource()
+                Task { @MainActor in
+                    await AppState.shared.focusedViewModel?.dataSource?.removeAllFilesFromDatasource()
+                }
             }
             .keyboardShortcut(.delete)
         }

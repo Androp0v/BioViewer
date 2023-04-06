@@ -8,44 +8,47 @@
 import Foundation
 import Metal
 
-extension ProteinRenderer {
+extension ProteinRenderer.MutableState {
     
-    func shadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, shadowDepthPrePassTexture: MTLTexture?, highQuality: Bool) {
+    func shadowRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, shadowDepthPrePassTexture: MTLTexture?, highQuality: Bool) {
     
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures
-        shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
-        shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
-        shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
+        renderer.shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
+        renderer.shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        renderer.shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
         if AppState.hasDepthPrePasses() {
             // colorAttachments[1] is the shadow depth pre-pass texture
-            shadowRenderPassDescriptor.colorAttachments[1].texture = shadowDepthPrePassTexture
+            renderer.shadowRenderPassDescriptor.colorAttachments[1].texture = shadowDepthPrePassTexture
             // Clear the depth texture using the equivalent to 1.0 (max depth)
-            shadowRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            renderer.shadowRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
         
-        shadowRenderPassDescriptor.renderTargetWidth = shadowTextures.textureWidth
-        shadowRenderPassDescriptor.renderTargetHeight = shadowTextures.textureHeight
+        renderer.shadowRenderPassDescriptor.renderTargetWidth = shadowTextures.textureWidth
+        renderer.shadowRenderPassDescriptor.renderTargetHeight = shadowTextures.textureHeight
         
         // MARK: - Render command
         
         // Create render command encoder
-        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: shadowRenderPassDescriptor) else {
+        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderer.shadowRenderPassDescriptor) else {
             return
         }
         renderCommandEncoder.label = "Shadow Depth Pre-pass & Shadow Map Generation"
         
         // Set depth state
-        renderCommandEncoder.setDepthStencilState(shadowDepthState)
+        renderCommandEncoder.setDepthStencilState(renderer.shadowDepthState)
         
         // MARK: - Shadow depth pre-pass
         
-        if AppState.hasDepthPrePasses() && self.scene.hasShadows {
-            self.encodeShadowDepthPrePassStage(renderCommandEncoder: renderCommandEncoder,
-                                               uniformBuffer: &uniformBuffer)
+        if AppState.hasDepthPrePasses() && renderer.scene.hasShadows {
+            self.encodeShadowDepthPrePassStage(
+                renderer: renderer,
+                renderCommandEncoder: renderCommandEncoder,
+                uniformBuffer: &uniformBuffer
+            )
         } else {
             // Add buffers to pipeline
             renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
@@ -64,9 +67,9 @@ extension ProteinRenderer {
         // Set the correct pipeline state
         var pipelineState: MTLRenderPipelineState?
         if highQuality {
-            pipelineState = shadowHQRenderingPipelineState
+            pipelineState = renderer.shadowHQRenderingPipelineState
         } else {
-            pipelineState = shadowRenderingPipelineState
+            pipelineState = renderer.shadowRenderingPipelineState
         }
         guard let shadowRenderingPipelineState = pipelineState else {
             return
@@ -89,16 +92,18 @@ extension ProteinRenderer {
         renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        guard let configurationSelector = scene.configurationSelector else {
+        guard let configurationSelector = renderer.scene.configurationSelector else {
             return
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
         
-        renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                   indexCount: indexBufferRegion.length,
-                                                   indexType: .uint32,
-                                                   indexBuffer: impostorIndexBuffer,
-                                                   indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+        renderCommandEncoder.drawIndexedPrimitives(
+            type: .triangle,
+            indexCount: indexBufferRegion.length,
+            indexType: .uint32,
+            indexBuffer: impostorIndexBuffer,
+            indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride
+        )
 
         renderCommandEncoder.endEncoding()
     }

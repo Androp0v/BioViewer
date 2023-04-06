@@ -99,7 +99,9 @@ struct FileSegmentProtein: View {
                     content: {
                         
                         Button(NSLocalizedString("Remove all", comment: ""), action: {
-                            proteinDataSource.proteinViewModel?.removeAllFiles()
+                            Task {
+                                await proteinDataSource.proteinViewModel?.removeAllFiles()
+                            }
                         })
                         .buttonStyle(PlainButtonStyle())
                         .foregroundColor(.red)

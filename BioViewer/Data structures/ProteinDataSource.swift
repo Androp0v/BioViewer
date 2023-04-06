@@ -98,21 +98,21 @@ class ProteinDataSource: ObservableObject {
     // MARK: - Remove files
     
     /// Removes file at index from data source and scene.
-    public func removeFileAtIndex(index: Int) {
+    public func removeFileAtIndex(index: Int) async {
         guard files.count > index else {
             NSLog("File to remove has an index out of bounds.")
             return
         }
         files.remove(at: index)
-        proteinViewModel?.renderer.removeBuffers()
+        await proteinViewModel?.renderer.removeBuffers()
     }
     
     /// Removes all files from the data source and the scene.
-    public func removeAllFilesFromDatasource() {
+    @MainActor public func removeAllFilesFromDatasource() async {
         files = []
         selectedModel = []
         selectedModelIndexForFile = [:]
-        proteinViewModel?.renderer.removeBuffers()
+        await proteinViewModel?.renderer.removeBuffers()
     }
     
     // MARK: - Update model

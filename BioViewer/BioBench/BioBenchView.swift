@@ -136,7 +136,7 @@ struct BioBenchView: View {
                 authors: "",
                 sourceLines: nil
             )
-            proteinDataSource.removeAllFilesFromDatasource()
+            await proteinDataSource.removeAllFilesFromDatasource()
             try? await FileImporter.importFileFromRawText(
                 rawText: rawText,
                 proteinDataSource: proteinDataSource,

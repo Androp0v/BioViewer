@@ -107,7 +107,7 @@ class ProteinVisualizationViewModel: ObservableObject {
                         return
                     }
                     #if DEBUG
-                    proteinViewModel.renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
+                    await proteinViewModel.renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
                     #endif
                 }
             }

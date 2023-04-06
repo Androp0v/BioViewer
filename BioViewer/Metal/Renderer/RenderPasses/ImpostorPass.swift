@@ -10,45 +10,48 @@ import Metal
 import QuartzCore
 import MetalKit
 
-extension ProteinRenderer {
+extension ProteinRenderer.MutableState {
     
-    func impostorRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthPrePassTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ImpostorRenderPassVariant, renderBonds: Bool) {
+    func impostorRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthPrePassTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ProteinRenderer.ImpostorRenderPassVariant, renderBonds: Bool) {
         
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
+        renderer.impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
-        impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
+        renderer.impostorRenderPassDescriptor.colorAttachments[0].clearColor = renderer.getBackgroundClearColor()
         
         if AppState.hasDepthPrePasses() {
             // Attach textures. colorAttachments[1] is the depth pre-pass GBuffer texture
-            impostorRenderPassDescriptor.colorAttachments[1].texture = depthPrePassTexture
+            renderer.impostorRenderPassDescriptor.colorAttachments[1].texture = depthPrePassTexture
             // Clear the depth texture using the equivalent to 1.0 (max depth)
-            impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            renderer.impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
                 
         // Attach depth texture.
-        impostorRenderPassDescriptor.depthAttachment.texture = depthTexture
+        renderer.impostorRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
-        impostorRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        renderer.impostorRenderPassDescriptor.depthAttachment.clearDepth = 1.0
 
         // Create render command encoder
-        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: impostorRenderPassDescriptor) else {
+        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderer.impostorRenderPassDescriptor) else {
             return
         }
         renderCommandEncoder.label = "Depth Pre-pass & Billboard Shading"
         
         // Set depth state
-        renderCommandEncoder.setDepthStencilState(depthState)
+        renderCommandEncoder.setDepthStencilState(renderer.depthState)
         
         // MARK: - Depth pre-pass stage
         
         if AppState.hasDepthPrePasses() {
-            self.encodeDepthBoundStage(renderCommandEncoder: renderCommandEncoder,
-                                       uniformBuffer: &uniformBuffer)
+            self.encodeDepthBoundStage(
+                renderer: renderer,
+                renderCommandEncoder: renderCommandEncoder,
+                uniformBuffer: &uniformBuffer
+            )
         } else {
             // Add buffers to pipeline
             renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
@@ -68,9 +71,9 @@ extension ProteinRenderer {
         var variantPipelineState: MTLRenderPipelineState?
         switch variant {
         case .solidSpheres, .ballAndSticks:
-            variantPipelineState = impostorRenderingPipelineState
+            variantPipelineState = renderer.impostorRenderingPipelineState
         case .solidSpheresHQ, .ballAndSticksHQ:
-            variantPipelineState = impostorHQRenderingPipelineState
+            variantPipelineState = renderer.impostorHQRenderingPipelineState
         }
         guard let impostorRenderingPipelineState = variantPipelineState else {
             return
@@ -101,7 +104,7 @@ extension ProteinRenderer {
         renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        guard let configurationSelector = scene.configurationSelector else {
+        guard let configurationSelector = renderer.scene.configurationSelector else {
             return
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
@@ -129,10 +132,10 @@ extension ProteinRenderer {
             var bondVariantPipelineState: MTLRenderPipelineState?
             switch variant {
             case .solidSpheres, .ballAndSticks:
-                bondVariantPipelineState = impostorBondRenderingPipelineState
+                bondVariantPipelineState = renderer.impostorBondRenderingPipelineState
             case .solidSpheresHQ, .ballAndSticksHQ:
                 // TO-DO: HQ impostorHQBondRenderingPipelineStage
-                bondVariantPipelineState = impostorBondRenderingPipelineState
+                bondVariantPipelineState = renderer.impostorBondRenderingPipelineState
             }
             guard let impostorBondRenderingPipelineState = bondVariantPipelineState else {
                 renderCommandEncoder.endEncoding()
@@ -156,7 +159,7 @@ extension ProteinRenderer {
             renderCommandEncoder.setCullMode(.none)
             
             // Draw primitives
-            guard let configurationSelector = scene.configurationSelector else {
+            guard let configurationSelector = renderer.scene.configurationSelector else {
                 return
             }
             guard let indexBufferRegion = configurationSelector.getBondsIndexBufferRegion() else {

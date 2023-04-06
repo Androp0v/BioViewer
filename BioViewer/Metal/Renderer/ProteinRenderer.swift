@@ -17,17 +17,10 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Scheduling
     
-    /// Whether a frame is currently being processed on the CPU.
-    var isProcessingFrame: Bool = false
-    /// GCD queue used to process frames.
-    let renderQueue = DispatchQueue(label: "com.bioviewer.renderqueue", qos: .userInteractive)
+    /// Actor used to protect mutable state that cannot be modified during draws.
+    let mutableStateActor: MutableState
     /// Used to signal that a new frame is ready to be computed by the CPU.
     var frameBoundarySemaphore: DispatchSemaphore
-    /// Used to index the dynamic buffers.
-    var currentFrameIndex: Int
-    /// Used to ensure buffers are untouched during frame rendering.
-    let bufferResourceLock = NSLock()
-    
     /// Frame GPU execution time, exponentially averaged.
     var lastFrameGPUTime = CFTimeInterval()
     
@@ -86,42 +79,7 @@ class ProteinRenderer: NSObject {
     var shadowDepthState: MTLDepthStencilState?
     /// Depth state.
     var depthState: MTLDepthStencilState?
-    
-    // MARK: - Buffers
-    
-    /// Used to pass the geometry vertex data to the shader when using a dense mesh
-    var opaqueVertexBuffer: MTLBuffer?
-    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader when using a dense mesh
-    var opaqueIndexBuffer: MTLBuffer?
-    
-    /// Used to pass the geometry vertex data to the shader when using billboarding
-    var billboardVertexBuffers: BillboardVertexBuffers?
-    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding
-    var impostorIndexBuffer: MTLBuffer?
-    
-    #if DEBUG
-    /// Used to debug things displaying points
-    var debugPointVertexBuffer: MTLBuffer?
-    #endif
-    
-    /// Used to pass the atomic element data to the shader (used for coloring, size...).
-    var atomElementBuffer: MTLBuffer?
-    /// Used to pass the subunit index to the shader (used for coloring).
-    var atomSubunitBuffer: MTLBuffer?
-    /// Used to pass the residue data for each atom to the shader (used for coloring, size...).
-    var atomResidueBuffer: MTLBuffer?
-    /// Used to pass the secondary structure data for each atom to the shader (used for coloring, size...).
-    var atomSecondaryStructureBuffer: MTLBuffer?
-    /// Used to pass the atom base color to the shader (used for coloring, size...).
-    var atomColorBuffer: MTLBuffer?
-    /// Used to pass constant frame data to the shader.
-    var uniformBuffers: [MTLBuffer]?
-    
-    /// Used to pass the geometry vertex data to the shader when using billboarding bonds
-    var impostorBondVertexBuffer: MTLBuffer?
-    /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding bonds.
-    var impostorBondIndexBuffer: MTLBuffer?
-    
+        
     // MARK: - Textures
     
     var benchmarkTextures = BenchmarkTextures()
@@ -156,10 +114,12 @@ class ProteinRenderer: NSObject {
             return MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
         }
         
-        return MTLClearColor(red: rgbaColorComponents[0],
-                             green: rgbaColorComponents[1],
-                             blue: rgbaColorComponents[2],
-                             alpha: rgbaColorComponents[3])
+        return MTLClearColor(
+            red: rgbaColorComponents[0],
+            green: rgbaColorComponents[1],
+            blue: rgbaColorComponents[2],
+            alpha: rgbaColorComponents[3]
+        )
     }
     
     // MARK: - Render pass descriptors
@@ -221,19 +181,20 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Initialization
 
+    @MainActor
     init(device: MTLDevice, isBenchmark: Bool) {
 
         self.device = device
         
-        // Initialize the uniforms triple buffering array
-        self.uniformBuffers = [MTLBuffer]()
-
+        self.mutableStateActor = MutableState(
+            device: device,
+            maxBuffersInFlight: maxBuffersInFlight,
+            frameData: scene.frameData
+        )
+        self.frameBoundarySemaphore = DispatchSemaphore(value: maxBuffersInFlight)
+        
         // Setup command queue
         self.commandQueue = device.makeCommandQueue()
-        
-        // Create frame boundary semaphore
-        self.frameBoundarySemaphore = DispatchSemaphore(value: maxBuffersInFlight)
-        self.currentFrameIndex = 0
         
         // Benchmark code
         self.isBenchmark = isBenchmark
@@ -241,18 +202,6 @@ class ProteinRenderer: NSObject {
         // Call super initializer
         super.init()
         
-        // Add buffers to uniforms buffer array
-        for _ in 0..<maxBuffersInFlight {
-            let uniformBuffer = device.makeBuffer(bytes: &self.scene.frameData,
-                                                  length: MemoryLayout<FrameData>.stride,
-                                                  options: [])
-            guard let uniformBuffer = uniformBuffer else {
-                NSLog("Unable to create uniform buffer.")
-                continue
-            }
-            uniformBuffers?.append(uniformBuffer)
-        }
-                
         // Create compute pipeline states
         makeSimpleFillColorComputePipelineState(device: device)
         makeFillColorComputePipelineState(device: device)
@@ -304,40 +253,31 @@ class ProteinRenderer: NSObject {
     }
 
     // MARK: - Public functions
-        
+    
     func createAtomColorBuffer(
         proteins: [Protein],
         colorList: [Color]?,
         colorBy: ProteinColorByOption?
-    ) {
-        
-        // Get the number of configurations
-        var atomAndConfigurationCount = 0
-        for protein in proteins {
-            atomAndConfigurationCount += protein.atomCount * protein.configurationCount
-        }
-        
-        // WORKAROUND: The memory layout should conform to simd_half3's stride, which is
-        // syntactic sugar for SIMD3<Float16>, but Float16 is (still) unavailable on macOS
-        // due to lack of support on x86. We assume SIMD3<Int16> is packed in the same way
-        // Metal packs the half3 type.
-        guard let generatedColorBuffer = device.makeBuffer(
-            length: atomAndConfigurationCount * MemoryLayout<SIMD3<Int16>>.stride
-        ) else { return }
-        
-        bufferResourceLock.lock()
-        self.atomColorBuffer = generatedColorBuffer
-        bufferResourceLock.unlock()
+    ) async {
+        await self.mutableStateActor.createAtomColorBuffer(
+            proteins: proteins,
+            colorList: colorList,
+            colorBy: colorBy
+        )
     }
     
     /// Adds the necessary buffers to display a protein in the renderer with a dense mesh
-    func addOpaqueBuffers(vertexBuffer: inout MTLBuffer, atomTypeBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
-        bufferResourceLock.lock()
-        self.opaqueVertexBuffer = vertexBuffer
-        self.atomElementBuffer = atomTypeBuffer
-        self.opaqueIndexBuffer = indexBuffer
-        self.scene.needsRedraw = true
-        bufferResourceLock.unlock()
+    func addOpaqueBuffers(
+        vertexBuffer: inout MTLBuffer,
+        atomTypeBuffer: inout MTLBuffer,
+        indexBuffer: inout MTLBuffer
+    ) async {
+        await self.mutableStateActor.addOpaqueBuffers(
+            vertexBuffer: &vertexBuffer,
+            atomTypeBuffer: &atomTypeBuffer,
+            indexBuffer: &indexBuffer,
+            scene: self.scene
+        )
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
@@ -349,56 +289,47 @@ class ProteinRenderer: NSObject {
         atomSecondaryStructureBuffer: MTLBuffer?,
         indexBuffer: MTLBuffer,
         configurationSelector: ConfigurationSelector
-    ) {
-        bufferResourceLock.lock()
-        self.billboardVertexBuffers = billboardVertexBuffers
-        self.atomElementBuffer = atomElementBuffer
-        self.atomSubunitBuffer = subunitBuffer
-        self.atomResidueBuffer = atomResidueBuffer
-        self.atomSecondaryStructureBuffer = atomSecondaryStructureBuffer
-        self.impostorIndexBuffer = indexBuffer
-        self.scene.needsRedraw = true
-        self.scene.lastColorPassRequest = CACurrentMediaTime()
-        self.scene.configurationSelector = configurationSelector
-        self.scene.frameData.atoms_per_configuration = Int32(configurationSelector.atomsPerConfiguration)
-        bufferResourceLock.unlock()
+    ) async {
+        await self.mutableStateActor.setBillboardingBuffers(
+            billboardVertexBuffers: billboardVertexBuffers,
+            atomElementBuffer: atomElementBuffer,
+            subunitBuffer: subunitBuffer,
+            atomResidueBuffer: atomResidueBuffer,
+            atomSecondaryStructureBuffer: atomSecondaryStructureBuffer,
+            indexBuffer: indexBuffer,
+            configurationSelector: configurationSelector,
+            scene: self.scene
+        )
     }
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
-    func setColorBuffer(colorBuffer: inout MTLBuffer) {
-        bufferResourceLock.lock()
-        self.atomColorBuffer = colorBuffer
-        bufferResourceLock.unlock()
+    func setColorBuffer(colorBuffer: inout MTLBuffer) async {
+        await self.mutableStateActor.setColorBuffer(colorBuffer: &colorBuffer)
     }
     
     /// Sets the necessary buffers to display atom bonds in the renderer using billboarding
-    func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
-        bufferResourceLock.lock()
-        self.impostorBondVertexBuffer = vertexBuffer
-        self.impostorBondIndexBuffer = indexBuffer
-        self.scene.needsRedraw = true
-        bufferResourceLock.unlock()
+    func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) async {
+        await self.mutableStateActor.setBillboardingBonds(
+            vertexBuffer: &vertexBuffer,
+            indexBuffer: &indexBuffer,
+            scene: scene
+        )
     }
     
     #if DEBUG
-    func setDebugPointsBuffer(vertexBuffer: inout MTLBuffer) {
-        bufferResourceLock.lock()
-        self.debugPointVertexBuffer = vertexBuffer
-        self.scene.needsRedraw = true
-        bufferResourceLock.unlock()
+    func setDebugPointsBuffer(vertexBuffer: inout MTLBuffer) async {
+        await self.mutableStateActor.setDebugPointsBuffer(
+            vertexBuffer: &vertexBuffer,
+            scene: self.scene
+        )
     }
     #endif
     
     /// Deallocates the MTLBuffers used to render a protein
-    func removeBuffers() {
-        bufferResourceLock.lock()
-        self.opaqueVertexBuffer = nil
-        self.atomElementBuffer = nil
-        self.opaqueIndexBuffer = nil
-        self.scene.needsRedraw = true
-        bufferResourceLock.unlock()
+    func removeBuffers() async {
+        await self.mutableStateActor.removeBuffers(scene: self.scene)
     }
-    
+
     /// Make new impostor pipeline variant.
     func remakeImpostorPipelineForVariant(variant: ImpostorRenderPassVariant) {
         makeImpostorRenderPipelineState(device: self.device, variant: variant)
@@ -430,162 +361,8 @@ extension ProteinRenderer: MTKViewDelegate {
 
     // This is called periodically to render the scene contents on display
     func draw(in view: MTKView) {
-        
-        // Check if the scene needs to be redrawn
-        guard scene.needsRedraw || scene.isPlaying else { return }
-        guard !isProcessingFrame else { return }
-        
-        isProcessingFrame = true
-        
-        // Render on a background thread
-        renderQueue.async { [weak self] in
-                                                
-            guard let self = self else {
-                self?.isProcessingFrame = false
-                return
-            }
-            
-            self.bufferResourceLock.lock()
-            
-            // Assure buffers are loaded
-            guard self.atomElementBuffer != nil else {
-                self.isProcessingFrame = false
-                self.bufferResourceLock.unlock()
-                return
-            }
-            guard self.atomColorBuffer != nil else {
-                self.isProcessingFrame = false
-                self.bufferResourceLock.unlock()
-                return
-            }
-            guard let uniformBuffers = self.uniformBuffers else {
-                self.isProcessingFrame = false
-                self.bufferResourceLock.unlock()
-                return
-            }
-            
-            // Wait until the inflight command buffer has completed its work
-            _ = self.frameBoundarySemaphore.wait(timeout: .distantFuture)
-
-            // MARK: - Update uniforms buffer
-            
-            // Ensure the uniform buffer is loaded
-            var uniformBuffer = uniformBuffers[self.currentFrameIndex]
-            
-            // Update current frame index
-            self.currentFrameIndex = (self.currentFrameIndex + 1) % self.maxBuffersInFlight
-                    
-            // Update uniform buffer
-            self.scene.updateScene()
-            withUnsafePointer(to: self.scene.frameData) {
-                uniformBuffer.contents()
-                    .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
-            }
-            
-            // MARK: - Command buffer & queue
-            
-            guard let commandQueue = self.commandQueue else {
-                NSLog("Command queue is nil.")
-                self.isProcessingFrame = false
-                self.bufferResourceLock.unlock()
-                return
-            }
-                    
-            // Create command buffer
-            guard let commandBuffer = commandQueue.makeCommandBuffer() else {
-                NSLog("Unable to create command buffer.")
-                self.isProcessingFrame = false
-                self.bufferResourceLock.unlock()
-                return
-            }
-            
-            /*- COMPUTE PASSES -*/
-            
-            // MARK: - Fill color pass
-            
-            if self.scene.lastColorPassRequest > self.scene.lastColorPass {
-                self.fillColorPass(
-                    commandBuffer: commandBuffer,
-                    colorBuffer: self.atomColorBuffer,
-                    colorFill: self.scene.colorFill
-                )
-            }
-            
-            /*- RENDER PASSES -*/
-            
-            // MARK: - Shadow Map pass
-            
-            if self.scene.hasShadows {
-                self.shadowRenderPass(commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
-                                      shadowTextures: self.shadowTextures,
-                                      shadowDepthPrePassTexture: self.depthPrePassTextures.shadowColorTexture,
-                                      highQuality: false)
-            }
-            
-            // GETTING THE DRAWABLE
-            // The final pass can only render if a drawable is available, otherwise it needs to skip
-            // rendering this frame. Get the drawable as late as possible.
-            var viewTexture: MTLTexture?
-            var viewDepthTexture: MTLTexture?
-            var drawable: CAMetalDrawable? = view.currentDrawable
-            if !self.isBenchmark {
-                drawable = view.currentDrawable
-                viewTexture = drawable?.texture
-                viewDepthTexture = view.depthStencilTexture
-            } else {
-                viewTexture = self.benchmarkTextures.colorTexture
-                viewDepthTexture = self.benchmarkTextures.depthTexture
-            }
-            
-            if let viewTexture, let viewDepthTexture {
-                // MARK: - Impostor pass
-                
-                self.impostorRenderPass(commandBuffer: commandBuffer,
-                                        uniformBuffer: &uniformBuffer,
-                                        drawableTexture: viewTexture,
-                                        depthTexture: viewDepthTexture,
-                                        depthPrePassTexture: self.depthPrePassTextures.colorTexture,
-                                        shadowTextures: self.shadowTextures,
-                                        variant: .solidSpheres,
-                                        renderBonds: self.scene.currentVisualization == .ballAndStick)
-                                                
-                // MARK: - Debug points pass
-                #if DEBUG
-                self.pointsRenderPass(commandBuffer: commandBuffer,
-                                      uniformBuffer: &uniformBuffer,
-                                      drawableTexture: viewTexture,
-                                      depthTexture: viewDepthTexture)
-                #endif
-                
-                // Schedule a drawable presentation to occur after the GPU completes its work
-                // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
-                if let drawable {
-                    commandBuffer.present(drawable)
-                }
-            }
-            
-            // MARK: - Triple buffering
-            
-            commandBuffer.addCompletedHandler({ [weak self] commandBuffer in
-                guard let self = self else { return }
-                // Store the time required to render the frame
-                self.lastFrameGPUTime = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
-                if self.isBenchmark,
-                   self.benchmarkedFrames < BioBenchConfig.numberOfFrames {
-                    self.benchmarkTimes?[self.benchmarkedFrames] = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
-                    self.benchmarkedFrames += 1
-                }
-                // GPU work is complete, signal the semaphore to start the CPU work
-                self.frameBoundarySemaphore.signal()
-            })
-            
-            // MARK: - Commit buffer
-            // Commit command buffer
-            commandBuffer.commit()
-            
-            // MARK: - Finish
-            self.isProcessingFrame = false
-            self.bufferResourceLock.unlock()
+        Task {
+            await mutableStateActor.drawFrame(from: self, in: view)
         }
     }
 

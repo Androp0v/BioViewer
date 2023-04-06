@@ -12,7 +12,7 @@ import simd
 import SwiftUI
 
 class MetalScene {
-
+    
     // MARK: - Properties
         
     /// Whether the scene needs to be redrawn for the next frame.
