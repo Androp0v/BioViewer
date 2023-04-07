@@ -17,6 +17,7 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Scheduling
     
+    var renderThread: Thread?
     /// Actor used to protect mutable state that cannot be modified during draws.
     let mutableStateActor: MutableState
     /// Used to signal that a new frame is ready to be computed by the CPU.
@@ -201,6 +202,9 @@ class ProteinRenderer: NSObject {
         // Call super initializer
         super.init()
         
+        // Render thread updates
+        startRenderThread()
+        
         // Create compute pipeline states
         makeSimpleFillColorComputePipelineState(device: device)
         makeFillColorComputePipelineState(device: device)
@@ -249,6 +253,21 @@ class ProteinRenderer: NSObject {
         // Depth state
         shadowDepthState = device.makeDepthStencilState(descriptor: depthDescriptor)
         depthState = device.makeDepthStencilState(descriptor: depthDescriptor)
+    }
+    
+    // MARK: - Render thread
+    func startRenderThread() {
+        renderThread = Thread { [weak self] in
+            while let self, !(self.renderThread?.isCancelled ?? false) {
+                RunLoop.current.run(
+                    mode: .default,
+                    before: Date.distantFuture
+                )
+            }
+            Thread.exit()
+        }
+        renderThread?.name = "ProteinRenderer Thread"
+        renderThread?.start()
     }
 
     // MARK: - Public functions

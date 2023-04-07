@@ -11,6 +11,7 @@ import UIKit
 class ProteinRenderedView: UIView {
     
     let renderer: ProteinRenderer
+    var metalLayer: CAMetalLayer?
     var displayLink: CADisplayLink?
     var depthTexture = ProteinRenderedViewDepthTexture()
     
@@ -43,6 +44,7 @@ class ProteinRenderedView: UIView {
         guard let metalLayer = self.layer as? CAMetalLayer else {
             return
         }
+        self.metalLayer = metalLayer
         metalLayer.contentsScale = displayScale
         self.contentScaleFactor = displayScale
         renderer.drawableSizeChanged(to: size)
@@ -51,7 +53,12 @@ class ProteinRenderedView: UIView {
     override func didMoveToWindow() {
         // FIXME: Update on display changes
         displayLink = CADisplayLink(target: self, selector: #selector(render))
-        displayLink?.add(to: .current, forMode: .default)
+        perform(
+            #selector(addDisplayLink),
+            on: renderer.renderThread!,
+            with: nil,
+            waitUntilDone: false
+        )
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 120, preferred: 120)
         guard let metalLayer = self.layer as? CAMetalLayer else {
             return
@@ -59,8 +66,12 @@ class ProteinRenderedView: UIView {
         metalLayer.device = renderer.device
     }
     
+    @objc func addDisplayLink() {
+        displayLink?.add(to: .current, forMode: .default)
+    }
+    
     @objc func render() {
-        guard let metalLayer = self.layer as? CAMetalLayer else {
+        guard let metalLayer else {
             return
         }
         guard let depthTexture = depthTexture.depthTexture else {
