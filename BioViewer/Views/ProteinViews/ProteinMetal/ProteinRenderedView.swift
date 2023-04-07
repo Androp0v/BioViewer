@@ -13,7 +13,6 @@ class ProteinRenderedView: UIView {
     let renderer: ProteinRenderer
     var metalLayer: CAMetalLayer?
     var displayLink: CADisplayLink?
-    var depthTexture = ProteinRenderedViewDepthTexture()
     
     init(renderer: ProteinRenderer, frame: CGRect) {
         self.renderer = renderer
@@ -35,11 +34,6 @@ class ProteinRenderedView: UIView {
         let size = CGSize(
             width: frame.width * displayScale,
             height: frame.height * displayScale
-        )
-        depthTexture.makeTextures(
-            device: renderer.device,
-            textureWidth: Int(size.width),
-            textureHeight: Int(size.height)
         )
         guard let metalLayer = self.layer as? CAMetalLayer else {
             return
@@ -93,9 +87,6 @@ class ProteinRenderedView: UIView {
         guard let metalLayer else {
             return
         }
-        guard let depthTexture = depthTexture.depthTexture else {
-            return
-        }
-        renderer.draw(in: metalLayer, depthTexture: depthTexture)
+        renderer.draw(in: metalLayer)
     }
 }

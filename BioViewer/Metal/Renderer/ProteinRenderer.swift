@@ -346,9 +346,9 @@ extension ProteinRenderer {
     }
 
     // This is called periodically to render the scene contents on display
-    func draw(in layer: CAMetalLayer, depthTexture: MTLTexture) {
+    func draw(in layer: CAMetalLayer) {
         Task {
-            await mutableStateActor.drawFrame(from: self, in: layer, depthTexture: depthTexture)
+            await mutableStateActor.drawFrame(from: self, in: layer)
         }
     }
 

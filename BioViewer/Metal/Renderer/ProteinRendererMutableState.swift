@@ -55,9 +55,14 @@ extension ProteinRenderer {
         
         // MARK: - Textures
         
-        var benchmarkTextures = BenchmarkTextures()
-        var shadowTextures = ShadowTextures()
+        /// `ProteinView` view depth texture.
+        var depthTexture = ProteinRenderedViewDepthTexture()
+        /// Depth texture used in the depth pre-pass.
         var depthPrePassTextures = DepthPrePassTextures()
+        /// Shadow textures.
+        var shadowTextures = ShadowTextures()
+        /// Benchmark textures.
+        var benchmarkTextures = BenchmarkTextures()
         
         // MARK: - Init
         
@@ -207,6 +212,11 @@ extension ProteinRenderer {
         }
         
         func updateTexturesForNewViewSize(_ size: CGSize) {
+            depthTexture.makeTextures(
+                device: device,
+                textureWidth: Int(size.width),
+                textureHeight: Int(size.height)
+            )
             if AppState.hasDepthPrePasses() {
                 depthPrePassTextures.makeTextures(
                     device: device,
