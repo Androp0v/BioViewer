@@ -12,7 +12,17 @@ import MetalKit
 
 extension ProteinRenderer.MutableState {
     
-    func impostorRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?, depthPrePassTexture: MTLTexture?, shadowTextures: ShadowTextures, variant: ProteinRenderer.ImpostorRenderPassVariant, renderBonds: Bool) {
+    func impostorRenderPass(
+        renderer: ProteinRenderer,
+        commandBuffer: MTLCommandBuffer,
+        uniformBuffer: inout MTLBuffer,
+        drawableTexture: MTLTexture,
+        depthTexture: MTLTexture?,
+        depthPrePassTexture: MTLTexture?,
+        shadowTextures: ShadowTextures,
+        variant: ProteinRenderer.ImpostorRenderPassVariant,
+        renderBonds: Bool
+    ) {
         
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
@@ -27,7 +37,12 @@ extension ProteinRenderer.MutableState {
             // Attach textures. colorAttachments[1] is the depth pre-pass GBuffer texture
             renderer.impostorRenderPassDescriptor.colorAttachments[1].texture = depthPrePassTexture
             // Clear the depth texture using the equivalent to 1.0 (max depth)
-            renderer.impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            renderer.impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(
+                red: 1.0,
+                green: 1.0,
+                blue: 1.0,
+                alpha: 1.0
+            )
         }
                 
         // Attach depth texture.
@@ -54,15 +69,21 @@ extension ProteinRenderer.MutableState {
             )
         } else {
             // Add buffers to pipeline
-            renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.positionBuffer,
-                                                 offset: 0,
-                                                 index: 0)
-            renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomWorldCenterBuffer,
-                                                 offset: 0,
-                                                 index: 1)
-            renderCommandEncoder.setVertexBuffer(uniformBuffer,
-                                                 offset: 0,
-                                                 index: 5)
+            renderCommandEncoder.setVertexBuffer(
+                billboardVertexBuffers.positionBuffer,
+                offset: 0,
+                index: 0
+            )
+            renderCommandEncoder.setVertexBuffer(
+                billboardVertexBuffers.atomWorldCenterBuffer,
+                offset: 0,
+                index: 1
+            )
+            renderCommandEncoder.setVertexBuffer(
+                uniformBuffer,
+                offset: 0,
+                index: 5
+            )
         }
         
         // MARK: - Impostor sphere rendering
@@ -81,24 +102,36 @@ extension ProteinRenderer.MutableState {
         renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
 
         // Add other buffers to pipeline
-        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.billboardMappingBuffer,
-                                             offset: 0,
-                                             index: 2)
-        renderCommandEncoder.setVertexBuffer(billboardVertexBuffers.atomRadiusBuffer,
-                                             offset: 0,
-                                             index: 3)
+        renderCommandEncoder.setVertexBuffer(
+            billboardVertexBuffers.billboardMappingBuffer,
+            offset: 0,
+            index: 2
+        )
+        renderCommandEncoder.setVertexBuffer(
+            billboardVertexBuffers.atomRadiusBuffer,
+            offset: 0,
+            index: 3
+        )
         
-        renderCommandEncoder.setVertexBuffer(atomColorBuffer,
-                                             offset: 0,
-                                             index: 4)
+        renderCommandEncoder.setVertexBuffer(
+            atomColorBuffer,
+            offset: 0,
+            index: 4
+        )
         
-        renderCommandEncoder.setFragmentBuffer(uniformBuffer,
-                                               offset: 0,
-                                               index: 1)
-        renderCommandEncoder.setFragmentTexture(shadowTextures.shadowDepthTexture,
-                                                index: 1)
-        renderCommandEncoder.setFragmentSamplerState(shadowTextures.shadowSampler,
-                                                     index: 0)
+        renderCommandEncoder.setFragmentBuffer(
+            uniformBuffer,
+            offset: 0,
+            index: 1
+        )
+        renderCommandEncoder.setFragmentTexture(
+            shadowTextures.shadowDepthTexture,
+            index: 1
+        )
+        renderCommandEncoder.setFragmentSamplerState(
+            shadowTextures.shadowSampler,
+            index: 0
+        )
 
         // Don't render back-facing triangles (cull them)
         renderCommandEncoder.setCullMode(.back)
@@ -144,16 +177,22 @@ extension ProteinRenderer.MutableState {
             renderCommandEncoder.setRenderPipelineState(impostorBondRenderingPipelineState)
             
             // Add buffers to pipeline
-            renderCommandEncoder.setVertexBuffer(impostorBondVertexBuffer,
-                                                 offset: 0,
-                                                 index: 0)
-            renderCommandEncoder.setVertexBuffer(uniformBuffer,
-                                                 offset: 0,
-                                                 index: 1)
+            renderCommandEncoder.setVertexBuffer(
+                impostorBondVertexBuffer,
+                offset: 0,
+                index: 0
+            )
+            renderCommandEncoder.setVertexBuffer(
+                uniformBuffer,
+                offset: 0,
+                index: 1
+            )
             
-            renderCommandEncoder.setFragmentBuffer(uniformBuffer,
-                                                   offset: 0,
-                                                   index: 1)
+            renderCommandEncoder.setFragmentBuffer(
+                uniformBuffer,
+                offset: 0,
+                index: 1
+            )
 
             // Don't render back-facing triangles (cull them)
             renderCommandEncoder.setCullMode(.none)
@@ -166,11 +205,13 @@ extension ProteinRenderer.MutableState {
                 return
             }
             
-            renderCommandEncoder.drawIndexedPrimitives(type: .triangle,
-                                                       indexCount: indexBufferRegion.length,
-                                                       indexType: .uint32,
-                                                       indexBuffer: impostorBondIndexBuffer,
-                                                       indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride)
+            renderCommandEncoder.drawIndexedPrimitives(
+                type: .triangle,
+                indexCount: indexBufferRegion.length,
+                indexType: .uint32,
+                indexBuffer: impostorBondIndexBuffer,
+                indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride
+            )
         }
         
         // MARK: - End encoding

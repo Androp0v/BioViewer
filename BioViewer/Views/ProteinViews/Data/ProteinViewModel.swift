@@ -31,7 +31,7 @@ class ProteinViewModel: ObservableObject {
     
     // MARK: - Initialization
 
-    @MainActor init(isBenchmark: Bool = false) {
+    init(isBenchmark: Bool = false) {
         // Setup Metal renderer
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")

@@ -10,7 +10,7 @@ import MetalKit
 
 extension ProteinRenderer.MutableState {
     
-    @MainActor func drawFrame(from renderer: ProteinRenderer, in view: MTKView) {
+    func drawFrame(from renderer: ProteinRenderer, in layer: CAMetalLayer, depthTexture: MTLTexture) {
         // Check if the scene needs to be redrawn.
         guard renderer.scene.needsRedraw || renderer.scene.isPlaying else {
             return
@@ -89,9 +89,9 @@ extension ProteinRenderer.MutableState {
         var viewDepthTexture: MTLTexture?
         var drawable: CAMetalDrawable?
         if !renderer.isBenchmark {
-            drawable = view.currentDrawable
-            viewTexture = view.currentDrawable?.texture
-            viewDepthTexture = view.depthStencilTexture
+            drawable = layer.nextDrawable()
+            viewTexture = drawable?.texture
+            viewDepthTexture = depthTexture
         } else {
             viewTexture = renderer.benchmarkTextures.colorTexture
             viewDepthTexture = renderer.benchmarkTextures.depthTexture

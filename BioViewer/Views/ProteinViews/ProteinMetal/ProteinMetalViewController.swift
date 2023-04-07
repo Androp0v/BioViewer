@@ -14,8 +14,8 @@ class ProteinMetalViewController: UIViewController {
 
     var device: MTLDevice!
     
-    var renderedView: MTKView!
-    weak var renderDelegate: MTKViewDelegate?
+    var renderedView: ProteinRenderedView!
+    
     var proteinViewModel: ProteinViewModel
     
     init(proteinViewModel: ProteinViewModel) {
@@ -38,8 +38,10 @@ class ProteinMetalViewController: UIViewController {
         self.device = device
 
         // Setup MTKView
-        renderedView = MTKView(frame: view.frame, device: device)
-        renderedView.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
+        renderedView = ProteinRenderedView(
+            renderer: proteinViewModel.renderer,
+            frame: view.frame
+        )
         renderedView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(renderedView)
         NSLayoutConstraint.activate([
@@ -48,13 +50,6 @@ class ProteinMetalViewController: UIViewController {
             renderedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             renderedView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
 
-        // Render delegate
-        self.renderDelegate = proteinViewModel.renderer
-        renderedView.delegate = self.renderDelegate
-
-        // Create depth texture for view
-        renderedView.depthStencilPixelFormat = .depth32Float
-        
         // FIXME: This breaks PhotoMode, but would be useful
         /*if #available(iOS 16.0, *) {
             if device.supportsFamily(.apple1) {

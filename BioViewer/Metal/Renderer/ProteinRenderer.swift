@@ -181,11 +181,10 @@ class ProteinRenderer: NSObject {
     
     // MARK: - Initialization
 
-    @MainActor
     init(device: MTLDevice, isBenchmark: Bool) {
 
         self.device = device
-        
+                
         self.mutableStateActor = MutableState(
             device: device,
             maxBuffersInFlight: maxBuffersInFlight,
@@ -337,8 +336,9 @@ class ProteinRenderer: NSObject {
 }
 
 // MARK: - Drawing
-extension ProteinRenderer: MTKViewDelegate {
+extension ProteinRenderer {
 
+    // FIXME: Recreate the textures in a different way
     /// This will be called when the ProteinMetalView changes size
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         // TO-DO: Update G-Buffer texture size to match view size
@@ -358,11 +358,26 @@ extension ProteinRenderer: MTKViewDelegate {
         // TO-DO: Enqueue draw calls so this doesn't drop the FPS
         view.draw()
     }
+    
+    func drawableSizeChanged(to size: CGSize) {
+        self.scene.camera.updateProjection(drawableSize: size)
+        self.scene.aspectRatio = Float(size.width / size.height)
+        
+        self.viewResolution = size
+        
+        if AppState.hasDepthPrePasses() {
+            depthPrePassTextures.makeTextures(
+                device: device,
+                textureWidth: Int(size.width),
+                textureHeight: Int(size.height)
+            )
+        }
+    }
 
     // This is called periodically to render the scene contents on display
-    func draw(in view: MTKView) {
+    func draw(in layer: CAMetalLayer, depthTexture: MTLTexture) {
         Task {
-            await mutableStateActor.drawFrame(from: self, in: view)
+            await mutableStateActor.drawFrame(from: self, in: layer, depthTexture: depthTexture)
         }
     }
 

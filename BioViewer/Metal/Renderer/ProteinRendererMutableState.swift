@@ -11,7 +11,7 @@ import SwiftUI
 
 extension ProteinRenderer {
     
-    @MainActor class MutableState {
+    actor MutableState {
         
         let device: MTLDevice
                 
