@@ -53,9 +53,15 @@ extension ProteinRenderer {
         /// Used to pass the index data (how the vertices data is connected to form triangles) to the shader  when using billboarding bonds.
         var impostorBondIndexBuffer: MTLBuffer?
         
+        // MARK: - Textures
+        
+        var benchmarkTextures = BenchmarkTextures()
+        var shadowTextures = ShadowTextures()
+        var depthPrePassTextures = DepthPrePassTextures()
+        
         // MARK: - Init
         
-        init(device: MTLDevice, maxBuffersInFlight: Int, frameData: FrameData) {
+        init(device: MTLDevice, maxBuffersInFlight: Int, frameData: FrameData, isBenchmark: Bool) {
             
             self.device = device
             
@@ -81,7 +87,7 @@ extension ProteinRenderer {
             self.currentFrameIndex = 0
         }
         
-        // MARK: - Functions
+        // MARK: - Buffer functions
         
         func createAtomColorBuffer(
             proteins: [Protein],
@@ -167,6 +173,47 @@ extension ProteinRenderer {
             self.atomElementBuffer = nil
             self.opaqueIndexBuffer = nil
             scene.needsRedraw = true
+        }
+        
+        // MARK: - Texture functions
+        
+        func createTextures(isBenchmark: Bool) {
+            // Benchmark textures
+            if isBenchmark {
+                benchmarkTextures.makeTextures(device: device)
+                depthPrePassTextures.makeTextures(
+                    device: device,
+                    textureWidth: BenchmarkTextures.benchmarkResolution,
+                    textureHeight: BenchmarkTextures.benchmarkResolution
+                )
+            }
+            
+            // Create shadow textures and sampler
+            shadowTextures.makeTextures(
+                device: device,
+                textureWidth: ShadowTextures.defaultTextureWidth,
+                textureHeight: ShadowTextures.defaultTextureHeight
+            )
+            shadowTextures.makeShadowSampler(device: device)
+            
+            // Create texture for depth-bound shadow render pass pre-pass
+            if AppState.hasDepthPrePasses() {
+                depthPrePassTextures.makeShadowTextures(
+                    device: device,
+                    shadowTextureWidth: ShadowTextures.defaultTextureWidth,
+                    shadowTextureHeight: ShadowTextures.defaultTextureHeight
+                )
+            }
+        }
+        
+        func updateTexturesForNewViewSize(_ size: CGSize) {
+            if AppState.hasDepthPrePasses() {
+                depthPrePassTextures.makeTextures(
+                    device: device,
+                    textureWidth: Int(size.width),
+                    textureHeight: Int(size.height)
+                )
+            }
         }
     }
 }

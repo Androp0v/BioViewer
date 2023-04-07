@@ -171,7 +171,7 @@ struct BioBenchView: View {
             )
             print("BioBench \(benchmarkedProteins.count) (\(pdbID)): \(proteinDataSource.totalAtomCount), \(meanTime), \(stdTime.0), \(stdTime.1)")
             proteinViewModel.renderer.scene.autorotating = false
-            currentImage = proteinViewModel.renderer.benchmarkTextures.colorTexture.getCGImage()
+            currentImage = await proteinViewModel.renderer.mutableStateActor.benchmarkTextures.colorTexture.getCGImage()
         }
     }
     

@@ -76,8 +76,8 @@ extension ProteinRenderer.MutableState {
             self.shadowRenderPass(
                 renderer: renderer,
                 commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
-                shadowTextures: renderer.shadowTextures,
-                shadowDepthPrePassTexture: renderer.depthPrePassTextures.shadowColorTexture,
+                shadowTextures: shadowTextures,
+                shadowDepthPrePassTexture: depthPrePassTextures.shadowColorTexture,
                 highQuality: false
             )
         }
@@ -93,8 +93,8 @@ extension ProteinRenderer.MutableState {
             viewTexture = drawable?.texture
             viewDepthTexture = depthTexture
         } else {
-            viewTexture = renderer.benchmarkTextures.colorTexture
-            viewDepthTexture = renderer.benchmarkTextures.depthTexture
+            viewTexture = benchmarkTextures.colorTexture
+            viewDepthTexture = benchmarkTextures.depthTexture
         }
         
         if let viewTexture, let viewDepthTexture {
@@ -106,8 +106,8 @@ extension ProteinRenderer.MutableState {
                 uniformBuffer: &uniformBuffer,
                 drawableTexture: viewTexture,
                 depthTexture: viewDepthTexture,
-                depthPrePassTexture: renderer.depthPrePassTextures.colorTexture,
-                shadowTextures: renderer.shadowTextures,
+                depthPrePassTexture: depthPrePassTextures.colorTexture,
+                shadowTextures: shadowTextures,
                 variant: .solidSpheres,
                 renderBonds: renderer.scene.currentVisualization == .ballAndStick
             )

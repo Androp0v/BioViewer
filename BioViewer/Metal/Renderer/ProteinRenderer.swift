@@ -80,12 +80,6 @@ class ProteinRenderer: NSObject {
     var shadowDepthState: MTLDepthStencilState?
     /// Depth state.
     var depthState: MTLDepthStencilState?
-        
-    // MARK: - Textures
-    
-    var benchmarkTextures = BenchmarkTextures()
-    var shadowTextures = ShadowTextures()
-    var depthPrePassTextures = DepthPrePassTextures()
 
     // MARK: - Runtime variables
     
@@ -185,12 +179,7 @@ class ProteinRenderer: NSObject {
     init(device: MTLDevice, isBenchmark: Bool) {
 
         self.device = device
-                
-        self.mutableStateActor = MutableState(
-            device: device,
-            maxBuffersInFlight: maxBuffersInFlight,
-            frameData: scene.frameData
-        )
+
         self.frameBoundarySemaphore = DispatchSemaphore(value: maxBuffersInFlight)
         
         // Setup command queue
@@ -198,6 +187,18 @@ class ProteinRenderer: NSObject {
         
         // Benchmark code
         self.isBenchmark = isBenchmark
+                
+        // Protected state
+        self.mutableStateActor = MutableState(
+            device: device,
+            maxBuffersInFlight: maxBuffersInFlight,
+            frameData: scene.frameData,
+            isBenchmark: isBenchmark
+        )
+        
+        if isBenchmark {
+            benchmarkTimes = [CFTimeInterval](repeating: .zero, count: BioBenchConfig.numberOfFrames)
+        }
         
         // Call super initializer
         super.init()
@@ -222,32 +223,8 @@ class ProteinRenderer: NSObject {
         makeDebugPointsPipelineState(device: device)
         #endif
         
-        // Benchmark textures
-        if isBenchmark {
-            benchmarkTextures.makeTextures(device: device)
-            depthPrePassTextures.makeTextures(
-                device: device,
-                textureWidth: BenchmarkTextures.benchmarkResolution,
-                textureHeight: BenchmarkTextures.benchmarkResolution
-            )
-            benchmarkTimes = [CFTimeInterval](repeating: .zero, count: BioBenchConfig.numberOfFrames)
-        }
-        
-        // Create shadow textures and sampler
-        shadowTextures.makeTextures(
-            device: device,
-            textureWidth: ShadowTextures.defaultTextureWidth,
-            textureHeight: ShadowTextures.defaultTextureHeight
-        )
-        shadowTextures.makeShadowSampler(device: device)
-        
-        // Create texture for depth-bound shadow render pass pre-pass
-        if AppState.hasDepthPrePasses() {
-            depthPrePassTextures.makeShadowTextures(
-                device: device,
-                shadowTextureWidth: ShadowTextures.defaultTextureWidth,
-                shadowTextureHeight: ShadowTextures.defaultTextureHeight
-            )
+        Task {
+            await mutableStateActor.createTextures(isBenchmark: isBenchmark)
         }
         
         // Depth state
@@ -356,27 +333,6 @@ class ProteinRenderer: NSObject {
 
 // MARK: - Drawing
 extension ProteinRenderer {
-
-    // FIXME: Recreate the textures in a different way
-    /// This will be called when the ProteinMetalView changes size
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // TO-DO: Update G-Buffer texture size to match view size
-        self.scene.camera.updateProjection(drawableSize: size)
-        self.scene.aspectRatio = Float(size.width / size.height)
-        
-        self.viewResolution = size
-        
-        if AppState.hasDepthPrePasses() {
-            depthPrePassTextures.makeTextures(
-                device: device,
-                textureWidth: Int(size.width),
-                textureHeight: Int(size.height)
-            )
-        }
-        
-        // TO-DO: Enqueue draw calls so this doesn't drop the FPS
-        view.draw()
-    }
     
     func drawableSizeChanged(to size: CGSize) {
         self.scene.camera.updateProjection(drawableSize: size)
@@ -384,12 +340,8 @@ extension ProteinRenderer {
         
         self.viewResolution = size
         
-        if AppState.hasDepthPrePasses() {
-            depthPrePassTextures.makeTextures(
-                device: device,
-                textureWidth: Int(size.width),
-                textureHeight: Int(size.height)
-            )
+        Task {
+            await mutableStateActor.updateTexturesForNewViewSize(size)
         }
     }
 
