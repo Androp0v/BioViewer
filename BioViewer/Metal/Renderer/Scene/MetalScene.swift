@@ -206,8 +206,10 @@ class MetalScene {
         self.frameData.inverse_rotation_matrix = rotationMatrix.inverse
         
         // Update sun rotation matrix (model rotation + sun rotation)
-        let sunRotation = Transform.rotationMatrix(radians: Float.pi / 2,
-                                                   axis: simd_float3(-1.0, 0.0, 1.0))
+        let sunRotation = Transform.rotationMatrix(
+            radians: Float.pi / 2,
+            axis: simd_float3(-1.0, 0.0, 1.0)
+        )
         self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix * translateToOriginMatrix
         
         // Update camera -> sun's coordinate transform
@@ -233,12 +235,14 @@ class MetalScene {
         self.frameData.depth_bias = 2 / armstrongsInBoundingSphere
         
         // Update shadow projection to fit too
-        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(-boundingSphere.radius + 3.3,
-                                                                                  boundingSphere.radius - 3.3,
-                                                                                 -boundingSphere.radius + 3.3,
-                                                                                  boundingSphere.radius - 3.3,
-                                                                                 -boundingSphere.radius - 3.3,
-                                                                                  boundingSphere.radius + 3.3)
+        self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(
+            -boundingSphere.radius + 3.3,
+             boundingSphere.radius - 3.3,
+             -boundingSphere.radius + 3.3,
+             boundingSphere.radius - 3.3,
+             -boundingSphere.radius - 3.3,
+             boundingSphere.radius + 3.3
+        )
     }
     
     // MARK: - Move camera

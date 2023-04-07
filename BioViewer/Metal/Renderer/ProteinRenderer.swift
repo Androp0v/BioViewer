@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MetalKit
+@preconcurrency import MetalKit
 import SwiftUI
 
 class ProteinRenderer: NSObject {
@@ -19,7 +19,7 @@ class ProteinRenderer: NSObject {
     
     var renderThread: Thread?
     /// Actor used to protect mutable state that cannot be modified during draws.
-    let mutableStateActor: MutableState
+    let protectedMutableState: MutableState
     /// Used to signal that a new frame is ready to be computed by the CPU.
     var frameBoundarySemaphore: DispatchSemaphore
     /// Frame GPU execution time, exponentially averaged.
@@ -189,7 +189,7 @@ class ProteinRenderer: NSObject {
         self.isBenchmark = isBenchmark
                 
         // Protected state
-        self.mutableStateActor = MutableState(
+        self.protectedMutableState = MutableState(
             device: device,
             maxBuffersInFlight: maxBuffersInFlight,
             frameData: scene.frameData,
@@ -224,7 +224,7 @@ class ProteinRenderer: NSObject {
         #endif
         
         Task {
-            await mutableStateActor.createTextures(isBenchmark: isBenchmark)
+            await protectedMutableState.createTextures(isBenchmark: isBenchmark)
         }
         
         // Depth state
@@ -254,7 +254,7 @@ class ProteinRenderer: NSObject {
         colorList: [Color]?,
         colorBy: ProteinColorByOption?
     ) async {
-        await self.mutableStateActor.createAtomColorBuffer(
+        await self.protectedMutableState.createAtomColorBuffer(
             proteins: proteins,
             colorList: colorList,
             colorBy: colorBy
@@ -267,7 +267,7 @@ class ProteinRenderer: NSObject {
         atomTypeBuffer: inout MTLBuffer,
         indexBuffer: inout MTLBuffer
     ) async {
-        await self.mutableStateActor.addOpaqueBuffers(
+        await self.protectedMutableState.addOpaqueBuffers(
             vertexBuffer: &vertexBuffer,
             atomTypeBuffer: &atomTypeBuffer,
             indexBuffer: &indexBuffer,
@@ -285,7 +285,7 @@ class ProteinRenderer: NSObject {
         indexBuffer: MTLBuffer,
         configurationSelector: ConfigurationSelector
     ) async {
-        await self.mutableStateActor.setBillboardingBuffers(
+        await self.protectedMutableState.setBillboardingBuffers(
             billboardVertexBuffers: billboardVertexBuffers,
             atomElementBuffer: atomElementBuffer,
             subunitBuffer: subunitBuffer,
@@ -299,12 +299,12 @@ class ProteinRenderer: NSObject {
     
     /// Sets the necessary buffers to display a protein in the renderer using billboarding
     func setColorBuffer(colorBuffer: inout MTLBuffer) async {
-        await self.mutableStateActor.setColorBuffer(colorBuffer: &colorBuffer)
+        await self.protectedMutableState.setColorBuffer(colorBuffer: &colorBuffer)
     }
     
     /// Sets the necessary buffers to display atom bonds in the renderer using billboarding
     func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) async {
-        await self.mutableStateActor.setBillboardingBonds(
+        await self.protectedMutableState.setBillboardingBonds(
             vertexBuffer: &vertexBuffer,
             indexBuffer: &indexBuffer,
             scene: scene
@@ -313,7 +313,7 @@ class ProteinRenderer: NSObject {
     
     #if DEBUG
     func setDebugPointsBuffer(vertexBuffer: inout MTLBuffer) async {
-        await self.mutableStateActor.setDebugPointsBuffer(
+        await self.protectedMutableState.setDebugPointsBuffer(
             vertexBuffer: &vertexBuffer,
             scene: self.scene
         )
@@ -322,7 +322,7 @@ class ProteinRenderer: NSObject {
     
     /// Deallocates the MTLBuffers used to render a protein
     func removeBuffers() async {
-        await self.mutableStateActor.removeBuffers(scene: self.scene)
+        await self.protectedMutableState.removeBuffers(scene: self.scene)
     }
 
     /// Make new impostor pipeline variant.
@@ -334,21 +334,24 @@ class ProteinRenderer: NSObject {
 // MARK: - Drawing
 extension ProteinRenderer {
     
-    func drawableSizeChanged(to size: CGSize) {
+    func drawableSizeChanged(to size: CGSize, layer: CAMetalLayer, displayScale: CGFloat) {
         self.scene.camera.updateProjection(drawableSize: size)
         self.scene.aspectRatio = Float(size.width / size.height)
         
         self.viewResolution = size
-        
         Task {
-            await mutableStateActor.updateTexturesForNewViewSize(size)
+            await protectedMutableState.updateTexturesForNewViewSize(
+                size,
+                metalLayer: layer,
+                displayScale: displayScale
+            )
         }
     }
 
     // This is called periodically to render the scene contents on display
     func draw(in layer: CAMetalLayer) {
         Task {
-            await mutableStateActor.drawFrame(from: self, in: layer)
+            await protectedMutableState.drawFrame(from: self, in: layer)
         }
     }
 

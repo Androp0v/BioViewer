@@ -30,7 +30,17 @@ class ProteinRenderedView: UIView {
     // Called when view size changes. Update drawables and textures
     // accordingly.
     override func layoutSubviews() {
-        let displayScale = window?.windowScene?.screen.scale ?? 1.0
+        var displayScale: CGFloat
+        if let screen = window?.windowScene?.screen {
+            displayScale = screen.scale
+        } else {
+            displayScale = 1.0
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "ProteinRenderedView failed to get display scale."
+            )
+        }
         let size = CGSize(
             width: frame.width * displayScale,
             height: frame.height * displayScale
@@ -39,9 +49,7 @@ class ProteinRenderedView: UIView {
             return
         }
         self.metalLayer = metalLayer
-        metalLayer.contentsScale = displayScale
-        self.contentScaleFactor = displayScale
-        renderer.drawableSizeChanged(to: size)
+        renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
     }
     
     override func didMoveToWindow() {

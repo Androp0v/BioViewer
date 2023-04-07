@@ -14,7 +14,13 @@ extension ProteinRenderer {
     actor MutableState {
         
         let device: MTLDevice
+        
+        // MARK: - Global
+        
+        var superSamplingCount: CGFloat = 1.0
                 
+        // MARK: - Scheduling
+        
         /// Used to index the dynamic buffers.
         var currentFrameIndex: Int
         
@@ -211,17 +217,22 @@ extension ProteinRenderer {
             }
         }
         
-        func updateTexturesForNewViewSize(_ size: CGSize) {
+        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer, displayScale: CGFloat) {
+            metalLayer.contentsScale = displayScale * superSamplingCount
+            let superSampledSize = CGSize(
+                width: size.width * superSamplingCount,
+                height: size.height * superSamplingCount
+            )
             depthTexture.makeTextures(
                 device: device,
-                textureWidth: Int(size.width),
-                textureHeight: Int(size.height)
+                textureWidth: Int(superSampledSize.width),
+                textureHeight: Int(superSampledSize.height)
             )
             if AppState.hasDepthPrePasses() {
                 depthPrePassTextures.makeTextures(
                     device: device,
-                    textureWidth: Int(size.width),
-                    textureHeight: Int(size.height)
+                    textureWidth: Int(superSampledSize.width),
+                    textureHeight: Int(superSampledSize.height)
                 )
             }
         }

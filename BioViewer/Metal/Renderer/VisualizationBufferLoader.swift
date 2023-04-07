@@ -158,7 +158,7 @@ class VisualizationBufferLoader {
         
         // Create color buffer if needed
         // TODO: Improve API
-        let colorBufferLength = await proteinViewModel.renderer.mutableStateActor.atomColorBuffer?.length
+        let colorBufferLength = await proteinViewModel.renderer.protectedMutableState.atomColorBuffer?.length
         if !((colorBufferLength ?? 0)
                 / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
             await proteinViewModel.renderer.createAtomColorBuffer(

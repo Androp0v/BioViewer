@@ -177,8 +177,7 @@ struct ProteinView: View {
                 #else
                 ToolbarItem(placement: .principal) {
                     // Status bar component
-                    StatusView(statusViewModel: proteinViewModel.statusViewModel)
-
+                    StatusView()
                 }
                 #endif
             }
