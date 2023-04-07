@@ -51,19 +51,38 @@ class ProteinRenderedView: UIView {
     }
     
     override func didMoveToWindow() {
-        // FIXME: Update on display changes
+        
+        guard let renderThread = renderer.renderThread else { return }
+        
+        // Remove CADisplayLink if there was one already running
+        if displayLink != nil {
+            perform(
+                #selector(removeDisplayLink),
+                on: renderThread,
+                with: nil,
+                waitUntilDone: false
+            )
+        }
+        
         displayLink = CADisplayLink(target: self, selector: #selector(render))
+        
+        // Receive CADisplayLink calls on a custom non-main thread
         perform(
             #selector(addDisplayLink),
-            on: renderer.renderThread!,
+            on: renderThread,
             with: nil,
             waitUntilDone: false
         )
+        
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 120, preferred: 120)
         guard let metalLayer = self.layer as? CAMetalLayer else {
             return
         }
         metalLayer.device = renderer.device
+    }
+    
+    @objc func removeDisplayLink() {
+        displayLink?.remove(from: .current, forMode: .default)
     }
     
     @objc func addDisplayLink() {
