@@ -35,6 +35,11 @@ float rand(int x, int y, int z) {
     return (( 1.0 - ( (seed * (seed * seed * 15731 + 789221) + 1376312589) & 2147483647) / 1073741824.0f) + 1.0f) / 2.0f;
 }
 
+float InterleavedGradientNoise(float2 position_screen) {
+    float3 magic = float3(0.06711056f, 0.00583715f, 52.9829189f);
+    return fract(magic.z * fract(dot(position_screen, magic.xy)));
+}
+
 half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
     half GoldenAngle = 2.4f;
 
@@ -205,24 +210,32 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
         } else {
             sample_count = 2;
         }
+        #ifndef JITTERED_PCF
         for (int sample_index = 0; sample_index < sample_count; sample_index++) {
             // FIXME: 0.001 should be proportional to the typical atom size
             // TO-DO: VogelDiskSample may be called with a random number instead of 3 for the rotation
-            #ifndef JITTERED_PCF
             half2 sample_offset = VogelDiskSample(0.001,
                                                   sample_index,
                                                   sample_count,
                                                   3);
-            #else
-            half2 sample_offset = VogelDiskSample(0.001,
-                                                  sample_index,
-                                                  sample_count,
-                                                  rand(impostor_vertex.position.x, impostor_vertex.position.y, impostor_vertex.position.z));
-            #endif
             sunlit_fraction += shadowMap.sample_compare(shadowSampler,
                                                         sphereShadowClipPosition.xy + float2(sample_offset),
                                                         sphereShadowClipPosition.z);
         }
+        #else
+        for (int sample_index = 0; sample_index < sample_count; sample_index++) {
+            // FIXME: 0.001 should be proportional to the typical atom size
+            // TO-DO: VogelDiskSample may be called with a random number instead of 3 for the rotation
+            float random_phi = InterleavedGradientNoise(impostor_vertex.position.xy);
+            half2 sample_offset = VogelDiskSample(0.001,
+                                                  sample_index,
+                                                  sample_count,
+                                                  random_phi);
+            sunlit_fraction += shadowMap.sample_compare(shadowSampler,
+                                                        sphereShadowClipPosition.xy + float2(sample_offset),
+                                                        sphereShadowClipPosition.z);
+        }
+        #endif
         
         // Add the shadow to the shadedColor by subtracting color
         shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
