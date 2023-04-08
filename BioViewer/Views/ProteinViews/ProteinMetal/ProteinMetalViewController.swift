@@ -129,7 +129,7 @@ class ProteinMetalViewController: UIViewController {
                 
                 let translationX = Float(gestureRecognizer.velocity(in: renderedView).x) * translationSensitivity
                 let translationY = Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
-                self.proteinViewModel.renderer.scene.moveCamera(x: translationX, y: -translationY)
+                self.proteinViewModel.renderer.scene.translateCamera(x: translationX, y: -translationY)
             
             default:
                 break

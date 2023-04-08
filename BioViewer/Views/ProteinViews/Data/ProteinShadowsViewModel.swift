@@ -6,10 +6,26 @@
 //
 
 import Foundation
+import SwiftUI
 
 class ProteinShadowsViewModel: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel?
+    
+    class SunDirection {
+        var theta: Angle = Angle(degrees: 90)
+        var phi: Angle = Angle(degrees: 45)
+    }
+    
+    @Published var sunDirection = SunDirection() {
+        didSet {
+            proteinViewModel?.renderer.scene.setSunDirection(
+                theta: sunDirection.theta,
+                phi: sunDirection.phi
+            )
+            proteinViewModel?.renderer.scene.needsRedraw = true
+        }
+    }
     
     @Published var hasShadows: Bool = true {
         didSet {

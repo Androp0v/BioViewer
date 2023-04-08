@@ -22,7 +22,7 @@ struct ProteinRenderedViewDepthTexture {
             )
         depthTextureDescriptor.textureType = .type2D
         depthTextureDescriptor.usage = [.shaderRead, .shaderWrite, .renderTarget]
-        depthTextureDescriptor.storageMode = .shared
+        depthTextureDescriptor.storageMode = .private
         depthTexture = device.makeTexture(descriptor: depthTextureDescriptor)
         depthTexture.label = "Depth Texture"
     }

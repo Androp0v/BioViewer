@@ -52,6 +52,8 @@ typedef struct {
         
     // MARK: - Shadows
     
+    /// Sun direction.
+    simd_float3 sun_direction;
     /// Whether it should cast shadows.
     int8_t has_shadows;
     /// The strength of the shadow color subtraction, from 0 to 1.

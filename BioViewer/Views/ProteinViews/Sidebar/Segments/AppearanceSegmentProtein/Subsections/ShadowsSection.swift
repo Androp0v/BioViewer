@@ -17,6 +17,10 @@ struct ShadowsSection: View {
             header: Text(NSLocalizedString("Shadows", comment: ""))
                 .padding(.bottom, 4),
             content: {
+                SunDirectionRow(
+                    theta: $shadowsViewModel.sunDirection.theta,
+                    phi: $shadowsViewModel.sunDirection.phi
+                )
                 if AppState.hasSamplerCompareSupport() {
                     PersistentDisclosureGroup(
                         for: .shadowGroup,

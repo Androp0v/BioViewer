@@ -133,8 +133,13 @@ class MetalScene {
         })
         
         // Initial rotation matrix values
-        updateModelRotation(rotationMatrix: Transform.rotationMatrix(radians: 0.0,
-                                                                     axis: simd_float3(0.0, 1.0, 0.0)))
+        updateModelRotation(rotationMatrix: Transform.rotationMatrix(
+            radians: 0.0,
+            axis: simd_float3(0.0, 1.0, 0.0)
+        ))
+        
+        // Set initial sun direction
+        setSunDirection(direction: simd_float3(x: 1.0, y: 1.0, z: 0.0))
         
         // Set initial FrameData bond color
         if let components = bondColor.components {
@@ -194,6 +199,19 @@ class MetalScene {
         }
     }
     
+    // MARK: - Sun direction
+    
+    func setSunDirection(theta: Angle, phi: Angle) {
+        let x = Float(cos(phi.radians) * sin(theta.radians))
+        let y = Float(sin(phi.radians))
+        let z = -Float(cos(phi.radians) * cos(theta.radians))
+        setSunDirection(direction: simd_float3(x: x, y: y, z: z))
+    }
+    
+    func setSunDirection(direction: simd_float3) {
+        frameData.sun_direction = normalize(direction)
+    }
+    
     // MARK: - Update rotation
     
     func updateModelRotation(rotationMatrix: simd_float4x4) {
@@ -246,7 +264,8 @@ class MetalScene {
     }
     
     // MARK: - Move camera
-    func moveCamera(x: Float, y: Float) {
+    
+    func translateCamera(x: Float, y: Float) {
         self.cameraPosition.x += x
         self.cameraPosition.y += y
     }

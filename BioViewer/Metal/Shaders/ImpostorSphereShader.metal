@@ -150,7 +150,7 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
     output.depth = normalizedDeviceCoordinatesDepth;
     
     // Phong diffuse shading
-    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
+    half3 sunRayDirection = half3(frameData.sun_direction);
     half reflectivity = 0.3;
     
     // Add base color
