@@ -221,16 +221,16 @@ class MetalScene {
         self.frameData.inverse_rotation_matrix = rotationMatrix.inverse
         
         // Update sun rotation matrix (model rotation + sun rotation)
-        let thetaRotation = Transform.rotationMatrix(
-            radians: Float(sunDirection.theta.radians),
-            axis: simd_float3(0.0, 1.0, 0.0)
-        )
-        let originalZDirection = thetaRotation.inverse * simd_float4(0.0, 0.0, 1.0, 1.0)
-        let phiRotation = Transform.rotationMatrix(
+        let phiRotation = Transform.leftHandedRotationMatrix(
             radians: Float(sunDirection.phi.radians),
-            axis: originalZDirection.xyz
+            axis: simd_float3(-1.0, 0.0, 0.0)
         )
-        let sunRotation = phiRotation * thetaRotation
+        let originalYDirection = phiRotation.inverse * simd_float4(0.0, -1.0, 0.0, 1.0)
+        let thetaRotation = Transform.leftHandedRotationMatrix(
+            radians: Float(sunDirection.theta.radians),
+            axis: originalYDirection.xyz
+        )
+        let sunRotation = thetaRotation * phiRotation
         self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix * translateToOriginMatrix
         
         // Update camera -> sun's coordinate transform
