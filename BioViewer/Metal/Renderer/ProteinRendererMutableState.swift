@@ -223,6 +223,7 @@ extension ProteinRenderer {
                 width: size.width * superSamplingCount,
                 height: size.height * superSamplingCount
             )
+            metalLayer.drawableSize = superSampledSize
             depthTexture.makeTextures(
                 device: device,
                 textureWidth: Int(superSampledSize.width),
