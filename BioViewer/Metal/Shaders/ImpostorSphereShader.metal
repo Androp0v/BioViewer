@@ -42,7 +42,8 @@ half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, floa
     half theta = sampleIndex * GoldenAngle + phi;
 
     half2 sine_cosine;
-    sincos(theta, sine_cosine);
+    sine_cosine.x = sin(theta);
+    sine_cosine.y = cos(theta);
   
     return half2(r * sine_cosine.y, r * sine_cosine.x);
 }
