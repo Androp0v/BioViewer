@@ -8,14 +8,24 @@
 import Foundation
 import SwiftUI
 
+class SunDirection {
+    var theta: Angle
+    var phi: Angle
+    
+    init() {
+        self.theta = Angle(degrees: 45)
+        self.phi = Angle(degrees: 45)
+    }
+    
+    init(theta: Angle, phi: Angle) {
+        self.theta = theta
+        self.phi = phi
+    }
+}
+
 class ProteinShadowsViewModel: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel?
-    
-    class SunDirection {
-        var theta: Angle = Angle(degrees: 90)
-        var phi: Angle = Angle(degrees: 45)
-    }
     
     @Published var sunDirection = SunDirection() {
         didSet {

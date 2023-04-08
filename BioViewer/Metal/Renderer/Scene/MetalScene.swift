@@ -39,7 +39,7 @@ class MetalScene {
     var configurationSelector: ConfigurationSelector?
     
     /// Sun position, world coordinates.
-    var sunDirection: simd_float3 = simd_float3(1, 1, 0)
+    var sunDirection = SunDirection()
     
     // MARK: - Representation properties
     /// Current ProteinVisualizationOption. May not match the value of the ProteinViewModel `visualization` until the new geometry
@@ -64,7 +64,7 @@ class MetalScene {
     var autorotating: Bool = false { didSet { needsRedraw = true } }
     
     // MARK: - Shadow properties
-    
+
     /// Whether shadows should be casted between geometry elements.
     var hasShadows: Bool { didSet { needsRedraw = true } }
     var shadowStrength: Float = 0.4 { didSet { needsRedraw = true } }
@@ -139,7 +139,7 @@ class MetalScene {
         ))
         
         // Set initial sun direction
-        setSunDirection(direction: simd_float3(x: 1.0, y: 1.0, z: 0.0))
+        setSunDirection(theta: sunDirection.theta, phi: sunDirection.phi) 
         
         // Set initial FrameData bond color
         if let components = bondColor.components {
@@ -205,11 +205,8 @@ class MetalScene {
         let x = Float(cos(phi.radians) * sin(theta.radians))
         let y = Float(sin(phi.radians))
         let z = -Float(cos(phi.radians) * cos(theta.radians))
-        setSunDirection(direction: simd_float3(x: x, y: y, z: z))
-    }
-    
-    func setSunDirection(direction: simd_float3) {
-        frameData.sun_direction = normalize(direction)
+        self.sunDirection = SunDirection(theta: theta, phi: phi)
+        self.frameData.sun_direction = normalize(simd_float3(x: x, y: y, z: z))
     }
     
     // MARK: - Update rotation
@@ -224,10 +221,16 @@ class MetalScene {
         self.frameData.inverse_rotation_matrix = rotationMatrix.inverse
         
         // Update sun rotation matrix (model rotation + sun rotation)
-        let sunRotation = Transform.rotationMatrix(
-            radians: Float.pi / 2,
-            axis: simd_float3(-1.0, 0.0, 1.0)
+        let thetaRotation = Transform.rotationMatrix(
+            radians: Float(sunDirection.theta.radians),
+            axis: simd_float3(0.0, 1.0, 0.0)
         )
+        let originalZDirection = thetaRotation.inverse * simd_float4(0.0, 0.0, 1.0, 1.0)
+        let phiRotation = Transform.rotationMatrix(
+            radians: Float(sunDirection.phi.radians),
+            axis: originalZDirection.xyz
+        )
+        let sunRotation = phiRotation * thetaRotation
         self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix * translateToOriginMatrix
         
         // Update camera -> sun's coordinate transform
