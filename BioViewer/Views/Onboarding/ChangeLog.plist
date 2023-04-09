@@ -8,9 +8,33 @@
             <key>Type</key>
             <string>FEAT</string>
             <key>Title</key>
+            <string>Improved rendering</string>
+            <key>Subtitle</key>
+            <string>Changes in the rendering engine for higher quality shadows at a small performance cost.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
             <string>Color by Residue</string>
             <key>Subtitle</key>
             <string>Protein atoms can now be colored based on their residue (ARG, HIS, LYS...).</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Color by Secondary Structure</string>
+            <key>Subtitle</key>
+            <string>Protein atoms can now be colored based on their secondary structure (helix, sheet or loop).</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Change sun direction</string>
+            <key>Subtitle</key>
+            <string>Added a UI control to change the direction of the light source.</string>
         </dict>
         <dict>
             <key>Type</key>
