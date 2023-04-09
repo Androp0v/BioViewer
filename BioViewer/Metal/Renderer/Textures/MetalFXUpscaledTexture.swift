@@ -10,7 +10,7 @@ import MetalKit
 
 struct MetalFXUpscaledTexture {
     
-    var upscaledTexture: MTLTexture!
+    var upscaledColor: MTLTexture!
     
     mutating func makeTexture(device: MTLDevice, width: Int, height: Int) {
                 
@@ -25,7 +25,7 @@ struct MetalFXUpscaledTexture {
         colorTextureDescriptor.textureType = .type2D
         colorTextureDescriptor.usage = [.renderTarget]
         colorTextureDescriptor.storageMode = .private
-        upscaledTexture = device.makeTexture(descriptor: colorTextureDescriptor)
-        upscaledTexture.label = "MetalFX Upscaled Texture"
+        upscaledColor = device.makeTexture(descriptor: colorTextureDescriptor)
+        upscaledColor.label = "MetalFX Upscaled Texture"
     }
 }

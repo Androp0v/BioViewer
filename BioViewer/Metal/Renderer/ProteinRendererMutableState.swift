@@ -64,14 +64,12 @@ extension ProteinRenderer {
         
         // MARK: - Textures
         
-        /// `ProteinView` view depth texture.
-        var renderedTextures = ProteinRenderedTextures()
+        var renderTarget = ProteinRenderTarget()
+        
         /// Depth texture used in the depth pre-pass.
         var depthPrePassTextures = DepthPrePassTextures()
         /// Shadow textures.
         var shadowTextures = ShadowTextures()
-        /// MetalFX upscaled texture.
-        var upscaledTexture = MetalFXUpscaledTexture()
         /// Benchmark textures.
         var benchmarkTextures = BenchmarkTextures()
         
@@ -223,43 +221,27 @@ extension ProteinRenderer {
         }
         
         func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer, displayScale: CGFloat, renderer: ProteinRenderer) {
-            // Update texture sizes
+            
+            // Update content scale
             metalLayer.contentsScale = displayScale * superSamplingCount
-            let superSampledSize = CGSize(
-                width: size.width * superSamplingCount,
-                height: size.height * superSamplingCount
+            
+            // Update render target
+            renderTarget.updateRenderTarget(for: size, renderer: renderer)
+            
+            // Update the drawable size
+            metalLayer.drawableSize = CGSize(
+                width: renderTarget.upscaledSize.width,
+                height: renderTarget.upscaledSize.height
             )
-            metalLayer.drawableSize = superSampledSize
-            renderedTextures.makeTextures(
-                device: device,
-                textureWidth: Int(superSampledSize.width / CGFloat(metalFXUpscalingFactor)),
-                textureHeight: Int(superSampledSize.height / CGFloat(metalFXUpscalingFactor))
-            )
+            
+            // Update non-render target textures
             if AppState.hasDepthPrePasses() {
                 depthPrePassTextures.makeTextures(
                     device: device,
-                    textureWidth: Int(superSampledSize.width / CGFloat(metalFXUpscalingFactor)),
-                    textureHeight: Int(superSampledSize.height / CGFloat(metalFXUpscalingFactor))
+                    textureWidth: renderTarget.renderSize.width,
+                    textureHeight: renderTarget.renderSize.height
                 )
             }
-            // Update MetalFX upscaler
-            renderer.makeSpatialScaler(
-                inputSize: MTLSizeMake(
-                    Int(superSampledSize.width / CGFloat(metalFXUpscalingFactor)),
-                    Int(superSampledSize.height / CGFloat(metalFXUpscalingFactor)),
-                    1
-                ),
-                outputSize: MTLSizeMake(
-                    Int(superSampledSize.width),
-                    Int(superSampledSize.height),
-                    1
-                )
-            )
-            upscaledTexture.makeTexture(
-                device: device,
-                width: Int(superSampledSize.width),
-                height: Int(superSampledSize.height)
-            )
         }
     }
 }

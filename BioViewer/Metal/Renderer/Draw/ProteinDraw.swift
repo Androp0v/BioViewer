@@ -85,8 +85,8 @@ extension ProteinRenderer.MutableState {
         var viewTexture: MTLTexture?
         var viewDepthTexture: MTLTexture?
         if !renderer.isBenchmark {
-            viewTexture = renderedTextures.colorTexture
-            viewDepthTexture = renderedTextures.depthTexture
+            viewTexture = renderTarget.renderedTextures.colorTexture
+            viewDepthTexture = renderTarget.renderedTextures.depthTexture
         } else {
             viewTexture = benchmarkTextures.colorTexture
             viewDepthTexture = benchmarkTextures.depthTexture
@@ -143,14 +143,14 @@ extension ProteinRenderer.MutableState {
                         renderer: renderer,
                         commandBuffer: commandBuffer,
                         sourceTexture: viewTexture,
-                        outputTexture: upscaledTexture.upscaledTexture
+                        outputTexture: renderTarget.upscaledTexture.upscaledColor
                     )
                     
                     // MARK: - Present drawable
                     
                     self.copyToDrawable(
                         commandBuffer: commandBuffer,
-                        finalRenderedTexture: upscaledTexture.upscaledTexture,
+                        finalRenderedTexture: renderTarget.upscaledTexture.upscaledColor,
                         drawableTexture: drawable.texture
                     )
                     commandBuffer.present(drawable)

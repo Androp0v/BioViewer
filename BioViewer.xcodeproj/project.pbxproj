@@ -183,6 +183,7 @@
 		C560E0DA29E2EB9400CE883C /* MetalFXScalers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C560E0D929E2EB9400CE883C /* MetalFXScalers.swift */; };
 		C560E0DD29E2F12E00CE883C /* MetalFXUpscaledTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C560E0DC29E2F12E00CE883C /* MetalFXUpscaledTexture.swift */; };
 		C560E0DF29E302FA00CE883C /* CopyToDrawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C560E0DE29E302FA00CE883C /* CopyToDrawable.swift */; };
+		C560E0E129E305DC00CE883C /* ProteinRenderTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C560E0E029E305DC00CE883C /* ProteinRenderTarget.swift */; };
 		C5626ADD282E8F2000CFE7DC /* ComputeMolecularSurfaceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */; };
 		C5626ADE282E8F2800CFE7DC /* PointsPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC85282A9616001281CD /* PointsPass.swift */; };
 		C5626ADF282E8F3200CFE7DC /* MakeBufferFromArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */; };
@@ -479,6 +480,7 @@
 		C560E0D929E2EB9400CE883C /* MetalFXScalers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalFXScalers.swift; sourceTree = "<group>"; };
 		C560E0DC29E2F12E00CE883C /* MetalFXUpscaledTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalFXUpscaledTexture.swift; sourceTree = "<group>"; };
 		C560E0DE29E302FA00CE883C /* CopyToDrawable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyToDrawable.swift; sourceTree = "<group>"; };
+		C560E0E029E305DC00CE883C /* ProteinRenderTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderTarget.swift; sourceTree = "<group>"; };
 		C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPSCounterView.swift; sourceTree = "<group>"; };
 		C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinVisualizationOption.swift; sourceTree = "<group>"; };
 		C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationBufferLoader.swift; sourceTree = "<group>"; };
@@ -876,6 +878,7 @@
 			children = (
 				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
 				C531754029DF1AA3004FF2C6 /* ProteinRendererMutableState.swift */,
+				C560E0E029E305DC00CE883C /* ProteinRenderTarget.swift */,
 				C531753F29DF16AD004FF2C6 /* Draw */,
 				C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */,
 				C501C74327C3FDC5008CDA25 /* ComputePasses */,
@@ -1640,6 +1643,7 @@
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
 				C5FEC7332775F93A00E348BD /* ConnectivityGenerator.swift in Sources */,
 				C5C7514927DC33D5004CEE8E /* InfoAtomsRow.swift in Sources */,
+				C560E0E129E305DC00CE883C /* ProteinRenderTarget.swift in Sources */,
 				C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */,
 				C581ACCC282C0195001DD4BB /* BioViewerLogger.swift in Sources */,
 				C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */,
