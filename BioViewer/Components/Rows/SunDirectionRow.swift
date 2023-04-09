@@ -14,9 +14,20 @@ struct SunDirectionRow: View {
     @Binding var phi: Angle
     
     let sunFrameSize: CGFloat = 64
+    #if targetEnvironment(macCatalyst)
+    let spacing: CGFloat = 8
+    #else
+    let spacing: CGFloat = 12
+    #endif
     
+    let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+        
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: spacing) {
             Text("Sun direction:")
             HStack {
                 ZStack(alignment: .center) {
@@ -67,9 +78,35 @@ struct SunDirectionRow: View {
                 }
                 .frame(width: sunFrameSize, height: sunFrameSize)
                 VStack(alignment: .leading, spacing: .zero) {
-                    Text("Latitude (\(Int(phi.degrees))º)")
+                    HStack(spacing: .zero) {
+                        Text("Latitude (")
+                        TextField("", value: $phi.degrees, formatter: formatter)
+                            .fixedSize()
+                            .onChange(of: phi) { newValue in
+                                if newValue.radians > .pi/2 {
+                                    phi.radians = .pi/2
+                                } else if newValue.radians < -.pi/2 {
+                                    phi.radians = -.pi/2
+                                }
+                            }
+                        Text("º)")
+                        Spacer()
+                    }
                     Slider(value: $phi.degrees, in: -90...90)
-                    Text("Longitude (\(Int(theta.degrees))º)")
+                    HStack(spacing: .zero) {
+                        Text("Longitude (")
+                        TextField("", value: $theta.degrees, formatter: formatter)
+                            .fixedSize()
+                            .onChange(of: theta) { newValue in
+                                if newValue.radians > .pi {
+                                    theta.radians = .pi
+                                } else if newValue.radians < -.pi {
+                                    theta.radians = -.pi
+                                }
+                            }
+                        Text("º)")
+                        Spacer()
+                    }
                     Slider(value: $theta.degrees, in: -180...180)
                 }
                 .padding(.leading, 12)
