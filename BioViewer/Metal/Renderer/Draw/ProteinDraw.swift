@@ -98,6 +98,7 @@ extension ProteinRenderer.MutableState {
         }
         
         if let viewTexture, let viewDepthTexture {
+            
             // MARK: - Impostor pass
             
             self.impostorRenderPass(
@@ -113,6 +114,7 @@ extension ProteinRenderer.MutableState {
             )
                                             
             // MARK: - Debug points pass
+            
             #if DEBUG
             self.pointsRenderPass(
                 renderer: renderer,
@@ -122,6 +124,15 @@ extension ProteinRenderer.MutableState {
                 depthTexture: viewDepthTexture
             )
             #endif
+            
+            // MARK: - Shadow blurring
+            /*
+            self.shadowBlurPass(
+                renderer: renderer,
+                commandBuffer: commandBuffer,
+                texture: viewTexture
+            )
+             */
             
             // Schedule a drawable presentation to occur after the GPU completes its work
             // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)

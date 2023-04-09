@@ -245,6 +245,9 @@
 		C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */; };
 		C59792CF277210580019ABD3 /* ShutterClosed.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CD277210570019ABD3 /* ShutterClosed.aiff */; };
 		C59792D0277210580019ABD3 /* ShutterOpen.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CE277210570019ABD3 /* ShutterOpen.aiff */; };
+		C59CD00929E21CBD0017796B /* ShadowBlur.metal in Sources */ = {isa = PBXBuildFile; fileRef = C59CD00829E21CBD0017796B /* ShadowBlur.metal */; };
+		C59CD00D29E21FF10017796B /* ShadowBlurPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59CD00C29E21FF10017796B /* ShadowBlurPass.swift */; };
+		C59CD00F29E222BA0017796B /* ShadowBlurPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59CD00C29E21FF10017796B /* ShadowBlurPass.swift */; };
 		C59D1F3827E08B43000B6020 /* PhotoModeShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D1F3727E08B43000B6020 /* PhotoModeShareButton.swift */; };
 		C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
 		C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */; };
@@ -527,6 +530,8 @@
 		C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterAnimator.swift; sourceTree = "<group>"; };
 		C59792CD277210570019ABD3 /* ShutterClosed.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterClosed.aiff; sourceTree = "<group>"; };
 		C59792CE277210570019ABD3 /* ShutterOpen.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterOpen.aiff; sourceTree = "<group>"; };
+		C59CD00829E21CBD0017796B /* ShadowBlur.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShadowBlur.metal; sourceTree = "<group>"; };
+		C59CD00C29E21FF10017796B /* ShadowBlurPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowBlurPass.swift; sourceTree = "<group>"; };
 		C59D1F3727E08B43000B6020 /* PhotoModeShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeShareButton.swift; sourceTree = "<group>"; };
 		C59D6A55275B939A00CCC941 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
 		C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTrackedAction.swift; sourceTree = "<group>"; };
@@ -647,6 +652,7 @@
 				C5FEC734277C744200E348BD /* ImpostorBondShader.metal */,
 				C405744E2663DD58008527D1 /* BasicShader.metal */,
 				C555EC7F282A751A001281CD /* DebugShader */,
+				C59CD00729E21C9C0017796B /* Postprocessing */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -987,10 +993,9 @@
 			isa = PBXGroup;
 			children = (
 				C5E7AF962760E6D40065F6AD /* RendererPipelines.swift */,
-				C540EE11284B747100153200 /* ShadowDepthPrePass.swift */,
-				C51D4EE0276912AE00C69B3D /* ShadowPass.swift */,
-				C5412FF0283D9E8C00234403 /* DepthPrePassStage.swift */,
-				C51D4EE42769137500C69B3D /* ImpostorPass.swift */,
+				C59CD00B29E21FD50017796B /* ShadowPass */,
+				C59CD00A29E21FC60017796B /* ImpostorPass */,
+				C59CD00E29E220660017796B /* Postprocessing */,
 				C555EC84282A9604001281CD /* DebugPass */,
 				C51D4EE72769151100C69B3D /* Computed once */,
 			);
@@ -1266,6 +1271,40 @@
 				C59792CE277210570019ABD3 /* ShutterOpen.aiff */,
 			);
 			path = "Media Assets";
+			sourceTree = "<group>";
+		};
+		C59CD00729E21C9C0017796B /* Postprocessing */ = {
+			isa = PBXGroup;
+			children = (
+				C59CD00829E21CBD0017796B /* ShadowBlur.metal */,
+			);
+			path = Postprocessing;
+			sourceTree = "<group>";
+		};
+		C59CD00A29E21FC60017796B /* ImpostorPass */ = {
+			isa = PBXGroup;
+			children = (
+				C5412FF0283D9E8C00234403 /* DepthPrePassStage.swift */,
+				C51D4EE42769137500C69B3D /* ImpostorPass.swift */,
+			);
+			path = ImpostorPass;
+			sourceTree = "<group>";
+		};
+		C59CD00B29E21FD50017796B /* ShadowPass */ = {
+			isa = PBXGroup;
+			children = (
+				C540EE11284B747100153200 /* ShadowDepthPrePass.swift */,
+				C51D4EE0276912AE00C69B3D /* ShadowPass.swift */,
+			);
+			path = ShadowPass;
+			sourceTree = "<group>";
+		};
+		C59CD00E29E220660017796B /* Postprocessing */ = {
+			isa = PBXGroup;
+			children = (
+				C59CD00C29E21FF10017796B /* ShadowBlurPass.swift */,
+			);
+			path = Postprocessing;
 			sourceTree = "<group>";
 		};
 		C59D6A5E275D807900CCC941 /* StatusView */ = {
@@ -1563,6 +1602,7 @@
 				C5FF9AD62980351C00D583A2 /* BioBenchView.swift in Sources */,
 				C553B79529360CF600294BB4 /* UserDefaults+Extension.swift in Sources */,
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
+				C59CD00929E21CBD0017796B /* ShadowBlur.metal in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
 				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
 				C5FEC737277C8EA800E348BD /* CreateImpostorBonds.metal in Sources */,
@@ -1724,6 +1764,7 @@
 				C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */,
 				C544D3A0277016270060B30D /* TextureToImage.swift in Sources */,
 				C5EEE9B0276E0448005737C1 /* InputWithButtonRow.swift in Sources */,
+				C59CD00D29E21FF10017796B /* ShadowBlurPass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1822,6 +1863,7 @@
 				C531754929DF8A99004FF2C6 /* ProteinRenderedViewDepthTexture.swift in Sources */,
 				C5035EEC283FE72F009CE87D /* DepthPrePassTextures.swift in Sources */,
 				C5EEE9BD276FB316005737C1 /* ToolbarConfig.swift in Sources */,
+				C59CD00F29E222BA0017796B /* ShadowBlurPass.swift in Sources */,
 				C5FF9AD929816C5400D583A2 /* BenchmarkTextures.swift in Sources */,
 				C504C9C1274175DD002D4E6A /* ImpostorSphereShader.metal in Sources */,
 				C57FCE8E277E60B7001A7B4A /* ConnectivityGenerator.swift in Sources */,

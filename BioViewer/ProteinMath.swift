@@ -38,18 +38,20 @@ func computeBoundingSphere(atoms: ContiguousArray<simd_float3>, extraMargin: Flo
     }
     
     let boundingBox = computeBoundingBox(atoms: atoms)
-    let center: simd_float3 = simd_float3(x: (boundingBox.minX + boundingBox.maxX) / 2,
-                                          y: (boundingBox.minY + boundingBox.maxY) / 2,
-                                          z: (boundingBox.minZ + boundingBox.maxZ) / 2)
+    let center: simd_float3 = simd_float3(
+        x: (boundingBox.minX + boundingBox.maxX) / 2,
+        y: (boundingBox.minY + boundingBox.maxY) / 2,
+        z: (boundingBox.minZ + boundingBox.maxZ) / 2
+    )
     
-    // Compute box dimensions
-    let length = boundingBox.maxX - boundingBox.minX
-    let width = boundingBox.maxY - boundingBox.minY
-    let depth = boundingBox.maxZ - boundingBox.minZ
-    
-    let radius = sqrt( pow(length, 2) + pow(width, 2) + pow(depth, 2) ) / 2
-    
-    return BoundingSphere(center: center, radius: radius + extraMargin)
+    var maxDistanceToCenter: Float = 0.0
+    for atom in atoms {
+        let atomDistance = distance(atom, center)
+        if atomDistance > maxDistanceToCenter {
+            maxDistanceToCenter = atomDistance
+        }
+    }
+    return BoundingSphere(center: center, radius: maxDistanceToCenter + extraMargin)
 }
 
 func computeBoundingSphere(proteins: [Protein], extraMargin: Float = 5) -> BoundingSphere {

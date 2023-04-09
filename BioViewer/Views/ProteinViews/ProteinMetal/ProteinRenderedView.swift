@@ -81,6 +81,7 @@ class ProteinRenderedView: UIView {
             return
         }
         metalLayer.device = renderer.device
+        metalLayer.framebufferOnly = false
     }
     
     @objc func removeDisplayLink() {

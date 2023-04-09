@@ -13,6 +13,7 @@
 
 #define PERCENTAGE_CLOSE_FILTERING
 #define JITTERED_PCF
+#define PENUMBRA_DEPENDENT_SAMPLING
 
 using namespace metal;
 
@@ -38,6 +39,19 @@ float rand(int x, int y, int z) {
 float InterleavedGradientNoise(float2 position_screen) {
     float3 magic = float3(0.06711056f, 0.00583715f, 52.9829189f);
     return fract(magic.z * fract(dot(position_screen, magic.xy)));
+}
+
+half2 OuterVogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
+    half GoldenAngle = 2.4f;
+
+    half r = radius_scale;
+    half theta = sampleIndex * GoldenAngle + phi;
+
+    half2 sine_cosine;
+    sine_cosine.x = sin(theta);
+    sine_cosine.y = cos(theta);
+  
+    return half2(r * sine_cosine.y, r * sine_cosine.x);
 }
 
 half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
@@ -206,14 +220,13 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
         float sunlit_fraction = 0;
         int sample_count;
         if (is_high_quality_frame) {
-            sample_count = 128;
+            sample_count = 256;
         } else {
-            sample_count = 2;
+            sample_count = 4;
         }
         #ifndef JITTERED_PCF
         for (int sample_index = 0; sample_index < sample_count; sample_index++) {
             // FIXME: 0.001 should be proportional to the typical atom size
-            // TO-DO: VogelDiskSample may be called with a random number instead of 3 for the rotation
             half2 sample_offset = VogelDiskSample(0.001,
                                                   sample_index,
                                                   sample_count,
@@ -223,20 +236,38 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
                                                         sphereShadowClipPosition.z);
         }
         #else
+        float random_phi = InterleavedGradientNoise(impostor_vertex.position.xy);
         for (int sample_index = 0; sample_index < sample_count; sample_index++) {
             // FIXME: 0.001 should be proportional to the typical atom size
-            // TO-DO: VogelDiskSample may be called with a random number instead of 3 for the rotation
-            float random_phi = InterleavedGradientNoise(impostor_vertex.position.xy);
-            half2 sample_offset = VogelDiskSample(0.001,
-                                                  sample_index,
-                                                  sample_count,
-                                                  random_phi);
+            half2 sample_offset = OuterVogelDiskSample(0.001,
+                                                       sample_index,
+                                                       sample_count,
+                                                       random_phi);
             sunlit_fraction += shadowMap.sample_compare(shadowSampler,
                                                         sphereShadowClipPosition.xy + float2(sample_offset),
                                                         sphereShadowClipPosition.z);
         }
         #endif
         
+        #ifdef PENUMBRA_DEPENDENT_SAMPLING
+        if (sunlit_fraction != 0 && sunlit_fraction != sample_count) {
+            for (int sample_index = 4; sample_index < 16; sample_index++) {
+                // FIXME: 0.001 should be proportional to the typical atom size
+                half2 sample_offset = VogelDiskSample(0.0005,
+                                                      sample_index,
+                                                      sample_count,
+                                                      random_phi);
+                sunlit_fraction += shadowMap.sample_compare(shadowSampler,
+                                                            sphereShadowClipPosition.xy + float2(sample_offset),
+                                                            sphereShadowClipPosition.z);
+            }
+            // Add the shadow to the shadedColor by subtracting color
+            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / 16);
+        } else {
+            // Add the shadow to the shadedColor by subtracting color
+            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+        }
+        #endif
         // Add the shadow to the shadedColor by subtracting color
         shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
         #endif

@@ -44,10 +44,14 @@ class ProteinRenderer: NSObject {
     /// Resolution of the view
     var viewResolution: CGSize?
     
+    // MARK: - Pipeline States
+    
     /// Pipeline state for filling the color buffer (common options: element).
     var simpleFillColorComputePipelineState: MTLComputePipelineState?
     /// Pipeline state for filling the color buffer (extra options: residue, secondary structure...).
     var fillColorComputePipelineState: MTLComputePipelineState?
+    /// Pipeline state for the compute post-processing step of blurring the shadows.
+    var shadowBlurPipelineState: MTLComputePipelineState?
     
     /// Pipeline state for the shadow depth pre-pass.
     var shadowDepthPrePassRenderPipelineState: MTLRenderPipelineState?
@@ -209,6 +213,7 @@ class ProteinRenderer: NSObject {
         // Create compute pipeline states
         makeSimpleFillColorComputePipelineState(device: device)
         makeFillColorComputePipelineState(device: device)
+        makeShadowBlurringComputePipelineState(device: device)
         
         // Create render pipeline states
         makeShadowRenderPipelineState(device: device, highQuality: false)

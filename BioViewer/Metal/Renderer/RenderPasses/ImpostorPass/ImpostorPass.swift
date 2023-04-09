@@ -213,7 +213,7 @@ extension ProteinRenderer.MutableState {
                 indexBufferOffset: indexBufferRegion.offset * MemoryLayout<UInt32>.stride
             )
         }
-        
+                
         // MARK: - End encoding
         renderCommandEncoder.endEncoding()
     }
