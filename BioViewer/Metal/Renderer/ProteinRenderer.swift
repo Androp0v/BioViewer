@@ -7,6 +7,7 @@
 
 import Foundation
 @preconcurrency import MetalKit
+import MetalFX
 import SwiftUI
 
 class ProteinRenderer: NSObject {
@@ -43,6 +44,10 @@ class ProteinRenderer: NSObject {
     var commandQueue: MTLCommandQueue?
     /// Resolution of the view
     var viewResolution: CGSize?
+    
+    // MARK: - Upscaling
+    
+    var metalFXSpatialScaler: MTLFXSpatialScaler!
     
     // MARK: - Pipeline States
     
@@ -342,13 +347,13 @@ extension ProteinRenderer {
     func drawableSizeChanged(to size: CGSize, layer: CAMetalLayer, displayScale: CGFloat) {
         self.scene.camera.updateProjection(drawableSize: size)
         self.scene.aspectRatio = Float(size.width / size.height)
-        
         self.viewResolution = size
         Task {
             await protectedMutableState.updateTexturesForNewViewSize(
                 size,
                 metalLayer: layer,
-                displayScale: displayScale
+                displayScale: displayScale,
+                renderer: self
             )
         }
     }

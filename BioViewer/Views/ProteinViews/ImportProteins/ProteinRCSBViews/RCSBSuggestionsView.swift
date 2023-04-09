@@ -35,15 +35,13 @@ struct RCSBSuggestionsView: View {
             if let sections = suggestionViewModel.suggestionData?.sections {
                 ForEach(sections, id: \.self) { section in
                     Section(content: {
-                        if let rcsbRows = section.rowData {
-                            ForEach(rcsbRows, id: \.self) { rcsbRow in
-                                let pdbInfo = PDBInfo(suggestion: rcsbRow)
-                                RCSBRowView(
-                                    pdbInfo: pdbInfo,
-                                    searchTerm: nil,
-                                    rcsbShowSheet: $rcsbShowSheet
-                                )
-                            }
+                        ForEach(section.rowData, id: \.self) { rcsbRow in
+                            let pdbInfo = PDBInfo(suggestion: rcsbRow)
+                            RCSBRowView(
+                                pdbInfo: pdbInfo,
+                                searchTerm: nil,
+                                rcsbShowSheet: $rcsbShowSheet
+                            )
                         }
                     }, header: {
                         RCSBSuggestionHeaderView(

@@ -82,16 +82,11 @@ extension ProteinRenderer.MutableState {
             )
         }
         
-        // GETTING THE DRAWABLE
-        // The final pass can only render if a drawable is available, otherwise it needs to skip
-        // rendering this frame. Get the drawable as late as possible.
         var viewTexture: MTLTexture?
         var viewDepthTexture: MTLTexture?
-        var drawable: CAMetalDrawable?
         if !renderer.isBenchmark {
-            drawable = layer.nextDrawable()
-            viewTexture = drawable?.texture
-            viewDepthTexture = depthTexture.depthTexture
+            viewTexture = renderedTextures.colorTexture
+            viewDepthTexture = renderedTextures.depthTexture
         } else {
             viewTexture = benchmarkTextures.colorTexture
             viewDepthTexture = benchmarkTextures.depthTexture
@@ -134,10 +129,35 @@ extension ProteinRenderer.MutableState {
             )
              */
             
-            // Schedule a drawable presentation to occur after the GPU completes its work
-            // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
-            if let drawable {
-                commandBuffer.present(drawable)
+            // MARK: - Get drawable
+            // The final pass can only render if a drawable is available, otherwise it needs to skip
+            // rendering this frame. Get the drawable as late as possible.
+            var drawable: CAMetalDrawable?
+            if !renderer.isBenchmark {
+                drawable = layer.nextDrawable()
+                if let drawable {
+                    
+                    // MARK: - MetalFX Upscaling
+                    
+                    self.metalFXUpscaling(
+                        renderer: renderer,
+                        commandBuffer: commandBuffer,
+                        sourceTexture: viewTexture,
+                        outputTexture: upscaledTexture.upscaledTexture
+                    )
+                    
+                    // MARK: - Present drawable
+                    
+                    self.copyToDrawable(
+                        commandBuffer: commandBuffer,
+                        finalRenderedTexture: upscaledTexture.upscaledTexture,
+                        drawableTexture: drawable.texture
+                    )
+                    commandBuffer.present(drawable)
+                    
+                    // Schedule a drawable presentation to occur after the GPU completes its work
+                    // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
+                }
             }
         }
         

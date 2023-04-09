@@ -17,7 +17,10 @@ extension ProteinRenderer {
         
         // MARK: - Global
         
-        var superSamplingCount: CGFloat = 1.0
+        /// Supersampling factor, if you want to perform SSAA.
+        var superSamplingCount: CGFloat = 1.5
+        /// Upscaling factor used for MetalFX upscaling. Render resolution will be drawable resolution / this factor.
+        var metalFXUpscalingFactor: Float = 1.5
                 
         // MARK: - Scheduling
         
@@ -62,11 +65,13 @@ extension ProteinRenderer {
         // MARK: - Textures
         
         /// `ProteinView` view depth texture.
-        var depthTexture = ProteinRenderedViewDepthTexture()
+        var renderedTextures = ProteinRenderedTextures()
         /// Depth texture used in the depth pre-pass.
         var depthPrePassTextures = DepthPrePassTextures()
         /// Shadow textures.
         var shadowTextures = ShadowTextures()
+        /// MetalFX upscaled texture.
+        var upscaledTexture = MetalFXUpscaledTexture()
         /// Benchmark textures.
         var benchmarkTextures = BenchmarkTextures()
         
@@ -217,25 +222,44 @@ extension ProteinRenderer {
             }
         }
         
-        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer, displayScale: CGFloat) {
+        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer, displayScale: CGFloat, renderer: ProteinRenderer) {
+            // Update texture sizes
             metalLayer.contentsScale = displayScale * superSamplingCount
             let superSampledSize = CGSize(
                 width: size.width * superSamplingCount,
                 height: size.height * superSamplingCount
             )
             metalLayer.drawableSize = superSampledSize
-            depthTexture.makeTextures(
+            renderedTextures.makeTextures(
                 device: device,
-                textureWidth: Int(superSampledSize.width),
-                textureHeight: Int(superSampledSize.height)
+                textureWidth: Int(superSampledSize.width / CGFloat(metalFXUpscalingFactor)),
+                textureHeight: Int(superSampledSize.height / CGFloat(metalFXUpscalingFactor))
             )
             if AppState.hasDepthPrePasses() {
                 depthPrePassTextures.makeTextures(
                     device: device,
-                    textureWidth: Int(superSampledSize.width),
-                    textureHeight: Int(superSampledSize.height)
+                    textureWidth: Int(superSampledSize.width / CGFloat(metalFXUpscalingFactor)),
+                    textureHeight: Int(superSampledSize.height / CGFloat(metalFXUpscalingFactor))
                 )
             }
+            // Update MetalFX upscaler
+            renderer.makeSpatialScaler(
+                inputSize: MTLSizeMake(
+                    Int(superSampledSize.width / CGFloat(metalFXUpscalingFactor)),
+                    Int(superSampledSize.height / CGFloat(metalFXUpscalingFactor)),
+                    1
+                ),
+                outputSize: MTLSizeMake(
+                    Int(superSampledSize.width),
+                    Int(superSampledSize.height),
+                    1
+                )
+            )
+            upscaledTexture.makeTexture(
+                device: device,
+                width: Int(superSampledSize.width),
+                height: Int(superSampledSize.height)
+            )
         }
     }
 }
