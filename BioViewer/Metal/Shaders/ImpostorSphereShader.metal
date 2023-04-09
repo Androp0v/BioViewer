@@ -267,9 +267,10 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
             // Add the shadow to the shadedColor by subtracting color
             shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
         }
-        #endif
+        #else
         // Add the shadow to the shadedColor by subtracting color
         shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+        #endif
         #endif
     }
     
