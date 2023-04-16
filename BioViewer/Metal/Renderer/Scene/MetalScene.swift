@@ -199,7 +199,7 @@ class MetalScene {
         // Autorotation
         if autorotating {
             let autorotationMatrix = Transform.rotationMatrix(
-                radians: -0.001,
+                radians: -0.01,
                 axis: (self.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
             )
             self.userModelRotationMatrix *= autorotationMatrix
