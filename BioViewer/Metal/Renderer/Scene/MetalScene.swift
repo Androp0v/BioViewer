@@ -224,6 +224,13 @@ class MetalScene {
     
     private func updateModelRotation(rotationMatrix: simd_float4x4) {
         
+        // Add some random rotation of shadowMap around its center axis to cause
+        // aliasing artifacts to change from frame to frame.
+        let randomRotation = Transform.rotationMatrix(
+            radians: 0.01 * Float.random(in: 0..<2 * Float.pi),
+            axis: simd_float3(0.0, 0.0, 1.0)
+        )
+        
         self.userModelRotationMatrix = rotationMatrix
         let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
 
@@ -245,9 +252,13 @@ class MetalScene {
         self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix * translateToOriginMatrix
         
         // Update camera -> sun's coordinate transform
-        self.frameData.camera_to_shadow_projection_matrix = self.frameData.shadowProjectionMatrix
+        self.frameData.camera_to_shadow_projection_matrix = randomRotation
+            * self.frameData.shadowProjectionMatrix
             * sunRotation
             * Transform.translationMatrix(cameraPosition).inverse
+        
+        // Add random rotation to the sun's
+        self.frameData.shadowProjectionMatrix = randomRotation * self.frameData.shadowProjectionMatrix
     }
         
     // MARK: - Fit protein on screen

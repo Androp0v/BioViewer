@@ -16,7 +16,7 @@ class ProteinRenderTarget {
     /// Supersampling factor, if you want to perform SSAA.
     let superSamplingCount: Float = 1.5
     /// Upscaling factor used for MetalFX upscaling. Render resolution will be drawable resolution / this factor.
-    let metalFXUpscalingFactor: Float = 2.0
+    let metalFXUpscalingFactor: Float = 1.5
     
     // MARK: - Window and texture sizes
     
