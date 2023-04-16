@@ -18,6 +18,9 @@ kernel void motion_texture(constant ReprojectionData& reprojection_data [[ buffe
     if (depth == 1.0) {
         motion_vector = float4(0.0, 0.0, 0.0, 0.0);
     } else {
+        float2 texture_position_normalized;
+        texture_position_normalized.x = texture_position.x / reprojection_data.renderWidth;
+        texture_position_normalized.y = texture_position.x / reprojection_data.renderHeight;
         float4 ndc_position = float4(2 * (texture_position.x - 0.5), -2 * (texture_position.y - 0.5), depth, 1.0);
         float3 old_ndc_position = (reprojection_data.reprojection_matrix * ndc_position).xyz;
         half2 old_texture_position = half2(old_ndc_position.x / 2 + 0.5, -old_ndc_position.y / 2 + 0.5);

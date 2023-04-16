@@ -279,7 +279,7 @@ class MetalScene {
     
     // MARK: - Reprojection
     
-    func reprojectionData(currentFrameData: FrameData, oldFrameData: FrameData?) -> ReprojectionData? {
+    func reprojectionData(currentFrameData: FrameData, oldFrameData: FrameData?) -> simd_float4x4? {
         guard let oldFrameData else { return nil }
         // Unproject from NDC to camera coordinates
         var reprojectionMatrix = currentFrameData.projectionMatrix.inverse
@@ -294,7 +294,7 @@ class MetalScene {
         // Project to old NDC
         reprojectionMatrix = oldFrameData.projectionMatrix * reprojectionMatrix
         // Nice! We have a matrix that transforms current-frame NDC to last-frame's NDC.
-        return ReprojectionData(reprojection_matrix: reprojectionMatrix)
+        return reprojectionMatrix
     }
     
     // MARK: - Move camera

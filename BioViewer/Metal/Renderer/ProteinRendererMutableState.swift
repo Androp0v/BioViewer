@@ -14,13 +14,6 @@ extension ProteinRenderer {
     actor MutableState {
         
         let device: MTLDevice
-        
-        // MARK: - Global
-        
-        /// Supersampling factor, if you want to perform SSAA.
-        var superSamplingCount: CGFloat = 1.5
-        /// Upscaling factor used for MetalFX upscaling. Render resolution will be drawable resolution / this factor.
-        var metalFXUpscalingFactor: Float = 1.5
                 
         // MARK: - Scheduling
         
@@ -223,7 +216,7 @@ extension ProteinRenderer {
         func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer, displayScale: CGFloat, renderer: ProteinRenderer) {
             
             // Update content scale
-            metalLayer.contentsScale = displayScale * superSamplingCount
+            metalLayer.contentsScale = displayScale * CGFloat(renderTarget.superSamplingCount)
             
             // Update render target
             renderTarget.updateRenderTarget(for: size, renderer: renderer)

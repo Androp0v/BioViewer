@@ -140,7 +140,17 @@ extension ProteinRenderer.MutableState {
                 if let drawable {
                     
                     // MARK: - MetalFX Upscaling
-                    
+                    var reprojectionData: ReprojectionData?
+                    if let reprojectionMatrix = renderer.scene.reprojectionData(
+                        currentFrameData: currentFrameData,
+                        oldFrameData: lastFrameFrameData
+                    ) {
+                        reprojectionData = ReprojectionData(
+                            reprojection_matrix: reprojectionMatrix,
+                            renderWidth: Int32(renderTarget.renderSize.width),
+                            renderHeight: Int32(renderTarget.renderSize.height)
+                        )
+                    }
                     self.metalFXUpscaling(
                         renderer: renderer,
                         commandBuffer: commandBuffer,
@@ -148,10 +158,7 @@ extension ProteinRenderer.MutableState {
                         depthTexture: viewDepthTexture,
                         motionTexture: renderTarget.renderedTextures.motionTexture, // TODO: High-quality, others
                         outputTexture: renderTarget.upscaledTexture.upscaledColor,
-                        reprojectionData: renderer.scene.reprojectionData(
-                            currentFrameData: currentFrameData,
-                            oldFrameData: lastFrameFrameData
-                        )
+                        reprojectionData: reprojectionData
                     )
                     
                     // MARK: - Present drawable
