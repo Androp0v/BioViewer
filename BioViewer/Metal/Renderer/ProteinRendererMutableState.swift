@@ -159,7 +159,7 @@ extension ProteinRenderer {
             scene.needsRedraw = true
             scene.lastColorPassRequest = CACurrentMediaTime()
             scene.configurationSelector = configurationSelector
-            scene.frameData.atoms_per_configuration = Int32(configurationSelector.atomsPerConfiguration)
+            scene.currentFrameData.atoms_per_configuration = Int32(configurationSelector.atomsPerConfiguration)
         }
         
         /// Sets the necessary buffers to display a protein in the renderer using billboarding

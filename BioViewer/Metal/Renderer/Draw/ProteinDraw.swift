@@ -37,7 +37,9 @@ extension ProteinRenderer.MutableState {
                 
         // Update uniform buffer
         renderer.scene.updateScene()
-        withUnsafePointer(to: renderer.scene.frameData) {
+        let currentFrameData = renderer.scene.currentFrameData
+        let lastFrameFrameData = renderer.scene.lastFrameFrameData
+        withUnsafePointer(to: currentFrameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
         }
@@ -143,7 +145,13 @@ extension ProteinRenderer.MutableState {
                         renderer: renderer,
                         commandBuffer: commandBuffer,
                         sourceTexture: viewTexture,
-                        outputTexture: renderTarget.upscaledTexture.upscaledColor
+                        depthTexture: viewDepthTexture,
+                        motionTexture: renderTarget.renderedTextures.motionTexture, // TODO: High-quality, others
+                        outputTexture: renderTarget.upscaledTexture.upscaledColor,
+                        reprojectionData: renderer.scene.reprojectionData(
+                            currentFrameData: currentFrameData,
+                            oldFrameData: lastFrameFrameData
+                        )
                     )
                     
                     // MARK: - Present drawable

@@ -244,6 +244,7 @@
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
 		C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5883E872857B8D000C97818 /* RCSBDetailView.swift */; };
+		C58E54F629EBF7C80028CA62 /* MotionTexture.metal in Sources */ = {isa = PBXBuildFile; fileRef = C58E54F529EBF7C80028CA62 /* MotionTexture.metal */; };
 		C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C59550C22782052D00129F9B /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */; };
@@ -515,6 +516,8 @@
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
 		C5883E872857B8D000C97818 /* RCSBDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBDetailView.swift; sourceTree = "<group>"; };
+		C58E54F429EB716D0028CA62 /* ReprojectionData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReprojectionData.h; sourceTree = "<group>"; };
+		C58E54F529EBF7C80028CA62 /* MotionTexture.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MotionTexture.metal; sourceTree = "<group>"; };
 		C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterAnimator.swift; sourceTree = "<group>"; };
 		C59792CD277210570019ABD3 /* ShutterClosed.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterClosed.aiff; sourceTree = "<group>"; };
 		C59792CE277210570019ABD3 /* ShutterOpen.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ShutterOpen.aiff; sourceTree = "<group>"; };
@@ -1275,7 +1278,9 @@
 		C59CD00729E21C9C0017796B /* Postprocessing */ = {
 			isa = PBXGroup;
 			children = (
+				C58E54F429EB716D0028CA62 /* ReprojectionData.h */,
 				C59CD00829E21CBD0017796B /* ShadowBlur.metal */,
+				C58E54F529EBF7C80028CA62 /* MotionTexture.metal */,
 			);
 			path = Postprocessing;
 			sourceTree = "<group>";
@@ -1651,6 +1656,7 @@
 				C5277FC9297B107E00291AF7 /* ProteinResidueComposition.swift in Sources */,
 				C45BAC4526497A3300B36026 /* DynamicStructureControlView.swift in Sources */,
 				C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */,
+				C58E54F629EBF7C80028CA62 /* MotionTexture.metal in Sources */,
 				C55384232972DD0C007E45E1 /* CartoonSheet.swift in Sources */,
 				C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */,
 				C5EDED9C29E0C9DF00B4DB6C /* SunDirectionRow.swift in Sources */,

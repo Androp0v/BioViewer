@@ -28,8 +28,12 @@ class MetalScene {
     /// Class used to animate changes in scene properties.
     var animator: SceneAnimator?
     
-    /// Struct with data passed to the GPU shader.
-    var frameData: FrameData
+    /// Struct with data passed to the GPU shader that can be modified between draw calls.
+    private var frameData: FrameData
+    /// Struct with data passed to the GPU shader for the current frame. Only updated on draw calls.
+    var currentFrameData: FrameData
+    /// Struct with data passed to the GPU shader for the last frame. Only updated on draw calls.
+    var lastFrameFrameData: FrameData?
     /// Current atom radii configuration
     var atom_radii: AtomRadii
     /// Frame count since the scene started.
@@ -126,6 +130,9 @@ class MetalScene {
         self.frameData.shadow_strength = shadowStrength
         self.frameData.depth_cueing_strength = depthCueingStrength
         
+        // Initial currentFrameData
+        self.currentFrameData = frameData
+        
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
             guard let self = self else { return }
@@ -162,6 +169,8 @@ class MetalScene {
 
     func updateScene() {
         guard needsRedraw || isPlaying else { return skipFrame() }
+        // Update last frame's frame data
+        self.lastFrameFrameData = currentFrameData
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
         self.frameData.projectionMatrix = self.camera.projectionMatrix
@@ -197,6 +206,8 @@ class MetalScene {
             updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
             needsRedraw = true
         }
+        // Store current frame data
+        self.currentFrameData = frameData
     }
     
     // MARK: - Sun direction
@@ -211,7 +222,7 @@ class MetalScene {
     
     // MARK: - Update rotation
     
-    func updateModelRotation(rotationMatrix: simd_float4x4) {
+    private func updateModelRotation(rotationMatrix: simd_float4x4) {
         
         self.userModelRotationMatrix = rotationMatrix
         let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
@@ -264,6 +275,26 @@ class MetalScene {
              -boundingSphere.radius - 3.3,
              boundingSphere.radius + 3.3
         )
+    }
+    
+    // MARK: - Reprojection
+    
+    func reprojectionData(currentFrameData: FrameData, oldFrameData: FrameData?) -> ReprojectionData? {
+        guard let oldFrameData else { return nil }
+        // Unproject from NDC to camera coordinates
+        var reprojectionMatrix = currentFrameData.projectionMatrix.inverse
+        // Unproject to world coordinates (rotated)
+        reprojectionMatrix = currentFrameData.model_view_matrix.inverse * reprojectionMatrix
+        // Unrotate to world coordinates (original)
+        reprojectionMatrix = currentFrameData.rotation_matrix.inverse * reprojectionMatrix
+        // Rotate to old world coordinates (rotated)
+        reprojectionMatrix = oldFrameData.rotation_matrix * reprojectionMatrix
+        // Project to old camera coordinates
+        reprojectionMatrix = oldFrameData.model_view_matrix * reprojectionMatrix
+        // Project to old NDC
+        reprojectionMatrix = oldFrameData.projectionMatrix * reprojectionMatrix
+        // Nice! We have a matrix that transforms current-frame NDC to last-frame's NDC.
+        return ReprojectionData(reprojection_matrix: reprojectionMatrix)
     }
     
     // MARK: - Move camera

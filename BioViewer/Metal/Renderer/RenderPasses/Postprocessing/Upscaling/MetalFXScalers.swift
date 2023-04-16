@@ -28,4 +28,23 @@ extension ProteinRenderer {
         }
         metalFXSpatialScaler = spatialScaler
     }
+    
+    /// Creates the MetalFX spatial scaler.
+    func makeTemporalScaler(inputSize: MTLSize, outputSize: MTLSize) {
+        let descriptor = MTLFXTemporalScalerDescriptor()
+        descriptor.inputWidth = inputSize.width
+        descriptor.inputHeight = inputSize.height
+        descriptor.outputWidth = outputSize.width
+        descriptor.outputHeight = outputSize.height
+        descriptor.colorTextureFormat = .bgra8Unorm
+        descriptor.depthTextureFormat = .r32Float
+        descriptor.motionTextureFormat = ProteinRenderedTextures.motionPixelFormat
+        descriptor.outputTextureFormat = .bgra8Unorm
+        
+        guard let temporalScaler = descriptor.makeTemporalScaler(device: device) else {
+            print("The temporal scaler effect is not usable!")
+            return
+        }
+        metalFXTemporalScaler = temporalScaler
+    }
 }

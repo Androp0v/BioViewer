@@ -20,8 +20,8 @@ struct ShadowTextures {
     // orthographic projection, the shadow texture should be square. High resolution
     // shadows are *very* expensive due to the need to call the fragment shader.
     
-    static let defaultTextureWidth: Int = 1024
-    static let defaultTextureHeight: Int = 1024
+    static let defaultTextureWidth: Int = 2048
+    static let defaultTextureHeight: Int = 2048
     
     static let shadowTexturePixelFormat = MTLPixelFormat.r32Float
     static let shadowDepthTexturePixelFormat = MTLPixelFormat.depth32Float

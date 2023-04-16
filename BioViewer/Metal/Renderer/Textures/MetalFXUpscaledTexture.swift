@@ -23,7 +23,7 @@ struct MetalFXUpscaledTexture {
                 mipmapped: false
             )
         colorTextureDescriptor.textureType = .type2D
-        colorTextureDescriptor.usage = [.renderTarget]
+        colorTextureDescriptor.usage = [.renderTarget, .shaderWrite]
         colorTextureDescriptor.storageMode = .private
         upscaledColor = device.makeTexture(descriptor: colorTextureDescriptor)
         upscaledColor.label = "MetalFX Upscaled Texture"

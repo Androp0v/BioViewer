@@ -57,4 +57,27 @@ extension ProteinRenderer {
 
         shadowBlurPipelineState = try? device.makeComputePipelineState(function: shadowBlurKernel)
     }
+    
+    // MARK: - Motion texture pass
+    
+    func makeMotionComputePipelineState(device: MTLDevice) {
+        // Setup pipeline
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: Bundle(for: ProteinRenderer.self)) else {
+            NSLog("Failed to retrieve the default library.")
+            return
+        }
+        
+        guard let motionKernel = defaultLibrary.makeFunction(name: "motion_texture") else {
+            NSLog("Failed to make shadow blur kernel")
+            return
+        }
+        
+        let descriptor = MTLComputePipelineDescriptor()
+        descriptor.computeFunction = motionKernel
+        descriptor.label = "Motion Texture Pass"
+        motionPipelineState = try? device.makeComputePipelineState(
+            descriptor: descriptor,
+            options: MTLPipelineOption()
+        ).0
+    }
 }

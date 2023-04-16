@@ -64,6 +64,18 @@ class ProteinRenderTarget {
                 1
             )
         )
+        renderer.makeTemporalScaler(
+            inputSize: MTLSizeMake(
+                renderSize.width,
+                renderSize.height,
+                1
+            ),
+            outputSize: MTLSizeMake(
+                upscaledSize.width,
+                upscaledSize.height,
+                1
+            )
+        )
         // Update MetalFX upscaled texture
         upscaledTexture.makeTexture(
             device: renderer.device,
