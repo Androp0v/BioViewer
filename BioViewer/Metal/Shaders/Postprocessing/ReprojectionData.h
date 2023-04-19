@@ -19,6 +19,12 @@ typedef struct {
     int32_t renderWidth;
     /// Height of the render target.
     int32_t renderHeight;
+    /// Pixel jitter in NDC coordinates (-0.5 to 0.5).
+    simd_float2 pixel_jitter;
+    /// Jitter performed on the projection, in texture coordinates.
+    simd_float2 texel_jitter;
+    /// Jitter performed on the projection, in texture coordinates.
+    simd_float2 previous_texel_jitter;
     
 } ReprojectionData;
 

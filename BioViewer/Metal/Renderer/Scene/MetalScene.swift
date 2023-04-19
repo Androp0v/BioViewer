@@ -17,6 +17,7 @@ class MetalScene {
         
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
+    var renderResolution: simd_float2 = .zero
     
     /// The last time a color buffer recompute was required.
     var lastColorPassRequest: CFTimeInterval = CACurrentMediaTime()
@@ -66,6 +67,12 @@ class MetalScene {
     var cameraChangedCancellable: AnyCancellable?
     /// Whether the camera is autorotating.
     var autorotating: Bool = false { didSet { needsRedraw = true } }
+    /// Jitter performed on the projection, in texture coordinates.
+    var texelJitter: simd_float2 = .zero
+    /// Jitter performed on the projection in the previous frame, in texture coordinates.
+    var previousTexelJitter: simd_float2 = .zero
+    
+    var pixelJitter: simd_float2 = .zero
     
     // MARK: - Shadow properties
 
@@ -173,7 +180,10 @@ class MetalScene {
         self.lastFrameFrameData = currentFrameData
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
+        
+        // Update projection matrix and add jittering
         self.frameData.projectionMatrix = self.camera.projectionMatrix
+        self.addJittering()
         
         // Update configuration
         if isPlaying {
@@ -199,7 +209,7 @@ class MetalScene {
         // Autorotation
         if autorotating {
             let autorotationMatrix = Transform.rotationMatrix(
-                radians: -0.01,
+                radians: -0.001,
                 axis: (self.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
             )
             self.userModelRotationMatrix *= autorotationMatrix
@@ -290,7 +300,7 @@ class MetalScene {
     
     // MARK: - Reprojection
     
-    func reprojectionData(currentFrameData: FrameData, oldFrameData: FrameData?) -> simd_float4x4? {
+    func reprojectionData(currentFrameData: FrameData, oldFrameData: FrameData?) -> ReprojectionData? {
         guard let oldFrameData else { return nil }
         // Unproject from NDC to camera coordinates
         var reprojectionMatrix = currentFrameData.projectionMatrix.inverse
@@ -305,7 +315,45 @@ class MetalScene {
         // Project to old NDC
         reprojectionMatrix = oldFrameData.projectionMatrix * reprojectionMatrix
         // Nice! We have a matrix that transforms current-frame NDC to last-frame's NDC.
-        return reprojectionMatrix
+        return ReprojectionData(
+            reprojection_matrix: reprojectionMatrix,
+            renderWidth: Int32(renderResolution.x),
+            renderHeight: Int32(renderResolution.y),
+            pixel_jitter: pixelJitter,
+            texel_jitter: texelJitter,
+            previous_texel_jitter: previousTexelJitter
+        )
+    }
+    
+    // MARK: - Jittering
+    
+    func addJittering() {
+        
+        self.previousTexelJitter = texelJitter
+        
+        // Halton sequence to generate the sample positions to ensure good pixel coverage.
+        let jitterIndex: UInt32 = (UInt32)(frame % 32 + 1)
+        
+        // Return Halton samples (+/- 0.5, +/- 0.5) that represent offsets of up to half a pixel.
+        pixelJitter.x = halton(index: jitterIndex, base: 2) - 0.5
+        pixelJitter.y = halton(index: jitterIndex, base: 3) - 0.5
+        
+        // Shear the projection matrix by plus or minus half a pixel for temporal antialiasing.
+        // Store the amount of jitter so that the shader can "unjitter" it when computing motion vectors (0...1).
+        // The sign of the jitter flips because the translation has the opposite effect.
+        // For example, an NDC x offset of +20 to the right ends up being -10 pixels to the left.
+        // To counter this, multiply by -2.0f.
+        let ndcJitter = -2 * pixelJitter / renderResolution
+        
+        // Update the projection matrix to implement this NDC jittering.
+        frameData.projectionMatrix.columns.2[0] += ndcJitter.x
+        frameData.projectionMatrix.columns.2[1] += ndcJitter.y
+        
+        // Flip the y-coordinate direction because the bottom left is the origin of a texture.
+        pixelJitter *= simd_float2(1, -1)
+
+        // Calculate the texel jitter by dividing by the resolution because the texture coordinates go (0...1).
+        self.texelJitter = pixelJitter / renderResolution
     }
     
     // MARK: - Move camera

@@ -45,6 +45,8 @@ extension ProteinRenderer {
             print("The temporal scaler effect is not usable!")
             return
         }
+        temporalScaler.motionVectorScaleX = Float(inputSize.width)
+        temporalScaler.motionVectorScaleY = Float(inputSize.height)
         metalFXTemporalScaler = temporalScaler
     }
 }

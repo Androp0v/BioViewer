@@ -71,9 +71,9 @@ extension ProteinRenderer.MutableState {
             temporalScaler.depthTexture = depthTexture
             temporalScaler.motionTexture = motionTexture
             temporalScaler.outputTexture = outputTexture
-            // temporalScaler.reversedDepth = reversedDepth
-            temporalScaler.jitterOffsetX = 0.0 // TODO: Actual value
-            temporalScaler.jitterOffsetY = 0.0 // TODO: Actual value
+            temporalScaler.isDepthReversed = false
+            temporalScaler.jitterOffsetX = -reprojectionData.pixel_jitter.x
+            temporalScaler.jitterOffsetY = -reprojectionData.pixel_jitter.y
             temporalScaler.encode(commandBuffer: commandBuffer)
             
         } else if let spatialScaler = renderer.metalFXSpatialScaler {

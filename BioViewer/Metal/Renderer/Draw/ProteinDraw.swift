@@ -39,6 +39,10 @@ extension ProteinRenderer.MutableState {
         renderer.scene.updateScene()
         let currentFrameData = renderer.scene.currentFrameData
         let lastFrameFrameData = renderer.scene.lastFrameFrameData
+        let reprojectionData = renderer.scene.reprojectionData(
+            currentFrameData: currentFrameData,
+            oldFrameData: lastFrameFrameData
+        )
         withUnsafePointer(to: currentFrameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
@@ -140,17 +144,7 @@ extension ProteinRenderer.MutableState {
                 if let drawable {
                     
                     // MARK: - MetalFX Upscaling
-                    var reprojectionData: ReprojectionData?
-                    if let reprojectionMatrix = renderer.scene.reprojectionData(
-                        currentFrameData: currentFrameData,
-                        oldFrameData: lastFrameFrameData
-                    ) {
-                        reprojectionData = ReprojectionData(
-                            reprojection_matrix: reprojectionMatrix,
-                            renderWidth: Int32(renderTarget.renderSize.width),
-                            renderHeight: Int32(renderTarget.renderSize.height)
-                        )
-                    }
+
                     self.metalFXUpscaling(
                         renderer: renderer,
                         commandBuffer: commandBuffer,

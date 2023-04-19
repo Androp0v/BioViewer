@@ -63,7 +63,7 @@ typedef struct {
     int8_t has_depth_cueing;
     /// The strength of the depth cueing, from 0 to 1.
     float depth_cueing_strength;
-
+    
 } FrameData;
 
 #endif /* FrameData_h */
