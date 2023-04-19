@@ -40,8 +40,8 @@ kernel void motion_texture(constant ReprojectionData& reprojection_data [[ buffe
         old_texture_position_normalized -= reprojection_data.previous_texel_jitter;
         
         // Output the motion vector.
-        motion_vector = float4(half(texture_position_normalized.x - old_texture_position_normalized.x),
-                               half(texture_position_normalized.y - old_texture_position_normalized.y),
+        motion_vector = float4(half(old_texture_position_normalized.x -texture_position_normalized.x),
+                               half(old_texture_position_normalized.y -texture_position_normalized.y),
                                0.0,
                                0.0);
     }

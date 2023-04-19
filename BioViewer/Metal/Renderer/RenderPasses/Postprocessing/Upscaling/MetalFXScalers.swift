@@ -37,9 +37,10 @@ extension ProteinRenderer {
         descriptor.outputWidth = outputSize.width
         descriptor.outputHeight = outputSize.height
         descriptor.colorTextureFormat = .bgra8Unorm
-        descriptor.depthTextureFormat = .r32Float
+        descriptor.depthTextureFormat = .depth32Float
         descriptor.motionTextureFormat = ProteinRenderedTextures.motionPixelFormat
         descriptor.outputTextureFormat = .bgra8Unorm
+        descriptor.isAutoExposureEnabled = false
         
         guard let temporalScaler = descriptor.makeTemporalScaler(device: device) else {
             print("The temporal scaler effect is not usable!")
