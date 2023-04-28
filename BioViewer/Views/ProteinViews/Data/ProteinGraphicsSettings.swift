@@ -23,5 +23,6 @@ class ProteinGraphicsSettings: ObservableObject {
             }
         }
     }
-    
+    @Published var ssaaFactor: Float = 1.0
+    @Published var metalFXFactor: Float = 1.5
 }

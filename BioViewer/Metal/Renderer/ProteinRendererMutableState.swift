@@ -248,6 +248,8 @@ extension ProteinRenderer {
                 displayScale: nil,
                 renderer: renderer
             )
+            // Update the mode as seen by the scene
+            renderer.scene.metalFXUpscalingMode = mode
         }
     }
 }

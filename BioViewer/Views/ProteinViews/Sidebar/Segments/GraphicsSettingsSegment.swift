@@ -11,17 +11,63 @@ struct GraphicsSettingsSegment: View {
     
     @EnvironmentObject var graphicsSettings: ProteinGraphicsSettings
     
+    let ssaaFormatter: NumberFormatter
+    let metalFXFactorFormatter: NumberFormatter
+    
+    init() {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumSignificantDigits = 3
+        formatter.minimum = 1.0
+        formatter.maximum = 2.0
+        self.ssaaFormatter = formatter
+        formatter.minimum = 1.25
+        formatter.maximum = 2.0
+        self.metalFXFactorFormatter = formatter
+    }
+    
     var body: some View {
         List {
             // First section hast 64pt padding to account for the
             // space under the segmented control.
             Section(
                 content: {
-                    PickerRow(
-                        optionName: NSLocalizedString("MetalFX Upscaling", comment: ""),
-                        selection: $graphicsSettings.metalFXUpscalingMode
+                    PersistentDisclosureGroup(
+                        for: .metalFXUpscalingSettings,
+                        defaultOpen: AppState.hasMetalFXUpscalingSupport(),
+                        content: {
+                            InputWithButtonRow(
+                                title: "SSAA",
+                                value: $graphicsSettings.ssaaFactor,
+                                buttonTitle: "Apply",
+                                action: {
+                                    // TODO: Implement this
+                                },
+                                formatter: ssaaFormatter
+                            )
+                            InputWithButtonRow(
+                                title: "Upscaling factor",
+                                value: $graphicsSettings.metalFXFactor,
+                                buttonTitle: "Apply",
+                                action: {
+                                    // TODO: Implement this
+                                },
+                                formatter: ssaaFormatter
+                            )
+                        },
+                        label: {
+                            PickerRow(
+                                optionName: NSLocalizedString("MetalFX Upscaling", comment: ""),
+                                selection: $graphicsSettings.metalFXUpscalingMode
+                            )
+                            .disabled(!AppState.hasMetalFXUpscalingSupport())
+                            #if targetEnvironment(macCatalyst)
+                            .padding(.leading, 8)
+                            #else
+                            .padding(.trailing, 16)
+                            #endif
+                        }
                     )
-                    .disabled(!AppState.hasMetalFXUpscalingSupport())
                 },
                 header: {
                     Text(NSLocalizedString("Graphics settings", comment: ""))

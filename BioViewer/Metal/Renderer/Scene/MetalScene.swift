@@ -67,6 +67,8 @@ class MetalScene {
     var cameraChangedCancellable: AnyCancellable?
     /// Whether the camera is autorotating.
     var autorotating: Bool = false { didSet { needsRedraw = true } }
+    /// The MetalFX Upscaling mode.
+    var metalFXUpscalingMode: MetalFXUpscalingMode = .none
     /// Jitter performed on the projection, in texture coordinates.
     var texelJitter: simd_float2 = .zero
     /// Jitter performed on the projection in the previous frame, in texture coordinates.
@@ -328,6 +330,12 @@ class MetalScene {
     // MARK: - Jittering
     
     func addJittering() {
+        
+        guard metalFXUpscalingMode == .temporal else {
+            pixelJitter = .zero
+            texelJitter = .zero
+            return
+        }
         
         self.previousTexelJitter = texelJitter
         

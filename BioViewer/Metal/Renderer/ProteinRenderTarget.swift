@@ -57,10 +57,6 @@ class ProteinRenderTarget {
     
     func updateMetalFXUpscalingMode(to mode: MetalFXUpscalingMode, renderer: ProteinRenderer) {
         self.metalFXUpscalingMode = mode
-        updateRenderTarget(
-            for: CGSize(width: windowSize.width, height: windowSize.height),
-            renderer: renderer
-        )
     }
     
     func updateRenderTarget(for newWindowSize: CGSize, renderer: ProteinRenderer) {
