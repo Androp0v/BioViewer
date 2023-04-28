@@ -30,11 +30,7 @@ private struct ProteinSidebarContent: View {
             case 1:
                 AppearanceSegmentProtein()
             case 2:
-                FunctionsSegmentProtein()
-            case 3:
-                TrajectorySegmentProtein()
-            case 4:
-                SettingsSegmentProtein()
+                GraphicsSettingsSegment()
             default:
                 Spacer()
             }
@@ -44,6 +40,7 @@ private struct ProteinSidebarContent: View {
                     Picker("Option", selection: $selectedSegment) {
                         SidebarItem(image: "doc", tag: 0)
                         SidebarItem(image: "camera.filters", tag: 1)
+                        SidebarItem(image: "wrench.and.screwdriver", tag: 2)
                         /*
                         SidebarItem(image: "function", tag: 2)
                         if proteinViewModel.dataSource.files.first?.fileType == .dynamicStructure {

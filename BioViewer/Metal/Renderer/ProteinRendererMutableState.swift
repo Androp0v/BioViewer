@@ -213,19 +213,10 @@ extension ProteinRenderer {
             }
         }
         
-        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer, displayScale: CGFloat, renderer: ProteinRenderer) {
-            
-            // Update content scale
-            metalLayer.contentsScale = displayScale * CGFloat(renderTarget.superSamplingCount)
-            
+        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?, renderer: ProteinRenderer) {
+                        
             // Update render target
             renderTarget.updateRenderTarget(for: size, renderer: renderer)
-            
-            // Update the drawable size
-            metalLayer.drawableSize = CGSize(
-                width: renderTarget.upscaledSize.width,
-                height: renderTarget.upscaledSize.height
-            )
             
             // Update non-render target textures
             if AppState.hasDepthPrePasses() {
@@ -235,6 +226,28 @@ extension ProteinRenderer {
                     textureHeight: renderTarget.renderSize.height
                 )
             }
+            
+            if let metalLayer {
+                // Update the drawable size
+                metalLayer.drawableSize = CGSize(
+                    width: renderTarget.upscaledSize.width,
+                    height: renderTarget.upscaledSize.height
+                )
+                if let displayScale {
+                    // Update content scale
+                    metalLayer.contentsScale = displayScale * CGFloat(renderTarget.superSamplingCount)
+                }
+            }
+        }
+        
+        func updateMetalFXUpscalingMode(to mode: MetalFXUpscalingMode, renderer: ProteinRenderer) {
+            renderTarget.updateMetalFXUpscalingMode(to: mode, renderer: renderer)
+            updateTexturesForNewViewSize(
+                CGSize(width: renderTarget.windowSize.width, height: renderTarget.windowSize.height),
+                metalLayer: nil,
+                displayScale: nil,
+                renderer: renderer
+            )
         }
     }
 }

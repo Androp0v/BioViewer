@@ -145,23 +145,31 @@ extension ProteinRenderer.MutableState {
                     
                     // MARK: - MetalFX Upscaling
 
-                    self.metalFXUpscaling(
-                        renderer: renderer,
-                        commandBuffer: commandBuffer,
-                        sourceTexture: viewTexture,
-                        depthTexture: viewDepthTexture,
-                        motionTexture: renderTarget.renderedTextures.motionTexture, // TODO: High-quality, others
-                        outputTexture: renderTarget.upscaledTexture.upscaledColor,
-                        reprojectionData: reprojectionData
-                    )
+                    if renderTarget.metalFXUpscalingMode != .none {
+                        self.metalFXUpscaling(
+                            renderer: renderer,
+                            commandBuffer: commandBuffer,
+                            sourceTexture: viewTexture,
+                            depthTexture: viewDepthTexture,
+                            motionTexture: renderTarget.renderedTextures.motionTexture, // TODO: High-quality, others
+                            outputTexture: renderTarget.upscaledTexture.upscaledColor,
+                            reprojectionData: reprojectionData
+                        )
+                        self.copyToDrawable(
+                            commandBuffer: commandBuffer,
+                            finalRenderedTexture: renderTarget.upscaledTexture.upscaledColor,
+                            drawableTexture: drawable.texture
+                        )
+                    } else {
+                        self.copyToDrawable(
+                            commandBuffer: commandBuffer,
+                            finalRenderedTexture: renderTarget.renderedTextures.colorTexture,
+                            drawableTexture: drawable.texture
+                        )
+                    }
                     
                     // MARK: - Present drawable
                     
-                    self.copyToDrawable(
-                        commandBuffer: commandBuffer,
-                        finalRenderedTexture: renderTarget.upscaledTexture.upscaledColor,
-                        drawableTexture: drawable.texture
-                    )
                     commandBuffer.present(drawable)
                     
                     // Schedule a drawable presentation to occur after the GPU completes its work

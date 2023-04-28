@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -79,6 +79,8 @@
 		C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024F2763CB0C005D7F06 /* RangeRow.swift */; };
 		C50E02552764B5BE005D7F06 /* PDBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBConstants.swift */; };
 		C50E02562764B5C4005D7F06 /* PDBConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E02542764B5BE005D7F06 /* PDBConstants.swift */; };
+		C50E376929FACFD400FC7354 /* GraphicsSettingsSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E376829FACFD400FC7354 /* GraphicsSettingsSegment.swift */; };
+		C50E376B29FADAB700FC7354 /* ProteinGraphicsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E376A29FADAB700FC7354 /* ProteinGraphicsSettings.swift */; };
 		C50FEBC829E2DC3B0082102D /* MetalFXUpscaling.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50FEBC729E2DC3B0082102D /* MetalFXUpscaling.swift */; };
 		C515EFB9274D9E0A00B6F7DB /* FileCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */; };
 		C515EFBC274E316A00B6F7DB /* FileCompositionItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */; };
@@ -406,6 +408,8 @@
 		C50E024D27639B43005D7F06 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C50E024F2763CB0C005D7F06 /* RangeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeRow.swift; sourceTree = "<group>"; };
 		C50E02542764B5BE005D7F06 /* PDBConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDBConstants.swift; sourceTree = "<group>"; };
+		C50E376829FACFD400FC7354 /* GraphicsSettingsSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsSettingsSegment.swift; sourceTree = "<group>"; };
+		C50E376A29FADAB700FC7354 /* ProteinGraphicsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinGraphicsSettings.swift; sourceTree = "<group>"; };
 		C50FEBC729E2DC3B0082102D /* MetalFXUpscaling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalFXUpscaling.swift; sourceTree = "<group>"; };
 		C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionView.swift; sourceTree = "<group>"; };
 		C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionItemRow.swift; sourceTree = "<group>"; };
@@ -670,6 +674,7 @@
 				C55CA714297EAB8300BEDFA4 /* ProteinColorViewModel.swift */,
 				C55CA719297EB60700BEDFA4 /* ProteinVisualizationViewModel.swift */,
 				C55CA71B297EC06200BEDFA4 /* ProteinShadowsViewModel.swift */,
+				C50E376A29FADAB700FC7354 /* ProteinGraphicsSettings.swift */,
 				C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */,
 				C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */,
 				C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */,
@@ -733,6 +738,7 @@
 				C572BD162740220900FF010D /* FileSegmentProtein */,
 				C59550BC2781C22F00129F9B /* AppearanceSegmentProtein */,
 				C586C5E7275A074700F230D3 /* FunctionsSegmentProtein.swift */,
+				C50E376829FACFD400FC7354 /* GraphicsSettingsSegment.swift */,
 				C5EEE9AD276E0198005737C1 /* TrajectorySegmentProtein.swift */,
 				C5406703274D656700710CFC /* SettingsSegmentProtein.swift */,
 			);
@@ -1546,6 +1552,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		C53A11882736AED000119BE6 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1751,10 +1758,12 @@
 				C56E87E0278D895B004BAEE2 /* SceneAnimator.swift in Sources */,
 				C553B7912932FAA400294BB4 /* VisualizationSection.swift in Sources */,
 				C45BAC402648A93500B36026 /* AppearanceSegmentProtein.swift in Sources */,
+				C50E376929FACFD400FC7354 /* GraphicsSettingsSegment.swift in Sources */,
 				C51D4ED9276596EE00C69B3D /* EmptyDataRow.swift in Sources */,
 				C572BD1E27413AFB00FF010D /* FileSourceViewModel.swift in Sources */,
 				C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */,
 				C5433F3D2770F9C600607B20 /* FileDetailsComponent.swift in Sources */,
+				C50E376B29FADAB700FC7354 /* ProteinGraphicsSettings.swift in Sources */,
 				C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */,
 				C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */,
 				C5406700274D387200710CFC /* ImportError.swift in Sources */,

@@ -16,6 +16,12 @@ extension ProteinRenderer.MutableState {
         finalRenderedTexture: MTLTexture,
         drawableTexture: MTLTexture
     ) {
+        guard finalRenderedTexture.width == drawableTexture.width else {
+            return
+        }
+        guard finalRenderedTexture.height == drawableTexture.height else {
+            return
+        }
         let blitCommandEncoder = commandBuffer.makeBlitCommandEncoder()
         blitCommandEncoder?.copy(from: finalRenderedTexture, to: drawableTexture)
         blitCommandEncoder?.endEncoding()
