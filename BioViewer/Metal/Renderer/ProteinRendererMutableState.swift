@@ -214,8 +214,13 @@ extension ProteinRenderer {
         }
         
         func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?, renderer: ProteinRenderer) {
-                        
             // Update render target
+            if let metalLayer {
+                renderTarget.metalLayer = metalLayer
+            }
+            if let displayScale {
+                renderTarget.displayScale = displayScale
+            }
             renderTarget.updateRenderTarget(for: size, renderer: renderer)
             
             // Update non-render target textures
@@ -226,30 +231,28 @@ extension ProteinRenderer {
                     textureHeight: renderTarget.renderSize.height
                 )
             }
-            
-            if let metalLayer {
-                // Update the drawable size
-                metalLayer.drawableSize = CGSize(
-                    width: renderTarget.upscaledSize.width,
-                    height: renderTarget.upscaledSize.height
-                )
-                if let displayScale {
-                    // Update content scale
-                    metalLayer.contentsScale = displayScale * CGFloat(renderTarget.superSamplingCount)
-                }
-            }
         }
         
-        func updateMetalFXUpscalingMode(to mode: MetalFXUpscalingMode, renderer: ProteinRenderer) {
-            renderTarget.updateMetalFXUpscalingMode(to: mode, renderer: renderer)
+        func refreshTexturesForNewSettings(renderer: ProteinRenderer) {
             updateTexturesForNewViewSize(
                 CGSize(width: renderTarget.windowSize.width, height: renderTarget.windowSize.height),
                 metalLayer: nil,
                 displayScale: nil,
                 renderer: renderer
             )
+        }
+        
+        func updateMetalFXUpscalingMode(to mode: MetalFXUpscalingMode, renderer: ProteinRenderer) {
+            renderTarget.metalFXUpscalingMode = mode
+            refreshTexturesForNewSettings(renderer: renderer)
             // Update the mode as seen by the scene
             renderer.scene.metalFXUpscalingMode = mode
+        }
+        
+        func updateProteinRenderFactors(ssaa: Float, metalFXUpscaling: Float, renderer: ProteinRenderer) {
+            renderTarget.superSamplingCount = ssaa
+            renderTarget.metalFXUpscalingFactor = metalFXUpscaling
+            refreshTexturesForNewSettings(renderer: renderer)
         }
     }
 }

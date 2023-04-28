@@ -34,11 +34,15 @@ class ProteinRenderTarget {
     // MARK: - Options
     
     /// Supersampling factor, if you want to perform Super Sampling Anti Aliasing (SSAA).
-    let superSamplingCount: Float = 1.0
+    var superSamplingCount: Float = 1.0
     /// Upscaling factor used for MetalFX upscaling. Render resolution will be drawable resolution / this factor.
-    let metalFXUpscalingFactor: Float = 1.5
+    var metalFXUpscalingFactor: Float = 1.5
     /// The MetalFX upscaling mode. 
-    private(set) var metalFXUpscalingMode: MetalFXUpscalingMode = .none
+    var metalFXUpscalingMode: MetalFXUpscalingMode = .none
+    
+    // MARK: - Metal layer
+    var metalLayer: CAMetalLayer?
+    var displayScale: CGFloat = 1.0
     
     // MARK: - Window and texture sizes
     
@@ -55,12 +59,22 @@ class ProteinRenderTarget {
     
     // MARK: - Functions
     
-    func updateMetalFXUpscalingMode(to mode: MetalFXUpscalingMode, renderer: ProteinRenderer) {
-        self.metalFXUpscalingMode = mode
-    }
-    
     func updateRenderTarget(for newWindowSize: CGSize, renderer: ProteinRenderer) {
+        
         self.windowSize = MTLSizeMake(Int(newWindowSize.width), Int(newWindowSize.height), 1)
+        
+        // Update the CAMetalLayer, if available
+        if let metalLayer {
+            // Update the drawable size
+            metalLayer.drawableSize = CGSize(
+                width: upscaledSize.width,
+                height: upscaledSize.height
+            )
+            // Update content scale
+            metalLayer.contentsScale = displayScale * CGFloat(superSamplingCount)
+        }
+        
+        // Handle MetalFX things
         if metalFXUpscalingMode == .none {
             self.renderSize = MTLSizeMake(
                 Int(Float(newWindowSize.width) * superSamplingCount),
