@@ -21,6 +21,7 @@ struct GraphicsSettingsSegment: View {
                         optionName: NSLocalizedString("MetalFX Upscaling", comment: ""),
                         selection: $graphicsSettings.metalFXUpscalingMode
                     )
+                    .disabled(!AppState.hasMetalFXUpscalingSupport())
                 },
                 header: {
                     Text(NSLocalizedString("Graphics settings", comment: ""))

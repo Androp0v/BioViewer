@@ -46,6 +46,23 @@ class AppState: ObservableObject {
         }
     }
     
+    static let hasMetalFXUpscalingSupport = { () -> Bool in
+        
+        // Looks like iPhones do not support MetalFX Upscaling
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return false
+        }
+        // Other Metal 3 capable devices do support MetalFX upscaling
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return false
+        }
+        if device.supportsFamily(.metal3) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     static let hasDepthPrePasses = { () -> Bool in
         guard let device = MTLCreateSystemDefaultDevice() else {
             return false
