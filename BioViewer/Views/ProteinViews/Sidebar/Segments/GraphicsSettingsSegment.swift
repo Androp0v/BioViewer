@@ -15,13 +15,16 @@ struct GraphicsSettingsSegment: View {
     let metalFXFactorFormatter: NumberFormatter
     
     init() {
+        let ssaaFormatter = NumberFormatter()
+        ssaaFormatter.numberStyle = .decimal
+        ssaaFormatter.minimumSignificantDigits = 3
+        ssaaFormatter.minimum = 1.0
+        ssaaFormatter.maximum = 2.0
+        self.ssaaFormatter = ssaaFormatter
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumSignificantDigits = 3
         formatter.minimum = 1.0
-        formatter.maximum = 2.0
-        self.ssaaFormatter = formatter
-        formatter.minimum = 1.25
         formatter.maximum = 2.0
         self.metalFXFactorFormatter = formatter
     }

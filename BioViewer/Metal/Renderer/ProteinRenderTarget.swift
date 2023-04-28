@@ -62,18 +62,7 @@ class ProteinRenderTarget {
     func updateRenderTarget(for newWindowSize: CGSize, renderer: ProteinRenderer) {
         
         self.windowSize = MTLSizeMake(Int(newWindowSize.width), Int(newWindowSize.height), 1)
-        
-        // Update the CAMetalLayer, if available
-        if let metalLayer {
-            // Update the drawable size
-            metalLayer.drawableSize = CGSize(
-                width: upscaledSize.width,
-                height: upscaledSize.height
-            )
-            // Update content scale
-            metalLayer.contentsScale = displayScale * CGFloat(superSamplingCount)
-        }
-        
+                
         // Handle MetalFX things
         if metalFXUpscalingMode == .none {
             self.renderSize = MTLSizeMake(
@@ -110,6 +99,18 @@ class ProteinRenderTarget {
             Float(renderSize.width),
             Float(renderSize.height)
         )
+        
+        // Update the CAMetalLayer, if available
+        if let metalLayer {
+            // Update the drawable size
+            metalLayer.drawableSize = CGSize(
+                width: upscaledSize.width,
+                height: upscaledSize.height
+            )
+            // Update content scale
+            metalLayer.contentsScale = displayScale * CGFloat(superSamplingCount)
+        }
+        
         // Early exit if MetalFX Upscaling is not enabled
         if metalFXUpscalingMode == .none {
             return
