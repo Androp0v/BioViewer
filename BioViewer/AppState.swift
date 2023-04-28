@@ -7,6 +7,7 @@
 
 import Foundation
 import Metal
+import MetalFX
 import SwiftUI
 
 class AppState: ObservableObject {
@@ -47,16 +48,11 @@ class AppState: ObservableObject {
     }
     
     static let hasMetalFXUpscalingSupport = { () -> Bool in
-        
-        // Looks like iPhones do not support MetalFX Upscaling
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return false
-        }
-        // Other Metal 3 capable devices do support MetalFX upscaling
+                
         guard let device = MTLCreateSystemDefaultDevice() else {
             return false
         }
-        if device.supportsFamily(.metal3) {
+        if MTLFXTemporalScalerDescriptor.supportsDevice(device) {
             return true
         } else {
             return false
