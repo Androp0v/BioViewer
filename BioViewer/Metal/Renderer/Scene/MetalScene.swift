@@ -230,6 +230,7 @@ class MetalScene {
         let z = -Float(cos(phi.radians) * cos(theta.radians))
         self.sunDirection = SunDirection(theta: theta, phi: phi)
         self.frameData.sun_direction = normalize(simd_float3(x: x, y: y, z: z))
+        self.needsRedraw = true
     }
     
     // MARK: - Update rotation

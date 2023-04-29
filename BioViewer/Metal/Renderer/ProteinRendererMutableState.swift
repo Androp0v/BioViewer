@@ -292,5 +292,34 @@ extension ProteinRenderer {
             renderTarget.metalFXUpscalingFactor = metalFXUpscaling
             refreshTexturesForNewSettings(renderer: renderer)
         }
+        
+        // MARK: - Scene functions
+        
+        func setSunDirection(theta: Angle, phi: Angle) {
+            scene.setSunDirection(theta: theta, phi: phi)
+        }
+        
+        func setHasShadows(_ hasShadows: Bool) {
+            scene.hasShadows = hasShadows
+        }
+        
+        func setShadowStrength(_ strength: Float) {
+            scene.shadowStrength = strength
+        }
+        
+        func setHasDepthCueing(_ hasDepthCueing: Bool) {
+            scene.hasDepthCueing = hasDepthCueing
+        }
+        
+        func setDepthCueingStrength(_ strength: Float) {
+            scene.depthCueingStrength = strength
+        }
+        
+        func setCameraFocalLength(_ focalLength: Float) {
+            scene.camera.updateFocalLength(
+                focalLength: focalLength,
+                aspectRatio: scene.aspectRatio
+            )
+        }
     }
 }
