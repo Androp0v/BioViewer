@@ -100,7 +100,7 @@ import SwiftUI
             return
         }
         files.remove(at: index)
-        await proteinViewModel?.renderer.removeBuffers()
+        await proteinViewModel?.renderer.mutableState.removeBuffers()
     }
     
     /// Removes all files from the data source and the scene.
@@ -108,7 +108,7 @@ import SwiftUI
         files = []
         selectedModel = []
         selectedModelIndexForFile = [:]
-        await proteinViewModel?.renderer.removeBuffers()
+        await proteinViewModel?.renderer.mutableState.removeBuffers()
     }
     
     // MARK: - Update model

@@ -89,7 +89,7 @@ import Foundation
                         return
                     }
                     #if DEBUG
-                    await proteinViewModel.renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
+                    await proteinViewModel.renderer.mutableState.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
                     #endif
                 }
             }

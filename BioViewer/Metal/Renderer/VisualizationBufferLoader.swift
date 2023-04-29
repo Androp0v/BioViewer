@@ -97,7 +97,7 @@ class VisualizationBufferLoader {
                 guard var bondIndexBuffer = bondIndexBuffer else { return }
                 
                 // Pass bond buffers to the renderer
-                await proteinViewModel.renderer.setBillboardingBonds(
+                await proteinViewModel.renderer.mutableState.setBillboardingBonds(
                     vertexBuffer: &bondVertexBuffer,
                     indexBuffer: &bondIndexBuffer
                 )
@@ -143,7 +143,7 @@ class VisualizationBufferLoader {
         guard let configurationSelector = await createConfigurationSelector(proteins: proteins) else { return }
         
         // Pass the new mesh to the renderer
-        await proteinViewModel.renderer.setBillboardingBuffers(
+        await proteinViewModel.renderer.mutableState.setBillboardingBuffers(
             billboardVertexBuffers: generatedImpostorData.vertexBuffer,
             atomElementBuffer: generatedImpostorData.atomElementBuffer,
             subunitBuffer: generatedImpostorData.subunitBuffer,
@@ -158,7 +158,7 @@ class VisualizationBufferLoader {
         let colorBufferLength = await proteinViewModel.renderer.mutableState.atomColorBuffer?.length
         if !((colorBufferLength ?? 0)
                 / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
-            await proteinViewModel.renderer.createAtomColorBuffer(
+            await proteinViewModel.renderer.mutableState.createAtomColorBuffer(
                 proteins: proteins,
                 colorList: colorViewModel.elementColors,
                 colorBy: colorViewModel.colorBy

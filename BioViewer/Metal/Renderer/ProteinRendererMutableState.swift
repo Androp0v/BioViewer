@@ -184,11 +184,6 @@ extension ProteinRenderer {
             scene.currentFrameData.atoms_per_configuration = Int32(configurationSelector.atomsPerConfiguration)
         }
         
-        /// Sets the necessary buffers to display a protein in the renderer using billboarding
-        func setColorBuffer(colorBuffer: inout MTLBuffer) {
-            self.atomColorBuffer = colorBuffer
-        }
-        
         /// Sets the necessary buffers to display atom bonds in the renderer using billboarding
         func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
             self.impostorBondVertexBuffer = vertexBuffer
