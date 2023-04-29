@@ -12,9 +12,7 @@ class ProteinColorViewModel: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel? {
         didSet {
-            Task {
-                await proteinViewModel?.renderer.mutableState.scene.colorFill = updatedFillColor()
-            }
+            updateSceneColorFill()
         }
     }
     
@@ -23,7 +21,7 @@ class ProteinColorViewModel: ObservableObject {
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
             Task {
-                await proteinViewModel?.renderer.mutableState.scene.backgroundColor = newCGColor
+                await proteinViewModel?.renderer.mutableState.setBackgroundColor(newCGColor)
             }
         }
     }
@@ -33,11 +31,7 @@ class ProteinColorViewModel: ObservableObject {
         didSet {
             guard let renderer = proteinViewModel?.renderer else { return }
             Task {
-                await renderer.mutableState.scene.animator?.animatedFillColorChange(
-                    initialColors: renderer.mutableState.scene.colorFill,
-                    finalColors: updatedFillColor(),
-                    duration: 0.15
-                )
+                await renderer.mutableState.animateColorFillChange(to: updatedFillColor())
             }
         }
     }
@@ -45,36 +39,28 @@ class ProteinColorViewModel: ObservableObject {
     /// Color used for each element when coloring by element.
     @Published var elementColors: [Color] = [Color]() {
         didSet {
-            Task {
-                await proteinViewModel?.renderer.mutableState.scene.colorFill = updatedFillColor()
-            }
+            updateSceneColorFill()
         }
     }
     
     /// Color used for each subunit when coloring by subunit.
     @Published var subunitColors: [Color] = [Color]() {
         didSet {
-            Task {
-                await proteinViewModel?.renderer.mutableState.scene.colorFill = updatedFillColor()
-            }
+            updateSceneColorFill()
         }
     }
     
     /// Color used for each residue when coloring by residue.
     @Published var residueColors: [Color] = [Color]() {
         didSet {
-            Task {
-                await proteinViewModel?.renderer.mutableState.scene.colorFill = updatedFillColor()
-            }
+            updateSceneColorFill()
         }
     }
     
     /// Color used for each residue when coloring by residue.
     @Published var structureColors: [Color] = [Color]() {
         didSet {
-            Task {
-                await proteinViewModel?.renderer.mutableState.scene.colorFill = updatedFillColor()
-            }
+            updateSceneColorFill()
         }
     }
     
@@ -84,7 +70,7 @@ class ProteinColorViewModel: ObservableObject {
             // TODO: Animation
             if let newColor = bondColor.cgColor {
                 Task {
-                    await proteinViewModel?.renderer.mutableState.scene.bondColor = newColor
+                    await proteinViewModel?.renderer.mutableState.setBondColor(newColor)
                 }
             }
         }
@@ -102,5 +88,12 @@ class ProteinColorViewModel: ObservableObject {
         initSubunitColors()
         initResidueColors()
         initStructureColors()
+    }
+    
+    // MARK: - Private
+    private func updateSceneColorFill() {
+        Task {
+            await proteinViewModel?.renderer.mutableState.setColorFill(updatedFillColor())
+        }
     }
 }

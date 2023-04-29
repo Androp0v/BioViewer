@@ -321,5 +321,25 @@ extension ProteinRenderer {
                 aspectRatio: scene.aspectRatio
             )
         }
+        
+        func setBackgroundColor(_ color: CGColor) {
+            scene.backgroundColor = color
+        }
+        
+        func setColorFill(_ colorFill: FillColorInput) {
+            scene.colorFill = colorFill
+        }
+        
+        func animateColorFillChange(to colorFill: FillColorInput) {
+            scene.animator?.animatedFillColorChange(
+                initialColors: scene.colorFill,
+                finalColors: colorFill,
+                duration: 0.15
+            )
+        }
+        
+        func setBondColor(_ color: CGColor) {
+            scene.bondColor = color
+        }
     }
 }
