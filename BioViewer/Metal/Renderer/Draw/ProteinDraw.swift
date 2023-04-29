@@ -12,7 +12,7 @@ extension ProteinRenderer.MutableState {
     
     func drawFrame(from renderer: ProteinRenderer, in layer: CAMetalLayer) {
         // Check if the scene needs to be redrawn.
-        guard renderer.scene.needsRedraw || renderer.scene.isPlaying else {
+        guard scene.needsRedraw || scene.isPlaying else {
             return
         }
                 
@@ -36,10 +36,10 @@ extension ProteinRenderer.MutableState {
         self.currentFrameIndex = (self.currentFrameIndex + 1) % renderer.maxBuffersInFlight
                 
         // Update uniform buffer
-        renderer.scene.updateScene()
-        let currentFrameData = renderer.scene.currentFrameData
-        let lastFrameFrameData = renderer.scene.lastFrameFrameData
-        let reprojectionData = renderer.scene.reprojectionData(
+        scene.updateScene()
+        let currentFrameData = scene.currentFrameData
+        let lastFrameFrameData = scene.lastFrameFrameData
+        let reprojectionData = scene.reprojectionData(
             currentFrameData: currentFrameData,
             oldFrameData: lastFrameFrameData
         )
@@ -65,12 +65,12 @@ extension ProteinRenderer.MutableState {
         
         // MARK: - Fill color pass
         
-        if renderer.scene.lastColorPassRequest > renderer.scene.lastColorPass {
+        if scene.lastColorPassRequest > scene.lastColorPass {
             self.fillColorPass(
                 renderer: renderer,
                 commandBuffer: commandBuffer,
                 colorBuffer: self.atomColorBuffer,
-                colorFill: renderer.scene.colorFill
+                colorFill: scene.colorFill
             )
         }
         
@@ -78,7 +78,7 @@ extension ProteinRenderer.MutableState {
         
         // MARK: - Shadow Map pass
         
-        if renderer.scene.hasShadows {
+        if scene.hasShadows {
             self.shadowRenderPass(
                 renderer: renderer,
                 commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
@@ -111,7 +111,7 @@ extension ProteinRenderer.MutableState {
                 depthPrePassTexture: depthPrePassTextures.colorTexture,
                 shadowTextures: shadowTextures,
                 variant: .solidSpheres,
-                renderBonds: renderer.scene.currentVisualization == .ballAndStick
+                renderBonds: scene.currentVisualization == .ballAndStick
             )
                                             
             // MARK: - Debug points pass

@@ -31,7 +31,7 @@ extension ProteinRenderer.MutableState {
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
         renderer.impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
-        renderer.impostorRenderPassDescriptor.colorAttachments[0].clearColor = renderer.getBackgroundClearColor()
+        renderer.impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
         
         if AppState.hasDepthPrePasses() {
             // Attach textures. colorAttachments[1] is the depth pre-pass GBuffer texture
@@ -137,7 +137,7 @@ extension ProteinRenderer.MutableState {
         renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        guard let configurationSelector = renderer.scene.configurationSelector else {
+        guard let configurationSelector = scene.configurationSelector else {
             return
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
@@ -198,7 +198,7 @@ extension ProteinRenderer.MutableState {
             renderCommandEncoder.setCullMode(.none)
             
             // Draw primitives
-            guard let configurationSelector = renderer.scene.configurationSelector else {
+            guard let configurationSelector = scene.configurationSelector else {
                 return
             }
             guard let indexBufferRegion = configurationSelector.getBondsIndexBufferRegion() else {

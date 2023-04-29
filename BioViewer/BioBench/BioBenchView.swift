@@ -146,11 +146,11 @@ struct BioBenchView: View {
                 fileExtension: "pdb",
                 byteSize: byteSize
             )
-            proteinViewModel.renderer.scene.updateCameraDistanceToModel(
-                distanceToModel: proteinViewModel.renderer.scene.cameraPosition.z * 0.8,
+            await proteinViewModel.renderer.mutableState.scene.updateCameraDistanceToModel(
+                distanceToModel: proteinViewModel.renderer.mutableState.scene.cameraPosition.z * 0.8,
                 proteinDataSource: proteinDataSource
             )
-            proteinViewModel.renderer.scene.autorotating = true
+            await proteinViewModel.renderer.mutableState.scene.autorotating = true
             proteinViewModel.renderer.benchmarkedFrames = 0
             let waitTask = Task.detached {
                 while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
@@ -170,8 +170,8 @@ struct BioBenchView: View {
                 )
             )
             print("BioBench \(benchmarkedProteins.count) (\(pdbID)): \(proteinDataSource.totalAtomCount), \(meanTime), \(stdTime.0), \(stdTime.1)")
-            proteinViewModel.renderer.scene.autorotating = false
-            currentImage = await proteinViewModel.renderer.protectedMutableState.benchmarkTextures.colorTexture.getCGImage()
+            await proteinViewModel.renderer.mutableState.scene.autorotating = false
+            currentImage = await proteinViewModel.renderer.mutableState.benchmarkTextures.colorTexture.getCGImage()
         }
     }
     

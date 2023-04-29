@@ -13,6 +13,9 @@ extension ProteinRenderer {
     
     actor MutableState {
         
+        /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
+        var scene = MetalScene()
+        /// The `MTLDevice` in charge of rendering the scene.
         let device: MTLDevice
                 
         // MARK: - Scheduling
@@ -68,7 +71,7 @@ extension ProteinRenderer {
         
         // MARK: - Init
         
-        init(device: MTLDevice, maxBuffersInFlight: Int, frameData: FrameData, isBenchmark: Bool) {
+        init(device: MTLDevice, maxBuffersInFlight: Int, isBenchmark: Bool) {
             
             self.device = device
             
@@ -77,7 +80,7 @@ extension ProteinRenderer {
             
             // Add buffers to uniforms buffer array
             for _ in 0..<maxBuffersInFlight {
-                var inoutFrameData = frameData
+                var inoutFrameData = scene.currentFrameData
                 let uniformBuffer = device.makeBuffer(
                     bytes: &inoutFrameData,
                     length: MemoryLayout<FrameData>.stride,
@@ -92,6 +95,34 @@ extension ProteinRenderer {
             
             // Property initialization
             self.currentFrameIndex = 0
+        }
+        
+        // MARK: - Functions
+        
+        /// Get the MTLClearColor for the scene's background color. Defaults to black if color can't be retrieved.
+        func getBackgroundClearColor() -> MTLClearColor {
+            
+            // Convert color to RGB from other color spaces (i.e. grayscale) as MTLClearColor requires
+            // a RGBA value.
+            let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+            guard let rgbaColor = scene.backgroundColor.converted(to: rgbColorSpace, intent: .defaultIntent, options: nil) else {
+                return MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+            }
+            
+            // We expect 4 color components in RGBA
+            guard rgbaColor.numberOfComponents == 4 else {
+                return MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+            }
+            guard let rgbaColorComponents = rgbaColor.components else {
+                return MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+            }
+            
+            return MTLClearColor(
+                red: rgbaColorComponents[0],
+                green: rgbaColorComponents[1],
+                blue: rgbaColorComponents[2],
+                alpha: rgbaColorComponents[3]
+            )
         }
         
         // MARK: - Buffer functions
@@ -123,8 +154,7 @@ extension ProteinRenderer {
         func addOpaqueBuffers(
             vertexBuffer: inout MTLBuffer,
             atomTypeBuffer: inout MTLBuffer,
-            indexBuffer: inout MTLBuffer,
-            scene: MetalScene
+            indexBuffer: inout MTLBuffer
         ) {
             self.opaqueVertexBuffer = vertexBuffer
             self.atomElementBuffer = atomTypeBuffer
@@ -140,8 +170,7 @@ extension ProteinRenderer {
             atomResidueBuffer: MTLBuffer?,
             atomSecondaryStructureBuffer: MTLBuffer?,
             indexBuffer: MTLBuffer,
-            configurationSelector: ConfigurationSelector,
-            scene: MetalScene
+            configurationSelector: ConfigurationSelector
         ) {
             self.billboardVertexBuffers = billboardVertexBuffers
             self.atomElementBuffer = atomElementBuffer
@@ -161,21 +190,21 @@ extension ProteinRenderer {
         }
         
         /// Sets the necessary buffers to display atom bonds in the renderer using billboarding
-        func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer, scene: MetalScene) {
+        func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
             self.impostorBondVertexBuffer = vertexBuffer
             self.impostorBondIndexBuffer = indexBuffer
             scene.needsRedraw = true
         }
         
         #if DEBUG
-        func setDebugPointsBuffer(vertexBuffer: inout MTLBuffer, scene: MetalScene) {
+        func setDebugPointsBuffer(vertexBuffer: inout MTLBuffer) {
             self.debugPointVertexBuffer = vertexBuffer
             scene.needsRedraw = true
         }
         #endif
         
         /// Deallocates the MTLBuffers used to render a protein
-        func removeBuffers(scene: MetalScene) {
+        func removeBuffers() {
             self.opaqueVertexBuffer = nil
             self.atomElementBuffer = nil
             self.opaqueIndexBuffer = nil
@@ -213,7 +242,8 @@ extension ProteinRenderer {
             }
         }
         
-        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?, renderer: ProteinRenderer) {
+        func updateMutableStateForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?, renderer: ProteinRenderer) {
+
             // Update render target
             if let metalLayer {
                 renderTarget.metalLayer = metalLayer
@@ -222,6 +252,14 @@ extension ProteinRenderer {
                 renderTarget.displayScale = displayScale
             }
             renderTarget.updateRenderTarget(for: size, renderer: renderer)
+            
+            // Update scene
+            scene.camera.updateProjection(drawableSize: size)
+            scene.aspectRatio = Float(size.width / size.height)
+            scene.renderResolution = simd_float2(
+                Float(renderTarget.renderSize.width),
+                Float(renderTarget.renderSize.height)
+            )
             
             // Update non-render target textures
             if AppState.hasDepthPrePasses() {
@@ -234,7 +272,7 @@ extension ProteinRenderer {
         }
         
         func refreshTexturesForNewSettings(renderer: ProteinRenderer) {
-            updateTexturesForNewViewSize(
+            updateMutableStateForNewViewSize(
                 CGSize(width: renderTarget.windowSize.width, height: renderTarget.windowSize.height),
                 metalLayer: nil,
                 displayScale: nil,
@@ -246,7 +284,7 @@ extension ProteinRenderer {
             renderTarget.metalFXUpscalingMode = mode
             refreshTexturesForNewSettings(renderer: renderer)
             // Update the mode as seen by the scene
-            renderer.scene.metalFXUpscalingMode = mode
+            scene.metalFXUpscalingMode = mode
         }
         
         func updateProteinRenderFactors(ssaa: Float, metalFXUpscaling: Float, renderer: ProteinRenderer) {

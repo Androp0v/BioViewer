@@ -94,11 +94,6 @@ class ProteinRenderTarget {
             textureWidth: renderSize.width,
             textureHeight: renderSize.height
         )
-        // Update the scene
-        renderer.scene.renderResolution = simd_float2(
-            Float(renderSize.width),
-            Float(renderSize.height)
-        )
         
         // Update the CAMetalLayer, if available
         if let metalLayer {

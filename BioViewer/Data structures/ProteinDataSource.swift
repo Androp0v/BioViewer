@@ -131,15 +131,17 @@ class ProteinDataSource: ObservableObject {
         self.selectionBoundingSphere = computeBoundingSphere(proteins: proteins)
         
         // Fit new selection in frustum
-        let scene = proteinViewModel.renderer.scene
-        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(
-            sphereRadius: selectionBoundingSphere.radius,
-            aspectRatio: scene.aspectRatio
-        )
-        scene.updateCameraDistanceToModel(
-            distanceToModel: cameraDistanceToFit,
-            proteinDataSource: self
-        )
+        Task {
+            let scene = await proteinViewModel.renderer.mutableState.scene
+            let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(
+                sphereRadius: selectionBoundingSphere.radius,
+                aspectRatio: scene.aspectRatio
+            )
+            scene.updateCameraDistanceToModel(
+                distanceToModel: cameraDistanceToFit,
+                proteinDataSource: self
+            )
+        }
     }
         
     func modelsForFile(file: ProteinFile?) -> [Protein]? {

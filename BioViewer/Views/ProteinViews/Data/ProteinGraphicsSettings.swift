@@ -25,7 +25,7 @@ class ProteinGraphicsSettings: ObservableObject {
                 self.metalFXFactor = 1.0
             }
             Task {
-                await renderer.protectedMutableState.updateMetalFXUpscalingMode(
+                await renderer.mutableState.updateMetalFXUpscalingMode(
                     to: metalFXUpscalingMode,
                     renderer: renderer
                 )
@@ -52,7 +52,7 @@ class ProteinGraphicsSettings: ObservableObject {
         guard let renderer = proteinViewModel?.renderer else {
             return
         }
-        await renderer.protectedMutableState.updateProteinRenderFactors(
+        await renderer.mutableState.updateProteinRenderFactors(
             ssaa: ssaaFactor,
             metalFXUpscaling: metalFXFactor,
             renderer: renderer

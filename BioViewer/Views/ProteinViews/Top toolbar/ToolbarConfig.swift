@@ -22,13 +22,17 @@ class ToolbarConfig: ObservableObject {
     
     @Published var autorotating: Bool = false {
         didSet {
-            proteinViewModel?.renderer.scene.autorotating = autorotating
+            Task {
+                await proteinViewModel?.renderer.mutableState.scene.autorotating = autorotating
+            }
         }
     }
     
     // MARK: - Actions
     
     func resetCamera() {
-        proteinViewModel?.renderer.scene.resetCamera()
+        Task {
+            await proteinViewModel?.renderer.mutableState.scene.resetCamera()
+        }
     }
 }

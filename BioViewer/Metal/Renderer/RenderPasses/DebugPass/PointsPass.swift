@@ -19,7 +19,7 @@ extension ProteinRenderer.MutableState {
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
         renderer.debugPointsRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
-        renderer.debugPointsRenderPassDescriptor.colorAttachments[0].clearColor = renderer.getBackgroundClearColor()
+        renderer.debugPointsRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
         // Attach depth texture.
         renderer.debugPointsRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).

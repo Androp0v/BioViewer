@@ -46,7 +46,7 @@ extension ProteinRenderer.MutableState {
         renderer.makeShadowRenderPipelineState(device: device, highQuality: true)
 
         // Create high quality impostor render pass pipeline state
-        switch renderer.scene.currentVisualization {
+        switch scene.currentVisualization {
         case .solidSpheres:
             renderer.makeImpostorRenderPipelineState(device: device, variant: .solidSpheresHQ)
         case .ballAndStick:
@@ -54,10 +54,12 @@ extension ProteinRenderer.MutableState {
         }
         
         // Change the image aspect ratio
-        renderer.scene.camera.updateProjection(drawableSize: CGSize(width: photoModeViewModel.photoConfig.finalTextureSize,
-                                                                height: photoModeViewModel.photoConfig.finalTextureSize))
-        let oldAspectRatio = renderer.scene.aspectRatio
-        renderer.scene.aspectRatio = 1.0
+        scene.camera.updateProjection(drawableSize: CGSize(
+            width: photoModeViewModel.photoConfig.finalTextureSize,
+            height: photoModeViewModel.photoConfig.finalTextureSize
+        ))
+        let oldAspectRatio = scene.aspectRatio
+        scene.aspectRatio = 1.0
         
         // Assure buffers are loaded
         guard self.atomElementBuffer != nil else { throw HQRenderingError.nonLoadedBuffer }
@@ -75,8 +77,8 @@ extension ProteinRenderer.MutableState {
         currentFrameIndex = (currentFrameIndex + 1) % renderer.maxBuffersInFlight
                 
         // Update uniform buffer
-        renderer.scene.updateScene()
-        withUnsafePointer(to: renderer.scene.currentFrameData) {
+        scene.updateScene()
+        withUnsafePointer(to: scene.currentFrameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
         }
@@ -119,7 +121,7 @@ extension ProteinRenderer.MutableState {
             depthPrePassTexture: hqPrePassTextures.colorTexture,
             shadowTextures: hqShadowTextures,
             variant: .solidSpheresHQ,
-            renderBonds: renderer.scene.currentVisualization == .ballAndStick
+            renderBonds: scene.currentVisualization == .ballAndStick
         )
         
         // MARK: - Completion handler
@@ -138,7 +140,7 @@ extension ProteinRenderer.MutableState {
                     photoModeViewModel.isPreviewCreated = true
                 }
             }
-            renderer.scene.aspectRatio = oldAspectRatio
+            self.scene.aspectRatio = oldAspectRatio
         })
         
         // MARK: - Commit buffer

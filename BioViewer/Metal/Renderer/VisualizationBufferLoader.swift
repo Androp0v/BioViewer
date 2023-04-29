@@ -29,11 +29,8 @@ class VisualizationBufferLoader {
         // Add a new geometry creation task
         currentTask = Task {
             await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
-            
-            DispatchQueue.main.sync {
-                // Update internal visualization mode as seen by renderer
-                proteinViewModel.renderer.scene.currentVisualization = visualization
-            }
+            // Update internal visualization mode as seen by renderer
+            await proteinViewModel.renderer.mutableState.scene.currentVisualization = visualization
         }
     }
     
@@ -42,7 +39,7 @@ class VisualizationBufferLoader {
     private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
         guard let protein = proteinViewModel.dataSource?.getFirstProtein(),
-              let animator = proteinViewModel.renderer.scene.animator,
+              let animator = await proteinViewModel.renderer.mutableState.scene.animator,
               let visualizationViewModel = proteinViewModel.visualizationViewModel else { return }
 
         switch visualization {
@@ -87,7 +84,7 @@ class VisualizationBufferLoader {
             // Update configuration selector with bonds
             guard let bondsPerConfiguration = protein.bondsPerConfiguration else { return }
             guard let bondsConfigurationArrayStart = protein.bondsConfigurationArrayStart else { return }
-            proteinViewModel.renderer.scene.configurationSelector?.addBonds(
+            await proteinViewModel.renderer.mutableState.scene.configurationSelector?.addBonds(
                 bondsPerConfiguration: bondsPerConfiguration,
                 bondArrayStarts: bondsConfigurationArrayStart
             )
@@ -143,7 +140,7 @@ class VisualizationBufferLoader {
         ) else { return }
         
         // Create ConfigurationSelector for new data
-        guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
+        guard let configurationSelector = await createConfigurationSelector(proteins: proteins) else { return }
         
         // Pass the new mesh to the renderer
         await proteinViewModel.renderer.setBillboardingBuffers(
@@ -158,7 +155,7 @@ class VisualizationBufferLoader {
         
         // Create color buffer if needed
         // TODO: Improve API
-        let colorBufferLength = await proteinViewModel.renderer.protectedMutableState.atomColorBuffer?.length
+        let colorBufferLength = await proteinViewModel.renderer.mutableState.atomColorBuffer?.length
         if !((colorBufferLength ?? 0)
                 / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
             await proteinViewModel.renderer.createAtomColorBuffer(
@@ -171,10 +168,10 @@ class VisualizationBufferLoader {
     
     // MARK: - ConfigurationSelector
     
-    func createConfigurationSelector(proteins: [Protein]) -> ConfigurationSelector? {
+    func createConfigurationSelector(proteins: [Protein]) async -> ConfigurationSelector? {
         guard let proteinViewModel = proteinViewModel else { return nil }
         
-        if let currentSelector = proteinViewModel.renderer.scene.configurationSelector,
+        if let currentSelector = await proteinViewModel.renderer.mutableState.scene.configurationSelector,
            currentSelector.proteins == proteins {
             return currentSelector
         }
@@ -191,9 +188,9 @@ class VisualizationBufferLoader {
                 }
             }
         }
-        return ConfigurationSelector(
+        return await ConfigurationSelector(
             for: proteins,
-            in: proteinViewModel.renderer.scene,
+            in: proteinViewModel.renderer.mutableState.scene,
             atomsPerConfiguration: totalAtomCount,
             subunitIndices: subunitIndices,
             subunitLengths: subunitLengths,

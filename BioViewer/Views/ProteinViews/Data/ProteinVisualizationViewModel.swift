@@ -117,10 +117,12 @@ class ProteinVisualizationViewModel: ObservableObject {
     /// Scene's main camera focal length.
     @Published var cameraFocalLength: Float = 200 {
         didSet {
-            proteinViewModel.renderer.scene.camera.updateFocalLength(
-                focalLength: cameraFocalLength,
-                aspectRatio: proteinViewModel.renderer.scene.aspectRatio
-            )
+            Task {
+                await proteinViewModel.renderer.mutableState.scene.camera.updateFocalLength(
+                    focalLength: cameraFocalLength,
+                    aspectRatio: proteinViewModel.renderer.mutableState.scene.aspectRatio
+                )
+            }
         }
     }
 }

@@ -43,7 +43,7 @@ extension ProteinRenderer.MutableState {
         
         // MARK: - Shadow depth pre-pass
         
-        if AppState.hasDepthPrePasses() && renderer.scene.hasShadows {
+        if AppState.hasDepthPrePasses() && scene.hasShadows {
             self.encodeShadowDepthPrePassStage(
                 renderer: renderer,
                 renderCommandEncoder: renderCommandEncoder,
@@ -92,7 +92,7 @@ extension ProteinRenderer.MutableState {
         renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        guard let configurationSelector = renderer.scene.configurationSelector else {
+        guard let configurationSelector = scene.configurationSelector else {
             return
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()

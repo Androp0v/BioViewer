@@ -135,6 +135,6 @@ extension ProteinRenderer.MutableState {
         computeEncoder.endEncoding()
         
         // Mark color pass as performed (doesn't mean it has displayed yet)
-        renderer.scene.lastColorPass = CACurrentMediaTime()
+        scene.lastColorPass = CACurrentMediaTime()
     }
 }

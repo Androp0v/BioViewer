@@ -20,7 +20,7 @@ struct PhotoModeFooter: View {
                 photoModeViewModel.shutterAnimator.openShutter()
                 // TODO: Error handling
                 Task {
-                    try? await proteinViewModel.renderer.protectedMutableState.drawHighQualityFrame(
+                    try? await proteinViewModel.renderer.mutableState.drawHighQualityFrame(
                         renderer: proteinViewModel.renderer,
                         size: CGSize(width: 2048, height: 2048),
                         photoModeViewModel: photoModeViewModel

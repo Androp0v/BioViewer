@@ -46,7 +46,7 @@ extension ProteinRenderer.MutableState {
         renderCommandEncoder.setCullMode(.back)
 
         // Draw primitives
-        guard let configurationSelector = renderer.scene.configurationSelector else {
+        guard let configurationSelector = scene.configurationSelector else {
             return
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
