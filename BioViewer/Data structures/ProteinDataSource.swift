@@ -13,7 +13,7 @@ import SwiftUI
 /// Handle all source data for a ```ProteinView``` that is not related to the
 /// scene nor the appearance, like the ```Protein``` objects that have been
 /// imported or computed values.
-class ProteinDataSource: ObservableObject {
+@MainActor class ProteinDataSource: ObservableObject {
     
     // MARK: - Properties
     
@@ -28,11 +28,9 @@ class ProteinDataSource: ObservableObject {
     private(set) var files: [ProteinFile] = [ProteinFile]() {
         // Run when a new file is added to the datasource
         didSet {
-            // Publishers need to be updated in the main queue
-            DispatchQueue.main.async {
-                // FIXME: This is number of files, not proteins
-                self.proteinCount = self.files.count
-            }
+            // FIXME: This is number of files, not proteins
+            self.proteinCount = self.files.count
+
             // Sum all subunit counts from all proteins in the datasource
             var newSubunitCount = 0
             for file in self.files {
@@ -51,11 +49,9 @@ class ProteinDataSource: ObservableObject {
                     }
                 }
             }
-            // Publishers need to be updated in the main queue
-            DispatchQueue.main.async {
-                self.totalSubunitCount = newSubunitCount
-                self.totalAtomCount = newTotalAtomCount
-            }
+
+            self.totalSubunitCount = newSubunitCount
+            self.totalAtomCount = newTotalAtomCount
         }
     }
             
@@ -98,7 +94,7 @@ class ProteinDataSource: ObservableObject {
     // MARK: - Remove files
     
     /// Removes file at index from data source and scene.
-    public func removeFileAtIndex(index: Int) async {
+    func removeFileAtIndex(index: Int) async {
         guard files.count > index else {
             NSLog("File to remove has an index out of bounds.")
             return
@@ -108,7 +104,7 @@ class ProteinDataSource: ObservableObject {
     }
     
     /// Removes all files from the data source and the scene.
-    @MainActor public func removeAllFilesFromDatasource() async {
+    func removeAllFilesFromDatasource() async {
         files = []
         selectedModel = []
         selectedModelIndexForFile = [:]
@@ -139,7 +135,7 @@ class ProteinDataSource: ObservableObject {
             )
             scene.updateCameraDistanceToModel(
                 distanceToModel: cameraDistanceToFit,
-                proteinDataSource: self
+                newBoundingSphere: selectionBoundingSphere
             )
         }
     }

@@ -38,7 +38,7 @@ class VisualizationBufferLoader {
     
     private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
-        guard let protein = proteinViewModel.dataSource?.getFirstProtein(),
+        guard let protein = await proteinViewModel.dataSource?.getFirstProtein(),
               let animator = await proteinViewModel.renderer.mutableState.scene.animator,
               let visualizationViewModel = proteinViewModel.visualizationViewModel else { return }
 
@@ -128,8 +128,8 @@ class VisualizationBufferLoader {
         
         guard let proteinViewModel = proteinViewModel,
               let colorViewModel = proteinViewModel.colorViewModel,
-              let proteinFile = proteinViewModel.dataSource?.getFirstFile(),
-              let proteins = proteinViewModel.dataSource?.modelsForFile(file: proteinFile) else {
+              let proteinFile = await proteinViewModel.dataSource?.getFirstFile(),
+              let proteins = await proteinViewModel.dataSource?.modelsForFile(file: proteinFile) else {
             return
         }
         

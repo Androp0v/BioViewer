@@ -148,7 +148,7 @@ struct BioBenchView: View {
             )
             await proteinViewModel.renderer.mutableState.scene.updateCameraDistanceToModel(
                 distanceToModel: proteinViewModel.renderer.mutableState.scene.cameraPosition.z * 0.8,
-                proteinDataSource: proteinDataSource
+                newBoundingSphere: proteinDataSource.selectionBoundingSphere
             )
             await proteinViewModel.renderer.mutableState.scene.autorotating = true
             proteinViewModel.renderer.benchmarkedFrames = 0

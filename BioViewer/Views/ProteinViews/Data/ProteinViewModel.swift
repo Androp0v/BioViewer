@@ -31,7 +31,7 @@ class ProteinViewModel: ObservableObject {
     
     // MARK: - Initialization
 
-    init(isBenchmark: Bool = false) {
+    @MainActor init(isBenchmark: Bool = false) {
         // Setup Metal renderer
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
@@ -40,7 +40,7 @@ class ProteinViewModel: ObservableObject {
 
         // Setup drop delegate
         self.dropHandler = ImportDroppedFilesDelegate()
-
+        
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dropHandler.proteinViewModel = self
         

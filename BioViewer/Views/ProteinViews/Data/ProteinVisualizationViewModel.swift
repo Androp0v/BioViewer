@@ -102,7 +102,7 @@ class ProteinVisualizationViewModel: ObservableObject {
                     guard let proteinViewModel = self.proteinViewModel,
                           let dataSource = proteinViewModel.dataSource
                     else { return }
-                    guard var debugBuffer = ComputeMolecularSurfaceUtility(protein: (dataSource.files.first?.models.first)!)
+                    guard var debugBuffer = await ComputeMolecularSurfaceUtility(protein: (dataSource.files.first?.models.first)!)
                             .createMolecularSurface() else {
                         return
                     }

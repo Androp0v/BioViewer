@@ -276,9 +276,11 @@ class MetalScene {
         
     // MARK: - Fit protein on screen
     
-    func updateCameraDistanceToModel(distanceToModel: Float, proteinDataSource: ProteinDataSource) {
+    func updateCameraDistanceToModel(distanceToModel: Float, newBoundingSphere: BoundingSphere?) {
         // TO-DO: Fit all files
-        self.boundingSphere = proteinDataSource.selectionBoundingSphere
+        if let newBoundingSphere {
+            self.boundingSphere = newBoundingSphere
+        }
         
         // Update camera far and near planes
         self.camera.nearPlane = max(1, distanceToModel - boundingSphere.radius)

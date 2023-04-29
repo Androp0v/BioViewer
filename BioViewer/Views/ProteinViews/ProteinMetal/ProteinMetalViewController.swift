@@ -83,7 +83,7 @@ class ProteinMetalViewController: UIViewController {
                 let newDistance = currentCameraPosition.z / Float(gestureRecognizer.scale)
                 await self.proteinViewModel.renderer.mutableState.scene.updateCameraDistanceToModel(
                     distanceToModel: newDistance,
-                    proteinDataSource: dataSource
+                    newBoundingSphere: nil
                 )
                 gestureRecognizer.scale = 1.0
             }
