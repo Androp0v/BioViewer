@@ -44,14 +44,7 @@ class ProteinRenderer: NSObject {
     var commandQueue: MTLCommandQueue?
     /// Resolution of the view
     var viewResolution: CGSize?
-    
-    // MARK: - Upscaling
-    
-    /// Metal FX Upscaler based solely on spatial data.
-    var metalFXSpatialScaler: MTLFXSpatialScaler?
-    /// Metal FX Upscaler based on spatial and temporal data.
-    var metalFXTemporalScaler: MTLFXTemporalScaler?
-    
+        
     // MARK: - Compute Pipeline States
     
     /// Pipeline state for filling the color buffer (common options: element).
@@ -255,8 +248,7 @@ extension ProteinRenderer {
             await mutableState.updateMutableStateForNewViewSize(
                 size,
                 metalLayer: layer,
-                displayScale: displayScale,
-                renderer: self
+                displayScale: displayScale
             )
         }
     }

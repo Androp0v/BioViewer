@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
 
-class ImageExporter {
+@MainActor class ImageExporter {
     func showImageExportSheet(cgImage: CGImage?, preferredFileName: String?) {
         guard let cgImage = cgImage else {
             return

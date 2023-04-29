@@ -9,7 +9,7 @@ import AVFoundation
 import Foundation
 import SwiftUI
 
-class ShutterAnimator: ObservableObject {
+@MainActor class ShutterAnimator: ObservableObject {
     
     @Published var shutterAnimationRunning: Bool = false
     @Published var showImage: Bool = true
@@ -56,7 +56,7 @@ class ShutterAnimator: ObservableObject {
             self.player?.prepareToPlay()
         }
         
-        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: after) {
+        Task { @MainActor in
             self.player?.play()
         }
     }
@@ -71,7 +71,7 @@ class ShutterAnimator: ObservableObject {
             self.player?.prepareToPlay()
         }
         
-        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: after) {
+        Task { @MainActor in
             self.player?.play()
         }
     }
@@ -119,8 +119,8 @@ class ShutterAnimator: ObservableObject {
             // Total shutter animation time
             shutterOpenAnimationTime = 0.15
         }
-        
-        DispatchQueue.global().asyncAfter(deadline: .now() + shutterOpenAnimationTime) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(shutterOpenAnimationTime))
             self.isShutterOpen = true
             self.shutterOpenSemaphore.signal()
         }

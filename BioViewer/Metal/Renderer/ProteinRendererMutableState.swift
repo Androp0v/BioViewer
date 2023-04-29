@@ -7,6 +7,7 @@
 
 import Foundation
 import MetalKit
+import MetalFX
 import SwiftUI
 
 extension ProteinRenderer {
@@ -68,6 +69,13 @@ extension ProteinRenderer {
         var shadowTextures = ShadowTextures()
         /// Benchmark textures.
         var benchmarkTextures = BenchmarkTextures()
+        
+        // MARK: - Upscaling
+        
+        /// Metal FX Upscaler based solely on spatial data.
+        var metalFXSpatialScaler: MTLFXSpatialScaler?
+        /// Metal FX Upscaler based on spatial and temporal data.
+        var metalFXTemporalScaler: MTLFXTemporalScaler?
         
         // MARK: - Init
         
@@ -237,16 +245,16 @@ extension ProteinRenderer {
             }
         }
         
-        func updateMutableStateForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?, renderer: ProteinRenderer) {
+        func updateMutableStateForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?) {
 
-            // Update render target
+            // Update render target.
             if let metalLayer {
                 renderTarget.metalLayer = metalLayer
             }
             if let displayScale {
                 renderTarget.displayScale = displayScale
             }
-            renderTarget.updateRenderTarget(for: size, renderer: renderer)
+            renderTarget.updateRenderTarget(for: size, device: device)
             
             // Update scene
             scene.camera.updateProjection(drawableSize: size)
@@ -256,7 +264,39 @@ extension ProteinRenderer {
                 Float(renderTarget.renderSize.height)
             )
             
-            // Update non-render target textures
+            // Remake MetalFX upscalers (if needed).
+            switch renderTarget.metalFXUpscalingMode {
+            case .temporal:
+                makeTemporalScaler(
+                    inputSize: MTLSizeMake(
+                        renderTarget.renderSize.width,
+                        renderTarget.renderSize.height,
+                        1
+                    ),
+                    outputSize: MTLSizeMake(
+                        renderTarget.upscaledSize.width,
+                        renderTarget.upscaledSize.height,
+                        1
+                    )
+                )
+            case .spatial:
+                makeSpatialScaler(
+                    inputSize: MTLSizeMake(
+                        renderTarget.renderSize.width,
+                        renderTarget.renderSize.height,
+                        1
+                    ),
+                    outputSize: MTLSizeMake(
+                        renderTarget.upscaledSize.width,
+                        renderTarget.upscaledSize.height,
+                        1
+                    )
+                )
+            case .none:
+                break
+            }
+            
+            // Update non-render target textures.
             if AppState.hasDepthPrePasses() {
                 depthPrePassTextures.makeTextures(
                     device: device,
@@ -266,18 +306,17 @@ extension ProteinRenderer {
             }
         }
         
-        func refreshTexturesForNewSettings(renderer: ProteinRenderer) {
+        func refreshTexturesForNewSettings() {
             updateMutableStateForNewViewSize(
                 CGSize(width: renderTarget.windowSize.width, height: renderTarget.windowSize.height),
                 metalLayer: nil,
-                displayScale: nil,
-                renderer: renderer
+                displayScale: nil
             )
         }
         
         func updateMetalFXUpscalingMode(to mode: MetalFXUpscalingMode, renderer: ProteinRenderer) {
             renderTarget.metalFXUpscalingMode = mode
-            refreshTexturesForNewSettings(renderer: renderer)
+            refreshTexturesForNewSettings()
             // Update the mode as seen by the scene
             scene.metalFXUpscalingMode = mode
         }
@@ -285,7 +324,7 @@ extension ProteinRenderer {
         func updateProteinRenderFactors(ssaa: Float, metalFXUpscaling: Float, renderer: ProteinRenderer) {
             renderTarget.superSamplingCount = ssaa
             renderTarget.metalFXUpscalingFactor = metalFXUpscaling
-            refreshTexturesForNewSettings(renderer: renderer)
+            refreshTexturesForNewSettings()
         }
         
         // MARK: - Scene functions
@@ -357,6 +396,32 @@ extension ProteinRenderer {
         
         func resetCamera() {
             scene.resetCamera()
+        }
+        
+        func getUserRotationMatrix() -> simd_float4x4 {
+            return scene.userModelRotationMatrix
+        }
+        
+        func setUserRotationMatrix(_ matrix: simd_float4x4) {
+            scene.userModelRotationMatrix = matrix
+        }
+        
+        func getCameraPosition() -> simd_float3 {
+            return scene.cameraPosition
+        }
+        
+        func translateCameraXY(x: Float, y: Float) {
+            scene.translateCamera(
+                x: x,
+                y: y
+            )
+        }
+        
+        func setCameraDistanceToModel(_ newDistance: Float) {
+            scene.updateCameraDistanceToModel(
+                distanceToModel: newDistance,
+                newBoundingSphere: nil
+            )
         }
     }
 }

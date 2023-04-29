@@ -25,7 +25,7 @@ extension ProteinRenderer.MutableState {
             
             // MARK: - Temporal scaler
             
-            if let temporalScaler = renderer.metalFXTemporalScaler,
+            if let temporalScaler = metalFXTemporalScaler,
                let motionTexture,
                let reprojectionData {
                 
@@ -86,7 +86,7 @@ extension ProteinRenderer.MutableState {
         case .spatial:
             
             // MARK: - Spatial scaler
-            if let spatialScaler = renderer.metalFXSpatialScaler {
+            if let spatialScaler = metalFXSpatialScaler {
                 spatialScaler.colorTexture = sourceTexture
                 spatialScaler.outputTexture = outputTexture
                 spatialScaler.encode(commandBuffer: commandBuffer)

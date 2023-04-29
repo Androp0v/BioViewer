@@ -23,6 +23,7 @@ struct PhotoModeFooter: View {
                     try? await proteinViewModel.renderer.mutableState.drawHighQualityFrame(
                         renderer: proteinViewModel.renderer,
                         size: CGSize(width: 2048, height: 2048),
+                        photoConfig: photoModeViewModel.photoConfig,
                         photoModeViewModel: photoModeViewModel
                     )
                 }

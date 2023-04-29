@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class PhotoModeViewModel: ObservableObject {
+@MainActor class PhotoModeViewModel: ObservableObject {
     
     // MARK: - Config
     @Published var photoConfig = PhotoModeConfig()

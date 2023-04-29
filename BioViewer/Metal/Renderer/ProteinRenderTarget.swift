@@ -59,7 +59,7 @@ class ProteinRenderTarget {
     
     // MARK: - Functions
     
-    func updateRenderTarget(for newWindowSize: CGSize, renderer: ProteinRenderer) {
+    func updateRenderTarget(for newWindowSize: CGSize, device: MTLDevice) {
         
         self.windowSize = MTLSizeMake(Int(newWindowSize.width), Int(newWindowSize.height), 1)
                 
@@ -90,7 +90,7 @@ class ProteinRenderTarget {
         
         // Update rendered textures
         renderedTextures.makeTextures(
-            device: renderer.device,
+            device: device,
             textureWidth: renderSize.width,
             textureHeight: renderSize.height
         )
@@ -107,46 +107,13 @@ class ProteinRenderTarget {
         }
         
         // Early exit if MetalFX Upscaling is not enabled
-        if metalFXUpscalingMode == .none {
-            return
-        }
-        
-        // Update MetalFX upscaler
-        switch metalFXUpscalingMode {
-        case .temporal:
-            renderer.makeTemporalScaler(
-                inputSize: MTLSizeMake(
-                    renderSize.width,
-                    renderSize.height,
-                    1
-                ),
-                outputSize: MTLSizeMake(
-                    upscaledSize.width,
-                    upscaledSize.height,
-                    1
-                )
+        if metalFXUpscalingMode != .none {
+            // Update MetalFX upscaled texture
+            upscaledTexture.makeTexture(
+                device: device,
+                width: upscaledSize.width,
+                height: upscaledSize.height
             )
-        case .spatial:
-            renderer.makeSpatialScaler(
-                inputSize: MTLSizeMake(
-                    renderSize.width,
-                    renderSize.height,
-                    1
-                ),
-                outputSize: MTLSizeMake(
-                    upscaledSize.width,
-                    upscaledSize.height,
-                    1
-                )
-            )
-        case .none:
-            break
         }
-        // Update MetalFX upscaled texture
-        upscaledTexture.makeTexture(
-            device: renderer.device,
-            width: upscaledSize.width,
-            height: upscaledSize.height
-        )
     }
 }

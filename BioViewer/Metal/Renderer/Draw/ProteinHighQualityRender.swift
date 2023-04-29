@@ -19,27 +19,34 @@ enum HQRenderingError: Error {
 
 extension ProteinRenderer.MutableState {
     
-    func drawHighQualityFrame(renderer: ProteinRenderer, size: CGSize, photoModeViewModel: PhotoModeViewModel) throws {
+    func drawHighQualityFrame(
+        renderer: ProteinRenderer,
+        size: CGSize,
+        photoConfig: PhotoModeConfig,
+        photoModeViewModel: PhotoModeViewModel
+    ) throws {
         
         // Create the textures required for HQ rendering
         var hqTextures = HQTextures()
-        hqTextures.makeTextures(device: device, photoConfig: photoModeViewModel.photoConfig)
+        hqTextures.makeTextures(device: device, photoConfig: photoConfig)
         renderer.impostorRenderPassDescriptor.depthAttachment.storeAction = .store
         
         // Create the textures required for HQ depth pre-pass
         var hqPrePassTextures = DepthPrePassTextures()
         hqPrePassTextures.makeTextures(device: device,
-                                       textureWidth: photoModeViewModel.photoConfig.finalTextureSize,
-                                       textureHeight: photoModeViewModel.photoConfig.finalTextureSize)
+                                       textureWidth: photoConfig.finalTextureSize,
+                                       textureHeight: photoConfig.finalTextureSize)
         hqPrePassTextures.makeShadowTextures(device: device,
-                                             shadowTextureWidth: photoModeViewModel.photoConfig.shadowTextureSize,
-                                             shadowTextureHeight: photoModeViewModel.photoConfig.shadowTextureSize)
+                                             shadowTextureWidth: photoConfig.shadowTextureSize,
+                                             shadowTextureHeight: photoConfig.shadowTextureSize)
         
         // Create the textures required for HQ shadow casting
         var hqShadowTextures = ShadowTextures()
-        hqShadowTextures.makeTextures(device: device,
-                                      textureWidth: photoModeViewModel.photoConfig.shadowTextureSize,
-                                      textureHeight: photoModeViewModel.photoConfig.shadowTextureSize)
+        hqShadowTextures.makeTextures(
+            device: device,
+            textureWidth: photoConfig.shadowTextureSize,
+            textureHeight: photoConfig.shadowTextureSize
+        )
         hqShadowTextures.makeShadowSampler(device: device)
         
         // Create high quality shadow render pass pipeline state
@@ -55,8 +62,8 @@ extension ProteinRenderer.MutableState {
         
         // Change the image aspect ratio
         scene.camera.updateProjection(drawableSize: CGSize(
-            width: photoModeViewModel.photoConfig.finalTextureSize,
-            height: photoModeViewModel.photoConfig.finalTextureSize
+            width: photoConfig.finalTextureSize,
+            height: photoConfig.finalTextureSize
         ))
         let oldAspectRatio = scene.aspectRatio
         scene.aspectRatio = 1.0
@@ -129,12 +136,14 @@ extension ProteinRenderer.MutableState {
             // GPU work is complete, signal the semaphore to start the CPU work
             renderer.frameBoundarySemaphore.signal()
             // Display the image
-            DispatchQueue.global(qos: .userInteractive).async {
+            Task { @MainActor in
                 photoModeViewModel.shutterAnimator.closeShutter()
             }
-            let hqImage = hqTextures.hqTexture.getCGImage(clearBackground: photoModeViewModel.photoConfig.clearBackground,
-                                                          depthTexture: hqTextures.hqDepthTexture)
-            DispatchQueue.main.async {
+            let hqImage = hqTextures.hqTexture.getCGImage(
+                clearBackground: photoConfig.clearBackground,
+                depthTexture: hqTextures.hqDepthTexture
+            )
+            Task { @MainActor in
                 withAnimation {
                     photoModeViewModel.image = hqImage
                     photoModeViewModel.isPreviewCreated = true
@@ -145,9 +154,11 @@ extension ProteinRenderer.MutableState {
         
         // MARK: - Commit buffer
         // Commit command buffer when the shutter is open (so no animations appear onscreen)
-        _ = photoModeViewModel.shutterAnimator.shutterOpenSemaphore.wait(timeout: .distantFuture)
-        commandBuffer.commit()
-        commandBuffer.waitUntilCompleted()
-        photoModeViewModel.shutterAnimator.shutterOpenSemaphore.signal()
+        Task { @MainActor in
+            _ = photoModeViewModel.shutterAnimator.shutterOpenSemaphore.wait(timeout: .distantFuture)
+            commandBuffer.commit()
+            commandBuffer.waitUntilCompleted()
+            photoModeViewModel.shutterAnimator.shutterOpenSemaphore.signal()
+        }
     }
 }

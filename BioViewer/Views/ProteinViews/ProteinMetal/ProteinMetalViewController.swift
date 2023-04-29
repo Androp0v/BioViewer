@@ -77,13 +77,10 @@ class ProteinMetalViewController: UIViewController {
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             Task {
-                let currentCameraPosition = await self.proteinViewModel.renderer.mutableState.scene.cameraPosition
+                let currentCameraPosition = await self.proteinViewModel.renderer.mutableState.getCameraPosition()
                 // TO-DO: Proper zooming
                 let newDistance = currentCameraPosition.z / Float(gestureRecognizer.scale)
-                await self.proteinViewModel.renderer.mutableState.scene.updateCameraDistanceToModel(
-                    distanceToModel: newDistance,
-                    newBoundingSphere: nil
-                )
+                await self.proteinViewModel.renderer.mutableState.setCameraDistanceToModel(newDistance)
                 gestureRecognizer.scale = 1.0
             }
        }
@@ -104,7 +101,7 @@ class ProteinMetalViewController: UIViewController {
                     let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
                     let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
                     
-                    var currentRotationMatrix = await self.proteinViewModel.renderer.mutableState.scene.userModelRotationMatrix
+                    var currentRotationMatrix = await self.proteinViewModel.renderer.mutableState.getUserRotationMatrix()
                     
                     // Revert the axis rotation before rotating through that axis
                     currentRotationMatrix *= Transform.rotationMatrix(
@@ -116,7 +113,7 @@ class ProteinMetalViewController: UIViewController {
                         axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
                     )
                     
-                    await self.proteinViewModel.renderer.mutableState.scene.userModelRotationMatrix = currentRotationMatrix
+                    await self.proteinViewModel.renderer.mutableState.setUserRotationMatrix(currentRotationMatrix)
                 }
                 
             case CameraControlTool.move:
@@ -129,11 +126,14 @@ class ProteinMetalViewController: UIViewController {
                     #endif
                     
                     // Move should be less sensible the closer the camera is to the protein
-                    await translationSensitivity *= proteinViewModel.renderer.mutableState.scene.cameraPosition.z
+                    await translationSensitivity *= proteinViewModel.renderer.mutableState.getCameraPosition().z
                     
                     let translationX = Float(gestureRecognizer.velocity(in: renderedView).x) * translationSensitivity
                     let translationY = Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
-                    await self.proteinViewModel.renderer.mutableState.scene.translateCamera(x: translationX, y: -translationY)
+                    await self.proteinViewModel.renderer.mutableState.translateCameraXY(
+                        x: translationX,
+                        y: -translationY
+                    )
                 }
             
             default:
