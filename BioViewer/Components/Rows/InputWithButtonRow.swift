@@ -8,16 +8,26 @@
 import SwiftUI
 
 struct InputWithButtonRow: View {
+    
+    let title: String
+    @Binding var value: Float
+    let buttonTitle: String
+    let action: () -> Void
+    let formatter: NumberFormatter
+    
     var body: some View {
         HStack {
-            Text("Go to frame")
-            TextField("Hey", text: .constant("0"), prompt: nil)
+            Text(title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
+            TextField(title, value: $value, formatter: formatter)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(maxWidth: 48)
                 .multilineTextAlignment(.trailing)
             Button(action: {
-                // TO-DO
+                action()
             }, label: {
-                Text("Go")
+                Text(buttonTitle)
             })
                 .buttonStyle(BorderedProminentButtonStyle())
         }
@@ -27,7 +37,7 @@ struct InputWithButtonRow: View {
 struct InputWithButtonRow_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            InputWithButtonRow()
+            InputWithButtonRow(title: "Go to frame", value: .constant(256), buttonTitle: "Go", action: {}, formatter: NumberFormatter())
         }
     }
 }

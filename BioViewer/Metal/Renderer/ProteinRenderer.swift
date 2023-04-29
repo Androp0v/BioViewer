@@ -7,6 +7,7 @@
 
 import Foundation
 @preconcurrency import MetalKit
+import MetalFX
 import SwiftUI
 
 class ProteinRenderer: NSObject {
@@ -44,7 +45,14 @@ class ProteinRenderer: NSObject {
     /// Resolution of the view
     var viewResolution: CGSize?
     
-    // MARK: - Pipeline States
+    // MARK: - Upscaling
+    
+    /// Metal FX Upscaler based solely on spatial data.
+    var metalFXSpatialScaler: MTLFXSpatialScaler?
+    /// Metal FX Upscaler based on spatial and temporal data.
+    var metalFXTemporalScaler: MTLFXTemporalScaler?
+    
+    // MARK: - Compute Pipeline States
     
     /// Pipeline state for filling the color buffer (common options: element).
     var simpleFillColorComputePipelineState: MTLComputePipelineState?
@@ -52,6 +60,10 @@ class ProteinRenderer: NSObject {
     var fillColorComputePipelineState: MTLComputePipelineState?
     /// Pipeline state for the compute post-processing step of blurring the shadows.
     var shadowBlurPipelineState: MTLComputePipelineState?
+    /// Pipeline state for motion texture generation.
+    var motionPipelineState: MTLComputePipelineState?
+    
+    // MARK: - Render Pipeline States
     
     /// Pipeline state for the shadow depth pre-pass.
     var shadowDepthPrePassRenderPipelineState: MTLRenderPipelineState?
@@ -196,7 +208,7 @@ class ProteinRenderer: NSObject {
         self.protectedMutableState = MutableState(
             device: device,
             maxBuffersInFlight: maxBuffersInFlight,
-            frameData: scene.frameData,
+            frameData: scene.currentFrameData,
             isBenchmark: isBenchmark
         )
         
@@ -214,6 +226,9 @@ class ProteinRenderer: NSObject {
         makeSimpleFillColorComputePipelineState(device: device)
         makeFillColorComputePipelineState(device: device)
         makeShadowBlurringComputePipelineState(device: device)
+        if device.supportsFamily(.metal3) {
+            makeMotionComputePipelineState(device: device)
+        }
         
         // Create render pipeline states
         makeShadowRenderPipelineState(device: device, highQuality: false)
@@ -342,13 +357,13 @@ extension ProteinRenderer {
     func drawableSizeChanged(to size: CGSize, layer: CAMetalLayer, displayScale: CGFloat) {
         self.scene.camera.updateProjection(drawableSize: size)
         self.scene.aspectRatio = Float(size.width / size.height)
-        
         self.viewResolution = size
         Task {
             await protectedMutableState.updateTexturesForNewViewSize(
                 size,
                 metalLayer: layer,
-                displayScale: displayScale
+                displayScale: displayScale,
+                renderer: self
             )
         }
     }

@@ -37,7 +37,13 @@ extension ProteinRenderer.MutableState {
                 
         // Update uniform buffer
         renderer.scene.updateScene()
-        withUnsafePointer(to: renderer.scene.frameData) {
+        let currentFrameData = renderer.scene.currentFrameData
+        let lastFrameFrameData = renderer.scene.lastFrameFrameData
+        let reprojectionData = renderer.scene.reprojectionData(
+            currentFrameData: currentFrameData,
+            oldFrameData: lastFrameFrameData
+        )
+        withUnsafePointer(to: currentFrameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
         }
@@ -82,16 +88,11 @@ extension ProteinRenderer.MutableState {
             )
         }
         
-        // GETTING THE DRAWABLE
-        // The final pass can only render if a drawable is available, otherwise it needs to skip
-        // rendering this frame. Get the drawable as late as possible.
         var viewTexture: MTLTexture?
         var viewDepthTexture: MTLTexture?
-        var drawable: CAMetalDrawable?
         if !renderer.isBenchmark {
-            drawable = layer.nextDrawable()
-            viewTexture = drawable?.texture
-            viewDepthTexture = depthTexture.depthTexture
+            viewTexture = renderTarget.renderedTextures.colorTexture
+            viewDepthTexture = renderTarget.renderedTextures.depthTexture
         } else {
             viewTexture = benchmarkTextures.colorTexture
             viewDepthTexture = benchmarkTextures.depthTexture
@@ -134,10 +135,46 @@ extension ProteinRenderer.MutableState {
             )
              */
             
-            // Schedule a drawable presentation to occur after the GPU completes its work
-            // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
-            if let drawable {
-                commandBuffer.present(drawable)
+            // MARK: - Get drawable
+            // The final pass can only render if a drawable is available, otherwise it needs to skip
+            // rendering this frame. Get the drawable as late as possible.
+            var drawable: CAMetalDrawable?
+            if !renderer.isBenchmark {
+                drawable = layer.nextDrawable()
+                if let drawable {
+                    
+                    // MARK: - MetalFX Upscaling
+
+                    if renderTarget.metalFXUpscalingMode != .none {
+                        self.metalFXUpscaling(
+                            renderer: renderer,
+                            commandBuffer: commandBuffer,
+                            sourceTexture: viewTexture,
+                            depthTexture: viewDepthTexture,
+                            motionTexture: renderTarget.renderedTextures.motionTexture, // TODO: High-quality, others
+                            outputTexture: renderTarget.upscaledTexture.upscaledColor,
+                            reprojectionData: reprojectionData
+                        )
+                        self.copyToDrawable(
+                            commandBuffer: commandBuffer,
+                            finalRenderedTexture: renderTarget.upscaledTexture.upscaledColor,
+                            drawableTexture: drawable.texture
+                        )
+                    } else {
+                        self.copyToDrawable(
+                            commandBuffer: commandBuffer,
+                            finalRenderedTexture: renderTarget.renderedTextures.colorTexture,
+                            drawableTexture: drawable.texture
+                        )
+                    }
+                    
+                    // MARK: - Present drawable
+                    
+                    commandBuffer.present(drawable)
+                    
+                    // Schedule a drawable presentation to occur after the GPU completes its work
+                    // commandBuffer.present(drawable, afterMinimumDuration: averageGPUTime)
+                }
             }
         }
         

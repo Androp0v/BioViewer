@@ -7,6 +7,7 @@
 
 import Foundation
 import Metal
+import MetalFX
 import SwiftUI
 
 class AppState: ObservableObject {
@@ -40,6 +41,18 @@ class AppState: ObservableObject {
             return false
         }
         if device.supportsFamily(.common3) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    static let hasMetalFXUpscalingSupport = { () -> Bool in
+                
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return false
+        }
+        if MTLFXTemporalScalerDescriptor.supportsDevice(device) {
             return true
         } else {
             return false

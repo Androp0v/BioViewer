@@ -17,6 +17,7 @@ class MetalScene {
         
     /// Whether the scene needs to be redrawn for the next frame.
     var needsRedraw: Bool = false
+    var renderResolution: simd_float2 = .zero
     
     /// The last time a color buffer recompute was required.
     var lastColorPassRequest: CFTimeInterval = CACurrentMediaTime()
@@ -28,8 +29,12 @@ class MetalScene {
     /// Class used to animate changes in scene properties.
     var animator: SceneAnimator?
     
-    /// Struct with data passed to the GPU shader.
-    var frameData: FrameData
+    /// Struct with data passed to the GPU shader that can be modified between draw calls.
+    private var frameData: FrameData
+    /// Struct with data passed to the GPU shader for the current frame. Only updated on draw calls.
+    var currentFrameData: FrameData
+    /// Struct with data passed to the GPU shader for the last frame. Only updated on draw calls.
+    var lastFrameFrameData: FrameData?
     /// Current atom radii configuration
     var atom_radii: AtomRadii
     /// Frame count since the scene started.
@@ -62,6 +67,14 @@ class MetalScene {
     var cameraChangedCancellable: AnyCancellable?
     /// Whether the camera is autorotating.
     var autorotating: Bool = false { didSet { needsRedraw = true } }
+    /// The MetalFX Upscaling mode.
+    var metalFXUpscalingMode: MetalFXUpscalingMode = .none
+    /// Jitter performed on the projection, in texture coordinates.
+    var texelJitter: simd_float2 = .zero
+    /// Jitter performed on the projection in the previous frame, in texture coordinates.
+    var previousTexelJitter: simd_float2 = .zero
+    
+    var pixelJitter: simd_float2 = .zero
     
     // MARK: - Shadow properties
 
@@ -126,6 +139,9 @@ class MetalScene {
         self.frameData.shadow_strength = shadowStrength
         self.frameData.depth_cueing_strength = depthCueingStrength
         
+        // Initial currentFrameData
+        self.currentFrameData = frameData
+        
         // Subscribe to changes in the camera properties
         cameraChangedCancellable = self.camera.didChange.sink(receiveValue: { [weak self] _ in
             guard let self = self else { return }
@@ -162,9 +178,14 @@ class MetalScene {
 
     func updateScene() {
         guard needsRedraw || isPlaying else { return skipFrame() }
+        // Update last frame's frame data
+        self.lastFrameFrameData = currentFrameData
         self.camera.updateProjection(aspectRatio: aspectRatio)
         self.frameData.model_view_matrix = Transform.translationMatrix(cameraPosition)
+        
+        // Update projection matrix and add jittering
         self.frameData.projectionMatrix = self.camera.projectionMatrix
+        self.addJittering()
         
         // Update configuration
         if isPlaying {
@@ -197,6 +218,8 @@ class MetalScene {
             updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
             needsRedraw = true
         }
+        // Store current frame data
+        self.currentFrameData = frameData
     }
     
     // MARK: - Sun direction
@@ -211,7 +234,14 @@ class MetalScene {
     
     // MARK: - Update rotation
     
-    func updateModelRotation(rotationMatrix: simd_float4x4) {
+    private func updateModelRotation(rotationMatrix: simd_float4x4) {
+        
+        // Add some random rotation of shadowMap around its center axis to cause
+        // aliasing artifacts to change from frame to frame.
+        let randomRotation = Transform.rotationMatrix(
+            radians: 0.01 * Float.random(in: 0..<2 * Float.pi),
+            axis: simd_float3(0.0, 0.0, 1.0)
+        )
         
         self.userModelRotationMatrix = rotationMatrix
         let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
@@ -234,9 +264,13 @@ class MetalScene {
         self.frameData.sun_rotation_matrix = sunRotation * rotationMatrix * translateToOriginMatrix
         
         // Update camera -> sun's coordinate transform
-        self.frameData.camera_to_shadow_projection_matrix = self.frameData.shadowProjectionMatrix
+        self.frameData.camera_to_shadow_projection_matrix = randomRotation
+            * self.frameData.shadowProjectionMatrix
             * sunRotation
             * Transform.translationMatrix(cameraPosition).inverse
+        
+        // Add random rotation to the sun's
+        self.frameData.shadowProjectionMatrix = randomRotation * self.frameData.shadowProjectionMatrix
     }
         
     // MARK: - Fit protein on screen
@@ -264,6 +298,70 @@ class MetalScene {
              -boundingSphere.radius - 3.3,
              boundingSphere.radius + 3.3
         )
+    }
+    
+    // MARK: - Reprojection
+    
+    func reprojectionData(currentFrameData: FrameData, oldFrameData: FrameData?) -> ReprojectionData? {
+        guard let oldFrameData else { return nil }
+        // Unproject from NDC to camera coordinates
+        var reprojectionMatrix = currentFrameData.projectionMatrix.inverse
+        // Unproject to world coordinates (rotated)
+        reprojectionMatrix = currentFrameData.model_view_matrix.inverse * reprojectionMatrix
+        // Unrotate to world coordinates (original)
+        reprojectionMatrix = currentFrameData.rotation_matrix.inverse * reprojectionMatrix
+        // Rotate to old world coordinates (rotated)
+        reprojectionMatrix = oldFrameData.rotation_matrix * reprojectionMatrix
+        // Project to old camera coordinates
+        reprojectionMatrix = oldFrameData.model_view_matrix * reprojectionMatrix
+        // Project to old NDC
+        reprojectionMatrix = oldFrameData.projectionMatrix * reprojectionMatrix
+        // Nice! We have a matrix that transforms current-frame NDC to last-frame's NDC.
+        return ReprojectionData(
+            reprojection_matrix: reprojectionMatrix,
+            renderWidth: Int32(renderResolution.x),
+            renderHeight: Int32(renderResolution.y),
+            pixel_jitter: pixelJitter,
+            texel_jitter: texelJitter,
+            previous_texel_jitter: previousTexelJitter
+        )
+    }
+    
+    // MARK: - Jittering
+    
+    func addJittering() {
+        
+        guard metalFXUpscalingMode == .temporal else {
+            pixelJitter = .zero
+            texelJitter = .zero
+            return
+        }
+        
+        self.previousTexelJitter = texelJitter
+        
+        // Halton sequence to generate the sample positions to ensure good pixel coverage.
+        let jitterIndex: UInt32 = (UInt32)(frame % 32 + 1)
+        
+        // Return Halton samples (+/- 0.5, +/- 0.5) that represent offsets of up to half a pixel.
+        pixelJitter.x = halton(index: jitterIndex, base: 2) - 0.5
+        pixelJitter.y = halton(index: jitterIndex, base: 3) - 0.5
+        
+        // Shear the projection matrix by plus or minus half a pixel for temporal antialiasing.
+        // Store the amount of jitter so that the shader can "unjitter" it when computing motion vectors (0...1).
+        // The sign of the jitter flips because the translation has the opposite effect.
+        // For example, an NDC x offset of +20 to the right ends up being -10 pixels to the left.
+        // To counter this, multiply by -2.0f.
+        let ndcJitter = -2 * pixelJitter / renderResolution
+        
+        // Update the projection matrix to implement this NDC jittering.
+        frameData.projectionMatrix.columns.2[0] += ndcJitter.x
+        frameData.projectionMatrix.columns.2[1] += ndcJitter.y
+        
+        // Flip the y-coordinate direction because the bottom left is the origin of a texture.
+        pixelJitter *= simd_float2(1, -1)
+
+        // Calculate the texel jitter by dividing by the resolution because the texture coordinates go (0...1).
+        self.texelJitter = pixelJitter / renderResolution
     }
     
     // MARK: - Move camera

@@ -10,7 +10,6 @@ using namespace metal;
 
 kernel void shadow_blur(const texture2d<float, access::read_write> renderer_output [[ texture(0) ]],
                         uint2 texture_position [[ thread_position_in_grid ]]) {
-    // TODO: This kernel thing
     float4 source_color = float4(0.0, 0.0, 0.0, 0.0);
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 7; j++) {

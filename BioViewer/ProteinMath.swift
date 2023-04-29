@@ -94,3 +94,18 @@ func computeBoundingBox(atoms: ContiguousArray<simd_float3>) -> BoundingBox {
     }
     return BoundingBox(minX: minX, maxX: maxX, minY: minY, maxY: maxY, minZ: minZ, maxZ: maxZ)
 }
+
+/// Uses the Halton sequence generator for random numbers.
+///
+/// This provides a good convergence rate for TAA, although it doesn't seem completely random.
+func halton(index: UInt32, base: UInt32) -> Float {
+    var result: Float = 0.0
+    var fractional: Float = 1.0
+    var currentIndex: UInt32 = index
+    while currentIndex > 0 {
+        fractional /= Float(base)
+        result += fractional * Float(currentIndex % base)
+        currentIndex /= base
+    }
+    return result
+}

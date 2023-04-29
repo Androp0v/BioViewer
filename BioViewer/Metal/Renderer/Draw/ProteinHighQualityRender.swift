@@ -76,7 +76,7 @@ extension ProteinRenderer.MutableState {
                 
         // Update uniform buffer
         renderer.scene.updateScene()
-        withUnsafePointer(to: renderer.scene.frameData) {
+        withUnsafePointer(to: renderer.scene.currentFrameData) {
             uniformBuffer.contents()
                 .copyMemory(from: $0, byteCount: MemoryLayout<FrameData>.stride)
         }

@@ -17,6 +17,7 @@ enum PersistentGroupName: String {
     case residueColoringAminoAcid
     case residueColoringDNANucleobase
     case residueColoringRNANucleobase
+    case metalFXUpscalingSettings
     /// This will still create a DisclosureGroup, but not persistent.
     case error
 }

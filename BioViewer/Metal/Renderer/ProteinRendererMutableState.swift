@@ -14,10 +14,6 @@ extension ProteinRenderer {
     actor MutableState {
         
         let device: MTLDevice
-        
-        // MARK: - Global
-        
-        var superSamplingCount: CGFloat = 1.0
                 
         // MARK: - Scheduling
         
@@ -61,8 +57,8 @@ extension ProteinRenderer {
         
         // MARK: - Textures
         
-        /// `ProteinView` view depth texture.
-        var depthTexture = ProteinRenderedViewDepthTexture()
+        var renderTarget = ProteinRenderTarget()
+        
         /// Depth texture used in the depth pre-pass.
         var depthPrePassTextures = DepthPrePassTextures()
         /// Shadow textures.
@@ -156,7 +152,7 @@ extension ProteinRenderer {
             scene.needsRedraw = true
             scene.lastColorPassRequest = CACurrentMediaTime()
             scene.configurationSelector = configurationSelector
-            scene.frameData.atoms_per_configuration = Int32(configurationSelector.atomsPerConfiguration)
+            scene.currentFrameData.atoms_per_configuration = Int32(configurationSelector.atomsPerConfiguration)
         }
         
         /// Sets the necessary buffers to display a protein in the renderer using billboarding
@@ -217,25 +213,46 @@ extension ProteinRenderer {
             }
         }
         
-        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer, displayScale: CGFloat) {
-            metalLayer.contentsScale = displayScale * superSamplingCount
-            let superSampledSize = CGSize(
-                width: size.width * superSamplingCount,
-                height: size.height * superSamplingCount
-            )
-            metalLayer.drawableSize = superSampledSize
-            depthTexture.makeTextures(
-                device: device,
-                textureWidth: Int(superSampledSize.width),
-                textureHeight: Int(superSampledSize.height)
-            )
+        func updateTexturesForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?, renderer: ProteinRenderer) {
+            // Update render target
+            if let metalLayer {
+                renderTarget.metalLayer = metalLayer
+            }
+            if let displayScale {
+                renderTarget.displayScale = displayScale
+            }
+            renderTarget.updateRenderTarget(for: size, renderer: renderer)
+            
+            // Update non-render target textures
             if AppState.hasDepthPrePasses() {
                 depthPrePassTextures.makeTextures(
                     device: device,
-                    textureWidth: Int(superSampledSize.width),
-                    textureHeight: Int(superSampledSize.height)
+                    textureWidth: renderTarget.renderSize.width,
+                    textureHeight: renderTarget.renderSize.height
                 )
             }
+        }
+        
+        func refreshTexturesForNewSettings(renderer: ProteinRenderer) {
+            updateTexturesForNewViewSize(
+                CGSize(width: renderTarget.windowSize.width, height: renderTarget.windowSize.height),
+                metalLayer: nil,
+                displayScale: nil,
+                renderer: renderer
+            )
+        }
+        
+        func updateMetalFXUpscalingMode(to mode: MetalFXUpscalingMode, renderer: ProteinRenderer) {
+            renderTarget.metalFXUpscalingMode = mode
+            refreshTexturesForNewSettings(renderer: renderer)
+            // Update the mode as seen by the scene
+            renderer.scene.metalFXUpscalingMode = mode
+        }
+        
+        func updateProteinRenderFactors(ssaa: Float, metalFXUpscaling: Float, renderer: ProteinRenderer) {
+            renderTarget.superSamplingCount = ssaa
+            renderTarget.metalFXUpscalingFactor = metalFXUpscaling
+            refreshTexturesForNewSettings(renderer: renderer)
         }
     }
 }
