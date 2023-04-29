@@ -75,7 +75,6 @@ class ProteinMetalViewController: UIViewController {
     // MARK: - Private functions
 
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
-        guard let dataSource = proteinViewModel.dataSource else { return }
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             Task {
                 let currentCameraPosition = await self.proteinViewModel.renderer.mutableState.scene.cameraPosition

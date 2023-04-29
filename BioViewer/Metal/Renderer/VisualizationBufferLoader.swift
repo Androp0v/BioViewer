@@ -52,13 +52,13 @@ class VisualizationBufferLoader {
             
             // Animate radii changes
             animator.bufferLoader = self
-            if visualizationViewModel.solidSpheresRadiusOption == .vanDerWaals {
-                animator.animateRadiiChange(
+            if await visualizationViewModel.solidSpheresRadiusOption == .vanDerWaals {
+                await animator.animateRadiiChange(
                     finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: visualizationViewModel.solidSpheresVDWScale),
                     duration: 0.15
                 )
             } else {
-                animator.animateRadiiChange(
+                await animator.animateRadiiChange(
                     finalRadii: AtomRadiiGenerator.fixedRadii(radius: visualizationViewModel.solidSpheresFixedAtomRadii),
                     duration: 0.15
                 )
@@ -108,13 +108,13 @@ class VisualizationBufferLoader {
             
             // Animate radii changes
             animator.bufferLoader = self
-            if visualizationViewModel.ballAndStickRadiusOption == .fixed {
-                animator.animateRadiiChange(
+            if await visualizationViewModel.ballAndStickRadiusOption == .fixed {
+                await animator.animateRadiiChange(
                     finalRadii: AtomRadiiGenerator.fixedRadii(radius: visualizationViewModel.ballAndSticksFixedAtomRadii),
                     duration: 0.15
                 )
             } else {
-                animator.animateRadiiChange(
+                await animator.animateRadiiChange(
                     finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: visualizationViewModel.ballAndSticksVDWScale),
                     duration: 0.15
                 )
@@ -188,9 +188,8 @@ class VisualizationBufferLoader {
                 }
             }
         }
-        return await ConfigurationSelector(
+        return ConfigurationSelector(
             for: proteins,
-            in: proteinViewModel.renderer.mutableState.scene,
             atomsPerConfiguration: totalAtomCount,
             subunitIndices: subunitIndices,
             subunitLengths: subunitLengths,

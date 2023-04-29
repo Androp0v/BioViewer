@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class ProteinColorViewModel: ObservableObject {
+@MainActor class ProteinColorViewModel: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel? {
         didSet {

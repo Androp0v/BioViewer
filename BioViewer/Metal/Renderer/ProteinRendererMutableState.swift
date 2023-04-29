@@ -341,5 +341,27 @@ extension ProteinRenderer {
         func setBondColor(_ color: CGColor) {
             scene.bondColor = color
         }
+        
+        func previousConfiguration() {
+            scene.configurationSelector?.previousConfiguration()
+            scene.needsRedraw = true
+        }
+        
+        func nextConfiguration() {
+            scene.configurationSelector?.nextConfiguration()
+            scene.needsRedraw = true
+        }
+        
+        func setIsPlaying(_ isPlaying: Bool) {
+            scene.isPlaying = isPlaying
+        }
+        
+        func setAutorotating(_ autorotating: Bool) {
+            scene.autorotating = autorotating
+        }
+        
+        func resetCamera() {
+            scene.resetCamera()
+        }
     }
 }

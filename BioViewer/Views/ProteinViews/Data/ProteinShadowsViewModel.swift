@@ -23,7 +23,7 @@ class SunDirection {
     }
 }
 
-class ProteinShadowsViewModel: ObservableObject {
+@MainActor class ProteinShadowsViewModel: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel?
     

@@ -56,12 +56,16 @@ struct BioViewerCommands: Commands {
             Section {
             
                 Button(NSLocalizedString("View as space-filling spheres", comment: "")) {
-                    AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .solidSpheres
+                    Task { @MainActor in
+                        AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .solidSpheres
+                    }
                 }
                 .keyboardShortcut("1")
                 
                 Button(NSLocalizedString("View as ball and stick", comment: "")) {
-                    AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .ballAndStick
+                    Task { @MainActor in
+                        AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .ballAndStick
+                    }
                 }
                 .keyboardShortcut("2")
             }
@@ -72,7 +76,9 @@ struct BioViewerCommands: Commands {
             Section {
                 ForEach(ProteinColorByOption.allCases, id: \.self) { colorOption in
                     Button(NSLocalizedString("Color by \(colorOption.displayName.lowercased())", comment: "")) {
-                        AppState.shared.focusedViewModel?.colorViewModel?.colorBy = colorOption
+                        Task { @MainActor in
+                            AppState.shared.focusedViewModel?.colorViewModel?.colorBy = colorOption
+                        }
                     }
                     .keyboardShortcut(colorOption.shortcutKey, modifiers: [.option])
                 }

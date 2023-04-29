@@ -28,7 +28,7 @@ struct DynamicStructureControlView: View {
         HStack(spacing: Constants.spacing) {
             Button(action: {
                 Task {
-                    await proteinViewModel.renderer.mutableState.scene.configurationSelector?.previousConfiguration()
+                    await proteinViewModel.renderer.mutableState.previousConfiguration()
                 }
             }, label: {
                 Image(systemName: "backward.frame.fill")
@@ -42,7 +42,7 @@ struct DynamicStructureControlView: View {
             Button(action: {
                 isPlaying.toggle()
                 Task {
-                    await proteinViewModel.renderer.mutableState.scene.isPlaying.toggle()
+                    await proteinViewModel.renderer.mutableState.setIsPlaying(isPlaying)
                 }
             }, label: {
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
@@ -54,7 +54,7 @@ struct DynamicStructureControlView: View {
             
             Button(action: {
                 Task {
-                    await proteinViewModel.renderer.mutableState.scene.configurationSelector?.nextConfiguration()
+                    await proteinViewModel.renderer.mutableState.nextConfiguration()
                 }
             }, label: {
                 Image(systemName: "forward.frame.fill")

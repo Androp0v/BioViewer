@@ -191,6 +191,7 @@ class MetalScene {
         if isPlaying {
             if frame % 1 == 0 {
                 self.configurationSelector?.nextConfiguration()
+                self.needsRedraw = true
             }
         }
         

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ProteinVisualizationViewModel: ObservableObject {
+@MainActor class ProteinVisualizationViewModel: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel!
     
@@ -27,70 +27,52 @@ class ProteinVisualizationViewModel: ObservableObject {
     /// Radius option for solid spheres.
     @Published var solidSpheresRadiusOption: SolidSpheresRadiusOptions = .vanDerWaals {
         didSet {
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(
-                    visualization: self.visualization,
-                    proteinViewModel: self.proteinViewModel
-                )
-            }
+            self.visualizationBufferLoader.handleVisualizationChange(
+                visualization: self.visualization,
+                proteinViewModel: self.proteinViewModel
+            )
         }
     }
     @Published var solidSpheresFixedAtomRadii: Float = 1.0 {
         didSet {
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(
-                    visualization: self.visualization,
-                    proteinViewModel: self.proteinViewModel
-                )
-            }
+            self.visualizationBufferLoader.handleVisualizationChange(
+                visualization: self.visualization,
+                proteinViewModel: self.proteinViewModel
+            )
         }
     }
     @Published var solidSpheresVDWScale: Float = 1.0 {
         didSet {
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(
-                    visualization: self.visualization,
-                    proteinViewModel: self.proteinViewModel
-                )
-            }
+            self.visualizationBufferLoader.handleVisualizationChange(
+                visualization: self.visualization,
+                proteinViewModel: self.proteinViewModel
+            )
         }
     }
     
     /// Radius option for ball and stick.
     @Published var ballAndStickRadiusOption: BallAndStickRadiusOptions = .fixed {
         didSet {
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(
-                    visualization: self.visualization,
-                    proteinViewModel: self.proteinViewModel
-                )
-            }
+            self.visualizationBufferLoader.handleVisualizationChange(
+                visualization: self.visualization,
+                proteinViewModel: self.proteinViewModel
+            )
         }
     }
     @Published var ballAndSticksFixedAtomRadii: Float = 0.4 {
         didSet {
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(
-                    visualization: self.visualization,
-                    proteinViewModel: self.proteinViewModel
-                )
-            }
+            self.visualizationBufferLoader.handleVisualizationChange(
+                visualization: self.visualization,
+                proteinViewModel: self.proteinViewModel
+            )
         }
     }
     @Published var ballAndSticksVDWScale: Float = 0.3 {
         didSet {
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                guard let self = self else { return }
-                self.visualizationBufferLoader.handleVisualizationChange(
-                    visualization: self.visualization,
-                    proteinViewModel: self.proteinViewModel
-                )
-            }
+            self.visualizationBufferLoader.handleVisualizationChange(
+                visualization: self.visualization,
+                proteinViewModel: self.proteinViewModel
+            )
         }
     }
         
@@ -102,7 +84,7 @@ class ProteinVisualizationViewModel: ObservableObject {
                     guard let proteinViewModel = self.proteinViewModel,
                           let dataSource = proteinViewModel.dataSource
                     else { return }
-                    guard var debugBuffer = await ComputeMolecularSurfaceUtility(protein: (dataSource.files.first?.models.first)!)
+                    guard var debugBuffer = ComputeMolecularSurfaceUtility(protein: (dataSource.files.first?.models.first)!)
                             .createMolecularSurface() else {
                         return
                     }
