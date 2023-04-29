@@ -17,7 +17,7 @@ enum HQRenderingError: Error {
     case unknownError
 }
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
     
     func drawHighQualityFrame(
         renderer: ProteinRenderer,

@@ -8,7 +8,7 @@
 import Foundation
 import Metal
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
     
     func shadowRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, shadowDepthPrePassTexture: MTLTexture?, highQuality: Bool) {
     

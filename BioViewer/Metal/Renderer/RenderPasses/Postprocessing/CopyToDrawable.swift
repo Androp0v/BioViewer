@@ -8,7 +8,7 @@
 import Foundation
 import MetalKit
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
     
     /// Blits the final, upscaled from renderer texture to the drawable size.
     func copyToDrawable(

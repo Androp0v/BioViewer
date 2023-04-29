@@ -9,7 +9,7 @@ import Foundation
 import Metal
 import SwiftUI
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
 
     // MARK: - Update existing color buffer
     

@@ -8,7 +8,7 @@
 import Foundation
 import MetalKit
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
     
     func drawFrame(from renderer: ProteinRenderer, in layer: CAMetalLayer) {
         // Check if the scene needs to be redrawn.

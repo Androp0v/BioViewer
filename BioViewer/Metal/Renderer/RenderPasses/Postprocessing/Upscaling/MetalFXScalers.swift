@@ -9,7 +9,7 @@ import Foundation
 import MetalFX
 import MetalKit
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
     
     /// Creates the MetalFX spatial scaler.
     func makeSpatialScaler(inputSize: MTLSize, outputSize: MTLSize) {

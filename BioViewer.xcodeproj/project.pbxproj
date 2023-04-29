@@ -124,8 +124,8 @@
 		C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C531753E29DF16A7004FF2C6 /* ProteinDraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */; };
-		C531754129DF1AA3004FF2C6 /* ProteinRendererMutableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754029DF1AA3004FF2C6 /* ProteinRendererMutableState.swift */; };
-		C531754229DF1C54004FF2C6 /* ProteinRendererMutableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754029DF1AA3004FF2C6 /* ProteinRendererMutableState.swift */; };
+		C531754129DF1AA3004FF2C6 /* MutableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754029DF1AA3004FF2C6 /* MutableState.swift */; };
+		C531754229DF1C54004FF2C6 /* MutableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754029DF1AA3004FF2C6 /* MutableState.swift */; };
 		C531754329DF1E2A004FF2C6 /* ProteinDraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */; };
 		C531754529DF8713004FF2C6 /* ProteinRenderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754429DF8713004FF2C6 /* ProteinRenderedView.swift */; };
 		C531754629DF8723004FF2C6 /* ProteinRenderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754429DF8713004FF2C6 /* ProteinRenderedView.swift */; };
@@ -428,7 +428,7 @@
 		C52AE373279D7CE900BEE11B /* FillColorInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillColorInput.h; sourceTree = "<group>"; };
 		C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillboardVertexBuffers.swift; sourceTree = "<group>"; };
 		C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinDraw.swift; sourceTree = "<group>"; };
-		C531754029DF1AA3004FF2C6 /* ProteinRendererMutableState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRendererMutableState.swift; sourceTree = "<group>"; };
+		C531754029DF1AA3004FF2C6 /* MutableState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableState.swift; sourceTree = "<group>"; };
 		C531754429DF8713004FF2C6 /* ProteinRenderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderedView.swift; sourceTree = "<group>"; };
 		C531754729DF89F3004FF2C6 /* ProteinRenderedTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderedTextures.swift; sourceTree = "<group>"; };
 		C5385325278998A0007A8368 /* SharedDataStructs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedDataStructs.h; sourceTree = "<group>"; };
@@ -881,7 +881,7 @@
 			isa = PBXGroup;
 			children = (
 				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
-				C531754029DF1AA3004FF2C6 /* ProteinRendererMutableState.swift */,
+				C531754029DF1AA3004FF2C6 /* MutableState.swift */,
 				C560E0E029E305DC00CE883C /* ProteinRenderTarget.swift */,
 				C531753F29DF16AD004FF2C6 /* Draw */,
 				C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */,
@@ -1676,7 +1676,7 @@
 				C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */,
 				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
 				C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */,
-				C531754129DF1AA3004FF2C6 /* ProteinRendererMutableState.swift in Sources */,
+				C531754129DF1AA3004FF2C6 /* MutableState.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */,
 				C540EE12284B747100153200 /* ShadowDepthPrePass.swift in Sources */,
@@ -1795,7 +1795,7 @@
 				C572BD392741656B00FF010D /* ProteinViewModel.swift in Sources */,
 				C51D4EDF27679B1100C69B3D /* DynamicStructureControlView.swift in Sources */,
 				C5277FC22979566900291AF7 /* PDBParser.swift in Sources */,
-				C531754229DF1C54004FF2C6 /* ProteinRendererMutableState.swift in Sources */,
+				C531754229DF1C54004FF2C6 /* MutableState.swift in Sources */,
 				C59550C12782052600129F9B /* VisualizationBufferLoader.swift in Sources */,
 				C501C74827CA2C3E008CDA25 /* ComputePipelines.swift in Sources */,
 				C572BD382741656500FF010D /* ProteinElementComposition.swift in Sources */,

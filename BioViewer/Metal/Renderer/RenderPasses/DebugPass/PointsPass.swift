@@ -8,7 +8,7 @@
 import Foundation
 import Metal
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
     
     #if DEBUG
     func pointsRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {

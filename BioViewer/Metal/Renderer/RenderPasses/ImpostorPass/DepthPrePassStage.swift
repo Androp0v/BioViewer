@@ -10,7 +10,7 @@ import Metal
 import QuartzCore
 import MetalKit
 
-extension ProteinRenderer.MutableState {
+extension MutableState {
     
     func encodeDepthBoundStage(renderer: ProteinRenderer, renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer) {
         
