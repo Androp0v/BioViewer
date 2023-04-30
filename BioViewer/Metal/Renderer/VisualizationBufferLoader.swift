@@ -84,24 +84,12 @@ class VisualizationBufferLoader {
             // Update configuration selector with bonds
             guard let bondsPerConfiguration = protein.bondsPerConfiguration else { return }
             guard let bondsConfigurationArrayStart = protein.bondsConfigurationArrayStart else { return }
-            await proteinViewModel.renderer.mutableState.scene.configurationSelector?.addBonds(
-                bondsPerConfiguration: bondsPerConfiguration,
-                bondArrayStarts: bondsConfigurationArrayStart
-            )
             
-            // Avoid trying to create a buffer with 0 length if no bonds are found (causes a crash)
-            if !bondData.isEmpty {
-                // Add bond buffers to the structure
-                let (bondVertexBuffer, bondIndexBuffer) = MetalScheduler.shared.createBondsGeometry(bondData: bondData)
-                guard var bondVertexBuffer = bondVertexBuffer else { return }
-                guard var bondIndexBuffer = bondIndexBuffer else { return }
-                
-                // Pass bond buffers to the renderer
-                await proteinViewModel.renderer.mutableState.setBillboardingBonds(
-                    vertexBuffer: &bondVertexBuffer,
-                    indexBuffer: &bondIndexBuffer
-                )
-            }
+            await proteinViewModel.renderer.mutableState.updateBonds(
+                bondData: bondData,
+                bondsPerConfiguration: bondsPerConfiguration,
+                bondsConfigurationArrayStart: bondsConfigurationArrayStart
+            )
             
             // Change pipeline
             proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
@@ -132,68 +120,14 @@ class VisualizationBufferLoader {
               let proteins = await proteinViewModel.dataSource?.modelsForFile(file: proteinFile) else {
             return
         }
-        
-        // Generate a billboard quad for each atom in the protein
-        guard let generatedImpostorData = MetalScheduler.shared.createImpostorSpheres(
-            proteins: proteins,
-            atomRadii: atomRadii
-        ) else { return }
-        
-        // Create ConfigurationSelector for new data
-        guard let configurationSelector = await createConfigurationSelector(proteins: proteins) else { return }
-        
-        // Pass the new mesh to the renderer
-        await proteinViewModel.renderer.mutableState.setBillboardingBuffers(
-            billboardVertexBuffers: generatedImpostorData.vertexBuffer,
-            atomElementBuffer: generatedImpostorData.atomElementBuffer,
-            subunitBuffer: generatedImpostorData.subunitBuffer,
-            atomResidueBuffer: generatedImpostorData.atomResidueBuffer,
-            atomSecondaryStructureBuffer: generatedImpostorData.atomSecondaryStructureBuffer,
-            indexBuffer: generatedImpostorData.indexBuffer,
-            configurationSelector: configurationSelector
+        let configuration = await VisualizationConfiguration(
+            atomRadii: atomRadii,
+            colorBy: colorViewModel.colorBy,
+            atomColors: colorViewModel.elementColors
         )
-        
-        // Create color buffer if needed
-        // TODO: Improve API
-        let colorBufferLength = await proteinViewModel.renderer.mutableState.atomColorBuffer?.length
-        if !((colorBufferLength ?? 0)
-                / MemoryLayout<SIMD4<Int16>>.stride == proteins.reduce(0) { $0 + $1.atomCount }) {
-            await proteinViewModel.renderer.mutableState.createAtomColorBuffer(
-                proteins: proteins,
-                colorList: colorViewModel.elementColors,
-                colorBy: colorViewModel.colorBy
-            )
-        }
-    }
-    
-    // MARK: - ConfigurationSelector
-    
-    func createConfigurationSelector(proteins: [Protein]) async -> ConfigurationSelector? {
-        guard let proteinViewModel = proteinViewModel else { return nil }
-        
-        if let currentSelector = await proteinViewModel.renderer.mutableState.scene.configurationSelector,
-           currentSelector.proteins == proteins {
-            return currentSelector
-        }
-
-        var totalAtomCount: Int = 0
-        var subunitIndices = [Int]()
-        var subunitLengths = [Int]()
-        for protein in proteins {
-            totalAtomCount += protein.atomCount
-            if let subunits = protein.subunits {
-                for subunit in subunits {
-                    subunitIndices.append(subunit.startIndex)
-                    subunitLengths.append(subunit.atomCount)
-                }
-            }
-        }
-        return ConfigurationSelector(
-            for: proteins,
-            atomsPerConfiguration: totalAtomCount,
-            subunitIndices: subunitIndices,
-            subunitLengths: subunitLengths,
-            configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
+        await proteinViewModel.renderer.mutableState.populateImpostorSphereBuffers(
+            proteins: proteins,
+            configuration: configuration
         )
     }
 }

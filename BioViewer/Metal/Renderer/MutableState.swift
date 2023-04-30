@@ -10,6 +10,8 @@ import MetalKit
 import MetalFX
 import SwiftUI
 
+/// Actor holding the `ProteinRenderer`'s protected mutable case, which must not be modified between
+/// draw calls. This includes textures, buffers, and other data structures.
 actor MutableState {
     
     /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
@@ -135,11 +137,19 @@ actor MutableState {
     
     // MARK: - Buffer functions
         
-    func createAtomColorBuffer(
+    /// Creates a new buffer to hold the color of each atom, if the existing color buffer does not have the appropriate size.
+    func createAtomColorBufferIfNeeded(
         proteins: [Protein],
         colorList: [Color]?,
         colorBy: ProteinColorByOption?
     ) {
+        // Check whether a buffer of the required size already exists.
+        let currentBufferLength = atomColorBuffer?.length ?? 0
+        let newBufferLength = proteins.reduce(0) { $0 + $1.atomCount } * MemoryLayout<SIMD4<Int16>>.stride
+        guard newBufferLength != currentBufferLength else {
+            // The existing buffer can be reused.
+            return
+        }
         
         // Get the number of configurations
         var atomAndConfigurationCount = 0
@@ -193,7 +203,7 @@ actor MutableState {
     }
     
     /// Sets the necessary buffers to display atom bonds in the renderer using billboarding
-    func setBillboardingBonds(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer) {
+    func setBillboardingBonds(vertexBuffer: MTLBuffer, indexBuffer: MTLBuffer) {
         self.impostorBondVertexBuffer = vertexBuffer
         self.impostorBondIndexBuffer = indexBuffer
         scene.needsRedraw = true
@@ -205,6 +215,49 @@ actor MutableState {
         scene.needsRedraw = true
     }
     #endif
+    
+    func populateImpostorSphereBuffers(proteins: [Protein], configuration: VisualizationConfiguration) {
+        
+        // Generate a billboard quad for each atom in the protein
+        guard let generatedImpostorData = createImpostorSpheres(
+            proteins: proteins,
+            atomRadii: configuration.atomRadii
+        ) else { return }
+        
+        // Create ConfigurationSelector for new data
+        guard let configurationSelector = createConfigurationSelector(proteins: proteins) else { return }
+        
+        // Pass the new mesh to the renderer
+        setBillboardingBuffers(
+            billboardVertexBuffers: generatedImpostorData.vertexBuffer,
+            atomElementBuffer: generatedImpostorData.atomElementBuffer,
+            subunitBuffer: generatedImpostorData.subunitBuffer,
+            atomResidueBuffer: generatedImpostorData.atomResidueBuffer,
+            atomSecondaryStructureBuffer: generatedImpostorData.atomSecondaryStructureBuffer,
+            indexBuffer: generatedImpostorData.indexBuffer,
+            configurationSelector: configurationSelector
+        )
+        
+        // Create color buffer if needed
+        createAtomColorBufferIfNeeded(
+            proteins: proteins,
+            colorList: configuration.atomColors,
+            colorBy: configuration.colorBy
+        )
+    }
+    
+    func populateBondBuffers(bondData: [BondStruct]) {
+        // Create bond buffers for the structure
+        guard let bondBuffers = createBondsGeometry(bondData: bondData) else {
+            return
+        }
+        
+        // Set the buffers
+        setBillboardingBonds(
+            vertexBuffer: bondBuffers.vertexBuffer,
+            indexBuffer: bondBuffers.indexBuffer
+        )
+    }
     
     /// Deallocates the MTLBuffers used to render a protein
     func removeBuffers() {
@@ -424,6 +477,52 @@ actor MutableState {
         scene.updateCameraDistanceToModel(
             distanceToModel: newDistance,
             newBoundingSphere: nil
+        )
+    }
+    
+    func updateBonds(bondData: [BondStruct], bondsPerConfiguration: [Int], bondsConfigurationArrayStart: [Int]) {
+        
+        guard let configurationSelector = scene.configurationSelector else {
+            return
+        }
+
+        // Avoid trying to create a buffer with 0 length if no bonds are found (causes a crash)
+        if !bondData.isEmpty {
+            populateBondBuffers(bondData: bondData)
+        }
+
+        configurationSelector.addBonds(
+            bondsPerConfiguration: bondsPerConfiguration,
+            bondArrayStarts: bondsConfigurationArrayStart
+        )
+    }
+    
+    // MARK: - Configuration Selector
+    
+    func createConfigurationSelector(proteins: [Protein]) -> ConfigurationSelector? {
+        
+        if let currentSelector = scene.configurationSelector, currentSelector.proteins == proteins {
+            return currentSelector
+        }
+
+        var totalAtomCount: Int = 0
+        var subunitIndices = [Int]()
+        var subunitLengths = [Int]()
+        for protein in proteins {
+            totalAtomCount += protein.atomCount
+            if let subunits = protein.subunits {
+                for subunit in subunits {
+                    subunitIndices.append(subunit.startIndex)
+                    subunitLengths.append(subunit.atomCount)
+                }
+            }
+        }
+        return ConfigurationSelector(
+            for: proteins,
+            atomsPerConfiguration: totalAtomCount,
+            subunitIndices: subunitIndices,
+            subunitLengths: subunitLengths,
+            configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
         )
     }
 }
