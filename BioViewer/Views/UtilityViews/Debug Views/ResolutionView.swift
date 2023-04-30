@@ -23,7 +23,6 @@ class ResolutionViewModel: ObservableObject {
     }
     
     @objc private func updateFrameTime() {
-        
         // Retrieve last GPU frame time.
         let viewResolution = proteinViewModel.renderer.viewResolution
         guard let width = viewResolution?.width else { return }

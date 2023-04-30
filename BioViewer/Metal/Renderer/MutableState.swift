@@ -480,6 +480,17 @@ actor MutableState {
         )
     }
     
+    func fitCameraToBoundingSphere(_ boundingSphere: BoundingSphere) {
+        let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(
+            sphereRadius: boundingSphere.radius,
+            aspectRatio: scene.aspectRatio
+        )
+        scene.updateCameraDistanceToModel(
+            distanceToModel: cameraDistanceToFit,
+            newBoundingSphere: boundingSphere
+        )
+    }
+    
     func updateBonds(bondData: [BondStruct], bondsPerConfiguration: [Int], bondsConfigurationArrayStart: [Int]) {
         
         guard let configurationSelector = scene.configurationSelector else {
@@ -495,6 +506,10 @@ actor MutableState {
             bondsPerConfiguration: bondsPerConfiguration,
             bondArrayStarts: bondsConfigurationArrayStart
         )
+    }
+    
+    func setVisualization(_ visualization: ProteinVisualizationOption) {
+        scene.currentVisualization = visualization
     }
     
     // MARK: - Configuration Selector

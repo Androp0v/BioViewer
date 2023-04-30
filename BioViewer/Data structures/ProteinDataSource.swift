@@ -128,14 +128,8 @@ import SwiftUI
         
         // Fit new selection in frustum
         Task {
-            let scene = await proteinViewModel.renderer.mutableState.scene
-            let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(
-                sphereRadius: selectionBoundingSphere.radius,
-                aspectRatio: scene.aspectRatio
-            )
-            scene.updateCameraDistanceToModel(
-                distanceToModel: cameraDistanceToFit,
-                newBoundingSphere: selectionBoundingSphere
+            await proteinViewModel.renderer.mutableState.fitCameraToBoundingSphere(
+                selectionBoundingSphere
             )
         }
     }

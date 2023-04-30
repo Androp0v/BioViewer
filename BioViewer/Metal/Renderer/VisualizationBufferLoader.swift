@@ -15,7 +15,7 @@ class VisualizationBufferLoader {
     var currentTask: Task<Void, Never>?
     weak var proteinViewModel: ProteinViewModel?
     
-    func handleVisualizationChange(
+    @MainActor func handleVisualizationChange(
         visualization: ProteinVisualizationOption,
         proteinViewModel: ProteinViewModel
     ) {
@@ -30,7 +30,7 @@ class VisualizationBufferLoader {
         currentTask = Task {
             await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
             // Update internal visualization mode as seen by renderer
-            await proteinViewModel.renderer.mutableState.scene.currentVisualization = visualization
+            await proteinViewModel.renderer.mutableState.setVisualization(visualization)
         }
     }
     

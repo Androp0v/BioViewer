@@ -8,7 +8,7 @@
 import Foundation
 
 /// Struct holding the contents of a protein subunit.
-public class ProteinSubunit {
+struct ProteinSubunit: Sendable {
     
     let id: Int
     
@@ -36,7 +36,8 @@ public class ProteinSubunit {
         self.startIndex = startIndex
     }
     
-    // MARK: - Functions
+    // MARK: - Computed
+    
     var subunitName: String {
         let letters = ["A",
                        "B",

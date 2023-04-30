@@ -14,64 +14,54 @@ class Protein {
     // MARK: - UUID
     
     /// Internal-use unique identifier.
-    var id = UUID()
+    let id = UUID()
 
     // MARK: - Sequence
 
-    /// Total number of residues in the protein sequence.
-    var resCount: Int?
-
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
-    private var sequence: [String]?
+    let sequence: [String]?
     
     // MARK: - Subunits
     
     /// Number of subunits in the protein
-    var subunitCount: Int
+    let subunitCount: Int
     
     /// List of all subunits in the protein
-    var subunits: [ProteinSubunit]?
+    let subunits: [ProteinSubunit]?
     
     // MARK: - Atoms
     
     /// Number of atoms in the protein.
-    var atomCount: Int
+    let atomCount: Int
 
     /// Atomic positions (in Armstrongs). ContiguousArray is faster than array since we
     /// don't need to add new atoms after its creation. Also has easier conversion to MTLBuffer.
-    ///
-    /// Stored in C, H, N, O, S, X order (X for others).
-    var atoms: ContiguousArray<simd_float3>
+    let atoms: ContiguousArray<simd_float3>
 
     /// Number of atoms of each element.
-    var elementComposition: ProteinElementComposition
+    let elementComposition: ProteinElementComposition
     
     /// Number of atoms of each kind.
     var residueComposition: ProteinResidueComposition?
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
-    var atomElements: [AtomElement]
+    let atomElements: [AtomElement]
     
     /// Residue type of each atom.
-    var atomResidues: [Residue]?
+    let atomResidues: [Residue]?
     
     /// Secondary structure of which each atom is part of.
-    var atomSecondaryStructure: [SecondaryStructure]?
+    let atomSecondaryStructure: [SecondaryStructure]?
     
     // MARK: - Bonds
     
     /// Array with bond data for the structure.
     var bonds: [BondStruct]?
     
-    // MARK: - Cartoon
-    
-    /// The cartoon structures of the protein (helices, sheets and loops).
-    var cartoonStructures: [CartoonModel]?
-    
     // MARK: - Configurations
     
     /// Number of configurations for this structure.
-    var configurationCount: Int
+    let configurationCount: Int
     /// Number of bonds in each configuration.
     var bondsPerConfiguration: [Int]?
     /// Index of the bond array start  for each configuration.
@@ -81,7 +71,7 @@ class Protein {
     
     // MARK: - Volume
     
-    var boundingSphere: BoundingSphere
+    let boundingSphere: BoundingSphere
     
     // MARK: - Initialization
 

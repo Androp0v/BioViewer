@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct BoundingSphere {
+struct BoundingSphere: Sendable {
     let center: simd_float3
     let radius: Float
 }
 
-public struct BoundingBox {
+struct BoundingBox: Sendable {
     let minX: Float
     let maxX: Float
     let minY: Float
