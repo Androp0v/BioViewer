@@ -121,6 +121,9 @@
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
 		C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
 		C52AE375279D80A900BEE11B /* BasicShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C405744E2663DD58008527D1 /* BasicShader.metal */; };
+		C52DD45E29FD78420050A7C2 /* AmbientOcclusion3DTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52DD45D29FD78420050A7C2 /* AmbientOcclusion3DTexture.swift */; };
+		C52DD46029FD91D40050A7C2 /* ComputeAmbientOcclusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52DD45F29FD91D40050A7C2 /* ComputeAmbientOcclusion.swift */; };
+		C52DD46229FD92300050A7C2 /* ComputeAmbientOcclusion.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52DD46129FD92300050A7C2 /* ComputeAmbientOcclusion.metal */; };
 		C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C5311B1128525DFE00A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C531753E29DF16A7004FF2C6 /* ProteinDraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */; };
@@ -426,6 +429,9 @@
 		C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorPass.swift; sourceTree = "<group>"; };
 		C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FillColorBuffer.metal; sourceTree = "<group>"; };
 		C52AE373279D7CE900BEE11B /* FillColorInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FillColorInput.h; sourceTree = "<group>"; };
+		C52DD45D29FD78420050A7C2 /* AmbientOcclusion3DTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientOcclusion3DTexture.swift; sourceTree = "<group>"; };
+		C52DD45F29FD91D40050A7C2 /* ComputeAmbientOcclusion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeAmbientOcclusion.swift; sourceTree = "<group>"; };
+		C52DD46129FD92300050A7C2 /* ComputeAmbientOcclusion.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeAmbientOcclusion.metal; sourceTree = "<group>"; };
 		C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillboardVertexBuffers.swift; sourceTree = "<group>"; };
 		C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinDraw.swift; sourceTree = "<group>"; };
 		C531754029DF1AA3004FF2C6 /* MutableState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableState.swift; sourceTree = "<group>"; };
@@ -614,6 +620,7 @@
 				C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */,
 				C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */,
 				C5546DA827E4DD4E00F607F2 /* ComputeSDFGrid.swift */,
+				C52DD45F29FD91D40050A7C2 /* ComputeAmbientOcclusion.swift */,
 				C555EC82282A91D7001281CD /* MakeBufferFromArray.swift */,
 				C400E2002721ED75004DFCA8 /* CreateSphereModel.swift */,
 			);
@@ -1002,6 +1009,7 @@
 				C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */,
 				C5FF9AD729816AE000D583A2 /* BenchmarkTextures.swift */,
 				C5E7AF982760EBD10065F6AD /* ShadowTextures.swift */,
+				C52DD45D29FD78420050A7C2 /* AmbientOcclusion3DTexture.swift */,
 				C560E0DC29E2F12E00CE883C /* MetalFXUpscaledTexture.swift */,
 				C5EEE9C2276FFC02005737C1 /* HQTextures.swift */,
 			);
@@ -1026,6 +1034,7 @@
 				C5546DAC27E4E18E00F607F2 /* SDFGrid.h */,
 				C555EC80282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift */,
 				C5546DAA27E4DF9F00F607F2 /* ComputeSDFGrid.metal */,
+				C52DD46129FD92300050A7C2 /* ComputeAmbientOcclusion.metal */,
 			);
 			path = Compute;
 			sourceTree = "<group>";
@@ -1599,9 +1608,11 @@
 				C464C35A265A57E900E66C3E /* BuyCoffeeView.swift in Sources */,
 				C59CD00929E21CBD0017796B /* ShadowBlur.metal in Sources */,
 				C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */,
+				C52DD46229FD92300050A7C2 /* ComputeAmbientOcclusion.metal in Sources */,
 				C57F994D275E2BE0001DE6D6 /* ColorPaletteView.swift in Sources */,
 				C5FEC737277C8EA800E348BD /* CreateImpostorBonds.metal in Sources */,
 				C5C7514727DC1859004CEE8E /* WhatsNewViewModel.swift in Sources */,
+				C52DD45E29FD78420050A7C2 /* AmbientOcclusion3DTexture.swift in Sources */,
 				C5412FF1283D9E8C00234403 /* DepthPrePassStage.swift in Sources */,
 				C5D97E0D297466C000EF1D5A /* PDBParseError.swift in Sources */,
 				C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */,
@@ -1756,6 +1767,7 @@
 				C572BD182740222800FF010D /* FileSourceView.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
+				C52DD46029FD91D40050A7C2 /* ComputeAmbientOcclusion.swift in Sources */,
 				C5C7514D27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift in Sources */,
 				C55384202972DCBC007E45E1 /* CartoonHelix.swift in Sources */,
 				C531753E29DF16A7004FF2C6 /* ProteinDraw.swift in Sources */,

@@ -65,6 +65,8 @@ actor MutableState {
     var depthPrePassTextures = DepthPrePassTextures()
     /// Shadow textures.
     var shadowTextures = ShadowTextures()
+    /// Ambient occlusion texture.
+    var ambientOcclusionTexture = AmbientOcclusion3DTexture()
     /// Benchmark textures.
     var benchmarkTextures = BenchmarkTextures()
     
@@ -232,6 +234,9 @@ actor MutableState {
             textureHeight: ShadowTextures.defaultTextureHeight
         )
         shadowTextures.makeShadowSampler(device: device)
+        
+        // Create ambient occlusion texture
+        ambientOcclusionTexture.makeTexture(device: device)
         
         // Create texture for depth-bound shadow render pass pre-pass
         if AppState.hasDepthPrePasses() {
