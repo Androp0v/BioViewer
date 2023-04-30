@@ -52,7 +52,7 @@ class ProteinViewModel: ObservableObject {
 
     func removeAllFiles() async {
         await self.dataSource?.removeAllFilesFromDatasource()
-        self.statusViewModel?.removeAllWarnings()
-        self.statusViewModel?.removeAllErrors()
+        await self.statusViewModel?.removeAllWarnings()
+        await self.statusViewModel?.removeAllErrors()
     }
 }

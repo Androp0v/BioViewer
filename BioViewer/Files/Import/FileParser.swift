@@ -22,7 +22,7 @@ class FileParser {
         switch fileExtension {
         // MARK: - PDB Files
         case "pdb", "PDB", "pdb1", "PDB1":
-            statusViewModel.statusUpdate(statusText: "Importing file")
+            await statusViewModel.statusUpdate(statusText: "Importing file")
             do {
                 let proteinFile = try await PDBParser().parsePDB(
                     fileName: fileName,
@@ -33,15 +33,15 @@ class FileParser {
                 )
                 return proteinFile
             } catch let error as ImportError {
-                statusViewModel.statusFinished(importError: error)
+                await statusViewModel.statusFinished(importError: error)
                 throw ImportError.emptyAtomCount
             } catch {
-                statusViewModel.statusFinished(importError: ImportError.unknownError)
+                await statusViewModel.statusFinished(importError: ImportError.unknownError)
                 throw ImportError.unknownError
             }
         // MARK: - XYZ Files
         case "xyz", "XYZ":
-            statusViewModel.statusUpdate(statusText: "Importing file")
+            await statusViewModel.statusUpdate(statusText: "Importing file")
             do {
                 let proteinFile = try parseXYZ(
                     fileName: fileName,
@@ -53,15 +53,15 @@ class FileParser {
                 )
                 return proteinFile
             } catch let error as ImportError {
-                statusViewModel.statusFinished(importError: error)
+                await statusViewModel.statusFinished(importError: error)
                 throw ImportError.emptyAtomCount
             } catch {
-                statusViewModel.statusFinished(importError: ImportError.unknownError)
+                await statusViewModel.statusFinished(importError: ImportError.unknownError)
                 throw ImportError.unknownError
             }
         // MARK: - Unknown Files
         default:
-            statusViewModel.statusFinished(importError: ImportError.unknownFileType)
+            await statusViewModel.statusFinished(importError: ImportError.unknownFileType)
             throw ImportError.unknownFileType
         }
     }

@@ -17,18 +17,18 @@ class FileImporter {
     ) async throws {
         
         guard let proteinData = try? Data(contentsOf: fileURL) else {
-            statusViewModel.statusFinished(importError: ImportError.unknownError)
+            await statusViewModel.statusFinished(importError: ImportError.unknownError)
             throw ImportError.unknownError
         }
         
-        statusViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
+        await statusViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
         
         let rawText = String(decoding: proteinData, as: UTF8.self)
         let fileName = fileURL.deletingPathExtension().lastPathComponent
         let fileExtension = fileURL.pathExtension
         
         guard !fileExtension.isEmpty else {
-            statusViewModel.statusFinished(importError: ImportError.unknownError)
+            await statusViewModel.statusFinished(importError: ImportError.unknownError)
             throw ImportError.unknownFileExtension
         }
         
@@ -65,12 +65,12 @@ class FileImporter {
             )
             await proteinDataSource.addProteinFileToDataSource(proteinFile: proteinFile)
             // File import finished
-            statusViewModel.statusFinished(action: StatusAction.importFile)
+            await statusViewModel.statusFinished(action: StatusAction.importFile)
         } catch let error as ImportError {
-            statusViewModel.statusFinished(importError: error)
+            await statusViewModel.statusFinished(importError: error)
             throw error
         } catch {
-            statusViewModel.statusFinished(importError: ImportError.unknownError)
+            await statusViewModel.statusFinished(importError: ImportError.unknownError)
             throw error
         }
     }

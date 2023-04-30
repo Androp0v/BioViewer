@@ -81,7 +81,7 @@ class RCSBImportViewModel: ObservableObject {
     
     func fetchPDBFile(pdbInfo: PDBInfo, proteinDataSource: ProteinDataSource, statusViewModel: StatusViewModel) async throws {
         
-        statusViewModel.statusUpdate(statusText: NSLocalizedString("Downloading file", comment: ""))
+        await statusViewModel.statusUpdate(statusText: NSLocalizedString("Downloading file", comment: ""))
         do {
             let (rawText, byteSize) = try await RCSBFetch.fetchPDBFile(rcsbid: pdbInfo.rcsbID)
             let fileInfo = ProteinFileInfo(
@@ -100,10 +100,9 @@ class RCSBImportViewModel: ObservableObject {
                 byteSize: byteSize
             )
         } catch RCSBError.notFound {
-            statusViewModel.statusFinished(importError: ImportError.notFound)
+            await statusViewModel.statusFinished(importError: ImportError.notFound)
         } catch {
-            statusViewModel.statusFinished(importError: ImportError.downloadError)
+            await statusViewModel.statusFinished(importError: ImportError.downloadError)
         }
     }
-    
 }

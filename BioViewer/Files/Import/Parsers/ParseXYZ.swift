@@ -78,7 +78,9 @@ extension FileParser {
         rawText.enumerateLines(invoking: { line, _ in
             
             currentLine += 1
-            statusViewModel.statusProgress(progress: progress)
+            Task {
+                await statusViewModel.statusProgress(progress: progress)
+            }
             
             let lineElements = line.components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
             guard lineElements.count >= XYZConstants.atomLineNumberOfComponents else {

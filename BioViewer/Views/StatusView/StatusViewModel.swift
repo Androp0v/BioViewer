@@ -13,7 +13,7 @@ enum StatusAction {
     case geometryGeneration
 }
 
-class StatusViewModel: ObservableObject {
+@MainActor class StatusViewModel: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel?
     
@@ -33,9 +33,7 @@ class StatusViewModel: ObservableObject {
             guard let importError = importError else {
                 return
             }
-            DispatchQueue.main.async {
-                self.statusError = importError.localizedDescription
-            }
+            self.statusError = importError.localizedDescription
         }
     }
     
@@ -84,9 +82,7 @@ class StatusViewModel: ObservableObject {
     func removeImportError() {
         self.importError = nil
         // FIXME: Handle different error types
-        DispatchQueue.main.async {
-            self.statusError = nil
-        }
+        self.statusError = nil
     }
     
     func setWarning(warning: String) {
@@ -95,16 +91,12 @@ class StatusViewModel: ObservableObject {
     }
     
     func removeAllWarnings() {
-        DispatchQueue.main.async {
-            self.internalStatusWarning = []
-            self.statusWarning = []
-        }
+        self.internalStatusWarning = []
+        self.statusWarning = []
     }
     
     func removeAllErrors() {
-        DispatchQueue.main.async {
-            self.statusError = nil
-        }
+        self.statusError = nil
     }
     
     // MARK: - Status handling
