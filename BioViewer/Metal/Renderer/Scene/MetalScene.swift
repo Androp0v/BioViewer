@@ -57,8 +57,8 @@ class MetalScene {
     private(set) var camera: Camera
     /// Position of the camera used to render the scene.
     private(set) var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
-    /// Bounding sphere of the visualised data.
-    var boundingSphere = BoundingSphere(center: .zero, radius: .zero)
+    /// Bounding volume of the visualized data.
+    var boundingVolume: BoundingVolume = .zero
     /// Rotation of the model applied by the user.
     var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true } }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on.
@@ -246,7 +246,7 @@ class MetalScene {
         )
         
         self.userModelRotationMatrix = rotationMatrix
-        let translateToOriginMatrix = Transform.translationMatrix(-boundingSphere.center)
+        let translateToOriginMatrix = Transform.translationMatrix(-boundingVolume.sphere.center)
 
         // Update model rotation matrix
         self.frameData.rotation_matrix = rotationMatrix * translateToOriginMatrix
@@ -277,15 +277,15 @@ class MetalScene {
         
     // MARK: - Fit protein on screen
     
-    func updateCameraDistanceToModel(distanceToModel: Float, newBoundingSphere: BoundingSphere?) {
+    func updateCameraDistanceToModel(distanceToModel: Float, newBoundingVolume: BoundingVolume?) {
         // TO-DO: Fit all files
-        if let newBoundingSphere {
-            self.boundingSphere = newBoundingSphere
+        if let newBoundingVolume {
+            self.boundingVolume = newBoundingVolume
         }
         
         // Update camera far and near planes
-        self.camera.nearPlane = max(1, distanceToModel - boundingSphere.radius)
-        self.camera.farPlane = distanceToModel + boundingSphere.radius
+        self.camera.nearPlane = max(1, distanceToModel - boundingVolume.sphere.radius)
+        self.camera.farPlane = distanceToModel + boundingVolume.sphere.radius
         // Update camera z-position
         self.cameraPosition.z = distanceToModel
         
@@ -295,12 +295,12 @@ class MetalScene {
         
         // Update shadow projection to fit too
         self.frameData.shadowProjectionMatrix = Transform.orthographicProjection(
-            -boundingSphere.radius + 3.3,
-             boundingSphere.radius - 3.3,
-             -boundingSphere.radius + 3.3,
-             boundingSphere.radius - 3.3,
-             -boundingSphere.radius - 3.3,
-             boundingSphere.radius + 3.3
+            -boundingVolume.sphere.radius + 3.3,
+             boundingVolume.sphere.radius - 3.3,
+             -boundingVolume.sphere.radius + 3.3,
+             boundingVolume.sphere.radius - 3.3,
+             -boundingVolume.sphere.radius - 3.3,
+             boundingVolume.sphere.radius + 3.3
         )
     }
     

@@ -9,7 +9,7 @@ import Foundation
 
 extension MutableState {
     
-    func computeAmbientOcclusion() {
+    func computeAmbientOcclusion(boundingSphere: BoundingSphere) {
         
     }
 }

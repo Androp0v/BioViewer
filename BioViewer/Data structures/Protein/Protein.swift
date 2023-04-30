@@ -71,7 +71,7 @@ class Protein {
     
     // MARK: - Volume
     
-    let boundingSphere: BoundingSphere
+    let boundingVolume: BoundingVolume
     
     // MARK: - Initialization
 
@@ -100,7 +100,7 @@ class Protein {
         self.atomSecondaryStructure = atomSecondaryStructure
         self.atomCount = elementComposition.totalCount
         self.sequence = sequence
-        self.boundingSphere = computeBoundingSphere(atoms: atoms)
+        self.boundingVolume = computeBoundingVolume(atoms: atoms)
     }
 }
 

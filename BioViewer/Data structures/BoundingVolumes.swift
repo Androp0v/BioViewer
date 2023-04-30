@@ -20,3 +20,15 @@ struct BoundingBox: Sendable {
     let minZ: Float
     let maxZ: Float
 }
+
+struct BoundingVolume: Sendable {
+    let sphere: BoundingSphere
+    let box: BoundingBox
+    
+    static var zero: Self {
+        return BoundingVolume(
+            sphere: BoundingSphere(center: .zero, radius: .zero),
+            box: BoundingBox(minX: .zero, maxX: .zero, minY: .zero, maxY: .zero, minZ: .zero, maxZ: .zero)
+        )
+    }
+}

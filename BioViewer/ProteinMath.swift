@@ -31,10 +31,20 @@ func normalizeAtomPositions(atoms: inout ContiguousArray<simd_float3>, center: s
 ///   - atoms: The positions of the atom centers.
 ///   - extraMargin: Safety margin to account for the radii of the atoms.
 /// - Returns: Position of the center of the bounding sphere and its radius.
-func computeBoundingSphere(atoms: ContiguousArray<simd_float3>, extraMargin: Float = 5) -> BoundingSphere {
+func computeBoundingVolume(atoms: ContiguousArray<simd_float3>, extraMargin: Float = 5) -> BoundingVolume {
     
     guard atoms.count != 1 else {
-        return BoundingSphere(center: atoms.first!, radius: extraMargin)
+        let center = atoms.first!
+        let boundingBox = BoundingBox(
+            minX: center.x - extraMargin,
+            maxX: center.x + extraMargin,
+            minY: center.y - extraMargin,
+            maxY: center.y + extraMargin,
+            minZ: center.z - extraMargin,
+            maxZ: center.z + extraMargin
+        )
+        let boundingSphere = BoundingSphere(center: atoms.first!, radius: extraMargin)
+        return BoundingVolume(sphere: boundingSphere, box: boundingBox)
     }
     
     let boundingBox = computeBoundingBox(atoms: atoms)
@@ -51,15 +61,18 @@ func computeBoundingSphere(atoms: ContiguousArray<simd_float3>, extraMargin: Flo
             maxDistanceToCenter = atomDistance
         }
     }
-    return BoundingSphere(center: center, radius: maxDistanceToCenter + extraMargin)
+    return BoundingVolume(
+        sphere: BoundingSphere(center: center, radius: maxDistanceToCenter + extraMargin),
+        box: boundingBox
+    )
 }
 
-func computeBoundingSphere(proteins: [Protein], extraMargin: Float = 5) -> BoundingSphere {
+func computeBoundingVolume(proteins: [Protein], extraMargin: Float = 5) -> BoundingVolume {
     var allAtoms = ContiguousArray<simd_float3>()
     for protein in proteins {
         allAtoms.append(contentsOf: protein.atoms)
     }
-    return computeBoundingSphere(atoms: allAtoms, extraMargin: extraMargin)
+    return computeBoundingVolume(atoms: allAtoms, extraMargin: extraMargin)
 }
 
 func computeBoundingBox(atoms: ContiguousArray<simd_float3>) -> BoundingBox {

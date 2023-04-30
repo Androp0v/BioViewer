@@ -31,7 +31,7 @@ class ComputeMolecularSurfaceUtility {
         self.protein = protein
         self.gridResolution = gridResolution
         
-        (self.boxSize, self.neighbourGridResolution) = optimalBox(boundingSphereRadius: protein.boundingSphere.radius)
+        (self.boxSize, self.neighbourGridResolution) = optimalBox(boundingSphereRadius: protein.boundingVolume.sphere.radius)
     }
     
     func createMolecularSurface() -> MTLBuffer? {

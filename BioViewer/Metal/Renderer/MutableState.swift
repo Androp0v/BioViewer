@@ -476,18 +476,18 @@ actor MutableState {
     func setCameraDistanceToModel(_ newDistance: Float) {
         scene.updateCameraDistanceToModel(
             distanceToModel: newDistance,
-            newBoundingSphere: nil
+            newBoundingVolume: nil
         )
     }
     
-    func fitCameraToBoundingSphere(_ boundingSphere: BoundingSphere) {
+    func fitCameraToBoundingVolume(_ boundingVolume: BoundingVolume) {
         let cameraDistanceToFit = scene.camera.distanceToFitInFrustum(
-            sphereRadius: boundingSphere.radius,
+            sphereRadius: boundingVolume.sphere.radius,
             aspectRatio: scene.aspectRatio
         )
         scene.updateCameraDistanceToModel(
             distanceToModel: cameraDistanceToFit,
-            newBoundingSphere: boundingSphere
+            newBoundingVolume: boundingVolume
         )
     }
     

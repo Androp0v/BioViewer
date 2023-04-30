@@ -65,13 +65,12 @@ import SwiftUI
     /// Maps file ID to selected model array index (different files may have different selected models).
     var selectedModelIndexForFile = [String: Int]()
     
-    var selectionBoundingSphere = BoundingSphere.init(center: .zero, radius: .zero)
+    var selectionBoundingVolume: BoundingVolume = .zero
         
     weak var proteinViewModel: ProteinViewModel?
 
     // MARK: - Add files
     
-    @MainActor
     func addProteinFileToDataSource(proteinFile: ProteinFile) {
         
         guard let proteinViewModel = proteinViewModel else { return }
@@ -124,12 +123,12 @@ import SwiftUI
         )
         
         guard let proteins = modelsForFile(file: getFirstFile()) else { return }
-        self.selectionBoundingSphere = computeBoundingSphere(proteins: proteins)
+        self.selectionBoundingVolume = computeBoundingVolume(proteins: proteins)
         
         // Fit new selection in frustum
         Task {
-            await proteinViewModel.renderer.mutableState.fitCameraToBoundingSphere(
-                selectionBoundingSphere
+            await proteinViewModel.renderer.mutableState.fitCameraToBoundingVolume(
+                selectionBoundingVolume
             )
         }
     }
