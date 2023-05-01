@@ -67,4 +67,18 @@ class SunDirection {
             }
         }
     }
+    @Published var hasAmbientOcclusion: Bool = false {
+        didSet {
+            if hasAmbientOcclusion {
+                Task {
+                    guard let proteinViewModel else { return }
+                    await proteinViewModel.renderer.mutableState.computeAmbientOcclusion(
+                        atomPositions: proteinViewModel.dataSource!.getFirstProtein()!.atoms,
+                        atomRadii: [Float.zero],
+                        boundingVolume: proteinViewModel.renderer.mutableState.scene.boundingVolume
+                    )
+                }
+            }
+        }
+    }
 }

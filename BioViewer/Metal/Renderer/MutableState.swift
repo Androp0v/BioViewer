@@ -18,6 +18,8 @@ actor MutableState {
     var scene = MetalScene()
     /// The `MTLDevice` in charge of rendering the scene.
     let device: MTLDevice
+    /// The default library.
+    let library: MTLLibrary?
             
     // MARK: - Scheduling
     
@@ -84,6 +86,8 @@ actor MutableState {
     init(device: MTLDevice, maxBuffersInFlight: Int, isBenchmark: Bool) {
         
         self.device = device
+        
+        self.library = device.makeDefaultLibrary()
         
         // Initialize the uniforms triple buffering array
         self.uniformBuffers = [MTLBuffer]()
