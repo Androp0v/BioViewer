@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class ResolutionViewModel: ObservableObject {
+@MainActor class ResolutionViewModel: ObservableObject {
     
     let proteinViewModel: ProteinViewModel
     

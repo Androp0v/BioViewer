@@ -60,10 +60,10 @@ class VisualizationBufferLoader {
     
     private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
-        guard let dataSource = proteinViewModel.dataSource,
+        guard let dataSource = await proteinViewModel.dataSource,
               let protein = await dataSource.getFirstProtein(),
               let animator = await proteinViewModel.renderer.mutableState.scene.animator,
-              let visualizationViewModel = proteinViewModel.visualizationViewModel
+              let visualizationViewModel = await proteinViewModel.visualizationViewModel
         else { return }
 
         switch visualization {
@@ -72,7 +72,7 @@ class VisualizationBufferLoader {
         case .solidSpheres:
             
             // Change pipeline
-            proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
+            await proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
             
             // Animate radii changes
             animator.bufferLoader = self
@@ -105,7 +105,7 @@ class VisualizationBufferLoader {
             )
             
             // Change pipeline
-            proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
+            await proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
             
             // Animate radii changes
             animator.bufferLoader = self
@@ -128,7 +128,7 @@ class VisualizationBufferLoader {
     func populateImpostorSphereBuffers(atomRadii: AtomRadii) async {
         
         guard let proteinViewModel = proteinViewModel,
-              let colorViewModel = proteinViewModel.colorViewModel,
+              let colorViewModel = await proteinViewModel.colorViewModel,
               let proteinFile = await proteinViewModel.dataSource?.getFirstFile(),
               let proteins = await proteinViewModel.dataSource?.modelsForFile(file: proteinFile) else {
             return

@@ -57,11 +57,10 @@ class ImportDroppedFilesDelegate: DropDelegate {
             
             let itemProviderType = itemProvider.registeredTypeIdentifiers.first
             
-            var fileName: String = NSLocalizedString("Unknown", comment: "")
+            var mutableFileName: String = NSLocalizedString("Unknown", comment: "")
             var fileExtension: String?
-            
             if let fullFileName = itemProvider.suggestedName as NSString? {
-                fileName = fullFileName.deletingPathExtension
+                mutableFileName = fullFileName.deletingPathExtension
                 if !fullFileName.pathExtension.isEmpty {
                     // Prefer getting the file extension from the suggested file name.
                     fileExtension = fullFileName.pathExtension
@@ -71,6 +70,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
                     fileExtension = (itemProviderType as NSString?)?.pathExtension
                 }
             }
+            let filename = mutableFileName
             
             // Check that either the suggestedName or the itemProvider type have a valid path extension
             guard let fileExtension = fileExtension else {
@@ -86,14 +86,14 @@ class ImportDroppedFilesDelegate: DropDelegate {
 
             // Parse file
             Task {
-                guard let dataSource = proteinViewModel.dataSource else { return }
-                guard let statusViewModel = proteinViewModel.statusViewModel else { return }
+                guard let dataSource = await proteinViewModel.dataSource else { return }
+                guard let statusViewModel = await proteinViewModel.statusViewModel else { return }
                 try? await FileImporter.importFileFromRawText(
                     rawText: rawFileText,
                     proteinDataSource: dataSource,
                     statusViewModel: statusViewModel,
                     fileInfo: nil,
-                    fileName: fileName,
+                    fileName: filename,
                     fileExtension: fileExtension,
                     byteSize: byteSize
                 )

@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftUI
 
-class ProteinViewModel: ObservableObject {
+@MainActor class ProteinViewModel: ObservableObject {
 
     // MARK: - Properties
     
@@ -31,7 +31,7 @@ class ProteinViewModel: ObservableObject {
     
     // MARK: - Initialization
 
-    @MainActor init(isBenchmark: Bool = false) {
+    init(isBenchmark: Bool = false) {
         // Setup Metal renderer
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
@@ -52,7 +52,7 @@ class ProteinViewModel: ObservableObject {
 
     func removeAllFiles() async {
         await self.dataSource?.removeAllFilesFromDatasource()
-        await self.statusViewModel?.removeAllWarnings()
-        await self.statusViewModel?.removeAllErrors()
+        self.statusViewModel?.removeAllWarnings()
+        self.statusViewModel?.removeAllErrors()
     }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class FPSCounterViewModel: ObservableObject {
+@MainActor class FPSCounterViewModel: ObservableObject {
     
     let proteinViewModel: ProteinViewModel
     

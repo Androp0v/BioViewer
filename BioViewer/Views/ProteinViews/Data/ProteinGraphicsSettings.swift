@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ProteinGraphicsSettings: ObservableObject {
+@MainActor class ProteinGraphicsSettings: ObservableObject {
     
     weak var proteinViewModel: ProteinViewModel?
     
