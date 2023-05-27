@@ -11,5 +11,4 @@ import SwiftUI
 struct VisualizationConfiguration {
     let atomRadii: AtomRadii
     let colorBy: ProteinColorByOption
-    let atomColors: [Color]
 }

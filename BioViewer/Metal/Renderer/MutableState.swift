@@ -144,7 +144,6 @@ actor MutableState {
     /// Creates a new buffer to hold the color of each atom, if the existing color buffer does not have the appropriate size.
     func createAtomColorBufferIfNeeded(
         proteins: [Protein],
-        colorList: [Color]?,
         colorBy: ProteinColorByOption?
     ) {
         // Check whether a buffer of the required size already exists.
@@ -245,7 +244,6 @@ actor MutableState {
         // Create color buffer if needed
         createAtomColorBufferIfNeeded(
             proteins: proteins,
-            colorList: configuration.atomColors,
             colorBy: configuration.colorBy
         )
     }

@@ -135,8 +135,7 @@ class VisualizationBufferLoader {
         }
         let configuration = await VisualizationConfiguration(
             atomRadii: atomRadii,
-            colorBy: colorViewModel.colorBy,
-            atomColors: colorViewModel.elementColors
+            colorBy: colorViewModel.colorBy
         )
         await proteinViewModel.renderer.mutableState.populateImpostorSphereBuffers(
             proteins: proteins,

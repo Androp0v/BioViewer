@@ -10,8 +10,8 @@ import Foundation
 import simd
 import SwiftUI
 
-/// Handle all source data for a ```ProteinView``` that is not related to the
-/// scene nor the appearance, like the ```Protein``` objects that have been
+/// Handle all source data for a `ProteinView` that is not related to the
+/// scene nor the appearance, like the `Protein` objects that have been
 /// imported or computed values.
 @MainActor class ProteinDataSource: ObservableObject {
     
@@ -23,7 +23,6 @@ import SwiftUI
     @Published var totalSubunitCount: Int = 0
     /// Total atom count in view.
     @Published var totalAtomCount: Int = 0
-    
     /// Files in the scene.
     private(set) var files: [ProteinFile] = [ProteinFile]() {
         // Run when a new file is added to the datasource
@@ -54,17 +53,15 @@ import SwiftUI
             self.totalAtomCount = newTotalAtomCount
         }
     }
-            
     /// User-selected model for each ProteinFile.
     @Published var selectedModel = [Int]() {
         didSet {
             updateFileModels()
         }
     }
-    
     /// Maps file ID to selected model array index (different files may have different selected models).
     var selectedModelIndexForFile = [ProteinFile: Int]()
-    
+    /// The bounding volume of the onscreen proteins.
     var selectionBoundingVolume: BoundingVolume = .zero
         
     weak var proteinViewModel: ProteinViewModel?
