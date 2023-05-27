@@ -8,9 +8,10 @@
 import Foundation
 
 /// Struct holding the contents of a protein subunit.
-struct ProteinSubunit: Sendable {
-    
-    let id: Int
+struct ProteinSubunit {
+        
+    /// The subunit index inside its parent protein.
+    let indexInProtein: Int
     
     enum SubunitKind {
         case chain
@@ -23,14 +24,13 @@ struct ProteinSubunit: Sendable {
     
     /// Number of atoms in the subunit.
     public var atomCount: Int
-    
     /// Index for the offset for the subunit atoms in the parent protein atom array.
     public var startIndex: Int
     
     // MARK: - Initialization
     
-    init(id: Int, kind: SubunitKind, atomCount: Int, startIndex: Int) {
-        self.id = id
+    init(indexInProtein: Int, kind: SubunitKind, atomCount: Int, startIndex: Int) {
+        self.indexInProtein = indexInProtein
         self.kind = kind
         self.atomCount = atomCount
         self.startIndex = startIndex
@@ -67,10 +67,10 @@ struct ProteinSubunit: Sendable {
                        "Z"]
         switch self.kind {
         case .chain, .unknown:
-            if id < 26 {
-                return "Subunit \(letters[id])"
+            if indexInProtein < 26 {
+                return "Subunit \(letters[indexInProtein])"
             } else {
-                return "Subunit \(id)"
+                return "Subunit \(indexInProtein)"
             }
         case .nonChain:
             return "Non-chain atoms"

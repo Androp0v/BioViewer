@@ -8,19 +8,19 @@
 import Foundation
 
 /// Class containing the data related to the imported protein file itself.
-public class ProteinFileInfo {
+struct ProteinFileInfo {
     
     /// PDB ID as in RCSB database.
-    public var pdbID: String?
+    var pdbID: String?
     /// Human-readable description of the protein.
-    public var description: String?
+    var description: String?
     /// Authors of the file.
-    public var authors: String?
+    var authors: String?
     /// Full source file text
-    public var sourceLines: [String]?
+    var sourceLines: [String]?
     
     /// List of all lines with warnings
-    public var warningIndices: [Int] = []
+    var warningIndices: [Int] = []
     
     // MARK: - Initialization
     
@@ -32,5 +32,4 @@ public class ProteinFileInfo {
         self.authors = authors
         self.sourceLines = sourceLines
     }
-    
 }

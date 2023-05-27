@@ -15,11 +15,10 @@ enum ProteinFileType {
 
 // MARK: - ProteinFile
 
-class ProteinFile {
+struct ProteinFile: Hashable {
     
     /// Unique ID for the file (only used internally).
-    let fileID = ProteinFile.randomID()
-    
+    let id = UUID()
     /// The type of protein file type (whether it contains a static structure or several configurations of the same protein).
     let fileType: ProteinFileType
     /// Name of the protein file.
@@ -30,9 +29,10 @@ class ProteinFile {
     let byteSize: Int?
     /// File metadata.
     let fileInfo: ProteinFileInfo
-    
     /// Protein contained in the file.
-    let models: [Protein]
+    var models: [Protein]
+    
+    // MARK: - Init
     
     init(fileType: ProteinFileType, fileName: String, fileExtension: String, models: [Protein], fileInfo: ProteinFileInfo, byteSize: Int?) {
         self.fileType = fileType
@@ -43,15 +43,13 @@ class ProteinFile {
         self.byteSize = byteSize
     }
     
-    // MARK: - Private
-    static private func randomID() -> String {
-        
-        let randomID = NSMutableString(capacity: 32)
-        let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        for _ in 0..<32 {
-            let randomCharacter = String(characters.randomElement() ?? "0")
-            randomID.appending(randomCharacter)
-        }
-        return String(randomID)
+    // MARK: - Hashable
+    
+    static func == (lhs: ProteinFile, rhs: ProteinFile) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

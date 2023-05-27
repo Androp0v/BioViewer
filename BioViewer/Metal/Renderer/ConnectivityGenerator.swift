@@ -8,9 +8,15 @@
 import Foundation
 import Metal
 
+struct ProteinConnectivity {
+    let computedBonds: [BondStruct]
+    let computedBondCounts: [Int]
+    let computedBondConfigurationStarts: [Int]
+}
+
 class ConnectivityGenerator {
         
-    func computeConnectivity(protein: Protein, proteinViewModel: ProteinViewModel?) async {
+    func computeConnectivity(protein: Protein, dataSource: ProteinDataSource, statusViewModel: StatusViewModel?) async {
         
         var computedBonds = [BondStruct]()
         var computedBondCounts = [Int]()
@@ -38,7 +44,7 @@ class ConnectivityGenerator {
                 if Task.isCancelled { return }
                 
                 // Update progress
-                await proteinViewModel?.statusViewModel?.statusProgress(progress: progress)
+                await statusViewModel?.statusProgress(progress: progress)
                 
                 // Compute a new matrix row
                 for indexB in configurationStartIndex..<indexA {
@@ -69,8 +75,13 @@ class ConnectivityGenerator {
         computedBondConfigurationStarts.insert(0, at: 0)
         computedBondConfigurationStarts.remove(at: computedBondConfigurationStarts.count - 1)
         
-        protein.bonds = computedBonds
-        protein.bondsPerConfiguration = computedBondCounts
-        protein.bondsConfigurationArrayStart = computedBondConfigurationStarts
+        try? await dataSource.updateProteinConnectivity(
+            ProteinConnectivity(
+                computedBonds: computedBonds,
+                computedBondCounts: computedBondCounts,
+                computedBondConfigurationStarts: computedBondConfigurationStarts
+            ),
+            for: protein
+        )
     }
 }

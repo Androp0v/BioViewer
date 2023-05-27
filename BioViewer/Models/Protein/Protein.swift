@@ -9,7 +9,7 @@ import Foundation
 import simd
 
 /// Class holding the contents of a protein.
-class Protein {
+struct Protein {
 
     // MARK: - UUID
     
@@ -19,7 +19,7 @@ class Protein {
     // MARK: - Sequence
 
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
-    let sequence: [String]?
+    let sequence: [Residue]?
     
     // MARK: - Subunits
     
@@ -41,8 +41,8 @@ class Protein {
     /// Number of atoms of each element.
     let elementComposition: ProteinElementComposition
     
-    /// Number of atoms of each kind.
-    var residueComposition: ProteinResidueComposition?
+    /// Number of atoms of each residue type.
+    let residueComposition: ProteinResidueComposition?
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     let atomElements: [AtomElement]
@@ -86,7 +86,7 @@ class Protein {
         residueComposition: ProteinResidueComposition?,
         atomResidues: [Residue]?,
         atomSecondaryStructure: [SecondaryStructure]?,
-        sequence: [String]? = nil
+        sequence: [Residue]? = nil
     ) {
         self.configurationCount = configurationCount
         self.configurationEnergies = configurationEnergies

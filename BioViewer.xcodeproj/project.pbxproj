@@ -149,6 +149,7 @@
 		C5626AE2283116AA00CFE7DC /* FPSCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */; };
 		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
+		C56B3A122A22781F00AD5C82 /* ProteinDataSourceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56B3A112A22781F00AD5C82 /* ProteinDataSourceError.swift */; };
 		C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
 		C56E87E0278D895B004BAEE2 /* SceneAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */; };
 		C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */; };
@@ -405,6 +406,7 @@
 		C5626AE1283116AA00CFE7DC /* FPSCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPSCounterView.swift; sourceTree = "<group>"; };
 		C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinVisualizationOption.swift; sourceTree = "<group>"; };
 		C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationBufferLoader.swift; sourceTree = "<group>"; };
+		C56B3A112A22781F00AD5C82 /* ProteinDataSourceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinDataSourceError.swift; sourceTree = "<group>"; };
 		C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomRadiiGenerator.swift; sourceTree = "<group>"; };
 		C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneAnimator.swift; sourceTree = "<group>"; };
 		C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerCommands.swift; sourceTree = "<group>"; };
@@ -704,6 +706,7 @@
 				C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */,
 				C418BAFB2645A8C20031C6F0 /* ProteinMath.swift */,
 				C54066F8274D1C6100710CFC /* Files */,
+				C56B3A0B2A22194100AD5C82 /* Models */,
 				C4B1F82026457D020035D739 /* Data structures */,
 				C553B79629360F9900294BB4 /* Components */,
 				C5FF9AD42980350700D583A2 /* BioBench */,
@@ -834,12 +837,10 @@
 		C4B1F82026457D020035D739 /* Data structures */ = {
 			isa = PBXGroup;
 			children = (
-				C45BAC482649C18000B36026 /* ProteinDataSource.swift */,
+				C56B3A102A22780C00AD5C82 /* ProteinDataSource */,
 				C5E7AF94275F98480065F6AD /* BoundingVolumes.swift */,
-				C57F9956275E59C0001DE6D6 /* Protein */,
 				C57F9952275E3B46001DE6D6 /* ColorPalettes.swift */,
 				C418BAFD2645B1210031C6F0 /* AtomElement.swift */,
-				C5277FCB297B147600291AF7 /* ProteinComposition */,
 				C5D97E0E29746A8000EF1D5A /* Residue.swift */,
 				C5A5F30C29B40CFC00C0887F /* SecondaryStructure.swift */,
 				C504C9C9274294FE002D4E6A /* RCSB */,
@@ -1108,6 +1109,23 @@
 			path = Scene;
 			sourceTree = "<group>";
 		};
+		C56B3A0B2A22194100AD5C82 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C57F9956275E59C0001DE6D6 /* Protein */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C56B3A102A22780C00AD5C82 /* ProteinDataSource */ = {
+			isa = PBXGroup;
+			children = (
+				C45BAC482649C18000B36026 /* ProteinDataSource.swift */,
+				C56B3A112A22781F00AD5C82 /* ProteinDataSourceError.swift */,
+			);
+			path = ProteinDataSource;
+			sourceTree = "<group>";
+		};
 		C572BD162740220900FF010D /* FileSegmentProtein */ = {
 			isa = PBXGroup;
 			children = (
@@ -1152,6 +1170,7 @@
 				C515EFBF274F7DA400B6F7DB /* ProteinSubunit.swift */,
 				C572BD192741372600FF010D /* ProteinFileInfo.swift */,
 				C54270242863374B00EE9AB0 /* ProteinExtensions.swift */,
+				C5277FCB297B147600291AF7 /* ProteinComposition */,
 			);
 			path = Protein;
 			sourceTree = "<group>";
@@ -1661,6 +1680,7 @@
 				C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */,
 				C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */,
 				C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */,
+				C56B3A122A22781F00AD5C82 /* ProteinDataSourceError.swift in Sources */,
 				C50FEBC829E2DC3B0082102D /* MetalFXUpscaling.swift in Sources */,
 				C544D3A0277016270060B30D /* TextureToImage.swift in Sources */,
 				C5EEE9B0276E0448005737C1 /* InputWithButtonRow.swift in Sources */,
@@ -1771,6 +1791,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
 			};
 			name = Debug;
 		};
@@ -1826,6 +1847,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -28,6 +28,28 @@ class VisualizationBufferLoader {
         
         // Add a new geometry creation task
         currentTask = Task {
+            // Compute model connectivity if not already present
+            if visualization == .ballAndStick {
+                guard let dataSource = proteinViewModel.dataSource,
+                      let protein = dataSource.getFirstProtein()
+                else {
+                    return
+                }
+                if protein.bonds == nil {
+                    // Update Status View
+                    proteinViewModel.statusViewModel?.statusUpdate(
+                        statusText: NSLocalizedString("Generating geometry", comment: "")
+                    )
+                    // Compute links
+                    await ConnectivityGenerator().computeConnectivity(
+                        protein: protein,
+                        dataSource: dataSource,
+                        statusViewModel: proteinViewModel.statusViewModel
+                    )
+                    // Finished computing links, update status
+                    proteinViewModel.statusViewModel?.statusFinished(action: .geometryGeneration)
+                }
+            }
             await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
             // Update internal visualization mode as seen by renderer
             await proteinViewModel.renderer.mutableState.setVisualization(visualization)
@@ -38,9 +60,11 @@ class VisualizationBufferLoader {
     
     private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
         
-        guard let protein = await proteinViewModel.dataSource?.getFirstProtein(),
+        guard let dataSource = proteinViewModel.dataSource,
+              let protein = await dataSource.getFirstProtein(),
               let animator = await proteinViewModel.renderer.mutableState.scene.animator,
-              let visualizationViewModel = proteinViewModel.visualizationViewModel else { return }
+              let visualizationViewModel = proteinViewModel.visualizationViewModel
+        else { return }
 
         switch visualization {
         
@@ -67,17 +91,6 @@ class VisualizationBufferLoader {
         // MARK: - Ball and stick
         case .ballAndStick:
 
-            // Compute model connectivity if not already present
-            if protein.bonds == nil {
-                // Update Status View
-                await proteinViewModel.statusViewModel?.statusUpdate(statusText: NSLocalizedString("Generating geometry", comment: ""))
-                
-                // Compute links
-                await ConnectivityGenerator().computeConnectivity(protein: protein, proteinViewModel: proteinViewModel)
-                
-                // Finished computing links, update status
-                await proteinViewModel.statusViewModel?.statusFinished(action: .geometryGeneration)
-            }
             guard let bondData = protein.bonds else { return }
             guard !Task.isCancelled else { return }
             

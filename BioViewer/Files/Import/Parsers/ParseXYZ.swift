@@ -59,10 +59,12 @@ extension FileParser {
         }
         
         // Protein file data
-        let fileInfo = ProteinFileInfo(pdbID: originalFileInfo?.pdbID,
-                                       description: originalFileInfo?.description,
-                                       authors: originalFileInfo?.authors,
-                                       sourceLines: originalFileInfo?.sourceLines)
+        var fileInfo = ProteinFileInfo(
+            pdbID: originalFileInfo?.pdbID,
+            description: originalFileInfo?.description,
+            authors: originalFileInfo?.authors,
+            sourceLines: originalFileInfo?.sourceLines
+        )
         var currentLine: Int = 0
             
         let totalLineCount = rawText.reduce(into: 0) { (count, letter) in
@@ -172,7 +174,7 @@ extension FileParser {
         atomElements.append(contentsOf: firstConfiguration.atomElements)
         atomArrayComposition = ProteinElementComposition(elements: atomElements)
         
-        let proteinSubunits = [ProteinSubunit(id: firstConfiguration.id,
+        let proteinSubunits = [ProteinSubunit(indexInProtein: firstConfiguration.id,
                                               kind: .unknown,
                                               atomCount: firstConfiguration.atomArrayComposition.totalCount,
                                               startIndex: 0)]

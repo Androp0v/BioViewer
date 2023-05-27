@@ -272,7 +272,7 @@ class PDBParser {
         let blockCount = Int(ceil(Double(lineCount) / Double(PDBParser.lineBlockSize)))
         
         var finalProteins = [Protein]()
-        let finalProteinInfo = originalFileInfo ?? ProteinFileInfo()
+        var finalProteinInfo = originalFileInfo ?? ProteinFileInfo()
 
         // Create a TaskGroup so the file can be parsed simultaneously using multiple threads.
         await withTaskGroup(of: ParsedBlock.self) { taskGroup in
@@ -432,7 +432,7 @@ class PDBParser {
                 var atomIndex = 0
                 for subunit in model.subunits {
                     finalSubunits.append(ProteinSubunit(
-                        id: subunitIndex,
+                        indexInProtein: subunitIndex,
                         kind: subunit.isPartOfChain ? .chain : .nonChain,
                         atomCount: subunit.atomCount,
                         startIndex: atomIndex

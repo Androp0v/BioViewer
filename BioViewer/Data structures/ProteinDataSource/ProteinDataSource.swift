@@ -63,11 +63,29 @@ import SwiftUI
     }
     
     /// Maps file ID to selected model array index (different files may have different selected models).
-    var selectedModelIndexForFile = [String: Int]()
+    var selectedModelIndexForFile = [ProteinFile: Int]()
     
     var selectionBoundingVolume: BoundingVolume = .zero
         
     weak var proteinViewModel: ProteinViewModel?
+    
+    // MARK: - Update Proteins
+    
+    func updateProteinConnectivity(
+        _ connectivity: ProteinConnectivity,
+        for protein: Protein
+    ) throws {
+        if let fileIndex = files.firstIndex(where: { $0.models.contains(protein) }) {
+            if let proteinIndex = files[fileIndex].models.firstIndex(of: protein) {
+                var updatedProtein = files[fileIndex].models[proteinIndex]
+                updatedProtein.bonds = connectivity.computedBonds
+                updatedProtein.bondsPerConfiguration = connectivity.computedBondCounts
+                updatedProtein.bondsConfigurationArrayStart = connectivity.computedBondConfigurationStarts
+                files[fileIndex].models[proteinIndex] = updatedProtein
+            }
+        }
+        throw ProteinDataSourceError.unableToUpdateProteinConnectivity
+    }
 
     // MARK: - Add files
     
@@ -77,7 +95,7 @@ import SwiftUI
         
         // Initialize selected protein model to first model.
         selectedModel.append(-1)
-        selectedModelIndexForFile[proteinFile.fileID] = selectedModel.count - 1
+        selectedModelIndexForFile[proteinFile] = selectedModel.count - 1
         
         // Add file to datasource.
         files.append(proteinFile)
@@ -89,7 +107,7 @@ import SwiftUI
             proteinViewModel.visualizationViewModel?.visualization = .solidSpheres
         }
     }
-    
+        
     // MARK: - Remove files
     
     /// Removes file at index from data source and scene.
@@ -137,7 +155,7 @@ import SwiftUI
         guard let file = file else {
             return nil
         }
-        guard let selectedModelIndex = selectedModelIndexForFile[file.fileID] else {
+        guard let selectedModelIndex = selectedModelIndexForFile[file] else {
             return nil
         }
         guard selectedModel[selectedModelIndex] < file.models.count else {
