@@ -119,15 +119,6 @@ struct ProteinView: View {
                         }
                     }
                     .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
-                    
-                    // Sidebar
-                    if showSidebar && horizontalSizeClass != .compact {
-                        sidebar
-                            .frame(width: Constants.sidebarWidth)
-                            .edgesIgnoringSafeArea([.horizontal, .bottom])
-                            .transition(AnyTransition.move(edge: .trailing))
-                    }
-                    
                 }
             }
             .navigationTitle("")
@@ -135,29 +126,14 @@ struct ProteinView: View {
             .toolbar {
                 // Button to open right panel
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    if horizontalSizeClass == .compact {
-                        Button(action: {
-                            toggleModalSidebar.toggle()
+                    Button(
+                        action: {
+                            showSidebar.toggle()
                         },
-                               label: {
-                            Image(systemName: "gearshape")
-                        })
-                    } else {
-                        Button(action: {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                showSidebar.toggle()
-                            }
-                        },
-                               label: {
-                            Image(systemName: "sidebar.trailing")
-                        })
-                            .onAppear {
-                                if toggleModalSidebar {
-                                    toggleModalSidebar = false
-                                    showSidebar = true
-                                }
-                            }
-                    }
+                        label: {
+                            Image(systemName: horizontalSizeClass == .compact ? "gearshape" : "sidebar.trailing")
+                        }
+                    )
                 }
                 
                 #if targetEnvironment(macCatalyst)
@@ -182,9 +158,10 @@ struct ProteinView: View {
                 #endif
             }
         }
-        .sheet(isPresented: $toggleModalSidebar, content: {
+        .inspector(isPresented: $showSidebar) {
             sidebar
-        })
+                .presentationDetents([.medium, .large])
+        }
         // Inform command menus of focus changes
         .focusedValue(\.proteinViewModel, proteinViewModel)
     }

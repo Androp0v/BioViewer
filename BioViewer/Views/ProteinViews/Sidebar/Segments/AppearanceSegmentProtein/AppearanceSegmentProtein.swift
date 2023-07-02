@@ -23,7 +23,6 @@ struct AppearanceSegmentProtein: View {
             // First section hast 64pt padding to account for the
             // space under the segmented control.
             Section(header: Text(NSLocalizedString("General", comment: ""))
-                        .padding(.top, 52)
                         .padding(.bottom, 4)
             ) {
 

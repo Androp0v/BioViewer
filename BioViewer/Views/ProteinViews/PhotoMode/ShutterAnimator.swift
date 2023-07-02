@@ -11,15 +11,15 @@ import SwiftUI
 
 @MainActor class ShutterAnimator: ObservableObject {
     
-    @Published var shutterAnimationRunning: Bool = false
-    @Published var showImage: Bool = true
-    @Published var showFirstShutterCurtain: Bool = true
-    @Published var showSecondShutterCurtain: Bool = false
+    var shutterAnimationRunning: Bool = false
+    var showImage: Bool = true
+    var showFirstShutterCurtain: Bool = true
+    var showSecondShutterCurtain: Bool = false
     
     weak var photoModeViewModel: PhotoModeViewModel?
         
     private var isShutterOpen: Bool = false
-    var player: AVAudioPlayer!
+    var player: AVAudioPlayer?
     
     // MARK: - Shutter feedback
     
@@ -43,7 +43,7 @@ import SwiftUI
             try? AVAudioSession.sharedInstance().setActive(true)
 
             self.player = try? AVAudioPlayer(contentsOf: soundURL, fileTypeHint: AVFileType.aiff.rawValue)
-            self.player.volume = 0.1
+            self.player?.volume = 0.1
             self.player?.prepareToPlay()
         }
         
@@ -56,7 +56,7 @@ import SwiftUI
             try? AVAudioSession.sharedInstance().setActive(true)
 
             self.player = try? AVAudioPlayer(contentsOf: soundURL, fileTypeHint: AVFileType.aiff.rawValue)
-            self.player.volume = 0.1
+            self.player?.volume = 0.1
             self.player?.prepareToPlay()
         }
         

@@ -23,23 +23,12 @@ struct FileSegmentProtein: View {
 
     var body: some View {
         List {
-            // First section hast 64pt padding to account for the
-            // space under the segmented control.
-            /*
-            Section(header: Text(NSLocalizedString("Workspace", comment: ""))
-                        .padding(.top, 52)
-                        .padding(.bottom, 4),
-                    content: {
-                        WorkspaceRow()
-            })
-            */
             
             // MARK: - Loaded files
             // First section hast 64pt padding to account for the
             // space under the segmented control.
             Section(
                 header: Text(NSLocalizedString("Loaded files", comment: ""))
-                        .padding(.top, 52)
                         .padding(.bottom, 4)
             ) {
                 if proteinDataSource.files.count == 0 {

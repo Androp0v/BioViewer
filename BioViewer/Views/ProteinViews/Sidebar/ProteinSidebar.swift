@@ -18,8 +18,11 @@ private struct SidebarItem: View {
     }
 }
 
-private struct ProteinSidebarContent: View {
+struct ProteinSidebar: View {
 
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.dismiss) var dismiss
+    
     @Binding var selectedSegment: Int
 
     var body: some View {
@@ -34,57 +37,68 @@ private struct ProteinSidebarContent: View {
             default:
                 Spacer()
             }
-            // Top segmented control to switch between options
-            VStack(spacing: 0) {
-                ZStack(alignment: .top) {
-                    Picker("Option", selection: $selectedSegment) {
-                        SidebarItem(image: "doc", tag: 0)
-                        SidebarItem(image: "camera.filters", tag: 1)
-                        SidebarItem(image: "wrench.and.screwdriver", tag: 2)
-                        /*
-                        SidebarItem(image: "function", tag: 2)
-                        if proteinViewModel.dataSource.files.first?.fileType == .dynamicStructure {
-                            SidebarItem(image: "video", tag: 3)
-                        }
-                        SidebarItem(image: "gearshape.2", tag: 3)
-                        */
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding(12)
-                }
-                .background(.thinMaterial)
-                Rectangle()
-                    .frame(height: 0.5)
-                    .foregroundColor(Color(UIColor.separator))
-                Spacer()
-            }
         }
         .background(Color(UIColor.secondarySystemBackground))
-    }
-}
-
-struct ProteinSidebar: View {
-
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.dismiss) var dismiss
-    @Binding var selectedSegment: Int
-
-    var body: some View {
-        if horizontalSizeClass == .compact {
-            NavigationView {
-                ProteinSidebarContent(selectedSegment: $selectedSegment)
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .navigationBarTitle(NSLocalizedString("Inspector", comment: ""))
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarItems(leading: Button(NSLocalizedString("Close", comment: "")) {
-                        dismiss()
-                    })
-            }
-        } else {
-            HStack(spacing: 0) {
+        .safeAreaInset(edge: .top) {
+            // Top segmented control to switch between options
+            VStack(spacing: .zero) {
+                header
+                    .background(.thinMaterial)
                 Divider()
-                ProteinSidebarContent(selectedSegment: $selectedSegment)
             }
+        }
+    }
+    
+    @ViewBuilder private var header: some View {
+        VStack(spacing: .zero) {
+            if horizontalSizeClass == .compact {
+                ZStack(alignment: .leading) {
+                    Button(
+                        action: {
+                            dismiss()
+                        },
+                        label: {
+                            closeImage
+                        }
+                    )
+                    .padding(.leading, 8)
+                    Text(NSLocalizedString("Inspector", comment: ""))
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .navigationBarHidden(true)
+                }
+                .padding(.top, 12)
+            }
+            Picker("Option", selection: $selectedSegment) {
+                SidebarItem(image: "doc", tag: 0)
+                SidebarItem(image: "camera.filters", tag: 1)
+                SidebarItem(image: "wrench.and.screwdriver", tag: 2)
+                /*
+                 SidebarItem(image: "function", tag: 2)
+                 if proteinViewModel.dataSource.files.first?.fileType == .dynamicStructure {
+                 SidebarItem(image: "video", tag: 3)
+                 }
+                 SidebarItem(image: "gearshape.2", tag: 3)
+                 */
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(12)
+        }
+    }
+    
+    @ViewBuilder private var closeImage: some View {
+        ZStack {
+            Group {
+                Image(systemName: "xmark.circle.fill")
+                    .resizable()
+                    .foregroundStyle(.regularMaterial)
+                Image(systemName: "xmark.circle.fill")
+                    .resizable()
+                    .foregroundStyle(Color(uiColor: .label))
+                    .opacity(0.3)
+            }
+            .padding(4)
+            .frame(width: 36, height: 36)
         }
     }
 }

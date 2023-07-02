@@ -74,7 +74,6 @@ struct GraphicsSettingsSegment: View {
                 },
                 header: {
                     Text(NSLocalizedString("Graphics settings", comment: ""))
-                        .padding(.top, 52)
                         .padding(.bottom, 4)
                 }
             )
