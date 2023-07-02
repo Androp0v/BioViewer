@@ -17,9 +17,9 @@ struct PhotoModeFooter: View {
         VStack(spacing: 0) {
             Divider()
             Button(action: {
-                photoModeViewModel.shutterAnimator.openShutter()
                 // TODO: Error handling
                 Task {
+                    await photoModeViewModel.shutterAnimator.openShutter()
                     try? await proteinViewModel.renderer.mutableState.drawHighQualityFrame(
                         renderer: proteinViewModel.renderer,
                         size: CGSize(width: 2048, height: 2048),

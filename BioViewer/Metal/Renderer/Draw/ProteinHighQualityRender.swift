@@ -135,15 +135,13 @@ extension MutableState {
         commandBuffer.addCompletedHandler({ _ in
             // GPU work is complete, signal the semaphore to start the CPU work
             renderer.frameBoundarySemaphore.signal()
-            // Display the image
-            Task { @MainActor in
-                photoModeViewModel.shutterAnimator.closeShutter()
-            }
+
             let hqImage = hqTextures.hqTexture.getCGImage(
                 clearBackground: photoConfig.clearBackground,
                 depthTexture: hqTextures.hqDepthTexture
             )
             Task { @MainActor in
+                await photoModeViewModel.shutterAnimator.closeShutter()
                 withAnimation {
                     photoModeViewModel.image = hqImage
                     photoModeViewModel.isPreviewCreated = true
@@ -155,10 +153,8 @@ extension MutableState {
         // MARK: - Commit buffer
         // Commit command buffer when the shutter is open (so no animations appear onscreen)
         Task { @MainActor in
-            _ = photoModeViewModel.shutterAnimator.shutterOpenSemaphore.wait(timeout: .distantFuture)
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
-            photoModeViewModel.shutterAnimator.shutterOpenSemaphore.signal()
         }
     }
 }
