@@ -25,6 +25,8 @@ struct ProteinSidebar: View {
     
     @Binding var selectedSegment: Int
 
+    // MARK: - View body
+    
     var body: some View {
         ZStack(alignment: .top) {
             switch selectedSegment {
@@ -48,6 +50,8 @@ struct ProteinSidebar: View {
             }
         }
     }
+    
+    // MARK: - Header
     
     @ViewBuilder private var header: some View {
         VStack(spacing: .zero) {
@@ -85,6 +89,8 @@ struct ProteinSidebar: View {
             .padding(12)
         }
     }
+    
+    // MARK: - Close button
     
     @ViewBuilder private var closeImage: some View {
         ZStack {

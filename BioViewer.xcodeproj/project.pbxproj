@@ -25,7 +25,6 @@
 		C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085662647ECE500DC5009 /* ProteinSidebar.swift */; };
 		C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085692648008500DC5009 /* FileSegmentProtein.swift */; };
 		C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440856B26481E0300DC5009 /* ProteinSequenceView.swift */; };
-		C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440856E2648200500DC5009 /* VisualEffectView.swift */; };
 		C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44D0558266BAA6E00BAFDCD /* AppState.swift */; };
 		C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */ = {isa = PBXBuildFile; fileRef = C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */; };
 		C44FC0722641AF1B00459E01 /* BioViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FC0712641AF1B00459E01 /* BioViewerApp.swift */; };
@@ -268,7 +267,6 @@
 		C44085662647ECE500DC5009 /* ProteinSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSidebar.swift; sourceTree = "<group>"; };
 		C44085692648008500DC5009 /* FileSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSegmentProtein.swift; sourceTree = "<group>"; };
 		C440856B26481E0300DC5009 /* ProteinSequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProteinSequenceView.swift; path = BioViewer/Views/ProteinViews/ProteinSequenceView.swift; sourceTree = SOURCE_ROOT; };
-		C440856E2648200500DC5009 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		C44D0558266BAA6E00BAFDCD /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		C44D055A266BB77600BAFDCD /* CreateAtomMesh.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateAtomMesh.metal; sourceTree = "<group>"; };
 		C44FC06E2641AF1B00459E01 /* BioViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BioViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -664,7 +662,6 @@
 				C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */,
 				C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */,
 				C5433F3F2770FA9200607B20 /* LineGraphView.swift */,
-				C440856E2648200500DC5009 /* VisualEffectView.swift */,
 				C464C356265A569800E66C3E /* CoffeeViews */,
 				C5412FED283AB63600234403 /* Debug Views */,
 			);
@@ -1614,7 +1611,6 @@
 				C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */,
 				C55384272972DE79007E45E1 /* CartoonLoop.swift in Sources */,
 				C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */,
-				C440856F2648200500DC5009 /* VisualEffectView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C5C7514B27DC35BF004CEE8E /* InfoSegmentedCapsule.swift in Sources */,
 				C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */,

@@ -10,6 +10,7 @@ import SwiftUI
 struct ProteinSequenceView: View {
     var body: some View {
         ZStack {
+            /*
             VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
             ScrollView(.horizontal) {
                 HStack {
@@ -33,6 +34,7 @@ struct ProteinSequenceView: View {
                         .foregroundColor(.white)
                 }
             }
+             */
         }
         .frame(height: 36)
         .cornerRadius(8)

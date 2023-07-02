@@ -19,12 +19,27 @@ struct ProteinView: View {
     @StateObject var toolbarConfig = ToolbarConfig()
     
     // Sidebar
+    @State private var showModalInspector: Bool = false
     @State private var showSidebar = UserDefaults.standard.bool(forKey: "showSidebar") {
         didSet {
             UserDefaults.standard.set(showSidebar, forKey: "showSidebar")
         }
     }
-    @State private var toggleModalSidebar = false
+    private var showInspector: Binding<Bool> {
+        Binding(
+            get: {
+                if horizontalSizeClass == .compact {
+                    return showModalInspector
+                } else {
+                    return showSidebar
+                }
+            },
+            set: { newValue in
+                showModalInspector = newValue
+                showSidebar = newValue
+            }
+        )
+    }
     @State private var selectedSidebarSegment = 0
 
     // Sequence view
@@ -128,7 +143,7 @@ struct ProteinView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(
                         action: {
-                            showSidebar.toggle()
+                            showInspector.wrappedValue = !showInspector.wrappedValue
                         },
                         label: {
                             Image(systemName: horizontalSizeClass == .compact ? "gearshape" : "sidebar.trailing")
@@ -158,7 +173,7 @@ struct ProteinView: View {
                 #endif
             }
         }
-        .inspector(isPresented: $showSidebar) {
+        .inspector(isPresented: $showModalInspector) {
             sidebar
                 .presentationDetents([.medium, .large])
         }
