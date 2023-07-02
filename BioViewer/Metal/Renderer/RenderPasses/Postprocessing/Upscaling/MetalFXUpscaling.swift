@@ -19,6 +19,7 @@ extension MutableState {
         outputTexture: MTLTexture,
         reprojectionData: ReprojectionData?
     ) {
+        #if canImport(MetalFX)
         switch renderTarget.metalFXUpscalingMode {
             
         case .temporal:
@@ -99,5 +100,6 @@ extension MutableState {
             )
             return
         }
+        #endif
     }
 }

@@ -7,7 +7,9 @@
 
 import Foundation
 @preconcurrency import MetalKit
+#if canImport(MetalFX)
 import MetalFX
+#endif
 import SwiftUI
 
 class ProteinRenderer: NSObject {

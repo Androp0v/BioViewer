@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 22/1/23.
 //
 
+import Charts
 import Foundation
 import SwiftUI
 

@@ -6,13 +6,16 @@
 //
 
 import Foundation
+#if canImport(MetalFX)
 import MetalFX
+#endif
 import MetalKit
 
 extension MutableState {
     
     /// Creates the MetalFX spatial scaler.
     func makeSpatialScaler(inputSize: MTLSize, outputSize: MTLSize) {
+        #if canImport(MetalFX)
         let descriptor = MTLFXSpatialScalerDescriptor()
         descriptor.inputWidth = inputSize.width
         descriptor.inputHeight = inputSize.height
@@ -27,10 +30,14 @@ extension MutableState {
             return
         }
         metalFXSpatialScaler = spatialScaler
+        #else
+        print("Can't import MetalFX!")
+        #endif
     }
     
     /// Creates the MetalFX spatial scaler.
     func makeTemporalScaler(inputSize: MTLSize, outputSize: MTLSize) {
+        #if canImport(MetalFX)
         let descriptor = MTLFXTemporalScalerDescriptor()
         descriptor.inputWidth = inputSize.width
         descriptor.inputHeight = inputSize.height
@@ -49,5 +56,8 @@ extension MutableState {
         temporalScaler.motionVectorScaleX = Float(inputSize.width)
         temporalScaler.motionVectorScaleY = Float(inputSize.height)
         metalFXTemporalScaler = temporalScaler
+        #else
+        print("Can't import MetalFX!")
+        #endif
     }
 }

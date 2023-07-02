@@ -7,7 +7,9 @@
 
 import Foundation
 import MetalKit
+#if canImport(MetalFX)
 import MetalFX
+#endif
 import SwiftUI
 
 /// Actor holding the `ProteinRenderer`'s protected mutable case, which must not be modified between
@@ -76,10 +78,12 @@ actor MutableState {
     
     // MARK: - Upscaling
     
+    #if canImport(MetalFX)
     /// Metal FX Upscaler based solely on spatial data.
     var metalFXSpatialScaler: MTLFXSpatialScaler?
     /// Metal FX Upscaler based on spatial and temporal data.
     var metalFXTemporalScaler: MTLFXTemporalScaler?
+    #endif
     
     // MARK: - Init
     

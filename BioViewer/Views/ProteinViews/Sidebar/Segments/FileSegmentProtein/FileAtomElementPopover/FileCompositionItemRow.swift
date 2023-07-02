@@ -38,7 +38,6 @@ struct FileCompositionItemRow: View {
             Text(getPercentageString())
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .padding(.horizontal)
     }
 }
 

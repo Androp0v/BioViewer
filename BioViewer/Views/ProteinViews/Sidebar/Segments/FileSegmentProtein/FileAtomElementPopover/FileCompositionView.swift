@@ -29,45 +29,71 @@ struct FileCompositionView: View {
     @State private var elementComposition = ProteinElementComposition()
     @State private var residueComposition = ProteinResidueComposition()
     
+    @State private var selectedSegment: CompositionItem?
+    
     private enum AnimationConstants {
         static let duration: Double = 0.8
     }
         
     var body: some View {
-        VStack(spacing: .zero) {
-            
-            HStack(spacing: 8) {
-                Spacer()
-                Text(NSLocalizedString("Atoms of each", comment: ""))
-                BioViewerPicker(selection: $compositionOption)
-                Spacer()
-            }
-            .padding(.top)
-            
-            FileCompositionCircleView(items: compositionSections)
-                .frame(width: 192, height: 192)
+        ScrollView {
+            VStack(spacing: .zero) {
+                HStack(spacing: 8) {
+                    Spacer()
+                    Text(NSLocalizedString("Atoms of each", comment: ""))
+                    BioViewerPicker(selection: $compositionOption)
+                    Spacer()
+                }
+                .padding(.top)
+                
+                FileCompositionChartView(
+                    segments: compositionSections.flatMap { $0 },
+                    selectedSegment: $selectedSegment
+                )
+                .frame(width: 256, height: 256)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 36)
                 .onAppear {
                     computeFractions()
                 }
-                .onChange(of: compositionOption) { _ in
+                .onChange(of: compositionOption) {
                     withAnimation {
+                        selectedSegment = nil
                         computeFractions()
                     }
                 }
-            
-            Divider()
-            ScrollView {
-                VStack {
+                
+                Divider()
+                VStack(spacing: .zero) {
                     ForEach(compositionSections.indices, id: \.self) { sectionIndex in
                         ForEach(compositionSections[sectionIndex], id: \.self) { item in
-                            FileCompositionItemRow(
-                                itemName: item.name,
-                                itemColor: item.color,
-                                itemCount: item.count,
-                                fraction: item.fraction
+                            Button(
+                                action: {
+                                    withAnimation {
+                                        selectedSegment = item
+                                    }
+                                },
+                                label: {
+                                    FileCompositionItemRow(
+                                        itemName: item.name,
+                                        itemColor: item.color,
+                                        itemCount: item.count,
+                                        fraction: item.fraction
+                                    )
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 12)
+                                    .background(
+                                        item == selectedSegment
+                                        ? Color.accentColor.opacity(0.3)
+                                        : Color.clear
+                                    )
+                                    .contentShape(Rectangle())
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    .padding(.horizontal, 8)
+                                }
                             )
+                            .buttonStyle(.plain)
+                            .disabled(item.count == 0)
                         }
                         if sectionIndex != compositionSections.indices.last {
                             Divider()
@@ -76,14 +102,33 @@ struct FileCompositionView: View {
                     }
                 }
                 .padding(.vertical, 8)
+                
+                Divider()
+                FileAtomTotalsRow()
+                    .padding(.vertical, 8)
             }
-            .frame(maxHeight: 400)
-            
-            Divider()
-            FileAtomTotalsRow()
-                .padding(.vertical, 8)
+            .frame(idealWidth: 450)
         }
-        .frame(idealWidth: 450)
+        .safeAreaInset(edge: .bottom) {
+            if selectedSegment != nil {
+                VStack(spacing: .zero) {
+                    Divider()
+                    Button(
+                        action: {
+                            withAnimation {
+                                selectedSegment = nil
+                            }
+                        }, label: {
+                            Label("Remove selection", systemImage: "xmark")
+                                .padding(8)
+                        }
+                    )
+                    .buttonStyle(.borderedProminent)
+                    .padding(8)
+                }
+                .background(.regularMaterial)
+            }
+        }
     }
     
     // MARK: - Fractions
