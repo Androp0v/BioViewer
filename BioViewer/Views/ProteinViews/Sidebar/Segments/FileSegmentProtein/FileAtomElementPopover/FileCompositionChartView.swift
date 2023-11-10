@@ -29,17 +29,22 @@ struct FileCompositionChartView: View {
         .chartAngleSelection(value: $selectedValue)
         .onChange(of: selectedValue) { _, newValue in
             if let newValue {
-                setSelectedSegment(from: newValue)
+                withAnimation {
+                    setSelectedSegment(from: newValue)
+                }
             }
         }
     }
     
-    private func setSelectedSegment(from value: Int) {
+    @MainActor private func setSelectedSegment(from value: Int) {
         var currentCount: Int = 0
         for segment in segments {
             let startValue = currentCount
             let endValue = currentCount + segment.count
             if startValue <= value && endValue >= value {
+                let hapticFeedback = UIImpactFeedbackGenerator(style: .light)
+                hapticFeedback.prepare()
+                hapticFeedback.impactOccurred()
                 selectedSegment = segment
                 return
             }

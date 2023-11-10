@@ -19,26 +19,10 @@ struct ProteinView: View {
     @StateObject var toolbarConfig = ToolbarConfig()
     
     // Sidebar
-    @State private var showModalInspector: Bool = false
-    @State private var showSidebar = UserDefaults.standard.bool(forKey: "showSidebar") {
+    @State private var showInspector: Bool = UserDefaults.standard.bool(forKey: "showInspector") {
         didSet {
-            UserDefaults.standard.set(showSidebar, forKey: "showSidebar")
+            UserDefaults.standard.set(showInspector, forKey: "showInspector")
         }
-    }
-    private var showInspector: Binding<Bool> {
-        Binding(
-            get: {
-                if horizontalSizeClass == .compact {
-                    return showModalInspector
-                } else {
-                    return showSidebar
-                }
-            },
-            set: { newValue in
-                showModalInspector = newValue
-                showSidebar = newValue
-            }
-        )
     }
     @State private var selectedSidebarSegment = 0
 
@@ -143,7 +127,7 @@ struct ProteinView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(
                         action: {
-                            showInspector.wrappedValue = !showInspector.wrappedValue
+                            showInspector.toggle()
                         },
                         label: {
                             Image(systemName: horizontalSizeClass == .compact ? "gearshape" : "sidebar.trailing")
@@ -173,9 +157,14 @@ struct ProteinView: View {
                 #endif
             }
         }
-        .inspector(isPresented: $showModalInspector) {
+        .inspector(isPresented: $showInspector) {
             sidebar
                 .presentationDetents([.medium, .large])
+                #if targetEnvironment(macCatalyst)
+                .inspectorColumnWidth(min: 200, ideal: 300, max: 400)
+                #else
+                .inspectorColumnWidth(min: 300, ideal: 400)
+                #endif
         }
         // Inform command menus of focus changes
         .focusedValue(\.proteinViewModel, proteinViewModel)

@@ -37,7 +37,7 @@ struct MainView: View {
 
     var body: some View {
         
-        NavigationView {
+        NavigationStack {
             ProteinView()
                 .environmentObject(proteinViewModel)
                 .environmentObject(proteinDataSource)

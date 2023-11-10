@@ -262,7 +262,7 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
                                                             sphereShadowClipPosition.z);
             }
             // Add the shadow to the shadedColor by subtracting color
-            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / 16);
+            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / (sample_count + 16));
         } else {
             // Add the shadow to the shadedColor by subtracting color
             shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
