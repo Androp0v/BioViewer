@@ -52,7 +52,7 @@ import SwiftUI
 
     func removeAllFiles() async {
         await self.dataSource?.removeAllFilesFromDatasource()
-        self.statusViewModel?.removeAllWarnings()
-        self.statusViewModel?.removeAllErrors()
+        // FIXME: Status changes, self.statusViewModel?.removeAllWarnings()
+        // FIXME: Status changes, self.statusViewModel?.removeAllErrors()
     }
 }

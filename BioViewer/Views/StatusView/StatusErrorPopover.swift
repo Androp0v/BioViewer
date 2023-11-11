@@ -15,11 +15,14 @@ struct StatusErrorPopover: View {
         ZStack {
             Color.red
                 .opacity(0.8)
+            // FIXME: Status changes
+            /*
             Text(statusViewModel.statusError ?? "")
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 18)
+             */
         }
         .edgesIgnoringSafeArea(.all)
     }

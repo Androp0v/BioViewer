@@ -137,10 +137,12 @@ struct BioBenchView: View {
                 sourceLines: nil
             )
             await proteinDataSource.removeAllFilesFromDatasource()
+            let statusAction = StatusAction(type: .importFile)
             try? await FileImporter.importFileFromRawText(
                 rawText: rawText,
                 proteinDataSource: proteinDataSource,
-                statusViewModel: statusViewModel,
+                statusViewModel: statusViewModel, 
+                statusAction: statusAction,
                 fileInfo: fileInfo,
                 fileName: pdbID,
                 fileExtension: "pdb",

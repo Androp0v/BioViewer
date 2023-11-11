@@ -37,17 +37,20 @@ class VisualizationBufferLoader {
                 }
                 if protein.bonds == nil {
                     // Update Status View
-                    proteinViewModel.statusViewModel?.statusUpdate(
-                        statusText: NSLocalizedString("Generating geometry", comment: "")
+                    let connectivityStatusAction = StatusAction(
+                        type: .geometryGeneration,
+                        description: NSLocalizedString("Generating geometry", comment: "")
                     )
+                    proteinViewModel.statusViewModel?.showStatusForAction(connectivityStatusAction)
                     // Compute links
                     await ConnectivityGenerator().computeConnectivity(
                         protein: protein,
                         dataSource: dataSource,
-                        statusViewModel: proteinViewModel.statusViewModel
+                        statusViewModel: proteinViewModel.statusViewModel,
+                        statusAction: connectivityStatusAction
                     )
                     // Finished computing links, update status
-                    proteinViewModel.statusViewModel?.statusFinished(action: .geometryGeneration)
+                    proteinViewModel.statusViewModel?.signalActionFinished(connectivityStatusAction, withError: nil)
                 }
             }
             await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)

@@ -18,6 +18,8 @@ struct StatusWarningPopover: View {
         
         var body: some View {
             VStack(spacing: 0) {
+                // FIXME: Status changes
+                /*
                 if statusViewModel.statusWarning.count == AppState.maxNumberOfWarnings {
                     Text(NSLocalizedString(
                         "Too many warnings found. Showing only the first \(AppState.maxNumberOfWarnings).", comment: "")
@@ -38,6 +40,7 @@ struct StatusWarningPopover: View {
                 }
                 Spacer()
                     .frame(height: 4)
+                 */
             }
             .frame(minWidth: 300, minHeight: 600)
             .background(.thinMaterial)

@@ -21,10 +21,14 @@ class ImportDroppedFilesDelegate: DropDelegate {
     // MARK: - Handle drag & drop events
 
     func performDrop(info: DropInfo) -> Bool {
+        
+        let statusAction = StatusAction(type: .importFile, description: "Importing file")
+        self.proteinViewModel?.statusViewModel?.showStatusForAction(statusAction)
 
-        guard let itemProvider = info.itemProviders(for: [.data,
-                                                          .item]).first else {
-            self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownFileType)
+        guard let itemProvider = info.itemProviders(
+            for: [.data, .item]
+        ).first else {
+            self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
             NSLog("No itemProvider available for the given type.")
             return false
         }
@@ -43,7 +47,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
         
         // Ensure that a type has been found at all
         guard let typeIdentifier = typeIdentifier else {
-            self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownFileType)
+            self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
             NSLog("Item provider has no associated type identifier.")
             return false
         }
@@ -51,7 +55,9 @@ class ImportDroppedFilesDelegate: DropDelegate {
         itemProvider.loadDataRepresentation(forTypeIdentifier: typeIdentifier) { data, error in
 
             guard let data = data else {
-                self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownError)
+                Task { @MainActor in
+                    self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownError)
+                }
                 return
             }
             
@@ -74,7 +80,9 @@ class ImportDroppedFilesDelegate: DropDelegate {
             
             // Check that either the suggestedName or the itemProvider type have a valid path extension
             guard let fileExtension = fileExtension else {
-                self.proteinViewModel?.statusViewModel?.statusFinished(importError: ImportError.unknownFileExtension)
+                Task { @MainActor in
+                    self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileExtension)
+                }
                 return
             }
 
@@ -92,6 +100,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
                     rawText: rawFileText,
                     proteinDataSource: dataSource,
                     statusViewModel: statusViewModel,
+                    statusAction: statusAction,
                     fileInfo: nil,
                     fileName: filename,
                     fileExtension: fileExtension,

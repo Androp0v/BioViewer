@@ -39,6 +39,7 @@ extension FileParser {
         byteSize: Int?,
         rawText: String,
         statusViewModel: StatusViewModel,
+        statusAction: StatusAction,
         originalFileInfo: ProteinFileInfo? = nil
     ) throws -> ProteinFile {
         
@@ -73,15 +74,15 @@ extension FileParser {
            }
         }
         
-        var progress: Float {
-            return Float(currentLine) / Float(totalLineCount)
+        var progress: Double {
+            return Double(currentLine) / Double(totalLineCount)
         }
 
         rawText.enumerateLines(invoking: { line, _ in
             
             currentLine += 1
             Task {
-                await statusViewModel.statusProgress(progress: progress)
+                await statusViewModel.updateProgress(statusAction, progress: progress)
             }
             
             let lineElements = line.components(separatedBy: .whitespaces).filter({ !$0.isEmpty })

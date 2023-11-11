@@ -16,6 +16,7 @@ struct ProteinView: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var proteinDataSource: ProteinDataSource
     @EnvironmentObject var colorViewModel: ProteinColorViewModel
+    @EnvironmentObject var statusViewModel: StatusViewModel
     @StateObject var toolbarConfig = ToolbarConfig()
     
     // Sidebar
@@ -51,110 +52,95 @@ struct ProteinView: View {
     var body: some View {
         
         let sidebar = ProteinSidebar(selectedSegment: $selectedSidebarSegment)
-        GeometryReader { geometryProxy in
-            VStack(spacing: 0) {
-                // Separator
-                Rectangle()
-                    .frame(height: 0.5)
-                    .foregroundColor(Color(UIColor.opaqueSeparator))
-                // Main view here (including sidebar)
-                HStack(spacing: 0) {
-                    // Main scene container
-                    ZStack {
-                        
-                        // Main scene view
-                        ProteinMetalView(proteinViewModel: proteinViewModel)
-                            .background(.black)
-                            .edgesIgnoringSafeArea([.top, .bottom])
-                        
-                        #if DEBUG
-                        HStack {
-                            VStack(spacing: .zero) {
-                                Spacer()
-                                ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
-                                FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
-                                    .padding()
-                            }
+        VStack(spacing: 0) {
+            // Separator
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(Color(UIColor.opaqueSeparator))
+            // Main view here (including sidebar)
+            HStack(spacing: 0) {
+                // Main scene container
+                ZStack {
+                    
+                    // Main scene view
+                    ProteinMetalView(proteinViewModel: proteinViewModel)
+                        .background(.black)
+                        .edgesIgnoringSafeArea([.top, .bottom])
+                    
+                    // Status changes
+                    StatusOverlayView()
+                    
+                    #if DEBUG
+                    HStack {
+                        Spacer()
+                        VStack(spacing: .zero) {
                             Spacer()
-                        }
-                        #endif
-                        
-                        // Top toolbar
-                        VStack {
-                            if UserDefaults.standard.value(forKey: "showToolbar") == nil {
-                                TopToolbar(displayToolbar: horizontalSizeClass != .compact)
-                            } else {
-                                TopToolbar(displayToolbar: UserDefaults.standard.bool(forKey: "showToolbar"))
-                            }
-                            Spacer()
-                        }
-                        .environmentObject(toolbarConfig)
-                        .onAppear {
-                            proteinViewModel.toolbarConfig = toolbarConfig
-                            toolbarConfig.proteinViewModel = proteinViewModel
-                        }
-                        
-                        // Scene controls
-                        VStack(spacing: 12) {
-                            Spacer()
-                            if proteinDataSource.files.first?.fileType == .dynamicStructure {
-                                DynamicStructureControlView()
-                                    .environmentObject(proteinViewModel)
-                            }
-                            /*
-                             if toggleSequenceView {
-                             ProteinSequenceView()
-                             .padding(.horizontal, 12)
-                             .frame(minWidth: 32, maxWidth: sequenceViewMaxWidth)
-                             }
-                             */
-                        }
-                        .padding(.bottom, 12)
-                        
-                        // Import view
-                        if proteinDataSource.proteinCount == 0 {
-                            ProteinImportView()
-                                .edgesIgnoringSafeArea(.bottom)
+                            ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
+                            FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
+                                .padding()
                         }
                     }
-                    .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
-                }
-            }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                // Button to open right panel
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(
-                        action: {
-                            showInspector.toggle()
-                        },
-                        label: {
-                            Image(systemName: horizontalSizeClass == .compact ? "gearshape" : "sidebar.trailing")
+                    #endif
+                    
+                    // Top toolbar
+                    VStack {
+                        if UserDefaults.standard.value(forKey: "showToolbar") == nil {
+                            TopToolbar(displayToolbar: horizontalSizeClass != .compact)
+                        } else {
+                            TopToolbar(displayToolbar: UserDefaults.standard.bool(forKey: "showToolbar"))
                         }
-                    )
+                        Spacer()
+                    }
+                    .environmentObject(toolbarConfig)
+                    .onAppear {
+                        proteinViewModel.toolbarConfig = toolbarConfig
+                        toolbarConfig.proteinViewModel = proteinViewModel
+                    }
+                    
+                    // Scene controls
+                    VStack(spacing: 12) {
+                        Spacer()
+                        if proteinDataSource.files.first?.fileType == .dynamicStructure {
+                            DynamicStructureControlView()
+                                .environmentObject(proteinViewModel)
+                        }
+                        /*
+                         if toggleSequenceView {
+                         ProteinSequenceView()
+                         .padding(.horizontal, 12)
+                         .frame(minWidth: 32, maxWidth: sequenceViewMaxWidth)
+                         }
+                         */
+                    }
+                    .padding(.bottom, 12)
+                    
+                    // Import view
+                    if proteinDataSource.proteinCount == 0 && !statusViewModel.isImportingFile {
+                        ProteinImportView()
+                            .edgesIgnoringSafeArea(.bottom)
+                    }
                 }
-                
-                #if targetEnvironment(macCatalyst)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    // Status bar component
-                    StatusView()
-                    .frame(
-                        minWidth: 96,
-                        idealWidth: geometryProxy.size.width * 0.6,
-                        maxWidth: geometryProxy.size.width * 0.6,
-                        minHeight: StatusViewConstants.height,
-                        idealHeight: StatusViewConstants.height,
-                        maxHeight: StatusViewConstants.height,
-                        alignment: .center
-                    )
-                }
-                #else
-                ToolbarItem(placement: .principal) {
-                    // Status bar component
-                    StatusView()
-                }
-                #endif
+                .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
+            }
+        }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            // Button to open right panel
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(
+                    action: {
+                        showInspector.toggle()
+                    },
+                    label: {
+                        Image(systemName: horizontalSizeClass == .compact ? "gearshape" : "sidebar.trailing")
+                    }
+                )
+            }
+            
+            ToolbarItem(placement: .navigationBarLeading) {
+                // Status bar component
+                StatusView()
             }
         }
         .inspector(isPresented: $showInspector) {

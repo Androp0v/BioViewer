@@ -16,15 +16,15 @@ struct ProteinConnectivity {
 
 class ConnectivityGenerator {
         
-    func computeConnectivity(protein: Protein, dataSource: ProteinDataSource, statusViewModel: StatusViewModel?) async {
+    func computeConnectivity(protein: Protein, dataSource: ProteinDataSource, statusViewModel: StatusViewModel?, statusAction: StatusAction) async {
         
         var computedBonds = [BondStruct]()
         var computedBondCounts = [Int]()
         var computedBondConfigurationStarts = [Int]()
         
         var computedInteractions = 0
-        var progress: Float {
-            return Float(computedInteractions) / Float( pow(Float(protein.atomCount * protein.configurationCount), 2) / 2 )
+        var progress: Double {
+            return Double(computedInteractions) / Double( pow(Float(protein.atomCount * protein.configurationCount), 2) / 2 )
         }
                 
         for configurationIndex in 0..<protein.configurationCount {
@@ -44,7 +44,7 @@ class ConnectivityGenerator {
                 if Task.isCancelled { return }
                 
                 // Update progress
-                await statusViewModel?.statusProgress(progress: progress)
+                await statusViewModel?.updateProgress(statusAction, progress: progress)
                 
                 // Compute a new matrix row
                 for indexB in configurationStartIndex..<indexA {

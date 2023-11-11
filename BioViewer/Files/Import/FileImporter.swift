@@ -16,19 +16,24 @@ class FileImporter {
         fileInfo: ProteinFileInfo?
     ) async throws {
         
+        var importStatusAction = StatusAction(
+            type: .importFile,
+            description: NSLocalizedString("Importing file", comment: ""),
+            progress: nil
+        )
+        await statusViewModel.showStatusForAction(importStatusAction)
+        
         guard let proteinData = try? Data(contentsOf: fileURL) else {
-            await statusViewModel.statusFinished(importError: ImportError.unknownError)
+            await statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.unknownError)
             throw ImportError.unknownError
         }
-        
-        await statusViewModel.statusUpdate(statusText: NSLocalizedString("Importing file", comment: ""))
         
         let rawText = String(decoding: proteinData, as: UTF8.self)
         let fileName = fileURL.deletingPathExtension().lastPathComponent
         let fileExtension = fileURL.pathExtension
         
         guard !fileExtension.isEmpty else {
-            await statusViewModel.statusFinished(importError: ImportError.unknownError)
+            await statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.unknownError)
             throw ImportError.unknownFileExtension
         }
         
@@ -38,6 +43,7 @@ class FileImporter {
             rawText: rawText,
             proteinDataSource: proteinDataSource,
             statusViewModel: statusViewModel,
+            statusAction: importStatusAction,
             fileInfo: fileInfo,
             fileName: fileName,
             fileExtension: fileExtension,
@@ -49,6 +55,7 @@ class FileImporter {
         rawText: String,
         proteinDataSource: ProteinDataSource,
         statusViewModel: StatusViewModel,
+        statusAction: StatusAction,
         fileInfo: ProteinFileInfo?,
         fileName: String,
         fileExtension: String,
@@ -61,16 +68,17 @@ class FileImporter {
                 fileExtension: fileExtension,
                 byteSize: byteSize,
                 fileInfo: fileInfo,
-                statusViewModel: statusViewModel
+                statusViewModel: statusViewModel,
+                statusAction: statusAction
             )
             await proteinDataSource.addProteinFileToDataSource(proteinFile: proteinFile)
             // File import finished
-            await statusViewModel.statusFinished(action: StatusAction.importFile)
+            await statusViewModel.signalActionFinished(statusAction, withError: nil)
         } catch let error as ImportError {
-            await statusViewModel.statusFinished(importError: error)
+            await statusViewModel.signalActionFinished(statusAction, withError: error)
             throw error
         } catch {
-            await statusViewModel.statusFinished(importError: ImportError.unknownError)
+            await statusViewModel.signalActionFinished(statusAction, withError: error)
             throw error
         }
     }

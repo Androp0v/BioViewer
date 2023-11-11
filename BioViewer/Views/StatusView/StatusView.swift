@@ -31,7 +31,7 @@ struct StatusView: View {
 
     var body: some View {
         ZStack {
-            Color(UIColor.secondarySystemBackground)
+            /*
             HStack(spacing: 0) {
                 if !(statusViewModel.statusWarning.isEmpty) || !(statusViewModel.statusError ?? "").isEmpty {
                     Group {
@@ -80,15 +80,12 @@ struct StatusView: View {
                     ProgressView()
                         .padding(.leading, 8)
                         .progressViewStyle(CircularProgressViewStyle())
-                        #if targetEnvironment(macCatalyst)
-                        // Spinner is weirdly big on Catalyst (Monterey)
-                        .scaleEffect(x: 0.4, y: 0.4)
-                        #endif
                 }
-                Text("\(statusViewModel.statusText)")
-                    .padding(.leading, StatusViewConstants.statusTextSpinnerPadding + 8)
-                    .padding(.trailing, 8)
-                    .frame(maxWidth: .infinity)
+                if let statusText = statusViewModel.statusText {
+                    Text(statusText)
+                        .padding(.leading, StatusViewConstants.statusTextSpinnerPadding + 8)
+                        .padding(.trailing, 8)
+                }
             }
             if statusViewModel.statusRunning {
                 VStack(spacing: 0) {
@@ -96,6 +93,7 @@ struct StatusView: View {
                     CustomLinearProgressView(value: statusViewModel.progress, total: 1.0)
                 }
             }
+             */
         }
         .frame(maxWidth: 600)
         .frame(height: StatusViewConstants.height)

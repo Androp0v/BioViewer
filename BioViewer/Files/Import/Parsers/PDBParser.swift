@@ -264,6 +264,8 @@ class PDBParser {
         fileExtension: String,
         byteSize: Int?,
         rawText: String,
+        statusViewModel: StatusViewModel,
+        statusAction: StatusAction,
         originalFileInfo: ProteinFileInfo? = nil
     ) async throws -> ProteinFile {
         
@@ -273,7 +275,7 @@ class PDBParser {
         
         var finalProteins = [Protein]()
         var finalProteinInfo = originalFileInfo ?? ProteinFileInfo()
-
+        
         // Create a TaskGroup so the file can be parsed simultaneously using multiple threads.
         await withTaskGroup(of: ParsedBlock.self) { taskGroup in
             // Lines to parse are batched into blocks to avoid creating too many tasks with
