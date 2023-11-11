@@ -11,15 +11,37 @@ import SwiftUI
 
 @MainActor class ShutterAnimator: ObservableObject {
     
-    var shutterAnimationRunning: Bool = false
-    var showImage: Bool = true
-    var showFirstShutterCurtain: Bool = true
-    var showSecondShutterCurtain: Bool = false
+    @Published var shutterAnimationRunning: Bool = false
+    @Published var showImage: Bool = true
+    @Published var showFirstShutterCurtain: Bool = true
+    @Published var showSecondShutterCurtain: Bool = false
     
     weak var photoModeViewModel: PhotoModeViewModel?
         
     private var isShutterOpen: Bool = false
-    var player: AVAudioPlayer?
+    var shutterOpenPlayer: AVAudioPlayer?
+    var shutterClosedPlayer: AVAudioPlayer?
+    
+    // MARK: - Init
+    init() {
+        Task{ @MainActor [weak self] in
+            guard let self else { return }
+            if let soundURL = Bundle.main.url(forResource: "ShutterOpen", withExtension: "aiff") {
+                self.shutterOpenPlayer = try? AVAudioPlayer(
+                    contentsOf: soundURL,
+                    fileTypeHint: AVFileType.aiff.rawValue
+                )
+                self.shutterOpenPlayer?.volume = 0.1
+            }
+            if let soundURL = Bundle.main.url(forResource: "ShutterClosed", withExtension: "aiff") {
+                self.shutterClosedPlayer = try? AVAudioPlayer(
+                    contentsOf: soundURL,
+                    fileTypeHint: AVFileType.aiff.rawValue
+                )
+                self.shutterClosedPlayer?.volume = 0.1
+            }
+        }
+    }
     
     // MARK: - Shutter feedback
     
@@ -38,39 +60,24 @@ import SwiftUI
     
     // MARK: - Shutter sound
     func playShutterOpenSound() {
-        if let soundURL = Bundle.main.url(forResource: "ShutterOpen", withExtension: "aiff") {
-            try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
-            try? AVAudioSession.sharedInstance().setActive(true)
-
-            self.player = try? AVAudioPlayer(contentsOf: soundURL, fileTypeHint: AVFileType.aiff.rawValue)
-            self.player?.volume = 0.1
-            self.player?.prepareToPlay()
-        }
-        
-        self.player?.play()
+        try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+        try? AVAudioSession.sharedInstance().setActive(true)
+        self.shutterOpenPlayer?.play()
     }
     
     func playShutterClosedSound() {
-        if let soundURL = Bundle.main.url(forResource: "ShutterClosed", withExtension: "aiff") {
-            try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
-            try? AVAudioSession.sharedInstance().setActive(true)
-
-            self.player = try? AVAudioPlayer(contentsOf: soundURL, fileTypeHint: AVFileType.aiff.rawValue)
-            self.player?.volume = 0.1
-            self.player?.prepareToPlay()
-        }
-        
-        self.player?.play()
+        try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+        try? AVAudioSession.sharedInstance().setActive(true)
+        self.shutterClosedPlayer?.play()
     }
     
     // MARK: - Shutter animation
     
     func openShutter() async {
         
+        shutterOpenPlayer?.prepareToPlay()
         shutterAnimationRunning = true
-        
-        var shutterOpenAnimationTime: Double = 0
-        
+                
         if photoModeViewModel?.isPreviewCreated ?? false {
             // Image ('mirror') goes up
             withAnimation(.easeIn(duration: 0.15)) {
@@ -93,9 +100,6 @@ import SwiftUI
             
             try? await Task.sleep(for: .seconds(0.15))
             shutterCurtainImpact()
-            
-            // Total mirror + shutter animation time
-            shutterOpenAnimationTime = 0.4
         } else {
             // First shutter curtain goes down
             withAnimation(.easeIn(duration: 0.15)) {
@@ -109,16 +113,13 @@ import SwiftUI
             shutterCurtainImpact()
             // Sound
             playShutterOpenSound()
-            
-            // Total shutter animation time
-            shutterOpenAnimationTime = 0.15
         }
-        
-        try? await Task.sleep(for: .seconds(shutterOpenAnimationTime))
         self.isShutterOpen = true
     }
     
     func closeShutter() async {
+        
+        shutterClosedPlayer?.prepareToPlay()
         
         withAnimation(.easeInOut(duration: 0.15)) {
             showSecondShutterCurtain = true

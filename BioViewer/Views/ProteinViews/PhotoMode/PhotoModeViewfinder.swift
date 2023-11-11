@@ -40,10 +40,11 @@ struct PhotoModeViewfinder: View {
                 Image("Shutter")
                     .resizable()
                     .zIndex(3.0)
-                    .transition(AnyTransition.asymmetric(insertion: .move(edge: .top),
-                                                         removal: .move(edge: .bottom)))
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .top),
+                        removal: .move(edge: .bottom)
+                    ))
             }
-            
             // MARK: - Photo/mirror
             if photoModeViewModel.isPreviewCreated && shutterAnimator.showImage {
                 ZStack {

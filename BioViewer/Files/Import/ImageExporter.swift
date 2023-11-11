@@ -9,10 +9,26 @@ import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
 
-@MainActor class ImageExporter {
-    func showImageExportSheet(cgImage: CGImage?, preferredFileName: String?) {
+struct ExportableImage: Transferable {
+    
+    let cgImage: CGImage?
+    let preferredFileName: String?
+    
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .png) { @MainActor exportableImage in
+            return try ImageExporter().actuallyExportImage(
+                cgImage: exportableImage.cgImage,
+                preferredFileName: exportableImage.preferredFileName
+            )
+        }
+    }
+}
+
+class ImageExporter {
+    
+    func actuallyExportImage(cgImage: CGImage?, preferredFileName: String?) throws -> Data {
         guard let cgImage = cgImage else {
-            return
+            throw ExportError.unknownError
         }
         
         // Create image metadata
@@ -27,7 +43,7 @@ import UniformTypeIdentifiers
         
         // Write image to file
         guard let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            return
+            throw ExportError.unknownError
         }
         var filename: String = "BioViewer Image"
         if let preferredFileName = preferredFileName {
@@ -35,34 +51,21 @@ import UniformTypeIdentifiers
         }
         let fileURL = cacheDirectory.appendingPathComponent("\(filename).png")
         
-        guard let imageDestination = CGImageDestinationCreateWithURL(fileURL as CFURL,
-                                                                     "public.png" as CFString,
-                                                                     1,
-                                                                     nil) else {
-            return
+        let imageDestination = CGImageDestinationCreateWithURL(
+            fileURL as CFURL,
+            "public.png" as CFString,
+            1,
+            nil
+        )
+        guard let imageDestination else {
+            throw ExportError.unknownError
         }
         CGImageDestinationAddImage(imageDestination, cgImage, properties)
         CGImageDestinationFinalize(imageDestination)
-        
-        // TO-DO: Improve how the current window is located. This is a hacky workaround.
-        for scene in UIApplication.shared.connectedScenes where scene.activationState == .foregroundActive {
-            guard let windowSceneDelegate = ((scene as? UIWindowScene)?.delegate as? UIWindowSceneDelegate) else {
-                return
-            }
-            guard let window = windowSceneDelegate.window else {
-                return
-            }
-            guard let presentedViewController = window?.rootViewController?.presentedViewController else {
-                return
-            }
-            let shareSheet = UIActivityViewController(activityItems: [fileURL],
-                                                      applicationActivities: nil)
-            
-            // Share sheets on iPadOS require a sourceView or they crash
-            shareSheet.popoverPresentationController?.sourceView = presentedViewController.view
-            shareSheet.popoverPresentationController?.sourceRect = presentedViewController.view.frame
-                        
-            presentedViewController.present(shareSheet, animated: true)
-        }
+        return try Data(contentsOf: fileURL)
+    }
+    
+    func createExportableImage(cgImage: CGImage?, preferredFileName: String?) -> ExportableImage {
+        return ExportableImage(cgImage: cgImage, preferredFileName: preferredFileName)
     }
 }

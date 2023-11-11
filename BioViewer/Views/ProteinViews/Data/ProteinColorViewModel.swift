@@ -93,7 +93,7 @@ import SwiftUI
     // MARK: - Private
     private func updateSceneColorFill() {
         Task {
-            await proteinViewModel?.renderer.mutableState.setColorFill(updatedFillColor())
+            await self.proteinViewModel?.renderer.mutableState.setColorFill(updatedFillColor())
         }
     }
 }

@@ -27,11 +27,15 @@ struct PhotoModeView: View {
             }
             .navigationTitle(NSLocalizedString("Photo Mode", comment: ""))
             .navigationBarItems(leading:
-                Button(action: {
-                    dismiss()
-                }, label: {
-                    Text(NSLocalizedString("Cancel", comment: ""))
-                })
+                Button(
+                    action: {
+                        dismiss()
+                    }, 
+                    label: {
+                        Text(NSLocalizedString("Cancel", comment: ""))
+                    }
+                )
+                .disabled(photoModeViewModel.shutterAnimator.shutterAnimationRunning)
             )
         }
     }

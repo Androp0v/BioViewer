@@ -41,7 +41,14 @@ struct PhotoModeContentHeaderView: View {
                     #endif
                 */
                 
-                PhotoModeShareButton()
+                ShareLink(
+                    item: ImageExporter().createExportableImage(
+                        cgImage: photoModeViewModel.image,
+                        preferredFileName: nil
+                    ),
+                    preview: SharePreview("BioViewer Image")
+                )
+                .disabled(!photoModeViewModel.isPreviewCreated)
             }
             Spacer()
         }

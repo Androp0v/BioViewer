@@ -152,9 +152,7 @@ extension MutableState {
         
         // MARK: - Commit buffer
         // Commit command buffer when the shutter is open (so no animations appear onscreen)
-        Task { @MainActor in
-            commandBuffer.commit()
-            commandBuffer.waitUntilCompleted()
-        }
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
     }
 }
