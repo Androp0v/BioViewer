@@ -26,7 +26,7 @@ extension FileParser {
         var othersArray = [simd_float3]()
         var atomElements = [AtomElement]()
         var atomArrayComposition = ProteinElementComposition()
-        
+                
         init(id: Int) {
             self.id = id
         }

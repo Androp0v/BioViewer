@@ -72,10 +72,12 @@ struct ShadowsSection: View {
                     }
                 )
                 
+                /*
                 SwitchRow(
                     title: NSLocalizedString("Ambient occlusion", comment: ""),
                     toggledVariable: $shadowsViewModel.hasAmbientOcclusion
                 )
+                 */
             }
         )
         #if targetEnvironment(macCatalyst)
