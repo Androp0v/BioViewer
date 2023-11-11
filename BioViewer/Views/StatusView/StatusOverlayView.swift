@@ -11,17 +11,24 @@ struct StatusOverlayView: View {
     @EnvironmentObject var statusViewModel: StatusViewModel
     
     var body: some View {
-        if let statusAction = statusViewModel.runningActions.first {
+        if let statusAction = statusViewModel.actionToShow {
             HStack {
                 VStack {
-                    if !statusViewModel.isImportingFile {
+                    if !statusViewModel.isBlockingUI {
                         Spacer()
                     }
-                    BVProgressComponent(title: statusAction.type.title, progress: statusAction.progress)
-                        .frame(alignment: .bottomLeading)
-                        .padding()
+                    BVProgressComponent(
+                        title: statusAction.type.title,
+                        progress: statusAction.progress,
+                        error: statusAction.error,
+                        closeAction: statusAction.error == nil ? nil : {
+                            statusViewModel.dismissAction(statusAction)
+                        }
+                    )
+                    .frame(alignment: .bottomLeading)
+                    .padding()
                 }
-                if !statusViewModel.isImportingFile {
+                if !statusViewModel.isBlockingUI {
                     Spacer()
                 }
             }

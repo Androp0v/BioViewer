@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BioViewerProgressView: View {
+struct BVProgressView: View {
     
     let size: CGFloat
     var halfSize: CGFloat { size / 2 }
@@ -60,5 +60,5 @@ struct BioViewerProgressView: View {
 }
 
 #Preview {
-    BioViewerProgressView(size: 128)
+    BVProgressView(size: 128)
 }

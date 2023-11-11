@@ -18,7 +18,6 @@
 		C418BAFE2645B1210031C6F0 /* AtomElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418BAFD2645B1210031C6F0 /* AtomElement.swift */; };
 		C41A0560264ACBF0006F551C /* InfoPopoverRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */; };
 		C41A0562264C2853006F551C /* FileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0561264C2853006F551C /* FileParser.swift */; };
-		C41A0566264C7B97006F551C /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0565264C7B97006F551C /* StatusView.swift */; };
 		C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
 		C440856026470A0700DC5009 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440855F26470A0700DC5009 /* SequenceView.swift */; };
 		C44085652647155C00DC5009 /* SequenceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085642647155C00DC5009 /* SequenceRow.swift */; };
@@ -61,8 +60,6 @@
 		C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
 		C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C504C9C7274294A7002D4E6A /* RCSBError.swift */; };
 		C50AF7B927CB84A000768E4D /* SelectedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50AF7B827CB84A000768E4D /* SelectedAtom.swift */; };
-		C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D4273753E50002E089 /* StatusWarningPopover.swift */; };
-		C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */; };
 		C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */; };
 		C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024D27639B43005D7F06 /* SliderRow.swift */; };
 		C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024F2763CB0C005D7F06 /* RangeRow.swift */; };
@@ -70,9 +67,11 @@
 		C50E376929FACFD400FC7354 /* GraphicsSettingsSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E376829FACFD400FC7354 /* GraphicsSettingsSegment.swift */; };
 		C50E376B29FADAB700FC7354 /* ProteinGraphicsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E376A29FADAB700FC7354 /* ProteinGraphicsSettings.swift */; };
 		C50FEBC829E2DC3B0082102D /* MetalFXUpscaling.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50FEBC729E2DC3B0082102D /* MetalFXUpscaling.swift */; };
-		C51084312AFF837300A3D388 /* BioViewerProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084302AFF837300A3D388 /* BioViewerProgressView.swift */; };
+		C51084312AFF837300A3D388 /* BVProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084302AFF837300A3D388 /* BVProgressView.swift */; };
 		C51084342AFF909D00A3D388 /* BVProgressComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084332AFF909D00A3D388 /* BVProgressComponent.swift */; };
 		C51084362AFFA24400A3D388 /* StatusOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084352AFFA24400A3D388 /* StatusOverlayView.swift */; };
+		C51084382AFFE5AE00A3D388 /* BVProgressFailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084372AFFE5AE00A3D388 /* BVProgressFailedView.swift */; };
+		C510843A2AFFEFDE00A3D388 /* BVDismissActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084392AFFEFDE00A3D388 /* BVDismissActionButton.swift */; };
 		C515EFB9274D9E0A00B6F7DB /* FileCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */; };
 		C515EFBC274E316A00B6F7DB /* FileCompositionItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */; };
 		C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBD274E691800B6F7DB /* InfoTextRow.swift */; };
@@ -185,7 +184,6 @@
 		C59CD00D29E21FF10017796B /* ShadowBlurPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59CD00C29E21FF10017796B /* ShadowBlurPass.swift */; };
 		C59D1F3827E08B43000B6020 /* PhotoModeShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D1F3727E08B43000B6020 /* PhotoModeShareButton.swift */; };
 		C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
-		C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */; };
 		C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A61275D902E00CCC941 /* FileRow.swift */; };
 		C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */; };
 		C5A5F30D29B40CFC00C0887F /* SecondaryStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A5F30C29B40CFC00C0887F /* SecondaryStructure.swift */; };
@@ -263,7 +261,6 @@
 		C418BAFD2645B1210031C6F0 /* AtomElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomElement.swift; sourceTree = "<group>"; };
 		C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopoverRow.swift; sourceTree = "<group>"; };
 		C41A0561264C2853006F551C /* FileParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FileParser.swift; path = BioViewer/Files/Import/FileParser.swift; sourceTree = SOURCE_ROOT; };
-		C41A0565264C7B97006F551C /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		C41A0568264D5D58006F551C /* ProteinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewModel.swift; sourceTree = "<group>"; };
 		C440855F26470A0700DC5009 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
 		C44085642647155C00DC5009 /* SequenceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceRow.swift; sourceTree = "<group>"; };
@@ -318,8 +315,6 @@
 		C504C9C527418769002D4E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C504C9C7274294A7002D4E6A /* RCSBError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBError.swift; sourceTree = "<group>"; };
 		C50AF7B827CB84A000768E4D /* SelectedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedAtom.swift; sourceTree = "<group>"; };
-		C50D95D4273753E50002E089 /* StatusWarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWarningPopover.swift; sourceTree = "<group>"; };
-		C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusErrorPopover.swift; sourceTree = "<group>"; };
 		C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoLongTextRow.swift; sourceTree = "<group>"; };
 		C50E024D27639B43005D7F06 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
 		C50E024F2763CB0C005D7F06 /* RangeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeRow.swift; sourceTree = "<group>"; };
@@ -327,9 +322,11 @@
 		C50E376829FACFD400FC7354 /* GraphicsSettingsSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsSettingsSegment.swift; sourceTree = "<group>"; };
 		C50E376A29FADAB700FC7354 /* ProteinGraphicsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinGraphicsSettings.swift; sourceTree = "<group>"; };
 		C50FEBC729E2DC3B0082102D /* MetalFXUpscaling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalFXUpscaling.swift; sourceTree = "<group>"; };
-		C51084302AFF837300A3D388 /* BioViewerProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerProgressView.swift; sourceTree = "<group>"; };
+		C51084302AFF837300A3D388 /* BVProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVProgressView.swift; sourceTree = "<group>"; };
 		C51084332AFF909D00A3D388 /* BVProgressComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVProgressComponent.swift; sourceTree = "<group>"; };
 		C51084352AFFA24400A3D388 /* StatusOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusOverlayView.swift; sourceTree = "<group>"; };
+		C51084372AFFE5AE00A3D388 /* BVProgressFailedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVProgressFailedView.swift; sourceTree = "<group>"; };
+		C51084392AFFEFDE00A3D388 /* BVDismissActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVDismissActionButton.swift; sourceTree = "<group>"; };
 		C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionView.swift; sourceTree = "<group>"; };
 		C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionItemRow.swift; sourceTree = "<group>"; };
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
@@ -450,7 +447,6 @@
 		C59CD00C29E21FF10017796B /* ShadowBlurPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowBlurPass.swift; sourceTree = "<group>"; };
 		C59D1F3727E08B43000B6020 /* PhotoModeShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeShareButton.swift; sourceTree = "<group>"; };
 		C59D6A55275B939A00CCC941 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
-		C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTrackedAction.swift; sourceTree = "<group>"; };
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRow.swift; sourceTree = "<group>"; };
 		C5A5F30C29B40CFC00C0887F /* SecondaryStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryStructure.swift; sourceTree = "<group>"; };
@@ -576,7 +572,7 @@
 				C553B79B2936235C00294BB4 /* PresentedViews */,
 				C44085612647151A00DC5009 /* SequenceViews */,
 				C464C357265A56CC00E66C3E /* SettingsView.swift */,
-				C440856D26481FD800DC5009 /* UtilityViews */,
+				C440856D26481FD800DC5009 /* UI Elements */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -659,7 +655,7 @@
 			path = Segments;
 			sourceTree = "<group>";
 		};
-		C440856D26481FD800DC5009 /* UtilityViews */ = {
+		C440856D26481FD800DC5009 /* UI Elements */ = {
 			isa = PBXGroup;
 			children = (
 				C57F994C275E2BE0001DE6D6 /* ColorPaletteView.swift */,
@@ -672,7 +668,7 @@
 				C5412FED283AB63600234403 /* Debug Views */,
 				C51084322AFF907900A3D388 /* BioViewerProgress */,
 			);
-			path = UtilityViews;
+			path = "UI Elements";
 			sourceTree = "<group>";
 		};
 		C44FC0652641AF1B00459E01 = {
@@ -881,7 +877,9 @@
 		C51084322AFF907900A3D388 /* BioViewerProgress */ = {
 			isa = PBXGroup;
 			children = (
-				C51084302AFF837300A3D388 /* BioViewerProgressView.swift */,
+				C51084302AFF837300A3D388 /* BVProgressView.swift */,
+				C51084392AFFEFDE00A3D388 /* BVDismissActionButton.swift */,
+				C51084372AFFE5AE00A3D388 /* BVProgressFailedView.swift */,
 				C51084332AFF909D00A3D388 /* BVProgressComponent.swift */,
 			);
 			path = BioViewerProgress;
@@ -1262,12 +1260,8 @@
 		C59D6A5E275D807900CCC941 /* StatusView */ = {
 			isa = PBXGroup;
 			children = (
-				C41A0565264C7B97006F551C /* StatusView.swift */,
 				C51084352AFFA24400A3D388 /* StatusOverlayView.swift */,
 				C500EEAF272D58A400A60317 /* StatusViewModel.swift */,
-				C59D6A5F275D80DD00CCC941 /* StatusTrackedAction.swift */,
-				C50D95D62737F3E90002E089 /* StatusErrorPopover.swift */,
-				C50D95D4273753E50002E089 /* StatusWarningPopover.swift */,
 			);
 			path = StatusView;
 			sourceTree = "<group>";
@@ -1535,7 +1529,6 @@
 				C52DD46529FE81D40050A7C2 /* VisualizationConfiguration.swift in Sources */,
 				C5D97E0D297466C000EF1D5A /* PDBParseError.swift in Sources */,
 				C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */,
-				C59D6A60275D80DD00CCC941 /* StatusTrackedAction.swift in Sources */,
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */,
 				C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */,
@@ -1559,10 +1552,9 @@
 				C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */,
 				C55CA71A297EB60700BEDFA4 /* ProteinVisualizationViewModel.swift in Sources */,
 				C5FF9ADB29817B4300D583A2 /* BioBenchConfig.swift in Sources */,
-				C51084312AFF837300A3D388 /* BioViewerProgressView.swift in Sources */,
+				C51084312AFF837300A3D388 /* BVProgressView.swift in Sources */,
 				C553B79F293624D900294BB4 /* PeriodicTableContentView.swift in Sources */,
 				C5E7AF95275F98480065F6AD /* BoundingVolumes.swift in Sources */,
-				C50D95D5273753E50002E089 /* StatusWarningPopover.swift in Sources */,
 				C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */,
 				C515EFBC274E316A00B6F7DB /* FileCompositionItemRow.swift in Sources */,
 				C560E0DA29E2EB9400CE883C /* MetalFXScalers.swift in Sources */,
@@ -1586,13 +1578,13 @@
 				C440856026470A0700DC5009 /* SequenceView.swift in Sources */,
 				C5EEE9BA276F8616005737C1 /* CameraControlToolbar.swift in Sources */,
 				C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */,
-				C41A0566264C7B97006F551C /* StatusView.swift in Sources */,
 				C45BAC432649550C00B36026 /* ColorPickerRow.swift in Sources */,
 				C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */,
 				C44085652647155C00DC5009 /* SequenceRow.swift in Sources */,
 				C5433F422771667200607B20 /* PhotoModeViewfinder.swift in Sources */,
 				C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */,
 				C55CA726297EFBF700BEDFA4 /* ImportRowView.swift in Sources */,
+				C51084382AFFE5AE00A3D388 /* BVProgressFailedView.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
 				C555EC86282A9616001281CD /* PointsPass.swift in Sources */,
@@ -1662,7 +1654,6 @@
 				C5C7513A27DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift in Sources */,
 				C586C5E8275A074700F230D3 /* FunctionsSegmentProtein.swift in Sources */,
 				C5D97E0B2974549C00EF1D5A /* PDBParser.swift in Sources */,
-				C50D95D72737F3E90002E089 /* StatusErrorPopover.swift in Sources */,
 				C45BAC492649C18000B36026 /* ProteinDataSource.swift in Sources */,
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
 				C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */,
@@ -1693,6 +1684,7 @@
 				C55384202972DCBC007E45E1 /* CartoonHelix.swift in Sources */,
 				C531753E29DF16A7004FF2C6 /* ProteinDraw.swift in Sources */,
 				C55384292972DEF6007E45E1 /* CartoonStructureType.swift in Sources */,
+				C510843A2AFFEFDE00A3D388 /* BVDismissActionButton.swift in Sources */,
 				C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */,
 				C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */,
 				C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */,

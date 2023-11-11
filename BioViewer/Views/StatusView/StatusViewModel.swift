@@ -21,6 +21,15 @@ enum StatusActionType {
             return "Ball and stick"
         }
     }
+    
+    var blocksRendering: Bool {
+        switch self {
+        case .importFile:
+            true
+        case .geometryGeneration:
+            false
+        }
+    }
 }
 
 struct StatusAction: Identifiable {
@@ -28,6 +37,7 @@ struct StatusAction: Identifiable {
     let type: StatusActionType
     var description: String?
     var progress: Double?
+    var error: Error?
 }
 
 @MainActor class StatusViewModel: ObservableObject {
@@ -36,37 +46,32 @@ struct StatusAction: Identifiable {
     
     // MARK: - UI properties
     // Published variables used by the UI
+    @Published private(set) var actionToShow: StatusAction?
     @Published private(set) var runningActions = [StatusAction]()
+    @Published private(set) var failedActions = [StatusAction]()
     
-    var isImportingFile: Bool {
-        return runningActions.contains(where: {$0.type == .importFile})
-    }
-    
-    // Warning/Error system
-    /*
-    @Published private(set) var statusError: String?
-    @Published private(set) var statusWarning: [String] = []
-    
-    // MARK: - Error types
-    private(set) var importError: ImportError? {
-        didSet {
-            guard let importError = importError else {
-                return
-            }
-            self.statusError = importError.localizedDescription
+    var isBlockingUI: Bool {
+        if runningActions.contains(where: {$0.type.blocksRendering}) {
+            return true
+        } else if failedActions.contains(where: {$0.type.blocksRendering}) {
+            return true
         }
+        return false
     }
-     */
+    var isImportingFile: Bool {
+        if runningActions.contains(where: {$0.type == .importFile}) {
+            return true
+        } else if failedActions.contains(where: {$0.type == .importFile}) {
+            return true
+        }
+        return false
+    }
     
     // MARK: - Internal properties
     // Internal variables that do not instantly trigger a UI redraw
     private var displayLink: CADisplayLink?
     private var internalRunningActions = [StatusAction]()
-    /*
-    private var internalStatusText: String?
-    private var internalProgress: Float?
-    private var internalStatusWarning: [String] = []
-     */
+    private var internalFailedActions = [StatusAction]()
     
     // MARK: - Init
     
@@ -80,6 +85,8 @@ struct StatusAction: Identifiable {
     @objc private func syncInternalAndUIStates() {
         withAnimation {
             runningActions = internalRunningActions
+            failedActions = internalFailedActions
+            actionToShow = failedActions.last ?? runningActions.last
         }
     }
     
@@ -109,95 +116,21 @@ struct StatusAction: Identifiable {
         internalRunningActions.append(newAction)
     }
     
-    func signalActionFinished(_ statusAction: StatusAction, withError: Error?) {
+    func signalActionFinished(_ statusAction: StatusAction, withError error: Error?) {
         guard internalRunningActions.contains(where: {$0.id == statusAction.id}) else {
             print("[Status] Error: finished action not found.")
             return
         }
         internalRunningActions.removeAll(where: { $0.id == statusAction.id })
-    }
-    
-    /*
-
-    func setStatusText(text: String) {
-        self.internalStatusText = text
-    }
-    
-    func setRunningStatus(running: Bool) {
-        DispatchQueue.main.async {
-            self.statusRunning = running
-            if running {
-                let displayLink = CADisplayLink(target: self, selector: #selector(self.syncInternalAndUIStates))
-                displayLink.add(to: .main, forMode: .default)
-                self.displayLink = displayLink
-            } else {
-                self.internalStatusText = nil
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                    self.displayLink?.invalidate()
-                })
-            }
+        if let error {
+            var newAction = statusAction
+            newAction.error = error
+            internalFailedActions.append(newAction)
         }
     }
     
-    func setProgress(progress: Float) {
-        self.internalProgress = progress
+    func dismissAction(_ statusAction: StatusAction) {
+        internalRunningActions.removeAll(where: { $0.id == statusAction.id })
+        internalFailedActions.removeAll(where: { $0.id == statusAction.id })
     }
-    
-    func setImportError(error: ImportError) {
-        self.importError = error
-    }
-    
-    func removeImportError() {
-        self.importError = nil
-        // FIXME: Handle different error types
-        self.statusError = nil
-    }
-    
-    func setWarning(warning: String) {
-        guard internalStatusWarning.count < AppState.maxNumberOfWarnings else { return }
-        self.internalStatusWarning.append(warning)
-    }
-    
-    func removeAllWarnings() {
-        self.internalStatusWarning = []
-        self.statusWarning = []
-    }
-    
-    func removeAllErrors() {
-        self.statusError = nil
-    }
-    
-    // MARK: - Status handling
-
-    func statusUpdate(statusText: String) {
-        self.setStatusText(text: statusText)
-        self.setRunningStatus(running: true)
-    }
-
-    func statusProgress(progress: Float) {
-        self.setProgress(progress: progress)
-    }
-
-    func statusFinished(action: StatusActionType) {
-        self.setProgress(progress: 0)
-        self.setRunningStatus(running: false)
-        switch action {
-        case .importFile:
-            self.removeImportError()
-        case .geometryGeneration:
-            // TO-DO
-            break
-        }
-    }
-    
-    func statusFinished(importError: ImportError) {
-        self.setProgress(progress: 0)
-        self.setRunningStatus(running: false)
-        self.setImportError(error: importError)
-    }
-    
-    func statusWarning(warningText: String) {
-        
-    }
-     */
 }

@@ -21,7 +21,7 @@ private struct SidebarItem: View {
 struct ProteinSidebar: View {
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.dismiss) var dismiss
+    @Binding var showSidebar: Bool
     
     @Binding var selectedSegment: Int
 
@@ -59,7 +59,9 @@ struct ProteinSidebar: View {
                 ZStack(alignment: .leading) {
                     Button(
                         action: {
-                            dismiss()
+                            withAnimation {
+                                showSidebar = false
+                            }
                         },
                         label: {
                             closeImage
@@ -111,7 +113,7 @@ struct ProteinSidebar: View {
 
 struct ProteinSidebar_Previews: PreviewProvider {
     static var previews: some View {
-        ProteinSidebar(selectedSegment: .constant(0))
+        ProteinSidebar(showSidebar: .constant(true), selectedSegment: .constant(0))
             .previewLayout(.sizeThatFits)
     }
 }

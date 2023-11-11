@@ -16,7 +16,7 @@ class FileImporter {
         fileInfo: ProteinFileInfo?
     ) async throws {
         
-        var importStatusAction = StatusAction(
+        let importStatusAction = StatusAction(
             type: .importFile,
             description: NSLocalizedString("Importing file", comment: ""),
             progress: nil

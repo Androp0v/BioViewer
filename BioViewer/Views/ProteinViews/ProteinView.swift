@@ -22,6 +22,7 @@ struct ProteinView: View {
     // Sidebar
     @State private var showInspector: Bool = UserDefaults.standard.bool(forKey: "showInspector") {
         didSet {
+            guard horizontalSizeClass != .compact else { return }
             UserDefaults.standard.set(showInspector, forKey: "showInspector")
         }
     }
@@ -34,14 +35,6 @@ struct ProteinView: View {
     // UI constants
     private enum Constants {
         static let compactSequenceViewWidth: CGFloat = 32
-        
-        #if targetEnvironment(macCatalyst)
-        // macOS sidebar
-        static let sidebarWidth: CGFloat = 300
-        #else
-        // iPadOS sidebar
-        static let sidebarWidth: CGFloat = 350
-        #endif
     }
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -51,7 +44,6 @@ struct ProteinView: View {
     // Main view
     var body: some View {
         
-        let sidebar = ProteinSidebar(selectedSegment: $selectedSidebarSegment)
         VStack(spacing: 0) {
             // Separator
             Rectangle()
@@ -137,20 +129,18 @@ struct ProteinView: View {
                     }
                 )
             }
-            
-            ToolbarItem(placement: .navigationBarLeading) {
-                // Status bar component
-                StatusView()
-            }
         }
         .inspector(isPresented: $showInspector) {
-            sidebar
-                .presentationDetents([.medium, .large])
-                #if targetEnvironment(macCatalyst)
-                .inspectorColumnWidth(min: 200, ideal: 300, max: 400)
-                #else
-                .inspectorColumnWidth(min: 300, ideal: 400)
-                #endif
+            ProteinSidebar(
+                showSidebar: $showInspector,
+                selectedSegment: $selectedSidebarSegment
+            )
+            .presentationDetents([.medium, .large])
+            #if targetEnvironment(macCatalyst)
+            .inspectorColumnWidth(min: 200, ideal: 300, max: 400)
+            #else
+            .inspectorColumnWidth(min: 300, ideal: 400)
+            #endif
         }
         // Inform command menus of focus changes
         .focusedValue(\.proteinViewModel, proteinViewModel)
