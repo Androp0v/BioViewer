@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 13/11/21.
 //
 
+import BioViewerFoundation
 import SwiftUI
 
 struct FileSourceView: View {

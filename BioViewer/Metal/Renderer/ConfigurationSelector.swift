@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 17/12/21.
 //
 
+import BioViewerFoundation
 import Foundation
 
 struct BufferRegion {

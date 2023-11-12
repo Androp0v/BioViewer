@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 31/12/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import SwiftUI
 

@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 15/1/23.
 //
 
+import BioViewerFoundation
 import Foundation
 
 // MARK: - Records

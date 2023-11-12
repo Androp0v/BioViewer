@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 12/3/22.
 //
 
+import BioViewerFoundation
 import SwiftUI
 
 struct InfoAtomsRow: View {

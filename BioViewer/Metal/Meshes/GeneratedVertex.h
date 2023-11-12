@@ -51,7 +51,7 @@ typedef struct {
     /// Bond radius.
     float bond_radius;
 
-} BondStruct;
+} RawBondStruct;
 
 typedef struct {
     

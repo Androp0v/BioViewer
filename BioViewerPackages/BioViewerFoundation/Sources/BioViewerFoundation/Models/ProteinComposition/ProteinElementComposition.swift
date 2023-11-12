@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct ProteinElementComposition {
+public struct ProteinElementComposition {
     
     /// Dictionary containing the number of atoms of each type of element.
-    var elementCounts = [AtomElement: Int]()
+    public var elementCounts = [AtomElement: Int]()
     /// The total count of atoms of all types.
-    var totalCount: Int = 0
+    public var totalCount: Int = 0
     /// The total count of atoms of a type present in `AtomElement.importantElements`.
-    var importantElementCount: Int {
+    public var importantElementCount: Int {
         var sum: Int = 0
         for element in AtomElement.importantElements {
             sum += elementCounts[element] ?? 0
@@ -22,7 +22,7 @@ struct ProteinElementComposition {
         return sum
     }
     
-    static func += (lhs: inout ProteinElementComposition, rhs: ProteinElementComposition) {
+    public static func += (lhs: inout ProteinElementComposition, rhs: ProteinElementComposition) {
         lhs.elementCounts.merge(rhs.elementCounts, uniquingKeysWith: { lhsCount, rhsCount in
             return lhsCount + rhsCount
         })
@@ -31,9 +31,9 @@ struct ProteinElementComposition {
     
     // MARK: - Init
     
-    init() {}
+    public init() {}
     
-    init(elements: [AtomElement]) {
+    public init(elements: [AtomElement]) {
         for element in elements {
             if let currentCount = elementCounts[element] {
                 elementCounts[element] = currentCount + 1

@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 10/5/21.
 //
 
+import BioViewerFoundation
 import Combine
 import Foundation
 import simd

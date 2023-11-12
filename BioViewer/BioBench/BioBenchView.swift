@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 24/1/23.
 //
 
+import BioViewerFoundation
 import SwiftUI
 
 // swiftlint:disable all

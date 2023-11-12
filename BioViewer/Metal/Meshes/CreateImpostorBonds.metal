@@ -11,7 +11,7 @@
 
 using namespace metal;
 
-kernel void create_impostor_bonds(const device BondStruct *bond_array [[ buffer(0) ]],
+kernel void create_impostor_bonds(const device RawBondStruct *bond_array [[ buffer(0) ]],
                                   device BillboardVertex *generated_vertices [[ buffer(1) ]],
                                   device uint32_t *generated_indices [[ buffer(2) ]],
                                   uint i [[ thread_position_in_grid ]],

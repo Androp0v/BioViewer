@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 24/12/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import Metal
 
@@ -55,10 +56,10 @@ class ConnectivityGenerator {
                         // Atoms close enough, create an impostor cylinder
                         computedBonds.append(
                             BondStruct(
-                                atom_A: atomA,
-                                atom_B: atomB,
-                                cylinder_center: (atomA + atomB) / 2,
-                                bond_radius: 0.05
+                                atomA: atomA,
+                                atomB: atomB,
+                                cylinderCenter: (atomA + atomB) / 2,
+                                bondRadius: 0.05
                             )
                         )
                         bondCountInCurrentConfiguration += 1

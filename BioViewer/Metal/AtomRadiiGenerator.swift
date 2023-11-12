@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 10/1/22.
 //
 
+import BioViewerFoundation
 import Foundation
 import CoreAudio
 

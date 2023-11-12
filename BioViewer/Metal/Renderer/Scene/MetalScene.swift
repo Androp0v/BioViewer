@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 17/10/21.
 //
 
+import BioViewerFoundation
 import Combine
 import CoreGraphics
 import Foundation

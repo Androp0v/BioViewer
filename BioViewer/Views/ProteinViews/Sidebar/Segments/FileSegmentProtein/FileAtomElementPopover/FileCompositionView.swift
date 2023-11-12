@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 23/11/21.
 //
 
+import BioViewerFoundation
 import SwiftUI
 
 private enum CompositionOption: PickableEnum {

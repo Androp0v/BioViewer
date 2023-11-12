@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct ProteinResidueComposition {
+public struct ProteinResidueComposition {
     
     /// Dictionary containing the number of atoms of each type of residue.
-    var residueCounts = [Residue: Int]()
+    public var residueCounts = [Residue: Int]()
     /// The total count of atoms of all types.
-    var totalCount: Int = 0
+    public var totalCount: Int = 0
     
-    static func += (lhs: inout ProteinResidueComposition, rhs: ProteinResidueComposition) {
+    public static func += (lhs: inout ProteinResidueComposition, rhs: ProteinResidueComposition) {
         lhs.residueCounts.merge(rhs.residueCounts, uniquingKeysWith: { lhsCount, rhsCount in
             return lhsCount + rhsCount
         })
@@ -23,9 +23,9 @@ struct ProteinResidueComposition {
     
     // MARK: - Init
     
-    init() {}
+    public init() {}
     
-    init(residues: [Residue]) {
+    public init(residues: [Residue]) {
         for residue in residues {
             if let currentCount = residueCounts[residue] {
                 residueCounts[residue] = currentCount + 1

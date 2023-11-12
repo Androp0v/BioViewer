@@ -8,17 +8,17 @@
 import Foundation
 
 /// Struct holding the contents of a protein subunit.
-struct ProteinSubunit {
+public struct ProteinSubunit {
         
     /// The subunit index inside its parent protein.
-    let indexInProtein: Int
+    public let indexInProtein: Int
     
-    enum SubunitKind {
+    public enum SubunitKind {
         case chain
         case nonChain
         case unknown
     }
-    let kind: SubunitKind
+    public let kind: SubunitKind
 
     // MARK: - Atoms
     
@@ -29,7 +29,7 @@ struct ProteinSubunit {
     
     // MARK: - Initialization
     
-    init(indexInProtein: Int, kind: SubunitKind, atomCount: Int, startIndex: Int) {
+    public init(indexInProtein: Int, kind: SubunitKind, atomCount: Int, startIndex: Int) {
         self.indexInProtein = indexInProtein
         self.kind = kind
         self.atomCount = atomCount
@@ -38,7 +38,7 @@ struct ProteinSubunit {
     
     // MARK: - Computed
     
-    var subunitName: String {
+    public var subunitName: String {
         let letters = ["A",
                        "B",
                        "C",

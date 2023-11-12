@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 4/12/21.
 //
 
+import BioViewerFoundation
 import Foundation
 
 class FileImporter {

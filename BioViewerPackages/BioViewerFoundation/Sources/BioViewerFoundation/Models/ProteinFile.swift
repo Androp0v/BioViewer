@@ -8,33 +8,33 @@
 import Foundation
 
 // MARK: - ProteinFileType
-enum ProteinFileType {
+public enum ProteinFileType {
     case staticStructure
     case dynamicStructure
 }
 
 // MARK: - ProteinFile
 
-struct ProteinFile: Hashable {
+public struct ProteinFile: Hashable {
     
     /// Unique ID for the file (only used internally).
-    let id = UUID()
+    public let id = UUID()
     /// The type of protein file type (whether it contains a static structure or several configurations of the same protein).
-    let fileType: ProteinFileType
+    public let fileType: ProteinFileType
     /// Name of the protein file.
-    let fileName: String
+    public let fileName: String
     /// Extension of the protein file (.pdb, .cif...).
-    let fileExtension: String
+    public let fileExtension: String
     /// Size of the stored file, in bytes.
-    let byteSize: Int?
+    public let byteSize: Int?
     /// File metadata.
-    let fileInfo: ProteinFileInfo
+    public let fileInfo: ProteinFileInfo
     /// Protein contained in the file.
-    var models: [Protein]
+    public var models: [Protein]
     
     // MARK: - Init
     
-    init(fileType: ProteinFileType, fileName: String, fileExtension: String, models: [Protein], fileInfo: ProteinFileInfo, byteSize: Int?) {
+    public init(fileType: ProteinFileType, fileName: String, fileExtension: String, models: [Protein], fileInfo: ProteinFileInfo, byteSize: Int?) {
         self.fileType = fileType
         self.fileName = fileName
         self.fileExtension = fileExtension
@@ -45,11 +45,11 @@ struct ProteinFile: Hashable {
     
     // MARK: - Hashable
     
-    static func == (lhs: ProteinFile, rhs: ProteinFile) -> Bool {
+    public static func == (lhs: ProteinFile, rhs: ProteinFile) -> Bool {
         lhs.id == rhs.id
     }
     
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

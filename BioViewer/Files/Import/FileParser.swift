@@ -5,7 +5,9 @@
 //  Created by Raúl Montón Pinillos on 12/5/21.
 //
 
+import BioViewerFoundation
 import Foundation
+import XYZParser
 
 // MARK: - File parsing
 
@@ -44,7 +46,7 @@ class FileParser {
         case "xyz", "XYZ":
             await statusViewModel.updateDescription(statusAction, description: "Importing file")
             do {
-                let proteinFile = try parseXYZ(
+                let proteinFile = try await XYZParser().parseXYZ(
                     fileName: fileName,
                     fileExtension: fileExtension,
                     byteSize: byteSize,

@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 29/12/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import Metal
 
@@ -40,7 +41,7 @@ extension MutableState {
 
         // Populate buffers
         let bondDataBuffer = device.makeBuffer(
-            bytes: Array(bondData),
+            bytes: Array(bondData.map({$0.toRawBondStruct()})),
             length: bondCount * MemoryLayout<BondStruct>.stride
         )
 
@@ -118,6 +119,17 @@ extension MutableState {
         return CreateBondsOutput(
             vertexBuffer: generatedVertexBuffer,
             indexBuffer: generatedIndexBuffer
+        )
+    }
+}
+
+extension BondStruct {
+    func toRawBondStruct() -> RawBondStruct {
+        return RawBondStruct(
+            atom_A: self.atomA,
+            atom_B: self.atomB,
+            cylinder_center: self.cylinderCenter,
+            bond_radius: self.bondRadius
         )
     }
 }

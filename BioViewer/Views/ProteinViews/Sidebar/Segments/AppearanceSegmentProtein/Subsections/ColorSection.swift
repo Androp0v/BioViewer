@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 10/6/22.
 //
 
+import BioViewerFoundation
 import SwiftUI
 
 struct ColorSection: View {

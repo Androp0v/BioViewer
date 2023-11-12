@@ -5,42 +5,12 @@
 //  Created by Raúl Montón Pinillos on 30/10/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import QuartzCore
 import SwiftUI
 
-enum StatusActionType {
-    case importFile
-    case geometryGeneration
-    
-    var title: String {
-        switch self {
-        case .importFile:
-            return "Import file"
-        case .geometryGeneration:
-            return "Ball and stick"
-        }
-    }
-    
-    var blocksRendering: Bool {
-        switch self {
-        case .importFile:
-            true
-        case .geometryGeneration:
-            false
-        }
-    }
-}
-
-struct StatusAction: Identifiable {
-    let id = UUID()
-    let type: StatusActionType
-    var description: String?
-    var progress: Double?
-    var error: Error?
-}
-
-@MainActor class StatusViewModel: ObservableObject {
+@MainActor class StatusViewModel: ObservableObject, StatusViewModelProtocol {
     
     weak var proteinViewModel: ProteinViewModel?
     

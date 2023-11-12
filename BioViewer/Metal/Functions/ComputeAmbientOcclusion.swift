@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 29/4/23.
 //
 
+import BioViewerFoundation
 import Foundation
 import Metal
 

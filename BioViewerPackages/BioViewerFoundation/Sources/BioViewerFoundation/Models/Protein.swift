@@ -1,5 +1,5 @@
 //
-//  LoadingProtein.swift
+//  Protein.swift
 //  BioViewer
 //
 //  Created by Raúl Montón Pinillos on 7/5/21.
@@ -9,73 +9,73 @@ import Foundation
 import simd
 
 /// Class holding the contents of a protein.
-struct Protein {
+public struct Protein {
 
     // MARK: - UUID
     
     /// Internal-use unique identifier.
-    let id = UUID()
+    public let id = UUID()
 
     // MARK: - Sequence
 
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
-    let sequence: [Residue]?
+    public let sequence: [Residue]?
     
     // MARK: - Subunits
     
     /// Number of subunits in the protein
-    let subunitCount: Int
+    public let subunitCount: Int
     
     /// List of all subunits in the protein
-    let subunits: [ProteinSubunit]?
+    public let subunits: [ProteinSubunit]?
     
     // MARK: - Atoms
     
     /// Number of atoms in the protein.
-    let atomCount: Int
+    public let atomCount: Int
 
     /// Atomic positions (in Armstrongs). ContiguousArray is faster than array since we
     /// don't need to add new atoms after its creation. Also has easier conversion to MTLBuffer.
-    let atoms: ContiguousArray<simd_float3>
+    public let atoms: ContiguousArray<simd_float3>
 
     /// Number of atoms of each element.
-    let elementComposition: ProteinElementComposition
+    public let elementComposition: ProteinElementComposition
     
     /// Number of atoms of each residue type.
-    let residueComposition: ProteinResidueComposition?
+    public let residueComposition: ProteinResidueComposition?
 
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
-    let atomElements: [AtomElement]
+    public let atomElements: [AtomElement]
     
     /// Residue type of each atom.
-    let atomResidues: [Residue]?
+    public let atomResidues: [Residue]?
     
     /// Secondary structure of which each atom is part of.
-    let atomSecondaryStructure: [SecondaryStructure]?
+    public let atomSecondaryStructure: [SecondaryStructure]?
     
     // MARK: - Bonds
     
     /// Array with bond data for the structure.
-    var bonds: [BondStruct]?
+    public var bonds: [BondStruct]?
     
     // MARK: - Configurations
     
     /// Number of configurations for this structure.
-    let configurationCount: Int
+    public let configurationCount: Int
     /// Number of bonds in each configuration.
-    var bondsPerConfiguration: [Int]?
+    public var bondsPerConfiguration: [Int]?
     /// Index of the bond array start  for each configuration.
-    var bondsConfigurationArrayStart: [Int]?
+    public var bondsConfigurationArrayStart: [Int]?
     /// Energies of each configuration.
-    var configurationEnergies: [Float]?
+    public var configurationEnergies: [Float]?
     
     // MARK: - Volume
     
-    let boundingVolume: BoundingVolume
+    public let boundingVolume: BoundingVolume
     
     // MARK: - Initialization
 
-    init(
+    public init(
         configurationCount: Int,
         configurationEnergies: [Float]?,
         subunitCount: Int,
@@ -104,10 +104,16 @@ struct Protein {
     }
 }
 
-// MARK: - Equatable
+// MARK: - Extensions
 
 extension Protein: Equatable {
-    static func == (lhs: Protein, rhs: Protein) -> Bool {
+    public static func == (lhs: Protein, rhs: Protein) -> Bool {
         return lhs.id == rhs.id
+    }
+}
+
+extension Array where Element == Protein {
+    var combinedAtomCount: Int {
+        return reduce(0) { $0 + $1.atomCount }
     }
 }
