@@ -22,10 +22,10 @@ class FileImporter {
             description: NSLocalizedString("Importing file", comment: ""),
             progress: nil
         )
-        statusViewModel.showStatusForAction(importStatusAction)
+        await statusViewModel.showStatusForAction(importStatusAction)
         
         guard let proteinData = try? Data(contentsOf: fileURL) else {
-            statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.unknownError)
+            await statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.unknownError)
             throw ImportError.unknownError
         }
         
@@ -34,7 +34,7 @@ class FileImporter {
         let fileExtension = fileURL.pathExtension
         
         guard !fileExtension.isEmpty else {
-            statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.unknownError)
+            await statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.unknownError)
             throw ImportError.unknownFileExtension
         }
         
@@ -74,12 +74,12 @@ class FileImporter {
             )
             await proteinDataSource.addProteinFileToDataSource(proteinFile: proteinFile)
             // File import finished
-            statusViewModel.signalActionFinished(statusAction, withError: nil)
+            await statusViewModel.signalActionFinished(statusAction, withError: nil)
         } catch let error as ImportError {
-            statusViewModel.signalActionFinished(statusAction, withError: error)
+            await statusViewModel.signalActionFinished(statusAction, withError: error)
             throw error
         } catch {
-            statusViewModel.signalActionFinished(statusAction, withError: error)
+            await statusViewModel.signalActionFinished(statusAction, withError: error)
             throw error
         }
     }

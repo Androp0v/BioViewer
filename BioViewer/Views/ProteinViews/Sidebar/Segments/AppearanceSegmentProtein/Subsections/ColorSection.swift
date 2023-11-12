@@ -11,13 +11,14 @@ import SwiftUI
 struct ColorSection: View {
     
     @EnvironmentObject var proteinDataSource: ProteinDataSource
-    @EnvironmentObject var colorViewModel: ProteinColorViewModel
-    @EnvironmentObject var visualizationViewModel: ProteinVisualizationViewModel
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
+    @Environment(ProteinVisualizationViewModel.self) var visualizationViewModel: ProteinVisualizationViewModel
     
     @State var presentPeriodicTable: Bool = false
     @State var showMoreElements: Bool = false
     
     var body: some View {
+        @Bindable var colorViewModel = colorViewModel
         Section(
             header: Text(NSLocalizedString("Color", comment: ""))
                     .padding(.bottom, 4),

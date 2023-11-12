@@ -7,11 +7,11 @@
 
 import Foundation
 
-@MainActor class ProteinGraphicsSettings: ObservableObject {
+@MainActor @Observable class ProteinGraphicsSettings {
     
     weak var proteinViewModel: ProteinViewModel?
     
-    @Published var metalFXUpscalingMode: MetalFXUpscalingMode = .none {
+    var metalFXUpscalingMode: MetalFXUpscalingMode = .none {
         didSet {
             guard let renderer = proteinViewModel?.renderer else {
                 return
@@ -33,14 +33,14 @@ import Foundation
         }
     }
         
-    @Published var ssaaFactor: Float = 1.0 {
+    var ssaaFactor: Float = 1.0 {
         didSet {
             Task {
                 await updateFactors()
             }
         }
     }
-    @Published var metalFXFactor: Float = 1.5 {
+    var metalFXFactor: Float = 1.5 {
         didSet {
             Task {
                 await updateFactors()

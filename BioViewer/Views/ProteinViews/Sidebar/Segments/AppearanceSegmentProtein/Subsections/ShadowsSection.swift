@@ -10,9 +10,10 @@ import SwiftUI
 
 struct ShadowsSection: View {
     
-    @EnvironmentObject var shadowsViewModel: ProteinShadowsViewModel
+    @Environment(ProteinShadowsViewModel.self) var shadowsViewModel: ProteinShadowsViewModel
     
     var body: some View {
+        @Bindable var shadowsViewModel = shadowsViewModel
         Section(
             header: Text(NSLocalizedString("Shadows", comment: ""))
                 .padding(.bottom, 4),

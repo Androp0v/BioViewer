@@ -11,12 +11,14 @@ struct AppearanceSegmentProtein: View {
     
     // MARK: - Properties
     
-    @EnvironmentObject var colorViewModel: ProteinColorViewModel
-    @EnvironmentObject var visualizationViewModel: ProteinVisualizationViewModel
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
+    @Environment(ProteinVisualizationViewModel.self) var visualizationViewModel: ProteinVisualizationViewModel
             
     // MARK: - View
     
     var body: some View {
+        @Bindable var colorViewModel = colorViewModel
+        @Bindable var visualizationViewModel = visualizationViewModel
         List {
             
             // MARK: - General section

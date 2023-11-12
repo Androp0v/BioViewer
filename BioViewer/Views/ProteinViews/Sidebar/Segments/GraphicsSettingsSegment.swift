@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GraphicsSettingsSegment: View {
     
-    @EnvironmentObject var graphicsSettings: ProteinGraphicsSettings
+    @Environment(ProteinGraphicsSettings.self) var graphicsSettings: ProteinGraphicsSettings
     
     let ssaaFormatter: NumberFormatter
     let metalFXFactorFormatter: NumberFormatter
@@ -30,6 +30,7 @@ struct GraphicsSettingsSegment: View {
     }
     
     var body: some View {
+        @Bindable var graphicsSettings = graphicsSettings
         List {
             // First section hast 64pt padding to account for the
             // space under the segmented control.

@@ -10,7 +10,7 @@ import Foundation
 import QuartzCore
 import SwiftUI
 
-@Observable final class StatusViewModel: StatusViewModelProtocol {
+@MainActor @Observable final class StatusViewModel: StatusViewModelProtocol {
     
     weak var proteinViewModel: ProteinViewModel?
     

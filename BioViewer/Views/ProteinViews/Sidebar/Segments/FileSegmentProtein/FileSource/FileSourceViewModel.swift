@@ -8,7 +8,7 @@
 import BioViewerFoundation
 import Foundation
 
-class FileSourceViewModel: ObservableObject {
+@MainActor @Observable class FileSourceViewModel {
     
     /// Batch size for line loading
     let batchSize: Int = 200
@@ -20,7 +20,7 @@ class FileSourceViewModel: ObservableObject {
     /// All the lines in the source
     var fileInfo: ProteinFileInfo?
     /// Lines currently loaded in the view
-    @Published var loadedLines: [String]?
+    var loadedLines: [String]?
     
     // MARK: - Initialization
     init(fileInfo: ProteinFileInfo?) {

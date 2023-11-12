@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-@MainActor class ResolutionViewModel: ObservableObject {
+@MainActor @Observable class ResolutionViewModel {
     
     let proteinViewModel: ProteinViewModel
+        
+    var resolutionString = "-"
     
     private var displayLink: CADisplayLink?
-    
-    @Published var resolutionString = "-"
     
     init(proteinViewModel: ProteinViewModel) {
         self.proteinViewModel = proteinViewModel
@@ -33,7 +33,7 @@ import SwiftUI
 
 struct ResolutionView: View {
     
-    @StateObject var viewModel: ResolutionViewModel
+    @State var viewModel: ResolutionViewModel
     
     var body: some View {
         Text(viewModel.resolutionString)

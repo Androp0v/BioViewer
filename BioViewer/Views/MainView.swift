@@ -11,10 +11,10 @@ struct MainView: View {
     
     @StateObject var proteinViewModel = ProteinViewModel()
     @StateObject var proteinDataSource = ProteinDataSource()
-    @StateObject var colorViewModel = ProteinColorViewModel()
-    @StateObject var visualizationViewModel = ProteinVisualizationViewModel()
-    @StateObject var shadowsViewModel = ProteinShadowsViewModel()
-    @StateObject var graphicsSettings = ProteinGraphicsSettings()
+    @State var colorViewModel = ProteinColorViewModel()
+    @State var visualizationViewModel = ProteinVisualizationViewModel()
+    @State var shadowsViewModel = ProteinShadowsViewModel()
+    @State var graphicsSettings = ProteinGraphicsSettings()
     @State var statusViewModel = StatusViewModel()
     @State var isPresentingNews = false
             
@@ -41,10 +41,10 @@ struct MainView: View {
             ProteinView()
                 .environmentObject(proteinViewModel)
                 .environmentObject(proteinDataSource)
-                .environmentObject(colorViewModel)
-                .environmentObject(visualizationViewModel)
-                .environmentObject(shadowsViewModel)
-                .environmentObject(graphicsSettings)
+                .environment(colorViewModel)
+                .environment(visualizationViewModel)
+                .environment(shadowsViewModel)
+                .environment(graphicsSettings)
                 .environment(statusViewModel)
                 .onAppear {
                     

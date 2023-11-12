@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CameraControlToolbar: View {
     
-    @EnvironmentObject var config: ToolbarConfig
+    @Environment(ToolbarConfig.self) var config: ToolbarConfig
         
     var body: some View {
+        @Bindable var config = config
         HStack {
             Picker("Rotation mode", selection: $config.selectedTool) {
                 Image(systemName: "rotate.3d")
@@ -54,6 +55,6 @@ struct CameraControlToolbar: View {
 struct CameraControlToolbar_Previews: PreviewProvider {
     static var previews: some View {
         CameraControlToolbar()
-            .environmentObject(ToolbarConfig())
+            .environment(ToolbarConfig())
     }
 }

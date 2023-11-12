@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor class ProteinColorViewModel: ObservableObject {
+@MainActor @Observable class ProteinColorViewModel {
     
     weak var proteinViewModel: ProteinViewModel? {
         didSet {
@@ -17,7 +17,7 @@ import SwiftUI
     }
     
     /// Scene background color.
-    @Published var backgroundColor: Color = .black {
+    var backgroundColor: Color = .black {
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
             Task {
@@ -27,7 +27,7 @@ import SwiftUI
     }
     
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
-    @Published var colorBy: ProteinColorByOption {
+    var colorBy: ProteinColorByOption {
         didSet {
             guard let renderer = proteinViewModel?.renderer else { return }
             Task {
@@ -37,35 +37,35 @@ import SwiftUI
     }
     
     /// Color used for each element when coloring by element.
-    @Published var elementColors: [Color] = [Color]() {
+    var elementColors: [Color] = [Color]() {
         didSet {
             updateSceneColorFill()
         }
     }
     
     /// Color used for each subunit when coloring by subunit.
-    @Published var subunitColors: [Color] = [Color]() {
+    var subunitColors: [Color] = [Color]() {
         didSet {
             updateSceneColorFill()
         }
     }
     
     /// Color used for each residue when coloring by residue.
-    @Published var residueColors: [Color] = [Color]() {
+    var residueColors: [Color] = [Color]() {
         didSet {
             updateSceneColorFill()
         }
     }
     
     /// Color used for each residue when coloring by residue.
-    @Published var structureColors: [Color] = [Color]() {
+    var structureColors: [Color] = [Color]() {
         didSet {
             updateSceneColorFill()
         }
     }
     
     /// Color used for each subunit when coloring by element.
-    @Published var bondColor: Color = .gray {
+    var bondColor: Color = .gray {
         didSet {
             // TODO: Animation
             if let newColor = bondColor.cgColor {

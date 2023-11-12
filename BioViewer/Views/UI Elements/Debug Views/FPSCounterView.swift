@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-@MainActor class FPSCounterViewModel: ObservableObject {
+@MainActor @Observable class FPSCounterViewModel {
     
     let proteinViewModel: ProteinViewModel
     
-    private var displayLink: CADisplayLink?
+    var averageFPSString = "-"
     
-    @Published var averageFPSString = "-"
+    private var displayLink: CADisplayLink?
     private var frameTimeArray = [CFTimeInterval]()
     private var lastIndex: Int = 0
     private var currentIndex: Int = 0
@@ -56,7 +56,7 @@ import SwiftUI
 
 struct FPSCounterView: View {
     
-    @StateObject var viewModel: FPSCounterViewModel
+    @State var viewModel: FPSCounterViewModel
     
     var body: some View {
         Text(viewModel.averageFPSString)

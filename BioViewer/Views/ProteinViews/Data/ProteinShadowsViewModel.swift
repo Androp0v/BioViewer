@@ -23,11 +23,11 @@ class SunDirection {
     }
 }
 
-@MainActor class ProteinShadowsViewModel: ObservableObject {
+@MainActor @Observable class ProteinShadowsViewModel {
     
     weak var proteinViewModel: ProteinViewModel?
     
-    @Published var sunDirection = SunDirection() {
+    var sunDirection = SunDirection() {
         didSet {
             Task {
                 await proteinViewModel?.renderer.mutableState.setSunDirection(
@@ -38,14 +38,14 @@ class SunDirection {
         }
     }
     
-    @Published var hasShadows: Bool = true {
+    var hasShadows: Bool = true {
         didSet {
             Task {
                 await proteinViewModel?.renderer.mutableState.setHasShadows(hasShadows)
             }
         }
     }
-    @Published var shadowStrength: Float = 0.4 {
+    var shadowStrength: Float = 0.4 {
         didSet {
             Task {
                 await proteinViewModel?.renderer.mutableState.setShadowStrength(shadowStrength)
@@ -53,21 +53,21 @@ class SunDirection {
         }
     }
     /// Whether depth cueing should be used in the scene.
-    @Published var hasDepthCueing: Bool = false {
+    var hasDepthCueing: Bool = false {
         didSet {
             Task {
                 await proteinViewModel?.renderer.mutableState.setHasDepthCueing(hasDepthCueing)
             }
         }
     }
-    @Published var depthCueingStrength: Float = 0.3 {
+    var depthCueingStrength: Float = 0.3 {
         didSet {
             Task {
                 await proteinViewModel?.renderer.mutableState.setDepthCueingStrength(depthCueingStrength)
             }
         }
     }
-    @Published var hasAmbientOcclusion: Bool = false {
+    var hasAmbientOcclusion: Bool = false {
         didSet {
             if hasAmbientOcclusion {
                 Task {

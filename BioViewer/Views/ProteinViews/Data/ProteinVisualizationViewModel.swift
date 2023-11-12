@@ -7,7 +7,7 @@
 
 import Foundation
 
-@MainActor class ProteinVisualizationViewModel: ObservableObject {
+@MainActor @Observable class ProteinVisualizationViewModel {
     
     weak var proteinViewModel: ProteinViewModel!
     
@@ -15,7 +15,7 @@ import Foundation
     var visualizationBufferLoader = VisualizationBufferLoader()
     
     /// Visualization option for protein representation.
-    @Published var visualization: ProteinVisualizationOption = .solidSpheres {
+    var visualization: ProteinVisualizationOption = .solidSpheres {
         didSet {
             visualizationBufferLoader.handleVisualizationChange(
                 visualization: visualization,
@@ -25,7 +25,7 @@ import Foundation
     }
     
     /// Radius option for solid spheres.
-    @Published var solidSpheresRadiusOption: SolidSpheresRadiusOptions = .vanDerWaals {
+    var solidSpheresRadiusOption: SolidSpheresRadiusOptions = .vanDerWaals {
         didSet {
             self.visualizationBufferLoader.handleVisualizationChange(
                 visualization: self.visualization,
@@ -33,7 +33,7 @@ import Foundation
             )
         }
     }
-    @Published var solidSpheresFixedAtomRadii: Float = 1.0 {
+    var solidSpheresFixedAtomRadii: Float = 1.0 {
         didSet {
             self.visualizationBufferLoader.handleVisualizationChange(
                 visualization: self.visualization,
@@ -41,7 +41,7 @@ import Foundation
             )
         }
     }
-    @Published var solidSpheresVDWScale: Float = 1.0 {
+    var solidSpheresVDWScale: Float = 1.0 {
         didSet {
             self.visualizationBufferLoader.handleVisualizationChange(
                 visualization: self.visualization,
@@ -51,7 +51,7 @@ import Foundation
     }
     
     /// Radius option for ball and stick.
-    @Published var ballAndStickRadiusOption: BallAndStickRadiusOptions = .fixed {
+    var ballAndStickRadiusOption: BallAndStickRadiusOptions = .fixed {
         didSet {
             self.visualizationBufferLoader.handleVisualizationChange(
                 visualization: self.visualization,
@@ -59,7 +59,7 @@ import Foundation
             )
         }
     }
-    @Published var ballAndSticksFixedAtomRadii: Float = 0.4 {
+    var ballAndSticksFixedAtomRadii: Float = 0.4 {
         didSet {
             self.visualizationBufferLoader.handleVisualizationChange(
                 visualization: self.visualization,
@@ -67,7 +67,7 @@ import Foundation
             )
         }
     }
-    @Published var ballAndSticksVDWScale: Float = 0.3 {
+    var ballAndSticksVDWScale: Float = 0.3 {
         didSet {
             self.visualizationBufferLoader.handleVisualizationChange(
                 visualization: self.visualization,
@@ -77,7 +77,7 @@ import Foundation
     }
         
     /// Whether to show the structure surface..
-    @Published var showSurface: Bool = false {
+    var showSurface: Bool = false {
         didSet {
             if showSurface {
                 Task {
@@ -97,7 +97,7 @@ import Foundation
     }
     
     /// Scene's main camera focal length.
-    @Published var cameraFocalLength: Float = 200 {
+    var cameraFocalLength: Float = 200 {
         didSet {
             Task {
                 await proteinViewModel.renderer.mutableState.setCameraFocalLength(

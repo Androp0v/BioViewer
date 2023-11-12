@@ -15,9 +15,9 @@ struct ProteinView: View {
 
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var proteinDataSource: ProteinDataSource
-    @EnvironmentObject var colorViewModel: ProteinColorViewModel
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
-    @StateObject var toolbarConfig = ToolbarConfig()
+    @State var toolbarConfig = ToolbarConfig()
     
     // Sidebar
     @State private var showInspector: Bool = UserDefaults.standard.bool(forKey: "showInspector") {
@@ -83,7 +83,7 @@ struct ProteinView: View {
                         }
                         Spacer()
                     }
-                    .environmentObject(toolbarConfig)
+                    .environment(toolbarConfig)
                     .onAppear {
                         proteinViewModel.toolbarConfig = toolbarConfig
                         toolbarConfig.proteinViewModel = proteinViewModel

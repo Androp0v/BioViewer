@@ -82,7 +82,8 @@ struct FileDetailsComponent: View {
         )
         .sheet(isPresented: $showFileSource, onDismiss: nil, content: {
             let fileSourceViewModel = FileSourceViewModel(fileInfo: file.fileInfo)
-            FileSourceView(sourceViewModel: fileSourceViewModel)
+            FileSourceView()
+                .environment(fileSourceViewModel)
         })
         .buttonStyle(DefaultButtonStyle())
     }

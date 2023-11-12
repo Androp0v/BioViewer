@@ -15,9 +15,9 @@ struct BioBenchView: View {
     
     @StateObject var proteinViewModel = ProteinViewModel(isBenchmark: true)
     @StateObject var proteinDataSource = ProteinDataSource()
-    @StateObject var colorViewModel = ProteinColorViewModel()
-    @StateObject var visualizationViewModel = ProteinVisualizationViewModel()
-    @StateObject var shadowsViewModel = ProteinShadowsViewModel()
+    @State var colorViewModel = ProteinColorViewModel()
+    @State var visualizationViewModel = ProteinVisualizationViewModel()
+    @State var shadowsViewModel = ProteinShadowsViewModel()
     @State var statusViewModel = StatusViewModel()
     
     @State var currentImage: CGImage?

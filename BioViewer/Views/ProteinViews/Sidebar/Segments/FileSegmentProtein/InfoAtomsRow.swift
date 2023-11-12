@@ -16,7 +16,7 @@ struct InfoAtomsRow: View {
     
     @State var buttonToggle: Bool = false
     @EnvironmentObject var proteinDataSource: ProteinDataSource
-    @EnvironmentObject var colorViewModel: ProteinColorViewModel
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
 
     var body: some View {
                     
@@ -56,7 +56,7 @@ struct InfoAtomsRow: View {
                         .popover(isPresented: $buttonToggle) {
                             FileCompositionView()
                                 .environmentObject(proteinDataSource)
-                                .environmentObject(colorViewModel)
+                                .environment(colorViewModel)
                         }
                 }
             }

@@ -10,9 +10,10 @@ import SwiftUI
 
 struct VisualizationSection: View {
     
-    @EnvironmentObject var visualizationViewModel: ProteinVisualizationViewModel
+    @Environment(ProteinVisualizationViewModel.self) var visualizationViewModel: ProteinVisualizationViewModel
     
     var body: some View {
+        @Bindable var visualizationViewModel = visualizationViewModel
         Section(
             header:
                 Text(NSLocalizedString("Visualization", comment: ""))

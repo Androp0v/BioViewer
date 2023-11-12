@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FileSourceView: View {
     
-    @ObservedObject var sourceViewModel: FileSourceViewModel
+    @Environment(FileSourceViewModel.self) var sourceViewModel: FileSourceViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -55,13 +55,19 @@ struct FileSourceView: View {
 }
 
 struct FileSourceView_Previews: PreviewProvider {
+    static let viewModel = FileSourceViewModel(fileInfo: ProteinFileInfo(
+        pdbID: nil,
+        description: nil,
+        authors: nil,
+        sourceLines:
+            [
+                "HEADER    RIBOSOME                                07-JAN-07   XXXX \n",
+                "TITLE     THE CRYSTAL STRUCTURE OF THE LARGE RIBOSOMAL SUBUNIT FROM \n",
+                "TITLE    2 DEINOCOCCUS RADIODURANS COMPLEXED WITH THE PLEUROMUTILIN \n"
+            ]
+    ))
     static var previews: some View {
-        FileSourceView(sourceViewModel: FileSourceViewModel(fileInfo: ProteinFileInfo(pdbID: nil,
-                                                                                      description: nil,
-                                                                                      authors: nil,
-                                                                                      sourceLines:
-            ["HEADER    RIBOSOME                                07-JAN-07   XXXX \n",
-             "TITLE     THE CRYSTAL STRUCTURE OF THE LARGE RIBOSOMAL SUBUNIT FROM \n",
-             "TITLE    2 DEINOCOCCUS RADIODURANS COMPLEXED WITH THE PLEUROMUTILIN \n"])))
+        FileSourceView()
+            .environment(Self.viewModel)
     }
 }
