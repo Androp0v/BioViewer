@@ -8,14 +8,15 @@
 import Foundation
 
 // MARK: - ProteinFileType
-public enum ProteinFileType {
+
+public enum ProteinFileType: Sendable {
     case staticStructure
     case dynamicStructure
 }
 
 // MARK: - ProteinFile
 
-public struct ProteinFile: Hashable {
+public struct ProteinFile: Hashable, Sendable {
     
     /// Unique ID for the file (only used internally).
     public let id = UUID()

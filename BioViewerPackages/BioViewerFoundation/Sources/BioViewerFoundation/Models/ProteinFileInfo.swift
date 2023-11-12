@@ -8,7 +8,7 @@
 import Foundation
 
 /// Class containing the data related to the imported protein file itself.
-public struct ProteinFileInfo {
+public struct ProteinFileInfo: Sendable {
     
     /// PDB ID as in RCSB database.
     public var pdbID: String?

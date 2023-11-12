@@ -8,12 +8,12 @@
 import Foundation
 
 /// Struct holding the contents of a protein subunit.
-public struct ProteinSubunit {
+public struct ProteinSubunit: Sendable {
         
     /// The subunit index inside its parent protein.
     public let indexInProtein: Int
     
-    public enum SubunitKind {
+    public enum SubunitKind: Sendable {
         case chain
         case nonChain
         case unknown

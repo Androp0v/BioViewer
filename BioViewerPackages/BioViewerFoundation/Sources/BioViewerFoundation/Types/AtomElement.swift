@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public enum AtomElement: UInt8, CaseIterable {
+public enum AtomElement: UInt8, CaseIterable, Sendable {
     case unknown = 0
     case hydrogen = 1
     case carbon = 6

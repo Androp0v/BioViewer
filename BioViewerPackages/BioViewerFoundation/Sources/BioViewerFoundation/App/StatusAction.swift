@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum StatusActionType {
+public enum StatusActionType: Sendable {
     case importFile
     case geometryGeneration
     
@@ -30,7 +30,7 @@ public enum StatusActionType {
     }
 }
 
-public struct StatusAction: Identifiable {
+public struct StatusAction: Identifiable, Sendable {
     public let id = UUID()
     public let type: StatusActionType
     public var description: String?

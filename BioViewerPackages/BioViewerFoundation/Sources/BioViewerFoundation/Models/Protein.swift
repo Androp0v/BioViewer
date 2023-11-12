@@ -9,7 +9,7 @@ import Foundation
 import simd
 
 /// Class holding the contents of a protein.
-public struct Protein {
+public struct Protein: Sendable {
 
     // MARK: - UUID
     

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public enum SecondaryStructure: UInt8, CaseIterable {
+public enum SecondaryStructure: UInt8, CaseIterable, Sendable {
     case helix
     case sheet
     case loop

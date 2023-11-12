@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ProteinElementComposition {
+public struct ProteinElementComposition: Sendable {
     
     /// Dictionary containing the number of atoms of each type of element.
     public var elementCounts = [AtomElement: Int]()

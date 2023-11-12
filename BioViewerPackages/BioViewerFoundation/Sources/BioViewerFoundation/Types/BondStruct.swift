@@ -8,7 +8,7 @@
 import Foundation
 import simd
 
-public struct BondStruct {
+public struct BondStruct: Sendable {
     /// Position of the first atom in world space.
     public let atomA: simd_float3
     /// Position of the first atom in world space.

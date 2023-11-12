@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ProteinResidueComposition {
+public struct ProteinResidueComposition: Sendable {
     
     /// Dictionary containing the number of atoms of each type of residue.
     public var residueCounts = [Residue: Int]()

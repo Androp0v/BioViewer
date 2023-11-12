@@ -10,7 +10,7 @@ import SwiftUI
 
 // swiftlint:disable all
 
-public enum Residue: UInt8, CaseIterable {
+public enum Residue: UInt8, CaseIterable, Sendable {
     
     // MARK: - Amino acids
     
