@@ -7,9 +7,10 @@
 
 import Foundation
 
-public enum StatusActionType: Sendable {
+public enum StatusActionType: Sendable, Equatable {
     case importFile
     case geometryGeneration
+    case benchmark(proteinName: String)
     
     public var title: String {
         switch self {
@@ -17,6 +18,8 @@ public enum StatusActionType: Sendable {
             return "Import file"
         case .geometryGeneration:
             return "Ball and stick"
+        case .benchmark(proteinName: let name):
+            return "Benchmark \(name)"
         }
     }
     
@@ -25,6 +28,8 @@ public enum StatusActionType: Sendable {
         case .importFile:
             true
         case .geometryGeneration:
+            false
+        case .benchmark:
             false
         }
     }

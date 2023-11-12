@@ -54,15 +54,18 @@ struct BioBenchView: View {
                         .border(.red)
                 }
                 
+                StatusOverlayView()
+                    .environment(statusViewModel)
+                
                 ZStack(alignment: .bottomLeading) {
                     HStack {
+                        Spacer()
                         VStack(spacing: .zero) {
                             Spacer()
                             ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
                             FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
                                 .padding()
                         }
-                        Spacer()
                     }
                 }
                 .frame(width: Self.benchmarkResolution / 2, height: Self.benchmarkResolution / 2)

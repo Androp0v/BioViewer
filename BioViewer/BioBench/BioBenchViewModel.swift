@@ -31,6 +31,8 @@ import SwiftUI
             "5FUA"
             // "1UF2"
         ] {
+            let benchmarkAction = StatusAction(type: .benchmark(proteinName: pdbID))
+            statusViewModel.showStatusForAction(benchmarkAction)
             guard let (rawText, byteSize) = try? await RCSBFetch.fetchPDBFile(rcsbid: pdbID) else {
                 continue
             }
@@ -58,6 +60,11 @@ import SwiftUI
             let waitTask = Task.detached {
                 while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
                     try? await Task.sleep(for: .seconds(1))
+                    let completedFrames = await proteinViewModel.renderer.benchmarkedFrames
+                    await statusViewModel.updateProgress(
+                        benchmarkAction,
+                        progress: Double(completedFrames) / Double(BioBenchConfig.numberOfFrames)
+                    )
                     await Task.yield()
                 }
             }
