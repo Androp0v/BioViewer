@@ -16,7 +16,7 @@ struct ProteinView: View {
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var proteinDataSource: ProteinDataSource
     @EnvironmentObject var colorViewModel: ProteinColorViewModel
-    @EnvironmentObject var statusViewModel: StatusViewModel
+    @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @StateObject var toolbarConfig = ToolbarConfig()
     
     // Sidebar

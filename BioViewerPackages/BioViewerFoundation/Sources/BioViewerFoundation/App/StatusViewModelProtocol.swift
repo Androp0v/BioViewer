@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol StatusViewModelProtocol {
-    @MainActor func updateProgress(_ statusAction: StatusAction, progress: Double?)
+    func updateProgress(_ statusAction: StatusAction, progress: Double?)
 }

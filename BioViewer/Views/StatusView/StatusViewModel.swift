@@ -10,15 +10,15 @@ import Foundation
 import QuartzCore
 import SwiftUI
 
-@MainActor class StatusViewModel: ObservableObject, StatusViewModelProtocol {
+@Observable final class StatusViewModel: StatusViewModelProtocol {
     
     weak var proteinViewModel: ProteinViewModel?
     
     // MARK: - UI properties
     // Published variables used by the UI
-    @Published private(set) var actionToShow: StatusAction?
-    @Published private(set) var runningActions = [StatusAction]()
-    @Published private(set) var failedActions = [StatusAction]()
+    private(set) var actionToShow: StatusAction?
+    private(set) var runningActions = [StatusAction]()
+    private(set) var failedActions = [StatusAction]()
     
     var isBlockingUI: Bool {
         if runningActions.contains(where: {$0.type.blocksRendering}) {

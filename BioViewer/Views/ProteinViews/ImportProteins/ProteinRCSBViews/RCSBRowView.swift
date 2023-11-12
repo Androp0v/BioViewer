@@ -17,7 +17,7 @@ struct RCSBRowView: View {
     @Binding var rcsbShowSheet: Bool
     
     @EnvironmentObject var proteinDataSource: ProteinDataSource
-    @EnvironmentObject var statusViewModel: StatusViewModel
+    @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @EnvironmentObject var rcsbImportViewModel: RCSBImportViewModel
     
     private enum Constants {

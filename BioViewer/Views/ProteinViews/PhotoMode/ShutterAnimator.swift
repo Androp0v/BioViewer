@@ -11,16 +11,20 @@ import SwiftUI
 
 @MainActor class ShutterAnimator: ObservableObject {
     
+    // MARK: - UI Properties
+    
     @Published var shutterAnimationRunning: Bool = false
     @Published var showImage: Bool = true
     @Published var showFirstShutterCurtain: Bool = true
     @Published var showSecondShutterCurtain: Bool = false
     
+    // MARK: - Internal properties
+    
     weak var photoModeViewModel: PhotoModeViewModel?
         
     private var isShutterOpen: Bool = false
-    var shutterOpenPlayer: AVAudioPlayer?
-    var shutterClosedPlayer: AVAudioPlayer?
+    private var shutterOpenPlayer: AVAudioPlayer?
+    private var shutterClosedPlayer: AVAudioPlayer?
     
     // MARK: - Init
     init() {

@@ -45,7 +45,7 @@ class ConnectivityGenerator {
                 if Task.isCancelled { return }
                 
                 // Update progress
-                await statusViewModel?.updateProgress(statusAction, progress: progress)
+                statusViewModel?.updateProgress(statusAction, progress: progress)
                 
                 // Compute a new matrix row
                 for indexB in configurationStartIndex..<indexA {

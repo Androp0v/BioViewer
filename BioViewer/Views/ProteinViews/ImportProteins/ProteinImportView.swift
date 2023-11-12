@@ -10,7 +10,7 @@ import SwiftUI
 struct ProteinImportView: View {
 
     @EnvironmentObject var proteinDataSource: ProteinDataSource
-    @EnvironmentObject var statusViewModel: StatusViewModel
+    @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @State var willLoadProtein: Bool = false
     @State var showFileImporter: Bool = false
     @State var showRCSBImportSheet: Bool = false

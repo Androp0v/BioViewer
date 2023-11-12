@@ -25,7 +25,7 @@ class FileParser {
         switch fileExtension {
         // MARK: - PDB Files
         case "pdb", "PDB", "pdb1", "PDB1":
-            await statusViewModel.updateDescription(statusAction, description: "Importing file")
+            statusViewModel.updateDescription(statusAction, description: "Importing file")
             do {
                 let proteinFile = try await PDBParser().parsePDB(
                     fileName: fileName,
@@ -44,7 +44,7 @@ class FileParser {
             }
         // MARK: - XYZ Files
         case "xyz", "XYZ":
-            await statusViewModel.updateDescription(statusAction, description: "Importing file")
+            statusViewModel.updateDescription(statusAction, description: "Importing file")
             do {
                 let proteinFile = try await XYZParser().parseXYZ(
                     fileName: fileName,

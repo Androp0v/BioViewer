@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StatusOverlayView: View {
-    @EnvironmentObject var statusViewModel: StatusViewModel
+    @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     
     var body: some View {
         if let statusAction = statusViewModel.actionToShow {

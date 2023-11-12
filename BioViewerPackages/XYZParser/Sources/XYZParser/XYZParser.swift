@@ -38,9 +38,7 @@ public actor XYZParser {
     
     func parseLine(_ line: String, statusViewModel: some StatusViewModelProtocol, statusAction: StatusAction) {
         currentLine += 1
-        Task {
-            await statusViewModel.updateProgress(statusAction, progress: progress)
-        }
+        statusViewModel.updateProgress(statusAction, progress: progress)
         
         let lineElements = line.components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
         guard lineElements.count >= XYZConstants.atomLineNumberOfComponents else {

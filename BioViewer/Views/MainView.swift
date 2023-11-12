@@ -15,7 +15,7 @@ struct MainView: View {
     @StateObject var visualizationViewModel = ProteinVisualizationViewModel()
     @StateObject var shadowsViewModel = ProteinShadowsViewModel()
     @StateObject var graphicsSettings = ProteinGraphicsSettings()
-    @StateObject var statusViewModel = StatusViewModel()
+    @State var statusViewModel = StatusViewModel()
     @State var isPresentingNews = false
             
     init() {
@@ -45,7 +45,7 @@ struct MainView: View {
                 .environmentObject(visualizationViewModel)
                 .environmentObject(shadowsViewModel)
                 .environmentObject(graphicsSettings)
-                .environmentObject(statusViewModel)
+                .environment(statusViewModel)
                 .onAppear {
                     
                     proteinDataSource.proteinViewModel = proteinViewModel
