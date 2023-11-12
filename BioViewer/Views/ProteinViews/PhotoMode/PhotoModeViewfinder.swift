@@ -9,9 +9,8 @@ import SwiftUI
 
 struct PhotoModeViewfinder: View {
     
-    @State var image: Image?
-    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
-    @ObservedObject var shutterAnimator: ShutterAnimator
+    @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
+    @Environment(ShutterAnimator.self) var shutterAnimator: ShutterAnimator
     
     var body: some View {
         ZStack {
@@ -46,13 +45,13 @@ struct PhotoModeViewfinder: View {
                     ))
             }
             // MARK: - Photo/mirror
-            if photoModeViewModel.isPreviewCreated && shutterAnimator.showImage {
+            if shutterAnimator.image != nil && shutterAnimator.showImage {
                 ZStack {
                     Color(uiColor: .systemBackground)
-                    image?
+                    shutterAnimator.image?
                         .resizable()
                         .onDrag {
-                            guard let cgImage = photoModeViewModel.image else { return NSItemProvider() }
+                            guard let cgImage = shutterAnimator.cgImage else { return NSItemProvider() }
                             let data = UIImage(cgImage: cgImage).pngData()
                             let provider = NSItemProvider(item: data as NSSecureCoding?,
                                                           typeIdentifier: "public.png")
@@ -79,17 +78,13 @@ struct PhotoModeViewfinder: View {
         .cornerRadius(12)
         .aspectRatio(1.0, contentMode: .fit)
         .frame(maxHeight: 300)
-        .onReceive(photoModeViewModel.$isPreviewCreated) { _ in
-            if let cgImage = photoModeViewModel.image {
-                self.image = Image(uiImage: UIImage(cgImage: cgImage))
-            }
-        }
     }
 }
 
 struct PhotoModeViewfinder_Previews: PreviewProvider {
     static var previews: some View {
-        PhotoModeViewfinder(shutterAnimator: PhotoModeViewModel().shutterAnimator)
-            .environmentObject(PhotoModeViewModel())
+        PhotoModeViewfinder()
+            .environment(ShutterAnimator())
+            .environment(PhotoModeViewModel())
     }
 }

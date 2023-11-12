@@ -8,14 +8,14 @@
 import Foundation
 import SwiftUI
 
-@MainActor class PhotoModeViewModel: ObservableObject {
+@Observable class PhotoModeViewModel {
     
     // MARK: - Config
-    @Published var photoConfig = PhotoModeConfig()
-    @Published var shutterAnimator = ShutterAnimator()
+    var photoConfig = PhotoModeConfig()
+    var shutterAnimator = ShutterAnimator()
     
     // MARK: - Pickers
-    @Published var finalTextureSizeOption: Int = PhotoModeTextureOptions.high {
+    var finalTextureSizeOption: Int = PhotoModeTextureOptions.high {
         didSet {
             switch finalTextureSizeOption {
             case PhotoModeTextureOptions.normal:
@@ -30,7 +30,7 @@ import SwiftUI
         }
     }
     
-    @Published var shadowResolution: Int = PhotoModeShadowOptions.high {
+    var shadowResolution: Int = PhotoModeShadowOptions.high {
         didSet {
             switch finalTextureSizeOption {
             case PhotoModeTextureOptions.normal:
@@ -43,15 +43,6 @@ import SwiftUI
                 photoConfig.shadowTextureSize = 4096
             }
         }
-    }
-    
-    // MARK: - Viewfinder
-    var image: CGImage?
-    @Published var isPreviewCreated: Bool = false
-    
-    // MARK: - Initialization
-    init() {
-        shutterAnimator.photoModeViewModel = self
     }
 }
 

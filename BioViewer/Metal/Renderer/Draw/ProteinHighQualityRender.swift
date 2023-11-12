@@ -139,12 +139,8 @@ extension MutableState {
                 clearBackground: photoConfig.clearBackground,
                 depthTexture: hqTextures.hqDepthTexture
             )
-            Task { @MainActor in
-                await photoModeViewModel.shutterAnimator.closeShutter()
-                withAnimation {
-                    photoModeViewModel.image = hqImage
-                    photoModeViewModel.isPreviewCreated = true
-                }
+            Task {
+                await photoModeViewModel.shutterAnimator.closeShutter(with: hqImage)
             }
             self.scene.aspectRatio = oldAspectRatio
         })

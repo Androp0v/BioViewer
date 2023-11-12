@@ -10,8 +10,8 @@ import SwiftUI
 struct PhotoModeFooter: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
-    @ObservedObject var shutterAnimator: ShutterAnimator
+    @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
+    @Environment(ShutterAnimator.self) var shutterAnimator: ShutterAnimator
     
     var body: some View {
         VStack(spacing: 0) {
@@ -49,6 +49,7 @@ struct PhotoModeFooter: View {
 
 struct PhotoModeFooter_Previews: PreviewProvider {
     static var previews: some View {
-        PhotoModeFooter(shutterAnimator: ShutterAnimator())
+        PhotoModeFooter()
+            .environment(ShutterAnimator())
     }
 }

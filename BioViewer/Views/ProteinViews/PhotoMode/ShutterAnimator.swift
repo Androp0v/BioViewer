@@ -9,53 +9,56 @@ import AVFoundation
 import Foundation
 import SwiftUI
 
-@MainActor class ShutterAnimator: ObservableObject {
+@Observable class ShutterAnimator {
     
     // MARK: - UI Properties
     
-    @Published var shutterAnimationRunning: Bool = false
-    @Published var showImage: Bool = true
-    @Published var showFirstShutterCurtain: Bool = true
-    @Published var showSecondShutterCurtain: Bool = false
+    var shutterAnimationRunning: Bool = false
+    var showImage: Bool = true
+    var showFirstShutterCurtain: Bool = true
+    var showSecondShutterCurtain: Bool = false
+    var image: Image?
+    var cgImage: CGImage? {
+        didSet {
+            if let cgImage {
+                self.image = Image(cgImage, scale: 1.0, label: Text("BioViewer Image"))
+            }
+        }
+    }
     
     // MARK: - Internal properties
-    
-    weak var photoModeViewModel: PhotoModeViewModel?
-        
+            
     private var isShutterOpen: Bool = false
     private var shutterOpenPlayer: AVAudioPlayer?
     private var shutterClosedPlayer: AVAudioPlayer?
     
     // MARK: - Init
     init() {
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            if let soundURL = Bundle.main.url(forResource: "ShutterOpen", withExtension: "aiff") {
-                self.shutterOpenPlayer = try? AVAudioPlayer(
-                    contentsOf: soundURL,
-                    fileTypeHint: AVFileType.aiff.rawValue
-                )
-                self.shutterOpenPlayer?.volume = 0.1
-            }
-            if let soundURL = Bundle.main.url(forResource: "ShutterClosed", withExtension: "aiff") {
-                self.shutterClosedPlayer = try? AVAudioPlayer(
-                    contentsOf: soundURL,
-                    fileTypeHint: AVFileType.aiff.rawValue
-                )
-                self.shutterClosedPlayer?.volume = 0.1
-            }
+        if let soundURL = Bundle.main.url(forResource: "ShutterOpen", withExtension: "aiff") {
+            self.shutterOpenPlayer = try? AVAudioPlayer(
+                contentsOf: soundURL,
+                fileTypeHint: AVFileType.aiff.rawValue
+            )
+            self.shutterOpenPlayer?.volume = 0.1
+        }
+        if let soundURL = Bundle.main.url(forResource: "ShutterClosed", withExtension: "aiff") {
+            self.shutterClosedPlayer = try? AVAudioPlayer(
+                contentsOf: soundURL,
+                fileTypeHint: AVFileType.aiff.rawValue
+            )
+            self.shutterClosedPlayer?.volume = 0.1
         }
     }
     
     // MARK: - Shutter feedback
     
-    func mirrorImpact() {
+    @MainActor func mirrorImpact() {
         let hapticFeedback = UIImpactFeedbackGenerator(style: .rigid)
         hapticFeedback.prepare()
         hapticFeedback.impactOccurred()
     }
     
-    func shutterCurtainImpact() {
+    @MainActor func shutterCurtainImpact() {
         let hapticFeedback = UIImpactFeedbackGenerator(style: .light)
         hapticFeedback.prepare()
         
@@ -82,7 +85,7 @@ import SwiftUI
         shutterOpenPlayer?.prepareToPlay()
         shutterAnimationRunning = true
                 
-        if photoModeViewModel?.isPreviewCreated ?? false {
+        if image == nil {
             // Image ('mirror') goes up
             withAnimation(.easeIn(duration: 0.15)) {
                 showImage = false
@@ -92,7 +95,7 @@ import SwiftUI
             try? await Task.sleep(for: .seconds(0.15))
             
             // Haptics
-            mirrorImpact()
+            await mirrorImpact()
             // Sound
             playShutterOpenSound()
             
@@ -103,7 +106,7 @@ import SwiftUI
             }
             
             try? await Task.sleep(for: .seconds(0.15))
-            shutterCurtainImpact()
+            await shutterCurtainImpact()
         } else {
             // First shutter curtain goes down
             withAnimation(.easeIn(duration: 0.15)) {
@@ -114,34 +117,35 @@ import SwiftUI
             try? await Task.sleep(for: .seconds(0.15))
             
             // Haptics
-            shutterCurtainImpact()
+            await shutterCurtainImpact()
             // Sound
             playShutterOpenSound()
         }
         self.isShutterOpen = true
     }
     
-    func closeShutter() async {
+    func closeShutter(with cgImage: CGImage?) async {
         
         shutterClosedPlayer?.prepareToPlay()
         
         withAnimation(.easeInOut(duration: 0.15)) {
             showSecondShutterCurtain = true
+            self.cgImage = cgImage
         }
         try? await Task.sleep(for: .seconds(0.15))
         
         // Haptics
-        shutterCurtainImpact()
+        await shutterCurtainImpact()
         // Sound
         playShutterClosedSound()
         
         try? await Task.sleep(for: .seconds(0.10))
-        withAnimation(.easeInOut(duration: 0.15)) {
+        withAnimation(.easeInOut(duration: 0.35)) {
             showImage = true
         }
 
-        try? await Task.sleep(for: .seconds(0.15))
-        mirrorImpact()
+        try? await Task.sleep(for: .seconds(0.35))
+        await mirrorImpact()
         self.showFirstShutterCurtain = true
         self.showSecondShutterCurtain = false
         self.isShutterOpen = false

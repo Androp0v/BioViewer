@@ -10,19 +10,21 @@ import SwiftUI
 struct PhotoModeView: View {
     
     @Environment(\.dismiss) var dismiss
-    @StateObject var photoModeViewModel = PhotoModeViewModel()
+    @State var photoModeViewModel = PhotoModeViewModel()
     
     var body: some View {
         NavigationView {
             ZStack {
                 PhotoModeContent()
                     .edgesIgnoringSafeArea(.bottom)
-                    .environmentObject(photoModeViewModel)
+                    .environment(photoModeViewModel.shutterAnimator)
+                    .environment(photoModeViewModel)
                 
                 VStack {
                     Spacer()
-                    PhotoModeFooter(shutterAnimator: photoModeViewModel.shutterAnimator)
-                        .environmentObject(photoModeViewModel)
+                    PhotoModeFooter()
+                        .environment(photoModeViewModel.shutterAnimator)
+                        .environment(photoModeViewModel)
                 }
             }
             .navigationTitle(NSLocalizedString("Photo Mode", comment: ""))

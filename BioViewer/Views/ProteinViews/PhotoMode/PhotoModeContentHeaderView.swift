@@ -9,13 +9,15 @@ import SwiftUI
 
 struct PhotoModeContentHeaderView: View {
     
-    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
+    @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
+    @Environment(ShutterAnimator.self) var shutterAnimator: ShutterAnimator
             
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             
             // MARK: - Preview image
-            PhotoModeViewfinder(shutterAnimator: photoModeViewModel.shutterAnimator)
+            PhotoModeViewfinder()
+                .environment(photoModeViewModel.shutterAnimator)
             
             // MARK: - Side buttons
             VStack(alignment: .leading, spacing: 12) {
@@ -43,12 +45,12 @@ struct PhotoModeContentHeaderView: View {
                 
                 ShareLink(
                     item: ImageExporter().createExportableImage(
-                        cgImage: photoModeViewModel.image,
+                        cgImage: shutterAnimator.cgImage,
                         preferredFileName: nil
                     ),
                     preview: SharePreview("BioViewer Image")
                 )
-                .disabled(!photoModeViewModel.isPreviewCreated)
+                .disabled(shutterAnimator.image == nil)
             }
             Spacer()
         }
@@ -61,7 +63,7 @@ struct PhotoModeContentHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         List {
             PhotoModeContentHeaderView()
-                .environmentObject(PhotoModeViewModel())
+                .environment(PhotoModeViewModel())
         }
 .previewInterfaceOrientation(.portrait)
     }
