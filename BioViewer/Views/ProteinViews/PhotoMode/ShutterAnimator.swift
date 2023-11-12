@@ -24,7 +24,7 @@ import SwiftUI
     
     // MARK: - Init
     init() {
-        Task{ @MainActor [weak self] in
+        Task { @MainActor [weak self] in
             guard let self else { return }
             if let soundURL = Bundle.main.url(forResource: "ShutterOpen", withExtension: "aiff") {
                 self.shutterOpenPlayer = try? AVAudioPlayer(

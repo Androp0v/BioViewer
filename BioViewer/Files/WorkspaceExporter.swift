@@ -19,6 +19,7 @@ class WorkspaceExporter {
         let fileURL = dataDir.appendingPathComponent("Workspace").appendingPathExtension("bioviewer")
         
         Task {
+            /*
             let archive = await BioViewerWorkspace(fileURL: fileURL)
             // FIXME: archive.testContent = await proteinViewModel.dataSource?.files.first?.fileInfo.pdbID ?? "Unknown PDB ID"
             
@@ -48,6 +49,7 @@ class WorkspaceExporter {
                     rootViewController.present(documentPicker, animated: true)
                 }
             }
+             */
         }
     }
 }

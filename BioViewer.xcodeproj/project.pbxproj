@@ -55,6 +55,7 @@
 		C501C74527C3FE93008CDA25 /* ComputePipelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74427C3FE93008CDA25 /* ComputePipelines.swift */; };
 		C501C74727C955B5008CDA25 /* FillColorInputUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */; };
 		C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C504C9C7274294A7002D4E6A /* RCSBError.swift */; };
+		C504F0BC2B00695000D68D10 /* ImportedUTTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C504F0BB2B00695000D68D10 /* ImportedUTTypes.swift */; };
 		C50AF7B927CB84A000768E4D /* SelectedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50AF7B827CB84A000768E4D /* SelectedAtom.swift */; };
 		C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */; };
 		C50E024E27639B43005D7F06 /* SliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E024D27639B43005D7F06 /* SliderRow.swift */; };
@@ -96,7 +97,6 @@
 		C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */; };
 		C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */; };
 		C53A11932736F79900119BE6 /* RCSBRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A11922736F79900119BE6 /* RCSBRequest.swift */; };
-		C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */; };
 		C54066EE274BBD6A00710CFC /* ProteinImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066ED274BBD6A00710CFC /* ProteinImportViewModel.swift */; };
 		C5406700274D387200710CFC /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54066FF274D387200710CFC /* ImportError.swift */; };
 		C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5406703274D656700710CFC /* SettingsSegmentProtein.swift */; };
@@ -112,11 +112,6 @@
 		C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F3F2770FA9200607B20 /* LineGraphView.swift */; };
 		C5433F422771667200607B20 /* PhotoModeViewfinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5433F412771667200607B20 /* PhotoModeViewfinder.swift */; };
 		C544D3A0277016270060B30D /* TextureToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544D39F277016270060B30D /* TextureToImage.swift */; };
-		C55384202972DCBC007E45E1 /* CartoonHelix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553841F2972DCBC007E45E1 /* CartoonHelix.swift */; };
-		C55384232972DD0C007E45E1 /* CartoonSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384222972DD0C007E45E1 /* CartoonSheet.swift */; };
-		C55384252972DD73007E45E1 /* CartoonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384242972DD73007E45E1 /* CartoonModel.swift */; };
-		C55384272972DE79007E45E1 /* CartoonLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384262972DE79007E45E1 /* CartoonLoop.swift */; };
-		C55384292972DEF6007E45E1 /* CartoonStructureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55384282972DEF6007E45E1 /* CartoonStructureType.swift */; };
 		C553B7912932FAA400294BB4 /* VisualizationSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B7902932FAA400294BB4 /* VisualizationSection.swift */; };
 		C553B79529360CF600294BB4 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79429360CF600294BB4 /* UserDefaults+Extension.swift */; };
 		C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553B79729361A9E00294BB4 /* ShadowsSection.swift */; };
@@ -299,6 +294,7 @@
 		C501C74627C955B5008CDA25 /* FillColorInputUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorInputUtility.swift; sourceTree = "<group>"; };
 		C504C9C527418769002D4E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C504C9C7274294A7002D4E6A /* RCSBError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBError.swift; sourceTree = "<group>"; };
+		C504F0BB2B00695000D68D10 /* ImportedUTTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedUTTypes.swift; sourceTree = "<group>"; };
 		C50AF7B827CB84A000768E4D /* SelectedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedAtom.swift; sourceTree = "<group>"; };
 		C50D95D827400F6F0002E089 /* InfoLongTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoLongTextRow.swift; sourceTree = "<group>"; };
 		C50E024D27639B43005D7F06 /* SliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderRow.swift; sourceTree = "<group>"; };
@@ -341,7 +337,6 @@
 		C53A118E2736DD0D00119BE6 /* RCSBRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRowView.swift; sourceTree = "<group>"; };
 		C53A11902736DED200119BE6 /* RCSBImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBImportViewModel.swift; sourceTree = "<group>"; };
 		C53A11922736F79900119BE6 /* RCSBRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBRequest.swift; sourceTree = "<group>"; };
-		C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerViewController.swift; sourceTree = "<group>"; };
 		C54066ED274BBD6A00710CFC /* ProteinImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinImportViewModel.swift; sourceTree = "<group>"; };
 		C54066FF274D387200710CFC /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
 		C5406703274D656700710CFC /* SettingsSegmentProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSegmentProtein.swift; sourceTree = "<group>"; };
@@ -357,11 +352,6 @@
 		C5433F3F2770FA9200607B20 /* LineGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraphView.swift; sourceTree = "<group>"; };
 		C5433F412771667200607B20 /* PhotoModeViewfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModeViewfinder.swift; sourceTree = "<group>"; };
 		C544D39F277016270060B30D /* TextureToImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToImage.swift; sourceTree = "<group>"; };
-		C553841F2972DCBC007E45E1 /* CartoonHelix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartoonHelix.swift; sourceTree = "<group>"; };
-		C55384222972DD0C007E45E1 /* CartoonSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartoonSheet.swift; sourceTree = "<group>"; };
-		C55384242972DD73007E45E1 /* CartoonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartoonModel.swift; sourceTree = "<group>"; };
-		C55384262972DE79007E45E1 /* CartoonLoop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartoonLoop.swift; sourceTree = "<group>"; };
-		C55384282972DEF6007E45E1 /* CartoonStructureType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartoonStructureType.swift; sourceTree = "<group>"; };
 		C553B7902932FAA400294BB4 /* VisualizationSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationSection.swift; sourceTree = "<group>"; };
 		C553B79429360CF600294BB4 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		C553B79729361A9E00294BB4 /* ShadowsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowsSection.swift; sourceTree = "<group>"; };
@@ -686,7 +676,6 @@
 				C44D0558266BAA6E00BAFDCD /* AppState.swift */,
 				C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */,
 				C54066F8274D1C6100710CFC /* Files */,
-				C56B3A0B2A22194100AD5C82 /* Models */,
 				C4B1F82026457D020035D739 /* Data structures */,
 				C553B79629360F9900294BB4 /* Components */,
 				C5FF9AD42980350700D583A2 /* BioBench */,
@@ -1011,18 +1000,6 @@
 			path = Sections;
 			sourceTree = "<group>";
 		};
-		C55384212972DCCF007E45E1 /* Cartoon */ = {
-			isa = PBXGroup;
-			children = (
-				C55384282972DEF6007E45E1 /* CartoonStructureType.swift */,
-				C55384242972DD73007E45E1 /* CartoonModel.swift */,
-				C553841F2972DCBC007E45E1 /* CartoonHelix.swift */,
-				C55384222972DD0C007E45E1 /* CartoonSheet.swift */,
-				C55384262972DE79007E45E1 /* CartoonLoop.swift */,
-			);
-			path = Cartoon;
-			sourceTree = "<group>";
-		};
 		C553B7922932FC5E00294BB4 /* Subsections */ = {
 			isa = PBXGroup;
 			children = (
@@ -1095,14 +1072,6 @@
 			path = Scene;
 			sourceTree = "<group>";
 		};
-		C56B3A0B2A22194100AD5C82 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				C57F9956275E59C0001DE6D6 /* Protein */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		C56B3A102A22780C00AD5C82 /* ProteinDataSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -1147,14 +1116,6 @@
 			path = ProteinThumbnail;
 			sourceTree = "<group>";
 		};
-		C57F9956275E59C0001DE6D6 /* Protein */ = {
-			isa = PBXGroup;
-			children = (
-				C55384212972DCCF007E45E1 /* Cartoon */,
-			);
-			path = Protein;
-			sourceTree = "<group>";
-		};
 		C57F995C275E8E16001DE6D6 /* Import */ = {
 			isa = PBXGroup;
 			children = (
@@ -1162,8 +1123,8 @@
 				C41A0561264C2853006F551C /* FileParser.swift */,
 				C54066FC274D20BE00710CFC /* Parsers */,
 				C54066FF274D387200710CFC /* ImportError.swift */,
+				C504F0BB2B00695000D68D10 /* ImportedUTTypes.swift */,
 				C4187E352642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift */,
-				C54066EB274BA7AF00710CFC /* DocumentPickerViewController.swift */,
 				C5433F3A2770EABA00607B20 /* ImageExporter.swift */,
 			);
 			path = Import;
@@ -1296,7 +1257,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C44FC0932641AF1E00459E01 /* Build configuration list for PBXNativeTarget "BioViewer" */;
 			buildPhases = (
-				C53A11882736AED000119BE6 /* SwiftLint */,
 				C44FC06A2641AF1B00459E01 /* Sources */,
 				C44FC06B2641AF1B00459E01 /* Frameworks */,
 				C44FC06C2641AF1B00459E01 /* Resources */,
@@ -1357,8 +1317,9 @@
 		C44FC0662641AF1B00459E01 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1310;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					C44FC06D2641AF1B00459E01 = {
 						CreatedOnToolsVersion = 12.5;
@@ -1432,28 +1393,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		C53A11882736AED000119BE6 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if test -d \"/opt/homebrew/bin/\"; then\n  PATH=\"/opt/homebrew/bin/:${PATH}\"\nfi\n\nexport PATH\n\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		C44FC06A2641AF1B00459E01 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1500,6 +1439,7 @@
 				C52DD46529FE81D40050A7C2 /* VisualizationConfiguration.swift in Sources */,
 				C5D97E0D297466C000EF1D5A /* PDBParseError.swift in Sources */,
 				C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */,
+				C504F0BC2B00695000D68D10 /* ImportedUTTypes.swift in Sources */,
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */,
 				C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */,
@@ -1518,7 +1458,6 @@
 				C553B79D2936237700294BB4 /* PeriodicTableView.swift in Sources */,
 				C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */,
 				C51084342AFF909D00A3D388 /* BVProgressComponent.swift in Sources */,
-				C54066EC274BA7AF00710CFC /* DocumentPickerViewController.swift in Sources */,
 				C5406704274D656700710CFC /* SettingsSegmentProtein.swift in Sources */,
 				C57F9951275E3686001DE6D6 /* ColorPalettePopoverRow.swift in Sources */,
 				C55CA71A297EB60700BEDFA4 /* ProteinVisualizationViewModel.swift in Sources */,
@@ -1540,7 +1479,6 @@
 				C45BAC4526497A3300B36026 /* DynamicStructureControlView.swift in Sources */,
 				C5FEC735277C744200E348BD /* ImpostorBondShader.metal in Sources */,
 				C58E54F629EBF7C80028CA62 /* MotionTexture.metal in Sources */,
-				C55384232972DD0C007E45E1 /* CartoonSheet.swift in Sources */,
 				C555EC81282A7D9B001281CD /* ComputeMolecularSurfaceUtility.swift in Sources */,
 				C5EDED9C29E0C9DF00B4DB6C /* SunDirectionRow.swift in Sources */,
 				C5EEE9AE276E0198005737C1 /* TrajectorySegmentProtein.swift in Sources */,
@@ -1589,7 +1527,6 @@
 				C50AF7B927CB84A000768E4D /* SelectedAtom.swift in Sources */,
 				C500EEB4272DA57300A60317 /* FocalLengthRow.swift in Sources */,
 				C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */,
-				C55384272972DE79007E45E1 /* CartoonLoop.swift in Sources */,
 				C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
 				C5C7514B27DC35BF004CEE8E /* InfoSegmentedCapsule.swift in Sources */,
@@ -1637,16 +1574,13 @@
 				C50E02502763CB0C005D7F06 /* RangeRow.swift in Sources */,
 				C44D055B266BB77600BAFDCD /* CreateAtomMesh.metal in Sources */,
 				C5406700274D387200710CFC /* ImportError.swift in Sources */,
-				C55384252972DD73007E45E1 /* CartoonModel.swift in Sources */,
 				C5433F3B2770EABA00607B20 /* ImageExporter.swift in Sources */,
 				C572BD182740222800FF010D /* FileSourceView.swift in Sources */,
 				C4187E362642FA7A009E2CBA /* ImportDroppedFilesDelegate.swift in Sources */,
 				C440856A2648008500DC5009 /* FileSegmentProtein.swift in Sources */,
 				C52DD46029FD91D40050A7C2 /* ComputeAmbientOcclusion.swift in Sources */,
 				C5C7514D27DE25D8004CEE8E /* PhotoModeUnsupportedView.swift in Sources */,
-				C55384202972DCBC007E45E1 /* CartoonHelix.swift in Sources */,
 				C531753E29DF16A7004FF2C6 /* ProteinDraw.swift in Sources */,
-				C55384292972DEF6007E45E1 /* CartoonStructureType.swift in Sources */,
 				C510843A2AFFEFDE00A3D388 /* BVDismissActionButton.swift in Sources */,
 				C5E7AF992760EBD10065F6AD /* ShadowTextures.swift in Sources */,
 				C53A118F2736DD0D00119BE6 /* RCSBRowView.swift in Sources */,
@@ -1741,6 +1675,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1804,6 +1739,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

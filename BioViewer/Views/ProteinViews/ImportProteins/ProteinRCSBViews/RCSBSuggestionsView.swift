@@ -28,7 +28,7 @@ struct RCSBSuggestionHeaderView: View {
 struct RCSBSuggestionsView: View {
     
     @Binding var rcsbShowSheet: Bool
-    let suggestionViewModel = RCSBSuggestionViewModel()
+    @StateObject var suggestionViewModel = RCSBSuggestionViewModel()
         
     var body: some View {
         List {

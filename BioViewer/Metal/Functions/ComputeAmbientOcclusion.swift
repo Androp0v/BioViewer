@@ -19,7 +19,7 @@ extension MutableState {
         
         // MARK: - Fill sphere buffer
         
-        guard var sphereBuffer = device.makeBuffer(
+        guard let sphereBuffer = device.makeBuffer(
             length: MemoryLayout<Sphere>.stride * atomPositions.count,
             options: .storageModeShared
         ) else {

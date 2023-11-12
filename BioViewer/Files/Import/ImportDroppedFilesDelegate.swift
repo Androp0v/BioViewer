@@ -13,7 +13,7 @@ import UniformTypeIdentifiers
 
 /// Class to handle importing dropped files into the protein view.
 /// Should be able to read .pdb files.
-class ImportDroppedFilesDelegate: DropDelegate {
+@MainActor class ImportDroppedFilesDelegate: DropDelegate {
 
     // MARK: - Properties
 

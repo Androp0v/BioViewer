@@ -82,7 +82,7 @@ struct SunDirectionRow: View {
                         Text("Latitude (")
                         TextField("", value: $phi.degrees, formatter: formatter)
                             .fixedSize()
-                            .onChange(of: phi) { newValue in
+                            .onChange(of: phi) { _, newValue in
                                 if newValue.radians > .pi/2 {
                                     phi.radians = .pi/2
                                 } else if newValue.radians < -.pi/2 {
@@ -97,7 +97,7 @@ struct SunDirectionRow: View {
                         Text("Longitude (")
                         TextField("", value: $theta.degrees, formatter: formatter)
                             .fixedSize()
-                            .onChange(of: theta) { newValue in
+                            .onChange(of: theta) { _, newValue in
                                 if newValue.radians > .pi {
                                     theta.radians = .pi
                                 } else if newValue.radians < -.pi {

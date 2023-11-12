@@ -9,7 +9,6 @@ import Accelerate
 import CoreGraphics
 import Foundation
 import Metal
-import UIKit
 import SwiftUI
 
 enum HQRenderingError: Error {

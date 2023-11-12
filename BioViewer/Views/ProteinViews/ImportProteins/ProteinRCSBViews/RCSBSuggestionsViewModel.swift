@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import simd
 
-class ProteinSuggestionRowData: Decodable, Hashable {
+final class ProteinSuggestionRowData: Decodable, Hashable {
     
     let rcsbid: String
     let description: String
@@ -63,7 +63,7 @@ struct ProteinSuggestionData: Decodable {
     let sections: [ProteinSuggestionSectionData]?
 }
 
-class RCSBSuggestionViewModel: ObservableObject {
+@MainActor class RCSBSuggestionViewModel: ObservableObject {
     
     @Published var suggestionData: ProteinSuggestionData?
     

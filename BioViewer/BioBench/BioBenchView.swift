@@ -150,14 +150,15 @@ struct BioBenchView: View {
                 byteSize: byteSize
             )
             await proteinViewModel.renderer.mutableState.scene.updateCameraDistanceToModel(
-                distanceToModel: proteinViewModel.renderer.mutableState.scene.cameraPosition.z * 0.8,
+                distanceToModel: proteinViewModel.renderer.mutableState.scene.cameraPosition.z,
                 newBoundingVolume: proteinDataSource.selectionBoundingVolume
             )
             await proteinViewModel.renderer.mutableState.scene.autorotating = true
             proteinViewModel.renderer.benchmarkedFrames = 0
-            let waitTask = Task.detached {
-                while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
-                    // Wait
+            let waitTask = Task.detached { @MainActor in
+                while proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
+                    try? await Task.sleep(for: .seconds(1))
+                    await Task.yield()
                 }
             }
             _ = await waitTask.result
