@@ -18,7 +18,7 @@ import SwiftUI
 actor MutableState {
     
     /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
-    var scene = MetalScene()
+    private(set) var scene = MetalScene()
     /// The `MTLDevice` in charge of rendering the scene.
     let device: MTLDevice
     /// The default library.
@@ -392,6 +392,10 @@ actor MutableState {
     
     // MARK: - Scene functions
     
+    func setAutorotating(to autorotating: Bool) {
+        scene.autorotating = autorotating
+    }
+    
     func setSunDirection(theta: Angle, phi: Angle) {
         scene.setSunDirection(theta: theta, phi: phi)
     }
@@ -517,6 +521,10 @@ actor MutableState {
     
     func setVisualization(_ visualization: ProteinVisualizationOption) {
         scene.currentVisualization = visualization
+    }
+    
+    func exportBenchmarkTextures() -> CGImage? {
+        return benchmarkTextures.colorTexture.getCGImage()
     }
     
     // MARK: - Configuration Selector

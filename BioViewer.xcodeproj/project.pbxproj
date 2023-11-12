@@ -173,6 +173,8 @@
 		C59D6A56275B939A00CCC941 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A55275B939A00CCC941 /* FileImporter.swift */; };
 		C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A61275D902E00CCC941 /* FileRow.swift */; };
 		C59D6A64275D9C3600CCC941 /* ColorPaletteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */; };
+		C59F6F692B00F72700C3F80A /* BioBenchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59F6F682B00F72700C3F80A /* BioBenchViewModel.swift */; };
+		C59F6F6B2B00F7BB00C3F80A /* BenchmarkedProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59F6F6A2B00F7BB00C3F80A /* BenchmarkedProtein.swift */; };
 		C5AC7D64283EB4310089572D /* DepthPrePassTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */; };
 		C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */; };
 		C5C7513A27DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */; };
@@ -419,6 +421,8 @@
 		C59D6A55275B939A00CCC941 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
 		C59D6A61275D902E00CCC941 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		C59D6A63275D9C3600CCC941 /* ColorPaletteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteRow.swift; sourceTree = "<group>"; };
+		C59F6F682B00F72700C3F80A /* BioBenchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioBenchViewModel.swift; sourceTree = "<group>"; };
+		C59F6F6A2B00F7BB00C3F80A /* BenchmarkedProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkedProtein.swift; sourceTree = "<group>"; };
 		C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthPrePassTextures.swift; sourceTree = "<group>"; };
 		C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidSpheresRadiusOptions.swift; sourceTree = "<group>"; };
 		C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallAndStickRadiusOptions.swift; sourceTree = "<group>"; };
@@ -1245,7 +1249,9 @@
 			isa = PBXGroup;
 			children = (
 				C5FF9AD52980351C00D583A2 /* BioBenchView.swift */,
+				C59F6F682B00F72700C3F80A /* BioBenchViewModel.swift */,
 				C5FF9ADA29817B4300D583A2 /* BioBenchConfig.swift */,
+				C59F6F6A2B00F7BB00C3F80A /* BenchmarkedProtein.swift */,
 			);
 			path = BioBench;
 			sourceTree = "<group>";
@@ -1498,6 +1504,7 @@
 				C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */,
 				C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */,
 				C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
+				C59F6F692B00F72700C3F80A /* BioBenchViewModel.swift in Sources */,
 				C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */,
 				C531754829DF89F3004FF2C6 /* ProteinRenderedTextures.swift in Sources */,
 				C50E02552764B5BE005D7F06 /* PDBConstants.swift in Sources */,
@@ -1529,6 +1536,7 @@
 				C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */,
 				C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
+				C59F6F6B2B00F7BB00C3F80A /* BenchmarkedProtein.swift in Sources */,
 				C5C7514B27DC35BF004CEE8E /* InfoSegmentedCapsule.swift in Sources */,
 				C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */,
 				C5626AE2283116AA00CFE7DC /* FPSCounterView.swift in Sources */,
