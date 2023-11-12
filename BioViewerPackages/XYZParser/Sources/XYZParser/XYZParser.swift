@@ -27,7 +27,7 @@ public actor XYZParser {
     // MARK: - Configuration creation
     
     func createNewConfigurationUnlessEmpty() {
-        guard configurations.last?.atomArrayComposition.totalCount != 0 else {
+        guard configurations.last?.atomElements.count != 0 else {
             // No need to create a new configuration, the last one is already empty
             return
         }
@@ -81,21 +81,8 @@ public actor XYZParser {
         // Since the projection matrix is left-handed, fix the chirality of the molecules
         z = -z
         
-        // Save atom position to array based on element
-        switch element {
-        case .carbon:
-            configurations.last?.carbonArray.append(simd_float3(x, y, z))
-        case .nitrogen:
-            configurations.last?.nitrogenArray.append(simd_float3(x, y, z))
-        case .hydrogen:
-            configurations.last?.hydrogenArray.append(simd_float3(x, y, z))
-        case .oxygen:
-            configurations.last?.oxygenArray.append(simd_float3(x, y, z))
-        case .sulfur:
-            configurations.last?.sulfurArray.append(simd_float3(x, y, z))
-        default:
-            configurations.last?.othersArray.append(simd_float3(x, y, z))
-        }
+        // Save atom position to array
+        configurations.last?.atomArray.append(simd_float3(x, y, z))
         configurations.last?.atomElements.append(element)
     }
     
@@ -147,12 +134,7 @@ public actor XYZParser {
         atomArray.reserveCapacity(MemoryLayout<simd_float3>.stride * totalCount * configurationCount)
         
         for configuration in configurations {
-            atomArray.append(contentsOf: configuration.carbonArray)
-            atomArray.append(contentsOf: configuration.nitrogenArray)
-            atomArray.append(contentsOf: configuration.hydrogenArray)
-            atomArray.append(contentsOf: configuration.oxygenArray)
-            atomArray.append(contentsOf: configuration.sulfurArray)
-            atomArray.append(contentsOf: configuration.othersArray)
+            atomArray.append(contentsOf: configuration.atomArray)
             
             if let configurationEnergy = configuration.energy {
                 if energyArray == nil {

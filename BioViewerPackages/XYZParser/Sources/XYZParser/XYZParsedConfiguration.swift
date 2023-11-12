@@ -13,12 +13,7 @@ class XYZParsedConfiguration {
     var id: Int
     var energy: Float?
     // Make one atom array per common element
-    var carbonArray = [simd_float3]()
-    var nitrogenArray = [simd_float3]()
-    var hydrogenArray = [simd_float3]()
-    var oxygenArray = [simd_float3]()
-    var sulfurArray = [simd_float3]()
-    var othersArray = [simd_float3]()
+    var atomArray = [simd_float3]()
     var atomElements = [AtomElement]()
     var atomArrayComposition = ProteinElementComposition()
             
