@@ -10,15 +10,16 @@ import Foundation
 import QuartzCore
 import SwiftUI
 
-@MainActor @Observable final class StatusViewModel: StatusViewModelProtocol {
+@MainActor @Observable final class StatusViewModel {
     
     weak var proteinViewModel: ProteinViewModel?
     
     // MARK: - UI properties
     // Published variables used by the UI
-    private(set) var actionToShow: StatusAction?
-    private(set) var runningActions = [StatusAction]()
-    private(set) var failedActions = [StatusAction]()
+    private(set) var actionToShow: StatusActionUI?
+    
+    private var runningActions = [StatusAction]()
+    private var failedActions = [StatusAction]()
     
     var isBlockingUI: Bool {
         if runningActions.contains(where: {$0.type.blocksRendering}) {
@@ -56,7 +57,11 @@ import SwiftUI
         withAnimation {
             runningActions = internalRunningActions
             failedActions = internalFailedActions
-            actionToShow = failedActions.last ?? runningActions.last
+            if let primaryAction = failedActions.last ?? runningActions.last {
+                actionToShow = StatusActionUI(statusAction: primaryAction)
+            } else {
+                actionToShow = nil
+            }
         }
     }
     
@@ -75,7 +80,7 @@ import SwiftUI
         internalRunningActions.append(newAction)
     }
     
-    func updateProgress(_ statusAction: StatusAction, progress: Double?) {
+    func updateProgress(_ statusAction: StatusAction, progress: Progress?) {
         guard internalRunningActions.contains(where: {$0.id == statusAction.id}) else {
             print("[Status] Error: update action not found.")
             return
@@ -99,7 +104,7 @@ import SwiftUI
         }
     }
     
-    func dismissAction(_ statusAction: StatusAction) {
+    func dismissAction(_ statusAction: StatusActionUI) {
         internalRunningActions.removeAll(where: { $0.id == statusAction.id })
         internalFailedActions.removeAll(where: { $0.id == statusAction.id })
     }

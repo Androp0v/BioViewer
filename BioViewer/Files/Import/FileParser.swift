@@ -51,8 +51,7 @@ class FileParser {
                     fileExtension: fileExtension,
                     byteSize: byteSize,
                     rawText: rawText,
-                    statusViewModel: statusViewModel,
-                    statusAction: statusAction,
+                    progress: statusAction.progress ?? Progress(), // FIXME: This is a very hacky solution
                     originalFileInfo: fileInfo
                 )
                 return proteinFile

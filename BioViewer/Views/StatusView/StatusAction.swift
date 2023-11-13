@@ -7,12 +7,12 @@
 
 import Foundation
 
-public enum StatusActionType: Sendable, Equatable {
+enum StatusActionType: Sendable, Equatable {
     case importFile
     case geometryGeneration
     case benchmark(proteinName: String)
     
-    public var title: String {
+    var title: String {
         switch self {
         case .importFile:
             return "Import file"
@@ -23,7 +23,7 @@ public enum StatusActionType: Sendable, Equatable {
         }
     }
     
-    public var blocksRendering: Bool {
+    var blocksRendering: Bool {
         switch self {
         case .importFile:
             true
@@ -35,14 +35,30 @@ public enum StatusActionType: Sendable, Equatable {
     }
 }
 
-public struct StatusAction: Identifiable, Sendable {
-    public let id = UUID()
+struct StatusActionUI: Identifiable, Sendable {
+    public let id: UUID
     public let type: StatusActionType
     public var description: String?
     public var progress: Double?
     public var error: Error?
     
-    public init(type: StatusActionType, description: String? = nil, progress: Double? = nil, error: Error? = nil) {
+    init(statusAction: StatusAction) {
+        self.id = statusAction.id
+        self.type = statusAction.type
+        self.description = statusAction.description
+        self.progress = statusAction.progress?.fractionCompleted
+        self.error = statusAction.error
+    }
+}
+
+struct StatusAction: Identifiable, Sendable {
+    public let id = UUID()
+    public let type: StatusActionType
+    public var description: String?
+    public var progress: Progress?
+    public var error: Error?
+    
+    public init(type: StatusActionType, description: String? = nil, progress: Progress?, error: Error? = nil) {
         self.type = type
         self.description = description
         self.progress = progress

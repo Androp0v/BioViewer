@@ -82,7 +82,11 @@ struct RCSBEntry {
     
     func fetchPDBFile(pdbInfo: PDBInfo, proteinDataSource: ProteinDataSource, statusViewModel: StatusViewModel) async throws {
         
-        let importStatusAction = StatusAction(type: .importFile, description: NSLocalizedString("Downloading file", comment: ""))
+        let importStatusAction = StatusAction(
+            type: .importFile,
+            description: NSLocalizedString("Downloading file", comment: ""),
+            progress: nil
+        )
         statusViewModel.showStatusForAction(importStatusAction)
         do {
             let (rawText, byteSize) = try await RCSBFetch.fetchPDBFile(rcsbid: pdbInfo.rcsbID)

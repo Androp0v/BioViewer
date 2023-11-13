@@ -9,9 +9,6 @@ public actor XYZParser {
     
     var currentLine: Int = 0
     var totalLineCount: Int = 1
-    var progress: Double {
-        return Double(currentLine) / Double(totalLineCount)
-    }
     // Initialize empty configuration
     var configurations: [XYZParsedConfiguration] = [XYZParsedConfiguration(id: 0)]
     
@@ -36,11 +33,9 @@ public actor XYZParser {
     
     // MARK: - Parse line
     
-    func parseLine(_ line: String, statusViewModel: some StatusViewModelProtocol, statusAction: StatusAction) {
+    func parseLine(_ line: String, progress: Progress) {
         currentLine += 1
-        Task { @MainActor in
-            await statusViewModel.updateProgress(statusAction, progress: progress)
-        }
+        progress.completedUnitCount = Int64(currentLine)
         
         let lineElements = line.components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
         guard lineElements.count >= XYZConstants.atomLineNumberOfComponents else {
@@ -93,8 +88,7 @@ public actor XYZParser {
         fileExtension: String,
         byteSize: Int?,
         rawText: String,
-        statusViewModel: some StatusViewModelProtocol,
-        statusAction: StatusAction,
+        progress: Progress,
         originalFileInfo: ProteinFileInfo? = nil
     ) throws -> ProteinFile {
         
@@ -105,6 +99,7 @@ public actor XYZParser {
                 count += 1
             }
         }
+        progress.totalUnitCount = Int64(totalLineCount)
         
         var atomArray = ContiguousArray<simd_float3>()
         var energyArray: [Float]?
@@ -120,7 +115,7 @@ public actor XYZParser {
         )
 
         rawText.enumerateLines(invoking: { line, _ in
-            self.parseLine(line, statusViewModel: statusViewModel, statusAction: statusAction)
+            self.parseLine(line, progress: progress)
         })
                 
         guard let firstConfiguration = configurations.first else {

@@ -38,17 +38,18 @@ class VisualizationBufferLoader {
                 }
                 if protein.bonds == nil {
                     // Update Status View
+                    let bondCreationProgress = Progress()
                     let connectivityStatusAction = StatusAction(
                         type: .geometryGeneration,
-                        description: NSLocalizedString("Generating geometry", comment: "")
+                        description: NSLocalizedString("Generating geometry", comment: ""),
+                        progress: bondCreationProgress
                     )
                     proteinViewModel.statusViewModel?.showStatusForAction(connectivityStatusAction)
                     // Compute links
                     await ConnectivityGenerator().computeConnectivity(
                         protein: protein,
                         dataSource: dataSource,
-                        statusViewModel: proteinViewModel.statusViewModel,
-                        statusAction: connectivityStatusAction
+                        progress: bondCreationProgress
                     )
                     // Finished computing links, update status
                     proteinViewModel.statusViewModel?.signalActionFinished(connectivityStatusAction, withError: nil)

@@ -176,6 +176,7 @@
 		C59F6F692B00F72700C3F80A /* BioBenchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59F6F682B00F72700C3F80A /* BioBenchViewModel.swift */; };
 		C59F6F6B2B00F7BB00C3F80A /* BenchmarkedProtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59F6F6A2B00F7BB00C3F80A /* BenchmarkedProtein.swift */; };
 		C5AC7D64283EB4310089572D /* DepthPrePassTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */; };
+		C5B3D0412B021F910037B46D /* StatusAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B3D0402B021F910037B46D /* StatusAction.swift */; };
 		C5C7513627DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */; };
 		C5C7513A27DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */; };
 		C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */; };
@@ -424,6 +425,7 @@
 		C59F6F682B00F72700C3F80A /* BioBenchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioBenchViewModel.swift; sourceTree = "<group>"; };
 		C59F6F6A2B00F7BB00C3F80A /* BenchmarkedProtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkedProtein.swift; sourceTree = "<group>"; };
 		C5AC7D63283EB4310089572D /* DepthPrePassTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthPrePassTextures.swift; sourceTree = "<group>"; };
+		C5B3D0402B021F910037B46D /* StatusAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAction.swift; sourceTree = "<group>"; };
 		C5C7513527DBBFD4004CEE8E /* SolidSpheresRadiusOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidSpheresRadiusOptions.swift; sourceTree = "<group>"; };
 		C5C7513927DBC5FC004CEE8E /* BallAndStickRadiusOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallAndStickRadiusOptions.swift; sourceTree = "<group>"; };
 		C5C7513E27DBF6EC004CEE8E /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
@@ -1194,8 +1196,9 @@
 		C59D6A5E275D807900CCC941 /* StatusView */ = {
 			isa = PBXGroup;
 			children = (
-				C51084352AFFA24400A3D388 /* StatusOverlayView.swift */,
+				C5B3D0402B021F910037B46D /* StatusAction.swift */,
 				C500EEAF272D58A400A60317 /* StatusViewModel.swift */,
+				C51084352AFFA24400A3D388 /* StatusOverlayView.swift */,
 			);
 			path = StatusView;
 			sourceTree = "<group>";
@@ -1536,6 +1539,7 @@
 				C5F7D30A275785E4008A0517 /* RCSBSuggestionsViewModel.swift in Sources */,
 				C5F7D30D2757893A008A0517 /* RCSBEmptyImportView.swift in Sources */,
 				C46435622669313A00434CC6 /* Camera.swift in Sources */,
+				C5B3D0412B021F910037B46D /* StatusAction.swift in Sources */,
 				C59F6F6B2B00F7BB00C3F80A /* BenchmarkedProtein.swift in Sources */,
 				C5C7514B27DC35BF004CEE8E /* InfoSegmentedCapsule.swift in Sources */,
 				C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */,

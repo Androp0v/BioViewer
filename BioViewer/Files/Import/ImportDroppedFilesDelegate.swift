@@ -23,7 +23,7 @@ import UniformTypeIdentifiers
 
     func performDrop(info: DropInfo) -> Bool {
         
-        let statusAction = StatusAction(type: .importFile, description: "Importing file")
+        let statusAction = StatusAction(type: .importFile, description: "Importing file", progress: nil)
         self.proteinViewModel?.statusViewModel?.showStatusForAction(statusAction)
 
         guard let itemProvider = info.itemProviders(

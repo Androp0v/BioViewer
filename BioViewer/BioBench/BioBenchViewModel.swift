@@ -31,7 +31,10 @@ import SwiftUI
             "5FUA"
             // "1UF2"
         ] {
-            let benchmarkAction = StatusAction(type: .benchmark(proteinName: pdbID))
+            let benchmarkAction = StatusAction(
+                type: .benchmark(proteinName: pdbID),
+                progress: Progress(totalUnitCount: Int64(BioBenchConfig.numberOfFrames))
+            )
             statusViewModel.showStatusForAction(benchmarkAction)
             guard let (rawText, byteSize) = try? await RCSBFetch.fetchPDBFile(rcsbid: pdbID) else {
                 continue
@@ -43,7 +46,7 @@ import SwiftUI
                 sourceLines: nil
             )
             await proteinDataSource.removeAllFilesFromDatasource()
-            let statusAction = StatusAction(type: .importFile)
+            let statusAction = StatusAction(type: .importFile, progress: Progress())
             try? await FileImporter.importFileFromRawText(
                 rawText: rawText,
                 proteinDataSource: proteinDataSource,
@@ -59,12 +62,7 @@ import SwiftUI
             proteinViewModel.renderer.benchmarkedFrames = 0
             let waitTask = Task.detached {
                 while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
-                    try? await Task.sleep(for: .seconds(1))
-                    let completedFrames = await proteinViewModel.renderer.benchmarkedFrames
-                    await statusViewModel.updateProgress(
-                        benchmarkAction,
-                        progress: Double(completedFrames) / Double(BioBenchConfig.numberOfFrames)
-                    )
+                    benchmarkAction.progress?.completedUnitCount = await Int64(proteinViewModel.renderer.benchmarkedFrames)
                     await Task.yield()
                 }
             }
@@ -82,6 +80,7 @@ import SwiftUI
             )
             print("BioBench \(benchmarkedProteins.count) (\(pdbID)): \(proteinDataSource.totalAtomCount), \(meanTime), \(stdTime.0), \(stdTime.1)")
             await proteinViewModel.renderer.mutableState.setAutorotating(false)
+            statusViewModel.signalActionFinished(benchmarkAction, withError: nil)
             currentImage = await proteinViewModel.renderer.mutableState.exportBenchmarkTextures()
         }
     }
