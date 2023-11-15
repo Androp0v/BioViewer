@@ -130,11 +130,3 @@ struct RCSBImportView: View {
         .padding()
     }
 }
-
-// MARK: - Previews
-
-struct RCSBImportView_Previews: PreviewProvider {
-    static var previews: some View {
-        RCSBImportView(rcsbShowSheet: .constant(true))
-    }
-}

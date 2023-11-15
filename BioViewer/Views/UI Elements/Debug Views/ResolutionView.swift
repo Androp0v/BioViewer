@@ -24,10 +24,15 @@ import SwiftUI
     
     @objc private func updateFrameTime() {
         // Retrieve last GPU frame time.
-        let viewResolution = proteinViewModel.renderer.viewResolution
-        guard let width = viewResolution?.width else { return }
-        guard let height = viewResolution?.height else { return }
-        resolutionString = "\(width)x\(height)"
+        if proteinViewModel.renderer.isBenchmark {
+            let benchmarkResolution = BenchmarkTextures.benchmarkResolution
+            resolutionString = "\(benchmarkResolution)x\(benchmarkResolution)"
+        } else {
+            let viewResolution = proteinViewModel.renderer.viewResolution
+            guard let width = viewResolution?.width else { return }
+            guard let height = viewResolution?.height else { return }
+            resolutionString = "\(width)x\(height)"
+        }
     }
 }
 

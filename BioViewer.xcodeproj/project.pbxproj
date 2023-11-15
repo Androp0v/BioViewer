@@ -161,6 +161,7 @@
 		C586C5EA275A26CE00F230D3 /* ComputedPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */; };
 		C586C5EE275A3FAB00F230D3 /* UnitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */; };
 		C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5883E872857B8D000C97818 /* RCSBDetailView.swift */; };
+		C58D36192B0384E900189C53 /* BioBenchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58D36182B0384E900189C53 /* BioBenchResultsView.swift */; };
 		C58E54F629EBF7C80028CA62 /* MotionTexture.metal in Sources */ = {isa = PBXBuildFile; fileRef = C58E54F529EBF7C80028CA62 /* MotionTexture.metal */; };
 		C59792CB2771EEBD0019ABD3 /* ShutterAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */; };
 		C59792CF277210580019ABD3 /* ShutterClosed.aiff in Resources */ = {isa = PBXBuildFile; fileRef = C59792CD277210570019ABD3 /* ShutterClosed.aiff */; };
@@ -410,6 +411,7 @@
 		C586C5E9275A26CE00F230D3 /* ComputedPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputedPropertyRow.swift; sourceTree = "<group>"; };
 		C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTextView.swift; sourceTree = "<group>"; };
 		C5883E872857B8D000C97818 /* RCSBDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCSBDetailView.swift; sourceTree = "<group>"; };
+		C58D36182B0384E900189C53 /* BioBenchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioBenchResultsView.swift; sourceTree = "<group>"; };
 		C58E54F429EB716D0028CA62 /* ReprojectionData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReprojectionData.h; sourceTree = "<group>"; };
 		C58E54F529EBF7C80028CA62 /* MotionTexture.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MotionTexture.metal; sourceTree = "<group>"; };
 		C59792CA2771EEBD0019ABD3 /* ShutterAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterAnimator.swift; sourceTree = "<group>"; };
@@ -1252,6 +1254,7 @@
 			isa = PBXGroup;
 			children = (
 				C5FF9AD52980351C00D583A2 /* BioBenchView.swift */,
+				C58D36182B0384E900189C53 /* BioBenchResultsView.swift */,
 				C59F6F682B00F72700C3F80A /* BioBenchViewModel.swift */,
 				C5FF9ADA29817B4300D583A2 /* BioBenchConfig.swift */,
 				C59F6F6A2B00F7BB00C3F80A /* BenchmarkedProtein.swift */,
@@ -1502,6 +1505,7 @@
 				C55CA726297EFBF700BEDFA4 /* ImportRowView.swift in Sources */,
 				C51084382AFFE5AE00A3D388 /* BVProgressFailedView.swift in Sources */,
 				C44FC0742641AF1B00459E01 /* ProteinView.swift in Sources */,
+				C58D36192B0384E900189C53 /* BioBenchResultsView.swift in Sources */,
 				C464C362265D311200E66C3E /* ProteinImportView.swift in Sources */,
 				C555EC86282A9616001281CD /* PointsPass.swift in Sources */,
 				C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */,

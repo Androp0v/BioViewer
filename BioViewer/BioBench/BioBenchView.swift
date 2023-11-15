@@ -23,52 +23,62 @@ struct BioBenchView: View {
     @State var visualizationViewModel = ProteinVisualizationViewModel()
     @State var shadowsViewModel = ProteinShadowsViewModel()
     @State var statusViewModel = StatusViewModel()
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    var layout: AnyLayout {
+        if horizontalSizeClass == .regular {
+            return AnyLayout(HStackLayout(spacing: .zero))
+        }
+        return AnyLayout(VStackLayout())
+    }
             
     var body: some View {
-        HStack(spacing: .zero) {
-            ZStack(alignment: .bottom) {
-                ProteinMetalView(proteinViewModel: proteinViewModel)
-                    .frame(width: Self.benchmarkResolution / 2, height: Self.benchmarkResolution / 2)
-                    .disabled(true)
-                    .border(.red)
-                    .background(.black)
-                    .onAppear {
-                        proteinDataSource.proteinViewModel = proteinViewModel
-                        proteinViewModel.dataSource = proteinDataSource
-                        
-                        colorViewModel.proteinViewModel = proteinViewModel
-                        proteinViewModel.colorViewModel = colorViewModel
-                        
-                        visualizationViewModel.proteinViewModel = proteinViewModel
-                        proteinViewModel.visualizationViewModel = visualizationViewModel
-                        
-                        shadowsViewModel.proteinViewModel = proteinViewModel
-                        
-                        statusViewModel.proteinViewModel = proteinViewModel
-                        proteinViewModel.statusViewModel = statusViewModel
+        layout {
+            VStack {
+                ZStack {
+                    ProteinMetalView(proteinViewModel: proteinViewModel)
+                        .disabled(true)
+                        .onAppear {
+                            proteinDataSource.proteinViewModel = proteinViewModel
+                            proteinViewModel.dataSource = proteinDataSource
+                            
+                            colorViewModel.proteinViewModel = proteinViewModel
+                            proteinViewModel.colorViewModel = colorViewModel
+                            
+                            visualizationViewModel.proteinViewModel = proteinViewModel
+                            proteinViewModel.visualizationViewModel = visualizationViewModel
+                            
+                            shadowsViewModel.proteinViewModel = proteinViewModel
+                            
+                            statusViewModel.proteinViewModel = proteinViewModel
+                            proteinViewModel.statusViewModel = statusViewModel
+                        }
+                    
+                    if let currentImage = benchmarkViewModel.currentImage {
+                        Image(uiImage: UIImage(cgImage: currentImage))
+                            .resizable()
                     }
-                
-                if let currentImage = benchmarkViewModel.currentImage {
-                    Image(uiImage: UIImage(cgImage: currentImage))
-                        .resizable()
-                        .border(.red)
-                }
-                
-                StatusOverlayView()
-                    .environment(statusViewModel)
-                
-                ZStack(alignment: .bottomLeading) {
-                    HStack {
-                        Spacer()
-                        VStack(spacing: .zero) {
+                    
+                    StatusOverlayView()
+                        .environment(statusViewModel)
+                    
+                    ZStack(alignment: .bottomLeading) {
+                        HStack {
                             Spacer()
-                            ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
-                            FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
-                                .padding()
+                            VStack(spacing: .zero) {
+                                Spacer()
+                                ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
+                                FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
+                                    .padding()
+                            }
                         }
                     }
                 }
-                .frame(width: Self.benchmarkResolution / 2, height: Self.benchmarkResolution / 2)
+                .border(.red)
+                .background(.black)
+                .aspectRatio(1.0, contentMode: .fit)
+                .padding()
                 
                 Button(
                     action: {
@@ -101,56 +111,14 @@ struct BioBenchView: View {
                 .padding()
                 .disabled(isRunningBenchmark)
             }
-            .padding()
+            .frame(maxWidth: .infinity)
             
-            VStack(spacing: .zero) {
-                Chart {
-                    ForEach(benchmarkViewModel.benchmarkedProteins) { benchmarkedProtein in
-                        BarMark(
-                            x: .value("FPS", toFPS(benchmarkedProtein.time)),
-                            y: .value(benchmarkedProtein.name, benchmarkedProtein.name)
-                        )
-                        .annotation(position: .trailing, alignment: .trailing, spacing: 4) {
-                            Text("\(toFPS(benchmarkedProtein.time))")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                                .padding(2)
-                        }
-                    }
-                }
-                .chartXAxisLabel("FPS")
-                .padding()
-                .background(.windowBackground)
-                
-                Divider()
-                
-                List(benchmarkViewModel.benchmarkedProteins, id: \.id) { benchmark in
-                    VStack(alignment: .leading) {
-                        Text("Name: ")
-                            .bold()
-                        Text("\(benchmark.name)")
-                        Text("Atom count: ")
-                            .bold()
-                        Text("\(benchmark.atoms)")
-                        Text("GPU time: ")
-                            .bold()
-                        Text("\(benchmark.time * 1000) ms (\(toFPS(benchmark.time)) fps)")
-                        Text("Standard deviation (ms): ")
-                            .bold()
-                        Text("\((benchmark.std.0 - benchmark.std.1) * 1000) (\(benchmark.std.0 * 1000), \(benchmark.std.1 * 1000))")
-                    }
-                    .padding(.vertical)
-                }
-                .background(.windowBackground)
-                .listStyle(.plain)
-            }
+            Divider()
+            
+            BioBenchResultsView()
+                .environment(benchmarkViewModel)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)
-    }
-    
-    private func toFPS(_ milliseconds: Double) -> Int {
-        return Int(1.0 / milliseconds)
     }
 }
 
