@@ -16,11 +16,11 @@ struct RCSBEntry {
     let authors: String?
 }
 
-@MainActor class RCSBImportViewModel: ObservableObject {
+@MainActor @Observable class RCSBImportViewModel {
         
-    @Published private(set) var results: [PDBInfo]?
-    @Published var resultImages = [PDBInfo: Image]()
-    @Published var isLoading: Bool = false
+    private(set) var results: [PDBInfo]?
+    var resultImages = [PDBInfo: Image]()
+    var isLoading: Bool = false
     
     struct OngoingSearch {
         let searchString: String
@@ -29,28 +29,29 @@ struct RCSBEntry {
     }
     var currentSearch: OngoingSearch?
     
-    func search(text: String) async throws {
+    @MainActor func search(text: String) async throws {
         guard !text.isEmpty else {
-            Task { @MainActor in
-                currentSearch = nil
-                withAnimation {
-                    results = nil
-                    resultImages = [:]
-                }
+            currentSearch = nil
+            withAnimation {
+                results = nil
+                resultImages = [:]
             }
             return
         }
+        withAnimation {
+            results = nil
+            isLoading = true
+        }
         let searchResult = try await RCSBFetch.search(text)
-        Task { @MainActor in
-            currentSearch = OngoingSearch(
-                searchString: text,
-                lastRow: 0,
-                totalCount: searchResult.totalCount
-            )
-            withAnimation {
-                results = searchResult.results
-                resultImages = [:]
-            }
+        currentSearch = OngoingSearch(
+            searchString: text,
+            lastRow: 0,
+            totalCount: searchResult.totalCount
+        )
+        withAnimation {
+            results = searchResult.results
+            resultImages = [:]
+            isLoading = false
         }
     }
     

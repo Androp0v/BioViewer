@@ -10,7 +10,13 @@ import SwiftUI
 struct BVProgressView: View {
     
     let size: CGFloat
+    let strokeWidth: CGFloat
     var halfSize: CGFloat { size / 2 }
+    
+    init(size: CGFloat, strokeWidth: CGFloat = 4) {
+        self.size = size
+        self.strokeWidth = strokeWidth
+    }
     
     var body: some View {
         TimelineView(.animation) { _ in
@@ -22,21 +28,21 @@ struct BVProgressView: View {
                             path.addLine(to: pathPoint(i, reversed: false, pointCount: 1000))
                         }
                     }
-                    .stroke(style: .init(lineWidth: 4, lineJoin: .round))
+                    .stroke(style: .init(lineWidth: strokeWidth, lineJoin: .round))
                     Path { path in
                         path.move(to: pathPoint(0, reversed: true, pointCount: 1000))
                         for i in 1..<1000 {
                             path.addLine(to: pathPoint(i, reversed: true, pointCount: 1000))
                         }
                     }
-                    .stroke(style: .init(lineWidth: 4, lineJoin: .round))
+                    .stroke(style: .init(lineWidth: strokeWidth, lineJoin: .round))
                     Path { path in
                         for i in 1..<18 {
                             path.move(to: pathPoint(i, reversed: false, pointCount: 18))
                             path.addLine(to: pathPoint(i, reversed: true, pointCount: 18))
                         }
                     }
-                    .stroke(style: .init(lineWidth: 4, lineJoin: .round))
+                    .stroke(style: .init(lineWidth: strokeWidth, lineJoin: .round))
                 }
                 .rotationEffect(.degrees(45))
             }

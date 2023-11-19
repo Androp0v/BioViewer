@@ -18,7 +18,7 @@ struct RCSBRowView: View {
     
     @EnvironmentObject var proteinDataSource: ProteinDataSource
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
-    @EnvironmentObject var rcsbImportViewModel: RCSBImportViewModel
+    @Environment(RCSBImportViewModel.self) var rcsbImportViewModel: RCSBImportViewModel
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)
