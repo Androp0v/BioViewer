@@ -7,6 +7,7 @@
 
 import BioViewerFoundation
 import Foundation
+import simd
 
 // MARK: - Records
 
@@ -252,21 +253,22 @@ private class SecondaryStructureIterator {
     }
 }
 
-class PDBParser {
+public class PDBParser {
     
     // MARK: - Configuration
     
     static let lineBlockSize: Int = 1024
     
+    public init() {}
+    
     // MARK: - Parse PDB
     
-    func parsePDB(
+    public func parsePDB(
         fileName: String,
         fileExtension: String,
         byteSize: Int?,
         rawText: String,
-        statusViewModel: StatusViewModel,
-        statusAction: StatusAction,
+        progress: Progress,
         originalFileInfo: ProteinFileInfo? = nil
     ) async throws -> ProteinFile {
         
