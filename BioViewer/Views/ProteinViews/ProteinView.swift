@@ -13,19 +13,14 @@ struct ProteinView: View {
 
     // MARK: - Properties
 
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var proteinDataSource: ProteinDataSource
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @State var toolbarConfig = ToolbarConfig()
     
-    // Sidebar
-    @State private var showInspector: Bool = UserDefaults.standard.bool(forKey: "showInspector") {
-        didSet {
-            guard horizontalSizeClass != .compact else { return }
-            UserDefaults.standard.set(showInspector, forKey: "showInspector")
-        }
-    }
+    @State private var showInspectorModal: Bool = false
     @State private var selectedSidebarSegment = 0
 
     // Sequence view
@@ -36,8 +31,6 @@ struct ProteinView: View {
     private enum Constants {
         static let compactSequenceViewWidth: CGFloat = 32
     }
-
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
     // MARK: - Body
 
@@ -122,7 +115,7 @@ struct ProteinView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(
                     action: {
-                        showInspector.toggle()
+                        showInspectorBinding(for: horizontalSizeClass).wrappedValue.toggle()
                     },
                     label: {
                         Image(systemName: horizontalSizeClass == .compact ? "gearshape" : "sidebar.trailing")
@@ -130,9 +123,9 @@ struct ProteinView: View {
                 )
             }
         }
-        .inspector(isPresented: $showInspector) {
+        .inspector(isPresented: showInspectorBinding(for: horizontalSizeClass)) {
             ProteinSidebar(
-                showSidebar: $showInspector,
+                showSidebar: showInspectorBinding(for: horizontalSizeClass),
                 selectedSegment: $selectedSidebarSegment
             )
             .presentationDetents([.medium, .large])
@@ -167,6 +160,25 @@ struct ProteinView: View {
     }
 
     // MARK: - Private functions
+    
+    /// Whether the sidebar inspector is shown should be persistent, while it should always default to not shown
+    /// on compact sizes.
+    private func showInspectorBinding(for horizontalSizeClass: UserInterfaceSizeClass?) -> Binding<Bool> {
+        return Binding<Bool>(
+            get: {
+                if horizontalSizeClass != .compact {
+                    return UserDefaults.standard.bool(forKey: "showSidebar")
+                }
+                return showInspectorModal
+            },
+            set: { newValue in
+                if horizontalSizeClass != .compact {
+                    UserDefaults.standard.set(newValue, forKey: "showSidebar")
+                }
+                showInspectorModal = newValue
+            }
+        )
+    }
 
     /// Animate collapsing or inflating the sequence view widget
     private func animateSequenceView() {

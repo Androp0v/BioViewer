@@ -12,13 +12,19 @@ let package = Package(
             name: "PDBParser",
             targets: ["PDBParser"]),
     ],
+    dependencies: [
+        .package(path: "../BioViewerFoundation")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "PDBParser"),
+            name: "PDBParser",
+            dependencies: ["BioViewerFoundation"]
+        ),
         .testTarget(
             name: "PDBParserTests",
-            dependencies: ["PDBParser"]),
+            dependencies: ["PDBParser"]
+        ),
     ]
 )
