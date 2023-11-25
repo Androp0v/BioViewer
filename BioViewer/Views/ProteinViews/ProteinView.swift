@@ -20,6 +20,7 @@ struct ProteinView: View {
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @State var toolbarConfig = ToolbarConfig()
     
+    @State private var showSidebar: Bool = UserDefaults.standard.bool(forKey: "showSidebar")
     @State private var showInspectorModal: Bool = false
     @State private var selectedSidebarSegment = 0
 
@@ -135,6 +136,9 @@ struct ProteinView: View {
             .inspectorColumnWidth(min: 300, ideal: 400)
             #endif
         }
+        .onChange(of: showSidebar) {
+            UserDefaults.standard.setValue(showSidebar, forKey: "showSidebar")
+        }
         // Inform command menus of focus changes
         .focusedValue(\.proteinViewModel, proteinViewModel)
     }
@@ -164,20 +168,11 @@ struct ProteinView: View {
     /// Whether the sidebar inspector is shown should be persistent, while it should always default to not shown
     /// on compact sizes.
     private func showInspectorBinding(for horizontalSizeClass: UserInterfaceSizeClass?) -> Binding<Bool> {
-        return Binding<Bool>(
-            get: {
-                if horizontalSizeClass != .compact {
-                    return UserDefaults.standard.bool(forKey: "showSidebar")
-                }
-                return showInspectorModal
-            },
-            set: { newValue in
-                if horizontalSizeClass != .compact {
-                    UserDefaults.standard.set(newValue, forKey: "showSidebar")
-                }
-                showInspectorModal = newValue
-            }
-        )
+        if horizontalSizeClass == .compact {
+            return $showInspectorModal
+        } else {
+            return $showSidebar
+        }
     }
 
     /// Animate collapsing or inflating the sequence view widget

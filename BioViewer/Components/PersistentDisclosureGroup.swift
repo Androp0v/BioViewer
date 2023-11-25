@@ -51,9 +51,9 @@ struct PersistentDisclosureGroup<Content: View, LabelContent: View>: View {
             content: content,
             label: label
         )
-        .onChange(of: isExpanded) { newValue in
+        .onChange(of: isExpanded) {
             guard group != .error else { return }
-            UserDefaults.standard.setValue(newValue, forKey: group.rawValue + "Expanded")
+            UserDefaults.standard.setValue(isExpanded, forKey: group.rawValue + "Expanded")
         }
     }
 }
