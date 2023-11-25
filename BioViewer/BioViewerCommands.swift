@@ -24,29 +24,48 @@ extension FocusedValues {
 }
 
 struct BioViewerCommands: Commands {
+    
+    @Environment(\.openWindow) private var openWindow
         
     var body: some Commands {
         
+        // MARK: - App
+        
+        CommandGroup(before: .appSettings) {
+            Button(NSLocalizedString("Benchmark", comment: "")) {
+                openWindow(id: "BioBench")
+            }
+            .keyboardShortcut("B")
+        }
+        
         // MARK: - Files
+        
         CommandGroup(after: .newItem) {
             Button(NSLocalizedString("Remove all files", comment: "")) {
-                AppState.shared.focusedViewModel?.dataSource.removeAllFilesFromDatasource()
+                Task { @MainActor in
+                    await AppState.shared.focusedViewModel?.dataSource?.removeAllFilesFromDatasource()
+                }
             }
             .keyboardShortcut(.delete)
         }
         
         // MARK: - View
+        
         CommandGroup(before: CommandGroupPlacement.toolbar) {
             
             Section {
             
                 Button(NSLocalizedString("View as space-filling spheres", comment: "")) {
-                    AppState.shared.focusedViewModel?.visualization = .solidSpheres
+                    Task { @MainActor in
+                        AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .solidSpheres
+                    }
                 }
                 .keyboardShortcut("1")
                 
                 Button(NSLocalizedString("View as ball and stick", comment: "")) {
-                    AppState.shared.focusedViewModel?.visualization = .ballAndStick
+                    Task { @MainActor in
+                        AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .ballAndStick
+                    }
                 }
                 .keyboardShortcut("2")
             }
@@ -55,15 +74,14 @@ struct BioViewerCommands: Commands {
         // MARK: - Color
         CommandMenu(NSLocalizedString("Color", comment: "")) {
             Section {
-                Button(NSLocalizedString("Color by element", comment: "")) {
-                    AppState.shared.focusedViewModel?.colorBy = ProteinColorByOption.element
+                ForEach(ProteinColorByOption.allCases, id: \.self) { colorOption in
+                    Button(NSLocalizedString("Color by \(colorOption.displayName.lowercased())", comment: "")) {
+                        Task { @MainActor in
+                            AppState.shared.focusedViewModel?.colorViewModel?.colorBy = colorOption
+                        }
+                    }
+                    .keyboardShortcut(colorOption.shortcutKey, modifiers: [.option])
                 }
-                .keyboardShortcut("1", modifiers: [.command, .shift])
-                
-                Button(NSLocalizedString("Color by subunit", comment: "")) {
-                    AppState.shared.focusedViewModel?.colorBy = ProteinColorByOption.subunit
-                }
-                .keyboardShortcut("2", modifiers: [.command, .shift])
             }
         }
     }

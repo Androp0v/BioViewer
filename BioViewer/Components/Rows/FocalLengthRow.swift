@@ -30,6 +30,9 @@ struct FocalLengthRow: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.secondary, lineWidth: 1)
                     )
+                    #if targetEnvironment(macCatalyst)
+                    .scaleEffect(0.75)
+                    #endif
                 Spacer()
                 
                 Text("300")

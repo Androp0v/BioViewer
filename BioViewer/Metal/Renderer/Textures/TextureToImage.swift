@@ -6,9 +6,9 @@
 //
 
 import Accelerate
+import CoreGraphics
 import Foundation
 import Metal
-import UIKit
 
 extension MTLTexture {
 

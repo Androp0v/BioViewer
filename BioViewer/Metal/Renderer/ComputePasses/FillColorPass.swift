@@ -9,16 +9,38 @@ import Foundation
 import Metal
 import SwiftUI
 
-extension ProteinRenderer {
+extension MutableState {
 
     // MARK: - Update existing color buffer
     
-    public func fillColorPass(commandBuffer: MTLCommandBuffer, colorBuffer: MTLBuffer?, subunitBuffer: MTLBuffer?, atomTypeBuffer: MTLBuffer?, colorFill: FillColorInput) {
+    public func fillColorPass(
+        renderer: ProteinRenderer,
+        commandBuffer: MTLCommandBuffer,
+        colorBuffer: MTLBuffer?,
+        colorFill: FillColorInput
+    ) {
           
         var colorFillData = colorFill
-        guard let colorBuffer = colorBuffer else { return }
-        guard let subunitBuffer = subunitBuffer else { return }
-        guard let atomTypeBuffer = atomTypeBuffer else { return }
+        guard let colorBuffer else {
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "Missing color buffer at FillColorPass Compute Pass."
+            )
+            return
+        }
+        guard let atomElementBuffer else {
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "Missing atom element buffer at FillColorPass Compute Pass."
+            )
+            return
+        }
+        
+        let useSimpleShader = atomSubunitBuffer == nil
+            || atomResidueBuffer == nil
+            || atomSecondaryStructureBuffer == nil
                 
         // Set Metal compute encoder
         guard let computeEncoder = commandBuffer.makeComputeCommandEncoder() else {
@@ -26,7 +48,13 @@ extension ProteinRenderer {
         }
 
         // Retrieve pipeline state
-        guard let pipelineState = fillColorComputePipelineState else {
+        var pipelineState: MTLComputePipelineState?
+        if useSimpleShader {
+            pipelineState = renderer.simpleFillColorComputePipelineState
+        } else {
+            pipelineState = renderer.fillColorComputePipelineState
+        }
+        guard let pipelineState else {
             computeEncoder.endEncoding()
             return
         }
@@ -35,22 +63,44 @@ extension ProteinRenderer {
         computeEncoder.setComputePipelineState(pipelineState)
 
         // Set buffer contents
-        computeEncoder.setBuffer(colorBuffer,
-                                 offset: 0,
-                                 index: 0)
-        computeEncoder.setBuffer(subunitBuffer,
-                                 offset: 0,
-                                 index: 1)
-        computeEncoder.setBuffer(atomTypeBuffer,
-                                 offset: 0,
-                                 index: 2)
+        computeEncoder.setBuffer(
+            colorBuffer,
+            offset: 0,
+            index: 0
+        )
+        computeEncoder.setBuffer(
+            atomElementBuffer,
+            offset: 0,
+            index: 1
+        )
+        if !useSimpleShader {
+            computeEncoder.setBuffer(
+                atomSubunitBuffer,
+                offset: 0,
+                index: 2
+            )
+            computeEncoder.setBuffer(
+                atomResidueBuffer,
+                offset: 0,
+                index: 3
+            )
+            computeEncoder.setBuffer(
+                atomSecondaryStructureBuffer,
+                offset: 0,
+                index: 4
+            )
+        }
         
         // Create fillColor buffer and fill with data
-        let fillColorBuffer = device.makeBuffer(bytes: &colorFillData,
-                                                length: MemoryLayout<FillColorInput>.stride)
-        computeEncoder.setBuffer(fillColorBuffer,
-                                 offset: 0,
-                                 index: 3)
+        let fillColorBuffer = device.makeBuffer(
+            bytes: &colorFillData,
+            length: MemoryLayout<FillColorInput>.size
+        )
+        computeEncoder.setBuffer(
+            fillColorBuffer,
+            offset: 0,
+            index: 5
+        )
         
         // Total number of threads (used for legacy devices)
         // TODO: Remove once all devices have non-uniform threadgroup size support
@@ -61,7 +111,7 @@ extension ProteinRenderer {
         computeEncoder.setBuffer(
             uniformBuffer,
             offset: 0,
-            index: 4
+            index: 6
         )
         
         // Schedule the threads
@@ -74,15 +124,17 @@ extension ProteinRenderer {
         } else {
             // LEGACY: Older devices do not support non-uniform threadgroup sizes
             let arrayLength = colorBuffer.length / MemoryLayout<SIMD4<Int16>>.stride
-            MetalLegacySupport.legacyDispatchThreadsForArray(commandEncoder: computeEncoder,
-                                                             length: arrayLength,
-                                                             pipelineState: pipelineState)
+            MetalLegacySupport.legacyDispatchThreadsForArray(
+                commandEncoder: computeEncoder,
+                length: arrayLength,
+                pipelineState: pipelineState
+            )
         }
 
         // REQUIRED: End the compute encoder encoding
         computeEncoder.endEncoding()
         
         // Mark color pass as performed (doesn't mean it has displayed yet)
-        self.scene.lastColorPass = CACurrentMediaTime()
+        scene.lastColorPass = CACurrentMediaTime()
     }
 }

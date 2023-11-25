@@ -9,10 +9,16 @@ import SwiftUI
 
 struct MainView: View {
     
+    @StateObject var proteinViewModel = ProteinViewModel()
+    @StateObject var proteinDataSource = ProteinDataSource()
+    @State var colorViewModel = ProteinColorViewModel()
+    @State var visualizationViewModel = ProteinVisualizationViewModel()
+    @State var shadowsViewModel = ProteinShadowsViewModel()
+    @State var graphicsSettings = ProteinGraphicsSettings()
+    @State var statusViewModel = StatusViewModel()
     @State var isPresentingNews = false
             
     init() {
-        
         // Custom segmented controls in the app
         #if targetEnvironment(macCatalyst)
         // selectedSegmentTintColor does not work on macCatalyst :(
@@ -31,11 +37,33 @@ struct MainView: View {
 
     var body: some View {
         
-        let proteinViewModel = ProteinViewModel()
-        
-        NavigationView {
+        NavigationStack {
             ProteinView()
                 .environmentObject(proteinViewModel)
+                .environmentObject(proteinDataSource)
+                .environment(colorViewModel)
+                .environment(visualizationViewModel)
+                .environment(shadowsViewModel)
+                .environment(graphicsSettings)
+                .environment(statusViewModel)
+                .onAppear {
+                    
+                    proteinDataSource.proteinViewModel = proteinViewModel
+                    proteinViewModel.dataSource = proteinDataSource
+                    
+                    colorViewModel.proteinViewModel = proteinViewModel
+                    proteinViewModel.colorViewModel = colorViewModel
+                    
+                    visualizationViewModel.proteinViewModel = proteinViewModel
+                    proteinViewModel.visualizationViewModel = visualizationViewModel
+                    
+                    shadowsViewModel.proteinViewModel = proteinViewModel
+                    
+                    graphicsSettings.proteinViewModel = proteinViewModel
+                    
+                    statusViewModel.proteinViewModel = proteinViewModel
+                    proteinViewModel.statusViewModel = statusViewModel
+                }
             
                 .sheet(isPresented: $isPresentingNews, onDismiss: {
                     AppState.shared.userHasSeenWhatsNew()
@@ -51,9 +79,14 @@ struct MainView: View {
         }
         // Open documents in view from other apps
         .onOpenURL { fileURL in
-            try? FileImporter.importFromFileURL(fileURL: fileURL,
-                                                proteinViewModel: proteinViewModel,
-                                                fileInfo: nil)
+            Task {
+                try? await FileImporter.importFromFileURL(
+                    fileURL: fileURL,
+                    proteinDataSource: proteinDataSource,
+                    statusViewModel: statusViewModel,
+                    fileInfo: nil
+                )
+            }
         }
     }
 }

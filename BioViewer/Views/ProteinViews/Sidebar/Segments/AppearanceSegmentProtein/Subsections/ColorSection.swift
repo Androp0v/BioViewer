@@ -5,86 +5,149 @@
 //  Created by Raúl Montón Pinillos on 10/6/22.
 //
 
+import BioViewerFoundation
 import SwiftUI
 
 struct ColorSection: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
+    @Environment(ProteinVisualizationViewModel.self) var visualizationViewModel: ProteinVisualizationViewModel
     
     @State var presentPeriodicTable: Bool = false
+    @State var showMoreElements: Bool = false
     
     var body: some View {
+        @Bindable var colorViewModel = colorViewModel
         Section(
             header: Text(NSLocalizedString("Color", comment: ""))
                     .padding(.bottom, 4),
             content: {
-                if proteinViewModel.visualization == .ballAndStick {
+                if visualizationViewModel.visualization == .ballAndStick {
                     ColorPickerRow(
                         title: NSLocalizedString("Bond color", comment: ""),
-                        selectedColor: $proteinViewModel.bondColor
+                        selectedColor: $colorViewModel.bondColor
                     )
                 }
                 PersistentDisclosureGroup(
                     for: .colorGroup,
                     defaultOpen: true,
                     content: {
+                        
+                        switch colorViewModel.colorBy {
+                        
                         // MARK: - Color by element
-                        if proteinViewModel.colorBy == ProteinColorByOption.element {
+                        case .element:
                             // TO-DO: Make color palette work
                             /*
                             ColorPaletteRow(colorPalette: ColorPalette(.default))
                             */
                             
-                            ColorPickerRow(
-                                title: NSLocalizedString("C atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.CARBON)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("H atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.HYDROGEN)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("N atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.NITROGEN)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("O atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.OXYGEN)]
-                            )
-                            ColorPickerRow(
-                                title: NSLocalizedString("S atom color", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.SULFUR)]
-                            )
+                            ForEach(AtomElement.importantElements, id: \.self) { element in
+                                ColorPickerRow(
+                                    title: NSLocalizedString("\(element.name) atom color", comment: ""),
+                                    selectedColor: $colorViewModel.elementColors[Int(element.rawValue)]
+                                )
+                            }
+                            
+                            if showMoreElements {
+                                ForEach(AtomElement.otherElements, id: \.self) { element in
+                                    ColorPickerRow(
+                                        title: NSLocalizedString("\(element.name) atom color", comment: ""),
+                                        selectedColor: $colorViewModel.elementColors[Int(element.rawValue)]
+                                    )
+                                }
+                            }
+                            
                             ColorPickerRow(
                                 title: NSLocalizedString("Other atoms", comment: ""),
-                                selectedColor: $proteinViewModel.elementColors[Int(AtomType.UNKNOWN)]
+                                selectedColor: $colorViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
                             )
-                        } else {
-                            if let subunits = proteinViewModel.dataSource.getFirstProtein()?.subunits {
-                                // MARK: - Color by subunit
-                                ForEach(subunits, id: \.id) { subunit in
+                            
+                            ButtonRow(
+                                action: {
+                                    withAnimation {
+                                        showMoreElements.toggle()
+                                    }
+                                },
+                                text: NSLocalizedString(
+                                    showMoreElements
+                                        ? NSLocalizedString("Show less", comment: "")
+                                        : NSLocalizedString("Show more", comment: ""),
+                                    comment: ""
+                                )
+                            )
+                            
+                        // MARK: - Color by subunit
+                        case .subunit:
+                            if let subunits = proteinDataSource.getFirstProtein()?.subunits {
+                                ForEach(subunits, id: \.indexInProtein) { subunit in
                                     // TO-DO: Show real subunit list
                                     ColorPickerRow(
-                                        title: NSLocalizedString("Subunit \(subunit.getUppercaseName())", comment: ""),
-                                        selectedColor: $proteinViewModel.subunitColors[subunit.id]
+                                        title: NSLocalizedString("\(subunit.subunitName)", comment: ""),
+                                        selectedColor: $colorViewModel.subunitColors[subunit.indexInProtein]
                                     )
                                 }
                             } else {
                                 EmptyDataRow(text: NSLocalizedString("No subunits found", comment: ""))
                                     .padding(.vertical, 2)
                             }
+                        case .residue:
+                            
+                            // MARK: - Color by residue
+                            
+                            ForEach(Residue.ResidueKind.allCases.filter { $0 != .unknown }, id: \.self) { residueKind in
+                                PersistentDisclosureGroup(
+                                    for: {
+                                        switch residueKind {
+                                        case .aminoAcid:
+                                            return .residueColoringAminoAcid
+                                        case .dnaNucleobase:
+                                            return .residueColoringDNANucleobase
+                                        case .rnaNucleobase:
+                                            return .residueColoringRNANucleobase
+                                        case .unknown:
+                                            return .error
+                                        }
+                                    }(),
+                                    defaultOpen: false,
+                                    content: {
+                                        let aminoAcids = Residue.allCases.filter({ $0.kind == residueKind })
+                                        ForEach(aminoAcids, id: \.rawValue) { residue in
+                                            ColorPickerRow(
+                                                title: residue.name,
+                                                selectedColor: $colorViewModel.residueColors[Int(residue.rawValue)]
+                                            )
+                                        }
+                                    },
+                                    label: {
+                                        Text(NSLocalizedString(residueKind.name, comment: ""))
+                                            #if targetEnvironment(macCatalyst)
+                                            .padding(.leading, 8)
+                                            #else
+                                            .padding(.trailing, 16)
+                                            #endif
+                                    }
+                                )
+                            }
+                            
+                            ColorPickerRow(
+                                title: Residue.unknown.name,
+                                selectedColor: $colorViewModel.residueColors[Int(Residue.unknown.rawValue)]
+                            )
+                        case .secondaryStructure:
+                            ForEach(SecondaryStructure.allCases, id: \.self) { structure in
+                                ColorPickerRow(
+                                    title: structure.name,
+                                    selectedColor: $colorViewModel.structureColors[Int(structure.rawValue)]
+                                )
+                            }
                         }
                     },
                     label: {
-                        // TO-DO: Refactor pickerOptions to get them from ProteinColorByOption
                         PickerRow(
                             optionName: "Color by",
-                            selectedOption: $proteinViewModel.colorBy,
-                            pickerOptions:
-                                [
-                                    "Element",
-                                    "Subunit"
-                                ]
+                            selection: $colorViewModel.colorBy
                         )
                         #if targetEnvironment(macCatalyst)
                         .padding(.leading, 8)
@@ -95,7 +158,7 @@ struct ColorSection: View {
                 )
                 // TODO: Change color defaults
                 /*
-                if proteinViewModel.colorBy == ProteinColorByOption.element {
+                if colorViewModel.colorBy == ProteinColorByOption.element {
                     ButtonRow(
                         action: {
                             withAnimation {

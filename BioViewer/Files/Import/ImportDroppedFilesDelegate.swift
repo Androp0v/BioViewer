@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 5/5/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import simd
 import SwiftUI
@@ -12,7 +13,7 @@ import UniformTypeIdentifiers
 
 /// Class to handle importing dropped files into the protein view.
 /// Should be able to read .pdb files.
-class ImportDroppedFilesDelegate: DropDelegate {
+@MainActor class ImportDroppedFilesDelegate: DropDelegate {
 
     // MARK: - Properties
 
@@ -21,10 +22,14 @@ class ImportDroppedFilesDelegate: DropDelegate {
     // MARK: - Handle drag & drop events
 
     func performDrop(info: DropInfo) -> Bool {
+        
+        let statusAction = StatusAction(type: .importFile, description: "Importing file", progress: nil)
+        self.proteinViewModel?.statusViewModel?.showStatusForAction(statusAction)
 
-        guard let itemProvider = info.itemProviders(for: [.data,
-                                                          .item]).first else {
-            self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
+        guard let itemProvider = info.itemProviders(
+            for: [.data, .item]
+        ).first else {
+            self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
             NSLog("No itemProvider available for the given type.")
             return false
         }
@@ -43,7 +48,7 @@ class ImportDroppedFilesDelegate: DropDelegate {
         
         // Ensure that a type has been found at all
         guard let typeIdentifier = typeIdentifier else {
-            self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileType)
+            self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
             NSLog("Item provider has no associated type identifier.")
             return false
         }
@@ -51,17 +56,18 @@ class ImportDroppedFilesDelegate: DropDelegate {
         itemProvider.loadDataRepresentation(forTypeIdentifier: typeIdentifier) { data, error in
 
             guard let data = data else {
-                self.proteinViewModel?.statusFinished(importError: ImportError.unknownError)
+                Task { @MainActor in
+                    self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownError)
+                }
                 return
             }
             
             let itemProviderType = itemProvider.registeredTypeIdentifiers.first
             
-            var fileName: String = NSLocalizedString("Unknown", comment: "")
+            var mutableFileName: String = NSLocalizedString("Unknown", comment: "")
             var fileExtension: String?
-            
             if let fullFileName = itemProvider.suggestedName as NSString? {
-                fileName = fullFileName.deletingPathExtension
+                mutableFileName = fullFileName.deletingPathExtension
                 if !fullFileName.pathExtension.isEmpty {
                     // Prefer getting the file extension from the suggested file name.
                     fileExtension = fullFileName.pathExtension
@@ -71,10 +77,13 @@ class ImportDroppedFilesDelegate: DropDelegate {
                     fileExtension = (itemProviderType as NSString?)?.pathExtension
                 }
             }
+            let filename = mutableFileName
             
             // Check that either the suggestedName or the itemProvider type have a valid path extension
             guard let fileExtension = fileExtension else {
-                self.proteinViewModel?.statusFinished(importError: ImportError.unknownFileExtension)
+                Task { @MainActor in
+                    self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileExtension)
+                }
                 return
             }
 
@@ -85,12 +94,20 @@ class ImportDroppedFilesDelegate: DropDelegate {
             let byteSize = (data as NSData).length
 
             // Parse file
-            try? FileImporter.importFileFromRawText(rawText: rawFileText,
-                                                    proteinViewModel: proteinViewModel,
-                                                    fileInfo: nil,
-                                                    fileName: fileName,
-                                                    fileExtension: fileExtension,
-                                                    byteSize: byteSize)
+            Task {
+                guard let dataSource = await proteinViewModel.dataSource else { return }
+                guard let statusViewModel = await proteinViewModel.statusViewModel else { return }
+                try? await FileImporter.importFileFromRawText(
+                    rawText: rawFileText,
+                    proteinDataSource: dataSource,
+                    statusViewModel: statusViewModel,
+                    statusAction: statusAction,
+                    fileInfo: nil,
+                    fileName: filename,
+                    fileExtension: fileExtension,
+                    byteSize: byteSize
+                )
+            }
         }
 
         return true

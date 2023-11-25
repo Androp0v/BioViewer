@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 10/5/22.
 //
 
+import BioViewerFoundation
 import Foundation
 import Metal
 import simd
@@ -31,7 +32,7 @@ class ComputeMolecularSurfaceUtility {
         self.protein = protein
         self.gridResolution = gridResolution
         
-        (self.boxSize, self.neighbourGridResolution) = optimalBox(boundingSphereRadius: protein.boundingSphere.radius)
+        (self.boxSize, self.neighbourGridResolution) = optimalBox(boundingSphereRadius: protein.boundingVolume.sphere.radius)
     }
     
     func createMolecularSurface() -> MTLBuffer? {
@@ -50,7 +51,7 @@ class ComputeMolecularSurfaceUtility {
         let optimalSize = Float(numberOfCells) * neighbourCellSize
         
         BioViewerLogger.shared.log(type: .info,
-                                   category: .ComputeSurfaceUtility,
+                                   category: .computeSurfaceUtility,
                                    message: """
                                             NeighbourGrid has \(numberOfCells * numberOfCells * numberOfCells)
                                             (\(numberOfCells)x\(numberOfCells)x\(numberOfCells)) cells.

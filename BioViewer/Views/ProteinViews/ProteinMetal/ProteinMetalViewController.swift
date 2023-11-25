@@ -14,8 +14,8 @@ class ProteinMetalViewController: UIViewController {
 
     var device: MTLDevice!
     
-    var renderedView: MTKView!
-    weak var renderDelegate: MTKViewDelegate?
+    var renderedView: ProteinRenderedView!
+    
     var proteinViewModel: ProteinViewModel
     
     init(proteinViewModel: ProteinViewModel) {
@@ -38,8 +38,10 @@ class ProteinMetalViewController: UIViewController {
         self.device = device
 
         // Setup MTKView
-        renderedView = MTKView(frame: view.frame, device: device)
-        renderedView.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
+        renderedView = ProteinRenderedView(
+            renderer: proteinViewModel.renderer,
+            frame: view.frame
+        )
         renderedView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(renderedView)
         NSLayoutConstraint.activate([
@@ -48,13 +50,6 @@ class ProteinMetalViewController: UIViewController {
             renderedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             renderedView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
 
-        // Render delegate
-        self.renderDelegate = proteinViewModel.renderer
-        renderedView.delegate = self.renderDelegate
-
-        // Create depth texture for view
-        renderedView.depthStencilPixelFormat = .depth32Float
-        
         // FIXME: This breaks PhotoMode, but would be useful
         /*if #available(iOS 16.0, *) {
             if device.supportsFamily(.apple1) {
@@ -81,55 +76,65 @@ class ProteinMetalViewController: UIViewController {
 
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-            let currentCameraPosition = self.proteinViewModel.renderer.scene.cameraPosition
-            // TO-DO: Proper zooming
-            let newDistance = currentCameraPosition.z / Float(gestureRecognizer.scale)
-            self.proteinViewModel.renderer.scene.updateCameraDistanceToModel(distanceToModel: newDistance,
-                                                                             proteinDataSource: proteinViewModel.dataSource)
-            gestureRecognizer.scale = 1.0
+            Task {
+                let currentCameraPosition = await self.proteinViewModel.renderer.mutableState.getCameraPosition()
+                // TO-DO: Proper zooming
+                let newDistance = currentCameraPosition.z / Float(gestureRecognizer.scale)
+                await self.proteinViewModel.renderer.mutableState.setCameraDistanceToModel(newDistance)
+                gestureRecognizer.scale = 1.0
+            }
        }
     }
     
     @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
         
-        if proteinViewModel.autorotating {
-            proteinViewModel.autorotating = false
+        guard let toolbarConfig = proteinViewModel.toolbarConfig else { return }
+        
+        if toolbarConfig.autorotating {
+            proteinViewModel.toolbarConfig?.autorotating = false
         }
         
         if gestureRecognizer.state == .changed {
-            switch proteinViewModel.toolbarConfig.selectedTool {
+            switch toolbarConfig.selectedTool {
             case CameraControlTool.rotate:
-                let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
-                let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
-                                  
-                var currentRotationMatrix = self.proteinViewModel.renderer.scene.userModelRotationMatrix
-                
-                // Revert the axis rotation before rotating through that axis
-                currentRotationMatrix *= Transform.rotationMatrix(
-                    radians: -rotationSpeedX,
-                    axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
-                )
-                currentRotationMatrix *= Transform.rotationMatrix(
-                    radians: -rotationSpeedY,
-                    axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
-                )
-                                                
-                self.proteinViewModel.renderer.scene.userModelRotationMatrix = currentRotationMatrix
+                Task {
+                    let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
+                    let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                    
+                    var currentRotationMatrix = await self.proteinViewModel.renderer.mutableState.getUserRotationMatrix()
+                    
+                    // Revert the axis rotation before rotating through that axis
+                    currentRotationMatrix *= Transform.rotationMatrix(
+                        radians: -rotationSpeedX,
+                        axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
+                    )
+                    currentRotationMatrix *= Transform.rotationMatrix(
+                        radians: -rotationSpeedY,
+                        axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
+                    )
+                    
+                    await self.proteinViewModel.renderer.mutableState.setUserRotationMatrix(currentRotationMatrix)
+                }
                 
             case CameraControlTool.move:
-                // TO-DO: Improve move tool
-                #if targetEnvironment(macCatalyst)
-                var translationSensitivity: Float = 0.000005
-                #else
-                var translationSensitivity: Float = 0.00001
-                #endif
-                
-                // Move should be less sensible the closer the camera is to the protein
-                translationSensitivity *= proteinViewModel.renderer.scene.cameraPosition.z
-                
-                let translationX = Float(gestureRecognizer.velocity(in: renderedView).x) * translationSensitivity
-                let translationY = Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
-                self.proteinViewModel.renderer.scene.moveCamera(x: translationX, y: -translationY)
+                Task {
+                    // TO-DO: Improve move tool
+                    #if targetEnvironment(macCatalyst)
+                    var translationSensitivity: Float = 0.000005
+                    #else
+                    var translationSensitivity: Float = 0.00001
+                    #endif
+                    
+                    // Move should be less sensible the closer the camera is to the protein
+                    await translationSensitivity *= proteinViewModel.renderer.mutableState.getCameraPosition().z
+                    
+                    let translationX = Float(gestureRecognizer.velocity(in: renderedView).x) * translationSensitivity
+                    let translationY = Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
+                    await self.proteinViewModel.renderer.mutableState.translateCameraXY(
+                        x: translationX,
+                        y: -translationY
+                    )
+                }
             
             default:
                 break

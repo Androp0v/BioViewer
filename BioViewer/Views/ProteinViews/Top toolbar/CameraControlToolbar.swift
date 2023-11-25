@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CameraControlToolbar: View {
     
-    @EnvironmentObject var config: ToolbarConfig
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @Environment(ToolbarConfig.self) var config: ToolbarConfig
         
     var body: some View {
+        @Bindable var config = config
         HStack {
             Picker("Rotation mode", selection: $config.selectedTool) {
                 Image(systemName: "rotate.3d")
@@ -29,20 +29,21 @@ struct CameraControlToolbar: View {
             .pickerStyle(SegmentedPickerStyle())
             .foregroundColor(.accentColor)
             .frame(width: 4 * TopToolbar.Constants.buttonSize)
-            .disabled(proteinViewModel.autorotating)
+            .disabled(config.autorotating)
             .contextMenu {
                 Button(role: .destructive) {
-                    proteinViewModel.renderer.scene.resetCamera()
+                    config.resetCamera()
                 } label: {
                     Label("Reset camera", systemImage: "arrow.uturn.backward")
                 }
             }
             Button(
                 action: {
-                    proteinViewModel.autorotating.toggle()
+                    config.autorotating.toggle()
                 }, label: {
-                    Image(systemName: proteinViewModel.autorotating ? "arrow.triangle.2.circlepath.circle.fill"
-                                                                    : "arrow.triangle.2.circlepath.circle"
+                    Image(systemName: config.autorotating
+                          ? "arrow.triangle.2.circlepath.circle.fill"
+                          : "arrow.triangle.2.circlepath.circle"
                     )
                     .foregroundColor(.accentColor)
                 }
@@ -54,6 +55,6 @@ struct CameraControlToolbar: View {
 struct CameraControlToolbar_Previews: PreviewProvider {
     static var previews: some View {
         CameraControlToolbar()
-            .environmentObject(ToolbarConfig())
+            .environment(ToolbarConfig())
     }
 }

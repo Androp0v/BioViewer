@@ -10,9 +10,10 @@ import SwiftUI
 
 struct VisualizationSection: View {
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @Environment(ProteinVisualizationViewModel.self) var visualizationViewModel: ProteinVisualizationViewModel
     
     var body: some View {
+        @Bindable var visualizationViewModel = visualizationViewModel
         Section(
             header:
                 Text(NSLocalizedString("Visualization", comment: ""))
@@ -24,7 +25,7 @@ struct VisualizationSection: View {
                     defaultOpen: true,
                     content: {
                         
-                        switch proteinViewModel.visualization {
+                        switch visualizationViewModel.visualization {
                         case .solidSpheres:
                             
                             // MARK: - Solid spheres
@@ -33,24 +34,27 @@ struct VisualizationSection: View {
                                 for: .solidSpheresRadiusGroup,
                                 defaultOpen: false,
                                 content: {
-                                    if proteinViewModel.solidSpheresRadiusOption == .fixed {
+                                    if visualizationViewModel.solidSpheresRadiusOption == .fixed {
                                         SliderRow(
                                             title: NSLocalizedString("Size", comment: ""),
-                                            value: $proteinViewModel.solidSpheresFixedAtomRadii,
+                                            value: $visualizationViewModel.solidSpheresFixedAtomRadii,
                                             minValue: 0.2,
                                             maxValue: 2.0
                                         )
-                                    } else if proteinViewModel.solidSpheresRadiusOption == .vanDerWaals {
+                                    } else if visualizationViewModel.solidSpheresRadiusOption == .vanDerWaals {
                                         SliderRow(
                                             title: NSLocalizedString("Scale", comment: ""),
-                                            value: $proteinViewModel.solidSpheresVDWScale,
+                                            value: $visualizationViewModel.solidSpheresVDWScale,
                                             minValue: 0.1,
                                             maxValue: 1.5
                                         )
                                     }
                                 },
                                 label: {
-                                    SolidSpheresRadiiPickerRow()
+                                    PickerRow(
+                                        optionName: "Radius",
+                                        selection: $visualizationViewModel.solidSpheresRadiusOption
+                                    )
                                         #if targetEnvironment(macCatalyst)
                                         .padding(.leading, 8)
                                         #else
@@ -66,24 +70,27 @@ struct VisualizationSection: View {
                                 for: .ballAndStickRadiusGroup,
                                 defaultOpen: false,
                                 content: {
-                                    if proteinViewModel.ballAndStickRadiusOption == .fixed {
+                                    if visualizationViewModel.ballAndStickRadiusOption == .fixed {
                                         SliderRow(
                                             title: NSLocalizedString("Size", comment: ""),
-                                            value: $proteinViewModel.ballAndSticksFixedAtomRadii,
+                                            value: $visualizationViewModel.ballAndSticksFixedAtomRadii,
                                             minValue: 0.2,
                                             maxValue: 0.6
                                         )
-                                    } else if proteinViewModel.ballAndStickRadiusOption == .scaledVDW {
+                                    } else if visualizationViewModel.ballAndStickRadiusOption == .scaledVDW {
                                         SliderRow(
                                             title: NSLocalizedString("Scale", comment: ""),
-                                            value: $proteinViewModel.ballAndSticksVDWScale,
+                                            value: $visualizationViewModel.ballAndSticksVDWScale,
                                             minValue: 0.2,
                                             maxValue: 0.4
                                         )
                                     }
                                 },
                                 label: {
-                                    BallAndStickRadiiPickerRow()
+                                    PickerRow(
+                                        optionName: "Radius",
+                                        selection: $visualizationViewModel.ballAndStickRadiusOption
+                                    )
                                         #if targetEnvironment(macCatalyst)
                                         .padding(.leading, 8)
                                         #else
@@ -94,7 +101,10 @@ struct VisualizationSection: View {
                         }
                     },
                     label: {
-                        VisualizationPickerRow()
+                        PickerRow(
+                            optionName: "View as",
+                            selection: $visualizationViewModel.visualization
+                        )
                             #if targetEnvironment(macCatalyst)
                             .padding(.leading, 8)
                             #else

@@ -12,7 +12,7 @@ struct TopToolbar: View {
     @State var displayToolbar: Bool
     @State var displayPhotoMode: Bool = false
     
-    @EnvironmentObject var config: ToolbarConfig
+    @Environment(ToolbarConfig.self) var config: ToolbarConfig
     
     #if targetEnvironment(macCatalyst)
     let buttonStyle = PlainButtonStyle()

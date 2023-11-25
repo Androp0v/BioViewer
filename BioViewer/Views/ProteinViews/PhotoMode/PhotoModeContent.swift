@@ -10,7 +10,7 @@ import SwiftUI
 struct PhotoModeContent: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
+    @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
     
     private struct Constants {
         #if targetEnvironment(macCatalyst)
@@ -21,25 +21,35 @@ struct PhotoModeContent: View {
     }
         
     var body: some View {
-        
+        @Bindable var photoModeViewModel = photoModeViewModel
         VStack(spacing: 0) {
             PhotoModeContentHeaderView()
                 .padding()
             Divider()
             List {
                 Section {
-                    PickerRow(optionName: NSLocalizedString("Image resolution", comment: ""),
-                              selectedOption: $photoModeViewModel.finalTextureSizeOption,
-                              pickerOptions: ["1024x1024",
-                                              "2048x2048",
-                                              "4096x4096"])
-                    PickerRow(optionName: NSLocalizedString("Shadow resolution", comment: ""),
-                              selectedOption: $photoModeViewModel.shadowResolution,
-                              pickerOptions: ["Normal",
-                                              "High",
-                                              "Very high"])
-                    SwitchRow(title: NSLocalizedString("Clear background", comment: ""),
-                              toggledVariable: $photoModeViewModel.photoConfig.clearBackground)
+                    LegacyPickerRow(
+                        optionName: NSLocalizedString("Image resolution", comment: ""),
+                        selectedOption: $photoModeViewModel.finalTextureSizeOption,
+                        pickerOptions: [
+                            "1024x1024",
+                            "2048x2048",
+                            "4096x4096"
+                        ]
+                    )
+                    LegacyPickerRow(
+                        optionName: NSLocalizedString("Shadow resolution", comment: ""),
+                        selectedOption: $photoModeViewModel.shadowResolution,
+                        pickerOptions: [
+                            "Normal",
+                            "High",
+                            "Very high"
+                        ]
+                    )
+                    SwitchRow(
+                        title: NSLocalizedString("Clear background", comment: ""),
+                        toggledVariable: $photoModeViewModel.photoConfig.clearBackground
+                    )
                 }
                 
                 // Empty section to add spacing at the bottom of the list
@@ -58,6 +68,6 @@ struct PhotoModeContent: View {
 struct PhotoModeHeader_Previews: PreviewProvider {
     static var previews: some View {
         PhotoModeContent()
-            .environmentObject(PhotoModeViewModel())
+            .environment(PhotoModeViewModel())
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 17/12/21.
 //
 
+import BioViewerFoundation
 import Foundation
 
 struct BufferRegion {
@@ -13,7 +14,6 @@ struct BufferRegion {
 }
 
 class ConfigurationSelector {
-    weak var scene: MetalScene?
     var proteins: [Protein]
     
     var atomsPerConfiguration: Int
@@ -29,9 +29,8 @@ class ConfigurationSelector {
     
     // MARK: - Initialization
     
-    init(for proteins: [Protein], in scene: MetalScene, atomsPerConfiguration: Int, subunitIndices: [Int], subunitLengths: [Int], configurationCount: Int) {
+    init(for proteins: [Protein], atomsPerConfiguration: Int, subunitIndices: [Int], subunitLengths: [Int], configurationCount: Int) {
         self.proteins = proteins
-        self.scene = scene
         self.atomsPerConfiguration = atomsPerConfiguration
         self.subunitIndices = subunitIndices
         self.subunitLengths = subunitLengths
@@ -50,7 +49,6 @@ class ConfigurationSelector {
         if currentConfiguration <= -1 {
             currentConfiguration = lastConfiguration
         }
-        scene?.needsRedraw = true
     }
     
     func nextConfiguration() {
@@ -58,7 +56,6 @@ class ConfigurationSelector {
         if currentConfiguration >= lastConfiguration {
             currentConfiguration = 0
         }
-        scene?.needsRedraw = true
     }
     
     // MARK: - Get buffer regions

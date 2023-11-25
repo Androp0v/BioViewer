@@ -11,6 +11,11 @@
 /// Supported number of (different) atom types.
 #define ATOM_TYPE_COUNT 64
 
+struct Sphere {
+    vector_float3 origin;
+    float radius;
+};
+
 typedef struct {
     /// Radius of each atom type (C, H, N, O, S, Others).
     float atomRadius [ATOM_TYPE_COUNT];

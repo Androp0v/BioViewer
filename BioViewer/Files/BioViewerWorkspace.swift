@@ -33,6 +33,8 @@ class BioViewerWorkspace: UIDocument {
     }
 }
 
-class BioViewerWorkspaceDelegate: DocumentPickerDelegate {
-    
-}
+/*
+ class BioViewerWorkspaceDelegate: DocumentPickerDelegate {
+ 
+ }
+ */

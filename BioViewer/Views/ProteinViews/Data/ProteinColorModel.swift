@@ -5,25 +5,73 @@
 //  Created by Raúl Montón Pinillos on 25/11/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import simd
 import SwiftUI
 
-public enum ProteinColorByOption {
-    static let none: Int = -1
-    static let element: Int = 0
-    static let subunit: Int = 1
+enum ProteinColorByOption: PickableEnum {
+    case element
+    case subunit
+    case residue
+    case secondaryStructure
+    
+    var displayName: String {
+        switch self {
+        case .element:
+            return NSLocalizedString("Element", comment: "")
+        case .subunit:
+            return NSLocalizedString("Subunit", comment: "")
+        case .residue:
+            return NSLocalizedString("Residue", comment: "")
+        case .secondaryStructure:
+            return NSLocalizedString("Secondary structure", comment: "")
+        }
+    }
+    
+    var shortcutKey: KeyEquivalent {
+        switch self {
+        case .element:
+            return "1"
+        case .subunit:
+            return "2"
+        case .residue:
+            return "3"
+        case .secondaryStructure:
+            return "4"
+        }
+    }
+
 }
 
-extension ProteinViewModel {
+extension ProteinColorViewModel {
     
     // MARK: - Initialization
     
     func initElementColors() {
         // Preselected element color palette
         elementColors = []
-        for atomType in 0..<ATOM_TYPE_COUNT {
-            elementColors.append(AtomTypeUtilities.getAtomicColor(atomType: UInt16(atomType)))
+        for atomElementIndex in 0..<ATOM_TYPE_COUNT {
+            if let element = AtomElement(rawValue: UInt8(atomElementIndex)) {
+                elementColors.append(element.defaultColor)
+            } else {
+                elementColors.append(AtomElement.unknown.defaultColor)
+            }
+        }
+    }
+    
+    func initResidueColors() {
+        // Preselected element color palette
+        residueColors = []
+        for residue in Residue.allCases {
+            residueColors.append(residue.defaultColor)
+        }
+    }
+    
+    func initStructureColors() {
+        structureColors = []
+        for structure in SecondaryStructure.allCases {
+            structureColors.append(structure.defaultColor)
         }
     }
     
@@ -59,15 +107,19 @@ extension ProteinViewModel {
         var fillColor = FillColorInput()
         
         fillColor.colorByElement = 0.0
+        fillColor.colorByResidue = 0.0
         fillColor.colorBySubunit = 0.0
+        fillColor.colorBySecondaryStructure = 0.0
         
         switch colorBy {
-        case ProteinColorByOption.element:
+        case .element:
             fillColor.colorByElement = 1.0
-        case ProteinColorByOption.subunit:
+        case .residue:
+            fillColor.colorByResidue = 1.0
+        case .subunit:
             fillColor.colorBySubunit = 1.0
-        default:
-            break
+        case .secondaryStructure:
+            fillColor.colorBySecondaryStructure = 1.0
         }
         
         // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
@@ -80,7 +132,41 @@ extension ProteinViewModel {
                 let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
                 // TO-DO:
                 guard let simdColor = getSIMDColor(atomColor: elementColors[index].cgColor) else {
-                    NSLog("Unable to get SIMD color from CGColor for protein subunit coloring.")
+                    NSLog("Unable to get SIMD color from CGColor for atom element coloring.")
+                    return
+                }
+                ptr.pointee = simdColor
+            }
+        }
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &fillColor.residue_color) { rawPtr -> Void in
+            for index in 0..<min(residueColors.count, Int(MAX_RESIDUE_COLORS)) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                // TO-DO:
+                guard let simdColor = getSIMDColor(atomColor: residueColors[index].cgColor) else {
+                    NSLog("Unable to get SIMD color from CGColor for residue coloring.")
+                    return
+                }
+                ptr.pointee = simdColor
+            }
+        }
+        
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeMutableBytes(of: &fillColor.secondary_structure_color) { rawPtr -> Void in
+            for index in 0..<min(structureColors.count, Int(MAX_SECONDARY_STRUCTURE_COLORS)) {
+                guard let ptrAddress = rawPtr.baseAddress else {
+                    return
+                }
+                let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
+                // TO-DO:
+                guard let simdColor = getSIMDColor(atomColor: structureColors[index].cgColor) else {
+                    NSLog("Unable to get SIMD color from CGColor for secondary structure coloring.")
                     return
                 }
                 ptr.pointee = simdColor

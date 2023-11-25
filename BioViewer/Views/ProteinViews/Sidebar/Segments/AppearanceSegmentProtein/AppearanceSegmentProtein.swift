@@ -11,24 +11,26 @@ struct AppearanceSegmentProtein: View {
     
     // MARK: - Properties
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
+    @Environment(ProteinVisualizationViewModel.self) var visualizationViewModel: ProteinVisualizationViewModel
             
     // MARK: - View
     
     var body: some View {
+        @Bindable var colorViewModel = colorViewModel
+        @Bindable var visualizationViewModel = visualizationViewModel
         List {
             
             // MARK: - General section
             // First section hast 64pt padding to account for the
             // space under the segmented control.
             Section(header: Text(NSLocalizedString("General", comment: ""))
-                        .padding(.top, 52)
                         .padding(.bottom, 4)
             ) {
 
                 ColorPickerRow(
                     title: NSLocalizedString("Background color", comment: ""),
-                    selectedColor: $proteinViewModel.backgroundColor
+                    selectedColor: $colorViewModel.backgroundColor
                 )
             }
             #if targetEnvironment(macCatalyst)
@@ -41,9 +43,7 @@ struct AppearanceSegmentProtein: View {
             
             // MARK: - Color section
             
-            if proteinViewModel.visualization == .solidSpheres || proteinViewModel.visualization == .ballAndStick {
-                ColorSection()
-            }
+            ColorSection()
             
             // MARK: - Shadows section
             
@@ -53,7 +53,7 @@ struct AppearanceSegmentProtein: View {
             Section(header: Text(NSLocalizedString("Focal distance", comment: ""))
                         .padding(.bottom, 4)
             ) {
-                FocalLengthRow(focalLength: $proteinViewModel.cameraFocalLength)
+                FocalLengthRow(focalLength: $visualizationViewModel.cameraFocalLength)
             }
 
         }
@@ -68,6 +68,5 @@ struct AppearanceSegmentProtein_Previews: PreviewProvider {
         AppearanceSegmentProtein()
             .previewDevice("iPhone SE (2nd generation)")
             .previewLayout(.sizeThatFits)
-            .environmentObject(ProteinViewModel())
     }
 }

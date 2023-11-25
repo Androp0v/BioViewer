@@ -18,5 +18,10 @@ struct BioViewerApp: App {
         .commands {
             BioViewerCommands()
         }
+
+        WindowGroup(id: "BioBench") {
+            BioBenchView()
+                .navigationTitle("BioBench")
+        }
     }
 }

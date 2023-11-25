@@ -7,20 +7,18 @@
 
 import SwiftUI
 
-struct RCSBImportView: View {
+@MainActor struct RCSBImportView: View {
     
     enum FocusField: Hashable {
         case field
       }
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
-    // TO-DO: Make rcsbShowSheet an environmental variable
     @Binding var rcsbShowSheet: Bool
     @State var searchText: String = ""
     @State var alertText: String = ""
     @State var showingAlert: Bool = false
     
-    @StateObject var rcsbImportViewModel = RCSBImportViewModel()
+    @State var rcsbImportViewModel = RCSBImportViewModel()
     
     func showAlert(text: String) {
         DispatchQueue.main.async {
@@ -36,48 +34,55 @@ struct RCSBImportView: View {
             VStack(alignment: .center, spacing: .zero) {
                 searchBar
                 Divider()
-                Group {
+                List {
                     if let results = rcsbImportViewModel.results {
-                        if !results.isEmpty {
-                            List {
-                                Section(
-                                    content: {
-                                        ForEach(results) { result in
-                                            RCSBRowView(
-                                                pdbInfo: result,
-                                                searchTerm: searchText,
-                                                rcsbShowSheet: $rcsbShowSheet
-                                            )
-                                            .onAppear {
-                                                if result == results.last {
-                                                    rcsbImportViewModel.loadNextPageIfNeeded()
-                                                }
-                                            }
-                                        }
-                                    },
-                                    footer: {
-                                        if rcsbImportViewModel.isLoading {
-                                            HStack {
-                                                Spacer()
-                                                Text("Loading")
-                                                    .italic()
-                                                    .foregroundColor(.secondary)
-                                                Spacer()
-                                            }
-                                            .padding()
-                                            .padding(.bottom, 24)
+                        Section(
+                            content: {
+                                ForEach(results) { result in
+                                    RCSBRowView(
+                                        pdbInfo: result,
+                                        searchTerm: searchText,
+                                        rcsbShowSheet: $rcsbShowSheet
+                                    )
+                                    .onAppear {
+                                        if result == results.last {
+                                            rcsbImportViewModel.loadNextPageIfNeeded()
                                         }
                                     }
-                                )
+                                }
+                            },
+                            footer: {
+                                if rcsbImportViewModel.isLoading {
+                                    HStack {
+                                        Spacer()
+                                        BVProgressView(size: 36, strokeWidth: 1.5)
+                                            .foregroundStyle(.gray)
+                                        Text("Loading")
+                                            .foregroundStyle(.gray)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .padding(.bottom, 48)
+                                }
                             }
-                            .listStyle(.plain)
-                            .edgesIgnoringSafeArea(.all)
-                        } else {
+                        )
+                    }
+                }
+                .listStyle(.plain)
+                .edgesIgnoringSafeArea(.all)
+                .overlay {
+                    if let results = rcsbImportViewModel.results {
+                        if results.isEmpty {
                             Text(NSLocalizedString("No results", comment: ""))
                                 .foregroundColor(.secondary)
                         }
                     } else {
-                        RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
+                        if !rcsbImportViewModel.isLoading {
+                            RCSBEmptyImportView(rcsbShowSheet: $rcsbShowSheet)
+                        } else {
+                            BVProgressView(size: 96)
+                                .foregroundStyle(.gray)
+                        }
                     }
                 }
                 .frame(maxHeight: .infinity)
@@ -93,7 +98,7 @@ struct RCSBImportView: View {
                 Image(systemName: "lightbulb.circle")
             })
         }
-        .environmentObject(rcsbImportViewModel)
+        .environment(rcsbImportViewModel)
     }
     
     // MARK: - SearchBar
@@ -130,13 +135,5 @@ struct RCSBImportView: View {
         }
         .foregroundColor(.gray)
         .padding()
-    }
-}
-
-// MARK: - Previews
-
-struct RCSBImportView_Previews: PreviewProvider {
-    static var previews: some View {
-        RCSBImportView(rcsbShowSheet: .constant(true))
     }
 }

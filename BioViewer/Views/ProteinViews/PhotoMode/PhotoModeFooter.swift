@@ -10,18 +10,21 @@ import SwiftUI
 struct PhotoModeFooter: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @EnvironmentObject var photoModeViewModel: PhotoModeViewModel
-    @ObservedObject var shutterAnimator: ShutterAnimator
+    @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
+    @Environment(ShutterAnimator.self) var shutterAnimator: ShutterAnimator
     
     var body: some View {
         VStack(spacing: 0) {
             Divider()
             Button(action: {
-                photoModeViewModel.shutterAnimator.openShutter()
-                // TO-DO: Error handling
-                DispatchQueue.global(qos: .userInitiated).async {
-                    try? proteinViewModel.renderer.drawHighQualityFrame(size: CGSize(width: 2048, height: 2048),
-                                                                        photoModeViewModel: photoModeViewModel)
+                Task {
+                    await photoModeViewModel.shutterAnimator.openShutter()
+                    try? await proteinViewModel.renderer.mutableState.drawHighQualityFrame(
+                        renderer: proteinViewModel.renderer,
+                        size: CGSize(width: 2048, height: 2048),
+                        photoConfig: photoModeViewModel.photoConfig,
+                        photoModeViewModel: photoModeViewModel
+                    )
                 }
             }, label: {
                 HStack {
@@ -46,6 +49,7 @@ struct PhotoModeFooter: View {
 
 struct PhotoModeFooter_Previews: PreviewProvider {
     static var previews: some View {
-        PhotoModeFooter(shutterAnimator: ShutterAnimator())
+        PhotoModeFooter()
+            .environment(ShutterAnimator())
     }
 }

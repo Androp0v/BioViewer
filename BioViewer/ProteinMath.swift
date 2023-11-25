@@ -31,33 +31,48 @@ func normalizeAtomPositions(atoms: inout ContiguousArray<simd_float3>, center: s
 ///   - atoms: The positions of the atom centers.
 ///   - extraMargin: Safety margin to account for the radii of the atoms.
 /// - Returns: Position of the center of the bounding sphere and its radius.
-func computeBoundingSphere(atoms: ContiguousArray<simd_float3>, extraMargin: Float = 5) -> BoundingSphere {
+func computeBoundingVolume(atoms: ContiguousArray<simd_float3>, extraMargin: Float = 5) -> BoundingVolume {
     
     guard atoms.count != 1 else {
-        return BoundingSphere(center: atoms.first!, radius: extraMargin)
+        let center = atoms.first!
+        let boundingBox = BoundingBox(
+            minX: center.x - extraMargin,
+            maxX: center.x + extraMargin,
+            minY: center.y - extraMargin,
+            maxY: center.y + extraMargin,
+            minZ: center.z - extraMargin,
+            maxZ: center.z + extraMargin
+        )
+        let boundingSphere = BoundingSphere(center: atoms.first!, radius: extraMargin)
+        return BoundingVolume(sphere: boundingSphere, box: boundingBox)
     }
     
     let boundingBox = computeBoundingBox(atoms: atoms)
-    let center: simd_float3 = simd_float3(x: (boundingBox.minX + boundingBox.maxX) / 2,
-                                          y: (boundingBox.minY + boundingBox.maxY) / 2,
-                                          z: (boundingBox.minZ + boundingBox.maxZ) / 2)
+    let center: simd_float3 = simd_float3(
+        x: (boundingBox.minX + boundingBox.maxX) / 2,
+        y: (boundingBox.minY + boundingBox.maxY) / 2,
+        z: (boundingBox.minZ + boundingBox.maxZ) / 2
+    )
     
-    // Compute box dimensions
-    let length = boundingBox.maxX - boundingBox.minX
-    let width = boundingBox.maxY - boundingBox.minY
-    let depth = boundingBox.maxZ - boundingBox.minZ
-    
-    let radius = sqrt( pow(length, 2) + pow(width, 2) + pow(depth, 2) ) / 2
-    
-    return BoundingSphere(center: center, radius: radius + extraMargin)
+    var maxDistanceToCenter: Float = 0.0
+    for atom in atoms {
+        let atomDistance = distance(atom, center)
+        if atomDistance > maxDistanceToCenter {
+            maxDistanceToCenter = atomDistance
+        }
+    }
+    return BoundingVolume(
+        sphere: BoundingSphere(center: center, radius: maxDistanceToCenter + extraMargin),
+        box: boundingBox
+    )
 }
 
-func computeBoundingSphere(proteins: [Protein], extraMargin: Float = 5) -> BoundingSphere {
+func computeBoundingVolume(proteins: [Protein], extraMargin: Float = 5) -> BoundingVolume {
     var allAtoms = ContiguousArray<simd_float3>()
     for protein in proteins {
         allAtoms.append(contentsOf: protein.atoms)
     }
-    return computeBoundingSphere(atoms: allAtoms, extraMargin: extraMargin)
+    return computeBoundingVolume(atoms: allAtoms, extraMargin: extraMargin)
 }
 
 func computeBoundingBox(atoms: ContiguousArray<simd_float3>) -> BoundingBox {
@@ -91,4 +106,19 @@ func computeBoundingBox(atoms: ContiguousArray<simd_float3>) -> BoundingBox {
         }
     }
     return BoundingBox(minX: minX, maxX: maxX, minY: minY, maxY: maxY, minZ: minZ, maxZ: maxZ)
+}
+
+/// Uses the Halton sequence generator for random numbers.
+///
+/// This provides a good convergence rate for TAA, although it doesn't seem completely random.
+func halton(index: UInt32, base: UInt32) -> Float {
+    var result: Float = 0.0
+    var fractional: Float = 1.0
+    var currentIndex: UInt32 = index
+    while currentIndex > 0 {
+        fractional /= Float(base)
+        result += fractional * Float(currentIndex % base)
+        currentIndex /= base
+    }
+    return result
 }

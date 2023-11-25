@@ -2,6 +2,57 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>1.5</key>
+    <array>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Improved rendering</string>
+            <key>Subtitle</key>
+            <string>Changes in the rendering engine for higher quality shadows at a small performance cost.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Color by Residue</string>
+            <key>Subtitle</key>
+            <string>Protein atoms can now be colored based on their residue (ARG, HIS, LYS...).</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Color by Secondary Structure</string>
+            <key>Subtitle</key>
+            <string>Protein atoms can now be colored based on their secondary structure (helix, sheet or loop).</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Change sun direction</string>
+            <key>Subtitle</key>
+            <string>Added a UI control to change the direction of the light source.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>More atom element colors</string>
+            <key>Subtitle</key>
+            <string>Several more elements can have their colors customized within the app: F, Na, P, Cl, K, Ca, Fe, Zn and I.</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>FEAT</string>
+            <key>Title</key>
+            <string>Faster file reading</string>
+            <key>Subtitle</key>
+            <string>PDB file reading is now multithreaded, making the opening of bigger files much faster.</string>
+        </dict>
+    </array>
 	<key>1.4.3</key>
 	<array>
 		<dict>

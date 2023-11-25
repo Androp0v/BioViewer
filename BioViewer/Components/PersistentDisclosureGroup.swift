@@ -14,21 +14,30 @@ enum PersistentGroupName: String {
     case ballAndStickRadiusGroup
     case shadowGroup
     case depthCueingGroup
+    case residueColoringAminoAcid
+    case residueColoringDNANucleobase
+    case residueColoringRNANucleobase
+    case metalFXUpscalingSettings
+    /// This will still create a DisclosureGroup, but not persistent.
+    case error
 }
 
 struct PersistentDisclosureGroup<Content: View, LabelContent: View>: View {
     
     @State var isExpanded: Bool
     
-    let groupName: String
+    let group: PersistentGroupName
     let content: () -> Content
     let label: () -> LabelContent
     
     init(for group: PersistentGroupName, defaultOpen: Bool, @ViewBuilder content: @escaping () -> Content, @ViewBuilder label: @escaping () -> LabelContent) {
-        self.groupName = group.rawValue + "Expanded"
+        self.group = group
         self.content = content
         self.label = label
-        
+        guard group != .error else {
+            _isExpanded = State(initialValue: false)
+            return
+        }
         if UserDefaults.standard.object(forKey: group.rawValue + "Expanded") != nil {
             _isExpanded = State(initialValue: UserDefaults.standard.bool(forKey: group.rawValue + "Expanded"))
         } else {
@@ -43,7 +52,8 @@ struct PersistentDisclosureGroup<Content: View, LabelContent: View>: View {
             label: label
         )
         .onChange(of: isExpanded) { newValue in
-            UserDefaults.standard.setValue(newValue, forKey: groupName)
+            guard group != .error else { return }
+            UserDefaults.standard.setValue(newValue, forKey: group.rawValue + "Expanded")
         }
     }
 }

@@ -21,7 +21,7 @@ struct TrajectorySegmentProtein: View {
                           value: .constant(23),
                           minValue: 1,
                           maxValue: 100)
-                InputWithButtonRow()
+                // InputWithButtonRow()
             })
         }
         .environment(\.defaultMinListHeaderHeight, 0)

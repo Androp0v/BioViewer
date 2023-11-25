@@ -12,6 +12,8 @@
 #include "../Meshes/AtomProperties.h"
 
 #define PERCENTAGE_CLOSE_FILTERING
+#define JITTERED_PCF
+#define PENUMBRA_DEPENDENT_SAMPLING
 
 using namespace metal;
 
@@ -28,6 +30,30 @@ constant bool is_high_quality_frame [[ function_constant(0) ]];
 
 // MARK: - Functions
 
+float rand(int x, int y, int z) {
+    int seed = x + y * 57 + z * 241;
+    seed= (seed<< 13) ^ seed;
+    return (( 1.0 - ( (seed * (seed * seed * 15731 + 789221) + 1376312589) & 2147483647) / 1073741824.0f) + 1.0f) / 2.0f;
+}
+
+float InterleavedGradientNoise(float2 position_screen) {
+    float3 magic = float3(0.06711056f, 0.00583715f, 52.9829189f);
+    return fract(magic.z * fract(dot(position_screen, magic.xy)));
+}
+
+half2 OuterVogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
+    half GoldenAngle = 2.4f;
+
+    half r = radius_scale;
+    half theta = sampleIndex * GoldenAngle + phi;
+
+    half2 sine_cosine;
+    sine_cosine.x = sin(theta);
+    sine_cosine.y = cos(theta);
+  
+    return half2(r * sine_cosine.y, r * sine_cosine.x);
+}
+
 half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, float phi) {
     half GoldenAngle = 2.4f;
 
@@ -35,7 +61,8 @@ half2 VogelDiskSample(half radius_scale, int sampleIndex, int samplesCount, floa
     half theta = sampleIndex * GoldenAngle + phi;
 
     half2 sine_cosine;
-    sincos(theta, sine_cosine);
+    sine_cosine.x = sin(theta);
+    sine_cosine.y = cos(theta);
   
     return half2(r * sine_cosine.y, r * sine_cosine.x);
 }
@@ -143,7 +170,7 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
     output.depth = normalizedDeviceCoordinatesDepth;
     
     // Phong diffuse shading
-    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
+    half3 sunRayDirection = half3(frameData.sun_direction);
     half reflectivity = 0.3;
     
     // Add base color
@@ -193,21 +220,57 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
         float sunlit_fraction = 0;
         int sample_count;
         if (is_high_quality_frame) {
-            sample_count = 128;
+            sample_count = 256;
         } else {
-            sample_count = 2;
+            sample_count = 4;
         }
+        #ifndef JITTERED_PCF
         for (int sample_index = 0; sample_index < sample_count; sample_index++) {
             // FIXME: 0.001 should be proportional to the typical atom size
-            // TO-DO: VogelDiskSample may be called with a random number instead of 3 for the rotation
-            half2 sample_offset = VogelDiskSample(0.001, sample_index, sample_count, 3);
+            half2 sample_offset = VogelDiskSample(0.001,
+                                                  sample_index,
+                                                  sample_count,
+                                                  3);
             sunlit_fraction += shadowMap.sample_compare(shadowSampler,
                                                         sphereShadowClipPosition.xy + float2(sample_offset),
                                                         sphereShadowClipPosition.z);
         }
+        #else
+        float random_phi = InterleavedGradientNoise(impostor_vertex.position.xy);
+        for (int sample_index = 0; sample_index < sample_count; sample_index++) {
+            // FIXME: 0.001 should be proportional to the typical atom size
+            half2 sample_offset = OuterVogelDiskSample(0.001,
+                                                       sample_index,
+                                                       sample_count,
+                                                       random_phi);
+            sunlit_fraction += shadowMap.sample_compare(shadowSampler,
+                                                        sphereShadowClipPosition.xy + float2(sample_offset),
+                                                        sphereShadowClipPosition.z);
+        }
+        #endif
         
+        #ifdef PENUMBRA_DEPENDENT_SAMPLING
+        if (sunlit_fraction != 0 && sunlit_fraction != sample_count) {
+            for (int sample_index = 4; sample_index < 16; sample_index++) {
+                // FIXME: 0.001 should be proportional to the typical atom size
+                half2 sample_offset = VogelDiskSample(0.0005,
+                                                      sample_index,
+                                                      sample_count,
+                                                      random_phi);
+                sunlit_fraction += shadowMap.sample_compare(shadowSampler,
+                                                            sphereShadowClipPosition.xy + float2(sample_offset),
+                                                            sphereShadowClipPosition.z);
+            }
+            // Add the shadow to the shadedColor by subtracting color
+            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / (sample_count + 16));
+        } else {
+            // Add the shadow to the shadedColor by subtracting color
+            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+        }
+        #else
         // Add the shadow to the shadedColor by subtracting color
         shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+        #endif
         #endif
     }
     

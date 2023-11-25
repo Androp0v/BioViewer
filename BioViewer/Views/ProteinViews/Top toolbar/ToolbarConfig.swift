@@ -12,7 +12,27 @@ enum CameraControlTool {
     static let move: Int = 1
 }
 
-class ToolbarConfig: ObservableObject {
+@MainActor @Observable class ToolbarConfig {
     
-    @Published var selectedTool: Int = CameraControlTool.rotate
+    weak var proteinViewModel: ProteinViewModel?
+    
+    // MARK: - Properties
+    
+    var selectedTool: Int = CameraControlTool.rotate
+    
+    var autorotating: Bool = false {
+        didSet {
+            Task {
+                await proteinViewModel?.renderer.mutableState.setAutorotating(autorotating)
+            }
+        }
+    }
+    
+    // MARK: - Actions
+    
+    func resetCamera() {
+        Task {
+            await proteinViewModel?.renderer.mutableState.resetCamera()
+        }
+    }
 }

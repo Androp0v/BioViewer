@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 18/3/22.
 //
 
+import BioViewerFoundation
 import Foundation
 import Metal
 
@@ -27,7 +28,7 @@ extension MetalScheduler {
                 length: protein.atomCount * protein.configurationCount * MemoryLayout<simd_float3>.stride
             )
             let atomTypeBuffer = device.makeBuffer(
-                bytes: Array(protein.atomIdentifiers),
+                bytes: Array(protein.atomElements),
                 length: protein.atomCount * protein.configurationCount * MemoryLayout<UInt16>.stride
             )
 

@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 6/11/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import SwiftUI
 
@@ -15,11 +16,11 @@ struct RCSBEntry {
     let authors: String?
 }
 
-class RCSBImportViewModel: ObservableObject {
+@MainActor @Observable class RCSBImportViewModel {
         
-    @Published private(set) var results: [PDBInfo]?
-    @Published var resultImages = [PDBInfo: Image]()
-    @Published var isLoading: Bool = false
+    private(set) var results: [PDBInfo]?
+    var resultImages = [PDBInfo: Image]()
+    var isLoading: Bool = false
     
     struct OngoingSearch {
         let searchString: String
@@ -28,28 +29,29 @@ class RCSBImportViewModel: ObservableObject {
     }
     var currentSearch: OngoingSearch?
     
-    func search(text: String) async throws {
+    @MainActor func search(text: String) async throws {
         guard !text.isEmpty else {
-            Task { @MainActor in
-                currentSearch = nil
-                withAnimation {
-                    results = nil
-                    resultImages = [:]
-                }
+            currentSearch = nil
+            withAnimation {
+                results = nil
+                resultImages = [:]
             }
             return
         }
+        withAnimation {
+            results = nil
+            isLoading = true
+        }
         let searchResult = try await RCSBFetch.search(text)
-        Task { @MainActor in
-            currentSearch = OngoingSearch(
-                searchString: text,
-                lastRow: 0,
-                totalCount: searchResult.totalCount
-            )
-            withAnimation {
-                results = searchResult.results
-                resultImages = [:]
-            }
+        currentSearch = OngoingSearch(
+            searchString: text,
+            lastRow: 0,
+            totalCount: searchResult.totalCount
+        )
+        withAnimation {
+            results = searchResult.results
+            resultImages = [:]
+            isLoading = false
         }
     }
     
@@ -79,32 +81,36 @@ class RCSBImportViewModel: ObservableObject {
     
     // MARK: - File download
     
-    func fetchPDBFile(pdbInfo: PDBInfo, proteinViewModel: ProteinViewModel) async throws {
+    func fetchPDBFile(pdbInfo: PDBInfo, proteinDataSource: ProteinDataSource, statusViewModel: StatusViewModel) async throws {
         
-        proteinViewModel.statusUpdate(statusText: NSLocalizedString("Downloading file", comment: ""))
+        let importStatusAction = StatusAction(
+            type: .importFile,
+            description: NSLocalizedString("Downloading file", comment: ""),
+            progress: nil
+        )
+        statusViewModel.showStatusForAction(importStatusAction)
         do {
             let (rawText, byteSize) = try await RCSBFetch.fetchPDBFile(rcsbid: pdbInfo.rcsbID)
-            DispatchQueue.global(qos: .userInitiated).async {
-                let fileInfo = ProteinFileInfo(
-                    pdbID: pdbInfo.rcsbID,
-                    description: pdbInfo.description,
-                    authors: pdbInfo.authors,
-                    sourceLines: nil
-                )
-                try? FileImporter.importFileFromRawText(
-                    rawText: rawText,
-                    proteinViewModel: proteinViewModel,
-                    fileInfo: fileInfo,
-                    fileName: pdbInfo.rcsbID,
-                    fileExtension: "pdb",
-                    byteSize: byteSize
-                )
-            }
+            let fileInfo = ProteinFileInfo(
+                pdbID: pdbInfo.rcsbID,
+                description: pdbInfo.description,
+                authors: pdbInfo.authors,
+                sourceLines: nil
+            )
+            try? await FileImporter.importFileFromRawText(
+                rawText: rawText,
+                proteinDataSource: proteinDataSource,
+                statusViewModel: statusViewModel, 
+                statusAction: importStatusAction,
+                fileInfo: fileInfo,
+                fileName: pdbInfo.rcsbID,
+                fileExtension: "pdb",
+                byteSize: byteSize
+            )
         } catch RCSBError.notFound {
-            proteinViewModel.statusFinished(importError: ImportError.notFound)
+            statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.notFound)
         } catch {
-            proteinViewModel.statusFinished(importError: ImportError.downloadError)
+            statusViewModel.signalActionFinished(importStatusAction, withError: ImportError.downloadError)
         }
     }
-    
 }

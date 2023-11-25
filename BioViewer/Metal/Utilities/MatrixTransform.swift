@@ -63,6 +63,49 @@ enum Transform {
 
         return .init(col0, col1, col2, col3)
     }
+    
+    /// A 4x4 rotation matrix specified by an angle and an axis or rotation.
+    // FIXME: Ensure this is correct!!
+    static func leftHandedRotationMatrix(radians: Float, axis: SIMD3<Float>, around pivot: SIMD3<Float> = .zero) -> simd_float4x4 {
+        let normalizedAxis = simd_normalize(axis)
+
+        let ct = cosf(radians)
+        let st = sinf(radians)
+        let ci = 1 - ct
+        let x = normalizedAxis.x
+        let y = normalizedAxis.y
+        let z = normalizedAxis.z
+        let px = pivot.x
+        let py = pivot.y
+        let pz = pivot.z
+
+        let col0 = SIMD4<Float>(
+            ct + x * x * ci,
+            z * x * ci - y * st,
+            y * x * ci + z * st,
+            0
+        )
+        let col1 = SIMD4<Float>(
+            x * y * ci - z * st,
+            z * y * ci + x * st,
+            ct + y * y * ci,
+            0
+        )
+        let col2 = SIMD4<Float>(
+            x * z * ci + y * st,
+            ct + z * z * ci,
+            y * z * ci - x * st,
+            0
+        )
+        let col3 = SIMD4<Float>(
+            px - (ct + x * x * ci) * px - (x * y * ci - z * st) * py - (x * z * ci + y * st) * pz,
+            pz - (z * x * ci - y * st) * px - (z * y * ci + x * st) * py - (ct + z * z * ci) * pz,
+            py - (y * x * ci + z * st) * px - (ct + y * y * ci) * py - (y * z * ci - x * st) * pz,
+            1
+        )
+
+        return .init(col0, col1, col2, col3)
+    }
 
     /// A 4x4 uniform scale matrix specified by x, y, and z components.
     static func scaleMatrix(_ scale: SIMD3<Float>) -> simd_float4x4 {

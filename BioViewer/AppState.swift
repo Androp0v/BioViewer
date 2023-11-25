@@ -7,6 +7,9 @@
 
 import Foundation
 import Metal
+#if canImport(MetalFX)
+import MetalFX
+#endif
 import SwiftUI
 
 class AppState: ObservableObject {
@@ -44,6 +47,21 @@ class AppState: ObservableObject {
         } else {
             return false
         }
+    }
+    
+    static let hasMetalFXUpscalingSupport = { () -> Bool in
+        #if canImport(MetalFX)
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return false
+        }
+        if MTLFXTemporalScalerDescriptor.supportsDevice(device) {
+            return true
+        } else {
+            return false
+        }
+        #else
+        return false
+        #endif
     }
     
     static let hasDepthPrePasses = { () -> Bool in

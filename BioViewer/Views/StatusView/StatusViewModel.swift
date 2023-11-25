@@ -5,103 +5,107 @@
 //  Created by Raúl Montón Pinillos on 30/10/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import QuartzCore
+import SwiftUI
 
-enum StatusAction {
-    case importFile
-    case geometryGeneration
-}
-
-class StatusViewModel: ObservableObject {
+@MainActor @Observable final class StatusViewModel {
+    
+    weak var proteinViewModel: ProteinViewModel?
     
     // MARK: - UI properties
     // Published variables used by the UI
-    @Published private(set) var statusText: String = NSLocalizedString("Idle", comment: "")
-    @Published private(set) var statusRunning: Bool = false
-    @Published private(set) var progress: Float?
+    private(set) var actionToShow: StatusActionUI?
     
-    // Warning/Error system
-    @Published private(set) var statusError: String?
-    @Published private(set) var statusWarning: [String] = []
+    private var runningActions = [StatusAction]()
+    private var failedActions = [StatusAction]()
     
-    // MARK: - Error types
-    private(set) var importError: ImportError? {
-        didSet {
-            guard let importError = importError else {
-                return
-            }
-            DispatchQueue.main.async {
-                self.statusError = importError.localizedDescription
-            }
+    var isBlockingUI: Bool {
+        if runningActions.contains(where: {$0.type.blocksRendering}) {
+            return true
+        } else if failedActions.contains(where: {$0.type.blocksRendering}) {
+            return true
         }
+        return false
+    }
+    var isImportingFile: Bool {
+        if runningActions.contains(where: {$0.type == .importFile}) {
+            return true
+        } else if failedActions.contains(where: {$0.type == .importFile}) {
+            return true
+        }
+        return false
     }
     
     // MARK: - Internal properties
     // Internal variables that do not instantly trigger a UI redraw
     private var displayLink: CADisplayLink?
-    private var internalStatusText: String = NSLocalizedString("Idle", comment: "")
-    private var internalProgress: Float?
-    private var internalStatusWarning: [String] = []
+    private var internalRunningActions = [StatusAction]()
+    private var internalFailedActions = [StatusAction]()
+    
+    // MARK: - Init
+    
+    init() {
+        let displayLink = CADisplayLink(target: self, selector: #selector(self.syncInternalAndUIStates))
+        displayLink.add(to: .main, forMode: .default)
+        self.displayLink = displayLink
+    }
     
     // MARK: - Functions
     @objc private func syncInternalAndUIStates() {
-        statusText = internalStatusText
-        progress = internalProgress
-        statusWarning = internalStatusWarning
-    }
-    
-    func setStatusText(text: String) {
-        self.internalStatusText = text
-    }
-    
-    func setRunningStatus(running: Bool) {
-        DispatchQueue.main.async {
-            self.statusRunning = running
-            if running {
-                let displayLink = CADisplayLink(target: self, selector: #selector(self.syncInternalAndUIStates))
-                displayLink.add(to: .current, forMode: .default)
-                self.displayLink = displayLink
+        withAnimation {
+            runningActions = internalRunningActions
+            failedActions = internalFailedActions
+            if let primaryAction = failedActions.last ?? runningActions.last {
+                actionToShow = StatusActionUI(statusAction: primaryAction)
             } else {
-                self.internalStatusText = NSLocalizedString("Idle", comment: "")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                    self.displayLink?.invalidate()
-                })
+                actionToShow = nil
             }
         }
     }
     
-    func setProgress(progress: Float) {
-        self.internalProgress = progress
+    func showStatusForAction(_ statusAction: StatusAction) {
+        internalRunningActions.append(statusAction)
     }
     
-    func setImportError(error: ImportError) {
-        self.importError = error
+    func updateDescription(_ statusAction: StatusAction, description: String?) {
+        guard internalRunningActions.contains(where: {$0.id == statusAction.id}) else {
+            print("[Status] Error: update action not found.")
+            return
+        }
+        internalRunningActions.removeAll(where: { $0.id == statusAction.id })
+        var newAction = statusAction
+        newAction.description = description
+        internalRunningActions.append(newAction)
     }
     
-    func removeImportError() {
-        self.importError = nil
-        // FIXME: Handle different error types
-        DispatchQueue.main.async {
-            self.statusError = nil
+    func updateProgress(_ statusAction: StatusAction, progress: Progress?) {
+        guard internalRunningActions.contains(where: {$0.id == statusAction.id}) else {
+            print("[Status] Error: update action not found.")
+            return
+        }
+        internalRunningActions.removeAll(where: { $0.id == statusAction.id })
+        var newAction = statusAction
+        newAction.progress = progress
+        internalRunningActions.append(newAction)
+    }
+    
+    func signalActionFinished(_ statusAction: StatusAction, withError error: Error?) {
+        guard internalRunningActions.contains(where: {$0.id == statusAction.id}) else {
+            print("[Status] Error: finished action not found.")
+            return
+        }
+        internalRunningActions.removeAll(where: { $0.id == statusAction.id })
+        if let error {
+            var newAction = statusAction
+            newAction.error = error
+            internalFailedActions.append(newAction)
         }
     }
     
-    func setWarning(warning: String) {
-        guard internalStatusWarning.count < AppState.maxNumberOfWarnings else { return }
-        self.internalStatusWarning.append(warning)
-    }
-    
-    func removeAllWarnings() {
-        DispatchQueue.main.async {
-            self.internalStatusWarning = []
-            self.statusWarning = []
-        }
-    }
-    
-    func removeAllErrors() {
-        DispatchQueue.main.async {
-            self.statusError = nil
-        }
+    func dismissAction(_ statusAction: StatusActionUI) {
+        internalRunningActions.removeAll(where: { $0.id == statusAction.id })
+        internalFailedActions.removeAll(where: { $0.id == statusAction.id })
     }
 }

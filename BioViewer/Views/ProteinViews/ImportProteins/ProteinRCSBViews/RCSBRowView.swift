@@ -16,8 +16,9 @@ struct RCSBRowView: View {
         
     @Binding var rcsbShowSheet: Bool
     
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @EnvironmentObject var rcsbImportViewModel: RCSBImportViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
+    @Environment(RCSBImportViewModel.self) var rcsbImportViewModel: RCSBImportViewModel
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)
@@ -67,7 +68,11 @@ struct RCSBRowView: View {
         .frame(minHeight: 108)
         .onTapGesture {
             Task {
-                try await rcsbImportViewModel.fetchPDBFile(pdbInfo: pdbInfo, proteinViewModel: proteinViewModel)
+                try await rcsbImportViewModel.fetchPDBFile(
+                    pdbInfo: pdbInfo,
+                    proteinDataSource: proteinDataSource,
+                    statusViewModel: statusViewModel
+                )
             }
             rcsbShowSheet = false
         }

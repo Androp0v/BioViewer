@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 12/3/22.
 //
 
+import BioViewerFoundation
 import SwiftUI
 
 struct InfoAtomsRow: View {
@@ -14,12 +15,11 @@ struct InfoAtomsRow: View {
     let file: ProteinFile
     
     @State var buttonToggle: Bool = false
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
 
     var body: some View {
-        
-        HStack(spacing: 4) {
-            
+                    
             VStack {
                 HStack {
                     Text(label)
@@ -29,29 +29,76 @@ struct InfoAtomsRow: View {
                 }
                 Spacer()
                     .frame(height: 8)
-                // TO-DO:
-                InfoAtomsCapsule(file: file)
-                    .opacity(0.8)
-                Spacer()
-                    .frame(height: 4)
-            }
-            
-            Spacer()
-                        
-            Button(action: {
-                buttonToggle.toggle()
-            },
-                   label: {
-                Image(systemName: "info.circle")
-            })
-                .foregroundColor(Color.accentColor)
-                .buttonStyle(PlainButtonStyle())
-                .disabled(isDisabled)
-                .popover(isPresented: $buttonToggle) {
-                    FileAtomElementPopover()
-                        .environmentObject(proteinViewModel)
+                
+                HStack {
+                    ZStack {
+                        VStack(spacing: 6) {
+                            InfoSegmentedCapsule(segments: getAtomElementSegments())
+                                .shadow(color: .black.opacity(0.1), radius: 4)
+                            
+                            if let proteins = proteinDataSource.modelsForFile(file: file),
+                               proteins.first(where: { $0.residueComposition != nil }) != nil {
+                                InfoSegmentedCapsule(segments: getAtomResiduesSegments())
+                                    .shadow(color: .black.opacity(0.1), radius: 4)
+                            }
+                        }
+                    }
+                                
+                    Button(action: {
+                        buttonToggle.toggle()
+                    },
+                           label: {
+                        Image(systemName: "info.circle")
+                    })
+                        .foregroundColor(Color.accentColor)
+                        .buttonStyle(PlainButtonStyle())
+                        .disabled(isDisabled)
+                        .popover(isPresented: $buttonToggle) {
+                            FileCompositionView()
+                                .environmentObject(proteinDataSource)
+                                .environment(colorViewModel)
+                        }
                 }
+            }
+    }
+    
+    private func getAtomElementSegments() -> [InfoCapsuleSegment] {
+        guard let protein = proteinDataSource.modelsForFile(file: file)?.first else {
+            return []
         }
+        var segments = [InfoCapsuleSegment]()
+        var importantTotal: Double = 0.0
+        for element in AtomElement.importantElements {
+            let elementFraction = Double(protein.elementComposition.elementCounts[element] ?? 0) / Double(protein.atomCount)
+            segments.append(InfoCapsuleSegment(
+                fraction: elementFraction,
+                color: colorViewModel.elementColors[Int(element.rawValue)]
+            ))
+            importantTotal += elementFraction
+        }
+        segments.append(InfoCapsuleSegment(
+            fraction: 1 - importantTotal,
+            color: colorViewModel.elementColors[Int(AtomElement.unknown.rawValue)]
+        ))
+        return segments
+    }
+    
+    private func getAtomResiduesSegments() -> [InfoCapsuleSegment] {
+        guard let protein = proteinDataSource.modelsForFile(file: file)?.first else {
+            return []
+        }
+        guard let residueComposition = protein.residueComposition else {
+             return []
+        }
+        var segments = [InfoCapsuleSegment]()
+        for residue in Residue.allCases {
+            let residueFraction = Double(residueComposition.residueCounts[residue] ?? 0) / Double(residueComposition.totalCount)
+            segments.append(InfoCapsuleSegment(
+                fraction: residueFraction,
+                color: colorViewModel.residueColors[Int(residue.rawValue)]
+            ))
+        }
+        return segments
     }
 }
 

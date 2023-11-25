@@ -8,36 +8,36 @@
 import Foundation
 import Metal
 
-extension ProteinRenderer {
+extension MutableState {
     
     #if DEBUG
-    func pointsRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
+    func pointsRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
         
         // Ensure transparent buffers are loaded
         guard let debugPointVertexBuffer = self.debugPointVertexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        debugPointsRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
+        renderer.debugPointsRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
-        debugPointsRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
+        renderer.debugPointsRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
         // Attach depth texture.
-        debugPointsRenderPassDescriptor.depthAttachment.texture = depthTexture
+        renderer.debugPointsRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
-        debugPointsRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        renderer.debugPointsRenderPassDescriptor.depthAttachment.clearDepth = 1.0
 
         // Create render command encoder
-        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: debugPointsRenderPassDescriptor) else {
+        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderer.debugPointsRenderPassDescriptor) else {
             return
         }
         
         // MARK: - Point rendering
-        guard let debugPointsRenderingPipelineState = debugPointsRenderingPipelineState else {
+        guard let debugPointsRenderingPipelineState = renderer.debugPointsRenderingPipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(debugPointsRenderingPipelineState)
 
         // Set depth state
-        renderCommandEncoder.setDepthStencilState(depthState)
+        renderCommandEncoder.setDepthStencilState(renderer.depthState)
 
         // Add buffers to pipeline
         renderCommandEncoder.setVertexBuffer(debugPointVertexBuffer,

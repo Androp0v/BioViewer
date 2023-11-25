@@ -10,8 +10,10 @@ import SwiftUI
 struct SequenceView: View {
 
     init() {
-        UITableViewCell.appearance().backgroundColor = .secondarySystemBackground
-        UITableView.appearance().backgroundColor = .secondarySystemBackground
+        Task { @MainActor in
+            UITableViewCell.appearance().backgroundColor = .secondarySystemBackground
+            UITableView.appearance().backgroundColor = .secondarySystemBackground
+        }
     }
 
     var body: some View {

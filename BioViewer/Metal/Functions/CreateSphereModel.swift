@@ -5,6 +5,7 @@
 //  Created by Raúl Montón Pinillos on 21/10/21.
 //
 
+import BioViewerFoundation
 import Foundation
 import Metal
 
@@ -24,9 +25,9 @@ extension MetalScheduler {
         let generatedVertexData = device.makeBuffer(
             length: protein.atomCount * spherePoints * MemoryLayout<GeneratedVertex>.stride
         )
-        let atomTypeData = device.makeBuffer(
-            bytes: protein.atomIdentifiers,
-            length: protein.atomCount * MemoryLayout<UInt16>.stride
+        let atomElementData = device.makeBuffer(
+            bytes: protein.atomElements,
+            length: protein.atomCount * MemoryLayout<AtomElement>.stride
         )
         let generatedIndexData = device.makeBuffer(
             length: protein.atomCount * sphereFaces * 3 * MemoryLayout<UInt32>.stride
@@ -39,7 +40,7 @@ extension MetalScheduler {
                 length: protein.atomCount * MemoryLayout<simd_float3>.stride
             )
             let atomTypeBuffer = device.makeBuffer(
-                bytes: Array(protein.atomIdentifiers),
+                bytes: Array(protein.atomElements),
                 length: protein.atomCount * MemoryLayout<UInt16>.stride
             )
 
@@ -93,6 +94,6 @@ extension MetalScheduler {
             // Wait until the computation is finished!
             buffer.waitUntilCompleted()
         }
-        return (generatedVertexData, atomTypeData, generatedIndexData)
+        return (generatedVertexData, atomElementData, generatedIndexData)
     }
 }
