@@ -16,7 +16,6 @@ extension AtomRadii {
     /// All atom radii set to zero.
     static let zero: AtomRadii = {
         var atomRadii = AtomRadii()
-
         // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
         // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
         withUnsafeMutableBytes(of: &atomRadii.atomRadius) { rawPtr -> Void in
@@ -28,7 +27,6 @@ extension AtomRadii {
                 ptr.pointee = .zero
             }
         }
-        
         return atomRadii
     }()
     

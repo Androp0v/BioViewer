@@ -91,12 +91,12 @@ class VisualizationBufferLoader {
             if await visualizationViewModel.solidSpheresRadiusOption == .vanDerWaals {
                 await animator.animateRadiiChange(
                     finalRadii: .scaledVanDerWaals(scale: visualizationViewModel.solidSpheresVDWScale),
-                    duration: 0.15
+                    duration: 0.35
                 )
             } else {
                 await animator.animateRadiiChange(
                     finalRadii: .fixed(radius: visualizationViewModel.solidSpheresFixedAtomRadii),
-                    duration: 0.15
+                    duration: 0.35
                 )
             }
             
@@ -124,12 +124,12 @@ class VisualizationBufferLoader {
             if await visualizationViewModel.ballAndStickRadiusOption == .fixed {
                 await animator.animateRadiiChange(
                     finalRadii: .fixed(radius: visualizationViewModel.ballAndSticksFixedAtomRadii),
-                    duration: 0.15
+                    duration: 0.35
                 )
             } else {
                 await animator.animateRadiiChange(
                     finalRadii: .scaledVanDerWaals(scale: visualizationViewModel.ballAndSticksVDWScale),
-                    duration: 0.15
+                    duration: 0.35
                 )
             }
         }
