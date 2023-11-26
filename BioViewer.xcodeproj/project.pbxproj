@@ -87,6 +87,7 @@
 		C52DD46029FD91D40050A7C2 /* ComputeAmbientOcclusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52DD45F29FD91D40050A7C2 /* ComputeAmbientOcclusion.swift */; };
 		C52DD46229FD92300050A7C2 /* ComputeAmbientOcclusion.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52DD46129FD92300050A7C2 /* ComputeAmbientOcclusion.metal */; };
 		C52DD46529FE81D40050A7C2 /* VisualizationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52DD46429FE81D40050A7C2 /* VisualizationConfiguration.swift */; };
+		C52E6BBC2B136A00000B8881 /* PopulateBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E6BBB2B136A00000B8881 /* PopulateBuffers.swift */; };
 		C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C531753E29DF16A7004FF2C6 /* ProteinDraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */; };
 		C531754129DF1AA3004FF2C6 /* MutableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754029DF1AA3004FF2C6 /* MutableState.swift */; };
@@ -328,6 +329,7 @@
 		C52DD45F29FD91D40050A7C2 /* ComputeAmbientOcclusion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeAmbientOcclusion.swift; sourceTree = "<group>"; };
 		C52DD46129FD92300050A7C2 /* ComputeAmbientOcclusion.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeAmbientOcclusion.metal; sourceTree = "<group>"; };
 		C52DD46429FE81D40050A7C2 /* VisualizationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationConfiguration.swift; sourceTree = "<group>"; };
+		C52E6BBB2B136A00000B8881 /* PopulateBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulateBuffers.swift; sourceTree = "<group>"; };
 		C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillboardVertexBuffers.swift; sourceTree = "<group>"; };
 		C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinDraw.swift; sourceTree = "<group>"; };
 		C531754029DF1AA3004FF2C6 /* MutableState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableState.swift; sourceTree = "<group>"; };
@@ -771,7 +773,7 @@
 			children = (
 				C52DD46329FE81C50050A7C2 /* Data Structures */,
 				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
-				C531754029DF1AA3004FF2C6 /* MutableState.swift */,
+				C52E6BBA2B1369F0000B8881 /* MutableState */,
 				C560E0E029E305DC00CE883C /* ProteinRenderTarget.swift */,
 				C531753F29DF16AD004FF2C6 /* Draw */,
 				C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */,
@@ -934,6 +936,15 @@
 				C52DD46429FE81D40050A7C2 /* VisualizationConfiguration.swift */,
 			);
 			path = "Data Structures";
+			sourceTree = "<group>";
+		};
+		C52E6BBA2B1369F0000B8881 /* MutableState */ = {
+			isa = PBXGroup;
+			children = (
+				C531754029DF1AA3004FF2C6 /* MutableState.swift */,
+				C52E6BBB2B136A00000B8881 /* PopulateBuffers.swift */,
+			);
+			path = MutableState;
 			sourceTree = "<group>";
 		};
 		C531753F29DF16AD004FF2C6 /* Draw */ = {
@@ -1518,6 +1529,7 @@
 				C51084362AFFA24400A3D388 /* StatusOverlayView.swift in Sources */,
 				C5FF9AD829816AE000D583A2 /* BenchmarkTextures.swift in Sources */,
 				C5E593B7281D793E00CFFAA2 /* MetalLegacySupport.swift in Sources */,
+				C52E6BBC2B136A00000B8881 /* PopulateBuffers.swift in Sources */,
 				C464C358265A56CC00E66C3E /* SettingsView.swift in Sources */,
 				C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */,
 				C5433F372770908E00607B20 /* PhotoModeContentHeaderView.swift in Sources */,

@@ -8,7 +8,7 @@
 import Foundation
 import Metal
 
-extension ProteinRenderer {
+extension MutableState {
     
     // MARK: - Shadow depth pre-pass
     

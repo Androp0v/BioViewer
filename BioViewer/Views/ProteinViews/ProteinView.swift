@@ -16,8 +16,11 @@ struct ProteinView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var proteinDataSource: ProteinDataSource
+    
+    @Environment(ProteinRenderer.self) var renderer: ProteinRenderer
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
+    
     @State var toolbarConfig = ToolbarConfig()
     
     @State private var showSidebar: Bool = UserDefaults.standard.bool(forKey: "showSidebar")
@@ -61,8 +64,8 @@ struct ProteinView: View {
                         Spacer()
                         VStack(spacing: .zero) {
                             Spacer()
-                            ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
-                            FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
+                            ResolutionView(viewModel: ResolutionViewModel(renderer: renderer))
+                            FPSCounterView(viewModel: FPSCounterViewModel(renderer: renderer))
                                 .padding()
                         }
                     }

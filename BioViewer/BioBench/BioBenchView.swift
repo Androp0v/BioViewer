@@ -68,8 +68,8 @@ struct BioBenchView: View {
                             Spacer()
                             VStack(spacing: .zero) {
                                 Spacer()
-                                ResolutionView(viewModel: ResolutionViewModel(proteinViewModel: proteinViewModel))
-                                FPSCounterView(viewModel: FPSCounterViewModel(proteinViewModel: proteinViewModel))
+                                ResolutionView(viewModel: ResolutionViewModel(renderer: proteinViewModel.renderer))
+                                FPSCounterView(viewModel: FPSCounterViewModel(renderer: proteinViewModel.renderer))
                                     .padding()
                             }
                         }

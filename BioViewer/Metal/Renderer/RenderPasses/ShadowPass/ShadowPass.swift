@@ -67,9 +67,9 @@ extension MutableState {
         // Set the correct pipeline state
         var pipelineState: MTLRenderPipelineState?
         if highQuality {
-            pipelineState = renderer.shadowHQRenderingPipelineState
+            pipelineState = shadowHQRenderingPipelineState
         } else {
-            pipelineState = renderer.shadowRenderingPipelineState
+            pipelineState = shadowRenderingPipelineState
         }
         guard let shadowRenderingPipelineState = pipelineState else {
             return

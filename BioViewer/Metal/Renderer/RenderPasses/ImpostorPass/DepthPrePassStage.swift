@@ -20,7 +20,7 @@ extension MutableState {
         
         // MARK: - Impostor sphere rendering
 
-        guard let pipelineState = renderer.depthPrePassRenderPipelineState else {
+        guard let pipelineState = depthPrePassRenderPipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(pipelineState)

@@ -41,6 +41,7 @@ struct MainView: View {
             ProteinView()
                 .environmentObject(proteinViewModel)
                 .environmentObject(proteinDataSource)
+                .environment(proteinViewModel.renderer)
                 .environment(colorViewModel)
                 .environment(visualizationViewModel)
                 .environment(shadowsViewModel)

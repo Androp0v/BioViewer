@@ -31,7 +31,7 @@ extension MutableState {
         }
         
         // MARK: - Point rendering
-        guard let debugPointsRenderingPipelineState = renderer.debugPointsRenderingPipelineState else {
+        guard let debugPointsRenderingPipelineState = debugPointsRenderingPipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(debugPointsRenderingPipelineState)

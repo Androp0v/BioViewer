@@ -134,13 +134,7 @@ import SwiftUI
         guard let proteinViewModel = self.proteinViewModel,
               let visualizationViewModel = proteinViewModel.visualizationViewModel
         else { return }
-        
-        /*
-        visualizationViewModel.visualizationBufferLoader.handleVisualizationChange(
-            visualization: visualizationViewModel.visualization,
-            proteinViewModel: proteinViewModel
-        )
-         */
+
         await visualizationViewModel.visualizationBufferLoader.populateVisualizationBuffers(
             visualization: visualizationViewModel.visualization,
             proteinViewModel: proteinViewModel,

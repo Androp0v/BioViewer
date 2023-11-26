@@ -20,7 +20,7 @@ extension MutableState {
         depthTexture: MTLTexture?,
         depthPrePassTexture: MTLTexture?,
         shadowTextures: ShadowTextures,
-        variant: ProteinRenderer.ImpostorRenderPassVariant,
+        variant: ImpostorRenderPassVariant,
         renderBonds: Bool
     ) {
         
@@ -92,9 +92,9 @@ extension MutableState {
         var variantPipelineState: MTLRenderPipelineState?
         switch variant {
         case .solidSpheres, .ballAndSticks:
-            variantPipelineState = renderer.impostorRenderingPipelineState
+            variantPipelineState = impostorRenderingPipelineState
         case .solidSpheresHQ, .ballAndSticksHQ:
-            variantPipelineState = renderer.impostorHQRenderingPipelineState
+            variantPipelineState = impostorHQRenderingPipelineState
         }
         guard let impostorRenderingPipelineState = variantPipelineState else {
             return
@@ -165,10 +165,10 @@ extension MutableState {
             var bondVariantPipelineState: MTLRenderPipelineState?
             switch variant {
             case .solidSpheres, .ballAndSticks:
-                bondVariantPipelineState = renderer.impostorBondRenderingPipelineState
+                bondVariantPipelineState = impostorBondRenderingPipelineState
             case .solidSpheresHQ, .ballAndSticksHQ:
                 // TO-DO: HQ impostorHQBondRenderingPipelineStage
-                bondVariantPipelineState = renderer.impostorBondRenderingPipelineState
+                bondVariantPipelineState = impostorBondRenderingPipelineState
             }
             guard let impostorBondRenderingPipelineState = bondVariantPipelineState else {
                 renderCommandEncoder.endEncoding()

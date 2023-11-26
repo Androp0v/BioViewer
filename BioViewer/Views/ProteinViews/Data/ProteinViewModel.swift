@@ -43,9 +43,6 @@ import SwiftUI
         
         // Pass reference to ProteinViewModel to delegates and datasources
         self.dropHandler.proteinViewModel = self
-        
-        // Add the dataSource to the renderer
-        self.renderer.proteinDataSource = dataSource
     }
 
     // MARK: - Public functions

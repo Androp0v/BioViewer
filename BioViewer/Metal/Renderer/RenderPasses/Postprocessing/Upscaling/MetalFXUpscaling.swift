@@ -38,7 +38,7 @@ extension MutableState {
                 }
                 computeEncoder.label = "Motion Texture Generation"
                 
-                guard let motionPipelineState = renderer.motionPipelineState else {
+                guard let motionPipelineState = motionPipelineState else {
                     return
                 }
                 

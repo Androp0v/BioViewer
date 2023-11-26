@@ -20,7 +20,7 @@ extension MutableState {
             return
         }
         
-        guard let shadowBlurPipelineState = renderer.shadowBlurPipelineState else {
+        guard let shadowBlurPipelineState = shadowBlurPipelineState else {
             return
         }
         

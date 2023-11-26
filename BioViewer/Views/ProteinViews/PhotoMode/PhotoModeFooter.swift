@@ -10,6 +10,7 @@ import SwiftUI
 struct PhotoModeFooter: View {
     
     @EnvironmentObject var proteinViewModel: ProteinViewModel
+    @Environment(ProteinRenderer.self) var renderer: ProteinRenderer
     @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
     @Environment(ShutterAnimator.self) var shutterAnimator: ShutterAnimator
     
@@ -19,8 +20,8 @@ struct PhotoModeFooter: View {
             Button(action: {
                 Task {
                     await photoModeViewModel.shutterAnimator.openShutter()
-                    try? await proteinViewModel.renderer.mutableState.drawHighQualityFrame(
-                        renderer: proteinViewModel.renderer,
+                    try? await renderer.mutableState.drawHighQualityFrame(
+                        renderer: renderer,
                         size: CGSize(width: 2048, height: 2048),
                         photoConfig: photoModeViewModel.photoConfig,
                         photoModeViewModel: photoModeViewModel

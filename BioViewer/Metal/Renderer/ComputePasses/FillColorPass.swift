@@ -50,9 +50,9 @@ extension MutableState {
         // Retrieve pipeline state
         var pipelineState: MTLComputePipelineState?
         if useSimpleShader {
-            pipelineState = renderer.simpleFillColorComputePipelineState
+            pipelineState = simpleFillColorComputePipelineState
         } else {
-            pipelineState = renderer.fillColorComputePipelineState
+            pipelineState = fillColorComputePipelineState
         }
         guard let pipelineState else {
             computeEncoder.endEncoding()

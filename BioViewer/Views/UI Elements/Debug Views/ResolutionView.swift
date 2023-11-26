@@ -9,14 +9,13 @@ import SwiftUI
 
 @MainActor @Observable class ResolutionViewModel {
     
-    let proteinViewModel: ProteinViewModel
-        
+    let renderer: ProteinRenderer
     var resolutionString = "-"
     
     private var displayLink: CADisplayLink?
     
-    init(proteinViewModel: ProteinViewModel) {
-        self.proteinViewModel = proteinViewModel
+    init(renderer: ProteinRenderer) {
+        self.renderer = renderer
         self.displayLink = CADisplayLink(target: self,
                                          selector: #selector(self.updateFrameTime))
         self.displayLink?.add(to: .main, forMode: .default)
@@ -24,11 +23,11 @@ import SwiftUI
     
     @objc private func updateFrameTime() {
         // Retrieve last GPU frame time.
-        if proteinViewModel.renderer.isBenchmark {
+        if renderer.isBenchmark {
             let benchmarkResolution = BenchmarkTextures.benchmarkResolution
             resolutionString = "\(benchmarkResolution)x\(benchmarkResolution)"
         } else {
-            let viewResolution = proteinViewModel.renderer.viewResolution
+            let viewResolution = renderer.viewResolution
             guard let width = viewResolution?.width else { return }
             guard let height = viewResolution?.height else { return }
             resolutionString = "\(width)x\(height)"

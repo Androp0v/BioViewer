@@ -5,25 +5,44 @@
 //  Created by Raúl Montón Pinillos on 11/1/22.
 //
 
+import BioViewerFoundation
 import Foundation
 import QuartzCore
+
+protocol RunningAnimation {
+    var initialTime: Double? { get set }
+    var currentTime: Double { get set }
+    var initialValue: Any { get }
+    var finalValue: Any { get }
+    var duration: Double { get }
+}
+
+struct RadiiAnimation: RunningAnimation {
+    var initialTime: Double?
+    var currentTime: Double
+    let initialValue: Any
+    let finalValue: Any
+    let duration: Double
+    
+    let colorBy: ProteinColorByOption
+    let proteins: [Protein]
+}
+struct ColorAnimation: RunningAnimation {
+    var initialTime: Double?
+    var currentTime: Double
+    let initialValue: Any
+    let finalValue: Any
+    let duration: Double
+}
 
 class SceneAnimator {
     
     weak var scene: MetalScene?
-    weak var bufferLoader: VisualizationBufferLoader?
-    
-    struct RunningAnimation {
-        var initialTime: Double?
-        var currentTime: Double
-        let initialValue: Any
-        let finalValue: Any
-        let duration: Double
-    }
+    weak var mutableState: MutableState?
     
     var displayLink: CADisplayLink?
-    var radiiAnimation: RunningAnimation?
-    var colorAnimation: RunningAnimation?
+    var radiiAnimation: RadiiAnimation?
+    var colorAnimation: ColorAnimation?
     var isBusy: Bool = false
     
     init(scene: MetalScene) {
@@ -32,19 +51,21 @@ class SceneAnimator {
         displayLink?.add(to: .main, forMode: .default)
     }
     
-    func animateRadiiChange(finalRadii: AtomRadii, duration: Double) {
+    func animateRadiiChange(finalRadii: AtomRadii, duration: Double, colorBy: ProteinColorByOption, proteins: [Protein]) {
         guard let scene = scene else { return }
-        radiiAnimation = RunningAnimation(
+        radiiAnimation = RadiiAnimation(
             currentTime: CACurrentMediaTime(),
             initialValue: scene.atom_radii,
             finalValue: finalRadii,
-            duration: duration
+            duration: duration, 
+            colorBy: colorBy,
+            proteins: proteins
         )
         resumeDisplayLinkIfNeeded()
     }
     
     func animatedFillColorChange(initialColors: FillColorInput, finalColors: FillColorInput, duration: Double) {
-        colorAnimation = RunningAnimation(
+        colorAnimation = ColorAnimation(
             currentTime: CACurrentMediaTime(),
             initialValue: initialColors,
             finalValue: finalColors,
@@ -64,15 +85,11 @@ class SceneAnimator {
         self.displayLink?.isPaused = true
     }
     
-    private func getAnimationProgress(animation: inout RunningAnimation?) -> Double {
-        if let initialTime = animation?.initialTime {
-            guard let animation = animation else {
-                NSLog("Error in animation")
-                return 0.0
-            }
+    private func getAnimationProgress(animation: inout some RunningAnimation) -> Double {
+        if let initialTime = animation.initialTime {
             return max(0.0, min(1.0, (animation.currentTime - initialTime) / animation.duration ))
         } else {
-            animation?.initialTime = CACurrentMediaTime()
+            animation.initialTime = CACurrentMediaTime()
             return 0.0
         }
     }
@@ -113,11 +130,15 @@ class SceneAnimator {
             return
         }
         
-        let progress = getAnimationProgress(animation: &self.radiiAnimation)
+        let progress = getAnimationProgress(animation: &self.radiiAnimation!)
                 
         scene.atom_radii = .interpolated(initial: initialRadii, final: finalRadii, progress: Float(progress))
         
-        await bufferLoader?.populateImpostorSphereBuffers(atomRadii: scene.atom_radii)
+        await mutableState?.sceneAnimatorCallback(
+            atomRadii: scene.atom_radii,
+            colorBy: radiiAnimation.colorBy,
+            proteins: radiiAnimation.proteins
+        )
         
         if progress >= 1 {
             self.radiiAnimation = nil
@@ -144,7 +165,7 @@ class SceneAnimator {
             return
         }
         
-        let progress = getAnimationProgress(animation: &self.colorAnimation)
+        let progress = getAnimationProgress(animation: &self.colorAnimation!)
         
         scene.colorFill = FillColorInputUtility.interpolateFillColorInput(
             start: initialFill,

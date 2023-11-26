@@ -9,8 +9,7 @@ import SwiftUI
 
 @MainActor @Observable class FPSCounterViewModel {
     
-    let proteinViewModel: ProteinViewModel
-    
+    let renderer: ProteinRenderer
     var averageFPSString = "-"
     
     private var displayLink: CADisplayLink?
@@ -19,17 +18,19 @@ import SwiftUI
     private var currentIndex: Int = 0
     private let maxSavedFrames: Int = 100
     
-    init(proteinViewModel: ProteinViewModel) {
-        self.proteinViewModel = proteinViewModel
-        self.displayLink = CADisplayLink(target: self,
-                                         selector: #selector(self.updateFrameTime))
+    init(renderer: ProteinRenderer) {
+        self.renderer = renderer
+        self.displayLink = CADisplayLink(
+            target: self,
+            selector: #selector(self.updateFrameTime)
+        )
         self.displayLink?.add(to: .main, forMode: .default)
     }
     
     @objc private func updateFrameTime() {
         
         // Retrieve last GPU frame time.
-        let newFrameTime = proteinViewModel.renderer.lastFrameGPUTime
+        let newFrameTime = renderer.lastFrameGPUTime
         
         // Avoid saving the same frame time several times if the renderer
         // is paused.

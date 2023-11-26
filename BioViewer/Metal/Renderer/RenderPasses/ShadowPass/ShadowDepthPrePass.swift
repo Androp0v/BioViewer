@@ -20,7 +20,7 @@ extension MutableState {
         
         // MARK: - Depth pre-pass rendering
 
-        guard let pipelineState = renderer.shadowDepthPrePassRenderPipelineState else {
+        guard let pipelineState = shadowDepthPrePassRenderPipelineState else {
             return
         }
         renderCommandEncoder.setRenderPipelineState(pipelineState)

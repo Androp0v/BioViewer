@@ -12,7 +12,7 @@ import MetalFX
 #endif
 import SwiftUI
 
-class ProteinRenderer: NSObject {
+@Observable class ProteinRenderer: NSObject {
     
     // MARK: - Constants
     
@@ -46,46 +46,6 @@ class ProteinRenderer: NSObject {
     var commandQueue: MTLCommandQueue?
     /// Resolution of the view
     var viewResolution: CGSize?
-        
-    // MARK: - Compute Pipeline States
-    
-    /// Pipeline state for filling the color buffer (common options: element).
-    var simpleFillColorComputePipelineState: MTLComputePipelineState?
-    /// Pipeline state for filling the color buffer (extra options: residue, secondary structure...).
-    var fillColorComputePipelineState: MTLComputePipelineState?
-    /// Pipeline state for the compute post-processing step of blurring the shadows.
-    var shadowBlurPipelineState: MTLComputePipelineState?
-    /// Pipeline state for motion texture generation.
-    var motionPipelineState: MTLComputePipelineState?
-    
-    // MARK: - Render Pipeline States
-    
-    /// Pipeline state for the shadow depth pre-pass.
-    var shadowDepthPrePassRenderPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the directional shadow creation.
-    var shadowRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the directional shadow creation.
-    var shadowHQRenderingPipelineState: MTLRenderPipelineState?
-    
-    var opaqueRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the impostor geometry rendering (transparent at times).
-    
-    /// Pipeline state for the depth pre-pass.
-    var depthPrePassRenderPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the opaque geometry rendering.
-    var impostorRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
-    var impostorHQRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the impostor geometry rendering (transparent at times).
-    ///
-    var impostorBondRenderingPipelineState: MTLRenderPipelineState?
-    /// Pipeline state for the impostor geometry rendering (transparent at times) in Photo Mode.
-    var impostorBondHQRenderingPipelineState: MTLRenderPipelineState?
-    
-    #if DEBUG
-    /// Pipeline to debug things using points.
-    var debugPointsRenderingPipelineState: MTLRenderPipelineState?
-    #endif
     
     /// Shadow depth state.
     var shadowDepthState: MTLDepthStencilState?
@@ -93,9 +53,6 @@ class ProteinRenderer: NSObject {
     var depthState: MTLDepthStencilState?
 
     // MARK: - Runtime variables
-    
-    /// Data source with the proteins that back the rendering.
-    var proteinDataSource: ProteinDataSource?
     
     /// If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
     var getCurrentDrawable: (() -> CAMetalDrawable?)?
@@ -188,27 +145,6 @@ class ProteinRenderer: NSObject {
         // Render thread updates
         startRenderThread()
         
-        // Create compute pipeline states
-        makeSimpleFillColorComputePipelineState(device: device)
-        makeFillColorComputePipelineState(device: device)
-        makeShadowBlurringComputePipelineState(device: device)
-        if device.supportsFamily(.metal3) {
-            makeMotionComputePipelineState(device: device)
-        }
-        
-        // Create render pipeline states
-        makeShadowRenderPipelineState(device: device, highQuality: false)
-        if AppState.hasDepthPrePasses() {
-            makeShadowDepthPrePassRenderPipelineState(device: device)
-            makeDepthPrePassRenderPipelineState(device: device)
-        }
-        makeOpaqueRenderPipelineState(device: device)
-        makeImpostorRenderPipelineState(device: device, variant: .solidSpheres)
-        makeImpostorBondRenderPipelineState(device: device, variant: .solidSpheres)
-        #if DEBUG
-        makeDebugPointsPipelineState(device: device)
-        #endif
-        
         Task {
             await mutableState.createTextures(isBenchmark: isBenchmark)
         }
@@ -231,13 +167,6 @@ class ProteinRenderer: NSObject {
         }
         renderThread?.name = "ProteinRenderer Thread"
         renderThread?.start()
-    }
-
-    // MARK: - Public functions
-    
-    /// Make new impostor pipeline variant.
-    func remakeImpostorPipelineForVariant(variant: ImpostorRenderPassVariant) {
-        makeImpostorRenderPipelineState(device: self.device, variant: variant)
     }
 }
 

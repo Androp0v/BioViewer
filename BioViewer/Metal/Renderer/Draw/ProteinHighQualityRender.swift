@@ -49,14 +49,14 @@ extension MutableState {
         hqShadowTextures.makeShadowSampler(device: device)
         
         // Create high quality shadow render pass pipeline state
-        renderer.makeShadowRenderPipelineState(device: device, highQuality: true)
+        makeShadowRenderPipelineState(device: device, highQuality: true)
 
         // Create high quality impostor render pass pipeline state
         switch scene.currentVisualization {
         case .solidSpheres:
-            renderer.makeImpostorRenderPipelineState(device: device, variant: .solidSpheresHQ)
+            makeImpostorRenderPipelineState(device: device, variant: .solidSpheresHQ)
         case .ballAndStick:
-            renderer.makeImpostorRenderPipelineState(device: device, variant: .ballAndSticksHQ)
+            makeImpostorRenderPipelineState(device: device, variant: .ballAndSticksHQ)
         }
         
         // Change the image aspect ratio
