@@ -34,10 +34,12 @@ class SceneAnimator {
     
     func animateRadiiChange(finalRadii: AtomRadii, duration: Double) {
         guard let scene = scene else { return }
-        radiiAnimation = RunningAnimation(currentTime: CACurrentMediaTime(),
-                                          initialValue: scene.atom_radii,
-                                          finalValue: finalRadii,
-                                          duration: duration)
+        radiiAnimation = RunningAnimation(
+            currentTime: CACurrentMediaTime(),
+            initialValue: scene.atom_radii,
+            finalValue: finalRadii,
+            duration: duration
+        )
         resumeDisplayLinkIfNeeded()
     }
     
@@ -113,7 +115,7 @@ class SceneAnimator {
         
         let progress = getAnimationProgress(animation: &self.radiiAnimation)
                 
-        scene.atom_radii = AtomRadiiGenerator.interpolatedRadii(initial: initialRadii, final: finalRadii, progress: Float(progress))
+        scene.atom_radii = .interpolated(initial: initialRadii, final: finalRadii, progress: Float(progress))
         
         await bufferLoader?.populateImpostorSphereBuffers(atomRadii: scene.atom_radii)
         

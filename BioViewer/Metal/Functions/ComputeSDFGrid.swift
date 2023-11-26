@@ -75,7 +75,7 @@ extension MetalScheduler {
                                      index: 3)
             
             let atomRadiiBuffer = device.makeBuffer(
-                bytes: Array([AtomRadiiGenerator.vanDerWaalsRadii()]),
+                bytes: Array([AtomRadii.vanDerWaals]),
                 length: MemoryLayout<AtomRadii>.stride
             )
             computeEncoder.setBuffer(atomRadiiBuffer,

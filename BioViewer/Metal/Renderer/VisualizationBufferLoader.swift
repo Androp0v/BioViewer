@@ -63,7 +63,11 @@ class VisualizationBufferLoader {
     
     // MARK: - Populate buffers
     
-    private func populateVisualizationBuffers(visualization: ProteinVisualizationOption, proteinViewModel: ProteinViewModel) async {
+    func populateVisualizationBuffers(
+        visualization: ProteinVisualizationOption,
+        proteinViewModel: ProteinViewModel,
+        isInitialAnimation: Bool = false
+    ) async {
         
         guard let dataSource = await proteinViewModel.dataSource,
               let protein = await dataSource.getFirstProtein(),
@@ -77,18 +81,21 @@ class VisualizationBufferLoader {
         case .solidSpheres:
             
             // Change pipeline
-            await proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
+            proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .solidSpheres)
             
             // Animate radii changes
+            if isInitialAnimation {
+                await proteinViewModel.renderer.mutableState.setAtomRadii(.zero)
+            }
             animator.bufferLoader = self
             if await visualizationViewModel.solidSpheresRadiusOption == .vanDerWaals {
                 await animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: visualizationViewModel.solidSpheresVDWScale),
+                    finalRadii: .scaledVanDerWaals(scale: visualizationViewModel.solidSpheresVDWScale),
                     duration: 0.15
                 )
             } else {
                 await animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: visualizationViewModel.solidSpheresFixedAtomRadii),
+                    finalRadii: .fixed(radius: visualizationViewModel.solidSpheresFixedAtomRadii),
                     duration: 0.15
                 )
             }
@@ -110,18 +117,18 @@ class VisualizationBufferLoader {
             )
             
             // Change pipeline
-            await proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
+            proteinViewModel.renderer.remakeImpostorPipelineForVariant(variant: .ballAndSticks)
             
             // Animate radii changes
             animator.bufferLoader = self
             if await visualizationViewModel.ballAndStickRadiusOption == .fixed {
                 await animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.fixedRadii(radius: visualizationViewModel.ballAndSticksFixedAtomRadii),
+                    finalRadii: .fixed(radius: visualizationViewModel.ballAndSticksFixedAtomRadii),
                     duration: 0.15
                 )
             } else {
                 await animator.animateRadiiChange(
-                    finalRadii: AtomRadiiGenerator.vanDerWaalsRadii(scale: visualizationViewModel.ballAndSticksVDWScale),
+                    finalRadii: .scaledVanDerWaals(scale: visualizationViewModel.ballAndSticksVDWScale),
                     duration: 0.15
                 )
             }

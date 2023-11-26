@@ -57,7 +57,9 @@ import SwiftUI
     /// User-selected model for each ProteinFile.
     @Published var selectedModel = [Int]() {
         didSet {
-            updateFileModels()
+            Task {
+                await updateFileModels(withAnimation: false)
+            }
         }
     }
     /// Maps file ID to selected model array index (different files may have different selected models).
@@ -87,7 +89,7 @@ import SwiftUI
 
     // MARK: - Add files
     
-    func addProteinFileToDataSource(proteinFile: ProteinFile) {
+    func addProteinFileToDataSource(proteinFile: ProteinFile) async {
         
         guard let proteinViewModel = proteinViewModel else { return }
         
@@ -97,11 +99,11 @@ import SwiftUI
         
         // Add file to datasource.
         files.append(proteinFile)
-        updateFileModels()
+        await updateFileModels(withAnimation: true)
         
         // Change visualization to trigger rendering
         // TO-DO: visualization should depend on file type too
-        DispatchQueue.main.async {
+        Task { @MainActor in
             proteinViewModel.visualizationViewModel?.visualization = .solidSpheres
         }
     }
@@ -128,14 +130,21 @@ import SwiftUI
     
     // MARK: - Update model
     
-    func updateFileModels() {
+    func updateFileModels(withAnimation: Bool) async {
         guard let proteinViewModel = self.proteinViewModel,
               let visualizationViewModel = proteinViewModel.visualizationViewModel
         else { return }
         
+        /*
         visualizationViewModel.visualizationBufferLoader.handleVisualizationChange(
             visualization: visualizationViewModel.visualization,
             proteinViewModel: proteinViewModel
+        )
+         */
+        await visualizationViewModel.visualizationBufferLoader.populateVisualizationBuffers(
+            visualization: visualizationViewModel.visualization,
+            proteinViewModel: proteinViewModel,
+            isInitialAnimation: withAnimation
         )
         
         guard let proteins = modelsForFile(file: getFirstFile()) else { return }

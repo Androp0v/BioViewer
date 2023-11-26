@@ -14,7 +14,7 @@ import SwiftUI
     // MARK: - Properties
     
     /// Metal rendering engine.
-    var renderer: ProteinRenderer
+    let renderer: ProteinRenderer
     /// Datasource to hold actual protein data.
     var dataSource: ProteinDataSource?
     /// Linked ProteinColorViewModel

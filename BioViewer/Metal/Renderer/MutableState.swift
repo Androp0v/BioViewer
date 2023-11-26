@@ -392,6 +392,10 @@ actor MutableState {
     
     // MARK: - Scene functions
     
+    func setAtomRadii(_ newRadii: AtomRadii) {
+        scene.atom_radii = newRadii
+    }
+    
     func setAutorotating(to autorotating: Bool) {
         scene.autorotating = autorotating
     }

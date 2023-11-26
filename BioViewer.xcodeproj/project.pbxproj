@@ -138,7 +138,7 @@
 		C565A7DD277F48BF0086E2C3 /* ProteinVisualizationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */; };
 		C565A7E1277F76D70086E2C3 /* VisualizationBufferLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */; };
 		C56B3A122A22781F00AD5C82 /* ProteinDataSourceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56B3A112A22781F00AD5C82 /* ProteinDataSourceError.swift */; };
-		C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */; };
+		C56E87DE278CAF89004BAEE2 /* AtomRadii+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DD278CAF89004BAEE2 /* AtomRadii+Extensions.swift */; };
 		C56E87E0278D895B004BAEE2 /* SceneAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */; };
 		C56E87E6278DE0A2004BAEE2 /* BioViewerCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */; };
 		C572BD182740222800FF010D /* FileSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C572BD172740222800FF010D /* FileSourceView.swift */; };
@@ -380,7 +380,7 @@
 		C565A7DC277F48BF0086E2C3 /* ProteinVisualizationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinVisualizationOption.swift; sourceTree = "<group>"; };
 		C565A7E0277F76D70086E2C3 /* VisualizationBufferLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationBufferLoader.swift; sourceTree = "<group>"; };
 		C56B3A112A22781F00AD5C82 /* ProteinDataSourceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinDataSourceError.swift; sourceTree = "<group>"; };
-		C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomRadiiGenerator.swift; sourceTree = "<group>"; };
+		C56E87DD278CAF89004BAEE2 /* AtomRadii+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AtomRadii+Extensions.swift"; sourceTree = "<group>"; };
 		C56E87DF278D895B004BAEE2 /* SceneAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneAnimator.swift; sourceTree = "<group>"; };
 		C56E87E5278DE0A2004BAEE2 /* BioViewerCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerCommands.swift; sourceTree = "<group>"; };
 		C572BD172740222800FF010D /* FileSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceView.swift; sourceTree = "<group>"; };
@@ -572,7 +572,7 @@
 			isa = PBXGroup;
 			children = (
 				C5385325278998A0007A8368 /* SharedDataStructs.h */,
-				C56E87DD278CAF89004BAEE2 /* AtomRadiiGenerator.swift */,
+				C56E87DD278CAF89004BAEE2 /* AtomRadii+Extensions.swift */,
 				C495B23A2665419C004995C2 /* Meshes */,
 				C52AE372279D7CAA00BEE11B /* Compute */,
 				C495B2372663E189004995C2 /* Renderer */,
@@ -1498,7 +1498,7 @@
 				C555EC86282A9616001281CD /* PointsPass.swift in Sources */,
 				C50D95D927400F6F0002E089 /* InfoLongTextRow.swift in Sources */,
 				C57F994F275E2C44001DE6D6 /* ColorPalettePopover.swift in Sources */,
-				C56E87DE278CAF89004BAEE2 /* AtomRadiiGenerator.swift in Sources */,
+				C56E87DE278CAF89004BAEE2 /* AtomRadii+Extensions.swift in Sources */,
 				C59F6F692B00F72700C3F80A /* BioBenchViewModel.swift in Sources */,
 				C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */,
 				C531754829DF89F3004FF2C6 /* ProteinRenderedTextures.swift in Sources */,

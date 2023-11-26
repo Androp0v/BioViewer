@@ -135,7 +135,7 @@ class MetalScene {
         self.hasDepthCueing = false
         
         // Initial atom radii
-        self.atom_radii = AtomRadiiGenerator.vanDerWaalsRadii()
+        self.atom_radii = .zero
         
         self.frameData.shadow_strength = shadowStrength
         self.frameData.depth_cueing_strength = depthCueingStrength
