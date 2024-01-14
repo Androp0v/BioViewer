@@ -112,7 +112,7 @@ struct ProteinView: View {
                 .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
             }
         }
-        .navigationTitle("")
+        .navigationTitle(proteinDataSource.files.first?.fileNameWithExtension ?? "BioViewer")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // Button to open right panel

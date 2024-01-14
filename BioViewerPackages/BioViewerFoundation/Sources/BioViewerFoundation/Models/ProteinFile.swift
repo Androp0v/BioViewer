@@ -22,10 +22,14 @@ public struct ProteinFile: Hashable, Sendable {
     public let id = UUID()
     /// The type of protein file type (whether it contains a static structure or several configurations of the same protein).
     public let fileType: ProteinFileType
-    /// Name of the protein file.
+    /// Name of the protein file (without the file extension).
     public let fileName: String
     /// Extension of the protein file (.pdb, .cif...).
     public let fileExtension: String
+    /// Name of the protein file (including file extension).
+    public var fileNameWithExtension: String {
+        return fileName + "." + fileExtension
+    }
     /// Size of the stored file, in bytes.
     public let byteSize: Int?
     /// File metadata.
