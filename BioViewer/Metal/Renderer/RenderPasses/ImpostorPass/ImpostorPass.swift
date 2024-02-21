@@ -52,6 +52,11 @@ extension MutableState {
 
         // Create render command encoder
         guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderer.impostorRenderPassDescriptor) else {
+            BioViewerLogger.shared.log(
+                type: .error,
+                category: .proteinRenderer,
+                message: "Failed to render impostors: unable to make render command encoder."
+            )
             return
         }
         renderCommandEncoder.label = "Depth Pre-pass & Billboard Shading"
@@ -97,6 +102,12 @@ extension MutableState {
             variantPipelineState = impostorHQRenderingPipelineState
         }
         guard let impostorRenderingPipelineState = variantPipelineState else {
+            BioViewerLogger.shared.log(
+                type: .error,
+                category: .proteinRenderer,
+                message: "Failed to render impostors: MTLPipelineState nil."
+            )
+            renderCommandEncoder.endEncoding()
             return
         }
         renderCommandEncoder.setRenderPipelineState(impostorRenderingPipelineState)
@@ -138,6 +149,12 @@ extension MutableState {
 
         // Draw primitives
         guard let configurationSelector = scene.configurationSelector else {
+            BioViewerLogger.shared.log(
+                type: .error,
+                category: .proteinRenderer,
+                message: "Failed to render impostors: ConfigurationSelector nil."
+            )
+            renderCommandEncoder.endEncoding()
             return
         }
         let indexBufferRegion = configurationSelector.getImpostorIndexBufferRegion()
@@ -153,10 +170,20 @@ extension MutableState {
         // MARK: - Bond rendering
         if renderBonds {
             guard let impostorBondVertexBuffer = self.impostorBondVertexBuffer else {
+                BioViewerLogger.shared.log(
+                    type: .error,
+                    category: .proteinRenderer,
+                    message: "Failed to render impostors: Bond's vertex buffer nil."
+                )
                 renderCommandEncoder.endEncoding()
                 return
             }
             guard let impostorBondIndexBuffer = self.impostorBondIndexBuffer else {
+                BioViewerLogger.shared.log(
+                    type: .error,
+                    category: .proteinRenderer,
+                    message: "Failed to render impostors: Bond's index buffer nil."
+                )
                 renderCommandEncoder.endEncoding()
                 return
             }
@@ -171,6 +198,11 @@ extension MutableState {
                 bondVariantPipelineState = impostorBondRenderingPipelineState
             }
             guard let impostorBondRenderingPipelineState = bondVariantPipelineState else {
+                BioViewerLogger.shared.log(
+                    type: .error,
+                    category: .proteinRenderer,
+                    message: "Failed to render impostors: Bond's MTLPipelineState nil."
+                )
                 renderCommandEncoder.endEncoding()
                 return
             }
@@ -199,9 +231,21 @@ extension MutableState {
             
             // Draw primitives
             guard let configurationSelector = scene.configurationSelector else {
+                BioViewerLogger.shared.log(
+                    type: .error,
+                    category: .proteinRenderer,
+                    message: "Failed to render impostors: Scene's ConfigurationSelector nil."
+                )
+                renderCommandEncoder.endEncoding()
                 return
             }
             guard let indexBufferRegion = configurationSelector.getBondsIndexBufferRegion() else {
+                BioViewerLogger.shared.log(
+                    type: .error,
+                    category: .proteinRenderer,
+                    message: "Failed to render impostors: Index's BufferRegion nil."
+                )
+                renderCommandEncoder.endEncoding()
                 return
             }
             

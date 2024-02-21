@@ -68,7 +68,7 @@ class AppState: ObservableObject {
         guard let device = MTLCreateSystemDefaultDevice() else {
             return false
         }
-        if !device.supportsFamily(.apple1) {
+        if !device.supportsFamily(.apple3) {
             return false
         }
         return true

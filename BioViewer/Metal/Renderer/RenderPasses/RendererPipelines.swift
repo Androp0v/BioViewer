@@ -178,9 +178,25 @@ extension MutableState {
         // Save to the appropriate pipeline state
         switch variant {
         case .solidSpheres, .ballAndSticks:
-            impostorRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            do {
+                impostorRenderingPipelineState = try device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            } catch {
+                BioViewerLogger.shared.log(
+                    type: .error,
+                    category: .proteinRenderer,
+                    message: "Failed to create non-HQ impostor rendering pipeline state: \(error)"
+                )
+            }
         case .solidSpheresHQ, .ballAndSticksHQ:
-            impostorHQRenderingPipelineState = try? device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            do {
+                impostorHQRenderingPipelineState = try device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            } catch {
+                BioViewerLogger.shared.log(
+                    type: .error,
+                    category: .proteinRenderer,
+                    message: "Failed to create HQ impostor rendering pipeline state: \(error)"
+                )
+            }
         }
     }
     

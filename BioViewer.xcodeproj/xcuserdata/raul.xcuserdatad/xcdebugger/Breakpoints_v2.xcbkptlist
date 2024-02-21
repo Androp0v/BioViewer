@@ -20,5 +20,243 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E623AF29-CD0C-4DBF-A051-4B8C8BC1EA4D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "impostorRenderPass(renderer:commandBuffer:uniformBuffer:drawableTexture:depthTexture:depthPrePassTexture:shadowTextures:variant:renderBonds:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3D44F537-3E50-45D1-AE90-281B84348690"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
+            landmarkName = "impostorRenderPass(renderer:commandBuffer:uniformBuffer:drawableTexture:depthTexture:depthPrePassTexture:shadowTextures:variant:renderBonds:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3D44F537-3E50-45D1-AE90-281B84348690 - f46bf92c7bb19d3f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "3536">
+               </Location>
+               <Location
+                  uuid = "3D44F537-3E50-45D1-AE90-281B84348690 - f46bf92c7bb19d5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "3360">
+               </Location>
+               <Location
+                  uuid = "3D44F537-3E50-45D1-AE90-281B84348690 - f46bf92c7bb19cd0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "158"
+                  endingLineNumber = "158"
+                  offsetFromSymbolStart = "5632">
+               </Location>
+               <Location
+                  uuid = "3D44F537-3E50-45D1-AE90-281B84348690 - f46bf92c7bb19cd0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "158"
+                  endingLineNumber = "158"
+                  offsetFromSymbolStart = "5660">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6A7EFC5B-4727-443A-9EE4-200FDFFAD883"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "240"
+            endingLineNumber = "240"
+            landmarkName = "impostorRenderPass(renderer:commandBuffer:uniformBuffer:drawableTexture:depthTexture:depthPrePassTexture:shadowTextures:variant:renderBonds:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6A7EFC5B-4727-443A-9EE4-200FDFFAD883 - f46bf92c7bb1a7ae"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "240"
+                  endingLineNumber = "240"
+                  offsetFromSymbolStart = "4672">
+               </Location>
+               <Location
+                  uuid = "6A7EFC5B-4727-443A-9EE4-200FDFFAD883 - f46bf92c7bb1a7ae"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "240"
+                  endingLineNumber = "240"
+                  offsetFromSymbolStart = "4700">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "53E8C79F-A0DC-4362-9BD9-4FF36C020471"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
+            landmarkName = "impostorRenderPass(renderer:commandBuffer:uniformBuffer:drawableTexture:depthTexture:depthPrePassTexture:shadowTextures:variant:renderBonds:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "53E8C79F-A0DC-4362-9BD9-4FF36C020471 - f46bf92c7bb1a895"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "249"
+                  endingLineNumber = "249"
+                  offsetFromSymbolStart = "4428">
+               </Location>
+               <Location
+                  uuid = "53E8C79F-A0DC-4362-9BD9-4FF36C020471 - f46bf92c7bb1a895"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "249"
+                  endingLineNumber = "249"
+                  offsetFromSymbolStart = "4456">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4226DB5D-6D13-448C-B65A-46BA8591BD92"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/RenderPasses/RendererPipelines.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "makeImpostorRenderPipelineState(device:variant:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2CCDF221-EF06-467C-AA9D-4DFDF1106FA0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/RenderPasses/RendererPipelines.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
+            landmarkName = "makeImpostorRenderPipelineState(device:variant:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6C2CC0FD-6DA9-4BEE-8C2A-3C80C14866A2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/AppState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "hasDepthPrePasses"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
