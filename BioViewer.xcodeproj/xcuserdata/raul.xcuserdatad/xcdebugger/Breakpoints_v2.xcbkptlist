@@ -111,6 +111,21 @@
                   endingLineNumber = "158"
                   offsetFromSymbolStart = "5660">
                </Location>
+               <Location
+                  uuid = "3D44F537-3E50-45D1-AE90-281B84348690 - c096e898247a9a85"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "function signature specialization &lt;Arg[6] = Exploded&gt; of BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "1232">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -158,6 +173,21 @@
                   startingLineNumber = "240"
                   endingLineNumber = "240"
                   offsetFromSymbolStart = "4700">
+               </Location>
+               <Location
+                  uuid = "6A7EFC5B-4727-443A-9EE4-200FDFFAD883 - c096e898247aa035"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "function signature specialization &lt;Arg[6] = Exploded&gt; of BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "242"
+                  endingLineNumber = "242"
+                  offsetFromSymbolStart = "1480">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -207,6 +237,21 @@
                   endingLineNumber = "249"
                   offsetFromSymbolStart = "4456">
                </Location>
+               <Location
+                  uuid = "53E8C79F-A0DC-4362-9BD9-4FF36C020471 - c096e898247aaeeb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "function signature specialization &lt;Arg[6] = Exploded&gt; of BioViewer.MutableState.impostorRenderPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, uniformBuffer: inout __C.MTLBuffer, drawableTexture: __C.MTLTexture, depthTexture: Swift.Optional&lt;__C.MTLTexture&gt;, depthPrePassTexture: Swift.Optional&lt;__C.MTLTexture&gt;, shadowTextures: BioViewer.ShadowTextures, variant: BioViewer.MutableState.ImpostorRenderPassVariant, renderBonds: Swift.Bool) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "252"
+                  endingLineNumber = "252"
+                  offsetFromSymbolStart = "1520">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -230,7 +275,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "2CCDF221-EF06-467C-AA9D-4DFDF1106FA0"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BioViewer/Metal/Renderer/RenderPasses/RendererPipelines.swift"
@@ -256,6 +301,278 @@
             endingLineNumber = "71"
             landmarkName = "hasDepthPrePasses"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D94D55C1-E115-4020-B64B-E6156A697102"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "03D8CBD1-38DD-4A9E-861C-4B9715D14CFD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "46188CFF-76B0-4B06-9E84-8CE792D4888E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "46188CFF-76B0-4B06-9E84-8CE792D4888E - 157e7c51aa5254ca"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CIFParser.CIFParser.parseCIF(fileName: Swift.String, fileExtension: Swift.String, byteSize: Swift.Optional&lt;Swift.Int&gt;, rawText: Swift.String, progress: __C.NSProgress, originalFileInfo: Swift.Optional&lt;BioViewerFoundation.ProteinFileInfo&gt;) throws -&gt; BioViewerFoundation.ProteinFile"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
+                  offsetFromSymbolStart = "5536">
+               </Location>
+               <Location
+                  uuid = "46188CFF-76B0-4B06-9E84-8CE792D4888E - 157e7c51aa5254ca"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CIFParser.CIFParser.parseCIF(fileName: Swift.String, fileExtension: Swift.String, byteSize: Swift.Optional&lt;Swift.Int&gt;, rawText: Swift.String, progress: __C.NSProgress, originalFileInfo: Swift.Optional&lt;BioViewerFoundation.ProteinFileInfo&gt;) throws -&gt; BioViewerFoundation.ProteinFile"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
+                  offsetFromSymbolStart = "5580">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "29A738C9-1A54-4C0D-8A15-FB7480EF57F8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "fillColorPass(renderer:commandBuffer:colorBuffer:colorFill:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A - c19db0a0285c7274"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.fillColorPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, colorBuffer: Swift.Optional&lt;__C.MTLBuffer&gt;, colorFill: __C.FillColorInput) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "3416">
+               </Location>
+               <Location
+                  uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A - c19db0a0285c7274"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.fillColorPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, colorBuffer: Swift.Optional&lt;__C.MTLBuffer&gt;, colorFill: __C.FillColorInput) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "3896">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C3E56DA0-B9E2-4B4B-8029-53DBF2600354"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Functions/CreateImpostorSpheres.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "createImpostorSpheres(proteins:atomRadii:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "69AC435F-9B33-4837-81A2-17A326F5C2E5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "fillColorPass(renderer:commandBuffer:colorBuffer:colorFill:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "090F3392-DE7B-48D2-BCA1-A4BCD6FE8876"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "parseLine(line:into:allLoopMetadata:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "090F3392-DE7B-48D2-BCA1-A4BCD6FE8876 - 2de6f0fda0194355"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CIFParser.CIFParser.parseLine(line: Swift.String, into: inout CIFParser.CIFParser.ParsedData, allLoopMetadata: inout Swift.Array&lt;CIFParser.CIFParser.LoopMetadata&gt;) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "1868">
+               </Location>
+               <Location
+                  uuid = "090F3392-DE7B-48D2-BCA1-A4BCD6FE8876 - 2de6f0fda0194355"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CIFParser.CIFParser.parseLine(line: Swift.String, into: inout CIFParser.CIFParser.ParsedData, allLoopMetadata: inout Swift.Array&lt;CIFParser.CIFParser.LoopMetadata&gt;) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "1628">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2733C44B-E1CC-4E5E-9262-8F50B8837FD9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "parseLine(line:into:allLoopMetadata:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2733C44B-E1CC-4E5E-9262-8F50B8837FD9 - 2de6f0fda01940f8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CIFParser.CIFParser.parseLine(line: Swift.String, into: inout CIFParser.CIFParser.ParsedData, allLoopMetadata: inout Swift.Array&lt;CIFParser.CIFParser.LoopMetadata&gt;) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69"
+                  offsetFromSymbolStart = "1444">
+               </Location>
+               <Location
+                  uuid = "2733C44B-E1CC-4E5E-9262-8F50B8837FD9 - 2de6f0fda01940f8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CIFParser.CIFParser.parseLine(line: Swift.String, into: inout CIFParser.CIFParser.ParsedData, allLoopMetadata: inout Swift.Array&lt;CIFParser.CIFParser.LoopMetadata&gt;) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69"
+                  offsetFromSymbolStart = "1416">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

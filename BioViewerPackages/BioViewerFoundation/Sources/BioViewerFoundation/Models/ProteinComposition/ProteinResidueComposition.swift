@@ -25,6 +25,11 @@ public struct ProteinResidueComposition: Sendable {
     
     public init() {}
     
+    public init?(residues: [Residue]?) {
+        guard let residues else { return nil }
+        self.init(residues: residues)
+    }
+    
     public init(residues: [Residue]) {
         for residue in residues {
             if let currentCount = residueCounts[residue] {

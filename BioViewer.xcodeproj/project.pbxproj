@@ -48,6 +48,7 @@
 		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */; };
 		C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
+		C4FE01592B87779600E848A5 /* CIFParser in Frameworks */ = {isa = PBXBuildFile; productRef = C4FE01582B87779600E848A5 /* CIFParser */; };
 		C500EE77272C8ADF00A60317 /* ImpostorSphereShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */; };
 		C500EEB0272D58A400A60317 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEAF272D58A400A60317 /* StatusViewModel.swift */; };
 		C500EEB2272D85DE00A60317 /* CustomLinearProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */; };
@@ -289,6 +290,7 @@
 		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineStateBundle.swift; sourceTree = "<group>"; };
 		C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorSpheres.metal; sourceTree = "<group>"; };
+		C4FE01562B87776800E848A5 /* CIFParser */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CIFParser; sourceTree = "<group>"; };
 		C500EE76272C8ADF00A60317 /* ImpostorSphereShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ImpostorSphereShader.metal; sourceTree = "<group>"; };
 		C500EEAF272D58A400A60317 /* StatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 		C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLinearProgressView.swift; sourceTree = "<group>"; };
@@ -474,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C55A217C2B1210CC00D7A84D /* PDBParser in Frameworks */,
+				C4FE01592B87779600E848A5 /* CIFParser in Frameworks */,
 				C59D2EE42B00436E0041E84A /* BioViewerFoundation in Frameworks */,
 				C59D2EE82B0050E60041E84A /* XYZParser in Frameworks */,
 				C59D2EDF2B00434B0041E84A /* BioViewerFoundation in Frameworks */,
@@ -861,6 +864,7 @@
 			isa = PBXGroup;
 			children = (
 				C59D2EE12B0043650041E84A /* BioViewerFoundation */,
+				C4FE01562B87776800E848A5 /* CIFParser */,
 				C57405072B121060001B082E /* PDBParser */,
 				C59D2EE52B004AE70041E84A /* XYZParser */,
 			);
@@ -1281,6 +1285,7 @@
 				C59D2EE32B00436E0041E84A /* BioViewerFoundation */,
 				C59D2EE72B0050E60041E84A /* XYZParser */,
 				C55A217B2B1210CC00D7A84D /* PDBParser */,
+				C4FE01582B87779600E848A5 /* CIFParser */,
 			);
 			productName = "PDB Viewer";
 			productReference = C44FC06E2641AF1B00459E01 /* BioViewer.app */;
@@ -1360,6 +1365,7 @@
 				C59D2EE22B00436E0041E84A /* XCLocalSwiftPackageReference "BioViewerPackages/BioViewerFoundation" */,
 				C59D2EE62B0050E60041E84A /* XCLocalSwiftPackageReference "BioViewerPackages/XYZParser" */,
 				C55A217A2B1210CC00D7A84D /* XCLocalSwiftPackageReference "BioViewerPackages/PDBParser" */,
+				C4FE01572B87779600E848A5 /* XCLocalSwiftPackageReference "BioViewerPackages/CIFParser" */,
 			);
 			productRefGroup = C44FC06F2641AF1B00459E01 /* Products */;
 			projectDirPath = "";
@@ -1783,7 +1789,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
@@ -1822,7 +1828,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"BioViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = 4ND4CZC2FK;
 				ENABLE_PREVIEWS = YES;
@@ -1979,6 +1985,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		C4FE01572B87779600E848A5 /* XCLocalSwiftPackageReference "BioViewerPackages/CIFParser" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = BioViewerPackages/CIFParser;
+		};
 		C55A217A2B1210CC00D7A84D /* XCLocalSwiftPackageReference "BioViewerPackages/PDBParser" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = BioViewerPackages/PDBParser;
@@ -1994,6 +2004,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C4FE01582B87779600E848A5 /* CIFParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CIFParser;
+		};
 		C55A217B2B1210CC00D7A84D /* PDBParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PDBParser;
