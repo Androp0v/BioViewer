@@ -38,10 +38,7 @@ struct ColorSection: View {
                         
                         // MARK: - Color by element
                         case .element:
-                            // TO-DO: Make color palette work
-                            /*
                             ColorPaletteRow(colorPalette: ColorPalette(.default))
-                            */
                             
                             ForEach(AtomElement.importantElements, id: \.self) { element in
                                 ColorPickerRow(

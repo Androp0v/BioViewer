@@ -22,10 +22,14 @@ public struct BoundingBox: Sendable {
     public let maxZ: Float
 }
 
+/// The bounding volume of an object.
 public struct BoundingVolume: Sendable {
+    /// The bounding __sphere__ of the object.
     public let sphere: BoundingSphere
+    /// The bounding __box__ of the object.
     public let box: BoundingBox
     
+    /// A `BoundingVolume` that has no volume, centered at the origin.
     public static var zero: Self {
         return BoundingVolume(
             sphere: BoundingSphere(center: .zero, radius: .zero),

@@ -8,7 +8,7 @@
 import Foundation
 import simd
 
-/// Class holding the contents of a protein.
+/// A struct holding the contents of a protein.
 public struct Protein: Sendable {
 
     // MARK: - UUID
@@ -71,6 +71,7 @@ public struct Protein: Sendable {
     
     // MARK: - Volume
     
+    /// The bounding volume of the protein.
     public let boundingVolume: BoundingVolume
     
     // MARK: - Initialization

@@ -29,12 +29,21 @@ struct ColorPaletteView: View {
         }
         .frame(width: 88, height: 36)
         .mask(RoundedRectangle(cornerRadius: 4)
-                .padding(4))
-        .background(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(uiColor: .separator),
-                            style: StrokeStyle(lineWidth: 1))
-                    .background(RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(uiColor: .tertiarySystemFill))))
+        .padding(4))
+        .background {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(
+                    Color(uiColor: .separator),
+                    style: StrokeStyle(lineWidth: 1)
+                )
+                .background {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color(uiColor: .secondarySystemGroupedBackground))
+                }
+        }
+        #if targetEnvironment(macCatalyst)
+        .shadow(color: .black.opacity(0.025), radius: 0.5)
+        #endif
     }
 }
 

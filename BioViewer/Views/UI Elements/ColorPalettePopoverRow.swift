@@ -24,22 +24,27 @@ struct ColorPalettePopoverRow: View {
     }
     
     var body: some View {
-        Button(action: {
-            selectedOption = optionIndex
-        }, label: {
-            HStack {
-                Image(systemName: selectedOption == optionIndex ? "checkmark.circle" : "circle")
-                    .padding(4)
-                    .font(Font.system(size: Constants.radioButtonSize, weight: .medium))
-                    .foregroundColor(.accentColor)
-                Text(paletteName)
-                    .foregroundColor(.accentColor)
-                Spacer()
-                ColorPaletteView(colorPalette: colorPalette)
+        Button(
+            action: {
+                withAnimation {
+                    selectedOption = optionIndex
+                }
+            },
+            label: {
+                HStack {
+                    Image(systemName: selectedOption == optionIndex ? "checkmark.circle" : "circle")
+                        .padding(4)
+                        .font(Font.system(size: Constants.radioButtonSize, weight: .medium))
+                        .foregroundColor(.accentColor)
+                    Text(paletteName)
+                        .foregroundColor(.accentColor)
+                    Spacer()
+                    ColorPaletteView(colorPalette: colorPalette)
+                }
+                .contentShape(Rectangle())
             }
-            .contentShape(Rectangle())
-        })
-            .buttonStyle(PlainButtonStyle())
+        )
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

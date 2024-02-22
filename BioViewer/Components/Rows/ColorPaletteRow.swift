@@ -16,16 +16,19 @@ struct ColorPaletteRow: View {
         HStack {
             Text(NSLocalizedString("Color palette", comment: ""))
             Spacer()
-            Button(action: {
-                showPalettePicker.toggle()
-            }, label: {
-                ColorPaletteView(colorPalette: colorPalette)
-                    .popover(isPresented: $showPalettePicker) {
-                        ColorPalettePopover()
-                    }
-            })
-                .buttonStyle(PlainButtonStyle())
+            Button(
+                action: {
+                    showPalettePicker.toggle()
+                }, label: {
+                    ColorPaletteView(colorPalette: colorPalette)
+                        .popover(isPresented: $showPalettePicker) {
+                            ColorPalettePopover()
+                        }
+                }
+            )
+            .buttonStyle(PlainButtonStyle())
         }
+        .padding(.vertical, 4)
     }
 }
 

@@ -17,25 +17,21 @@ struct ColorPalettePopover: View {
         @State var paletteSelection: Int = 0
         @Environment(\.horizontalSizeClass) var horizontalSizeClass
         
-        var body: some View {
-            // TO-DO: Use native Radio Button on macOS
-            
+        var body: some View {            
             VStack {
-                ColorPalettePopoverRow(selectedOption: $paletteSelection,
-                                       colorPalette: ColorPalette(.default),
-                                       paletteName: NSLocalizedString("Default", comment: ""),
-                                       optionIndex: 0)
+                ColorPalettePopoverRow(
+                    selectedOption: $paletteSelection,
+                    colorPalette: ColorPalette(.default),
+                    paletteName: NSLocalizedString("Default", comment: ""),
+                    optionIndex: 0
+                )
                 Divider()
-                ColorPalettePopoverRow(selectedOption: $paletteSelection,
-                                       colorPalette: ColorPalette(.bioViewer),
-                                       paletteName: NSLocalizedString("BioViewer", comment: ""),
-                                       optionIndex: 1)
-                Divider()
-                ColorPalettePopoverRow(selectedOption: $paletteSelection,
-                                       colorPalette: ColorPalette(.custom),
-                                       paletteName: NSLocalizedString("Custom", comment: ""),
-                                       optionIndex: 2)
-                    .disabled(true)
+                ColorPalettePopoverRow(
+                    selectedOption: $paletteSelection,
+                    colorPalette: ColorPalette(.bioViewer),
+                    paletteName: NSLocalizedString("BioViewer", comment: ""),
+                    optionIndex: 1
+                )
                 if horizontalSizeClass == .compact {
                     Spacer()
                 }
