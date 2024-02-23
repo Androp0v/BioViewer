@@ -12,7 +12,7 @@ import SwiftUI
 
 enum ProteinColorByOption: PickableEnum {
     case element
-    case subunit
+    case chain
     case residue
     case secondaryStructure
     
@@ -20,8 +20,8 @@ enum ProteinColorByOption: PickableEnum {
         switch self {
         case .element:
             return NSLocalizedString("Element", comment: "")
-        case .subunit:
-            return NSLocalizedString("Subunit", comment: "")
+        case .chain:
+            return NSLocalizedString("Chain", comment: "")
         case .residue:
             return NSLocalizedString("Residue", comment: "")
         case .secondaryStructure:
@@ -33,7 +33,7 @@ enum ProteinColorByOption: PickableEnum {
         switch self {
         case .element:
             return "1"
-        case .subunit:
+        case .chain:
             return "2"
         case .residue:
             return "3"
@@ -76,7 +76,7 @@ extension ProteinColorViewModel {
     }
     
     func initSubunitColors() {
-        subunitColors = []
+        chainColors = []
         // Preselected color palette
         let fixedColorPalette =
             [
@@ -90,13 +90,13 @@ extension ProteinColorViewModel {
                 Color(.displayP3, red: 0.216, green: 0.945, blue: 0.657, opacity: 1)
             ]
         for index in 0..<fixedColorPalette.count {
-            guard index < MAX_SUBUNIT_COLORS else { return }
-            subunitColors.append(fixedColorPalette[index])
+            guard index < MAX_CHAIN_COLORS else { return }
+            chainColors.append(fixedColorPalette[index])
         }
         // If there are more subunits than colors in the preselected color palette, chose them
         // at random.
-        for _ in fixedColorPalette.count..<Int(MAX_SUBUNIT_COLORS) {
-            subunitColors.append(randomColor())
+        for _ in fixedColorPalette.count..<Int(MAX_CHAIN_COLORS) {
+            chainColors.append(randomColor())
         }
     }
     
@@ -108,7 +108,7 @@ extension ProteinColorViewModel {
         
         fillColor.colorByElement = 0.0
         fillColor.colorByResidue = 0.0
-        fillColor.colorBySubunit = 0.0
+        fillColor.colorByChain = 0.0
         fillColor.colorBySecondaryStructure = 0.0
         
         switch colorBy {
@@ -116,8 +116,8 @@ extension ProteinColorViewModel {
             fillColor.colorByElement = 1.0
         case .residue:
             fillColor.colorByResidue = 1.0
-        case .subunit:
-            fillColor.colorBySubunit = 1.0
+        case .chain:
+            fillColor.colorByChain = 1.0
         case .secondaryStructure:
             fillColor.colorBySecondaryStructure = 1.0
         }
@@ -176,13 +176,13 @@ extension ProteinColorViewModel {
         // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
         // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
         withUnsafeMutableBytes(of: &fillColor.subunit_color) { rawPtr -> Void in
-            for index in 0..<min(subunitColors.count, Int(MAX_SUBUNIT_COLORS)) {
+            for index in 0..<min(chainColors.count, Int(MAX_CHAIN_COLORS)) {
                 guard let ptrAddress = rawPtr.baseAddress else {
                     return
                 }
                 let ptr = (ptrAddress + MemoryLayout<simd_float4>.stride * index).assumingMemoryBound(to: simd_float4.self)
                 // TO-DO:
-                guard let simdColor = getSIMDColor(atomColor: subunitColors[index].cgColor) else {
+                guard let simdColor = getSIMDColor(atomColor: chainColors[index].cgColor) else {
                     NSLog("Unable to get SIMD color from CGColor for protein subunit coloring.")
                     return
                 }

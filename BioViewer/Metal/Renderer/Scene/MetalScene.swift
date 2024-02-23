@@ -50,7 +50,7 @@ class MetalScene {
     // MARK: - Representation properties
     /// Current ProteinVisualizationOption. May not match the value of the ProteinViewModel `visualization` until the new geometry
     /// is generated and the buffers are populated.
-    var currentVisualization: ProteinVisualizationOption = .ballAndStick { didSet { needsRedraw = true } }
+    var currentVisualization: ProteinVisualizationOption = .solidSpheres { didSet { needsRedraw = true } }
     
     // MARK: - Camera properties
     
@@ -81,10 +81,10 @@ class MetalScene {
 
     /// Whether shadows should be casted between geometry elements.
     var hasShadows: Bool { didSet { needsRedraw = true } }
-    var shadowStrength: Float = 0.4 { didSet { needsRedraw = true } }
+    var shadowStrength: Float = 0.7 { didSet { needsRedraw = true } }
     /// Whether depth cueing should be used in the scene.
     var hasDepthCueing: Bool { didSet { needsRedraw = true } }
-    var depthCueingStrength: Float = 0.3 { didSet { needsRedraw = true } }
+    var depthCueingStrength: Float = 0.6 { didSet { needsRedraw = true } }
     
     // MARK: - Color properties
     

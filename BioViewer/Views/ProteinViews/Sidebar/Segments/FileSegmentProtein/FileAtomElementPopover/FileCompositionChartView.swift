@@ -11,7 +11,7 @@ import SwiftUI
 struct FileCompositionChartView: View {
     
     let segments: [CompositionItem]
-    @Binding var selectedSegment: CompositionItem?
+    @Binding var selectedSegmentID: CompositionItem.ID?
     
     @State var selectedValue: Int?
         
@@ -45,30 +45,20 @@ struct FileCompositionChartView: View {
                 let hapticFeedback = UIImpactFeedbackGenerator(style: .light)
                 hapticFeedback.prepare()
                 hapticFeedback.impactOccurred()
-                selectedSegment = segment
+                selectedSegmentID = segment.id
                 return
             }
             currentCount += segment.count
         }
-        selectedSegment = nil
+        selectedSegmentID = nil
     }
     
     private func segmentOpacity(segment: CompositionItem) -> Double {
-        guard let selectedSegment else { return 1.0 }
-        if segment == selectedSegment {
+        guard let selectedSegmentID else { return 1.0 }
+        if segment.id == selectedSegmentID {
             return 1.0
         } else {
             return 0.3
         }
     }
-}
-
-#Preview {
-    FileCompositionChartView(
-        segments: [
-            CompositionItem(name: "Element A", color: .red, count: 1, fraction: 0.33),
-            CompositionItem(name: "Element B", color: .blue, count: 2, fraction: 0.66)
-        ],
-        selectedSegment: .constant(CompositionItem(name: "Element A", color: .red, count: 1, fraction: 0.33))
-    )
 }

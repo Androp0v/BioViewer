@@ -7,6 +7,7 @@
 
 import BioViewerFoundation
 import Foundation
+import CIFParser
 import PDBParser
 import XYZParser
 
@@ -24,6 +25,23 @@ class FileParser {
     ) async throws -> ProteinFile {
         
         switch fileExtension {
+        // MARK: - CIF Files
+        case "cif":
+            await statusViewModel.updateDescription(statusAction, description: "Importing file")
+            do {
+                let proteinFile = try await CIFParser().parseCIF(
+                    fileName: fileName,
+                    fileExtension: fileExtension,
+                    byteSize: byteSize,
+                    rawText: rawText,
+                    progress: statusAction.progress ?? Progress()
+                )
+                return proteinFile
+            } catch let error as ImportError {
+                throw error
+            } catch {
+                throw ImportError.unknownError
+            }
         // MARK: - PDB Files
         case "pdb", "PDB", "pdb1", "PDB1":
             await statusViewModel.updateDescription(statusAction, description: "Importing file")

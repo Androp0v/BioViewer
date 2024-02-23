@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>1.6</key>
+    <dict>
+        <key>Type</key>
+        <string>FEAT</string>
+        <key>Title</key>
+        <string>PDBx/mmCIF file support</string>
+        <key>Subtitle</key>
+        <string>Support for PBDx/mmCIF files.</string>
+    </dict>
     <key>1.5</key>
     <array>
         <dict>

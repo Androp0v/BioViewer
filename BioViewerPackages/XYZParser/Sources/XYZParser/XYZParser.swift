@@ -1,6 +1,3 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
-
 import BioViewerFoundation
 import Foundation
 import simd
@@ -145,27 +142,18 @@ public actor XYZParser {
 
         atomElements.append(contentsOf: firstConfiguration.atomElements)
         atomArrayComposition = ProteinElementComposition(elements: atomElements)
-        
-        let proteinSubunits = [
-            ProteinSubunit(
-                indexInProtein: firstConfiguration.id,
-                kind: .unknown,
-                atomCount: firstConfiguration.atomArrayComposition.totalCount,
-                startIndex: 0
-            )
-        ]
-        
+                
         fileInfo.sourceLines = rawText.components(separatedBy: .newlines)
         
         // Return ProteinFile
         let protein = Protein(
             configurationCount: configurationCount,
             configurationEnergies: energyArray,
-            subunitCount: 1,
-            subunits: proteinSubunits,
             atoms: atomArray,
             elementComposition: atomArrayComposition,
             atomElements: atomElements,
+            chainComposition: nil,
+            atomChainIDs: nil,
             residueComposition: nil,
             atomResidues: nil,
             atomSecondaryStructure: nil,

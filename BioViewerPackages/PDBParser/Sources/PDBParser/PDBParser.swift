@@ -98,10 +98,11 @@ extension ParsedBlock {
 private class ParsedModel {
     let startLine: Int
     let endLine: Int
-    var subunits = [ParsedSubunit]()
+    var chains = [ParsedSubunit]()
     
     var atomPositions = [simd_float3]()
     var atomElements = [AtomElement]()
+    var atomChainIDs = [ChainID]()
     var atomResidues = [Residue]()
     var atomSecondaryStructure = [SecondaryStructure]()
     
@@ -346,7 +347,7 @@ public class PDBParser {
             // least one subunit.
             if mergedBlocks.subunitEndRecords.count == 0 {
                 for model in parsedModels {
-                    model.subunits.append(ParsedSubunit(
+                    model.chains.append(ParsedSubunit(
                         startLine: model.startLine,
                         endLine: model.endLine,
                         isPartOfChain: true
@@ -358,7 +359,7 @@ public class PDBParser {
                     var lastSubunitStart: Int = model.startLine
                     for subunitRecord in sortedSubunitRecords {
                         if subunitRecord.line >= model.startLine && subunitRecord.line <= model.endLine {
-                            model.subunits.append(ParsedSubunit(
+                            model.chains.append(ParsedSubunit(
                                 startLine: lastSubunitStart + 1,
                                 endLine: subunitRecord.line,
                                 isPartOfChain: true
@@ -387,14 +388,15 @@ public class PDBParser {
                         
                         // Add regular ATOM records if present
                         var lastParsedLine: Int = 0
-                        for subunit in model.subunits {
-                            let subunitRecords =  modelRecords.filter {
-                                $0.line >= subunit.startLine && $0.line <= subunit.endLine
+                        for (chainIndex, chain) in model.chains.enumerated() {
+                            let chainRecords =  modelRecords.filter {
+                                $0.line >= chain.startLine && $0.line <= chain.endLine
                             }
-                            for record in subunitRecords {
+                            for record in chainRecords {
                                 model.atomPositions.append(record.position)
                                 model.atomResidues.append(record.resType)
                                 model.atomElements.append(record.element)
+                                model.atomChainIDs.append(ChainID(rawValue: UInt16(chainIndex)) ?? .zero)
                                 let structure = structureIterator.advanceAndGetCurrentStructure(
                                     chainID: record.chainID,
                                     resID: record.resID
@@ -402,7 +404,7 @@ public class PDBParser {
                                 model.atomSecondaryStructure.append(structure)
                                 lastParsedLine = record.line
                             }
-                            subunit.atomCount = subunitRecords.count
+                            chain.atomCount = chainRecords.count
                         }
                         
                         // Add non-chain HETATM records if present
@@ -417,11 +419,12 @@ public class PDBParser {
                                 endLine: lastHETATMLine,
                                 isPartOfChain: false
                             )
-                            model.subunits.append(nonChainSubunit)
+                            model.chains.append(nonChainSubunit)
                             for record in nonChainRecords {
                                 model.atomPositions.append(record.position)
                                 model.atomResidues.append(record.resType)
                                 model.atomElements.append(record.element)
+                                model.atomChainIDs.append(ChainID(rawValue: UInt16(model.chains.count - 1)) ?? .zero)
                                 model.atomSecondaryStructure.append(.nonChain)
                             }
                             nonChainSubunit.atomCount = nonChainRecords.count
@@ -431,32 +434,18 @@ public class PDBParser {
             }
             
             // Convert parsed objects to final objects
-            for model in parsedModels {
-                var finalSubunits = [ProteinSubunit]()
-                var subunitIndex = 0
-                var atomIndex = 0
-                for subunit in model.subunits {
-                    finalSubunits.append(ProteinSubunit(
-                        indexInProtein: subunitIndex,
-                        kind: subunit.isPartOfChain ? .chain : .nonChain,
-                        atomCount: subunit.atomCount,
-                        startIndex: atomIndex
-                    ))
-                    subunitIndex += 1
-                    atomIndex += subunit.atomCount
-                }
-                
+            for model in parsedModels {                
                 let elementComposition = ProteinElementComposition(elements: model.atomElements)
                 let residueComposition = ProteinResidueComposition(residues: model.atomResidues)
                 
                 finalProteins.append(Protein(
                     configurationCount: 1,
                     configurationEnergies: nil,
-                    subunitCount: finalSubunits.count,
-                    subunits: finalSubunits,
                     atoms: ContiguousArray(model.atomPositions),
                     elementComposition: elementComposition,
-                    atomElements: model.atomElements,
+                    atomElements: model.atomElements, 
+                    chainComposition: ProteinChainComposition(chainIDs: model.atomChainIDs),
+                    atomChainIDs: model.atomChainIDs,
                     residueComposition: residueComposition,
                     atomResidues: model.atomResidues,
                     atomSecondaryStructure: model.atomSecondaryStructure

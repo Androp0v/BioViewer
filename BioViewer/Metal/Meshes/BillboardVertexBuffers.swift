@@ -29,8 +29,10 @@ struct BillboardVertexBuffers {
         }
         
         // Position buffer
-        guard let newPositionBuffer = device.makeBuffer(length: totalVertexCount * MemoryLayout<simd_short2>.stride,
-                                                        options: .storageModePrivate) else {
+        guard let newPositionBuffer = device.makeBuffer(
+            length: totalVertexCount * MemoryLayout<simd_short2>.stride,
+            options: .storageModePrivate)
+        else {
             return nil
         }
         positionBuffer = newPositionBuffer

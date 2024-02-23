@@ -38,29 +38,24 @@ extension MutableState {
             return
         }
         
+        // Modify FillColorInput on the fly to avoid accessing the empty arrays
         let useSimpleShader = atomSubunitBuffer == nil
             || atomResidueBuffer == nil
             || atomSecondaryStructureBuffer == nil
-                
+                        
         // Set Metal compute encoder
         guard let computeEncoder = commandBuffer.makeComputeCommandEncoder() else {
             return
         }
 
         // Retrieve pipeline state
-        var pipelineState: MTLComputePipelineState?
-        if useSimpleShader {
-            pipelineState = simpleFillColorComputePipelineState
-        } else {
-            pipelineState = fillColorComputePipelineState
-        }
-        guard let pipelineState else {
+        guard let fillColorComputePipelineState else {
             computeEncoder.endEncoding()
             return
         }
 
         // Set compute pipeline state for current arguments
-        computeEncoder.setComputePipelineState(pipelineState)
+        computeEncoder.setComputePipelineState(fillColorComputePipelineState)
 
         // Set buffer contents
         computeEncoder.setBuffer(
@@ -73,23 +68,21 @@ extension MutableState {
             offset: 0,
             index: 1
         )
-        if !useSimpleShader {
-            computeEncoder.setBuffer(
-                atomSubunitBuffer,
-                offset: 0,
-                index: 2
-            )
-            computeEncoder.setBuffer(
-                atomResidueBuffer,
-                offset: 0,
-                index: 3
-            )
-            computeEncoder.setBuffer(
-                atomSecondaryStructureBuffer,
-                offset: 0,
-                index: 4
-            )
-        }
+        computeEncoder.setBuffer(
+            atomSubunitBuffer,
+            offset: 0,
+            index: 2
+        )
+        computeEncoder.setBuffer(
+            atomResidueBuffer,
+            offset: 0,
+            index: 3
+        )
+        computeEncoder.setBuffer(
+            atomSecondaryStructureBuffer,
+            offset: 0,
+            index: 4
+        )
         
         // Create fillColor buffer and fill with data
         let fillColorBuffer = device.makeBuffer(
@@ -118,7 +111,7 @@ extension MutableState {
         if device.supportsFamily(.common3) {
             // Create threads and threadgroup sizes
             let threadsPerArray = MTLSizeMake(colorBuffer.length / MemoryLayout<SIMD3<Int16>>.stride, 1, 1)
-            let groupSize = MTLSizeMake(pipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
+            let groupSize = MTLSizeMake(fillColorComputePipelineState.maxTotalThreadsPerThreadgroup, 1, 1)
             // Dispatch threads
             computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupSize)
         } else {
@@ -127,7 +120,7 @@ extension MutableState {
             MetalLegacySupport.legacyDispatchThreadsForArray(
                 commandEncoder: computeEncoder,
                 length: arrayLength,
-                pipelineState: pipelineState
+                pipelineState: fillColorComputePipelineState
             )
         }
 

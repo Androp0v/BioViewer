@@ -54,6 +54,7 @@ actor MutableState {
     var atomResidueBuffer: MTLBuffer?
     /// Used to pass the secondary structure data for each atom to the shader (used for coloring, size...).
     var atomSecondaryStructureBuffer: MTLBuffer?
+    
     /// Used to pass the atom base color to the shader (used for coloring, size...).
     var atomColorBuffer: MTLBuffer?
     /// Used to pass constant frame data to the shader.
@@ -79,9 +80,7 @@ actor MutableState {
     
     // MARK: - Compute Pipeline States
     
-    /// Pipeline state for filling the color buffer (common options: element).
-    var simpleFillColorComputePipelineState: MTLComputePipelineState?
-    /// Pipeline state for filling the color buffer (extra options: residue, secondary structure...).
+    /// Pipeline state for filling the color buffer (element, subunit, residue, secondary structure...).
     var fillColorComputePipelineState: MTLComputePipelineState?
     /// Pipeline state for the compute post-processing step of blurring the shadows.
     var shadowBlurPipelineState: MTLComputePipelineState?
@@ -444,7 +443,6 @@ actor MutableState {
     
     private func createPipelineStates() {
         // Create compute pipeline states
-        makeSimpleFillColorComputePipelineState(device: device)
         makeFillColorComputePipelineState(device: device)
         makeShadowBlurringComputePipelineState(device: device)
         if device.supportsFamily(.metal3) {
@@ -619,18 +617,10 @@ actor MutableState {
         var subunitLengths = [Int]()
         for protein in proteins {
             totalAtomCount += protein.atomCount
-            if let subunits = protein.subunits {
-                for subunit in subunits {
-                    subunitIndices.append(subunit.startIndex)
-                    subunitLengths.append(subunit.atomCount)
-                }
-            }
         }
         return ConfigurationSelector(
             for: proteins,
             atomsPerConfiguration: totalAtomCount,
-            subunitIndices: subunitIndices,
-            subunitLengths: subunitLengths,
             configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
         )
     }

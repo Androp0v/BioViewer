@@ -10,14 +10,16 @@ import SwiftUI
 @MainActor @Observable class ResolutionViewModel {
     
     let renderer: ProteinRenderer
-    var resolutionString = "-"
+    var resolution: CGSize?
     
     private var displayLink: CADisplayLink?
     
     init(renderer: ProteinRenderer) {
         self.renderer = renderer
-        self.displayLink = CADisplayLink(target: self,
-                                         selector: #selector(self.updateFrameTime))
+        self.displayLink = CADisplayLink(
+            target: self,
+            selector: #selector(self.updateFrameTime)
+        )
         self.displayLink?.add(to: .main, forMode: .default)
     }
     
@@ -25,22 +27,26 @@ import SwiftUI
         // Retrieve last GPU frame time.
         if renderer.isBenchmark {
             let benchmarkResolution = BenchmarkTextures.benchmarkResolution
-            resolutionString = "\(benchmarkResolution)x\(benchmarkResolution)"
+            resolution = CGSize(width: benchmarkResolution, height: benchmarkResolution)
         } else {
-            let viewResolution = renderer.viewResolution
-            guard let width = viewResolution?.width else { return }
-            guard let height = viewResolution?.height else { return }
-            resolutionString = "\(width)x\(height)"
+            resolution = renderer.viewResolution
         }
     }
 }
 
-struct ResolutionView: View {
+@MainActor struct ResolutionView: View {
     
     @State var viewModel: ResolutionViewModel
     
+    var resolutionString: String {
+        guard let resolution = viewModel.resolution else {
+            return "-"
+        }
+        return "\(resolution.width)x\(resolution.height)"
+    }
+    
     var body: some View {
-        Text(viewModel.resolutionString)
+        Text(resolutionString)
             .foregroundColor(.white)
             .background(.black)
             .font(.footnote)

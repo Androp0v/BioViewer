@@ -32,6 +32,7 @@ extension MutableState {
         let impostorTriangleCount = 2
         
         // Create subunit data array
+        /*
         var subunitData = [Int16]()
         for protein in proteins {
             guard let subunits = protein.subunits else {
@@ -41,6 +42,13 @@ extension MutableState {
             for index in 0..<protein.subunitCount {
                 subunitData.append(contentsOf: Array(repeating: Int16(index),
                                                      count: subunits[index].atomCount))
+            }
+        }
+         */
+        var subunitData = [UInt16]()
+        for protein in proteins {
+            if let atomSubunits = protein.atomChainIDs {
+                subunitData.append(contentsOf: atomSubunits.map { $0.rawValue })
             }
         }
         
@@ -95,7 +103,9 @@ extension MutableState {
         guard let atomTypeBuffer = device.makeBuffer(
             bytes: atomElementData.map { $0.rawValue },
             length: bufferAtomCount * MemoryLayout<AtomElement.RawValue>.stride
-        ) else { return nil }
+        ) else {
+            return nil
+        }
         
         // Populate optional buffers
         
@@ -105,6 +115,13 @@ extension MutableState {
                 bytes: subunitData,
                 length: subunitData.count * MemoryLayout<Int16>.stride
             )
+        } else {
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "Creating empty atom subunit buffer."
+            )
+            subunitBuffer = device.makeBuffer(length: bufferAtomCount * MemoryLayout<ChainID.RawValue>.stride)
         }
                 
         var atomResidueBuffer: MTLBuffer?
@@ -113,6 +130,13 @@ extension MutableState {
                 bytes: atomResidueType,
                 length: bufferAtomCount * MemoryLayout<Residue.RawValue>.stride
             )
+        } else {
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "Creating empty atom residue buffer."
+            )
+            atomResidueBuffer = device.makeBuffer(length: bufferAtomCount * MemoryLayout<Residue.RawValue>.stride)
         }
         
         var atomSecondaryStructureBuffer: MTLBuffer?
@@ -121,6 +145,13 @@ extension MutableState {
                 bytes: atomSecondaryStructureType,
                 length: bufferAtomCount * MemoryLayout<SecondaryStructure.RawValue>.stride
             )
+        } else {
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "Creating empty atom secondary structure buffer."
+            )
+            atomSecondaryStructureBuffer = device.makeBuffer(length: bufferAtomCount * MemoryLayout<SecondaryStructure.RawValue>.stride)
         }
         
         guard let generatedIndexBuffer = device.makeBuffer(

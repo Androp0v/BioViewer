@@ -20,15 +20,7 @@ public struct Protein: Sendable {
 
     // Sequence (i.e. ["ALA", "GLC", "TRY"])
     public let sequence: [Residue]?
-    
-    // MARK: - Subunits
-    
-    /// Number of subunits in the protein
-    public let subunitCount: Int
-    
-    /// List of all subunits in the protein
-    public let subunits: [ProteinSubunit]?
-    
+        
     // MARK: - Atoms
     
     /// Number of atoms in the protein.
@@ -47,11 +39,25 @@ public struct Protein: Sendable {
     /// Atom identifiers (C,N,H,O,S...) mapped to int values.
     public let atomElements: [AtomElement]
     
+    /// Chain ID for each atom.
+    public let atomChainIDs: [ChainID]?
+    
     /// Residue type of each atom.
     public let atomResidues: [Residue]?
     
     /// Secondary structure of which each atom is part of.
     public let atomSecondaryStructure: [SecondaryStructure]?
+    
+    // MARK: - Chains
+    
+    /// Number of atoms of each chain.
+    public let chainComposition: ProteinChainComposition?
+    
+    /// The number of unique chains in the protein.
+    public var chainCount: Int {
+        guard let chainComposition else { return 1 }
+        return chainComposition.uniqueChainIDs.count
+    }
     
     // MARK: - Bonds
     
@@ -78,11 +84,11 @@ public struct Protein: Sendable {
     public init(
         configurationCount: Int,
         configurationEnergies: [Float]?,
-        subunitCount: Int,
-        subunits: [ProteinSubunit],
         atoms: ContiguousArray<simd_float3>,
         elementComposition: ProteinElementComposition,
         atomElements: [AtomElement],
+        chainComposition: ProteinChainComposition?,
+        atomChainIDs: [ChainID]?,
         residueComposition: ProteinResidueComposition?,
         atomResidues: [Residue]?,
         atomSecondaryStructure: [SecondaryStructure]?,
@@ -90,15 +96,20 @@ public struct Protein: Sendable {
     ) {
         self.configurationCount = configurationCount
         self.configurationEnergies = configurationEnergies
-        self.subunitCount = subunitCount
-        self.subunits = subunits
         self.atoms = atoms
+        self.atomCount = elementComposition.totalCount
+        
         self.elementComposition = elementComposition
         self.atomElements = atomElements
+        
+        self.chainComposition = chainComposition
+        self.atomChainIDs = atomChainIDs
+        
         self.residueComposition = residueComposition
         self.atomResidues = atomResidues
+        
         self.atomSecondaryStructure = atomSecondaryStructure
-        self.atomCount = elementComposition.totalCount
+        
         self.sequence = sequence
         self.boundingVolume = computeBoundingVolume(atoms: atoms)
     }
