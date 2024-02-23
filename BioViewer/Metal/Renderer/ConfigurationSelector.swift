@@ -18,9 +18,6 @@ class ConfigurationSelector {
     
     var atomsPerConfiguration: Int
     
-    var subunitIndices: [Int]
-    var subunitLengths: [Int]
-    
     var bondsPerConfiguration: [Int]?
     var bondArrayStarts: [Int]?
     
@@ -29,11 +26,9 @@ class ConfigurationSelector {
     
     // MARK: - Initialization
     
-    init(for proteins: [Protein], atomsPerConfiguration: Int, subunitIndices: [Int], subunitLengths: [Int], configurationCount: Int) {
+    init(for proteins: [Protein], atomsPerConfiguration: Int, configurationCount: Int) {
         self.proteins = proteins
         self.atomsPerConfiguration = atomsPerConfiguration
-        self.subunitIndices = subunitIndices
-        self.subunitLengths = subunitLengths
         self.lastConfiguration = configurationCount - 1
     }
     

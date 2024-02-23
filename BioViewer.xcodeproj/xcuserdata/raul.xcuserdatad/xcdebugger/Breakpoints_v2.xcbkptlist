@@ -313,8 +313,8 @@
             filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
             landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -329,8 +329,8 @@
             filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
             landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -345,8 +345,8 @@
             filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
             landmarkType = "7">
             <Locations>
@@ -393,8 +393,8 @@
             filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
             landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -457,8 +457,8 @@
             filePath = "BioViewer/Metal/Functions/CreateImpostorSpheres.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "createImpostorSpheres(proteins:atomRadii:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -573,6 +573,22 @@
                   offsetFromSymbolStart = "1416">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "55C743DA-8BCA-4013-95D7-EEEECF932649"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewerPackages/CIFParser/Sources/CIFParser/CIFParser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
+            landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

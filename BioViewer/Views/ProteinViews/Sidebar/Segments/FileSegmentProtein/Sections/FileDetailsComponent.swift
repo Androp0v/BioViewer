@@ -22,7 +22,7 @@ struct FileDetailsComponent: View {
                 // PDB and static XYZ Files
                 HStack {
                     InfoTextRow(
-                        text: NSLocalizedString("PDB ID:", comment: ""),
+                        text: NSLocalizedString("Entry ID:", comment: ""),
                         value: String(file.fileInfo.pdbID ?? "-")
                     )
                     .padding(.horizontal, 8)

@@ -136,6 +136,7 @@ public actor CIFParser {
                 continue
             }
             let residueValues = atomLoop.values[CategoryNames.AtomSite.compID]
+            let subunitValues = atomLoop.values[CategoryNames.AtomSite.authAsymID]
             
             var atoms = [simd_float3]()
             var elements = [AtomElement]()
@@ -162,6 +163,27 @@ public actor CIFParser {
                 elements.append(AtomElement(string: element))
             }
             
+            // Chains
+            var chainIDs: [ChainID]?
+            if let subunitValues, subunitValues.count == rawAtomCount {
+                var tempChainIDs = [ChainID]()
+                for index in 0..<rawAtomCount {
+                    // Ignore water molecules
+                    // TODO: Option to toggle water visibility on/off
+                    if let residueValues, residueValues.count == rawAtomCount {
+                        // Ignore water molecules
+                        // TODO: Option to toggle water visibility on/off
+                        guard residueValues[index] != "HOH" else {
+                            continue
+                        }
+                    }
+                    let rawChainID = subunitValues[index]
+                    tempChainIDs.append(ChainID(string: rawChainID) ?? .zero)
+                }
+                chainIDs = tempChainIDs
+            }
+            
+            // Residues
             var residues: [Residue]?
             if let residueValues, residueValues.count == rawAtomCount {
                 var tempResidues = [Residue]()
@@ -179,16 +201,11 @@ public actor CIFParser {
             let protein = Protein(
                 configurationCount: 1,
                 configurationEnergies: nil,
-                subunitCount: 1, 
-                subunits: [ProteinSubunit(
-                    indexInProtein: 0,
-                    kind: .unknown,
-                    atomCount: atoms.count,
-                    startIndex: 0
-                )],
                 atoms: ContiguousArray(atoms),
                 elementComposition: ProteinElementComposition(elements: elements),
                 atomElements: elements,
+                chainComposition: ProteinChainComposition(chainIDs: chainIDs),
+                atomChainIDs: chainIDs,
                 residueComposition: ProteinResidueComposition(residues: residues),
                 atomResidues: residues,
                 atomSecondaryStructure: nil

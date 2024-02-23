@@ -54,8 +54,8 @@ struct FileSegmentProtein: View {
                         
                         if let proteins = proteinDataSource.modelsForFile(file: file) {
                             InfoTextRow(
-                                text: NSLocalizedString("Number of subunits:", comment: ""),
-                                value: "\(proteins.reduce(0) { $0 + $1.subunitCount })"
+                                text: NSLocalizedString("Number of chains:", comment: ""),
+                                value: "\(proteins.reduce(0) { $0 + $1.chainCount })"
                             )
                             InfoAtomsRow(
                                 label: NSLocalizedString("Number of atoms:", comment: ""),

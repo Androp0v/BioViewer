@@ -32,6 +32,7 @@ extension MutableState {
         let impostorTriangleCount = 2
         
         // Create subunit data array
+        /*
         var subunitData = [Int16]()
         for protein in proteins {
             guard let subunits = protein.subunits else {
@@ -41,6 +42,13 @@ extension MutableState {
             for index in 0..<protein.subunitCount {
                 subunitData.append(contentsOf: Array(repeating: Int16(index),
                                                      count: subunits[index].atomCount))
+            }
+        }
+         */
+        var subunitData = [UInt16]()
+        for protein in proteins {
+            if let atomSubunits = protein.atomChainIDs {
+                subunitData.append(contentsOf: atomSubunits.map { $0.rawValue })
             }
         }
         
@@ -113,7 +121,7 @@ extension MutableState {
                 category: .proteinRenderer,
                 message: "Creating empty atom subunit buffer."
             )
-            subunitBuffer = device.makeBuffer(length: subunitData.count * MemoryLayout<Int16>.stride)
+            subunitBuffer = device.makeBuffer(length: bufferAtomCount * MemoryLayout<ChainID.RawValue>.stride)
         }
                 
         var atomResidueBuffer: MTLBuffer?

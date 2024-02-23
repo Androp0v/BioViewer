@@ -21,7 +21,7 @@ import SwiftUI
     /// Total protein count in view.
     @Published var proteinCount: Int = 0
     /// Total subunit count in view.
-    @Published var totalSubunitCount: Int = 0
+    @Published var totalChainCount: Int = 0
     /// Total atom count in view.
     @Published var totalAtomCount: Int = 0
     /// Files in the scene.
@@ -30,13 +30,12 @@ import SwiftUI
         didSet {
             // FIXME: This is number of files, not proteins
             self.proteinCount = self.files.count
-
-            // Sum all subunit counts from all proteins in the datasource
-            var newSubunitCount = 0
+            // Sum all chain counts from all proteins in the datasource
+            var newChainCount = 0
             for file in self.files {
                 if let proteins = modelsForFile(file: file) {
                     for protein in proteins {
-                        newSubunitCount += protein.subunitCount
+                        newChainCount += protein.chainCount
                     }
                 }
             }
@@ -49,8 +48,7 @@ import SwiftUI
                     }
                 }
             }
-
-            self.totalSubunitCount = newSubunitCount
+            self.totalChainCount = newChainCount
             self.totalAtomCount = newTotalAtomCount
         }
     }

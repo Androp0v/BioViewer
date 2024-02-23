@@ -80,12 +80,12 @@ struct ColorSection: View {
                             
                         // MARK: - Color by subunit
                         case .subunit:
-                            if let subunits = proteinDataSource.getFirstProtein()?.subunits {
-                                ForEach(subunits, id: \.indexInProtein) { subunit in
+                            if let chains = proteinDataSource.getFirstProtein()?.chainComposition?.uniqueChainIDs {
+                                ForEach(chains, id: \.self) { chain in
                                     // TO-DO: Show real subunit list
                                     ColorPickerRow(
-                                        title: NSLocalizedString("\(subunit.subunitName)", comment: ""),
-                                        selectedColor: $colorViewModel.subunitColors[subunit.indexInProtein]
+                                        title: "\(chain.displayName)",
+                                        selectedColor: $colorViewModel.subunitColors[Int(chain.rawValue)]
                                     )
                                 }
                             } else {

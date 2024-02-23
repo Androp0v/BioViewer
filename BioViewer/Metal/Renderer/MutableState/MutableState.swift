@@ -617,18 +617,10 @@ actor MutableState {
         var subunitLengths = [Int]()
         for protein in proteins {
             totalAtomCount += protein.atomCount
-            if let subunits = protein.subunits {
-                for subunit in subunits {
-                    subunitIndices.append(subunit.startIndex)
-                    subunitLengths.append(subunit.atomCount)
-                }
-            }
         }
         return ConfigurationSelector(
             for: proteins,
             atomsPerConfiguration: totalAtomCount,
-            subunitIndices: subunitIndices,
-            subunitLengths: subunitLengths,
             configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
         )
     }
