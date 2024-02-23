@@ -444,6 +444,21 @@
                   endingLineNumber = "48"
                   offsetFromSymbolStart = "3896">
                </Location>
+               <Location
+                  uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A - c19db0a0285c7274"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.fillColorPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, colorBuffer: Swift.Optional&lt;__C.MTLBuffer&gt;, colorFill: __C.FillColorInput) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "3852">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -588,6 +603,70 @@
             startingLineNumber = "208"
             endingLineNumber = "208"
             landmarkName = "parseCIF(fileName:fileExtension:byteSize:rawText:progress:originalFileInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "866BE2BF-6659-4047-8269-F4F5B7621009"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Sidebar/Segments/FileSegmentProtein/FileAtomElementPopover/FileCompositionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B942F133-C045-47FE-A322-31AFB55A4853"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Sidebar/Segments/FileSegmentProtein/FileAtomElementPopover/FileCompositionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "computeFractions()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6471906A-2131-471C-A4A5-EA08F2C99FBC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Sidebar/Segments/FileSegmentProtein/FileAtomElementPopover/FileCompositionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "computeFractions()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A9C9049-3FA2-48F7-BEB7-05DEC047F34D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Sidebar/Segments/FileSegmentProtein/FileAtomElementPopover/FileCompositionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "computeFractions()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -177,7 +177,7 @@ public actor CIFParser {
                             continue
                         }
                     }
-                    let rawChainID = subunitValues[index]
+                    let rawChainID = String(subunitValues[index].first ?? "A")
                     tempChainIDs.append(ChainID(string: rawChainID) ?? .zero)
                 }
                 chainIDs = tempChainIDs

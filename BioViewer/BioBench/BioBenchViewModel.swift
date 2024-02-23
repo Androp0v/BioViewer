@@ -20,7 +20,7 @@ import SwiftUI
         proteinDataSource: ProteinDataSource,
         statusViewModel: StatusViewModel
     ) async {
-        colorViewModel?.colorBy = .subunit
+        colorViewModel?.colorBy = .chain
         for pdbID in [
             "1A3N",
             "2OGM",

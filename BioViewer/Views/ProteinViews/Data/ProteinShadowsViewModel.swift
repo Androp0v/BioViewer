@@ -45,7 +45,7 @@ class SunDirection {
             }
         }
     }
-    var shadowStrength: Float = 0.4 {
+    var shadowStrength: Float = 0.7 {
         didSet {
             Task {
                 await proteinViewModel?.renderer.mutableState.setShadowStrength(shadowStrength)
@@ -60,7 +60,7 @@ class SunDirection {
             }
         }
     }
-    var depthCueingStrength: Float = 0.3 {
+    var depthCueingStrength: Float = 0.6 {
         didSet {
             Task {
                 await proteinViewModel?.renderer.mutableState.setDepthCueingStrength(depthCueingStrength)

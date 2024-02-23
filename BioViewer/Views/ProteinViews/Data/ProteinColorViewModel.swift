@@ -25,7 +25,7 @@ import SwiftUI
             }
         }
     }
-    
+        
     /// What kind of color scheme is used to color atoms (i.e. by element or by chain).
     var colorBy: ProteinColorByOption {
         didSet {
@@ -44,7 +44,7 @@ import SwiftUI
     }
     
     /// Color used for each subunit when coloring by subunit.
-    var subunitColors: [Color] = [Color]() {
+    var chainColors: [Color] = [Color]() {
         didSet {
             updateSceneColorFill()
         }

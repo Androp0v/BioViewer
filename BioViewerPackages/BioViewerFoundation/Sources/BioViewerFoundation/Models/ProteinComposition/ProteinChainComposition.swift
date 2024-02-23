@@ -15,6 +15,14 @@ public struct ProteinChainComposition: Sendable {
     /// The total count of atoms of all chains.
     public var totalCount: Int = 0
     
+    public static func += (lhs: inout ProteinChainComposition, rhs: ProteinChainComposition) {
+        lhs.chainIDCounts.merge(rhs.chainIDCounts, uniquingKeysWith: { lhsCount, rhsCount in
+            return lhsCount + rhsCount
+        })
+        lhs.uniqueChainIDs = Array(lhs.chainIDCounts.keys)
+        lhs.totalCount += rhs.totalCount
+    }
+    
     // MARK: - Init
     
     public init() {}
@@ -33,6 +41,7 @@ public struct ProteinChainComposition: Sendable {
                 uniqueChainIDs.append(chainID)
             }
         }
+        uniqueChainIDs = uniqueChainIDs.sorted(by: { $0.displayName < $1.displayName })
         for atomsInChainID in chainIDCounts.values {
             totalCount += atomsInChainID
         }

@@ -70,7 +70,6 @@
 		C51084382AFFE5AE00A3D388 /* BVProgressFailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084372AFFE5AE00A3D388 /* BVProgressFailedView.swift */; };
 		C510843A2AFFEFDE00A3D388 /* BVDismissActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51084392AFFEFDE00A3D388 /* BVDismissActionButton.swift */; };
 		C515EFB9274D9E0A00B6F7DB /* FileCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */; };
-		C515EFBC274E316A00B6F7DB /* FileCompositionItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */; };
 		C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFBD274E691800B6F7DB /* InfoTextRow.swift */; };
 		C515EFC3274FEA0900B6F7DB /* ProteinColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */; };
 		C51D4ED9276596EE00C69B3D /* EmptyDataRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */; };
@@ -79,7 +78,6 @@
 		C51D4EE52769137500C69B3D /* ImpostorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EE42769137500C69B3D /* ImpostorPass.swift */; };
 		C51D4EEF276D073200C69B3D /* ConfigurationSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */; };
 		C5277FC529795A2F00291AF7 /* PickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC429795A2F00291AF7 /* PickerRow.swift */; };
-		C5277FC7297B0B2100291AF7 /* FileAtomTotalsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */; };
 		C5277FD1297B6F9D00291AF7 /* BioViewerPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5277FD0297B6F9D00291AF7 /* BioViewerPicker.swift */; };
 		C52AE36F279CA0DA00BEE11B /* FillColorPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */; };
 		C52AE371279CB0FF00BEE11B /* FillColorBuffer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */; };
@@ -313,7 +311,6 @@
 		C51084372AFFE5AE00A3D388 /* BVProgressFailedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVProgressFailedView.swift; sourceTree = "<group>"; };
 		C51084392AFFEFDE00A3D388 /* BVDismissActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVDismissActionButton.swift; sourceTree = "<group>"; };
 		C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionView.swift; sourceTree = "<group>"; };
-		C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCompositionItemRow.swift; sourceTree = "<group>"; };
 		C515EFBD274E691800B6F7DB /* InfoTextRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextRow.swift; sourceTree = "<group>"; };
 		C515EFC2274FEA0900B6F7DB /* ProteinColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinColorModel.swift; sourceTree = "<group>"; };
 		C51D4ED8276596EE00C69B3D /* EmptyDataRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataRow.swift; sourceTree = "<group>"; };
@@ -322,7 +319,6 @@
 		C51D4EE42769137500C69B3D /* ImpostorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpostorPass.swift; sourceTree = "<group>"; };
 		C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationSelector.swift; sourceTree = "<group>"; };
 		C5277FC429795A2F00291AF7 /* PickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerRow.swift; sourceTree = "<group>"; };
-		C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAtomTotalsRow.swift; sourceTree = "<group>"; };
 		C5277FD0297B6F9D00291AF7 /* BioViewerPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioViewerPicker.swift; sourceTree = "<group>"; };
 		C52AE36E279CA0DA00BEE11B /* FillColorPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillColorPass.swift; sourceTree = "<group>"; };
 		C52AE370279CB0FF00BEE11B /* FillColorBuffer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FillColorBuffer.metal; sourceTree = "<group>"; };
@@ -887,8 +883,6 @@
 				C55CA6F8297D62D900BEDFA4 /* CompositionItem.swift */,
 				C515EFB8274D9E0A00B6F7DB /* FileCompositionView.swift */,
 				C55677362A51A23700468257 /* FileCompositionChartView.swift */,
-				C515EFBB274E316A00B6F7DB /* FileCompositionItemRow.swift */,
-				C5277FC6297B0B2100291AF7 /* FileAtomTotalsRow.swift */,
 			);
 			path = FileAtomElementPopover;
 			sourceTree = "<group>";
@@ -1482,7 +1476,6 @@
 				C51084312AFF837300A3D388 /* BVProgressView.swift in Sources */,
 				C553B79F293624D900294BB4 /* PeriodicTableContentView.swift in Sources */,
 				C572BD1C2741386300FF010D /* FileSourceRow.swift in Sources */,
-				C515EFBC274E316A00B6F7DB /* FileCompositionItemRow.swift in Sources */,
 				C560E0DA29E2EB9400CE883C /* MetalFXScalers.swift in Sources */,
 				C515EFBE274E691800B6F7DB /* InfoTextRow.swift in Sources */,
 				C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */,
@@ -1578,7 +1571,6 @@
 				C45BAC492649C18000B36026 /* ProteinDataSource.swift in Sources */,
 				C464C360265B0CA900E66C3E /* CoffeeRow.swift in Sources */,
 				C57F9961275EAD6C001DE6D6 /* ExportError.swift in Sources */,
-				C5277FC7297B0B2100291AF7 /* FileAtomTotalsRow.swift in Sources */,
 				C553B79A2936218000294BB4 /* ButtonRow.swift in Sources */,
 				C5EEE9C1276FFB11005737C1 /* ProteinHighQualityRender.swift in Sources */,
 				C5F7D308275776EC008A0517 /* RCSBSuggestionsView.swift in Sources */,

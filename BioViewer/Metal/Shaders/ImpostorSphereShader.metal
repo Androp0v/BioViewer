@@ -185,7 +185,7 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
         // Rescale depth so only the part of the model that has a depth ranging 0.5 to 1.0
         // (the furthest half of the model) gets depth cued.
         float rescaled_depth = max((2.0 * normalizedDeviceCoordinatesDepth) - 1.0, 0.0);
-        shadedColor.rgb -= frameData.depth_cueing_strength * half3(rescaled_depth);
+        shadedColor.rgb *= (1 - frameData.depth_cueing_strength * half3(rescaled_depth));
     }
     
     // Add hard shadows
@@ -215,7 +215,7 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
         }
         
         // Add the shadow to the shadedColor by subtracting color
-        shadedColor.rgb -= frameData.shadow_strength * (1 - is_sunlit);
+        shadedColor.rgb *= (1 - frameData.shadow_strength * (1 - is_sunlit));
         #else
         float sunlit_fraction = 0;
         int sample_count;
@@ -262,14 +262,14 @@ ImpostorFragmentOut impostor_fragment_common(ImpostorVertexOut impostor_vertex,
                                                             sphereShadowClipPosition.z);
             }
             // Add the shadow to the shadedColor by subtracting color
-            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / (sample_count + 16));
+            shadedColor.rgb *= (1 - frameData.shadow_strength * (1 - sunlit_fraction / (sample_count + 16)));
         } else {
             // Add the shadow to the shadedColor by subtracting color
-            shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+            shadedColor.rgb *= (1 - frameData.shadow_strength * (1 - sunlit_fraction / sample_count));
         }
         #else
         // Add the shadow to the shadedColor by subtracting color
-        shadedColor.rgb -= frameData.shadow_strength * (1 - sunlit_fraction / sample_count);
+        shadedColor.rgb *= (1 - frameData.shadow_strength * (1 - sunlit_fraction / sample_count));
         #endif
         #endif
     }

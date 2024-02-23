@@ -47,8 +47,8 @@ kernel void fill_color_buffer(device half3 *atom_color [[ buffer(0) ]],
     if (color_input.colorByElement != 0.0) {
         final_color += pow(half3( color_input.element_color[atom_element[i]].rgb ), 2) * color_input.colorByElement;
     }
-    if (color_input.colorBySubunit != 0.0) {
-        final_color += pow(half3( color_input.subunit_color[subunitIndex[i]].rgb), 2) * color_input.colorBySubunit;
+    if (color_input.colorByChain != 0.0) {
+        final_color += pow(half3( color_input.subunit_color[subunitIndex[i]].rgb), 2) * color_input.colorByChain;
     }
     if (color_input.colorByResidue != 0.0) {
         final_color += pow(half3( color_input.residue_color[atom_residue[i]].rgb), 2) * color_input.colorByResidue;
