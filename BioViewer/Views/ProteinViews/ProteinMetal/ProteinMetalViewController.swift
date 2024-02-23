@@ -17,9 +17,11 @@ class ProteinMetalViewController: UIViewController {
     var renderedView: ProteinRenderedView!
     
     var proteinViewModel: ProteinViewModel
+    var selectionModel: SelectionModel
     
-    init(proteinViewModel: ProteinViewModel) {
+    init(proteinViewModel: ProteinViewModel, selectionModel: SelectionModel) {
         self.proteinViewModel = proteinViewModel
+        self.selectionModel = selectionModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -64,6 +66,9 @@ class ProteinMetalViewController: UIViewController {
         
         // MARK: - Gesture recognizers
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
+        renderedView.addGestureRecognizer(tapGesture)
+        
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
         renderedView.addGestureRecognizer(pinchGesture)
         
@@ -73,6 +78,19 @@ class ProteinMetalViewController: UIViewController {
     }
 
     // MARK: - Private functions
+    
+    @objc private func handleTap(gestureRecognizer: UITapGestureRecognizer) {
+        let location = gestureRecognizer.location(in: self.view)
+        Task(priority: .userInitiated) {
+            await self.selectionModel.hit(
+                at: location,
+                viewSize: self.view.frame.size,
+                camera: self.proteinViewModel.renderer.mutableState.getCamera(),
+                cameraPosition: self.proteinViewModel.renderer.mutableState.getCameraPosition(),
+                rotationMatrix: self.proteinViewModel.renderer.mutableState.getUserRotationMatrix()
+            )
+        }
+    }
 
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {

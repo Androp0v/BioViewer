@@ -20,6 +20,7 @@ struct ProteinView: View {
     @Environment(ProteinRenderer.self) var renderer: ProteinRenderer
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
+    @Environment(SelectionModel.self) var selectionModel: SelectionModel
     
     @State var toolbarConfig = ToolbarConfig()
     
@@ -52,9 +53,12 @@ struct ProteinView: View {
                 ZStack {
                     
                     // Main scene view
-                    ProteinMetalView(proteinViewModel: proteinViewModel)
-                        .background(.black)
-                        .edgesIgnoringSafeArea([.top, .bottom])
+                    ProteinMetalView(
+                        proteinViewModel: proteinViewModel,
+                        selectionModel: selectionModel
+                    )
+                    .background(.black)
+                    .edgesIgnoringSafeArea([.top, .bottom])
                     
                     // Status changes
                     StatusOverlayView()
@@ -102,6 +106,17 @@ struct ProteinView: View {
                          */
                     }
                     .padding(.bottom, 12)
+                    
+                    HStack {
+                        VStack {
+                            Spacer()
+                            if selectionModel.selectionActive {
+                                SelectedAtom(element: "C", elementName: "C", radius: 1.0)
+                                    .frame(alignment: .bottomLeading)
+                            }
+                        }
+                        Spacer()
+                    }
                     
                     // Import view
                     if proteinDataSource.proteinCount == 0 && !statusViewModel.isImportingFile {

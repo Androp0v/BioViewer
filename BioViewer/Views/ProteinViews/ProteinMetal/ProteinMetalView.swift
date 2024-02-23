@@ -14,19 +14,17 @@ struct ProteinMetalView: UIViewControllerRepresentable {
     typealias UIViewControllerType = ProteinMetalViewController
 
     let proteinViewModel: ProteinViewModel
+    let selectionModel: SelectionModel
 
     func makeUIViewController(context: Context) -> ProteinMetalViewController {
-        return ProteinMetalViewController(proteinViewModel: self.proteinViewModel)
+        return ProteinMetalViewController(
+            proteinViewModel: self.proteinViewModel,
+            selectionModel: self.selectionModel
+        )
     }
 
     func updateUIViewController(_ uiViewController: ProteinMetalViewController, context: Context) {
         // TO-DO? Updateable ViewController
     }
 
-}
-
-struct ProteinMetalView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProteinMetalView(proteinViewModel: ProteinViewModel())
-    }
 }

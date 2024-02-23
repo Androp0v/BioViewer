@@ -550,6 +550,10 @@ actor MutableState {
         scene.userModelRotationMatrix = matrix
     }
     
+    func getCamera() -> Camera {
+        return scene.camera
+    }
+    
     func getCameraPosition() -> simd_float3 {
         return scene.cameraPosition
     }

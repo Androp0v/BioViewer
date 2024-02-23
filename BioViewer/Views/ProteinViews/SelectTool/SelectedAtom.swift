@@ -7,8 +7,31 @@
 
 import SwiftUI
 
+private enum SelectionOption: PickableEnum {
+    case debug
+    case element
+    case chain
+    case residue
+    
+    var displayName: String {
+        switch self {
+        case .debug:
+            return "Debug"
+        case .element:
+            return "Element"
+        case .chain:
+            return "Chain"
+        case .residue:
+            return "Residue"
+        }
+    }
+}
+
 struct SelectedAtom: View {
     
+    @Environment(SelectionModel.self) var selectionModel: SelectionModel
+
+    @State private var selectionOption: SelectionOption = .debug
     var element: String
     var elementName: String
     var radius: Float
@@ -17,53 +40,49 @@ struct SelectedAtom: View {
         VStack(spacing: 0) {
             
             ZStack(alignment: .leading) {
-                Text(NSLocalizedString("Selected element", comment: ""))
-                    .bold()
-                    .foregroundColor(.white)
-                    .padding(8)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.black.opacity(0.7))
-                
-                Button(action: {
-                    // TO-DO
-                }, label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 14, height: 14)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                })
-                    .foregroundColor(.gray)
-                    .buttonStyle(PlainButtonStyle())
-            }
-            
-            HStack(spacing: 0) {
-                ZStack {
-                    Rectangle()
-                        .frame(width: 64, height: 64)
-                        .foregroundColor(Color(uiColor: UIColor.systemBackground))
-                    Rectangle()
-                        .strokeBorder(Color.black, lineWidth: 2)
-                        .frame(width: 64, height: 64)
-                    Text("K")
-                        .font(.largeTitle)
+                HStack(spacing: .zero) {
+                    Text(NSLocalizedString("Selecting", comment: ""))
                         .bold()
+                    BioViewerPicker(selection: $selectionOption)
                 }
-                .padding()
+                .padding(.horizontal, 24)
+                .padding(.leading, 36)
                 
-                VStack(alignment: .leading) {
-                    Text("**Atomic mass:** 39.09 u")
-                    Text("**Radius:** \(radius) Å")
-                }
-                
-                Spacer()
+                Button(
+                    action: {
+                        selectionModel.deselect()
+                    },
+                    label: {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 12, height: 12)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .contentShape(Rectangle())
+                    }
+                )
+                .foregroundColor(.primary)
+                .buttonStyle(PlainButtonStyle())
+            }
+            .padding(.top, 4)
+            
+            switch selectionOption {
+            case .debug:
+                SelectedDebugView()
+            case .element:
+                SelectedElementView()
+            case .chain:
+                EmptyView()
+            case .residue:
+                EmptyView()
             }
         }
-        .background(.regularMaterial)
+        .background(.thinMaterial)
         .cornerRadius(12)
         .frame(maxWidth: 300, alignment: .bottomLeading)
         .padding()
+        .transition(.move(edge: .bottom))
     }
 }
 
