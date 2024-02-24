@@ -5,7 +5,9 @@
 //  Created by Raúl Montón Pinillos on 23/2/24.
 //
 
+import BioViewerFoundation
 import Foundation
+import simd
 import SwiftUI
 
 @MainActor @Observable class SelectionModel {
@@ -13,9 +15,12 @@ import SwiftUI
     private(set) var selectionActive: Bool = false
     private(set) var lastHitPointInScreenSpace: CGPoint?
     private(set) var lastHitPointInClipSpace: simd_float4?
-    private(set) var lastClipSpaceRay: (origin: simd_float4, direction: simd_float4)?
-    private(set) var lastUnrotatedWorldSpaceRay: (origin: simd_float4, direction: simd_float4)?
-    private(set) var lastWorldSpaceRay: (origin: simd_float3, direction: simd_float3)?
+    private(set) var lastClipSpaceRay: Ray?
+    private(set) var lastUnrotatedWorldSpaceRay: Ray?
+    private(set) var lastWorldSpaceRay: Ray?
+    
+    private(set) var didHit: Bool = false
+    private(set) var elementHit: AtomElement?
     
     init() {}
     
@@ -24,7 +29,10 @@ import SwiftUI
         viewSize: CGSize,
         camera: Camera,
         cameraPosition: simd_float3,
-        rotationMatrix: simd_float4x4
+        rotationMatrix: simd_float4x4,
+        modelTranslationMatrix: simd_float4x4,
+        atomRadii: AtomRadii,
+        dataSource: ProteinDataSource?
     ) {
         withAnimation {
             selectionActive = true
@@ -43,10 +51,13 @@ import SwiftUI
         let projectionMatrix = camera.projectionMatrix
         let inverseProjectionMatrix = projectionMatrix.inverse
         var eyeRay = inverseProjectionMatrix * clipSpacePoint
-        eyeRay.z = -1
+        eyeRay.z = 1
         eyeRay.w = 0
         let eyeRayOrigin = simd_float4(x: 0, y: 0, z: 0, w: 1)
-        self.lastClipSpaceRay = (eyeRayOrigin, eyeRay)
+        self.lastClipSpaceRay = Ray(
+            origin: eyeRayOrigin.xyz,
+            direction: eyeRay.xyz
+        )
         
         // Unrotated world space
         let modelViewMatrix = Transform.translationMatrix(cameraPosition)
@@ -54,13 +65,93 @@ import SwiftUI
         var unrotatedWorldRay = (viewModelMatrix * eyeRay)
         unrotatedWorldRay = normalize(unrotatedWorldRay)
         let unrotatedWorldRayOrigin = (viewModelMatrix * eyeRayOrigin)
-        self.lastUnrotatedWorldSpaceRay = (unrotatedWorldRayOrigin, unrotatedWorldRay)
+        self.lastUnrotatedWorldSpaceRay = Ray(
+            origin: unrotatedWorldRayOrigin.xyz,
+            direction: unrotatedWorldRay.xyz
+        )
         
-        // Rotated world space
-        // TODO: Actual rotation matrix (model is slightly offset)
-        let worldRayOrigin = rotationMatrix.inverse * unrotatedWorldRayOrigin
-        let worldRayDirection = rotationMatrix.inverse * unrotatedWorldRay
-        self.lastWorldSpaceRay = (worldRayOrigin.xyz, worldRayDirection.xyz)
+        // Translated and rotated world space
+        var worldRayOrigin = rotationMatrix.inverse * unrotatedWorldRayOrigin
+        var worldRayDirection = rotationMatrix.inverse * unrotatedWorldRay
+        worldRayOrigin = modelTranslationMatrix.inverse * worldRayOrigin
+        worldRayDirection = modelTranslationMatrix.inverse * worldRayDirection
+        let worldRay = Ray(
+            origin: worldRayOrigin.xyz,
+            direction: worldRayDirection.xyz
+        )
+        self.lastWorldSpaceRay = worldRay
+        
+        guard let dataSource else {
+            self.didHit = false
+            return
+        }
+        if let hitAtomIndex = hitTest(
+            worldSpaceRay: worldRay, 
+            atomRadii: atomRadii,
+            dataSource: dataSource
+        ) {
+            self.didHit = true
+            self.elementHit = dataSource.getFirstProtein()?.atomElements[hitAtomIndex]
+        } else {
+            self.didHit = false
+            self.elementHit = nil
+            // deselect()
+        }
+    }
+    
+    func hitTest(worldSpaceRay: Ray, atomRadii: AtomRadii, dataSource: ProteinDataSource) -> Int? {
+        guard let protein = dataSource.getFirstProtein() else {
+            return nil
+        }
+        
+        var minDistance: Float = .infinity
+        var atomIndex: Int?
+        for (index, atom) in protein.atoms.enumerated() {
+            guard let intersection = intersect(
+                worldSpaceRay,
+                atomCenter: atom,
+                radius: atomRadii.getRadiusOf(atomElement: protein.atomElements[index])
+            ) else {
+                continue
+            }
+            let intersectionDistance = distance(worldSpaceRay.origin, intersection.xyz)
+            if intersectionDistance < minDistance {
+                minDistance = intersectionDistance
+                atomIndex = index
+            }
+        }
+        if minDistance != .infinity, let atomIndex {
+            print("Intersection found at \(minDistance), atomIndex: \(atomIndex)")
+            return atomIndex
+        }
+        return nil
+    }
+    
+    func intersect(_ ray: Ray, atomCenter position: simd_float3, radius: Float) -> simd_float4? {
+        var t0, t1: Float
+        let radius2 = radius * radius
+        if (radius2 == 0) { return nil }
+        let L = position - ray.origin
+        let tca = simd_dot(L, ray.direction)
+        
+        let d2 = simd_dot(L, L) - tca * tca
+        if (d2 > radius2) { return nil }
+        let thc = sqrt(radius2 - d2)
+        t0 = tca - thc
+        t1 = tca + thc
+        
+        if (t0 > t1) {
+            swap(&t0, &t1)
+        }
+        
+        if t0 < 0 {
+            t0 = t1
+            if t0 < 0 {
+                return nil
+            }
+        }
+        
+        return simd_float4(ray.origin + ray.direction * t0, 1)
     }
     
     func deselect() {

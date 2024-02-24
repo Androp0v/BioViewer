@@ -87,7 +87,10 @@ class ProteinMetalViewController: UIViewController {
                 viewSize: self.view.frame.size,
                 camera: self.proteinViewModel.renderer.mutableState.getCamera(),
                 cameraPosition: self.proteinViewModel.renderer.mutableState.getCameraPosition(),
-                rotationMatrix: self.proteinViewModel.renderer.mutableState.getUserRotationMatrix()
+                rotationMatrix: self.proteinViewModel.renderer.mutableState.getUserRotationMatrix(),
+                modelTranslationMatrix: self.proteinViewModel.renderer.mutableState.getModelTranslationMatrix(),
+                atomRadii: self.proteinViewModel.renderer.mutableState.getAtomRadii(),
+                dataSource: self.proteinViewModel.dataSource
             )
         }
     }

@@ -465,6 +465,10 @@ actor MutableState {
     
     // MARK: - Scene functions
     
+    func getAtomRadii() -> AtomRadii {
+        return scene.atom_radii
+    }
+    
     func setAtomRadii(_ newRadii: AtomRadii) {
         scene.atom_radii = newRadii
     }
@@ -548,6 +552,10 @@ actor MutableState {
     
     func setUserRotationMatrix(_ matrix: simd_float4x4) {
         scene.userModelRotationMatrix = matrix
+    }
+    
+    func getModelTranslationMatrix() -> simd_float4x4 {
+        return scene.modelTranslationMatrix
     }
     
     func getCamera() -> Camera {

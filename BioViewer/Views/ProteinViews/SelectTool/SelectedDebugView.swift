@@ -36,17 +36,17 @@ import SwiftUI
     }
     
     var clipSpaceRayOriginText: String {
-        return simdFormat(selectionModel.lastClipSpaceRay?.origin.xyz)
+        return simdFormat(selectionModel.lastClipSpaceRay?.origin)
     }
     var clipSpaceRayDirectionText: String {
-        return simdFormat(selectionModel.lastClipSpaceRay?.direction.xyz)
+        return simdFormat(selectionModel.lastClipSpaceRay?.direction)
     }
     
     var unrotatedWorldSpaceRayOriginText: String {
-        return simdFormat(selectionModel.lastUnrotatedWorldSpaceRay?.origin.xyz)
+        return simdFormat(selectionModel.lastUnrotatedWorldSpaceRay?.origin)
     }
     var unrotatedWorldSpaceRayDirectionText: String {
-        return simdFormat(selectionModel.lastUnrotatedWorldSpaceRay?.direction.xyz)
+        return simdFormat(selectionModel.lastUnrotatedWorldSpaceRay?.direction)
     }
     
     var worldSpaceRayOriginText: String {
@@ -57,69 +57,92 @@ import SwiftUI
     }
     
     var body: some View {
-        VStack {
-            HStack(spacing: .zero) {
-                Text("Screen space hit point: ")
-                    .font(.caption)
-                Spacer()
-                Text(screenSpaceText)
-                    .font(.caption)
-                    .monospaced()
-            }
-            Divider()
-            HStack(spacing: .zero) {
-                Text("Clip space hit point: ")
-                    .font(.caption)
-                Spacer()
-                Text(clipSpacePointText)
-                    .font(.caption)
-                    .monospaced()
-            }
-            Divider()
-            HStack(spacing: .zero) {
-                Text("Clip space ray: ")
-                    .font(.caption)
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text(clipSpaceRayOriginText)
+        ScrollView {
+            VStack {
+                Divider()
+                HStack(spacing: .zero) {
+                    Text("Did hit?: ")
                         .font(.caption)
-                        .monospaced()
-                    Text(clipSpaceRayDirectionText)
+                    Spacer()
+                    Text(selectionModel.didHit ? "YES" : "NO")
                         .font(.caption)
                         .monospaced()
                 }
-            }
-            Divider()
-            HStack(spacing: .zero) {
-                Text("(Unrotated) world space ray: ")
-                    .font(.caption)
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text(unrotatedWorldSpaceRayOriginText)
+                Divider()
+                HStack(spacing: .zero) {
+                    Text("Element hit: ")
                         .font(.caption)
-                        .monospaced()
-                    Text(unrotatedWorldSpaceRayDirectionText)
+                    Spacer()
+                    Text(selectionModel.elementHit?.name ?? "-")
                         .font(.caption)
                         .monospaced()
                 }
-            }
-            Divider()
-            HStack(spacing: .zero) {
-                Text("World space ray: ")
-                    .font(.caption)
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text(worldSpaceRayOriginText)
+                
+                HStack(spacing: .zero) {
+                    Text("Screen space hit point: ")
                         .font(.caption)
-                        .monospaced()
-                    Text(worldSpaceRayDirectionText)
+                    Spacer()
+                    Text(screenSpaceText)
                         .font(.caption)
                         .monospaced()
                 }
+                Divider()
+                HStack(spacing: .zero) {
+                    Text("Clip space hit point: ")
+                        .font(.caption)
+                    Spacer()
+                    Text(clipSpacePointText)
+                        .font(.caption)
+                        .monospaced()
+                }
+                Divider()
+                HStack(spacing: .zero) {
+                    Text("Clip space ray: ")
+                        .font(.caption)
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        Text(clipSpaceRayOriginText)
+                            .font(.caption)
+                            .monospaced()
+                        Text(clipSpaceRayDirectionText)
+                            .font(.caption)
+                            .monospaced()
+                    }
+                }
+                Divider()
+                HStack(spacing: .zero) {
+                    Text("(Unrotated) world space ray: ")
+                        .font(.caption)
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        Text(unrotatedWorldSpaceRayOriginText)
+                            .font(.caption)
+                            .monospaced()
+                        Text(unrotatedWorldSpaceRayDirectionText)
+                            .font(.caption)
+                            .monospaced()
+                    }
+                }
+                Divider()
+                HStack(spacing: .zero) {
+                    Text("World space ray: ")
+                        .font(.caption)
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        Text(worldSpaceRayOriginText)
+                            .font(.caption)
+                            .monospaced()
+                        Text(worldSpaceRayDirectionText)
+                            .font(.caption)
+                            .monospaced()
+                    }
+                }
             }
+            .padding()
+            .frame(minHeight: 128)
         }
-        .padding()
-        .frame(minHeight: 128)
+        .contentMargins(.bottom, 8, for: .scrollIndicators)
+        .frame(maxHeight: 192)
     }
     
     // MARK: - simd_float3 format

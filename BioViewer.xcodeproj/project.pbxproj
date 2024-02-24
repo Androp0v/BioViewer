@@ -44,6 +44,7 @@
 		C488E7272B891348001E2222 /* SelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488E7262B891348001E2222 /* SelectionModel.swift */; };
 		C488E7292B8913B1001E2222 /* SelectedElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488E7282B8913B1001E2222 /* SelectedElementView.swift */; };
 		C488E72B2B891418001E2222 /* SelectedDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488E72A2B891418001E2222 /* SelectedDebugView.swift */; };
+		C488E72D2B896860001E2222 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488E72C2B896860001E2222 /* Ray.swift */; };
 		C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
 		C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
 		C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
@@ -283,6 +284,7 @@
 		C488E7262B891348001E2222 /* SelectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionModel.swift; sourceTree = "<group>"; };
 		C488E7282B8913B1001E2222 /* SelectedElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedElementView.swift; sourceTree = "<group>"; };
 		C488E72A2B891418001E2222 /* SelectedDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedDebugView.swift; sourceTree = "<group>"; };
+		C488E72C2B896860001E2222 /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
 		C495B2382663E195004995C2 /* ProteinRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderer.swift; sourceTree = "<group>"; };
 		C495B24226663CF3004995C2 /* MatrixTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixTransform.swift; sourceTree = "<group>"; };
 		C495B24426663D2C004995C2 /* SIMDExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMDExtensions.swift; sourceTree = "<group>"; };
@@ -790,6 +792,7 @@
 				C51D4EEE276D073200C69B3D /* ConfigurationSelector.swift */,
 				C5FEC7322775F93A00E348BD /* ConnectivityGenerator.swift */,
 				C46435612669313A00434CC6 /* Camera.swift */,
+				C488E72C2B896860001E2222 /* Ray.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -1443,6 +1446,7 @@
 				C57F995E275E8E31001DE6D6 /* BioViewerWorkspace.swift in Sources */,
 				C5412FEC283AB63100234403 /* ResolutionView.swift in Sources */,
 				C5E7AF9B2760FF950065F6AD /* ShadowShader.metal in Sources */,
+				C488E72D2B896860001E2222 /* Ray.swift in Sources */,
 				C55CA715297EAB8300BEDFA4 /* ProteinColorViewModel.swift in Sources */,
 				C59D6A62275D902E00CCC941 /* FileRow.swift in Sources */,
 				C5EEE9B2276F5BCD005737C1 /* PhotoModeView.swift in Sources */,

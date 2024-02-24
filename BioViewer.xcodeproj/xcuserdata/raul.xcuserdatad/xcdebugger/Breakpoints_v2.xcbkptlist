@@ -734,5 +734,133 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "63A15775-455F-4A10-BB3D-BD928C985134"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "63A15775-455F-4A10-BB3D-BD928C985134 - cb26b981fef238c2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.SelectionModel.hitTest(worldSpaceRay: BioViewer.Ray, atomRadii: __C.AtomRadii, dataSource: BioViewer.ProteinDataSource) -&gt; Swift.Optional&lt;Swift.Int&gt;"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "106"
+                  endingLineNumber = "106"
+                  offsetFromSymbolStart = "332">
+               </Location>
+               <Location
+                  uuid = "63A15775-455F-4A10-BB3D-BD928C985134 - cb26b981fef23f00"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.SelectionModel.hitTest(worldSpaceRay: BioViewer.Ray, atomRadii: __C.AtomRadii, dataSource: BioViewer.ProteinDataSource) -&gt; Swift.Optional&lt;Swift.Int&gt;"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "104"
+                  endingLineNumber = "104"
+                  offsetFromSymbolStart = "2356">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4F2FA6FB-3242-407B-B348-07571EA38DDA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4F2FA6FB-3242-407B-B348-07571EA38DDA - fef545bed5b92d5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.SelectionModel.hitTest(worldSpaceRay: BioViewer.Ray, dataSource: BioViewer.ProteinDataSource) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "1788">
+               </Location>
+               <Location
+                  uuid = "4F2FA6FB-3242-407B-B348-07571EA38DDA - fef545bed5b92d5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.SelectionModel.hitTest(worldSpaceRay: BioViewer.Ray, dataSource: BioViewer.ProteinDataSource) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "1848">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D6C9A5AB-7C0F-4E54-9294-D438A6D44E8B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "075F495C-3B47-4E6A-97D2-EC911E9D6935"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/Scene/MetalScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "260"
+            endingLineNumber = "260"
+            landmarkName = "updateModelTransform(rotationMatrix:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
