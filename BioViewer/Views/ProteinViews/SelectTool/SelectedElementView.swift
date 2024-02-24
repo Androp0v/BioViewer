@@ -7,48 +7,81 @@
 
 import SwiftUI
 
-struct SelectedElementView: View {
+@MainActor struct SelectedElementView: View {
+    
+    @Environment(SelectionModel.self) var selectionModel: SelectionModel
+    @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
+    
+    private let numberFormatter: NumberFormatter = {
+        var formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
+    
+    var elementSymbol: String {
+        selectionModel.elementHit?.name ?? "?"
+    }
+    var elementName: String {
+        selectionModel.elementHit?.longName ?? "?"
+    }
+    var elementColor: Color {
+        guard let element = selectionModel.elementHit else {
+            return .gray
+        }
+        return colorViewModel.elementColors[Int(element.rawValue)]
+    }
+    var radiusString: String {
+        guard let element = selectionModel.elementHit else {
+            return "- Å"
+        }
+        let radius = AtomRadii.vanDerWaals.getRadiusOf(atomElement: element)
+        return "\(numberFormatter.string(from: NSNumber(floatLiteral: Double(radius))) ?? "-") Å"
+    }
+    
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(alignment: .top, spacing: .zero) {
             ZStack {
                 Rectangle()
                     .frame(width: 64, height: 64)
-                    .foregroundColor(Color(uiColor: UIColor.systemBackground))
+                    .foregroundColor(elementColor)
+                    .saturation(0.8)
                 Rectangle()
                     .strokeBorder(
                         Color.primary,
                         lineWidth: 2
                     )
                     .frame(width: 64, height: 64)
-                Text("K")
+                Text(elementSymbol)
                     .font(.largeTitle)
                     .bold()
             }
-            .padding()
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text("**Atomic mass:**")
-                    Text("39.09 u")
+                    Text(elementName)
+                        .bold()
+                }
+                
+                Divider()
+                    .padding(.bottom, 4)
+                
+                HStack {
+                    Text("Radius:")
+                    Text(radiusString)
                         .font(.footnote)
                         .monospaced()
                 }
-                HStack {
-                    Text("**Radius:**")
-                    Text("1.00 Å")
-                        .font(.footnote)
-                        .monospaced()
-                }
-                HStack {
-                    Text("**Coordinates:**")
-                    Text("(-34.0, 44.2, 23.8)")
-                        .font(.footnote)
-                        .monospaced()
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Coordinates:")
+                    CoordinatesView(selectionModel.coordinatesHit)
                 }
             }
+            .padding(.leading)
             
             Spacer()
         }
+        .padding()
     }
 }
 

@@ -111,7 +111,7 @@ struct ProteinView: View {
                         VStack {
                             Spacer()
                             if selectionModel.selectionActive {
-                                SelectedAtom(element: "C", elementName: "C", radius: 1.0)
+                                SelectedAtom()
                                     .frame(alignment: .bottomLeading)
                             }
                         }

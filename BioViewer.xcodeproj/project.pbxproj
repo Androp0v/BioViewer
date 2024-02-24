@@ -17,6 +17,7 @@
 		C41A0560264ACBF0006F551C /* InfoPopoverRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */; };
 		C41A0562264C2853006F551C /* FileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0561264C2853006F551C /* FileParser.swift */; };
 		C41A0569264D5D58006F551C /* ProteinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A0568264D5D58006F551C /* ProteinViewModel.swift */; };
+		C43837D92B8A0BB8000775F4 /* CoordinatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43837D82B8A0BB8000775F4 /* CoordinatesView.swift */; };
 		C440856026470A0700DC5009 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C440855F26470A0700DC5009 /* SequenceView.swift */; };
 		C44085652647155C00DC5009 /* SequenceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085642647155C00DC5009 /* SequenceRow.swift */; };
 		C44085672647ECE500DC5009 /* ProteinSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44085662647ECE500DC5009 /* ProteinSidebar.swift */; };
@@ -250,6 +251,7 @@
 		C41A055F264ACBF0006F551C /* InfoPopoverRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopoverRow.swift; sourceTree = "<group>"; };
 		C41A0561264C2853006F551C /* FileParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FileParser.swift; path = BioViewer/Files/Import/FileParser.swift; sourceTree = SOURCE_ROOT; };
 		C41A0568264D5D58006F551C /* ProteinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinViewModel.swift; sourceTree = "<group>"; };
+		C43837D82B8A0BB8000775F4 /* CoordinatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesView.swift; sourceTree = "<group>"; };
 		C440855F26470A0700DC5009 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
 		C44085642647155C00DC5009 /* SequenceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceRow.swift; sourceTree = "<group>"; };
 		C44085662647ECE500DC5009 /* ProteinSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinSidebar.swift; sourceTree = "<group>"; };
@@ -649,6 +651,7 @@
 				C586C5ED275A3FAB00F230D3 /* UnitTextView.swift */,
 				C500EEB1272D85DE00A60317 /* CustomLinearProgressView.swift */,
 				C5433F3F2770FA9200607B20 /* LineGraphView.swift */,
+				C43837D82B8A0BB8000775F4 /* CoordinatesView.swift */,
 				C464C356265A569800E66C3E /* CoffeeViews */,
 				C5412FED283AB63600234403 /* Debug Views */,
 				C51084322AFF907900A3D388 /* BioViewerProgress */,
@@ -1536,6 +1539,7 @@
 				C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */,
 				C540EE12284B747100153200 /* ShadowDepthPrePass.swift in Sources */,
 				C5EEE9B5276F6031005737C1 /* PhotoModeContent.swift in Sources */,
+				C43837D92B8A0BB8000775F4 /* CoordinatesView.swift in Sources */,
 				C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */,
 				C5FEC739277C977A00E348BD /* CreateBondsGeometry.swift in Sources */,
 				C5EEE9BC276FB0CB005737C1 /* ToolbarConfig.swift in Sources */,

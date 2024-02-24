@@ -10,17 +10,41 @@ import Foundation
 import simd
 import SwiftUI
 
+enum SelectionOption: PickableEnum {
+    case debug
+    case element
+    case chain
+    case residue
+    
+    var displayName: String {
+        switch self {
+        case .debug:
+            return "Debug"
+        case .element:
+            return "Element"
+        case .chain:
+            return "Chain"
+        case .residue:
+            return "Residue"
+        }
+    }
+}
+
 @MainActor @Observable class SelectionModel {
     
     private(set) var selectionActive: Bool = false
+    var selectionOption: SelectionOption = .element
+    private(set) var didHit: Bool = false
+    private(set) var coordinatesHit: simd_float3?
+    private(set) var elementHit: AtomElement?
+    
+    // DEBUG:
+    
     private(set) var lastHitPointInScreenSpace: CGPoint?
     private(set) var lastHitPointInClipSpace: simd_float4?
     private(set) var lastClipSpaceRay: Ray?
     private(set) var lastUnrotatedWorldSpaceRay: Ray?
     private(set) var lastWorldSpaceRay: Ray?
-    
-    private(set) var didHit: Bool = false
-    private(set) var elementHit: AtomElement?
     
     init() {}
     
@@ -92,10 +116,10 @@ import SwiftUI
         ) {
             self.didHit = true
             self.elementHit = dataSource.getFirstProtein()?.atomElements[hitAtomIndex]
+            self.coordinatesHit = dataSource.getFirstProtein()?.atoms[hitAtomIndex]
         } else {
             self.didHit = false
-            self.elementHit = nil
-            // deselect()
+            deselect()
         }
     }
     

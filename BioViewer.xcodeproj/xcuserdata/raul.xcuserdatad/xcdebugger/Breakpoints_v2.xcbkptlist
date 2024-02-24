@@ -459,6 +459,21 @@
                   endingLineNumber = "48"
                   offsetFromSymbolStart = "3852">
                </Location>
+               <Location
+                  uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A - c19db0a0285c7274"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MutableState.fillColorPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, colorBuffer: Swift.Optional&lt;__C.MTLBuffer&gt;, colorFill: __C.FillColorInput) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "3868">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -744,13 +759,13 @@
             filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "63A15775-455F-4A10-BB3D-BD928C985134 - cb26b981fef238c2"
+                  uuid = "63A15775-455F-4A10-BB3D-BD928C985134 - cb26b981fef23bdb"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -760,12 +775,12 @@
                   urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "106"
-                  endingLineNumber = "106"
-                  offsetFromSymbolStart = "332">
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "392">
                </Location>
                <Location
-                  uuid = "63A15775-455F-4A10-BB3D-BD928C985134 - cb26b981fef23f00"
+                  uuid = "63A15775-455F-4A10-BB3D-BD928C985134 - cb26b981fef23a38"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -775,8 +790,23 @@
                   urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "104"
-                  endingLineNumber = "104"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "2200">
+               </Location>
+               <Location
+                  uuid = "63A15775-455F-4A10-BB3D-BD928C985134 - cb26b981fef23a38"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.SelectionModel.hitTest(worldSpaceRay: BioViewer.Ray, atomRadii: __C.AtomRadii, dataSource: BioViewer.ProteinDataSource) -&gt; Swift.Optional&lt;Swift.Int&gt;"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
                   offsetFromSymbolStart = "2356">
                </Location>
             </Locations>
@@ -792,8 +822,8 @@
             filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
             landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
             landmarkType = "7">
             <Locations>
@@ -840,8 +870,8 @@
             filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
             landmarkType = "7">
          </BreakpointContent>

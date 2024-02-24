@@ -7,43 +7,23 @@
 
 import SwiftUI
 
-private enum SelectionOption: PickableEnum {
-    case debug
-    case element
-    case chain
-    case residue
-    
-    var displayName: String {
-        switch self {
-        case .debug:
-            return "Debug"
-        case .element:
-            return "Element"
-        case .chain:
-            return "Chain"
-        case .residue:
-            return "Residue"
-        }
-    }
-}
-
 struct SelectedAtom: View {
     
     @Environment(SelectionModel.self) var selectionModel: SelectionModel
-
-    @State private var selectionOption: SelectionOption = .debug
-    var element: String
-    var elementName: String
-    var radius: Float
     
     var body: some View {
         VStack(spacing: 0) {
-            
+            @Bindable var bindableSelectionModel = selectionModel
             ZStack(alignment: .leading) {
                 HStack(spacing: .zero) {
                     Text(NSLocalizedString("Selecting", comment: ""))
                         .bold()
-                    BioViewerPicker(selection: $selectionOption)
+                    #if !targetEnvironment(macCatalyst)
+                    Spacer()
+                        .frame(width: 8)
+                    #endif
+                    BioViewerPicker(selection: $bindableSelectionModel.selectionOption)
+                        .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal, 24)
                 .padding(.leading, 36)
@@ -67,7 +47,7 @@ struct SelectedAtom: View {
             }
             .padding(.top, 4)
             
-            switch selectionOption {
+            switch selectionModel.selectionOption {
             case .debug:
                 SelectedDebugView()
             case .element:
@@ -91,9 +71,7 @@ struct SelectedElement_Previews: PreviewProvider {
         ZStack(alignment: .bottomLeading) {
             Color.black
                 .ignoresSafeArea()
-            SelectedAtom(element: "K",
-                         elementName: "Potassium",
-                         radius: 2.80)
+            SelectedAtom()
         }
     }
 }
