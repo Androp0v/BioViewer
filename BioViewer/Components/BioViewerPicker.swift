@@ -36,8 +36,10 @@ struct BioViewerPicker<T: PickableEnum>: View {
                     .background(Color.accentColor)
                     .foregroundColor(.white)
                     .cornerRadius(4)
+                    .fixedSize(horizontal: true, vertical: false)
             }
         }
+        .menuOrder(.fixed)
         #endif
     }
 }

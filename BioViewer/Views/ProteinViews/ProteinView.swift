@@ -124,6 +124,7 @@ struct ProteinView: View {
                             .edgesIgnoringSafeArea(.bottom)
                     }
                 }
+                .edgesIgnoringSafeArea(.bottom)
                 .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
             }
         }

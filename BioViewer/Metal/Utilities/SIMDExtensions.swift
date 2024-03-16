@@ -15,6 +15,12 @@ extension SIMD4 {
     }
 }
 
+extension simd_quatf {
+    static var identity: simd_quatf {
+        return simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
+    }
+}
+
 extension Float {
     static var randomSign: Float {
         if Bool.random() {

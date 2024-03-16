@@ -81,7 +81,10 @@ import SwiftUI
             
             Spacer()
         }
-        .padding()
+        .padding(.top, 4)
+        .padding(.horizontal)
+        .padding(.bottom)
+        .drawingGroup()
     }
 }
 

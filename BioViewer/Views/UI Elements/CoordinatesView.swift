@@ -39,9 +39,9 @@ struct CoordinatesView: View {
         HStack(spacing: 4) {
             Text("\(name)")
                 .bold()
+                .offset(x: 1.0, y: -0.5)
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
-                .foregroundStyle(.white)
                 .background {
                     UnevenRoundedRectangle(
                         cornerRadii: .init(

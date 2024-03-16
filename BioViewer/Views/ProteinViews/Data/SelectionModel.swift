@@ -11,15 +11,19 @@ import simd
 import SwiftUI
 
 enum SelectionOption: PickableEnum {
+    #if DEBUG
     case debug
+    #endif
     case element
     case chain
     case residue
     
     var displayName: String {
         switch self {
+        #if DEBUG
         case .debug:
             return "Debug"
+        #endif
         case .element:
             return "Element"
         case .chain:
@@ -37,6 +41,8 @@ enum SelectionOption: PickableEnum {
     private(set) var didHit: Bool = false
     private(set) var coordinatesHit: simd_float3?
     private(set) var elementHit: AtomElement?
+    private(set) var chainHit: ChainID?
+    private(set) var residueHit: Residue?
     
     // DEBUG:
     
@@ -53,7 +59,7 @@ enum SelectionOption: PickableEnum {
         viewSize: CGSize,
         camera: Camera,
         cameraPosition: simd_float3,
-        rotationMatrix: simd_float4x4,
+        rotationQuaternion: simd_quatf,
         modelTranslationMatrix: simd_float4x4,
         atomRadii: AtomRadii,
         dataSource: ProteinDataSource?
@@ -95,6 +101,7 @@ enum SelectionOption: PickableEnum {
         )
         
         // Translated and rotated world space
+        let rotationMatrix = Transform.rotationMatrix(quaternion: rotationQuaternion)
         var worldRayOrigin = rotationMatrix.inverse * unrotatedWorldRayOrigin
         var worldRayDirection = rotationMatrix.inverse * unrotatedWorldRay
         worldRayOrigin = modelTranslationMatrix.inverse * worldRayOrigin
@@ -114,14 +121,26 @@ enum SelectionOption: PickableEnum {
             atomRadii: atomRadii,
             dataSource: dataSource
         ) {
-            self.didHit = true
-            self.elementHit = dataSource.getFirstProtein()?.atomElements[hitAtomIndex]
-            self.coordinatesHit = dataSource.getFirstProtein()?.atoms[hitAtomIndex]
+            withAnimation {
+                self.didHit = true
+                self.elementHit = dataSource.getFirstProtein()?.atomElements[hitAtomIndex]
+                self.chainHit = dataSource.getFirstProtein()?.atomChainIDs?[hitAtomIndex]
+                self.residueHit = dataSource.getFirstProtein()?.atomResidues?[hitAtomIndex]
+                self.coordinatesHit = dataSource.getFirstProtein()?.atoms[hitAtomIndex]
+            }
         } else {
             self.didHit = false
             deselect()
         }
     }
+    
+    func deselect() {
+        withAnimation {
+            selectionActive = false
+        }
+    }
+    
+    // MARK: - Intersection test
     
     func hitTest(worldSpaceRay: Ray, atomRadii: AtomRadii, dataSource: ProteinDataSource) -> Int? {
         guard let protein = dataSource.getFirstProtein() else {
@@ -145,7 +164,6 @@ enum SelectionOption: PickableEnum {
             }
         }
         if minDistance != .infinity, let atomIndex {
-            print("Intersection found at \(minDistance), atomIndex: \(atomIndex)")
             return atomIndex
         }
         return nil
@@ -176,11 +194,5 @@ enum SelectionOption: PickableEnum {
         }
         
         return simd_float4(ray.origin + ray.direction * t0, 1)
-    }
-    
-    func deselect() {
-        withAnimation {
-            selectionActive = false
-        }
     }
 }

@@ -87,7 +87,7 @@ class ProteinMetalViewController: UIViewController {
                 viewSize: self.view.frame.size,
                 camera: self.proteinViewModel.renderer.mutableState.getCamera(),
                 cameraPosition: self.proteinViewModel.renderer.mutableState.getCameraPosition(),
-                rotationMatrix: self.proteinViewModel.renderer.mutableState.getUserRotationMatrix(),
+                rotationQuaternion: self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion(),
                 modelTranslationMatrix: self.proteinViewModel.renderer.mutableState.getModelTranslationMatrix(),
                 atomRadii: self.proteinViewModel.renderer.mutableState.getAtomRadii(),
                 dataSource: self.proteinViewModel.dataSource
@@ -119,22 +119,22 @@ class ProteinMetalViewController: UIViewController {
             switch toolbarConfig.selectedTool {
             case CameraControlTool.rotate:
                 Task {
-                    let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
-                    let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                    let rawRotationSpeed: CGPoint = gestureRecognizer.velocity(in: renderedView)
+                    guard rawRotationSpeed != .zero else { return }
+                    let rotationSpeedX = Float(rawRotationSpeed.x) / 5000
+                    let rotationSpeedY = Float(rawRotationSpeed.y) / 5000
                     
-                    var currentRotationMatrix = await self.proteinViewModel.renderer.mutableState.getUserRotationMatrix()
+                    var currentRotationQuaternion = await self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion()
                     
-                    // Revert the axis rotation before rotating through that axis
-                    currentRotationMatrix *= Transform.rotationMatrix(
-                        radians: -rotationSpeedX,
-                        axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
-                    )
-                    currentRotationMatrix *= Transform.rotationMatrix(
-                        radians: -rotationSpeedY,
-                        axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
+                    let rotationAxis = normalize(rotationSpeedX * simd_float3(0, 1, 0) + rotationSpeedY * simd_float3(1, 0, 0))
+                    let newRotationQuaternion = simd_quatf(
+                        angle: -sqrt(pow(rotationSpeedX, 2) + pow(rotationSpeedY, 2)),
+                        axis: rotationAxis
                     )
                     
-                    await self.proteinViewModel.renderer.mutableState.setUserRotationMatrix(currentRotationMatrix)
+                    await self.proteinViewModel.renderer.mutableState.setUserRotationQuaternion(
+                        newRotationQuaternion * currentRotationQuaternion
+                    )
                 }
                 
             case CameraControlTool.move:

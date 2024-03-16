@@ -12,7 +12,7 @@ struct SelectedAtom: View {
     @Environment(SelectionModel.self) var selectionModel: SelectionModel
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             @Bindable var bindableSelectionModel = selectionModel
             ZStack(alignment: .leading) {
                 HStack(spacing: .zero) {
@@ -23,7 +23,6 @@ struct SelectedAtom: View {
                         .frame(width: 8)
                     #endif
                     BioViewerPicker(selection: $bindableSelectionModel.selectionOption)
-                        .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal, 24)
                 .padding(.leading, 36)
@@ -36,7 +35,11 @@ struct SelectedAtom: View {
                         Image(systemName: "xmark")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            #if targetEnvironment(macCatalyst)
                             .frame(width: 12, height: 12)
+                            #else
+                            .frame(width: 16, height: 16)
+                            #endif
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
                             .contentShape(Rectangle())
@@ -45,17 +48,23 @@ struct SelectedAtom: View {
                 .foregroundColor(.primary)
                 .buttonStyle(PlainButtonStyle())
             }
-            .padding(.top, 4)
+            #if targetEnvironment(macCatalyst)
+            .padding(.vertical, 4)
+            #else
+            .padding(.vertical, 8)
+            #endif
             
             switch selectionModel.selectionOption {
+            #if DEBUG
             case .debug:
                 SelectedDebugView()
+            #endif
             case .element:
                 SelectedElementView()
             case .chain:
-                EmptyView()
+                SelectedChainView()
             case .residue:
-                EmptyView()
+                SelectedResidueView()
             }
         }
         .background(.thinMaterial)
