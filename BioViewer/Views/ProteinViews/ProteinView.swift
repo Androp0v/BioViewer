@@ -107,15 +107,20 @@ struct ProteinView: View {
                     }
                     .padding(.bottom, 12)
                     
-                    HStack {
-                        VStack {
-                            Spacer()
-                            if selectionModel.selectionActive {
-                                SelectedAtom()
-                                    .frame(alignment: .bottomLeading)
+                    VStack {
+                        Spacer()
+                        HStack(alignment: .bottom) {
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    if selectionModel.selectionActive {
+                                        SelectedAtom()
+                                    }
+                                    Spacer()
+                                }
                             }
                         }
-                        Spacer()
+                        .frame(maxHeight: 256)
                     }
                     
                     // Import view

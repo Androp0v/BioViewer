@@ -425,8 +425,8 @@
             filePath = "BioViewer/Metal/Functions/CreateImpostorSpheres.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "createImpostorSpheres(proteins:atomRadii:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -697,8 +697,8 @@
             filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
             landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -713,8 +713,8 @@
             filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
             landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -729,8 +729,8 @@
             filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
             landmarkType = "7">
          </BreakpointContent>

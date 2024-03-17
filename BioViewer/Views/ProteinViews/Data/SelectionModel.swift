@@ -11,19 +11,12 @@ import simd
 import SwiftUI
 
 enum SelectionOption: PickableEnum {
-    #if DEBUG
-    case debug
-    #endif
     case element
     case chain
     case residue
     
     var displayName: String {
         switch self {
-        #if DEBUG
-        case .debug:
-            return "Debug"
-        #endif
         case .element:
             return "Element"
         case .chain:

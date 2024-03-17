@@ -57,92 +57,86 @@ import SwiftUI
     }
     
     var body: some View {
-        ScrollView {
-            VStack {
-                Divider()
-                HStack(spacing: .zero) {
-                    Text("Did hit?: ")
-                        .font(.caption)
-                    Spacer()
-                    Text(selectionModel.didHit ? "YES" : "NO")
+        VStack {
+            Divider()
+            HStack(spacing: .zero) {
+                Text("Did hit?: ")
+                    .font(.caption)
+                Spacer()
+                Text(selectionModel.didHit ? "YES" : "NO")
+                    .font(.caption)
+                    .monospaced()
+            }
+            Divider()
+            HStack(spacing: .zero) {
+                Text("Element hit: ")
+                    .font(.caption)
+                Spacer()
+                Text(selectionModel.elementHit?.name ?? "-")
+                    .font(.caption)
+                    .monospaced()
+            }
+            
+            HStack(spacing: .zero) {
+                Text("Screen space hit point: ")
+                    .font(.caption)
+                Spacer()
+                Text(screenSpaceText)
+                    .font(.caption)
+                    .monospaced()
+            }
+            Divider()
+            HStack(spacing: .zero) {
+                Text("Clip space hit point: ")
+                    .font(.caption)
+                Spacer()
+                Text(clipSpacePointText)
+                    .font(.caption)
+                    .monospaced()
+            }
+            Divider()
+            HStack(spacing: .zero) {
+                Text("Clip space ray: ")
+                    .font(.caption)
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text(clipSpaceRayOriginText)
                         .font(.caption)
                         .monospaced()
-                }
-                Divider()
-                HStack(spacing: .zero) {
-                    Text("Element hit: ")
-                        .font(.caption)
-                    Spacer()
-                    Text(selectionModel.elementHit?.name ?? "-")
+                    Text(clipSpaceRayDirectionText)
                         .font(.caption)
                         .monospaced()
-                }
-                
-                HStack(spacing: .zero) {
-                    Text("Screen space hit point: ")
-                        .font(.caption)
-                    Spacer()
-                    Text(screenSpaceText)
-                        .font(.caption)
-                        .monospaced()
-                }
-                Divider()
-                HStack(spacing: .zero) {
-                    Text("Clip space hit point: ")
-                        .font(.caption)
-                    Spacer()
-                    Text(clipSpacePointText)
-                        .font(.caption)
-                        .monospaced()
-                }
-                Divider()
-                HStack(spacing: .zero) {
-                    Text("Clip space ray: ")
-                        .font(.caption)
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text(clipSpaceRayOriginText)
-                            .font(.caption)
-                            .monospaced()
-                        Text(clipSpaceRayDirectionText)
-                            .font(.caption)
-                            .monospaced()
-                    }
-                }
-                Divider()
-                HStack(spacing: .zero) {
-                    Text("(Unrotated) world space ray: ")
-                        .font(.caption)
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text(unrotatedWorldSpaceRayOriginText)
-                            .font(.caption)
-                            .monospaced()
-                        Text(unrotatedWorldSpaceRayDirectionText)
-                            .font(.caption)
-                            .monospaced()
-                    }
-                }
-                Divider()
-                HStack(spacing: .zero) {
-                    Text("World space ray: ")
-                        .font(.caption)
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text(worldSpaceRayOriginText)
-                            .font(.caption)
-                            .monospaced()
-                        Text(worldSpaceRayDirectionText)
-                            .font(.caption)
-                            .monospaced()
-                    }
                 }
             }
-            .padding()
-            .frame(minHeight: 128)
+            Divider()
+            HStack(spacing: .zero) {
+                Text("(Unrotated) world space ray: ")
+                    .font(.caption)
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text(unrotatedWorldSpaceRayOriginText)
+                        .font(.caption)
+                        .monospaced()
+                    Text(unrotatedWorldSpaceRayDirectionText)
+                        .font(.caption)
+                        .monospaced()
+                }
+            }
+            Divider()
+            HStack(spacing: .zero) {
+                Text("World space ray: ")
+                    .font(.caption)
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text(worldSpaceRayOriginText)
+                        .font(.caption)
+                        .monospaced()
+                    Text(worldSpaceRayDirectionText)
+                        .font(.caption)
+                        .monospaced()
+                }
+            }
         }
-        .contentMargins(.bottom, 8, for: .scrollIndicators)
-        .frame(maxHeight: 192)
     }
     
     // MARK: - simd_float3 format

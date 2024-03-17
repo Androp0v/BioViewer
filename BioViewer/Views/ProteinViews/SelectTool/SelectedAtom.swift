@@ -54,17 +54,18 @@ struct SelectedAtom: View {
             .padding(.vertical, 8)
             #endif
             
-            switch selectionModel.selectionOption {
-            #if DEBUG
-            case .debug:
-                SelectedDebugView()
-            #endif
-            case .element:
-                SelectedElementView()
-            case .chain:
-                SelectedChainView()
-            case .residue:
-                SelectedResidueView()
+            Divider()
+            
+            ViewThatFits(in: .vertical) {
+
+                SelectedAtomContentView()
+                    .padding(.top, 8)
+                    
+                ScrollView {
+                    SelectedAtomContentView()
+                        .padding(.top, 8)
+                }
+                .contentMargins(.bottom, 8, for: .scrollIndicators)
             }
         }
         .background(.thinMaterial)
