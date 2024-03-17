@@ -23,8 +23,8 @@ enum Transform {
     }
     
     // A 4x4 rotation matrix from a quaternion.
-    static func rotationMatrix(quaternion q: simd_quatf) -> simd_float4x4 {
-        let q = q.vector
+    static func rotationMatrix(quaternion q: simd_quatd) -> simd_float4x4 {
+        let q = simd_float4(q.vector)
         let xx = q.x * q.x;
         let xy = q.x * q.y;
         let xz = q.x * q.z;

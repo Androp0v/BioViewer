@@ -15,9 +15,9 @@ extension SIMD4 {
     }
 }
 
-extension simd_quatf {
-    static var identity: simd_quatf {
-        return simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
+extension simd_quatd {
+    static var identity: simd_quatd {
+        return simd_quatd(ix: 0, iy: 0, iz: 0, r: 1)
     }
 }
 

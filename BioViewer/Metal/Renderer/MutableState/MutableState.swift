@@ -546,11 +546,11 @@ actor MutableState {
         scene.resetCamera()
     }
     
-    func getUserRotationQuaternion() -> simd_quatf {
+    func getUserRotationQuaternion() -> simd_quatd {
         return scene.userRotationQuaternion
     }
     
-    func setUserRotationQuaternion(_ quaternion: simd_quatf) {
+    func setUserRotationQuaternion(_ quaternion: simd_quatd) {
         scene.userRotationQuaternion = quaternion
     }
     

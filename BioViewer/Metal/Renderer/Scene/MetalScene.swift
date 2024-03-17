@@ -64,7 +64,7 @@ class MetalScene {
     /// coordinates) before rotation.
     var modelTranslationMatrix: simd_float4x4 { didSet { needsRedraw = true } }
     /// Rotation of the model applied by the user.
-    var userRotationQuaternion: simd_quatf { didSet { needsRedraw = true } }
+    var userRotationQuaternion: simd_quatd { didSet { needsRedraw = true } }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on.
     var aspectRatio: Float { didSet { needsRedraw = true } }
     /// Subscriber to camera changes.
@@ -199,9 +199,9 @@ class MetalScene {
         
         // Update rotation matrices
         if autorotating {
-            let autorotationQuaternion = simd_quatf(
+            let autorotationQuaternion = simd_quatd(
                 angle: -0.001,
-                axis: simd_float3(0, 1, 0)
+                axis: simd_double3(0, 1, 0)
             )
             self.userRotationQuaternion = autorotationQuaternion * self.userRotationQuaternion
         }
@@ -241,7 +241,7 @@ class MetalScene {
     ///
     /// The model is still in world coordinates: it's just translated so its bounding volume is centered at
     /// `(0,0,0)` and rotated (users can rotate the model).
-    private func updateModelTransform(rotationQuaternion: simd_quatf) {
+    private func updateModelTransform(rotationQuaternion: simd_quatd) {
         
         // Add some random rotation of shadowMap around its center axis to cause
         // aliasing artifacts to change from frame to frame.

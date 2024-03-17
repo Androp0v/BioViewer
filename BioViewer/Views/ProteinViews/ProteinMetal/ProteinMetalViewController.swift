@@ -121,13 +121,13 @@ class ProteinMetalViewController: UIViewController {
                 Task {
                     let rawRotationSpeed: CGPoint = gestureRecognizer.velocity(in: renderedView)
                     guard rawRotationSpeed != .zero else { return }
-                    let rotationSpeedX = Float(rawRotationSpeed.x) / 5000
-                    let rotationSpeedY = Float(rawRotationSpeed.y) / 5000
+                    let rotationSpeedX = rawRotationSpeed.x / 10000
+                    let rotationSpeedY = rawRotationSpeed.y / 10000
                     
-                    var currentRotationQuaternion = await self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion()
+                    let currentRotationQuaternion = await self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion()
                     
-                    let rotationAxis = normalize(rotationSpeedX * simd_float3(0, 1, 0) + rotationSpeedY * simd_float3(1, 0, 0))
-                    let newRotationQuaternion = simd_quatf(
+                    let rotationAxis = normalize(rotationSpeedX * simd_double3(0, 1, 0) + rotationSpeedY * simd_double3(1, 0, 0))
+                    let newRotationQuaternion = simd_quatd(
                         angle: -sqrt(pow(rotationSpeedX, 2) + pow(rotationSpeedY, 2)),
                         axis: rotationAxis
                     )

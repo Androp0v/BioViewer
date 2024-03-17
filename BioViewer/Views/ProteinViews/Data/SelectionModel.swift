@@ -59,7 +59,7 @@ enum SelectionOption: PickableEnum {
         viewSize: CGSize,
         camera: Camera,
         cameraPosition: simd_float3,
-        rotationQuaternion: simd_quatf,
+        rotationQuaternion: simd_quatd,
         modelTranslationMatrix: simd_float4x4,
         atomRadii: AtomRadii,
         dataSource: ProteinDataSource?
