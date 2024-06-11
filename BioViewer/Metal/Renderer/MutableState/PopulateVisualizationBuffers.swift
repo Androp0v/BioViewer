@@ -10,6 +10,19 @@ import Foundation
 
 extension MutableState {
     
+    func animatedFileDeletion(colorBy: ProteinColorByOption, proteins: [Protein]) async {
+        guard let animator = scene.animator else {
+            return
+        }
+        animator.animateRadiiChange(
+            finalRadii: .zero,
+            duration: 0.35,
+            colorBy: colorBy,
+            proteins: proteins
+        )
+        try? await Task.sleep(for: .seconds(0.5))
+    }
+    
     func populateVisualizationBuffers(
         visualization: ProteinVisualizationOption,
         dataSource: ProteinDataSource,

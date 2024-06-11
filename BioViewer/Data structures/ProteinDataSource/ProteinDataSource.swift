@@ -120,6 +120,12 @@ import SwiftUI
     
     /// Removes all files from the data source and the scene.
     func removeAllFilesFromDatasource() async {
+        if let proteins = modelsForFile(file: getFirstFile()), let colorBy = proteinViewModel?.colorViewModel?.colorBy {
+            await proteinViewModel?.renderer.mutableState.animatedFileDeletion(
+                colorBy: colorBy,
+                proteins: proteins
+            )
+        }
         files = []
         selectedModel = []
         selectedModelIndexForFile = [:]
