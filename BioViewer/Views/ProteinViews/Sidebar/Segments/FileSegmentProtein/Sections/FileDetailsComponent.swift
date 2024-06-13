@@ -33,11 +33,11 @@ struct FileDetailsComponent: View {
                         .padding(.horizontal, 4)
                         .background {
                             RoundedRectangle(cornerRadius: 6)
-                                .foregroundColor(Color(uiColor: .systemFill))
+                                .foregroundColor(.systemFill)
                         }
                         .padding(.trailing, 4)
                 }
-                .background(Color(uiColor: .tertiarySystemFill))
+                .background(Color.tertiarySystemFill)
             }
             
             Divider()
@@ -64,7 +64,7 @@ struct FileDetailsComponent: View {
         }
         .background {
             RoundedRectangle(cornerRadius: 8)
-                .foregroundColor(Color(uiColor: .secondarySystemFill))
+                .foregroundColor(.secondarySystemFill)
         }
         .mask(RoundedRectangle(cornerRadius: 8))
         

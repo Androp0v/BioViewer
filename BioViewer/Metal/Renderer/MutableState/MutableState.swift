@@ -268,10 +268,10 @@ actor MutableState {
     }
     #endif
     
-    func populateImpostorSphereBuffers(proteins: [Protein], configuration: VisualizationConfiguration) {
+    func populateImpostorSphereBuffers(proteins: [Protein], configuration: VisualizationConfiguration) async {
         
         // Generate a billboard quad for each atom in the protein
-        guard let generatedImpostorData = createImpostorSpheres(
+        guard let generatedImpostorData = await createImpostorSpheres(
             proteins: proteins,
             atomRadii: configuration.atomRadii
         ) else { return }
@@ -297,9 +297,9 @@ actor MutableState {
         )
     }
     
-    func populateBondBuffers(bondData: [BondStruct]) {
+    func populateBondBuffers(bondData: [BondStruct]) async {
         // Create bond buffers for the structure
-        guard let bondBuffers = createBondsGeometry(bondData: bondData) else {
+        guard let bondBuffers = await createBondsGeometry(bondData: bondData) else {
             return
         }
         
@@ -579,7 +579,7 @@ actor MutableState {
         )
     }
     
-    func updateBonds(bondData: [BondStruct], bondsPerConfiguration: [Int], bondsConfigurationArrayStart: [Int]) {
+    func updateBonds(bondData: [BondStruct], bondsPerConfiguration: [Int], bondsConfigurationArrayStart: [Int]) async {
         
         guard let configurationSelector = scene.configurationSelector else {
             return
@@ -587,7 +587,7 @@ actor MutableState {
 
         // Avoid trying to create a buffer with 0 length if no bonds are found (causes a crash)
         if !bondData.isEmpty {
-            populateBondBuffers(bondData: bondData)
+            await populateBondBuffers(bondData: bondData)
         }
 
         configurationSelector.addBonds(

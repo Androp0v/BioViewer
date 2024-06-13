@@ -10,10 +10,12 @@ import SwiftUI
 struct SequenceView: View {
 
     init() {
+        #if os(iOS)
         Task { @MainActor in
             UITableViewCell.appearance().backgroundColor = .secondarySystemBackground
             UITableView.appearance().backgroundColor = .secondarySystemBackground
         }
+        #endif
     }
 
     var body: some View {
@@ -22,7 +24,7 @@ struct SequenceView: View {
                 // Future toolbar items will be here
                 Rectangle()
                     .frame(height: 8)
-                    .foregroundColor(Color(UIColor.systemBackground))
+                    .foregroundColor(.systemBackground)
                 // Main sequences view
                 VStack {
 
@@ -32,27 +34,27 @@ struct SequenceView: View {
                                 SequenceRow()
                                 Rectangle()
                                     .frame(height: 1)
-                                    .foregroundColor(Color(UIColor.separator))
+                                    .foregroundColor(.separator)
                                     .padding(.leading, 24)
                                 SequenceRow()
                                 Rectangle()
                                     .frame(height: 1)
-                                    .foregroundColor(Color(UIColor.separator))
+                                    .foregroundColor(.separator)
                                     .padding(.leading, 24)
                                 SequenceRow()
                                 Rectangle()
                                     .frame(height: 1)
-                                    .foregroundColor(Color(UIColor.separator))
+                                    .foregroundColor(.separator)
                                     .padding(.leading, 24)
                                 SequenceRow()
                                 Rectangle()
                                     .frame(height: 1)
-                                    .foregroundColor(Color(UIColor.separator))
+                                    .foregroundColor(.separator)
                                     .padding(.leading, 24)
                                 SequenceRow()
                                 Rectangle()
                                     .frame(height: 1)
-                                    .foregroundColor(Color(UIColor.separator))
+                                    .foregroundColor(.separator)
                                     .padding(.leading, 24)
                             }
                             .padding(.top, 8)
@@ -60,9 +62,10 @@ struct SequenceView: View {
                     }
 
                 }
-                .background(Color(UIColor.secondarySystemBackground))
+                .background(Color.systemBackground)
                 .edgesIgnoringSafeArea([.top, .bottom])
                 .navigationTitle("")
+                #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     // Button to open right panel
@@ -94,6 +97,7 @@ struct SequenceView: View {
                                    alignment: .center)
                     }
                 }
+                #endif
             }
         }
         .background(Color.green)

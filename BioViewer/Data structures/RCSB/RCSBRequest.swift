@@ -278,10 +278,18 @@ class RCSBFetch {
             throw RCSBError.unknown
         }
         
+        #if os(iOS)
         guard let uiImage = UIImage(data: data) else {
             throw RCSBError.badImageData
         }
         
         return Image(uiImage: uiImage)
+        #elseif os(macOS)
+        guard let uiImage = NSImage(data: data) else {
+            throw RCSBError.badImageData
+        }
+        
+        return Image(nsImage: uiImage)
+        #endif
     }
 }

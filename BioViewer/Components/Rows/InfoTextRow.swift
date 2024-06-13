@@ -15,7 +15,7 @@ struct InfoTextRow: View {
         HStack(spacing: 4) {
             Text(text)
             Text(value ?? "-")
-                .foregroundColor(Color(uiColor: .secondaryLabel))
+                .foregroundColor(.secondaryLabel)
         }
     }
 }

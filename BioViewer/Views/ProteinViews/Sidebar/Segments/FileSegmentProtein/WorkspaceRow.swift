@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(iOS)
 struct WorkspaceRow: View {
     
     @State var showWorkspaceHelp: Bool = false
@@ -62,3 +63,4 @@ struct WorkspaceRow_Previews: PreviewProvider {
         .frame(width: 300)
     }
 }
+#endif

@@ -77,7 +77,7 @@ struct FileCompositionView: View {
                         HStack {
                             Circle()
                                 .stroke(
-                                    Color(uiColor: .separator),
+                                    Color.separator,
                                     style: StrokeStyle(lineWidth: 1)
                                 )
                                 .background {

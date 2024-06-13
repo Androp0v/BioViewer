@@ -47,14 +47,28 @@ struct PhotoModeViewfinder: View {
             // MARK: - Photo/mirror
             if shutterAnimator.image != nil && shutterAnimator.showImage {
                 ZStack {
-                    Color(uiColor: .systemBackground)
+                    Color.systemBackground
                     shutterAnimator.image?
                         .resizable()
                         .onDrag {
                             guard let cgImage = shutterAnimator.cgImage else { return NSItemProvider() }
+                            #if os(iOS)
                             let data = UIImage(cgImage: cgImage).pngData()
-                            let provider = NSItemProvider(item: data as NSSecureCoding?,
-                                                          typeIdentifier: "public.png")
+                            let provider = NSItemProvider(
+                                item: data as NSSecureCoding?,
+                                typeIdentifier: "public.png"
+                            )
+                            #elseif os(macOS)
+                            // FIXME: Export in PNG
+                            let data = NSImage(
+                                cgImage: cgImage,
+                                size: CGSize(width: cgImage.width, height: cgImage.height)
+                            ).tiffRepresentation
+                            let provider = NSItemProvider(
+                                item: data as NSSecureCoding?,
+                                typeIdentifier: "public.tiff"
+                            )
+                            #endif
                             provider.previewImageHandler = { (handler, _, _) -> Void in
                                 handler?(data as NSSecureCoding?, nil)
                             }
@@ -67,12 +81,16 @@ struct PhotoModeViewfinder: View {
             
             // MARK: - Container
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(uiColor: .separator),
-                        style: StrokeStyle(lineWidth: 2))
-                .shadow(color: .black.opacity(0.25),
-                        radius: 8,
-                        x: 0,
-                        y: 0)
+                .stroke(
+                    Color.separator,
+                    style: StrokeStyle(lineWidth: 2)
+                )
+                .shadow(
+                    color: .black.opacity(0.25),
+                    radius: 8,
+                    x: 0,
+                    y: 0
+                )
                 .zIndex(5.0)
         }
         .cornerRadius(12)

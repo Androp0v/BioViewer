@@ -8,33 +8,35 @@
 import Foundation
 import os
 
-class BioViewerLogger {
+final class BioViewerLogger: Sendable {
 
-    static let shared = BioViewerLogger()
+    // MARK: - Properties
     
-    private var rendererLogger = Logger(
+    private let rendererLogger = Logger(
         subsystem: "BioViewer",
         category: "ProteinRenderer"
     )
-    private var computeSurfaceUtilityLogger = Logger(
+    private let computeSurfaceUtilityLogger = Logger(
         subsystem: "BioViewer",
         category: "ComputeSurfaceUtility"
     )
     
-    private init() {
-        
-    }
+    // MARK: - Init
+    
+    private init() {}
+    
+    static let shared = BioViewerLogger()
     
     // MARK: - Functions
+    
     func log(type: LogType, category: LogCategory, message: String) {
         
         #if DEBUG
-        var logger: Logger
-        switch category {
+        let logger = switch category {
         case .computeSurfaceUtility:
-            logger = computeSurfaceUtilityLogger
+            computeSurfaceUtilityLogger
         case .proteinRenderer:
-            logger = rendererLogger
+            rendererLogger
         }
         
         switch type {

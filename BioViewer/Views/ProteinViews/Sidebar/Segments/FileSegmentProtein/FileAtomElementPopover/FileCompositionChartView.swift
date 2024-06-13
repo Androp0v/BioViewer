@@ -42,9 +42,11 @@ struct FileCompositionChartView: View {
             let startValue = currentCount
             let endValue = currentCount + segment.count
             if startValue <= value && endValue >= value {
+                #if os(iOS)
                 let hapticFeedback = UIImpactFeedbackGenerator(style: .light)
                 hapticFeedback.prepare()
                 hapticFeedback.impactOccurred()
+                #endif
                 selectedSegmentID = segment.id
                 return
             }

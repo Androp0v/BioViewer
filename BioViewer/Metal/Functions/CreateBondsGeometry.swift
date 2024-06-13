@@ -7,7 +7,7 @@
 
 import BioViewerFoundation
 import Foundation
-import Metal
+@preconcurrency import Metal
 
 struct CreateBondsOutput {
     let vertexBuffer: MTLBuffer
@@ -20,7 +20,7 @@ extension MutableState {
     /// - Parameter protein: The protein to be visualized.
     /// - Returns: ```MTLBuffer``` containing the positions of each vertex and ```MTLBuffer```
     /// specifying how the triangles are constructed.
-    public func createBondsGeometry(bondData: [BondStruct]) -> CreateBondsOutput? {
+    public func createBondsGeometry(bondData: [BondStruct]) async -> CreateBondsOutput? {
 
         let impostorVertexCount = 8
         let impostorTriangleCount = 8
@@ -53,15 +53,15 @@ extension MutableState {
         guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return nil }
 
         // Check if the function needs to be compiled
-        if MetalScheduler.shared.createBondsBundle.requiresBuilding(newFunctionParameters: nil) {
-            MetalScheduler.shared.createBondsBundle.createPipelineState(
+        if await MetalScheduler.shared.createBondsBundle.requiresBuilding(newFunctionParameters: nil) {
+            await MetalScheduler.shared.createBondsBundle.createPipelineState(
                 functionName: "create_impostor_bonds",
                 library: MetalScheduler.shared.library,
                 device: self.device,
                 constantValues: nil
             )
         }
-        guard let pipelineState = MetalScheduler.shared.createBondsBundle.getPipelineState(functionParameters: nil) else {
+        guard let pipelineState = await MetalScheduler.shared.createBondsBundle.getPipelineState(functionParameters: nil) else {
             return nil
         }
 

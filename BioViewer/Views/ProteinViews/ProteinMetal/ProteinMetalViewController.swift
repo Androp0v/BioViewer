@@ -5,12 +5,17 @@
 //  Created by Raúl Montón Pinillos on 30/5/21.
 //
 
-import UIKit
 import Metal
 import MetalKit
 import simd
 
-class ProteinMetalViewController: UIViewController {
+#if os(iOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
+
+class ProteinMetalViewController: PlatformViewController {
 
     var device: MTLDevice!
     
@@ -60,6 +65,7 @@ class ProteinMetalViewController: UIViewController {
         }*/
 
         // Add gesture recognition
+        #if os(iOS)
         renderedView.isUserInteractionEnabled = true
         
         // MARK: - Gesture recognizers
@@ -69,11 +75,12 @@ class ProteinMetalViewController: UIViewController {
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
         renderedView.addGestureRecognizer(panGesture)
-
+        #endif
     }
 
     // MARK: - Private functions
-
+    
+    #if os(iOS)
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             Task {
@@ -141,5 +148,5 @@ class ProteinMetalViewController: UIViewController {
             }
         }
     }
-
+    #endif
 }

@@ -28,6 +28,7 @@ struct PhotoModeView: View {
                 }
             }
             .navigationTitle(NSLocalizedString("Photo Mode", comment: ""))
+            #if os(iOS)
             .navigationBarItems(leading:
                 Button(
                     action: {
@@ -39,6 +40,7 @@ struct PhotoModeView: View {
                 )
                 .disabled(photoModeViewModel.shutterAnimator.shutterAnimationRunning)
             )
+            #endif
         }
     }
 }

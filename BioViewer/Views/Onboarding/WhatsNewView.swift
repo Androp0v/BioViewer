@@ -51,7 +51,9 @@ struct WhatsNewView: View {
                 .background(.regularMaterial)
             }
         }
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.large)
+        #endif
     }
 }
 

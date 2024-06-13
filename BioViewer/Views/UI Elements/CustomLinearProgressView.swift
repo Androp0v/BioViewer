@@ -16,7 +16,7 @@ struct CustomLinearProgressView: View {
         if let value = value {
             GeometryReader { geometry in
                 ZStack {
-                    Color(uiColor: UIColor.secondarySystemBackground)
+                    Color.secondarySystemBackground
                     HStack {
                         Color.accentColor
                             .frame(width: geometry.size.width * CGFloat(value) / CGFloat(total))

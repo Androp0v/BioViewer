@@ -20,6 +20,7 @@ struct PeriodicTableView: View {
                     Spacer()
                 }
                 .navigationTitle("Elements")
+                #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(
                     leading: Button(
@@ -31,6 +32,7 @@ struct PeriodicTableView: View {
                         }
                     )
                 )
+                #endif
             }
         } else {
             EmptyView()

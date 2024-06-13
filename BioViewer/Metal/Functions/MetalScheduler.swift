@@ -9,7 +9,7 @@ import Foundation
 import Metal
 import simd
 
-class MetalScheduler {
+actor MetalScheduler {
 
     // MARK: - Properties
 

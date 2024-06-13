@@ -12,7 +12,7 @@ import MetalFX
 #endif
 import SwiftUI
 
-class AppState: ObservableObject {
+actor AppState: ObservableObject {
 
     static let shared = AppState()
     
@@ -117,4 +117,8 @@ class AppState: ObservableObject {
     
     /// Workaround around @FocusedValue bugs
     @Published var focusedViewModel: ProteinViewModel?
+    
+    func setFocusedViewModel(to model: ProteinViewModel?) {
+        self.focusedViewModel = model
+    }
 }

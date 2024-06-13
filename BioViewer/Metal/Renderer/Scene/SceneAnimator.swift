@@ -35,19 +35,21 @@ struct ColorAnimation: RunningAnimation {
     let duration: Double
 }
 
-class SceneAnimator {
+final class SceneAnimator {
     
     weak var scene: MetalScene?
     weak var mutableState: MutableState?
     
-    var displayLink: CADisplayLink?
+    var displayLink: PlatformDisplayLink?
     var radiiAnimation: RadiiAnimation?
     var colorAnimation: ColorAnimation?
     var isBusy: Bool = false
     
     init(scene: MetalScene) {
         self.scene = scene
-        self.displayLink = CADisplayLink(target: self, selector: #selector(updateAllAnimations))
+        self.displayLink = PlatformDisplayLink {
+            self.updateAllAnimations()
+        }
         displayLink?.add(to: .main, forMode: .default)
     }
     

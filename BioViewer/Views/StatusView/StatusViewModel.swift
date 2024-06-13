@@ -40,20 +40,24 @@ import SwiftUI
     
     // MARK: - Internal properties
     // Internal variables that do not instantly trigger a UI redraw
-    private var displayLink: CADisplayLink?
+    private var displayLink: PlatformDisplayLink?
     private var internalRunningActions = [StatusAction]()
     private var internalFailedActions = [StatusAction]()
     
     // MARK: - Init
     
     init() {
-        let displayLink = CADisplayLink(target: self, selector: #selector(self.syncInternalAndUIStates))
+        let displayLink = PlatformDisplayLink {
+            MainActor.assumeIsolated {
+                self.syncInternalAndUIStates()
+            }
+        }
         displayLink.add(to: .main, forMode: .default)
         self.displayLink = displayLink
     }
     
     // MARK: - Functions
-    @objc private func syncInternalAndUIStates() {
+    private func syncInternalAndUIStates() {
         withAnimation {
             runningActions = internalRunningActions
             failedActions = internalFailedActions

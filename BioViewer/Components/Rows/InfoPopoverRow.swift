@@ -26,20 +26,22 @@ struct InfoPopoverRow<Content: View>: View {
         HStack(spacing: 4) {
             Text(label)
             Text(value)
-                .foregroundColor(Color(uiColor: .secondaryLabel))
+                .foregroundColor(.secondaryLabel)
             Spacer()
-            Button(action: {
-                buttonToggle.toggle()
-            },
-                   label: {
-                Image(systemName: "info.circle")
-            })
-                .foregroundColor(Color.accentColor)
-                .buttonStyle(PlainButtonStyle())
-                .disabled(isDisabled)
-                .popover(isPresented: $buttonToggle) {
-                    popoverView
+            Button(
+                action: {
+                    buttonToggle.toggle()
+                },
+                label: {
+                    Image(systemName: "info.circle")
                 }
+            )
+            .foregroundColor(.secondaryLabel)
+            .buttonStyle(PlainButtonStyle())
+            .disabled(isDisabled)
+            .popover(isPresented: $buttonToggle) {
+                popoverView
+            }
         }
     }
 }

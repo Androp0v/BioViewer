@@ -6,27 +6,46 @@
 //
 
 import Foundation
-import UIKit
 
-class ProteinRenderedView: UIView {
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
+
+final class ProteinRenderedView: PlatformView, CALayerDelegate {
     
     let renderer: ProteinRenderer
     var metalLayer: CAMetalLayer?
-    var displayLink: CADisplayLink?
+    var displayLink: PlatformDisplayLink?
     
     init(renderer: ProteinRenderer, frame: CGRect) {
         self.renderer = renderer
         super.init(frame: frame)
+        
+        #if os(macOS)
+        self.wantsLayer = true
+        self.metalLayer = CAMetalLayer()
+        self.layer = metalLayer
+        self.layer?.delegate = self
+        #endif
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    #if os(iOS)
     override final class var layerClass: AnyClass {
         return CAMetalLayer.self
     }
+    #elseif os(macOS)
+    override func makeBackingLayer() -> CALayer {
+        return CAMetalLayer()
+    }
+    #endif
     
+    #if os(iOS)
     // Called when view size changes. Update drawables and textures
     // accordingly.
     override func layoutSubviews() {
@@ -51,12 +70,39 @@ class ProteinRenderedView: UIView {
         self.metalLayer = metalLayer
         renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
     }
+    #elseif os(macOS)
+    // Called when view size changes. Update drawables and textures
+    // accordingly.
+    override func layout() {
+        var displayScale: CGFloat
+        if let screen = window?.screen {
+            displayScale = screen.backingScaleFactor
+        } else {
+            displayScale = 1.0
+            BioViewerLogger.shared.log(
+                type: .warning,
+                category: .proteinRenderer,
+                message: "ProteinRenderedView failed to get display scale."
+            )
+        }
+        let size = CGSize(
+            width: frame.width * displayScale,
+            height: frame.height * displayScale
+        )
+        guard let metalLayer = self.layer as? CAMetalLayer else {
+            return
+        }
+        self.metalLayer = metalLayer
+        renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
+    }
+    #endif
     
+    #if os(iOS)
     override func didMoveToWindow() {
         
         guard let renderThread = renderer.renderThread else { return }
         
-        // Remove CADisplayLink if there was one already running
+        // Remove PlatformDisplayLink if there was one already running
         if displayLink != nil {
             perform(
                 #selector(removeDisplayLink),
@@ -66,9 +112,11 @@ class ProteinRenderedView: UIView {
             )
         }
         
-        displayLink = CADisplayLink(target: self, selector: #selector(render))
+        displayLink = PlatformDisplayLink {
+            self.render()
+        }
         
-        // Receive CADisplayLink calls on a custom non-main thread
+        // Receive PlatformDisplayLink calls on a custom non-main thread
         perform(
             #selector(addDisplayLink),
             on: renderThread,
@@ -83,6 +131,40 @@ class ProteinRenderedView: UIView {
         metalLayer.device = renderer.device
         metalLayer.framebufferOnly = false
     }
+    #elseif os(macOS)
+    override func viewDidMoveToWindow() {
+        guard let renderThread = renderer.renderThread else { return }
+        
+        // Remove PlatformDisplayLink if there was one already running
+        if displayLink != nil {
+            perform(
+                #selector(removeDisplayLink),
+                on: renderThread,
+                with: nil,
+                waitUntilDone: false
+            )
+        }
+        
+        displayLink = PlatformDisplayLink(in: self.window?.screen) {
+            self.render()
+        }
+        
+        // Receive PlatformDisplayLink calls on a custom non-main thread
+        perform(
+            #selector(addDisplayLink),
+            on: renderThread,
+            with: nil,
+            waitUntilDone: false
+        )
+        
+        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 120, preferred: 120)
+        guard let metalLayer = self.layer as? CAMetalLayer else {
+            return
+        }
+        metalLayer.device = renderer.device
+        metalLayer.framebufferOnly = false
+    }
+    #endif
     
     @objc func removeDisplayLink() {
         displayLink?.remove(from: .current, forMode: .default)
@@ -92,7 +174,7 @@ class ProteinRenderedView: UIView {
         displayLink?.add(to: .current, forMode: .default)
     }
     
-    @objc func render() {
+    nonisolated func render() {
         guard let metalLayer else {
             return
         }

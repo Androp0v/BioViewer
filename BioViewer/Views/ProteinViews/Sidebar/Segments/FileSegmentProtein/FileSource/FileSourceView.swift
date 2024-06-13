@@ -30,6 +30,7 @@ struct FileSourceView: View {
                 }
                 .listStyle(PlainListStyle())
                 .navigationTitle(NSLocalizedString("Source file", comment: ""))
+                #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading:
                     Button(action: {
@@ -38,8 +39,10 @@ struct FileSourceView: View {
                         Text(NSLocalizedString("Close", comment: ""))
                     })
                 )
+                #endif
             } else {
                 Text(NSLocalizedString("Source text not available", comment: ""))
+                    #if os(iOS)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarItems(leading:
                         Button(action: {
@@ -48,6 +51,7 @@ struct FileSourceView: View {
                             Text(NSLocalizedString("Close", comment: ""))
                         })
                     )
+                    #endif
             }
         }
         .environment(\.defaultMinListHeaderHeight, 0)

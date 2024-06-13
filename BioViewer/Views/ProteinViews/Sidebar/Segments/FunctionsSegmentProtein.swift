@@ -28,7 +28,9 @@ struct FunctionsSegmentProtein: View {
             
         }
         .environment(\.defaultMinListHeaderHeight, 0)
+        #if os(iOS)
         .listStyle(GroupedListStyle())
+        #endif
     }
 }
 

@@ -42,7 +42,7 @@ struct SelectedAtom: View {
                 ZStack {
                     Rectangle()
                         .frame(width: 64, height: 64)
-                        .foregroundColor(Color(uiColor: UIColor.systemBackground))
+                        .foregroundColor(.systemBackground)
                     Rectangle()
                         .strokeBorder(Color.black, lineWidth: 2)
                         .frame(width: 64, height: 64)

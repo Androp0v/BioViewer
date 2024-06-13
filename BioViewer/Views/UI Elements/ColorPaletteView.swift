@@ -31,10 +31,15 @@ struct ColorPaletteView: View {
         .mask(RoundedRectangle(cornerRadius: 4)
                 .padding(4))
         .background(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(uiColor: .separator),
-                            style: StrokeStyle(lineWidth: 1))
-                    .background(RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(uiColor: .tertiarySystemFill))))
+                    .stroke(
+                        Color.separator,
+                        style: StrokeStyle(lineWidth: 1)
+                    )
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.tertiarySystemFill)
+                    )
+        )
     }
 }
 

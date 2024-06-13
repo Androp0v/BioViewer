@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import Metal
+@preconcurrency import Metal
 
-class PipelineStateBundle {
+final class PipelineStateBundle {
 
     // MARK: - Properties
 
@@ -60,7 +60,12 @@ class PipelineStateBundle {
         }
     }
 
-    func createPipelineState(functionName: String, library: MTLLibrary?, device: MTLDevice, constantValues: MTLFunctionConstantValues? = nil) {
+    func createPipelineState(
+        functionName: String,
+        library: MTLLibrary?,
+        device: MTLDevice,
+        constantValues: MTLFunctionConstantValues? = nil
+    ) {
 
         guard let library = library else { return }
 

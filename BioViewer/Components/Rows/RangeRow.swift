@@ -28,7 +28,7 @@ struct RangeRow: View {
                 .resizable()
                 .aspectRatio(1.0, contentMode: .fit)
                 .frame(width: RangeDelimiterConstants.size)
-                .foregroundColor(Color(uiColor: .white))
+                .foregroundColor(.white)
                 .rotationEffect(Angle(degrees: isLeftRange ? 90 : -90))
                 .shadow(color: .black.opacity(0.2),
                         radius: 4,

@@ -14,11 +14,12 @@ struct BuyCoffeeView: View {
 
     var body: some View {
         NavigationView {
+            #if os(iOS)
             VStack(spacing: 0) {
                 Text(NSLocalizedString("Hello there! You can buy me a coffee if you want to and contribute supporting BioViewer.",
                                        comment: ""))
                     .padding()
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color.secondary)
                 List {
                     Section(header: Text(NSLocalizedString("Coffee options: ", comment: "")),
                             footer: Text(NSLocalizedString("Thank you!", comment: "")),
@@ -40,12 +41,13 @@ struct BuyCoffeeView: View {
                 }
                 .listStyle(InsetGroupedListStyle())
             }
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color.secondary)
             .navigationBarTitle(NSLocalizedString("Buy me a coffee ☕️", comment: ""),
                                 displayMode: .inline)
             .navigationBarItems(leading: Button(NSLocalizedString("Close", comment: ""), action: {
                 showingCoffeeView.toggle()
             }))
+            #endif
         }
         .edgesIgnoringSafeArea(.all)
 

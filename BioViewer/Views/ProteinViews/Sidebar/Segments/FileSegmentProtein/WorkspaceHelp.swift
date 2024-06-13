@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(iOS)
 struct WorkspaceHelp: View {
     
     @Environment(\.dismiss) var dismiss
@@ -42,3 +43,4 @@ struct WorkspaceHelp_Previews: PreviewProvider {
         WorkspaceHelp()
     }
 }
+#endif

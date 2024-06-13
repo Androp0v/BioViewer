@@ -17,8 +17,10 @@ struct RCSBDetailView: View {
                     .bold()
                 ZStack {
                     RoundedRectangle(cornerRadius: 24)
-                        .stroke(Color(uiColor: .separator),
-                                style: StrokeStyle(lineWidth: 2))
+                        .stroke(
+                            Color.separator,
+                            style: StrokeStyle(lineWidth: 2)
+                        )
                         .opacity(0.2)
                 }
                 .aspectRatio(1.0, contentMode: .fit)

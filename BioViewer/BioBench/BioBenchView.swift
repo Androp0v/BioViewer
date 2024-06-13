@@ -56,8 +56,13 @@ struct BioBenchView: View {
                         }
                     
                     if let currentImage = benchmarkViewModel.currentImage {
+                        #if os(iOS)
                         Image(uiImage: UIImage(cgImage: currentImage))
                             .resizable()
+                        #elseif os(macOS)
+                        Image(nsImage: NSImage(cgImage: currentImage, size: CGSize(width: currentImage.width, height: currentImage.height)))
+                            .resizable()
+                        #endif
                     }
                     
                     StatusOverlayView()

@@ -40,7 +40,7 @@ struct ProteinSequenceView: View {
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(UIColor.opaqueSeparator), lineWidth: 3)
+                .stroke(.separator, lineWidth: 3)
         )
     }
 }

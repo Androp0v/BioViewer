@@ -24,7 +24,7 @@ struct InfoAtomsRow: View {
                 HStack {
                     Text(label)
                     Text("\(value)")
-                        .foregroundColor(Color(uiColor: .secondaryLabel))
+                        .foregroundColor(.secondaryLabel)
                     Spacer()
                 }
                 Spacer()

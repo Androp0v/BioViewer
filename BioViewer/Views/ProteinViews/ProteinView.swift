@@ -45,7 +45,7 @@ struct ProteinView: View {
             // Separator
             Rectangle()
                 .frame(height: 0.5)
-                .foregroundColor(Color(UIColor.opaqueSeparator))
+                .foregroundColor(Color.opaqueSeparator)
             // Main view here (including sidebar)
             HStack(spacing: 0) {
                 // Main scene container
@@ -113,6 +113,7 @@ struct ProteinView: View {
             }
         }
         .navigationTitle(proteinDataSource.files.first?.fileNameWithExtension ?? "BioViewer")
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // Button to open right panel
@@ -127,6 +128,7 @@ struct ProteinView: View {
                 )
             }
         }
+        #endif
         .inspector(isPresented: showInspectorBinding(for: horizontalSizeClass)) {
             ProteinSidebar(
                 showSidebar: showInspectorBinding(for: horizontalSizeClass),

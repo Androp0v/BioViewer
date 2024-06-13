@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+#if os(iOS)
 import UIKit
 
 class BioViewerWorkspace: UIDocument {
@@ -38,3 +40,4 @@ class BioViewerWorkspace: UIDocument {
  
  }
  */
+#endif

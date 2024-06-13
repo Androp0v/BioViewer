@@ -19,7 +19,7 @@ struct InfoLongTextRow: View {
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text(longText)
-                    .foregroundColor(Color(uiColor: UIColor.secondaryLabel))
+                    .foregroundColor(.secondaryLabel)
             }
             .frame(maxWidth: .infinity)
         } else {
@@ -28,7 +28,7 @@ struct InfoLongTextRow: View {
                     .multilineTextAlignment(.leading)
                     .frame(alignment: .leading)
                 Text("-")
-                    .foregroundColor(Color(uiColor: UIColor.secondaryLabel))
+                    .foregroundColor(.secondaryLabel)
                 Spacer()
             }
             .frame(maxWidth: .infinity)

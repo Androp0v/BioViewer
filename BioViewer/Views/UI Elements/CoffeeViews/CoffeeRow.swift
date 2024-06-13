@@ -10,6 +10,7 @@ import SwiftUI
 struct CoffeeRow: View {
     var body: some View {
         HStack {
+            #if os(iOS)
             Spacer()
             VStack {
                 Image("PlaceholderCoffee")
@@ -44,6 +45,7 @@ struct CoffeeRow: View {
                     .foregroundColor(Color(UIColor.secondaryLabel))
             }
             Spacer()
+            #endif
         }
         .padding(8)
     }

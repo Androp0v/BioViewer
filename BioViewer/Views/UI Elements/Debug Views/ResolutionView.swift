@@ -7,23 +7,24 @@
 
 import SwiftUI
 
-@MainActor @Observable class ResolutionViewModel {
+@MainActor @Observable final class ResolutionViewModel {
     
     let renderer: ProteinRenderer
     var resolution: CGSize?
     
-    private var displayLink: CADisplayLink?
+    private var displayLink: PlatformDisplayLink?
     
     init(renderer: ProteinRenderer) {
         self.renderer = renderer
-        self.displayLink = CADisplayLink(
-            target: self,
-            selector: #selector(self.updateFrameTime)
-        )
+        self.displayLink = PlatformDisplayLink {
+            MainActor.assumeIsolated {
+                self.updateFrameTime()
+            }
+        }
         self.displayLink?.add(to: .main, forMode: .default)
     }
     
-    @objc private func updateFrameTime() {
+    private func updateFrameTime() {
         // Retrieve last GPU frame time.
         if renderer.isBenchmark {
             let benchmarkResolution = BenchmarkTextures.benchmarkResolution

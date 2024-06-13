@@ -52,6 +52,7 @@ import SwiftUI
     
     // MARK: - Shutter feedback
     
+    #if os(iOS)
     @MainActor func mirrorImpact() {
         let hapticFeedback = UIImpactFeedbackGenerator(style: .rigid)
         hapticFeedback.prepare()
@@ -77,6 +78,7 @@ import SwiftUI
         try? AVAudioSession.sharedInstance().setActive(true)
         self.shutterClosedPlayer?.play()
     }
+    #endif
     
     // MARK: - Shutter animation
     
@@ -94,10 +96,12 @@ import SwiftUI
             // Wait for shutter to fully open
             try? await Task.sleep(for: .seconds(0.15))
             
+            #if os(iOS)
             // Haptics
             await mirrorImpact()
             // Sound
             playShutterOpenSound()
+            #endif
             
             // First shutter curtain goes down after the image + delay
             try? await Task.sleep(for: .seconds(0.10))
@@ -106,7 +110,9 @@ import SwiftUI
             }
             
             try? await Task.sleep(for: .seconds(0.15))
+            #if os(iOS)
             await shutterCurtainImpact()
+            #endif
         } else {
             // First shutter curtain goes down
             withAnimation(.easeIn(duration: 0.15)) {
@@ -115,11 +121,12 @@ import SwiftUI
             }
             
             try? await Task.sleep(for: .seconds(0.15))
-            
+            #if os(iOS)
             // Haptics
             await shutterCurtainImpact()
             // Sound
             playShutterOpenSound()
+            #endif
         }
         self.isShutterOpen = true
     }
@@ -134,10 +141,12 @@ import SwiftUI
         }
         try? await Task.sleep(for: .seconds(0.15))
         
+        #if os(iOS)
         // Haptics
         await shutterCurtainImpact()
         // Sound
         playShutterClosedSound()
+        #endif
         
         try? await Task.sleep(for: .seconds(0.10))
         withAnimation(.easeInOut(duration: 0.35)) {
@@ -145,7 +154,9 @@ import SwiftUI
         }
 
         try? await Task.sleep(for: .seconds(0.35))
+        #if os(iOS)
         await mirrorImpact()
+        #endif
         self.showFirstShutterCurtain = true
         self.showSecondShutterCurtain = false
         self.isShutterOpen = false

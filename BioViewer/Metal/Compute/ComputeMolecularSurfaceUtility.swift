@@ -7,7 +7,7 @@
 
 import BioViewerFoundation
 import Foundation
-import Metal
+@preconcurrency import Metal
 import simd
 
 class ComputeMolecularSurfaceUtility {
@@ -74,11 +74,13 @@ class ComputeMolecularSurfaceUtility {
         return neighbourDict
     }
     
-    private func createSDFGrid() -> MTLBuffer? {
+    private func createSDFGrid() async -> MTLBuffer? {
         
-        let sdfBuffer = MetalScheduler.shared.computeSDFGrid(protein: protein,
-                                                             boxSize: boxSize,
-                                                             gridResolution: gridResolution)
+        let sdfBuffer = await MetalScheduler.shared.computeSDFGrid(
+            protein: protein,
+            boxSize: boxSize,
+            gridResolution: gridResolution
+        )
         return sdfBuffer
     }
     
@@ -106,7 +108,7 @@ class ComputeMolecularSurfaceUtility {
     
     // MARK: - Debug
     
-    func debugCreatePointsFromSDFGrid(sdfBuffer: MTLBuffer) -> MTLBuffer? {
+    func debugCreatePointsFromSDFGrid(sdfBuffer: MTLBuffer) async -> MTLBuffer? {
         
         func getCellCenterFrom(cellID: Int) -> simd_float3 {
             let cell_size = boxSize / Float(gridResolution)
@@ -139,6 +141,6 @@ class ComputeMolecularSurfaceUtility {
             }
         }
         
-        return MetalScheduler.shared.makeBufferFromArray(array: pointsInsideVolume)
+        return await MetalScheduler.shared.makeBufferFromArray(array: pointsInsideVolume)
     }
 }

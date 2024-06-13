@@ -88,6 +88,7 @@ import SwiftUI
                 .frame(maxHeight: .infinity)
             }
             .navigationTitle(NSLocalizedString("RCSB Search", comment: ""))
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button(action: {
                 rcsbShowSheet = false
@@ -97,6 +98,7 @@ import SwiftUI
             }), trailing: NavigationLink(destination: RCSBSuggestionsView(rcsbShowSheet: $rcsbShowSheet)) {
                 Image(systemName: "lightbulb.circle")
             })
+            #endif
         }
         .environment(rcsbImportViewModel)
     }
@@ -130,7 +132,7 @@ import SwiftUI
         }
         .clipped()
         .background {
-            Color(UIColor.secondarySystemBackground)
+            Color.secondarySystemBackground
                 .cornerRadius(12)
         }
         .foregroundColor(.gray)

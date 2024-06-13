@@ -40,7 +40,7 @@ struct ProteinSidebar: View {
                 Spacer()
             }
         }
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.secondarySystemBackground)
         .safeAreaInset(edge: .top) {
             // Top segmented control to switch between options
             VStack(spacing: .zero) {
@@ -71,7 +71,9 @@ struct ProteinSidebar: View {
                     Text(NSLocalizedString("Inspector", comment: ""))
                         .bold()
                         .frame(maxWidth: .infinity)
+                        #if os(iOS)
                         .navigationBarHidden(true)
+                        #endif
                 }
                 .padding(.top, 12)
             }
@@ -102,7 +104,7 @@ struct ProteinSidebar: View {
                     .foregroundStyle(.regularMaterial)
                 Image(systemName: "xmark.circle.fill")
                     .resizable()
-                    .foregroundStyle(Color(uiColor: .label))
+                    .foregroundStyle(Color.label)
                     .opacity(0.3)
             }
             .padding(4)

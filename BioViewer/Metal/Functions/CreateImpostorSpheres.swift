@@ -7,7 +7,7 @@
 
 import BioViewerFoundation
 import Foundation
-import Metal
+@preconcurrency import Metal
 
 struct CreateImpostorSpheresOutput {
     let vertexBuffer: BillboardVertexBuffers
@@ -27,7 +27,7 @@ extension MutableState {
     public func createImpostorSpheres(
         proteins: [Protein],
         atomRadii: AtomRadii
-    ) -> CreateImpostorSpheresOutput? {
+    ) async -> CreateImpostorSpheresOutput? {
 
         let impostorTriangleCount = 2
         
@@ -178,15 +178,17 @@ extension MutableState {
         }
 
         // Check if the function needs to be compiled
-        if MetalScheduler.shared.createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
-            MetalScheduler.shared.createSphereModelBundle.createPipelineState(
+        if await MetalScheduler.shared.createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
+            await MetalScheduler.shared.createSphereModelBundle.createPipelineState(
                 functionName: "createImpostorSpheres",
                 library: self.device.makeDefaultLibrary(),
                 device: self.device,
                 constantValues: nil
             )
         }
-        guard let pipelineState = MetalScheduler.shared.createSphereModelBundle.getPipelineState(functionParameters: nil) else {
+        guard let pipelineState = await MetalScheduler.shared.createSphereModelBundle.getPipelineState(
+            functionParameters: nil
+        ) else {
             return nil
         }
 

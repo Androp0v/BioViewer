@@ -12,7 +12,7 @@ import SwiftUI
     let renderer: ProteinRenderer
     var averageFPSString = "-"
     
-    private var displayLink: CADisplayLink?
+    private var displayLink: PlatformDisplayLink?
     private var frameTimeArray = [CFTimeInterval]()
     private var lastIndex: Int = 0
     private var currentIndex: Int = 0
@@ -20,14 +20,15 @@ import SwiftUI
     
     init(renderer: ProteinRenderer) {
         self.renderer = renderer
-        self.displayLink = CADisplayLink(
-            target: self,
-            selector: #selector(self.updateFrameTime)
-        )
+        self.displayLink = PlatformDisplayLink {
+            MainActor.assumeIsolated {
+                self.updateFrameTime()
+            }
+        }
         self.displayLink?.add(to: .main, forMode: .default)
     }
     
-    @objc private func updateFrameTime() {
+    private func updateFrameTime() {
         
         // Retrieve last GPU frame time.
         let newFrameTime = renderer.lastFrameGPUTime

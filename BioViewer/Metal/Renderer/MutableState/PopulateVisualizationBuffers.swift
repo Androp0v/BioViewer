@@ -79,7 +79,7 @@ extension MutableState {
             guard let bondsPerConfiguration = protein.bondsPerConfiguration else { return }
             guard let bondsConfigurationArrayStart = protein.bondsConfigurationArrayStart else { return }
             
-            updateBonds(
+            await updateBonds(
                 bondData: bondData,
                 bondsPerConfiguration: bondsPerConfiguration,
                 bondsConfigurationArrayStart: bondsConfigurationArrayStart
@@ -113,7 +113,7 @@ extension MutableState {
             atomRadii: atomRadii,
             colorBy: colorBy
         )
-        populateImpostorSphereBuffers(
+        await populateImpostorSphereBuffers(
             proteins: proteins,
             configuration: configuration
         )

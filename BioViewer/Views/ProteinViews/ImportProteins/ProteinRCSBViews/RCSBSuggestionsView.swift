@@ -53,7 +53,9 @@ struct RCSBSuggestionsView: View {
             }
         }
         .navigationTitle(NSLocalizedString("Suggestions", comment: ""))
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 

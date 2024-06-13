@@ -50,6 +50,7 @@ struct ColorPalettePopover: View {
             NavigationView {
                 ColorPalettePopoverContent()
                     .navigationTitle(NSLocalizedString("Select a palette", comment: ""))
+                    #if os(iOS)
                     .navigationBarItems(leading:
                         Button(action: {
                             dismiss()
@@ -57,6 +58,7 @@ struct ColorPalettePopover: View {
                             Text(NSLocalizedString("Close", comment: ""))
                         })
                     )
+                    #endif
             }
         } else {
             ColorPalettePopoverContent()

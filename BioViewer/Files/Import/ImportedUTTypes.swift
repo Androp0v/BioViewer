@@ -15,4 +15,7 @@ extension UTType {
     static var xyzFiles: UTType {
         UTType(importedAs: "com.raulmonton.bioviewer.xyz")
     }
+    static var cifFiles: UTType {
+        UTType(importedAs: "com.raulmonton.bioviewer.cif")
+    }
 }

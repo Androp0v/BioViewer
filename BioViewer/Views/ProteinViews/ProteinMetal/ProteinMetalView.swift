@@ -9,12 +9,21 @@ import SwiftUI
 import Metal
 import MetalKit
 
-struct ProteinMetalView: UIViewControllerRepresentable {
+#if os(macOS)
+import AppKit
+typealias ControllerRepresentable = NSViewControllerRepresentable
+#else
+import UIKit
+typealias ControllerRepresentable = UIViewControllerRepresentable
+#endif
 
-    typealias UIViewControllerType = ProteinMetalViewController
-
+struct ProteinMetalView: ControllerRepresentable {
+    
     let proteinViewModel: ProteinViewModel
 
+    #if os(iOS)
+    typealias UIViewControllerType = ProteinMetalViewController
+    
     func makeUIViewController(context: Context) -> ProteinMetalViewController {
         return ProteinMetalViewController(proteinViewModel: self.proteinViewModel)
     }
@@ -22,7 +31,17 @@ struct ProteinMetalView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: ProteinMetalViewController, context: Context) {
         // TO-DO? Updateable ViewController
     }
+    #elseif os(macOS)
+    typealias NSViewControllerType = ProteinMetalViewController
+    
+    func makeNSViewController(context: Context) -> ProteinMetalViewController {
+        return ProteinMetalViewController(proteinViewModel: self.proteinViewModel)
+    }
 
+    func updateNSViewController(_ uiViewController: ProteinMetalViewController, context: Context) {
+        // TO-DO? Updateable ViewController
+    }
+    #endif
 }
 
 struct ProteinMetalView_Previews: PreviewProvider {

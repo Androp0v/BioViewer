@@ -27,7 +27,7 @@ struct FileSourceRow: View {
                 Rectangle()
                     .padding(.vertical, 4)
                     .frame(width: 1)
-                    .foregroundColor(Color(UIColor.opaqueSeparator))
+                    .foregroundColor(.opaqueSeparator)
                     .opacity(0.5)
                 Text(line)
                     .font(.system(size: 9.5, design: .monospaced))

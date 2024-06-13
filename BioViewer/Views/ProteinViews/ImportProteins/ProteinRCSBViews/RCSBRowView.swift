@@ -46,8 +46,10 @@ struct RCSBRowView: View {
                         .frame(width: 96)
                 }
                 RoundedRectangle(cornerRadius: Constants.imageCornerRadius)
-                    .stroke(Color(uiColor: .separator),
-                            style: StrokeStyle(lineWidth: 2))
+                    .stroke(
+                        Color.separator,
+                        style: StrokeStyle(lineWidth: 2)
+                    )
                     .opacity(0.5)
             }
             .cornerRadius(Constants.imageCornerRadius)
@@ -60,7 +62,7 @@ struct RCSBRowView: View {
                 titleText(pdbInfo.title)
                 descriptionText(pdbInfo.description)
                 Text(pdbInfo.authors)
-                    .foregroundColor(Color(uiColor: .secondaryLabel))
+                    .foregroundColor(.secondaryLabel)
                     .italic()
             }
             .padding()

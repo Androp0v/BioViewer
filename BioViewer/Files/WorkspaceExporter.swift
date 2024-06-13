@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if os(iOS)
 import UIKit
 
 class WorkspaceExporter {
@@ -53,3 +54,4 @@ class WorkspaceExporter {
         }
     }
 }
+#endif

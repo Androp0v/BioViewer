@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -466,6 +466,10 @@
 		C5FF9ADA29817B4300D583A2 /* BioBenchConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioBenchConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C535A5062C1AEDC800D3392A /* UIKit+AppKit */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "UIKit+AppKit"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		C44FC06B2641AF1B00459E01 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -681,9 +685,10 @@
 				C581ACCB282C0195001DD4BB /* BioViewerLogger.swift */,
 				C44D0558266BAA6E00BAFDCD /* AppState.swift */,
 				C5E593B6281D793E00CFFAA2 /* MetalLegacySupport.swift */,
+				C535A5062C1AEDC800D3392A /* UIKit+AppKit */,
+				C553B79629360F9900294BB4 /* Components */,
 				C54066F8274D1C6100710CFC /* Files */,
 				C4B1F82026457D020035D739 /* Data structures */,
-				C553B79629360F9900294BB4 /* Components */,
 				C5FF9AD42980350700D583A2 /* BioBench */,
 				C4187E342642E0CA009E2CBA /* Views */,
 				C41A056A2658948B006F551C /* Metal */,
@@ -1273,6 +1278,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				C535A5062C1AEDC800D3392A /* UIKit+AppKit */,
+			);
 			name = BioViewer;
 			packageProductDependencies = (
 				C59D2EDE2B00434B0041E84A /* BioViewerFoundation */,
@@ -1788,7 +1796,7 @@
 				INFOPLIST_FILE = BioViewer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1799,7 +1807,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
@@ -1828,7 +1837,7 @@
 				INFOPLIST_FILE = BioViewer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BioViewer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1839,7 +1848,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "BioViewer/BioViewer-Bridging-Header.h";
