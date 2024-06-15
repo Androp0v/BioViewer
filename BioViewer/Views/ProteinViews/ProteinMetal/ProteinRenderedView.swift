@@ -13,10 +13,10 @@ import AppKit
 import UIKit
 #endif
 
-final class ProteinRenderedView: PlatformView, CALayerDelegate {
+final class ProteinRenderedView: PlatformView {
     
-    let renderer: ProteinRenderer
-    var metalLayer: CAMetalLayer?
+    nonisolated(unsafe) let renderer: ProteinRenderer
+    nonisolated(unsafe) var metalLayer: CAMetalLayer?
     var displayLink: PlatformDisplayLink?
     
     init(renderer: ProteinRenderer, frame: CGRect) {
@@ -181,3 +181,7 @@ final class ProteinRenderedView: PlatformView, CALayerDelegate {
         renderer.draw(in: metalLayer)
     }
 }
+
+#if os(macOS)
+extension ProteinRenderedView: CALayerDelegate {}
+#endif

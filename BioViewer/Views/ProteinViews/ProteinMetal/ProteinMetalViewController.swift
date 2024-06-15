@@ -67,18 +67,22 @@ class ProteinMetalViewController: PlatformViewController {
         // Add gesture recognition
         #if os(iOS)
         renderedView.isUserInteractionEnabled = true
+        #endif
         
         // MARK: - Gesture recognizers
         
+        #if os(iOS)
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
-        renderedView.addGestureRecognizer(pinchGesture)
-        
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
-        renderedView.addGestureRecognizer(panGesture)
+        #elseif os(macOS)
+        let pinchGesture = NSMagnificationGestureRecognizer(target: self, action: #selector(self.handlePinch))
+        let panGesture = NSPanGestureRecognizer(target: self, action: #selector(self.handlePan))
         #endif
+        renderedView.addGestureRecognizer(pinchGesture)
+        renderedView.addGestureRecognizer(panGesture)
     }
 
-    // MARK: - Private functions
+    // MARK: - Pinch
     
     #if os(iOS)
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
@@ -92,8 +96,32 @@ class ProteinMetalViewController: PlatformViewController {
             }
        }
     }
+    #elseif os(macOS)
+    @objc private func handlePinch(gestureRecognizer: NSMagnificationGestureRecognizer) {
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            Task {
+                let currentCameraPosition = await self.proteinViewModel.renderer.mutableState.getCameraPosition()
+                // TO-DO: Proper zooming
+                let newDistance = currentCameraPosition.z / Float(gestureRecognizer.magnification + 1.0)
+                await self.proteinViewModel.renderer.mutableState.setCameraDistanceToModel(newDistance)
+            }
+       }
+    }
+    #endif
     
+    // MARK: - Pan
+    
+    #if os(iOS)
     @objc private func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
+        self.genericHandlePan(gestureRecognizer: gestureRecognizer)
+    }
+    #elseif os(macOS)
+    @objc private func handlePan(gestureRecognizer: NSPanGestureRecognizer) {
+        self.genericHandlePan(gestureRecognizer: gestureRecognizer)
+    }
+    #endif
+    
+    private func genericHandlePan(gestureRecognizer: some PlatformPanGestureRecognizer) {
         
         guard let toolbarConfig = proteinViewModel.toolbarConfig else { return }
         
@@ -101,12 +129,17 @@ class ProteinMetalViewController: PlatformViewController {
             proteinViewModel.toolbarConfig?.autorotating = false
         }
         
-        if gestureRecognizer.state == .changed {
+        if gestureRecognizer.stateChanged {
             switch toolbarConfig.selectedTool {
             case CameraControlTool.rotate:
-                Task {
+                Task(priority: .high) {
                     let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
+                    #if os(iOS)
                     let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                    #elseif os(macOS)
+                    // Swap rotation direction on macOS to match iOS
+                    let rotationSpeedY = -Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                    #endif
                     
                     var currentRotationMatrix = await self.proteinViewModel.renderer.mutableState.getUserRotationMatrix()
                     
@@ -126,17 +159,27 @@ class ProteinMetalViewController: PlatformViewController {
             case CameraControlTool.move:
                 Task {
                     // TO-DO: Improve move tool
+                    #if os(iOS)
                     #if targetEnvironment(macCatalyst)
                     var translationSensitivity: Float = 0.000005
                     #else
                     var translationSensitivity: Float = 0.00001
+                    #endif
+                    #elseif os(macOS)
+                    var translationSensitivity: Float = 0.0000025
                     #endif
                     
                     // Move should be less sensible the closer the camera is to the protein
                     await translationSensitivity *= proteinViewModel.renderer.mutableState.getCameraPosition().z
                     
                     let translationX = Float(gestureRecognizer.velocity(in: renderedView).x) * translationSensitivity
+                    #if os(iOS)
                     let translationY = Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
+                    #elseif os(macOS)
+                    // Swap translation direction on macOS to match iOS
+                    let translationY = -Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
+                    #endif
+                    
                     await self.proteinViewModel.renderer.mutableState.translateCameraXY(
                         x: translationX,
                         y: -translationY
@@ -148,5 +191,4 @@ class ProteinMetalViewController: PlatformViewController {
             }
         }
     }
-    #endif
 }
