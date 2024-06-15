@@ -50,12 +50,14 @@ extension MTLTexture {
                 
                 // Modify the bgraBytes according to depth values
                 bgraBytes.withUnsafeMutableBytes { bgraBytesPointer in
-                    let bgraPointer = bgraBytesPointer.baseAddress!.assumingMemoryBound(to: UInt8.self)
-                    let depthPointer = depthBytesPointer.baseAddress!.assumingMemoryBound(to: Float32.self)
+                    let uncheckedSendableBox = UncheckedSendablePointers(
+                        bgraPointer: bgraBytesPointer.baseAddress!.assumingMemoryBound(to: UInt8.self), 
+                        depthPointer: depthBytesPointer.baseAddress!.assumingMemoryBound(to: Float32.self)
+                    )
                     DispatchQueue.concurrentPerform(iterations: self.width * self.height) { index in
                         let bgraIndex = index * 4 + 3
-                        if (depthPointer + index).pointee == 1.0 {
-                            (bgraPointer + bgraIndex).pointee = 0
+                        if (uncheckedSendableBox.depthPointer + index).pointee == 1.0 {
+                            (uncheckedSendableBox.bgraPointer + bgraIndex).pointee = 0
                         }
                     }
                 }
@@ -102,4 +104,15 @@ extension MTLTexture {
                               intent: .defaultIntent)
         return cgImage
     }
+}
+
+// MARK: - Helper structs
+
+/// Wrap sone non-Sendable types in a `struct` to be able to mark them as
+/// `@unchecked Sendable`.
+///
+/// See https://forums.swift.org/t/sharing-memory-unsafe-pointers-between-actors/54870
+private struct UncheckedSendablePointers: @unchecked Sendable {
+    let bgraPointer: UnsafeMutablePointer<UInt8>
+    let depthPointer: UnsafeMutablePointer<Float32>
 }

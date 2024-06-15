@@ -72,10 +72,11 @@ class SunDirection {
             if hasAmbientOcclusion {
                 Task {
                     guard let proteinViewModel else { return }
+                    let boundingVolume = await proteinViewModel.renderer.mutableState.scene.boundingVolume
                     await proteinViewModel.renderer.mutableState.computeAmbientOcclusion(
                         atomPositions: proteinViewModel.dataSource!.getFirstProtein()!.atoms,
                         atomRadii: [Float.zero],
-                        boundingVolume: proteinViewModel.renderer.mutableState.scene.boundingVolume
+                        boundingVolume: boundingVolume
                     )
                 }
             }

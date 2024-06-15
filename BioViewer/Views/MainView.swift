@@ -53,18 +53,24 @@ struct MainView: View {
                     proteinViewModel.statusViewModel = statusViewModel
                 }
             
-                .sheet(isPresented: $isPresentingNews, onDismiss: {
-                    AppState.shared.userHasSeenWhatsNew()
-                }, content: {
-                    WhatsNewView()
-                })
+                .sheet(
+                    isPresented: $isPresentingNews,
+                    onDismiss: {
+                        AppState.shared.userHasSeenWhatsNew()
+                    },
+                    content: {
+                        WhatsNewView()
+                    }
+                )
         }
         #if os(iOS)
         .navigationViewStyle(StackNavigationViewStyle())
         #endif
         .onAppear {
-            if AppState.shared.shouldShowWhatsNew() {
-                isPresentingNews = true
+            Task(priority: .userInitiated) {
+                if await AppState.shared.shouldShowWhatsNew() {
+                    isPresentingNews = true
+                }
             }
         }
         // Open documents in view from other apps

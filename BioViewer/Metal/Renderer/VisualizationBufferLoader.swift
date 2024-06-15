@@ -63,15 +63,15 @@ class VisualizationBufferLoader {
     
     // MARK: - Populate buffers
     
-    func populateVisualizationBuffers(
+    @MainActor func populateVisualizationBuffers(
         visualization: ProteinVisualizationOption,
         proteinViewModel: ProteinViewModel,
         isInitialAnimation: Bool = false
     ) async {
         
-        guard let dataSource = await proteinViewModel.dataSource,
-              let visualizationViewModel = await proteinViewModel.visualizationViewModel,
-              let colorBy = await proteinViewModel.colorViewModel?.colorBy
+        guard let dataSource = proteinViewModel.dataSource,
+              let visualizationViewModel = proteinViewModel.visualizationViewModel,
+              let colorBy = proteinViewModel.colorViewModel?.colorBy
         else {
             return
         }

@@ -52,7 +52,10 @@ import UniformTypeIdentifiers
             NSLog("Item provider has no associated type identifier.")
             return false
         }
-
+        
+        // Get or deduce a file name
+        let (filename, fileExtension) = getOrSuggestFilenameAndExtension(itemProvider: itemProvider)
+        
         itemProvider.loadDataRepresentation(forTypeIdentifier: typeIdentifier) { data, error in
 
             guard let data = data else {
@@ -61,23 +64,6 @@ import UniformTypeIdentifiers
                 }
                 return
             }
-            
-            let itemProviderType = itemProvider.registeredTypeIdentifiers.first
-            
-            var mutableFileName: String = NSLocalizedString("Unknown", comment: "")
-            var fileExtension: String?
-            if let fullFileName = itemProvider.suggestedName as NSString? {
-                mutableFileName = fullFileName.deletingPathExtension
-                if !fullFileName.pathExtension.isEmpty {
-                    // Prefer getting the file extension from the suggested file name.
-                    fileExtension = fullFileName.pathExtension
-                } else {
-                    // If the suggested name foes not include the path extension, retrieve
-                    // it from the ItemProvider type.
-                    fileExtension = (itemProviderType as NSString?)?.pathExtension
-                }
-            }
-            let filename = mutableFileName
             
             // Check that either the suggestedName or the itemProvider type have a valid path extension
             guard let fileExtension = fileExtension else {
@@ -94,7 +80,7 @@ import UniformTypeIdentifiers
             let byteSize = (data as NSData).length
 
             // Parse file
-            Task {
+            Task(priority: .userInitiated) {
                 guard let dataSource = await proteinViewModel.dataSource else { return }
                 guard let statusViewModel = await proteinViewModel.statusViewModel else { return }
                 try? await FileImporter.importFileFromRawText(
@@ -111,6 +97,35 @@ import UniformTypeIdentifiers
         }
 
         return true
+    }
+    
+    // MARK: - Helper
+    
+    struct FilenameInfo {
+        let filename: String
+        let fileExtension: String?
+    }
+    
+    func getOrSuggestFilenameAndExtension(itemProvider: NSItemProvider) -> (filename: String, fileExtension: String?) {
+        // Get item provider type
+        let itemProviderType = itemProvider.registeredTypeIdentifiers.first
+        
+        var mutableFileName: String = NSLocalizedString("Unknown", comment: "")
+        let fileExtension: String?
+        if let fullFileName = itemProvider.suggestedName as NSString? {
+            mutableFileName = fullFileName.deletingPathExtension
+            if !fullFileName.pathExtension.isEmpty {
+                // Prefer getting the file extension from the suggested file name.
+                fileExtension = fullFileName.pathExtension
+            } else {
+                // If the suggested name foes not include the path extension, retrieve
+                // it from the ItemProvider type.
+                fileExtension = (itemProviderType as NSString?)?.pathExtension
+            }
+        } else {
+            fileExtension = nil
+        }
+        return (mutableFileName, fileExtension)
     }
 
     // MARK: - Dynamic UTI decoding

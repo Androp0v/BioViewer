@@ -38,15 +38,18 @@ struct WhatsNewView: View {
                         .frame(maxWidth: .infinity)
                         .buttonStyle(.borderedProminent)
                     
-                    Button(action: {
-                        dismiss()
-                        AppState.shared.userDoesNotWantUpdates()
-                    }, label: {
-                        Text(NSLocalizedString("Don't notify new features", comment: ""))
-                            .padding(4)
-                            .frame(maxWidth: .infinity)
-                    })
-                        .padding(.bottom, 4)
+                    Button(
+                        action: {
+                            dismiss()
+                            AppState.shared.userDoesNotWantUpdates()
+                        },
+                        label: {
+                            Text(NSLocalizedString("Don't notify new features", comment: ""))
+                                .padding(4)
+                                .frame(maxWidth: .infinity)
+                        }
+                    )
+                    .padding(.bottom, 4)
                 }
                 .background(.regularMaterial)
             }

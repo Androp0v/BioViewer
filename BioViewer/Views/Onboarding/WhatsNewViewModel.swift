@@ -22,7 +22,7 @@ struct WhatsNew: Identifiable {
 class WhatsNewViewModel: ObservableObject {
     
     @Published var newItems = [WhatsNew]()
-    let version = AppState.shared.version()
+    let version = AppState.shared.version
     
     init() {
         var changeLog: NSDictionary?

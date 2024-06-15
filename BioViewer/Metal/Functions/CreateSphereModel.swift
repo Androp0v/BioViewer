@@ -69,18 +69,26 @@ extension MetalScheduler {
             computeEncoder.setComputePipelineState(pipelineState)
 
             // Set buffer contents
-            computeEncoder.setBuffer(atomPositionsBuffer,
-                                     offset: 0,
-                                     index: 0)
-            computeEncoder.setBuffer(atomTypeBuffer,
-                                     offset: 0,
-                                     index: 1)
-            computeEncoder.setBuffer(generatedVertexData,
-                                     offset: 0,
-                                     index: 2)
-            computeEncoder.setBuffer(generatedIndexData,
-                                     offset: 0,
-                                     index: 3)
+            computeEncoder.setBuffer(
+                atomPositionsBuffer,
+                offset: 0,
+                index: 0
+            )
+            computeEncoder.setBuffer(
+                atomTypeBuffer,
+                offset: 0,
+                index: 1
+            )
+            computeEncoder.setBuffer(
+                generatedVertexData,
+                offset: 0,
+                index: 2
+            )
+            computeEncoder.setBuffer(
+                generatedIndexData,
+                offset: 0,
+                index: 3
+            )
 
             // Dispatch threads
             computeEncoder.dispatchThreads(threadsPerArray, threadsPerThreadgroup: groupsize)

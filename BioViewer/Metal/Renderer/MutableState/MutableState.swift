@@ -428,7 +428,7 @@ actor MutableState {
         scene.metalFXUpscalingMode = mode
     }
     
-    func updateProteinRenderFactors(ssaa: Float, metalFXUpscaling: Float, renderer: ProteinRenderer) {
+    func updateProteinRenderFactors(ssaa: Float, metalFXUpscaling: Float) {
         renderTarget.superSamplingCount = ssaa
         renderTarget.metalFXUpscalingFactor = metalFXUpscaling
         refreshTexturesForNewSettings()

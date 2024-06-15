@@ -54,8 +54,7 @@ import Foundation
         }
         await renderer.mutableState.updateProteinRenderFactors(
             ssaa: ssaaFactor,
-            metalFXUpscaling: metalFXFactor,
-            renderer: renderer
+            metalFXUpscaling: metalFXFactor
         )
     }
 }

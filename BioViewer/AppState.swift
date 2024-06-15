@@ -76,7 +76,7 @@ actor AppState: ObservableObject {
     
     // MARK: - Version
     
-    func version() -> String {
+    nonisolated var version: String {
         guard let dictionary = Bundle.main.infoDictionary else { return "" }
         guard let version = dictionary["CFBundleShortVersionString"] as? String else { return "" }
         return version
@@ -90,12 +90,12 @@ actor AppState: ObservableObject {
         if userDefaults.value(forKey: "userWantsUpdates") == nil {
             userDefaults.set(true, forKey: "userWantsUpdates")
         }
-        if userDefaults.value(forKey: "hasSeen\(version())updates") == nil {
-            userDefaults.set(false, forKey: "hasSeen\(version())updates")
+        if userDefaults.value(forKey: "hasSeen\(version)updates") == nil {
+            userDefaults.set(false, forKey: "hasSeen\(version)updates")
         }
         
         let userWantsUpdates = userDefaults.bool(forKey: "userWantsUpdates")
-        let userHasSeenUpdates = userDefaults.bool(forKey: "hasSeen\(version())updates")
+        let userHasSeenUpdates = userDefaults.bool(forKey: "hasSeen\(version)updates")
         
         if userWantsUpdates && !userHasSeenUpdates {
             return true
@@ -103,14 +103,14 @@ actor AppState: ObservableObject {
         return false
     }
     
-    func userDoesNotWantUpdates() {
+    nonisolated func userDoesNotWantUpdates() {
         let userDefaults = UserDefaults.standard
         userDefaults.set(false, forKey: "userWantsUpdates")
     }
     
-    func userHasSeenWhatsNew() {
+    nonisolated func userHasSeenWhatsNew() {
         let userDefaults = UserDefaults.standard
-        userDefaults.set(true, forKey: "hasSeen\(version())updates")
+        userDefaults.set(true, forKey: "hasSeen\(version)updates")
     }
     
     // MARK: - Focused view model
