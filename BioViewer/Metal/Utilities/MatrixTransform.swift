@@ -21,6 +21,48 @@ enum Transform {
         let col3 = SIMD4<Float>(translation, 1)
         return .init(col0, col1, col2, col3)
     }
+    
+    // A 4x4 rotation matrix from a quaternion.
+    static func rotationMatrix(quaternion q: simd_quatd) -> simd_float4x4 {
+        let q = simd_float4(q.vector)
+        let xx = q.x * q.x;
+        let xy = q.x * q.y;
+        let xz = q.x * q.z;
+        let xw = q.x * q.w;
+        let yy = q.y * q.y;
+        let yz = q.y * q.z;
+        let yw = q.y * q.w;
+        let zz = q.z * q.z;
+        let zw = q.z * q.w;
+
+        // indices are m<column><row>
+        let m00: Float = 1 - 2 * (yy + zz)
+        let m10: Float = 2 * (xy - zw)
+        let m20: Float = 2 * (xz + yw)
+        let m30: Float = 0.0
+
+        let m01: Float = 2 * (xy + zw)
+        let m11: Float = 1 - 2 * (xx + zz)
+        let m21: Float = 2 * (yz - xw)
+        let m31: Float = 0.0
+
+        let m02: Float = 2 * (xz - yw)
+        let m12: Float = 2 * (yz + xw)
+        let m22: Float = 1 - 2 * (xx + yy)
+        let m32: Float = 0.0
+        
+        let m03: Float = 0.0
+        let m13: Float = 0.0
+        let m23: Float = 0.0
+        let m33: Float = 1.0
+
+        return matrix_from_rows(
+            simd_float4(m00, m10, m20, m30),
+            simd_float4(m01, m11, m21, m31),
+            simd_float4(m02, m12, m22, m32),
+            simd_float4(m03, m13, m23, m33)
+        )
+    }
 
     /// A 4x4 rotation matrix specified by an angle and an axis or rotation.
     static func rotationMatrix(radians: Float, axis: SIMD3<Float>, around pivot: SIMD3<Float> = .zero) -> simd_float4x4 {

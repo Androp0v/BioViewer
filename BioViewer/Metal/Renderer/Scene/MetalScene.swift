@@ -60,8 +60,11 @@ class MetalScene {
     private(set) var cameraPosition: simd_float3 { didSet { needsRedraw = true } }
     /// Bounding volume of the visualized data.
     var boundingVolume: BoundingVolume = .zero
+    /// The translation matrix that moves the model so its bounding volume is centered at `(0,0,0)` (in world
+    /// coordinates) before rotation.
+    var modelTranslationMatrix: simd_float4x4 { didSet { needsRedraw = true } }
     /// Rotation of the model applied by the user.
-    var userModelRotationMatrix: simd_float4x4 { didSet { needsRedraw = true } }
+    var userRotationQuaternion: simd_quatd { didSet { needsRedraw = true } }
     /// Scene's aspect ratio, determined by the MTKView it's displayed on.
     var aspectRatio: Float { didSet { needsRedraw = true } }
     /// Subscriber to camera changes.
@@ -116,7 +119,8 @@ class MetalScene {
     init() {
         self.camera = Camera(nearPlane: 1, farPlane: 10000, focalLength: 200)
         self.cameraPosition = simd_float3(0, 0, 1000)
-        self.userModelRotationMatrix = Transform.scaleMatrix(.one)
+        self.modelTranslationMatrix = Transform.translationMatrix(.zero)
+        self.userRotationQuaternion = .identity
         self.backgroundColor = .init(red: .zero, green: .zero, blue: .zero, alpha: 1.0)
         self.bondColor = .init(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
         self.frameData = FrameData()
@@ -150,10 +154,7 @@ class MetalScene {
         })
         
         // Initial rotation matrix values
-        updateModelRotation(rotationMatrix: Transform.rotationMatrix(
-            radians: 0.0,
-            axis: simd_float3(0.0, 1.0, 0.0)
-        ))
+        updateModelTransform(rotationQuaternion: .identity)
         
         // Set initial sun direction
         setSunDirection(theta: sunDirection.theta, phi: sunDirection.phi) 
@@ -197,29 +198,28 @@ class MetalScene {
         }
         
         // Update rotation matrices
-        if !autorotating {
-            updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
+        if autorotating {
+            let autorotationQuaternion = simd_quatd(
+                angle: -0.001,
+                axis: simd_double3(0, 1, 0)
+            )
+            self.userRotationQuaternion = autorotationQuaternion * self.userRotationQuaternion
         }
+        updateModelTransform(rotationQuaternion: self.userRotationQuaternion)
         
-        // Update shadow behaviour
+        // Update shadow behavior
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
         self.frameData.shadow_strength = self.shadowStrength
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
         self.frameData.depth_cueing_strength = self.depthCueingStrength
         
         frame += 1
-        needsRedraw = false
-        
-        // Autorotation
         if autorotating {
-            let autorotationMatrix = Transform.rotationMatrix(
-                radians: -0.001,
-                axis: (self.userModelRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
-            )
-            self.userModelRotationMatrix *= autorotationMatrix
-            updateModelRotation(rotationMatrix: self.userModelRotationMatrix)
             needsRedraw = true
+        } else {
+            needsRedraw = false
         }
+
         // Store current frame data
         self.currentFrameData = frameData
     }
@@ -237,7 +237,11 @@ class MetalScene {
     
     // MARK: - Update rotation
     
-    private func updateModelRotation(rotationMatrix: simd_float4x4) {
+    /// Translates the model to the origin and rotates it.
+    ///
+    /// The model is still in world coordinates: it's just translated so its bounding volume is centered at
+    /// `(0,0,0)` and rotated (users can rotate the model).
+    private func updateModelTransform(rotationQuaternion: simd_quatd) {
         
         // Add some random rotation of shadowMap around its center axis to cause
         // aliasing artifacts to change from frame to frame.
@@ -246,8 +250,11 @@ class MetalScene {
             axis: simd_float3(0.0, 0.0, 1.0)
         )
         
-        self.userModelRotationMatrix = rotationMatrix
+        self.userRotationQuaternion = rotationQuaternion.normalized
+        let rotationMatrix = Transform.rotationMatrix(quaternion: rotationQuaternion)
+        
         let translateToOriginMatrix = Transform.translationMatrix(-boundingVolume.sphere.center)
+        self.modelTranslationMatrix = translateToOriginMatrix
 
         // Update model rotation matrix
         self.frameData.rotation_matrix = rotationMatrix * translateToOriginMatrix
@@ -381,7 +388,7 @@ class MetalScene {
         self.cameraPosition.x = 0
         self.cameraPosition.y = 0
         // Undo rotation
-        updateModelRotation(rotationMatrix: Transform.scaleMatrix(.one))
+        updateModelTransform(rotationQuaternion: .identity)
         // TO-DO: Undo zoom
     }
     

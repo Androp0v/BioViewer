@@ -40,7 +40,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "3D44F537-3E50-45D1-AE90-281B84348690"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BioViewer/Metal/Renderer/RenderPasses/ImpostorPass/ImpostorPass.swift"
@@ -403,63 +403,16 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "fillColorPass(renderer:commandBuffer:colorBuffer:colorFill:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A - c19db0a0285c7274"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BioViewer.MutableState.fillColorPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, colorBuffer: Swift.Optional&lt;__C.MTLBuffer&gt;, colorFill: __C.FillColorInput) -&gt; ()"
-                  moduleName = "BioViewer"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "48"
-                  endingLineNumber = "48"
-                  offsetFromSymbolStart = "3416">
-               </Location>
-               <Location
-                  uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A - c19db0a0285c7274"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BioViewer.MutableState.fillColorPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, colorBuffer: Swift.Optional&lt;__C.MTLBuffer&gt;, colorFill: __C.FillColorInput) -&gt; ()"
-                  moduleName = "BioViewer"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "48"
-                  endingLineNumber = "48"
-                  offsetFromSymbolStart = "3896">
-               </Location>
-               <Location
-                  uuid = "E5AAF5F3-83AB-4F7B-B358-276555F34B0A - c19db0a0285c7274"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BioViewer.MutableState.fillColorPass(renderer: BioViewer.ProteinRenderer, commandBuffer: __C.MTLCommandBuffer, colorBuffer: Swift.Optional&lt;__C.MTLBuffer&gt;, colorFill: __C.FillColorInput) -&gt; ()"
-                  moduleName = "BioViewer"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/ComputePasses/FillColorPass.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "48"
-                  endingLineNumber = "48"
-                  offsetFromSymbolStart = "3852">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -472,8 +425,8 @@
             filePath = "BioViewer/Metal/Functions/CreateImpostorSpheres.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "createImpostorSpheres(proteins:atomRadii:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -668,6 +621,166 @@
             endingLineNumber = "163"
             landmarkName = "computeFractions()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3A58674D-9BE4-4580-A0EA-586F61C162EE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/ProteinMetal/ProteinMetalViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "handleTap(gestureRecognizer:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3A58674D-9BE4-4580-A0EA-586F61C162EE - 31caeee972a2dda7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in BioViewer.ProteinMetalViewController.handleTap(gestureRecognizer: __C.UITapGestureRecognizer) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/ProteinMetal/ProteinMetalViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "84"
+                  endingLineNumber = "84"
+                  offsetFromSymbolStart = "104">
+               </Location>
+               <Location
+                  uuid = "3A58674D-9BE4-4580-A0EA-586F61C162EE - 39e38740e4155ab"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for closure #1 @Sendable () async -&gt; () in BioViewer.ProteinMetalViewController.handleTap(gestureRecognizer: __C.UITapGestureRecognizer) -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Views/ProteinViews/ProteinMetal/ProteinMetalViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "84"
+                  endingLineNumber = "84"
+                  offsetFromSymbolStart = "156">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "075F495C-3B47-4E6A-97D2-EC911E9D6935"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/Scene/MetalScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
+            landmarkName = "updateModelTransform(rotationQuaternion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DCA60C31-34F0-4962-B613-B532F08616CB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "680D2178-569B-4C36-BAAA-A7AD98E5C33A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5DB8D578-2281-4E3D-B30F-07FA5A65D72B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Views/ProteinViews/Data/SelectionModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "hitTest(worldSpaceRay:atomRadii:dataSource:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6514DFB1-E11C-412A-8A8C-2C2C44784C6E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BioViewer/Metal/Renderer/Scene/MetalScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
+            landmarkName = "updateScene()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6514DFB1-E11C-412A-8A8C-2C2C44784C6E - 59281ed994fed6d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MetalScene.updateScene() -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/Scene/MetalScene.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "202"
+                  endingLineNumber = "202"
+                  offsetFromSymbolStart = "2792">
+               </Location>
+               <Location
+                  uuid = "6514DFB1-E11C-412A-8A8C-2C2C44784C6E - 59281ed994fed6d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BioViewer.MetalScene.updateScene() -&gt; ()"
+                  moduleName = "BioViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raul/Developer/BioViewer/BioViewer/Metal/Renderer/Scene/MetalScene.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "202"
+                  endingLineNumber = "202"
+                  offsetFromSymbolStart = "2780">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

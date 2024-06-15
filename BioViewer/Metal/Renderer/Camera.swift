@@ -11,7 +11,7 @@ import simd
 
 // MARK: - Camera
 
-class Camera {
+final class Camera: Sendable {
     
     private static let fullFrameDiagonal: Float = 43.3 // mm
     
@@ -41,10 +41,12 @@ class Camera {
         self.farPlane = farPlane
         self.verticalFieldOfView = fieldOfView
         self.focalLength = Camera.fullFrameDiagonal / ( 2 * tan( (fieldOfView * Float.pi / 180) / 2 ) )
-        projectionMatrix = Transform.perspectiveProjection(fieldOfView * Float.pi / 180,
-                                                           1.0,
-                                                           nearPlane,
-                                                           farPlane)
+        projectionMatrix = Transform.perspectiveProjection(
+            fieldOfView * Float.pi / 180,
+            1.0,
+            nearPlane,
+            farPlane
+        )
     }
 
     /// Initialize the camera struct.

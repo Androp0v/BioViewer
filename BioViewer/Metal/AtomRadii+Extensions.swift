@@ -141,4 +141,17 @@ extension AtomRadii {
         }
         return atomRadii
     }
+    
+    func getRadiusOf(atomElement: AtomElement) -> Float {
+        // WORKAROUND: C arrays with fixed sizes, such as the ones defined in FillColorInput, are
+        // imported in Swift as tuples. To access its contents, we must use an unsafe pointer.
+        withUnsafeBytes(of: self.atomRadius) { rawPtr -> Float in
+            let index = atomElement.rawValue
+            guard index < Int(ATOM_TYPE_COUNT), let ptrAddress = rawPtr.baseAddress else {
+                return .zero
+            }
+            let ptr = (ptrAddress + MemoryLayout<Float>.stride * Int(index)).assumingMemoryBound(to: Float.self)
+            return ptr.pointee
+        }
+    }
 }
