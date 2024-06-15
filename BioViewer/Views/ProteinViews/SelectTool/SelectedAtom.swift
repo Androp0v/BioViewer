@@ -16,13 +16,16 @@ struct SelectedAtom: View {
             @Bindable var bindableSelectionModel = selectionModel
             ZStack(alignment: .leading) {
                 HStack(spacing: .zero) {
-                    Text(NSLocalizedString("Selecting", comment: ""))
+                    // TODO: Different selection modes
+                    // Text(NSLocalizedString("Selecting", comment: ""))
+                    Text(NSLocalizedString("Selection tool", comment: ""))
                         .bold()
                     #if !targetEnvironment(macCatalyst)
                     Spacer()
                         .frame(width: 8)
                     #endif
-                    BioViewerPicker(selection: $bindableSelectionModel.selectionOption)
+                    // TODO: Different selection modes
+                    // BioViewerPicker(selection: $bindableSelectionModel.selectionOption)
                 }
                 .padding(.horizontal, 24)
                 .padding(.leading, 36)
@@ -48,6 +51,7 @@ struct SelectedAtom: View {
                 .foregroundColor(.primary)
                 .buttonStyle(PlainButtonStyle())
             }
+            .drawingGroup()
             #if targetEnvironment(macCatalyst)
             .padding(.vertical, 4)
             #else
