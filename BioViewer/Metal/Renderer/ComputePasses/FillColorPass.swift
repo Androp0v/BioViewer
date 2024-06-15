@@ -38,11 +38,6 @@ extension MutableState {
             return
         }
         
-        // Modify FillColorInput on the fly to avoid accessing the empty arrays
-        let useSimpleShader = atomSubunitBuffer == nil
-            || atomResidueBuffer == nil
-            || atomSecondaryStructureBuffer == nil
-                        
         // Set Metal compute encoder
         guard let computeEncoder = commandBuffer.makeComputeCommandEncoder() else {
             return

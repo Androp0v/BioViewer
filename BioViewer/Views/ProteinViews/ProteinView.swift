@@ -20,6 +20,7 @@ struct ProteinView: View {
     @Environment(ProteinRenderer.self) var renderer: ProteinRenderer
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
+    @Environment(SelectionModel.self) var selectionModel: SelectionModel
     
     @State var toolbarConfig = ToolbarConfig()
     
@@ -52,9 +53,12 @@ struct ProteinView: View {
                 ZStack {
                     
                     // Main scene view
-                    ProteinMetalView(proteinViewModel: proteinViewModel)
-                        .background(.black)
-                        .edgesIgnoringSafeArea([.top, .bottom])
+                    ProteinMetalView(
+                        proteinViewModel: proteinViewModel,
+                        selectionModel: selectionModel
+                    )
+                    .background(.black)
+                    .edgesIgnoringSafeArea([.top, .bottom])
                     
                     // Status changes
                     StatusOverlayView()
@@ -103,12 +107,29 @@ struct ProteinView: View {
                     }
                     .padding(.bottom, 12)
                     
+                    VStack {
+                        Spacer()
+                        HStack(alignment: .bottom) {
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    if selectionModel.selectionActive {
+                                        SelectedAtom()
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .frame(maxHeight: 256)
+                    }
+                    
                     // Import view
                     if proteinDataSource.proteinCount == 0 && !statusViewModel.isImportingFile {
                         ProteinImportView()
                             .edgesIgnoringSafeArea(.bottom)
                     }
                 }
+                .edgesIgnoringSafeArea(.bottom)
                 .onDrop(of: [.data, .item], delegate: proteinViewModel.dropHandler)
             }
         }

@@ -32,19 +32,6 @@ extension MutableState {
         let impostorTriangleCount = 2
         
         // Create subunit data array
-        /*
-        var subunitData = [Int16]()
-        for protein in proteins {
-            guard let subunits = protein.subunits else {
-                NSLog("Unable to create subunit data array buffer: protein has no subunits")
-                return nil
-            }
-            for index in 0..<protein.subunitCount {
-                subunitData.append(contentsOf: Array(repeating: Int16(index),
-                                                     count: subunits[index].atomCount))
-            }
-        }
-         */
         var subunitData = [UInt16]()
         for protein in proteins {
             if let atomSubunits = protein.atomChainIDs {

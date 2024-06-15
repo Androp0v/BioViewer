@@ -22,9 +22,11 @@ class ProteinMetalViewController: PlatformViewController {
     var renderedView: ProteinRenderedView!
     
     var proteinViewModel: ProteinViewModel
+    var selectionModel: SelectionModel
     
-    init(proteinViewModel: ProteinViewModel) {
+    init(proteinViewModel: ProteinViewModel, selectionModel: SelectionModel) {
         self.proteinViewModel = proteinViewModel
+        self.selectionModel = selectionModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -72,17 +74,54 @@ class ProteinMetalViewController: PlatformViewController {
         // MARK: - Gesture recognizers
         
         #if os(iOS)
+        let tapOrClickGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
         #elseif os(macOS)
+        let tapOrClickGesture = NSClickGestureRecognizer(target: self, action: #selector(self.handleClick))
         let pinchGesture = NSMagnificationGestureRecognizer(target: self, action: #selector(self.handlePinch))
         let panGesture = NSPanGestureRecognizer(target: self, action: #selector(self.handlePan))
         #endif
+        renderedView.addGestureRecognizer(tapOrClickGesture)
         renderedView.addGestureRecognizer(pinchGesture)
         renderedView.addGestureRecognizer(panGesture)
     }
 
-    // MARK: - Pinch
+    // MARK: - Tap
+        
+    #if os(iOS)
+    @objc private func handleTap(gestureRecognizer: UITapGestureRecognizer) {
+        let location = gestureRecognizer.location(in: self.view)
+        Task(priority: .userInitiated) {
+            await self.selectionModel.hit(
+                at: location,
+                viewSize: self.view.frame.size,
+                camera: self.proteinViewModel.renderer.mutableState.getCamera(),
+                cameraPosition: self.proteinViewModel.renderer.mutableState.getCameraPosition(),
+                rotationQuaternion: self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion(),
+                modelTranslationMatrix: self.proteinViewModel.renderer.mutableState.getModelTranslationMatrix(),
+                atomRadii: self.proteinViewModel.renderer.mutableState.getAtomRadii(),
+                dataSource: self.proteinViewModel.dataSource
+            )
+        }
+    }
+    #elseif os(macOS)
+    @objc private func handleClick(gestureRecognizer: NSClickGestureRecognizer) {
+        let location = gestureRecognizer.location(in: self.view)
+        Task(priority: .userInitiated) {
+            await self.selectionModel.hit(
+                at: location,
+                viewSize: self.view.frame.size,
+                camera: self.proteinViewModel.renderer.mutableState.getCamera(),
+                cameraPosition: self.proteinViewModel.renderer.mutableState.getCameraPosition(),
+                rotationQuaternion: self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion(),
+                modelTranslationMatrix: self.proteinViewModel.renderer.mutableState.getModelTranslationMatrix(),
+                atomRadii: self.proteinViewModel.renderer.mutableState.getAtomRadii(),
+                dataSource: self.proteinViewModel.dataSource
+            )
+        }
+    }
+    #endif
     
     #if os(iOS)
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
@@ -133,27 +172,26 @@ class ProteinMetalViewController: PlatformViewController {
             switch toolbarConfig.selectedTool {
             case CameraControlTool.rotate:
                 Task(priority: .high) {
-                    let rotationSpeedX = Float(gestureRecognizer.velocity(in: renderedView).x) / 5000
+                    let rawRotationSpeed: CGPoint = gestureRecognizer.velocity(in: renderedView)
+                    guard rawRotationSpeed != .zero else { return }
+                    let rotationSpeedX = rawRotationSpeed.x / 10000
                     #if os(iOS)
-                    let rotationSpeedY = Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                    let rotationSpeedY = rawRotationSpeed.y / 10000
                     #elseif os(macOS)
                     // Swap rotation direction on macOS to match iOS
-                    let rotationSpeedY = -Float(gestureRecognizer.velocity(in: renderedView).y) / 5000
+                    let rotationSpeedY = -rawRotationSpeed.y / 10000
                     #endif
+                    let currentRotationQuaternion = await self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion()
                     
-                    var currentRotationMatrix = await self.proteinViewModel.renderer.mutableState.getUserRotationMatrix()
-                    
-                    // Revert the axis rotation before rotating through that axis
-                    currentRotationMatrix *= Transform.rotationMatrix(
-                        radians: -rotationSpeedX,
-                        axis: (currentRotationMatrix.inverse * simd_float4(0, 1, 0, 1)).xyz
-                    )
-                    currentRotationMatrix *= Transform.rotationMatrix(
-                        radians: -rotationSpeedY,
-                        axis: (currentRotationMatrix.inverse * simd_float4(1, 0, 0, 1)).xyz
+                    let rotationAxis = normalize(rotationSpeedX * simd_double3(0, 1, 0) + rotationSpeedY * simd_double3(1, 0, 0))
+                    let newRotationQuaternion = simd_quatd(
+                        angle: -sqrt(pow(rotationSpeedX, 2) + pow(rotationSpeedY, 2)),
+                        axis: rotationAxis
                     )
                     
-                    await self.proteinViewModel.renderer.mutableState.setUserRotationMatrix(currentRotationMatrix)
+                    await self.proteinViewModel.renderer.mutableState.setUserRotationQuaternion(
+                        newRotationQuaternion * currentRotationQuaternion
+                    )
                 }
                 
             case CameraControlTool.move:

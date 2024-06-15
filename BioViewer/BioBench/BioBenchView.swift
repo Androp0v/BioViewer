@@ -23,6 +23,7 @@ struct BioBenchView: View {
     @State var visualizationViewModel = ProteinVisualizationViewModel()
     @State var shadowsViewModel = ProteinShadowsViewModel()
     @State var statusViewModel = StatusViewModel()
+    @State var selectionModel = SelectionModel()
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -37,23 +38,26 @@ struct BioBenchView: View {
         layout {
             VStack {
                 ZStack {
-                    ProteinMetalView(proteinViewModel: proteinViewModel)
-                        .disabled(true)
-                        .onAppear {
-                            proteinDataSource.proteinViewModel = proteinViewModel
-                            proteinViewModel.dataSource = proteinDataSource
-                            
-                            colorViewModel.proteinViewModel = proteinViewModel
-                            proteinViewModel.colorViewModel = colorViewModel
-                            
-                            visualizationViewModel.proteinViewModel = proteinViewModel
-                            proteinViewModel.visualizationViewModel = visualizationViewModel
-                            
-                            shadowsViewModel.proteinViewModel = proteinViewModel
-                            
-                            statusViewModel.proteinViewModel = proteinViewModel
-                            proteinViewModel.statusViewModel = statusViewModel
-                        }
+                    ProteinMetalView(
+                        proteinViewModel: proteinViewModel,
+                        selectionModel: selectionModel
+                    )
+                    .disabled(true)
+                    .onAppear {
+                        proteinDataSource.proteinViewModel = proteinViewModel
+                        proteinViewModel.dataSource = proteinDataSource
+                        
+                        colorViewModel.proteinViewModel = proteinViewModel
+                        proteinViewModel.colorViewModel = colorViewModel
+                        
+                        visualizationViewModel.proteinViewModel = proteinViewModel
+                        proteinViewModel.visualizationViewModel = visualizationViewModel
+                        
+                        shadowsViewModel.proteinViewModel = proteinViewModel
+                        
+                        statusViewModel.proteinViewModel = proteinViewModel
+                        proteinViewModel.statusViewModel = statusViewModel
+                    }
                     
                     if let currentImage = benchmarkViewModel.currentImage {
                         #if os(iOS)
