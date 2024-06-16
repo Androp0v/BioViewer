@@ -17,7 +17,7 @@ struct BioBenchView: View {
     @State var benchmarkViewModel = BioBenchViewModel()
     @State var isRunningBenchmark: Bool = false
     
-    @StateObject var proteinViewModel = ProteinViewModel(isBenchmark: true)
+    let proteinViewModel = ProteinViewModel(isBenchmark: true)
     @StateObject var proteinDataSource = ProteinDataSource()
     @State var colorViewModel = ProteinColorViewModel()
     @State var visualizationViewModel = ProteinVisualizationViewModel()
@@ -44,19 +44,7 @@ struct BioBenchView: View {
                     )
                     .disabled(true)
                     .onAppear {
-                        proteinDataSource.proteinViewModel = proteinViewModel
-                        proteinViewModel.dataSource = proteinDataSource
-                        
-                        colorViewModel.proteinViewModel = proteinViewModel
-                        proteinViewModel.colorViewModel = colorViewModel
-                        
-                        visualizationViewModel.proteinViewModel = proteinViewModel
-                        proteinViewModel.visualizationViewModel = visualizationViewModel
-                        
                         shadowsViewModel.proteinViewModel = proteinViewModel
-                        
-                        statusViewModel.proteinViewModel = proteinViewModel
-                        proteinViewModel.statusViewModel = statusViewModel
                     }
                     
                     if let currentImage = benchmarkViewModel.currentImage {

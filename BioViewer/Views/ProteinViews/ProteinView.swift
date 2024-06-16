@@ -13,18 +13,16 @@ struct ProteinView: View {
 
     // MARK: - Properties
     
+    let proteinViewModel: ProteinViewModel
     let renderer: ProteinRenderer
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var proteinDataSource: ProteinDataSource
     
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @Environment(SelectionModel.self) var selectionModel: SelectionModel
-    
-    @State var toolbarConfig = ToolbarConfig()
-    
+        
     @State private var showSidebar: Bool = UserDefaults.standard.bool(forKey: "showSidebar")
     @State private var showInspectorModal: Bool = false
     @State private var selectedSidebarSegment = 0
@@ -91,18 +89,13 @@ struct ProteinView: View {
                         }
                         Spacer()
                     }
-                    .environment(toolbarConfig)
-                    .onAppear {
-                        proteinViewModel.toolbarConfig = toolbarConfig
-                        toolbarConfig.proteinViewModel = proteinViewModel
-                    }
+                    .environment(proteinViewModel.toolbarConfig)
                     
                     // Scene controls
                     VStack(spacing: 12) {
                         Spacer()
                         if proteinDataSource.files.first?.fileType == .dynamicStructure {
-                            DynamicStructureControlView()
-                                .environmentObject(proteinViewModel)
+                            DynamicStructureControlView(renderer: renderer)
                         }
                         /*
                          if toggleSequenceView {

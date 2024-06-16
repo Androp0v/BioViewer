@@ -7,7 +7,7 @@
 
 import BioViewerFoundation
 import Foundation
-@preconcurrency import Metal
+import Metal
 
 struct CreateImpostorSpheresOutput {
     let vertexBuffer: BillboardVertexBuffers

@@ -10,7 +10,6 @@ import SwiftUI
 struct PhotoModeFooter: View {
     
     let renderer: ProteinRenderer
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
     @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
     @Environment(ShutterAnimator.self) var shutterAnimator: ShutterAnimator
     

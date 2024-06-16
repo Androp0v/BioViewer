@@ -45,7 +45,7 @@ struct BioViewerCommands: Commands {
         CommandGroup(after: .newItem) {
             Button(NSLocalizedString("Remove all files", comment: "")) {
                 Task { @MainActor in
-                    await AppState.shared.focusedViewModel?.dataSource?.removeAllFilesFromDatasource()
+                    await AppState.shared.focusedViewModel?.dataSource.removeAllFilesFromDatasource()
                 }
             }
             .keyboardShortcut(.delete)
@@ -59,14 +59,14 @@ struct BioViewerCommands: Commands {
             
                 Button(NSLocalizedString("View as space-filling spheres", comment: "")) {
                     Task { @MainActor in
-                        await AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .solidSpheres
+                        await AppState.shared.focusedViewModel?.visualizationViewModel.visualization = .solidSpheres
                     }
                 }
                 .keyboardShortcut("1")
                 
                 Button(NSLocalizedString("View as ball and stick", comment: "")) {
                     Task { @MainActor in
-                        await AppState.shared.focusedViewModel?.visualizationViewModel?.visualization = .ballAndStick
+                        await AppState.shared.focusedViewModel?.visualizationViewModel.visualization = .ballAndStick
                     }
                 }
                 .keyboardShortcut("2")
@@ -79,7 +79,7 @@ struct BioViewerCommands: Commands {
                 ForEach(ProteinColorByOption.allCases, id: \.self) { colorOption in
                     Button(NSLocalizedString("Color by \(colorOption.displayName.lowercased())", comment: "")) {
                         Task { @MainActor in
-                            await AppState.shared.focusedViewModel?.colorViewModel?.colorBy = colorOption
+                            await AppState.shared.focusedViewModel?.colorViewModel.colorBy = colorOption
                         }
                     }
                     .keyboardShortcut(colorOption.shortcutKey, modifiers: [.option])

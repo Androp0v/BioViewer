@@ -74,7 +74,7 @@ class SunDirection {
                     guard let proteinViewModel else { return }
                     let boundingVolume = await proteinViewModel.renderer.scene.boundingVolume
                     await proteinViewModel.renderer.computeAmbientOcclusion(
-                        atomPositions: proteinViewModel.dataSource!.getFirstProtein()!.atoms,
+                        atomPositions: proteinViewModel.dataSource.getFirstProtein()!.atoms,
                         atomRadii: [Float.zero],
                         boundingVolume: boundingVolume
                     )

@@ -24,12 +24,12 @@ import UniformTypeIdentifiers
     func performDrop(info: DropInfo) -> Bool {
         
         let statusAction = StatusAction(type: .importFile, description: "Importing file", progress: nil)
-        self.proteinViewModel?.statusViewModel?.showStatusForAction(statusAction)
+        self.proteinViewModel?.statusViewModel.showStatusForAction(statusAction)
 
         guard let itemProvider = info.itemProviders(
             for: [.data, .item]
         ).first else {
-            self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
+            self.proteinViewModel?.statusViewModel.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
             NSLog("No itemProvider available for the given type.")
             return false
         }
@@ -48,7 +48,7 @@ import UniformTypeIdentifiers
         
         // Ensure that a type has been found at all
         guard let typeIdentifier = typeIdentifier else {
-            self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
+            self.proteinViewModel?.statusViewModel.signalActionFinished(statusAction, withError: ImportError.unknownFileType)
             NSLog("Item provider has no associated type identifier.")
             return false
         }
@@ -60,7 +60,7 @@ import UniformTypeIdentifiers
 
             guard let data = data else {
                 Task { @MainActor in
-                    self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownError)
+                    self.proteinViewModel?.statusViewModel.signalActionFinished(statusAction, withError: ImportError.unknownError)
                 }
                 return
             }
@@ -68,7 +68,7 @@ import UniformTypeIdentifiers
             // Check that either the suggestedName or the itemProvider type have a valid path extension
             guard let fileExtension = fileExtension else {
                 Task { @MainActor in
-                    self.proteinViewModel?.statusViewModel?.signalActionFinished(statusAction, withError: ImportError.unknownFileExtension)
+                    self.proteinViewModel?.statusViewModel.signalActionFinished(statusAction, withError: ImportError.unknownFileExtension)
                 }
                 return
             }
@@ -81,12 +81,10 @@ import UniformTypeIdentifiers
 
             // Parse file
             Task(priority: .userInitiated) {
-                guard let dataSource = await proteinViewModel.dataSource else { return }
-                guard let statusViewModel = proteinViewModel.statusViewModel else { return }
                 try? await FileImporter.importFileFromRawText(
                     rawText: rawFileText,
-                    proteinDataSource: dataSource,
-                    statusViewModel: statusViewModel,
+                    proteinDataSource: proteinViewModel.dataSource,
+                    statusViewModel: proteinViewModel.statusViewModel,
                     statusAction: statusAction,
                     fileInfo: nil,
                     fileName: filename,

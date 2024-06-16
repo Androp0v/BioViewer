@@ -13,8 +13,7 @@ import MetalFX
 #endif
 import SwiftUI
 
-/// Actor holding the `ProteinRenderer`'s protected mutable case, which must not be modified between
-/// draw calls. This includes textures, buffers, and other data structures.
+/// Object handling protein rendering. This includes textures, buffers, and other data structures.
 actor ProteinRenderer {
     
     /// The `MTLDevice` in charge of rendering the scene.

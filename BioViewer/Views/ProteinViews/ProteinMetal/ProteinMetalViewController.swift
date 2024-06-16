@@ -162,10 +162,10 @@ class ProteinMetalViewController: PlatformViewController {
     
     private func genericHandlePan(gestureRecognizer: some PlatformPanGestureRecognizer) {
         
-        guard let toolbarConfig = proteinViewModel.toolbarConfig else { return }
+        let toolbarConfig = proteinViewModel.toolbarConfig
         
         if toolbarConfig.autorotating {
-            proteinViewModel.toolbarConfig?.autorotating = false
+            toolbarConfig.autorotating = false
         }
         
         if gestureRecognizer.stateChanged {

@@ -10,7 +10,7 @@ import SwiftUI
 struct DynamicStructureControlView: View {
     
     @State var isPlaying: Bool = false
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
+    let renderer: ProteinRenderer
     
     private struct Constants {
         #if targetEnvironment(macCatalyst)
@@ -28,7 +28,7 @@ struct DynamicStructureControlView: View {
         HStack(spacing: Constants.spacing) {
             Button(action: {
                 Task {
-                    await proteinViewModel.renderer.previousConfiguration()
+                    await renderer.previousConfiguration()
                 }
             }, label: {
                 Image(systemName: "backward.frame.fill")
@@ -42,7 +42,7 @@ struct DynamicStructureControlView: View {
             Button(action: {
                 isPlaying.toggle()
                 Task {
-                    await proteinViewModel.renderer.setIsPlaying(isPlaying)
+                    await renderer.setIsPlaying(isPlaying)
                 }
             }, label: {
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
@@ -54,7 +54,7 @@ struct DynamicStructureControlView: View {
             
             Button(action: {
                 Task {
-                    await proteinViewModel.renderer.nextConfiguration()
+                    await renderer.nextConfiguration()
                 }
             }, label: {
                 Image(systemName: "forward.frame.fill")
@@ -80,13 +80,5 @@ private struct CameraControlButtonStyle: ButtonStyle {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.8 : 1.0)
             .foregroundColor(isEnabled ? .primary : .primary.opacity(0.3))
-    }
-}
-
-// MARK: - SwiftUI previews
-struct ProteinCameraControlView_Previews: PreviewProvider {
-    static var previews: some View {
-        DynamicStructureControlView()
-            .previewDevice("iPhone 12")
     }
 }

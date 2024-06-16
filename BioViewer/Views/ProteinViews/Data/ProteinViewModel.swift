@@ -9,43 +9,53 @@ import Combine
 import Foundation
 import SwiftUI
 
-final class ProteinViewModel: ObservableObject {
+final class ProteinViewModel: Sendable {
 
     // MARK: - Properties
     
     /// Metal rendering engine.
     let renderer: ProteinRenderer
     /// Datasource to hold actual protein data.
-    var dataSource: ProteinDataSource?
+    let dataSource: ProteinDataSource
     /// Linked ProteinColorViewModel
-    var colorViewModel: ProteinColorViewModel?
+    let colorViewModel: ProteinColorViewModel
     /// Linked ProteinVisualizationViewModel
-    var visualizationViewModel: ProteinVisualizationViewModel?
+    let visualizationViewModel: ProteinVisualizationViewModel
     /// Toolbar view model.
-    var toolbarConfig: ToolbarConfig?
+    let toolbarConfig: ToolbarConfig
     /// Reference to the status view model for updates.
-    var statusViewModel: StatusViewModel?
-    
+    let statusViewModel: StatusViewModel
     /// Delegate to handle dropped files in view.
-    var dropHandler: ImportDroppedFilesDelegate
+    let dropHandler: ImportDroppedFilesDelegate
     
     // MARK: - Initialization
 
     @MainActor init(isBenchmark: Bool = false) {
         // Setup Metal renderer
         self.renderer = ProteinRenderer(isBenchmark: isBenchmark)
-
-        // Setup drop delegate
-        self.dropHandler = ImportDroppedFilesDelegate()
         
-        // Pass reference to ProteinViewModel to delegates and datasources
+        self.dataSource = ProteinDataSource()
+        self.colorViewModel = ProteinColorViewModel()
+        self.visualizationViewModel = ProteinVisualizationViewModel()
+        self.toolbarConfig = ToolbarConfig()
+        self.dropHandler = ImportDroppedFilesDelegate()
+        self.statusViewModel = StatusViewModel()
+        
+        setup()
+    }
+    
+    @MainActor private func setup() {
+        self.dataSource.proteinViewModel = self
+        self.colorViewModel.proteinViewModel = self
+        self.visualizationViewModel.proteinViewModel = self
+        self.toolbarConfig.proteinViewModel = self
         self.dropHandler.proteinViewModel = self
     }
 
     // MARK: - Public functions
 
     func removeAllFiles() async {
-        await self.dataSource?.removeAllFilesFromDatasource()
+        await self.dataSource.removeAllFilesFromDatasource()
         // FIXME: Status changes, self.statusViewModel?.removeAllWarnings()
         // FIXME: Status changes, self.statusViewModel?.removeAllErrors()
     }

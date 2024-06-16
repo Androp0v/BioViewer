@@ -31,8 +31,7 @@ class VisualizationBufferLoader {
         currentTask = Task {
             // Compute model connectivity if not already present
             if visualization == .ballAndStick {
-                guard let dataSource = proteinViewModel.dataSource,
-                      let protein = dataSource.getFirstProtein()
+                guard let protein = proteinViewModel.dataSource.getFirstProtein()
                 else {
                     return
                 }
@@ -44,15 +43,15 @@ class VisualizationBufferLoader {
                         description: NSLocalizedString("Generating geometry", comment: ""),
                         progress: bondCreationProgress
                     )
-                    proteinViewModel.statusViewModel?.showStatusForAction(connectivityStatusAction)
+                    proteinViewModel.statusViewModel.showStatusForAction(connectivityStatusAction)
                     // Compute links
                     await ConnectivityGenerator().computeConnectivity(
                         protein: protein,
-                        dataSource: dataSource,
+                        dataSource: proteinViewModel.dataSource,
                         progress: bondCreationProgress
                     )
                     // Finished computing links, update status
-                    proteinViewModel.statusViewModel?.signalActionFinished(connectivityStatusAction, withError: nil)
+                    proteinViewModel.statusViewModel.signalActionFinished(connectivityStatusAction, withError: nil)
                 }
             }
             await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
@@ -68,19 +67,11 @@ class VisualizationBufferLoader {
         proteinViewModel: ProteinViewModel,
         isInitialAnimation: Bool = false
     ) async {
-        
-        guard let dataSource = proteinViewModel.dataSource,
-              let visualizationViewModel = proteinViewModel.visualizationViewModel,
-              let colorBy = proteinViewModel.colorViewModel?.colorBy
-        else {
-            return
-        }
-        
         await proteinViewModel.renderer.populateVisualizationBuffers(
             visualization: visualization,
-            dataSource: dataSource,
-            visualizationViewModel: visualizationViewModel,
-            colorBy: colorBy,
+            dataSource: proteinViewModel.dataSource,
+            visualizationViewModel: proteinViewModel.visualizationViewModel,
+            colorBy: proteinViewModel.colorViewModel.colorBy,
             isInitialAnimation: isInitialAnimation
         )
     }

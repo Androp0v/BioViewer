@@ -33,10 +33,3 @@ struct FunctionsSegmentProtein: View {
         #endif
     }
 }
-
-struct FunctionsSegmentProtein_Previews: PreviewProvider {
-    static var previews: some View {
-        FunctionsSegmentProtein()
-            .environmentObject(ProteinViewModel())
-    }
-}

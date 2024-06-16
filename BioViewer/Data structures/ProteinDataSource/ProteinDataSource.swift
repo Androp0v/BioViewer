@@ -102,7 +102,7 @@ import SwiftUI
         // Change visualization to trigger rendering
         // TO-DO: visualization should depend on file type too
         Task { @MainActor in
-            proteinViewModel.visualizationViewModel?.visualization = .solidSpheres
+            proteinViewModel.visualizationViewModel.visualization = .solidSpheres
         }
     }
         
@@ -120,7 +120,7 @@ import SwiftUI
     
     /// Removes all files from the data source and the scene.
     func removeAllFilesFromDatasource() async {
-        if let proteins = modelsForFile(file: getFirstFile()), let colorBy = proteinViewModel?.colorViewModel?.colorBy {
+        if let proteins = modelsForFile(file: getFirstFile()), let colorBy = proteinViewModel?.colorViewModel.colorBy {
             await proteinViewModel?.renderer.animatedFileDeletion(
                 colorBy: colorBy,
                 proteins: proteins
@@ -135,10 +135,10 @@ import SwiftUI
     // MARK: - Update model
     
     func updateFileModels(withAnimation: Bool) async {
-        guard let proteinViewModel = self.proteinViewModel,
-              let visualizationViewModel = proteinViewModel.visualizationViewModel
-        else { return }
-
+        guard let proteinViewModel = self.proteinViewModel else {
+            return
+        }
+        let visualizationViewModel = proteinViewModel.visualizationViewModel
         await visualizationViewModel.visualizationBufferLoader.populateVisualizationBuffers(
             visualization: visualizationViewModel.visualization,
             proteinViewModel: proteinViewModel,

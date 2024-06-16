@@ -9,8 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    @StateObject var proteinViewModel = ProteinViewModel()
-    @StateObject var proteinDataSource = ProteinDataSource()
+    let proteinViewModel = ProteinViewModel()
     @State var colorViewModel = ProteinColorViewModel()
     @State var visualizationViewModel = ProteinVisualizationViewModel()
     @State var shadowsViewModel = ProteinShadowsViewModel()
@@ -24,9 +23,8 @@ struct MainView: View {
     var body: some View {
         
         NavigationStack {
-            ProteinView(renderer: proteinViewModel.renderer)
-                .environmentObject(proteinViewModel)
-                .environmentObject(proteinDataSource)
+            ProteinView(proteinViewModel: proteinViewModel, renderer: proteinViewModel.renderer)
+                .environmentObject(proteinViewModel.dataSource)
                 .environment(colorViewModel)
                 .environment(visualizationViewModel)
                 .environment(shadowsViewModel)
@@ -34,22 +32,8 @@ struct MainView: View {
                 .environment(statusViewModel)
                 .environment(selectionModel)
                 .onAppear {
-                    
-                    proteinDataSource.proteinViewModel = proteinViewModel
-                    proteinViewModel.dataSource = proteinDataSource
-                    
-                    colorViewModel.proteinViewModel = proteinViewModel
-                    proteinViewModel.colorViewModel = colorViewModel
-                    
-                    visualizationViewModel.proteinViewModel = proteinViewModel
-                    proteinViewModel.visualizationViewModel = visualizationViewModel
-                    
                     shadowsViewModel.proteinViewModel = proteinViewModel
-                    
                     graphicsSettings.proteinViewModel = proteinViewModel
-                    
-                    statusViewModel.proteinViewModel = proteinViewModel
-                    proteinViewModel.statusViewModel = statusViewModel
                 }
             
                 .sheet(
@@ -77,7 +61,7 @@ struct MainView: View {
             Task {
                 try? await FileImporter.importFromFileURL(
                     fileURL: fileURL,
-                    proteinDataSource: proteinDataSource,
+                    proteinDataSource: proteinViewModel.dataSource,
                     statusViewModel: statusViewModel,
                     fileInfo: nil
                 )

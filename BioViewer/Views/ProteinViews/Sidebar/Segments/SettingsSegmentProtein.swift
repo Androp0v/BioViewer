@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct SettingsSegmentProtein: View {
-    
-    @EnvironmentObject var proteinViewModel: ProteinViewModel
-    
+        
     var body: some View {
         List {
             // First section hast 64pt padding to account for the

@@ -104,10 +104,3 @@ struct FileSegmentProtein: View {
         .listStyle(DefaultListStyle())
     }
 }
-
-struct FileSegmentProtein_Previews: PreviewProvider {
-    static var previews: some View {
-        FileSegmentProtein()
-            .environmentObject(ProteinViewModel())
-    }
-}

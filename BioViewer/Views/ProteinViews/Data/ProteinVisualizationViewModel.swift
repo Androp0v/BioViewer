@@ -81,10 +81,10 @@ import Foundation
         didSet {
             if showSurface {
                 Task {
-                    guard let proteinViewModel = self.proteinViewModel,
-                          let dataSource = proteinViewModel.dataSource
-                    else { return }
-                    guard var debugBuffer = ComputeMolecularSurfaceUtility(protein: (dataSource.files.first?.models.first)!)
+                    guard let proteinViewModel = self.proteinViewModel else {
+                        return
+                    }
+                    guard var debugBuffer = ComputeMolecularSurfaceUtility(protein: (proteinViewModel.dataSource.files.first?.models.first)!)
                             .createMolecularSurface() else {
                         return
                     }
