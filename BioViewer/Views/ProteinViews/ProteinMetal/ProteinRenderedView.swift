@@ -13,11 +13,19 @@ import AppKit
 import UIKit
 #endif
 
+struct UncheckedSendableCAMetalLayer: @unchecked Sendable {
+    let metalLayer: CAMetalLayer
+    
+    init(_ metalLayer: CAMetalLayer) {
+        self.metalLayer = metalLayer
+    }
+}
+
 final class ProteinRenderedView: PlatformView {
     
     nonisolated(unsafe) let renderer: ProteinRenderer
     nonisolated(unsafe) private var renderThread: Thread?
-    nonisolated(unsafe) var metalLayer: CAMetalLayer?
+    nonisolated(unsafe) var metalLayer: UncheckedSendableCAMetalLayer?
     var displayLink: PlatformDisplayLink?
     
     init(renderer: ProteinRenderer, frame: CGRect) {
@@ -85,7 +93,7 @@ final class ProteinRenderedView: PlatformView {
         guard let metalLayer = self.layer as? CAMetalLayer else {
             return
         }
-        self.metalLayer = metalLayer
+        self.metalLayer = UncheckedSendableCAMetalLayer(metalLayer)
         Task {
             await renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
         }
@@ -113,7 +121,9 @@ final class ProteinRenderedView: PlatformView {
             return
         }
         self.metalLayer = metalLayer
-        renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
+        Task {
+            renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
+        }
     }
     #endif
     
@@ -149,7 +159,7 @@ final class ProteinRenderedView: PlatformView {
             guard let metalLayer = self.layer as? CAMetalLayer else {
                 return
             }
-            metalLayer.device = await renderer.device
+            await renderer.setDeviceFor(layer: UncheckedSendableCAMetalLayer(metalLayer))
             metalLayer.framebufferOnly = false
         }
     }
@@ -201,7 +211,7 @@ final class ProteinRenderedView: PlatformView {
             return
         }
         Task(priority: .high) {
-            await renderer.draw(in: metalLayer)
+            await renderer.drawFrame(in: metalLayer)
         }
     }
 }

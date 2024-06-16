@@ -724,7 +724,7 @@ actor ProteinRenderer {
     }
     
     func exportBenchmarkTextures() -> CGImage? {
-        return benchmarkTextures.colorTexture.getCGImage()
+        return exportAsCGImage(texture: benchmarkTextures.colorTexture)
     }
     
     // MARK: - Configuration Selector

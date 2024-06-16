@@ -10,36 +10,38 @@ import CoreGraphics
 import Foundation
 import Metal
 
-extension MTLTexture {
+extension ProteinRenderer {
 
-    func getCGImage(clearBackground: Bool = false, depthTexture: MTLTexture? = nil) -> CGImage? {
+    func exportAsCGImage(texture: MTLTexture, clearBackground: Bool = false, depthTexture: MTLTexture? = nil) -> CGImage? {
 
-        guard self.pixelFormat == .bgra8Unorm else {
+        guard texture.pixelFormat == .bgra8Unorm else {
             NSLog("Unexpected pixelFormat in MTLTexture on getCGImage from MTLTexture.")
             return nil
         }
     
         // MARK: - MTLTexture to array
         
-        let rowBytes = self.width * 4
-        let length = rowBytes * self.height
-        let region = MTLRegionMake2D(0, 0, self.width, self.height)
+        let rowBytes = texture.width * 4
+        let length = rowBytes * texture.height
+        let region = MTLRegionMake2D(0, 0, texture.width, texture.height)
         var bgraBytes = [UInt8](repeating: 0, count: length)
         
         // Fill bgraBytes with the drawable texture data.
         bgraBytes.withUnsafeMutableBytes { bgraBytesPointer in
-            self.getBytes(bgraBytesPointer.baseAddress!,
-                          bytesPerRow: rowBytes,
-                          from: region,
-                          mipmapLevel: 0)
+            texture.getBytes(
+                bgraBytesPointer.baseAddress!,
+                bytesPerRow: rowBytes,
+                from: region,
+                mipmapLevel: 0
+            )
         }
         
         // MARK: - Clear background
         
         if let depthTexture = depthTexture, clearBackground {
-            let depthRowBytes = self.width * 4
-            let depthRegion = MTLRegionMake2D(0, 0, self.width, self.height)
-            var depthBytes = [Float](repeating: 0, count: 4 * self.width * self.height)
+            let depthRowBytes = texture.width * 4
+            let depthRegion = MTLRegionMake2D(0, 0, texture.width, texture.height)
+            var depthBytes = [Float](repeating: 0, count: 4 * texture.width * texture.height)
             
             // Fill depthBytes with the texture data.
             depthBytes.withUnsafeMutableBytes { depthBytesPointer in
@@ -51,10 +53,10 @@ extension MTLTexture {
                 // Modify the bgraBytes according to depth values
                 bgraBytes.withUnsafeMutableBytes { bgraBytesPointer in
                     let uncheckedSendableBox = UncheckedSendablePointers(
-                        bgraPointer: bgraBytesPointer.baseAddress!.assumingMemoryBound(to: UInt8.self), 
+                        bgraPointer: bgraBytesPointer.baseAddress!.assumingMemoryBound(to: UInt8.self),
                         depthPointer: depthBytesPointer.baseAddress!.assumingMemoryBound(to: Float32.self)
                     )
-                    DispatchQueue.concurrentPerform(iterations: self.width * self.height) { index in
+                    DispatchQueue.concurrentPerform(iterations: texture.width * texture.height) { index in
                         let bgraIndex = index * 4 + 3
                         if (uncheckedSendableBox.depthPointer + index).pointee == 1.0 {
                             (uncheckedSendableBox.bgraPointer + bgraIndex).pointee = 0
@@ -70,14 +72,14 @@ extension MTLTexture {
         var rgbaBytes = [UInt8](repeating: 0, count: length)
         bgraBytes.withUnsafeMutableBytes { bgraBytesPointer in
             var bgraBuffer = vImage_Buffer(data: bgraBytesPointer.baseAddress!,
-                                           height: vImagePixelCount(self.height),
-                                           width: vImagePixelCount(self.width),
+                                           height: vImagePixelCount(texture.height),
+                                           width: vImagePixelCount(texture.width),
                                            rowBytes: rowBytes)
             
             rgbaBytes.withUnsafeMutableBytes { rbgaBytesPointer in
                 var rgbaBuffer = vImage_Buffer(data: rbgaBytesPointer.baseAddress!,
-                                               height: vImagePixelCount(self.height),
-                                               width: vImagePixelCount(self.width),
+                                               height: vImagePixelCount(texture.height),
+                                               width: vImagePixelCount(texture.width),
                                                rowBytes: rowBytes)
                 let map: [UInt8] = [2, 1, 0, 3]
                 vImagePermuteChannels_ARGB8888(&bgraBuffer, &rgbaBuffer, map, 0)
@@ -91,8 +93,8 @@ extension MTLTexture {
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
         guard let data = CFDataCreate(nil, rgbaBytes, length) else { return nil }
         guard let dataProvider = CGDataProvider(data: data) else { return nil }
-        let cgImage = CGImage(width: self.width,
-                              height: self.height,
+        let cgImage = CGImage(width: texture.width,
+                              height: texture.height,
                               bitsPerComponent: 8,
                               bitsPerPixel: 32,
                               bytesPerRow: rowBytes,

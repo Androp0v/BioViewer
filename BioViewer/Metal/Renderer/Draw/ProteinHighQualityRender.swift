@@ -26,8 +26,7 @@ extension ProteinRenderer {
     ) throws {
         
         // Create the textures required for HQ rendering
-        var hqTextures = HQTextures()
-        hqTextures.makeTextures(device: device, photoConfig: photoConfig)
+        let hqTextures = HQTextures(device: device, photoConfig: photoConfig)
         Self.impostorRenderPassDescriptor.depthAttachment.storeAction = .store
         
         // Create the textures required for HQ depth pre-pass
@@ -120,8 +119,8 @@ extension ProteinRenderer {
         impostorRenderPass(
             commandBuffer: commandBuffer,
             uniformBuffer: &uniformBuffer,
-            drawableTexture: hqTextures.hqTexture,
-            depthTexture: hqTextures.hqDepthTexture,
+            drawableTexture: hqTextures.colorTexture,
+            depthTexture: hqTextures.depthTexture,
             depthPrePassTexture: hqPrePassTextures.colorTexture,
             shadowTextures: hqShadowTextures,
             variant: .solidSpheresHQ,
@@ -129,19 +128,19 @@ extension ProteinRenderer {
         )
         
         // MARK: - Completion handler
-        commandBuffer.addCompletedHandler({ _ in
+        commandBuffer.addCompletedHandler { _ in
             // GPU work is complete, signal the semaphore to start the CPU work
             self.frameBoundarySemaphore.signal()
-
-            let hqImage = hqTextures.hqTexture.getCGImage(
+            let hqImage = self.exportAsCGImage(
+                texture: hqTextures.colorTexture,
                 clearBackground: photoConfig.clearBackground,
-                depthTexture: hqTextures.hqDepthTexture
+                depthTexture: hqTextures.depthTexture
             )
             Task {
                 await photoModeViewModel.shutterAnimator.closeShutter(with: hqImage)
             }
             self.scene.aspectRatio = oldAspectRatio
-        })
+        }
         
         // MARK: - Commit buffer
         // Commit command buffer when the shutter is open (so no animations appear onscreen)

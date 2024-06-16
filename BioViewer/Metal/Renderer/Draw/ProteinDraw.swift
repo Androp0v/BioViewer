@@ -12,6 +12,10 @@ import MetalKit
 
 extension ProteinRenderer {
     
+    func setDeviceFor(layer: UncheckedSendableCAMetalLayer) {
+        layer.metalLayer.device = device
+    }
+    
     func drawableSizeChanged(to size: CGSize, layer: CAMetalLayer, displayScale: CGFloat) {
         updateMutableStateForNewViewSize(
             size,
@@ -21,11 +25,7 @@ extension ProteinRenderer {
     }
 
     // This is called periodically to render the scene contents on display
-    func draw(in layer: CAMetalLayer) {
-        drawFrame(in: layer)
-    }
-    
-    private func drawFrame(in layer: CAMetalLayer) {
+    func drawFrame(in layer: UncheckedSendableCAMetalLayer) {
         // Check if the scene needs to be redrawn.
         guard scene.needsRedraw || scene.isPlaying else {
             return
@@ -151,7 +151,7 @@ extension ProteinRenderer {
             // rendering this frame. Get the drawable as late as possible.
             var drawable: CAMetalDrawable?
             if !isBenchmark {
-                drawable = layer.nextDrawable()
+                drawable = layer.metalLayer.nextDrawable()
                 if let drawable {
                     
                     // MARK: - MetalFX Upscaling
