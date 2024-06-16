@@ -27,7 +27,7 @@ private enum CompositionOption: PickableEnum {
 
 struct FileCompositionView: View {
     
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     
     @State private var compositionOption: CompositionOption = .element

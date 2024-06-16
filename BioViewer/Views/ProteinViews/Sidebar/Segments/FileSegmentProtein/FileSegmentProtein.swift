@@ -10,7 +10,7 @@ import simd
 
 struct FileSegmentProtein: View {
 
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     
     private func getModelNames(modelCount: Int) -> [String] {
         var modelNames = [String]()
@@ -46,7 +46,14 @@ struct FileSegmentProtein: View {
                         if file.models.count > 1 {
                             LegacyPickerRow(
                                 optionName: NSLocalizedString("Model", comment: ""),
-                                selectedOption: $proteinDataSource.selectedModel[index],
+                                selectedOption: Binding(
+                                    get: {
+                                        proteinDataSource.selectedModel[index]
+                                    },
+                                    set: { newValue in
+                                        proteinDataSource.selectedModel[index] = newValue
+                                    }
+                                ),
                                 startIndex: -1,
                                 pickerOptions: getModelNames(modelCount: file.models.count)
                             )

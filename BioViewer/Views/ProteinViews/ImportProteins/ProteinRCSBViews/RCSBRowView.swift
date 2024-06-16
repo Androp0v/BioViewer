@@ -16,7 +16,7 @@ struct RCSBRowView: View {
         
     @Binding var rcsbShowSheet: Bool
     
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @Environment(RCSBImportViewModel.self) var rcsbImportViewModel: RCSBImportViewModel
     

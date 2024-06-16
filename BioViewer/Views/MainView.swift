@@ -10,6 +10,7 @@ import SwiftUI
 struct MainView: View {
     
     @State var proteinViewModel: ProteinViewModel
+    @State var dataSource: ProteinDataSource
     @State var colorViewModel: ProteinColorViewModel
     @State var visualizationViewModel: ProteinVisualizationViewModel
     @State var statusViewModel: StatusViewModel
@@ -22,6 +23,7 @@ struct MainView: View {
     init() {
         let proteinViewModel = ProteinViewModel()
         self._proteinViewModel = State(initialValue: proteinViewModel)
+        self._dataSource = State(initialValue: proteinViewModel.dataSource)
         self._colorViewModel = State(initialValue: proteinViewModel.colorViewModel)
         self._visualizationViewModel = State(initialValue: proteinViewModel.visualizationViewModel)
         self._statusViewModel = State(initialValue: proteinViewModel.statusViewModel)
@@ -31,7 +33,7 @@ struct MainView: View {
         
         NavigationStack {
             ProteinView(proteinViewModel: proteinViewModel, renderer: proteinViewModel.renderer)
-                .environmentObject(proteinViewModel.dataSource)
+                .environment(dataSource)
                 .environment(colorViewModel)
                 .environment(visualizationViewModel)
                 .environment(shadowsViewModel)

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FileDetailsComponent: View {
     
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     @State var showFileSource: Bool = false
     
     let file: ProteinFile

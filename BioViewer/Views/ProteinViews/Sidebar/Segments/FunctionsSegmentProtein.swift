@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FunctionsSegmentProtein: View {
     
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     
     var body: some View {
         List {

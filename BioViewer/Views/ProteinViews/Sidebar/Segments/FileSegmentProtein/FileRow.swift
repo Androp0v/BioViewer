@@ -14,7 +14,7 @@ struct FileRow: View {
     let fileIndex: Int
     let byteSize: Int?
     
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     
     private enum Constants {
         #if targetEnvironment(macCatalyst)

@@ -17,8 +17,8 @@ struct ProteinView: View {
     let renderer: ProteinRenderer
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
     
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @Environment(SelectionModel.self) var selectionModel: SelectionModel

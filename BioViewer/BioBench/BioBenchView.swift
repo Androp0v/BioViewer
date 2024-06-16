@@ -18,7 +18,7 @@ struct BioBenchView: View {
     @State var isRunningBenchmark: Bool = false
     
     let proteinViewModel: ProteinViewModel
-    @StateObject var proteinDataSource = ProteinDataSource()
+    @State var proteinDataSource = ProteinDataSource()
     @State var colorViewModel = ProteinColorViewModel()
     @State var visualizationViewModel = ProteinVisualizationViewModel()
     @State var shadowsViewModel = ProteinShadowsViewModel()
@@ -33,6 +33,7 @@ struct BioBenchView: View {
     init() {
         let proteinViewModel = ProteinViewModel(isBenchmark: true)
         self.proteinViewModel = proteinViewModel
+        self._proteinDataSource = State(initialValue: proteinViewModel.dataSource)
         self._resolutionViewModel = State(initialValue: ResolutionViewModel(renderer: proteinViewModel.renderer))
         self._fpsViewModel = State(initialValue: FPSCounterViewModel(renderer: proteinViewModel.renderer))
     }

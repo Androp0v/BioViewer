@@ -36,8 +36,8 @@ final class ProteinRenderedView: PlatformView {
         
         #if os(macOS)
         self.wantsLayer = true
-        self.metalLayer = CAMetalLayer()
-        self.layer = metalLayer
+        self.metalLayer = UncheckedSendableCAMetalLayer(CAMetalLayer())
+        self.layer = metalLayer?.metalLayer
         self.layer?.delegate = self
         #endif
     }
@@ -120,9 +120,9 @@ final class ProteinRenderedView: PlatformView {
         guard let metalLayer = self.layer as? CAMetalLayer else {
             return
         }
-        self.metalLayer = metalLayer
+        self.metalLayer = UncheckedSendableCAMetalLayer(metalLayer)
         Task {
-            renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
+            await renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
         }
     }
     #endif
@@ -190,11 +190,13 @@ final class ProteinRenderedView: PlatformView {
         )
         
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 120, preferred: 120)
-        guard let metalLayer = self.layer as? CAMetalLayer else {
-            return
+        Task {
+            guard let metalLayer = self.layer as? CAMetalLayer else {
+                return
+            }
+            await renderer.setDeviceFor(layer: UncheckedSendableCAMetalLayer(metalLayer))
+            metalLayer.framebufferOnly = false
         }
-        metalLayer.device = renderer.device
-        metalLayer.framebufferOnly = false
     }
     #endif
     

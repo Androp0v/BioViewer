@@ -14,16 +14,16 @@ import SwiftUI
 /// Handle all source data for a `ProteinView` that is not related to the
 /// scene nor the appearance, like the `Protein` objects that have been
 /// imported or computed values.
-@MainActor class ProteinDataSource: ObservableObject {
+@MainActor @Observable final class ProteinDataSource {
     
     // MARK: - Properties
     
     /// Total protein count in view.
-    @Published var proteinCount: Int = 0
+    var proteinCount: Int = 0
     /// Total subunit count in view.
-    @Published var totalChainCount: Int = 0
+    var totalChainCount: Int = 0
     /// Total atom count in view.
-    @Published var totalAtomCount: Int = 0
+    var totalAtomCount: Int = 0
     /// Files in the scene.
     private(set) var files: [ProteinFile] = [ProteinFile]() {
         // Run when a new file is added to the datasource
@@ -53,7 +53,7 @@ import SwiftUI
         }
     }
     /// User-selected model for each ProteinFile.
-    @Published var selectedModel = [Int]() {
+    var selectedModel = [Int]() {
         didSet {
             Task {
                 await updateFileModels(withAnimation: false)
@@ -126,9 +126,11 @@ import SwiftUI
                 proteins: proteins
             )
         }
-        files = []
-        selectedModel = []
-        selectedModelIndexForFile = [:]
+        withAnimation {
+            files = []
+            selectedModel = []
+            selectedModelIndexForFile = [:]
+        }
         await proteinViewModel?.renderer.removeBuffers()
     }
     

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ColorSection: View {
     
-    @EnvironmentObject var proteinDataSource: ProteinDataSource
+    @Environment(ProteinDataSource.self) var proteinDataSource: ProteinDataSource
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(ProteinVisualizationViewModel.self) var visualizationViewModel: ProteinVisualizationViewModel
     
