@@ -11,7 +11,7 @@ import simd
 
 // MARK: - Camera
 
-final class Camera: Sendable {
+final class Camera {
     
     private static let fullFrameDiagonal: Float = 43.3 // mm
     

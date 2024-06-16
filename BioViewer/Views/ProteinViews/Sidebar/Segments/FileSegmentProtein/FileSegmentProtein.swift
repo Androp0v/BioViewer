@@ -90,6 +90,7 @@ struct FileSegmentProtein: View {
             */
             
             // MARK: - Remove files
+            /*
             Section(header: Text(NSLocalizedString("Remove files", comment: ""))
                         .padding(.bottom, 4),
                     content: {
@@ -106,6 +107,7 @@ struct FileSegmentProtein: View {
             #if targetEnvironment(macCatalyst)
             .listRowInsets(EdgeInsets(top: .zero, leading: 12, bottom: .zero, trailing: 12))
             #endif
+             */
         }
         .environment(\.defaultMinListHeaderHeight, 0)
         .listStyle(DefaultListStyle())

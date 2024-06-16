@@ -11,12 +11,12 @@ import Metal
 
 extension ProteinRenderer {
     
-    func computeAmbientOcclusion(atomPositions: ContiguousArray<simd_float3>, atomRadii: [Float], boundingVolume: BoundingVolume) {
+    func computeAmbientOcclusion(atomPositions: ContiguousArray<simd_float3>, atomRadii: [Float]) {
         
         guard let library else {
             return
         }
-        
+                
         // MARK: - Fill sphere buffer
         
         guard let sphereBuffer = device.makeBuffer(

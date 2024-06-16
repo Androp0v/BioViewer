@@ -50,7 +50,7 @@ enum SelectionOption: PickableEnum {
     func hit(
         at point: CGPoint,
         viewSize: CGSize,
-        camera: Camera,
+        cameraProjectionMatrix: simd_float4x4,
         cameraPosition: simd_float3,
         rotationQuaternion: simd_quatd,
         modelTranslationMatrix: simd_float4x4,
@@ -71,8 +71,7 @@ enum SelectionOption: PickableEnum {
         self.lastHitPointInClipSpace = clipSpacePoint
         
         // View space
-        let projectionMatrix = camera.projectionMatrix
-        let inverseProjectionMatrix = projectionMatrix.inverse
+        let inverseProjectionMatrix = cameraProjectionMatrix.inverse
         var eyeRay = inverseProjectionMatrix * clipSpacePoint
         eyeRay.z = 1
         eyeRay.w = 0

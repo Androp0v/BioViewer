@@ -576,6 +576,10 @@ actor ProteinRenderer {
     
     // MARK: - Scene functions
     
+    func getBoundingVolume() -> BoundingVolume {
+        return scene.boundingVolume
+    }
+    
     func getAtomRadii() -> AtomRadii {
         return scene.atom_radii
     }
@@ -669,8 +673,8 @@ actor ProteinRenderer {
         return scene.modelTranslationMatrix
     }
     
-    func getCamera() -> Camera {
-        return scene.camera
+    func getCameraProjectionMatrix() -> simd_float4x4 {
+        return scene.camera.projectionMatrix
     }
     
     func getCameraPosition() -> simd_float3 {
