@@ -39,7 +39,7 @@ extension MutableState {
         renderCommandEncoder.label = "Shadow Depth Pre-pass & Shadow Map Generation"
         
         // Set depth state
-        renderCommandEncoder.setDepthStencilState(renderer.shadowDepthState)
+        renderCommandEncoder.setDepthStencilState(shadowDepthState)
         
         // MARK: - Shadow depth pre-pass
         

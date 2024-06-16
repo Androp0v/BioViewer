@@ -59,15 +59,17 @@ import SwiftUI
             )
             await proteinViewModel.renderer.mutableState.fitCameraToBoundingVolume(proteinDataSource.selectionBoundingVolume)
             await proteinViewModel.renderer.mutableState.setAutorotating(true)
-            proteinViewModel.renderer.benchmarkedFrames = 0
+            await proteinViewModel.renderer.mutableState.resetBenchmarkedFrames()
             let waitTask = Task.detached {
-                while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
-                    benchmarkAction.progress?.completedUnitCount = await Int64(proteinViewModel.renderer.benchmarkedFrames)
+                while await proteinViewModel.renderer.mutableState.benchmarkedFrames < BioBenchConfig.numberOfFrames {
+                    benchmarkAction.progress?.completedUnitCount = await Int64(proteinViewModel.renderer.mutableState.benchmarkedFrames)
                     await Task.yield()
                 }
             }
             _ = await waitTask.result
-            guard let benchmarkedTimes = proteinViewModel.renderer.benchmarkTimes else { continue }
+            guard let benchmarkedTimes = await proteinViewModel.renderer.mutableState.benchmarkTimes else {
+                continue
+            }
             let meanTime = meanTime(measuredTimes: benchmarkedTimes)
             let stdTime = stdTime(measuredTimes: benchmarkedTimes, mean: meanTime)
             benchmarkedProteins.append(

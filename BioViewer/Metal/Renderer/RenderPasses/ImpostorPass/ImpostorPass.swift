@@ -62,7 +62,7 @@ extension MutableState {
         renderCommandEncoder.label = "Depth Pre-pass & Billboard Shading"
         
         // Set depth state
-        renderCommandEncoder.setDepthStencilState(renderer.depthState)
+        renderCommandEncoder.setDepthStencilState(depthState)
         
         // MARK: - Depth pre-pass stage
         

@@ -25,7 +25,7 @@ extension MutableState {
         }
         
         // Wait until the inflight command buffer has completed its work.
-        _ = renderer.frameBoundarySemaphore.wait(timeout: .distantFuture)
+        _ = frameBoundarySemaphore.wait(timeout: .distantFuture)
         
         // MARK: - Update uniforms buffer
         
@@ -50,7 +50,7 @@ extension MutableState {
         
         // MARK: - Command buffer & queue
         
-        guard let commandQueue = renderer.commandQueue else {
+        guard let commandQueue else {
             NSLog("Command queue is nil.")
             return
         }
@@ -182,14 +182,14 @@ extension MutableState {
         
         commandBuffer.addCompletedHandler({ commandBuffer in
             // Store the time required to render the frame
-            renderer.lastFrameGPUTime = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
+            self.lastFrameGPUTime = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
             if renderer.isBenchmark,
-               renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
-                renderer.benchmarkTimes?[renderer.benchmarkedFrames] = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
-                renderer.benchmarkedFrames += 1
+               self.benchmarkedFrames < BioBenchConfig.numberOfFrames {
+                self.benchmarkTimes?[self.benchmarkedFrames] = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
+                self.benchmarkedFrames += 1
             }
             // GPU work is complete, signal the semaphore to start the CPU work
-            renderer.frameBoundarySemaphore.signal()
+            self.frameBoundarySemaphore.signal()
         })
         
         // MARK: - Commit buffer

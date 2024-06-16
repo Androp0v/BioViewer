@@ -16,6 +16,7 @@ import UIKit
 final class ProteinRenderedView: PlatformView {
     
     nonisolated(unsafe) let renderer: ProteinRenderer
+    nonisolated(unsafe) private var renderThread: Thread?
     nonisolated(unsafe) var metalLayer: CAMetalLayer?
     var displayLink: PlatformDisplayLink?
     
@@ -23,12 +24,29 @@ final class ProteinRenderedView: PlatformView {
         self.renderer = renderer
         super.init(frame: frame)
         
+        startRenderThread()
+        
         #if os(macOS)
         self.wantsLayer = true
         self.metalLayer = CAMetalLayer()
         self.layer = metalLayer
         self.layer?.delegate = self
         #endif
+    }
+    
+    private func startRenderThread() {
+        // Setup render thread
+        renderThread = Thread { [weak self] in
+            while let self, !(self.renderThread?.isCancelled ?? false) {
+                RunLoop.current.run(
+                    mode: .default,
+                    before: Date.distantFuture
+                )
+            }
+            Thread.exit()
+        }
+        renderThread?.name = "ProteinRenderer Thread"
+        renderThread?.start()
     }
     
     required init?(coder: NSCoder) {
@@ -100,7 +118,7 @@ final class ProteinRenderedView: PlatformView {
     #if os(iOS)
     override func didMoveToWindow() {
         
-        guard let renderThread = renderer.renderThread else { return }
+        guard let renderThread = self.renderThread else { return }
         
         // Remove PlatformDisplayLink if there was one already running
         if displayLink != nil {
@@ -125,15 +143,17 @@ final class ProteinRenderedView: PlatformView {
         )
         
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 120, preferred: 120)
-        guard let metalLayer = self.layer as? CAMetalLayer else {
-            return
+        Task {
+            guard let metalLayer = self.layer as? CAMetalLayer else {
+                return
+            }
+            metalLayer.device = await renderer.mutableState.device
+            metalLayer.framebufferOnly = false
         }
-        metalLayer.device = renderer.device
-        metalLayer.framebufferOnly = false
     }
     #elseif os(macOS)
     override func viewDidMoveToWindow() {
-        guard let renderThread = renderer.renderThread else { return }
+        guard let renderThread = self.renderThread else { return }
         
         // Remove PlatformDisplayLink if there was one already running
         if displayLink != nil {

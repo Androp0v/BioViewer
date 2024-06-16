@@ -24,10 +24,9 @@ struct MainView: View {
     var body: some View {
         
         NavigationStack {
-            ProteinView()
+            ProteinView(renderer: proteinViewModel.renderer)
                 .environmentObject(proteinViewModel)
                 .environmentObject(proteinDataSource)
-                .environment(proteinViewModel.renderer)
                 .environment(colorViewModel)
                 .environment(visualizationViewModel)
                 .environment(shadowsViewModel)

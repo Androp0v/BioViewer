@@ -72,7 +72,7 @@ extension MutableState {
         guard let uniformBuffers = self.uniformBuffers else { throw HQRenderingError.nonLoadedBuffer }
         
         // Wait until the inflight command buffer has completed its work
-        _ = renderer.frameBoundarySemaphore.wait(timeout: .distantFuture)
+        _ = frameBoundarySemaphore.wait(timeout: .distantFuture)
         
         // MARK: - Update uniforms buffer
         
@@ -91,7 +91,7 @@ extension MutableState {
         
         // MARK: - Command buffer & depth
         
-        guard let commandQueue = renderer.commandQueue else {
+        guard let commandQueue else {
             NSLog("Command queue is nil.")
             throw HQRenderingError.unknownError
         }
@@ -133,7 +133,7 @@ extension MutableState {
         // MARK: - Completion handler
         commandBuffer.addCompletedHandler({ _ in
             // GPU work is complete, signal the semaphore to start the CPU work
-            renderer.frameBoundarySemaphore.signal()
+            self.frameBoundarySemaphore.signal()
 
             let hqImage = hqTextures.hqTexture.getCGImage(
                 clearBackground: photoConfig.clearBackground,

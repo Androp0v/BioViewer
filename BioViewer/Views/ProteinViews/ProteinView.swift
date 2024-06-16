@@ -12,12 +12,13 @@ import UniformTypeIdentifiers
 struct ProteinView: View {
 
     // MARK: - Properties
+    
+    let renderer: ProteinRenderer
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var proteinViewModel: ProteinViewModel
     @EnvironmentObject var proteinDataSource: ProteinDataSource
     
-    @Environment(ProteinRenderer.self) var renderer: ProteinRenderer
     @Environment(ProteinColorViewModel.self) var colorViewModel: ProteinColorViewModel
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @Environment(SelectionModel.self) var selectionModel: SelectionModel
@@ -78,9 +79,15 @@ struct ProteinView: View {
                     // Top toolbar
                     VStack {
                         if UserDefaults.standard.value(forKey: "showToolbar") == nil {
-                            TopToolbar(displayToolbar: horizontalSizeClass != .compact)
+                            TopToolbar(
+                                renderer: renderer,
+                                displayToolbar: horizontalSizeClass != .compact
+                            )
                         } else {
-                            TopToolbar(displayToolbar: UserDefaults.standard.bool(forKey: "showToolbar"))
+                            TopToolbar(
+                                renderer: renderer,
+                                displayToolbar: UserDefaults.standard.bool(forKey: "showToolbar")
+                            )
                         }
                         Spacer()
                     }
@@ -222,12 +229,4 @@ struct ProteinView: View {
         }
     }
 
-}
-
-struct ProteinView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProteinView()
-            .previewDevice("iPhone SE (2nd generation)")
-            .environmentObject(ProteinViewModel())
-    }
 }

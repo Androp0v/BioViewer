@@ -82,7 +82,7 @@ import UniformTypeIdentifiers
             // Parse file
             Task(priority: .userInitiated) {
                 guard let dataSource = await proteinViewModel.dataSource else { return }
-                guard let statusViewModel = await proteinViewModel.statusViewModel else { return }
+                guard let statusViewModel = proteinViewModel.statusViewModel else { return }
                 try? await FileImporter.importFileFromRawText(
                     rawText: rawFileText,
                     proteinDataSource: dataSource,

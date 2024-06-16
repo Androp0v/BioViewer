@@ -17,20 +17,20 @@ import SwiftUI
     init(renderer: ProteinRenderer) {
         self.renderer = renderer
         self.displayLink = PlatformDisplayLink {
-            MainActor.assumeIsolated {
-                self.updateFrameTime()
+            Task { @MainActor in
+                await self.updateFrameTime()
             }
         }
         self.displayLink?.add(to: .main, forMode: .default)
     }
     
-    private func updateFrameTime() {
+    private func updateFrameTime() async {
         // Retrieve last GPU frame time.
         if renderer.isBenchmark {
             let benchmarkResolution = BenchmarkTextures.benchmarkResolution
             resolution = CGSize(width: benchmarkResolution, height: benchmarkResolution)
         } else {
-            resolution = renderer.viewResolution
+            resolution = await renderer.mutableState.viewResolution
         }
     }
 }

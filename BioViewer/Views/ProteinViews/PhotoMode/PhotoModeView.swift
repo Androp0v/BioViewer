@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PhotoModeView: View {
     
+    let renderer: ProteinRenderer
     @Environment(\.dismiss) var dismiss
     @State var photoModeViewModel = PhotoModeViewModel()
     
@@ -22,7 +23,7 @@ struct PhotoModeView: View {
                 
                 VStack {
                     Spacer()
-                    PhotoModeFooter()
+                    PhotoModeFooter(renderer: renderer)
                         .environment(photoModeViewModel.shutterAnimator)
                         .environment(photoModeViewModel)
                 }
@@ -42,11 +43,5 @@ struct PhotoModeView: View {
             )
             #endif
         }
-    }
-}
-
-struct PhotoModeView_Previews: PreviewProvider {
-    static var previews: some View {
-        PhotoModeView()
     }
 }

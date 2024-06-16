@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TopToolbar: View {
     
+    let renderer: ProteinRenderer
     @State var displayToolbar: Bool
     @State var displayPhotoMode: Bool = false
     
@@ -54,7 +55,7 @@ struct TopToolbar: View {
                             })
                                 .sheet(isPresented: $displayPhotoMode) {
                                     if AppState.hasPhotoModeSupport() {
-                                        PhotoModeView()
+                                        PhotoModeView(renderer: renderer)
                                     } else {
                                         PhotoModeUnsupportedView()
                                     }
@@ -113,11 +114,5 @@ struct TopToolbar: View {
             }
         }
         .frame(height: Constants.toolbarSize)
-    }
-}
-
-struct TopToolbar_Previews: PreviewProvider {
-    static var previews: some View {
-        TopToolbar(displayToolbar: true)
     }
 }

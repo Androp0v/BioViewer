@@ -37,7 +37,7 @@ extension MutableState {
         renderCommandEncoder.setRenderPipelineState(debugPointsRenderingPipelineState)
 
         // Set depth state
-        renderCommandEncoder.setDepthStencilState(renderer.depthState)
+        renderCommandEncoder.setDepthStencilState(depthState)
 
         // Add buffers to pipeline
         renderCommandEncoder.setVertexBuffer(debugPointVertexBuffer,

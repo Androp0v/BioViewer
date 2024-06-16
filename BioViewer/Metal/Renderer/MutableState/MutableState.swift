@@ -17,17 +17,34 @@ import SwiftUI
 /// draw calls. This includes textures, buffers, and other data structures.
 actor MutableState {
     
-    /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
-    private(set) var scene = MetalScene()
     /// The `MTLDevice` in charge of rendering the scene.
     let device: MTLDevice
+    /// Command queue.
+    let commandQueue: MTLCommandQueue?
     /// The default library.
     let library: MTLLibrary?
+    
+    /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
+    private(set) var scene = MetalScene()
+    /// Resolution of the view
+    var viewResolution: CGSize?
             
     // MARK: - Scheduling
     
+    /// Used to signal that a new frame is ready to be computed by the CPU.
+    var frameBoundarySemaphore: DispatchSemaphore
     /// Used to index the dynamic buffers.
     var currentFrameIndex: Int
+    /// Frame GPU execution time, exponentially averaged.
+    var lastFrameGPUTime = CFTimeInterval()
+    
+    // MARK: - Benchmark
+    
+    /// The GPU execution times for the las N frames in benchmark mode.
+    /// Property is `nil` when not in benchmark mode.
+    var benchmarkTimes: [CFTimeInterval]?
+    /// Number of benchmarked frames.
+    var benchmarkedFrames: Int = 0
     
     // MARK: - Buffers
     
@@ -78,6 +95,29 @@ actor MutableState {
     /// Benchmark textures.
     var benchmarkTextures = BenchmarkTextures()
     
+    // MARK: - Depth Texture descriptors
+    
+    static let shadowDepthDescriptor: MTLDepthStencilDescriptor = {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = MTLCompareFunction.less
+        descriptor.isDepthWriteEnabled = true
+        return descriptor
+    }()
+
+    static let depthDescriptor: MTLDepthStencilDescriptor = {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = MTLCompareFunction.less
+        descriptor.isDepthWriteEnabled = true
+        return descriptor
+    }()
+    
+    // MARK: - Render Pipeline Statues
+    
+    /// Shadow depth state.
+    var shadowDepthState: MTLDepthStencilState?
+    /// Depth state.
+    var depthState: MTLDepthStencilState?
+    
     // MARK: - Compute Pipeline States
     
     /// Pipeline state for filling the color buffer (element, subunit, residue, secondary structure...).
@@ -127,10 +167,17 @@ actor MutableState {
     
     // MARK: - Init
     
-    init(device: MTLDevice, maxBuffersInFlight: Int, isBenchmark: Bool) {
+    init(maxBuffersInFlight: Int, isBenchmark: Bool) {
         
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            fatalError("Unable to create default Metal Device")
+        }
         self.device = device
         
+        // Setup command queue
+        self.commandQueue = device.makeCommandQueue()
+        
+        self.frameBoundarySemaphore = DispatchSemaphore(value: maxBuffersInFlight)
         self.library = device.makeDefaultLibrary()
         
         // Initialize the uniforms triple buffering array
@@ -153,6 +200,15 @@ actor MutableState {
         
         // Property initialization
         self.currentFrameIndex = 0
+        
+        // Depth state
+        shadowDepthState = device.makeDepthStencilState(descriptor: Self.depthDescriptor)
+        depthState = device.makeDepthStencilState(descriptor: Self.depthDescriptor)
+        
+        if isBenchmark {
+            // Setup benchmark times
+            benchmarkTimes = [CFTimeInterval](repeating: .zero, count: BioBenchConfig.numberOfFrames)
+        }
         
         // Create Metal pipeline states
         Task {
@@ -353,6 +409,8 @@ actor MutableState {
     }
     
     func updateMutableStateForNewViewSize(_ size: CGSize, metalLayer: CAMetalLayer?, displayScale: CGFloat?) {
+        
+        self.viewResolution = size
 
         // Update render target.
         if let metalLayer {
@@ -635,5 +693,11 @@ actor MutableState {
             atomsPerConfiguration: totalAtomCount,
             configurationCount: proteins.first?.configurationCount ?? 1 // FIXME: Remove ?? 1
         )
+    }
+    
+    // MARK: - Benchmarks
+    
+    func resetBenchmarkedFrames() {
+        self.benchmarkedFrames = 0
     }
 }

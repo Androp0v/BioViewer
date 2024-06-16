@@ -9,8 +9,8 @@ import SwiftUI
 
 struct PhotoModeFooter: View {
     
+    let renderer: ProteinRenderer
     @EnvironmentObject var proteinViewModel: ProteinViewModel
-    @Environment(ProteinRenderer.self) var renderer: ProteinRenderer
     @Environment(PhotoModeViewModel.self) var photoModeViewModel: PhotoModeViewModel
     @Environment(ShutterAnimator.self) var shutterAnimator: ShutterAnimator
     
@@ -45,12 +45,5 @@ struct PhotoModeFooter: View {
         }
         .background(.regularMaterial)
         .edgesIgnoringSafeArea(.bottom)
-    }
-}
-
-struct PhotoModeFooter_Previews: PreviewProvider {
-    static var previews: some View {
-        PhotoModeFooter()
-            .environment(ShutterAnimator())
     }
 }

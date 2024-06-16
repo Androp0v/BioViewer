@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftUI
 
-@MainActor class ProteinViewModel: ObservableObject {
+final class ProteinViewModel: ObservableObject {
 
     // MARK: - Properties
     
@@ -31,12 +31,9 @@ import SwiftUI
     
     // MARK: - Initialization
 
-    init(isBenchmark: Bool = false) {
+    @MainActor init(isBenchmark: Bool = false) {
         // Setup Metal renderer
-        guard let device = MTLCreateSystemDefaultDevice() else {
-            fatalError("Unable to create default Metal Device")
-        }
-        self.renderer = ProteinRenderer(device: device, isBenchmark: isBenchmark)
+        self.renderer = ProteinRenderer(isBenchmark: isBenchmark)
 
         // Setup drop delegate
         self.dropHandler = ImportDroppedFilesDelegate()
