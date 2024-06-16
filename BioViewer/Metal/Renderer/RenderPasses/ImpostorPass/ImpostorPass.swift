@@ -10,10 +10,9 @@ import Metal
 import QuartzCore
 import MetalKit
 
-extension MutableState {
+extension ProteinRenderer {
     
     func impostorRenderPass(
-        renderer: ProteinRenderer,
         commandBuffer: MTLCommandBuffer,
         uniformBuffer: inout MTLBuffer,
         drawableTexture: MTLTexture,
@@ -29,15 +28,15 @@ extension MutableState {
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        renderer.impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
+        Self.impostorRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
-        renderer.impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
+        Self.impostorRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
         
         if AppState.hasDepthPrePasses() {
             // Attach textures. colorAttachments[1] is the depth pre-pass GBuffer texture
-            renderer.impostorRenderPassDescriptor.colorAttachments[1].texture = depthPrePassTexture
+            Self.impostorRenderPassDescriptor.colorAttachments[1].texture = depthPrePassTexture
             // Clear the depth texture using the equivalent to 1.0 (max depth)
-            renderer.impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(
+            Self.impostorRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(
                 red: 1.0,
                 green: 1.0,
                 blue: 1.0,
@@ -46,12 +45,12 @@ extension MutableState {
         }
                 
         // Attach depth texture.
-        renderer.impostorRenderPassDescriptor.depthAttachment.texture = depthTexture
+        Self.impostorRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
-        renderer.impostorRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        Self.impostorRenderPassDescriptor.depthAttachment.clearDepth = 1.0
 
         // Create render command encoder
-        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderer.impostorRenderPassDescriptor) else {
+        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: Self.impostorRenderPassDescriptor) else {
             BioViewerLogger.shared.log(
                 type: .error,
                 category: .proteinRenderer,
@@ -68,7 +67,6 @@ extension MutableState {
         
         if AppState.hasDepthPrePasses() {
             self.encodeDepthBoundStage(
-                renderer: renderer,
                 renderCommandEncoder: renderCommandEncoder,
                 uniformBuffer: &uniformBuffer
             )

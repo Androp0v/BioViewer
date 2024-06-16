@@ -115,13 +115,13 @@ import SwiftUI
             return
         }
         files.remove(at: index)
-        await proteinViewModel?.renderer.mutableState.removeBuffers()
+        await proteinViewModel?.renderer.removeBuffers()
     }
     
     /// Removes all files from the data source and the scene.
     func removeAllFilesFromDatasource() async {
         if let proteins = modelsForFile(file: getFirstFile()), let colorBy = proteinViewModel?.colorViewModel?.colorBy {
-            await proteinViewModel?.renderer.mutableState.animatedFileDeletion(
+            await proteinViewModel?.renderer.animatedFileDeletion(
                 colorBy: colorBy,
                 proteins: proteins
             )
@@ -129,7 +129,7 @@ import SwiftUI
         files = []
         selectedModel = []
         selectedModelIndexForFile = [:]
-        await proteinViewModel?.renderer.mutableState.removeBuffers()
+        await proteinViewModel?.renderer.removeBuffers()
     }
     
     // MARK: - Update model
@@ -150,7 +150,7 @@ import SwiftUI
         
         // Fit new selection in frustum
         Task {
-            await proteinViewModel.renderer.mutableState.fitCameraToBoundingVolume(
+            await proteinViewModel.renderer.fitCameraToBoundingVolume(
                 selectionBoundingVolume
             )
         }

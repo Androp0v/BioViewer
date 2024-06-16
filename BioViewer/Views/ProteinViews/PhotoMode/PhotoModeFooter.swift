@@ -20,7 +20,7 @@ struct PhotoModeFooter: View {
             Button(action: {
                 Task {
                     await photoModeViewModel.shutterAnimator.openShutter()
-                    try? await renderer.mutableState.drawHighQualityFrame(
+                    try? await renderer.drawHighQualityFrame(
                         renderer: renderer,
                         size: CGSize(width: 2048, height: 2048),
                         photoConfig: photoModeViewModel.photoConfig,

@@ -57,7 +57,7 @@ class VisualizationBufferLoader {
             }
             await self.populateVisualizationBuffers(visualization: visualization, proteinViewModel: proteinViewModel)
             // Update internal visualization mode as seen by renderer
-            await proteinViewModel.renderer.mutableState.setVisualization(visualization)
+            await proteinViewModel.renderer.setVisualization(visualization)
         }
     }
     
@@ -76,7 +76,7 @@ class VisualizationBufferLoader {
             return
         }
         
-        await proteinViewModel.renderer.mutableState.populateVisualizationBuffers(
+        await proteinViewModel.renderer.populateVisualizationBuffers(
             visualization: visualization,
             dataSource: dataSource,
             visualizationViewModel: visualizationViewModel,

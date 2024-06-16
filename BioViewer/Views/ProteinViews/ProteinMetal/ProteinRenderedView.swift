@@ -147,7 +147,7 @@ final class ProteinRenderedView: PlatformView {
             guard let metalLayer = self.layer as? CAMetalLayer else {
                 return
             }
-            metalLayer.device = await renderer.mutableState.device
+            metalLayer.device = await renderer.device
             metalLayer.framebufferOnly = false
         }
     }
@@ -198,7 +198,9 @@ final class ProteinRenderedView: PlatformView {
         guard let metalLayer else {
             return
         }
-        renderer.draw(in: metalLayer)
+        Task(priority: .high) {
+            await renderer.draw(in: metalLayer)
+        }
     }
 }
 

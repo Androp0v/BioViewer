@@ -89,7 +89,7 @@ import Foundation
                         return
                     }
                     #if DEBUG
-                    await proteinViewModel.renderer.mutableState.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
+                    await proteinViewModel.renderer.setDebugPointsBuffer(vertexBuffer: &debugBuffer)
                     #endif
                 }
             }
@@ -100,7 +100,7 @@ import Foundation
     var cameraFocalLength: Float = 200 {
         didSet {
             Task {
-                await proteinViewModel.renderer.mutableState.setCameraFocalLength(
+                await proteinViewModel.renderer.setCameraFocalLength(
                     cameraFocalLength
                 )
             }

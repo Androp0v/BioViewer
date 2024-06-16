@@ -11,7 +11,7 @@ import MetalFX
 #endif
 import MetalKit
 
-extension MutableState {
+extension ProteinRenderer {
     
     /// Creates the MetalFX spatial scaler.
     func makeSpatialScaler(inputSize: MTLSize, outputSize: MTLSize) {

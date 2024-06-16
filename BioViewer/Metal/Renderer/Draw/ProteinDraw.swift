@@ -8,9 +8,24 @@
 import Foundation
 import MetalKit
 
-extension MutableState {
+// MARK: - Drawing
+
+extension ProteinRenderer {
     
-    func drawFrame(from renderer: ProteinRenderer, in layer: CAMetalLayer) {
+    func drawableSizeChanged(to size: CGSize, layer: CAMetalLayer, displayScale: CGFloat) {
+        updateMutableStateForNewViewSize(
+            size,
+            metalLayer: layer,
+            displayScale: displayScale
+        )
+    }
+
+    // This is called periodically to render the scene contents on display
+    func draw(in layer: CAMetalLayer) {
+        drawFrame(in: layer)
+    }
+    
+    private func drawFrame(in layer: CAMetalLayer) {
         // Check if the scene needs to be redrawn.
         guard scene.needsRedraw || scene.isPlaying else {
             return
@@ -33,7 +48,7 @@ extension MutableState {
         var uniformBuffer = uniformBuffers[self.currentFrameIndex]
         
         // Update current frame index
-        self.currentFrameIndex = (self.currentFrameIndex + 1) % renderer.maxBuffersInFlight
+        self.currentFrameIndex = (self.currentFrameIndex + 1) % maxBuffersInFlight
                 
         // Update uniform buffer
         scene.updateScene()
@@ -67,7 +82,6 @@ extension MutableState {
         
         if scene.lastColorPassRequest > scene.lastColorPass {
             self.fillColorPass(
-                renderer: renderer,
                 commandBuffer: commandBuffer,
                 colorBuffer: self.atomColorBuffer,
                 colorFill: scene.colorFill
@@ -80,7 +94,6 @@ extension MutableState {
         
         if scene.hasShadows {
             self.shadowRenderPass(
-                renderer: renderer,
                 commandBuffer: commandBuffer, uniformBuffer: &uniformBuffer,
                 shadowTextures: shadowTextures,
                 shadowDepthPrePassTexture: depthPrePassTextures.shadowColorTexture,
@@ -90,7 +103,7 @@ extension MutableState {
         
         var viewTexture: MTLTexture?
         var viewDepthTexture: MTLTexture?
-        if !renderer.isBenchmark {
+        if !isBenchmark {
             viewTexture = renderTarget.renderedTextures.colorTexture
             viewDepthTexture = renderTarget.renderedTextures.depthTexture
         } else {
@@ -103,7 +116,6 @@ extension MutableState {
             // MARK: - Impostor pass
             
             self.impostorRenderPass(
-                renderer: renderer,
                 commandBuffer: commandBuffer,
                 uniformBuffer: &uniformBuffer,
                 drawableTexture: viewTexture,
@@ -118,7 +130,6 @@ extension MutableState {
             
             #if DEBUG
             self.pointsRenderPass(
-                renderer: renderer,
                 commandBuffer: commandBuffer,
                 uniformBuffer: &uniformBuffer,
                 drawableTexture: viewTexture,
@@ -139,7 +150,7 @@ extension MutableState {
             // The final pass can only render if a drawable is available, otherwise it needs to skip
             // rendering this frame. Get the drawable as late as possible.
             var drawable: CAMetalDrawable?
-            if !renderer.isBenchmark {
+            if !isBenchmark {
                 drawable = layer.nextDrawable()
                 if let drawable {
                     
@@ -147,7 +158,6 @@ extension MutableState {
 
                     if renderTarget.metalFXUpscalingMode != .none {
                         self.metalFXUpscaling(
-                            renderer: renderer,
                             commandBuffer: commandBuffer,
                             sourceTexture: viewTexture,
                             depthTexture: viewDepthTexture,
@@ -183,7 +193,7 @@ extension MutableState {
         commandBuffer.addCompletedHandler({ commandBuffer in
             // Store the time required to render the frame
             self.lastFrameGPUTime = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
-            if renderer.isBenchmark,
+            if self.isBenchmark,
                self.benchmarkedFrames < BioBenchConfig.numberOfFrames {
                 self.benchmarkTimes?[self.benchmarkedFrames] = commandBuffer.gpuEndTime - commandBuffer.gpuStartTime
                 self.benchmarkedFrames += 1

@@ -30,7 +30,7 @@ class SunDirection {
     var sunDirection = SunDirection() {
         didSet {
             Task {
-                await proteinViewModel?.renderer.mutableState.setSunDirection(
+                await proteinViewModel?.renderer.setSunDirection(
                     theta: sunDirection.theta,
                     phi: sunDirection.phi
                 )
@@ -41,14 +41,14 @@ class SunDirection {
     var hasShadows: Bool = true {
         didSet {
             Task {
-                await proteinViewModel?.renderer.mutableState.setHasShadows(hasShadows)
+                await proteinViewModel?.renderer.setHasShadows(hasShadows)
             }
         }
     }
     var shadowStrength: Float = 0.7 {
         didSet {
             Task {
-                await proteinViewModel?.renderer.mutableState.setShadowStrength(shadowStrength)
+                await proteinViewModel?.renderer.setShadowStrength(shadowStrength)
             }
         }
     }
@@ -56,14 +56,14 @@ class SunDirection {
     var hasDepthCueing: Bool = false {
         didSet {
             Task {
-                await proteinViewModel?.renderer.mutableState.setHasDepthCueing(hasDepthCueing)
+                await proteinViewModel?.renderer.setHasDepthCueing(hasDepthCueing)
             }
         }
     }
     var depthCueingStrength: Float = 0.6 {
         didSet {
             Task {
-                await proteinViewModel?.renderer.mutableState.setDepthCueingStrength(depthCueingStrength)
+                await proteinViewModel?.renderer.setDepthCueingStrength(depthCueingStrength)
             }
         }
     }
@@ -72,8 +72,8 @@ class SunDirection {
             if hasAmbientOcclusion {
                 Task {
                     guard let proteinViewModel else { return }
-                    let boundingVolume = await proteinViewModel.renderer.mutableState.scene.boundingVolume
-                    await proteinViewModel.renderer.mutableState.computeAmbientOcclusion(
+                    let boundingVolume = await proteinViewModel.renderer.scene.boundingVolume
+                    await proteinViewModel.renderer.computeAmbientOcclusion(
                         atomPositions: proteinViewModel.dataSource!.getFirstProtein()!.atoms,
                         atomRadii: [Float.zero],
                         boundingVolume: boundingVolume

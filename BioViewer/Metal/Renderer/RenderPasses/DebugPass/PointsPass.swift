@@ -8,25 +8,25 @@
 import Foundation
 import Metal
 
-extension MutableState {
+extension ProteinRenderer {
     
     #if DEBUG
-    func pointsRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
+    func pointsRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, drawableTexture: MTLTexture, depthTexture: MTLTexture?) {
         
         // Ensure transparent buffers are loaded
         guard let debugPointVertexBuffer = self.debugPointVertexBuffer else { return }
         
         // Attach textures. colorAttachments[0] is the final texture we draw onscreen
-        renderer.debugPointsRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
+        Self.debugPointsRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
         // Clear the drawable texture using the scene's background color
-        renderer.debugPointsRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
+        Self.debugPointsRenderPassDescriptor.colorAttachments[0].clearColor = getBackgroundClearColor()
         // Attach depth texture.
-        renderer.debugPointsRenderPassDescriptor.depthAttachment.texture = depthTexture
+        Self.debugPointsRenderPassDescriptor.depthAttachment.texture = depthTexture
         // Clear the depth texture (depth is in normalized device coordinates, where 1.0 is the maximum/deepest value).
-        renderer.debugPointsRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        Self.debugPointsRenderPassDescriptor.depthAttachment.clearDepth = 1.0
 
         // Create render command encoder
-        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderer.debugPointsRenderPassDescriptor) else {
+        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: Self.debugPointsRenderPassDescriptor) else {
             return
         }
         

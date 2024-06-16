@@ -31,7 +31,7 @@ import SwiftUI
     private func updateFrameTime() async {
         
         // Retrieve last GPU frame time.
-        let newFrameTime = await renderer.mutableState.lastFrameGPUTime
+        let newFrameTime = await renderer.lastFrameGPUTime
         
         // Avoid saving the same frame time several times if the renderer
         // is paused.

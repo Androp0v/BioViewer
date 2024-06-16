@@ -8,10 +8,9 @@
 import Foundation
 import MetalKit
 
-extension MutableState {
+extension ProteinRenderer {
         
     func metalFXUpscaling(
-        renderer: ProteinRenderer,
         commandBuffer: MTLCommandBuffer,
         sourceTexture: MTLTexture,
         depthTexture: MTLTexture,

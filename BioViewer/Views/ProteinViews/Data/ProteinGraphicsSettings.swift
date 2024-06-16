@@ -25,7 +25,7 @@ import Foundation
                 self.metalFXFactor = 1.0
             }
             Task {
-                await renderer.mutableState.updateMetalFXUpscalingMode(
+                await renderer.updateMetalFXUpscalingMode(
                     to: metalFXUpscalingMode,
                     renderer: renderer
                 )
@@ -52,7 +52,7 @@ import Foundation
         guard let renderer = proteinViewModel?.renderer else {
             return
         }
-        await renderer.mutableState.updateProteinRenderFactors(
+        await renderer.updateProteinRenderFactors(
             ssaa: ssaaFactor,
             metalFXUpscaling: metalFXFactor
         )

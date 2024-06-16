@@ -21,7 +21,7 @@ import SwiftUI
         didSet {
             guard let newCGColor = backgroundColor.cgColor else { return }
             Task {
-                await proteinViewModel?.renderer.mutableState.setBackgroundColor(newCGColor)
+                await proteinViewModel?.renderer.setBackgroundColor(newCGColor)
             }
         }
     }
@@ -31,7 +31,7 @@ import SwiftUI
         didSet {
             guard let renderer = proteinViewModel?.renderer else { return }
             Task {
-                await renderer.mutableState.animateColorFillChange(to: updatedFillColor())
+                await renderer.animateColorFillChange(to: updatedFillColor())
             }
         }
     }
@@ -70,7 +70,7 @@ import SwiftUI
             // TODO: Animation
             if let newColor = bondColor.cgColor {
                 Task {
-                    await proteinViewModel?.renderer.mutableState.setBondColor(newColor)
+                    await proteinViewModel?.renderer.setBondColor(newColor)
                 }
             }
         }
@@ -93,7 +93,7 @@ import SwiftUI
     // MARK: - Private
     private func updateSceneColorFill() {
         Task {
-            await self.proteinViewModel?.renderer.mutableState.setColorFill(updatedFillColor())
+            await self.proteinViewModel?.renderer.setColorFill(updatedFillColor())
         }
     }
 }

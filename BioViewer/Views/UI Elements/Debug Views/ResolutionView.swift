@@ -30,7 +30,7 @@ import SwiftUI
             let benchmarkResolution = BenchmarkTextures.benchmarkResolution
             resolution = CGSize(width: benchmarkResolution, height: benchmarkResolution)
         } else {
-            resolution = await renderer.mutableState.viewResolution
+            resolution = await renderer.viewResolution
         }
     }
 }

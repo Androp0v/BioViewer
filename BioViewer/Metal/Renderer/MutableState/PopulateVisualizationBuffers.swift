@@ -8,7 +8,7 @@
 import BioViewerFoundation
 import Foundation
 
-extension MutableState {
+extension ProteinRenderer {
     
     func animatedFileDeletion(colorBy: ProteinColorByOption, proteins: [Protein]) async {
         guard let animator = scene.animator else {
@@ -49,7 +49,7 @@ extension MutableState {
             remakeImpostorPipelineForVariant(variant: .solidSpheres)
             
             // Animate radii changes
-            animator.mutableState = self
+            animator.renderer = self
             if isInitialAnimation {
                 setAtomRadii(.zero)
             }
@@ -89,7 +89,7 @@ extension MutableState {
             remakeImpostorPipelineForVariant(variant: .ballAndSticks)
             
             // Animate radii changes
-            animator.mutableState = self
+            animator.renderer = self
             if await visualizationViewModel.ballAndStickRadiusOption == .fixed {
                 await animator.animateRadiiChange(
                     finalRadii: .fixed(radius: visualizationViewModel.ballAndSticksFixedAtomRadii),

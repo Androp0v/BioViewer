@@ -23,7 +23,7 @@ enum CameraControlTool {
     var autorotating: Bool = false {
         didSet {
             Task {
-                await proteinViewModel?.renderer.mutableState.setAutorotating(autorotating)
+                await proteinViewModel?.renderer.setAutorotating(autorotating)
             }
         }
     }
@@ -32,7 +32,7 @@ enum CameraControlTool {
     
     func resetCamera() {
         Task {
-            await proteinViewModel?.renderer.mutableState.resetCamera()
+            await proteinViewModel?.renderer.resetCamera()
         }
     }
 }

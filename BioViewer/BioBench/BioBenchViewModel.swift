@@ -57,17 +57,17 @@ import SwiftUI
                 fileExtension: "pdb",
                 byteSize: byteSize
             )
-            await proteinViewModel.renderer.mutableState.fitCameraToBoundingVolume(proteinDataSource.selectionBoundingVolume)
-            await proteinViewModel.renderer.mutableState.setAutorotating(true)
-            await proteinViewModel.renderer.mutableState.resetBenchmarkedFrames()
+            await proteinViewModel.renderer.fitCameraToBoundingVolume(proteinDataSource.selectionBoundingVolume)
+            await proteinViewModel.renderer.setAutorotating(true)
+            await proteinViewModel.renderer.resetBenchmarkedFrames()
             let waitTask = Task.detached {
-                while await proteinViewModel.renderer.mutableState.benchmarkedFrames < BioBenchConfig.numberOfFrames {
-                    benchmarkAction.progress?.completedUnitCount = await Int64(proteinViewModel.renderer.mutableState.benchmarkedFrames)
+                while await proteinViewModel.renderer.benchmarkedFrames < BioBenchConfig.numberOfFrames {
+                    benchmarkAction.progress?.completedUnitCount = await Int64(proteinViewModel.renderer.benchmarkedFrames)
                     await Task.yield()
                 }
             }
             _ = await waitTask.result
-            guard let benchmarkedTimes = await proteinViewModel.renderer.mutableState.benchmarkTimes else {
+            guard let benchmarkedTimes = await proteinViewModel.renderer.benchmarkTimes else {
                 continue
             }
             let meanTime = meanTime(measuredTimes: benchmarkedTimes)
@@ -81,9 +81,9 @@ import SwiftUI
                 )
             )
             print("BioBench \(benchmarkedProteins.count) (\(pdbID)): \(proteinDataSource.totalAtomCount), \(meanTime), \(stdTime.0), \(stdTime.1)")
-            await proteinViewModel.renderer.mutableState.setAutorotating(false)
+            await proteinViewModel.renderer.setAutorotating(false)
             statusViewModel.signalActionFinished(benchmarkAction, withError: nil)
-            currentImage = await proteinViewModel.renderer.mutableState.exportBenchmarkTextures()
+            currentImage = await proteinViewModel.renderer.exportBenchmarkTextures()
         }
     }
     

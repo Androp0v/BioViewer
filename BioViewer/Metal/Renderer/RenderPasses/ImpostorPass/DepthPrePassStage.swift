@@ -10,9 +10,9 @@ import Metal
 import QuartzCore
 import MetalKit
 
-extension MutableState {
+extension ProteinRenderer {
     
-    func encodeDepthBoundStage(renderer: ProteinRenderer, renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer) {
+    func encodeDepthBoundStage(renderCommandEncoder: MTLRenderCommandEncoder, uniformBuffer: inout MTLBuffer) {
         
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }

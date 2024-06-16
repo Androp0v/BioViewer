@@ -9,12 +9,11 @@ import Foundation
 import Metal
 import SwiftUI
 
-extension MutableState {
+extension ProteinRenderer {
 
     // MARK: - Update existing color buffer
     
     public func fillColorPass(
-        renderer: ProteinRenderer,
         commandBuffer: MTLCommandBuffer,
         colorBuffer: MTLBuffer?,
         colorFill: FillColorInput

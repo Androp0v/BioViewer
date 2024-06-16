@@ -9,7 +9,7 @@ import BioViewerFoundation
 import Foundation
 import Metal
 
-extension MutableState {
+extension ProteinRenderer {
     
     func computeAmbientOcclusion(atomPositions: ContiguousArray<simd_float3>, atomRadii: [Float], boundingVolume: BoundingVolume) {
         

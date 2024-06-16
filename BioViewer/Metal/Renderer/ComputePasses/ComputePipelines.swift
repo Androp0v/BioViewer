@@ -8,7 +8,7 @@
 import Foundation
 import Metal
 
-extension MutableState {
+extension ProteinRenderer {
     
     // MARK: - Fill color pass
     

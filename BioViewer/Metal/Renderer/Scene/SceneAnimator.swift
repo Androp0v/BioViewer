@@ -38,7 +38,7 @@ struct ColorAnimation: RunningAnimation {
 final class SceneAnimator {
     
     weak var scene: MetalScene?
-    weak var mutableState: MutableState?
+    weak var renderer: ProteinRenderer?
     
     var displayLink: PlatformDisplayLink?
     var radiiAnimation: RadiiAnimation?
@@ -136,7 +136,7 @@ final class SceneAnimator {
                 
         scene.atom_radii = .interpolated(initial: initialRadii, final: finalRadii, progress: Float(progress))
         
-        await mutableState?.sceneAnimatorCallback(
+        await renderer?.sceneAnimatorCallback(
             atomRadii: scene.atom_radii,
             colorBy: radiiAnimation.colorBy,
             proteins: radiiAnimation.proteins

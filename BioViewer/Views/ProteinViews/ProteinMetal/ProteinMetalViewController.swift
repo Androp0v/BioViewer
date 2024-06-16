@@ -96,11 +96,11 @@ class ProteinMetalViewController: PlatformViewController {
             await self.selectionModel.hit(
                 at: location,
                 viewSize: self.view.frame.size,
-                camera: self.proteinViewModel.renderer.mutableState.getCamera(),
-                cameraPosition: self.proteinViewModel.renderer.mutableState.getCameraPosition(),
-                rotationQuaternion: self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion(),
-                modelTranslationMatrix: self.proteinViewModel.renderer.mutableState.getModelTranslationMatrix(),
-                atomRadii: self.proteinViewModel.renderer.mutableState.getAtomRadii(),
+                camera: self.proteinViewModel.renderer.getCamera(),
+                cameraPosition: self.proteinViewModel.renderer.getCameraPosition(),
+                rotationQuaternion: self.proteinViewModel.renderer.getUserRotationQuaternion(),
+                modelTranslationMatrix: self.proteinViewModel.renderer.getModelTranslationMatrix(),
+                atomRadii: self.proteinViewModel.renderer.getAtomRadii(),
                 dataSource: self.proteinViewModel.dataSource
             )
         }
@@ -112,11 +112,11 @@ class ProteinMetalViewController: PlatformViewController {
             await self.selectionModel.hit(
                 at: location,
                 viewSize: self.view.frame.size,
-                camera: self.proteinViewModel.renderer.mutableState.getCamera(),
-                cameraPosition: self.proteinViewModel.renderer.mutableState.getCameraPosition(),
-                rotationQuaternion: self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion(),
-                modelTranslationMatrix: self.proteinViewModel.renderer.mutableState.getModelTranslationMatrix(),
-                atomRadii: self.proteinViewModel.renderer.mutableState.getAtomRadii(),
+                camera: self.proteinViewModel.renderer.getCamera(),
+                cameraPosition: self.proteinViewModel.renderer.getCameraPosition(),
+                rotationQuaternion: self.proteinViewModel.renderer.getUserRotationQuaternion(),
+                modelTranslationMatrix: self.proteinViewModel.renderer.getModelTranslationMatrix(),
+                atomRadii: self.proteinViewModel.renderer.getAtomRadii(),
                 dataSource: self.proteinViewModel.dataSource
             )
         }
@@ -127,10 +127,10 @@ class ProteinMetalViewController: PlatformViewController {
     @objc private func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             Task {
-                let currentCameraPosition = await self.proteinViewModel.renderer.mutableState.getCameraPosition()
+                let currentCameraPosition = await self.proteinViewModel.renderer.getCameraPosition()
                 // TO-DO: Proper zooming
                 let newDistance = currentCameraPosition.z / Float(gestureRecognizer.scale)
-                await self.proteinViewModel.renderer.mutableState.setCameraDistanceToModel(newDistance)
+                await self.proteinViewModel.renderer.setCameraDistanceToModel(newDistance)
                 gestureRecognizer.scale = 1.0
             }
        }
@@ -139,10 +139,10 @@ class ProteinMetalViewController: PlatformViewController {
     @objc private func handlePinch(gestureRecognizer: NSMagnificationGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             Task {
-                let currentCameraPosition = await self.proteinViewModel.renderer.mutableState.getCameraPosition()
+                let currentCameraPosition = await self.proteinViewModel.renderer.getCameraPosition()
                 // TO-DO: Proper zooming
                 let newDistance = currentCameraPosition.z / Float(gestureRecognizer.magnification + 1.0)
-                await self.proteinViewModel.renderer.mutableState.setCameraDistanceToModel(newDistance)
+                await self.proteinViewModel.renderer.setCameraDistanceToModel(newDistance)
             }
        }
     }
@@ -181,7 +181,7 @@ class ProteinMetalViewController: PlatformViewController {
                     // Swap rotation direction on macOS to match iOS
                     let rotationSpeedY = -rawRotationSpeed.y / 10000
                     #endif
-                    let currentRotationQuaternion = await self.proteinViewModel.renderer.mutableState.getUserRotationQuaternion()
+                    let currentRotationQuaternion = await self.proteinViewModel.renderer.getUserRotationQuaternion()
                     
                     let rotationAxis = normalize(rotationSpeedX * simd_double3(0, 1, 0) + rotationSpeedY * simd_double3(1, 0, 0))
                     let newRotationQuaternion = simd_quatd(
@@ -189,7 +189,7 @@ class ProteinMetalViewController: PlatformViewController {
                         axis: rotationAxis
                     )
                     
-                    await self.proteinViewModel.renderer.mutableState.setUserRotationQuaternion(
+                    await self.proteinViewModel.renderer.setUserRotationQuaternion(
                         newRotationQuaternion * currentRotationQuaternion
                     )
                 }
@@ -208,7 +208,7 @@ class ProteinMetalViewController: PlatformViewController {
                     #endif
                     
                     // Move should be less sensible the closer the camera is to the protein
-                    await translationSensitivity *= proteinViewModel.renderer.mutableState.getCameraPosition().z
+                    await translationSensitivity *= proteinViewModel.renderer.getCameraPosition().z
                     
                     let translationX = Float(gestureRecognizer.velocity(in: renderedView).x) * translationSensitivity
                     #if os(iOS)
@@ -218,7 +218,7 @@ class ProteinMetalViewController: PlatformViewController {
                     let translationY = -Float(gestureRecognizer.velocity(in: renderedView).y) * translationSensitivity
                     #endif
                     
-                    await self.proteinViewModel.renderer.mutableState.translateCameraXY(
+                    await self.proteinViewModel.renderer.translateCameraXY(
                         x: translationX,
                         y: -translationY
                     )

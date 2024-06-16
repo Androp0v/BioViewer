@@ -8,10 +8,9 @@
 import Foundation
 import MetalKit
 
-extension MutableState {
+extension ProteinRenderer {
     
     func shadowBlurPass(
-        renderer: ProteinRenderer,
         commandBuffer: MTLCommandBuffer,
         texture: MTLTexture
     ) {

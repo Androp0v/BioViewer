@@ -8,32 +8,32 @@
 import Foundation
 import Metal
 
-extension MutableState {
+extension ProteinRenderer {
     
-    func shadowRenderPass(renderer: ProteinRenderer, commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, shadowDepthPrePassTexture: MTLTexture?, highQuality: Bool) {
+    func shadowRenderPass(commandBuffer: MTLCommandBuffer, uniformBuffer: inout MTLBuffer, shadowTextures: ShadowTextures, shadowDepthPrePassTexture: MTLTexture?, highQuality: Bool) {
     
         // Ensure transparent buffers are loaded
         guard let billboardVertexBuffers = self.billboardVertexBuffers else { return }
         guard let impostorIndexBuffer = self.impostorIndexBuffer else { return }
         
         // Attach textures
-        renderer.shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
-        renderer.shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
-        renderer.shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
+        Self.shadowRenderPassDescriptor.depthAttachment.texture = shadowTextures.shadowDepthTexture
+        Self.shadowRenderPassDescriptor.depthAttachment.clearDepth = 1.0
+        Self.shadowRenderPassDescriptor.colorAttachments[0].texture = shadowTextures.shadowTexture
         if AppState.hasDepthPrePasses() {
             // colorAttachments[1] is the shadow depth pre-pass texture
-            renderer.shadowRenderPassDescriptor.colorAttachments[1].texture = shadowDepthPrePassTexture
+            Self.shadowRenderPassDescriptor.colorAttachments[1].texture = shadowDepthPrePassTexture
             // Clear the depth texture using the equivalent to 1.0 (max depth)
-            renderer.shadowRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            Self.shadowRenderPassDescriptor.colorAttachments[1].clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
         
-        renderer.shadowRenderPassDescriptor.renderTargetWidth = shadowTextures.textureWidth
-        renderer.shadowRenderPassDescriptor.renderTargetHeight = shadowTextures.textureHeight
+        Self.shadowRenderPassDescriptor.renderTargetWidth = shadowTextures.textureWidth
+        Self.shadowRenderPassDescriptor.renderTargetHeight = shadowTextures.textureHeight
         
         // MARK: - Render command
         
         // Create render command encoder
-        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderer.shadowRenderPassDescriptor) else {
+        guard let renderCommandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: Self.shadowRenderPassDescriptor) else {
             return
         }
         renderCommandEncoder.label = "Shadow Depth Pre-pass & Shadow Map Generation"
@@ -45,7 +45,6 @@ extension MutableState {
         
         if AppState.hasDepthPrePasses() && scene.hasShadows {
             self.encodeShadowDepthPrePassStage(
-                renderer: renderer,
                 renderCommandEncoder: renderCommandEncoder,
                 uniformBuffer: &uniformBuffer
             )

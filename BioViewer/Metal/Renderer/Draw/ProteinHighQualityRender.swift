@@ -16,7 +16,7 @@ enum HQRenderingError: Error {
     case unknownError
 }
 
-extension MutableState {
+extension ProteinRenderer {
     
     func drawHighQualityFrame(
         renderer: ProteinRenderer,
@@ -28,7 +28,7 @@ extension MutableState {
         // Create the textures required for HQ rendering
         var hqTextures = HQTextures()
         hqTextures.makeTextures(device: device, photoConfig: photoConfig)
-        renderer.impostorRenderPassDescriptor.depthAttachment.storeAction = .store
+        Self.impostorRenderPassDescriptor.depthAttachment.storeAction = .store
         
         // Create the textures required for HQ depth pre-pass
         var hqPrePassTextures = DepthPrePassTextures()
@@ -105,7 +105,6 @@ extension MutableState {
         // MARK: - Shadow Map pass
         
         shadowRenderPass(
-            renderer: renderer,
             commandBuffer: commandBuffer,
             uniformBuffer: &uniformBuffer,
             shadowTextures: hqShadowTextures,
@@ -119,7 +118,6 @@ extension MutableState {
                 
         // MARK: - Transparent geometry pass
         impostorRenderPass(
-            renderer: renderer,
             commandBuffer: commandBuffer,
             uniformBuffer: &uniformBuffer,
             drawableTexture: hqTextures.hqTexture,

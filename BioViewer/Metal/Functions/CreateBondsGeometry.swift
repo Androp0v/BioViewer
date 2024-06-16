@@ -14,7 +14,7 @@ struct CreateBondsOutput {
     let indexBuffer: MTLBuffer
 }
 
-extension MutableState {
+extension ProteinRenderer {
     
     /// Create vertex and index data for a protein given the atom positions.
     /// - Parameter protein: The protein to be visualized.

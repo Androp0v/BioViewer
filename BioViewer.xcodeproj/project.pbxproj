@@ -46,7 +46,6 @@
 		C488E7272B891348001E2222 /* SelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488E7262B891348001E2222 /* SelectionModel.swift */; };
 		C488E72B2B891418001E2222 /* SelectedDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488E72A2B891418001E2222 /* SelectedDebugView.swift */; };
 		C488E72D2B896860001E2222 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488E72C2B896860001E2222 /* Ray.swift */; };
-		C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B2382663E195004995C2 /* ProteinRenderer.swift */; };
 		C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
 		C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
 		C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D9D31271C469100E12E2F /* MetalScene.swift */; };
@@ -94,7 +93,7 @@
 		C52E6BBC2B136A00000B8881 /* PopulateVisualizationBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E6BBB2B136A00000B8881 /* PopulateVisualizationBuffers.swift */; };
 		C5311B102852554300A13C94 /* BillboardVertexBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */; };
 		C531753E29DF16A7004FF2C6 /* ProteinDraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */; };
-		C531754129DF1AA3004FF2C6 /* MutableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754029DF1AA3004FF2C6 /* MutableState.swift */; };
+		C531754129DF1AA3004FF2C6 /* ProteinRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754029DF1AA3004FF2C6 /* ProteinRenderer.swift */; };
 		C531754529DF8713004FF2C6 /* ProteinRenderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754429DF8713004FF2C6 /* ProteinRenderedView.swift */; };
 		C531754829DF89F3004FF2C6 /* ProteinRenderedTextures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C531754729DF89F3004FF2C6 /* ProteinRenderedTextures.swift */; };
 		C53A118C2736D17500119BE6 /* RCSBImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53A118B2736D17500119BE6 /* RCSBImportView.swift */; };
@@ -287,7 +286,6 @@
 		C488E7262B891348001E2222 /* SelectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionModel.swift; sourceTree = "<group>"; };
 		C488E72A2B891418001E2222 /* SelectedDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedDebugView.swift; sourceTree = "<group>"; };
 		C488E72C2B896860001E2222 /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
-		C495B2382663E195004995C2 /* ProteinRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderer.swift; sourceTree = "<group>"; };
 		C495B24226663CF3004995C2 /* MatrixTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixTransform.swift; sourceTree = "<group>"; };
 		C495B24426663D2C004995C2 /* SIMDExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMDExtensions.swift; sourceTree = "<group>"; };
 		C49D9D31271C469100E12E2F /* MetalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScene.swift; sourceTree = "<group>"; };
@@ -340,7 +338,7 @@
 		C52E6BBB2B136A00000B8881 /* PopulateVisualizationBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopulateVisualizationBuffers.swift; sourceTree = "<group>"; };
 		C5311B0F2852554300A13C94 /* BillboardVertexBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillboardVertexBuffers.swift; sourceTree = "<group>"; };
 		C531753D29DF16A7004FF2C6 /* ProteinDraw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinDraw.swift; sourceTree = "<group>"; };
-		C531754029DF1AA3004FF2C6 /* MutableState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableState.swift; sourceTree = "<group>"; };
+		C531754029DF1AA3004FF2C6 /* ProteinRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderer.swift; sourceTree = "<group>"; };
 		C531754429DF8713004FF2C6 /* ProteinRenderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderedView.swift; sourceTree = "<group>"; };
 		C531754729DF89F3004FF2C6 /* ProteinRenderedTextures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProteinRenderedTextures.swift; sourceTree = "<group>"; };
 		C5385325278998A0007A8368 /* SharedDataStructs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedDataStructs.h; sourceTree = "<group>"; };
@@ -788,7 +786,7 @@
 			isa = PBXGroup;
 			children = (
 				C52DD46329FE81C50050A7C2 /* Data Structures */,
-				C495B2382663E195004995C2 /* ProteinRenderer.swift */,
+				C531754029DF1AA3004FF2C6 /* ProteinRenderer.swift */,
 				C52E6BBA2B1369F0000B8881 /* MutableState */,
 				C560E0E029E305DC00CE883C /* ProteinRenderTarget.swift */,
 				C531753F29DF16AD004FF2C6 /* Draw */,
@@ -959,7 +957,6 @@
 		C52E6BBA2B1369F0000B8881 /* MutableState */ = {
 			isa = PBXGroup;
 			children = (
-				C531754029DF1AA3004FF2C6 /* MutableState.swift */,
 				C52E6BBB2B136A00000B8881 /* PopulateVisualizationBuffers.swift */,
 			);
 			path = MutableState;
@@ -1446,7 +1443,6 @@
 				C5C7513F27DBF6EC004CEE8E /* WhatsNewView.swift in Sources */,
 				C52AE374279D80A800BEE11B /* BasicShader.metal in Sources */,
 				C580F257294B9BD60073B01B /* PersistentDisclosureGroup.swift in Sources */,
-				C495B2392663E195004995C2 /* ProteinRenderer.swift in Sources */,
 				C440856C26481E0300DC5009 /* ProteinSequenceView.swift in Sources */,
 				C53A11912736DED200119BE6 /* RCSBImportViewModel.swift in Sources */,
 				C5AC7D64283EB4310089572D /* DepthPrePassTextures.swift in Sources */,
@@ -1542,7 +1538,7 @@
 				C5883E882857B8D000C97818 /* RCSBDetailView.swift in Sources */,
 				C44D0559266BAA6E00BAFDCD /* AppState.swift in Sources */,
 				C504C9C8274294A7002D4E6A /* RCSBError.swift in Sources */,
-				C531754129DF1AA3004FF2C6 /* MutableState.swift in Sources */,
+				C531754129DF1AA3004FF2C6 /* ProteinRenderer.swift in Sources */,
 				C4187E332642E0C2009E2CBA /* MainView.swift in Sources */,
 				C5EEE9AC276DE4B9005737C1 /* TopToolbar.swift in Sources */,
 				C540EE12284B747100153200 /* ShadowDepthPrePass.swift in Sources */,
