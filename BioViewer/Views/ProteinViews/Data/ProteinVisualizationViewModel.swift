@@ -84,8 +84,12 @@ import Foundation
                     guard let proteinViewModel = self.proteinViewModel else {
                         return
                     }
-                    guard var debugBuffer = ComputeMolecularSurfaceUtility(protein: (proteinViewModel.dataSource.files.first?.models.first)!)
-                            .createMolecularSurface() else {
+                    guard var debugBuffer = ComputeMolecularSurfaceUtility(
+                        protein: (proteinViewModel.dataSource.files.first?.models.first)!,
+                        renderer: proteinViewModel.renderer
+                    )
+                        .createMolecularSurface()
+                    else {
                         return
                     }
                     #if DEBUG

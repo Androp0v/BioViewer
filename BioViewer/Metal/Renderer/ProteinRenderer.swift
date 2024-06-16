@@ -154,6 +154,13 @@ actor ProteinRenderer {
         return descriptor
     }()
     
+    // MARK: -  PipelineStateBundle bundles
+    
+    let createSphereModelBundle = PipelineStateBundle()
+    let createBondsBundle = PipelineStateBundle()
+    let createSASPointsBundle = PipelineStateBundle()
+    let removeSASPointsInsideSolidBundle = PipelineStateBundle()
+    
     // MARK: - Render Pipeline Statues
     
     /// Shadow depth state.

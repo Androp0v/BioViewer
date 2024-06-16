@@ -8,7 +8,7 @@
 import Foundation
 import Metal
 
-extension MetalScheduler {
+extension ProteinRenderer {
     public func makeBufferFromArray<T>(array: [T]) -> MTLBuffer? {
         let arrayCopy = array
         let buffer = device.makeBuffer(bytes: arrayCopy,

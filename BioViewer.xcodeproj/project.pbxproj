@@ -49,7 +49,6 @@
 		C495B24326663CF3004995C2 /* MatrixTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24226663CF3004995C2 /* MatrixTransform.swift */; };
 		C495B24526663D2C004995C2 /* SIMDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C495B24426663D2C004995C2 /* SIMDExtensions.swift */; };
 		C49D9D32271C469100E12E2F /* MetalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D9D31271C469100E12E2F /* MetalScene.swift */; };
-		C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AAE265936A2001C0490 /* MetalScheduler.swift */; };
 		C4A69AB126594CB1001C0490 /* PipelineStateBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */; };
 		C4D3978F2721F3AF00F2C2BB /* CreateImpostorSpheres.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */; };
 		C4FE01592B87779600E848A5 /* CIFParser in Frameworks */ = {isa = PBXBuildFile; productRef = C4FE01582B87779600E848A5 /* CIFParser */; };
@@ -291,7 +290,6 @@
 		C49D9D34271C56A600E12E2F /* BioViewer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BioViewer-Bridging-Header.h"; sourceTree = "<group>"; };
 		C49D9D38271C6BEF00E12E2F /* AtomProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomProperties.h; sourceTree = "<group>"; };
 		C49D9D39271DB54E00E12E2F /* GeneratedVertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedVertex.h; sourceTree = "<group>"; };
-		C4A69AAE265936A2001C0490 /* MetalScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalScheduler.swift; sourceTree = "<group>"; };
 		C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineStateBundle.swift; sourceTree = "<group>"; };
 		C4D3978E2721F3AF00F2C2BB /* CreateImpostorSpheres.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateImpostorSpheres.metal; sourceTree = "<group>"; };
 		C4FE01562B87776800E848A5 /* CIFParser */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CIFParser; sourceTree = "<group>"; };
@@ -507,7 +505,6 @@
 		C400E1FF2721ED5C004DFCA8 /* Functions */ = {
 			isa = PBXGroup;
 			children = (
-				C4A69AAE265936A2001C0490 /* MetalScheduler.swift */,
 				C4A69AB026594CB1001C0490 /* PipelineStateBundle.swift */,
 				C400E2042721EEE8004DFCA8 /* CreateImpostorSpheres.swift */,
 				C5FEC738277C977A00E348BD /* CreateBondsGeometry.swift */,
@@ -1468,7 +1465,6 @@
 				C51D4EE1276912AE00C69B3D /* ShadowPass.swift in Sources */,
 				C553B79829361A9E00294BB4 /* ShadowsSection.swift in Sources */,
 				C5433F402770FA9200607B20 /* LineGraphView.swift in Sources */,
-				C4A69AAF265936A2001C0490 /* MetalScheduler.swift in Sources */,
 				C501C74527C3FE93008CDA25 /* ComputePipelines.swift in Sources */,
 				C560E0DF29E302FA00CE883C /* CopyToDrawable.swift in Sources */,
 				C40574492663D756008527D1 /* ProteinMetalView.swift in Sources */,

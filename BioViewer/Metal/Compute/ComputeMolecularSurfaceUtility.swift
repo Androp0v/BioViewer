@@ -13,6 +13,7 @@ import simd
 class ComputeMolecularSurfaceUtility {
     
     let protein: Protein
+    let renderer: ProteinRenderer
     
     /// Size of the box that encloses the entire protein.
     var boxSize: Float = 0.0
@@ -28,8 +29,9 @@ class ComputeMolecularSurfaceUtility {
     /// property of the compute pipeline state.
     var threadsPerNBGrid: Int?
     
-    init(protein: Protein, gridResolution: Int = 200) {
+    init(protein: Protein, renderer: ProteinRenderer, gridResolution: Int = 200) {
         self.protein = protein
+        self.renderer = renderer
         self.gridResolution = gridResolution
         
         (self.boxSize, self.neighbourGridResolution) = optimalBox(boundingSphereRadius: protein.boundingVolume.sphere.radius)
@@ -76,7 +78,7 @@ class ComputeMolecularSurfaceUtility {
     
     private func createSDFGrid() async -> MTLBuffer? {
         
-        let sdfBuffer = await MetalScheduler.shared.computeSDFGrid(
+        let sdfBuffer = await renderer.computeSDFGrid(
             protein: protein,
             boxSize: boxSize,
             gridResolution: gridResolution
@@ -141,6 +143,6 @@ class ComputeMolecularSurfaceUtility {
             }
         }
         
-        return await MetalScheduler.shared.makeBufferFromArray(array: pointsInsideVolume)
+        return await renderer.makeBufferFromArray(array: pointsInsideVolume)
     }
 }

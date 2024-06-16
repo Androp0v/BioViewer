@@ -86,7 +86,9 @@ final class ProteinRenderedView: PlatformView {
             return
         }
         self.metalLayer = metalLayer
-        renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
+        Task {
+            await renderer.drawableSizeChanged(to: size, layer: metalLayer, displayScale: displayScale)
+        }
     }
     #elseif os(macOS)
     // Called when view size changes. Update drawables and textures

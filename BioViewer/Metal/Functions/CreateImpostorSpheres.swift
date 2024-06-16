@@ -165,15 +165,15 @@ extension ProteinRenderer {
         }
 
         // Check if the function needs to be compiled
-        if await MetalScheduler.shared.createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
-            await MetalScheduler.shared.createSphereModelBundle.createPipelineState(
+        if createSphereModelBundle.requiresBuilding(newFunctionParameters: nil) {
+            createSphereModelBundle.createPipelineState(
                 functionName: "createImpostorSpheres",
                 library: self.device.makeDefaultLibrary(),
                 device: self.device,
                 constantValues: nil
             )
         }
-        guard let pipelineState = await MetalScheduler.shared.createSphereModelBundle.getPipelineState(
+        guard let pipelineState = createSphereModelBundle.getPipelineState(
             functionParameters: nil
         ) else {
             return nil

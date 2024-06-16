@@ -53,15 +53,15 @@ extension ProteinRenderer {
         guard let computeEncoder = buffer.makeComputeCommandEncoder() else { return nil }
 
         // Check if the function needs to be compiled
-        if await MetalScheduler.shared.createBondsBundle.requiresBuilding(newFunctionParameters: nil) {
-            await MetalScheduler.shared.createBondsBundle.createPipelineState(
+        if createBondsBundle.requiresBuilding(newFunctionParameters: nil) {
+            createBondsBundle.createPipelineState(
                 functionName: "create_impostor_bonds",
-                library: MetalScheduler.shared.library,
+                library: library,
                 device: self.device,
                 constantValues: nil
             )
         }
-        guard let pipelineState = await MetalScheduler.shared.createBondsBundle.getPipelineState(functionParameters: nil) else {
+        guard let pipelineState = createBondsBundle.getPipelineState(functionParameters: nil) else {
             return nil
         }
 
