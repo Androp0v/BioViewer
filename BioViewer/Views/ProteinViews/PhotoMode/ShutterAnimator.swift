@@ -9,7 +9,7 @@ import AVFoundation
 import Foundation
 import SwiftUI
 
-@Observable class ShutterAnimator {
+@MainActor @Observable class ShutterAnimator {
     
     // MARK: - UI Properties
     

@@ -17,7 +17,7 @@ struct BioBenchView: View {
     @State var benchmarkViewModel = BioBenchViewModel()
     @State var isRunningBenchmark: Bool = false
     
-    let proteinViewModel = ProteinViewModel(isBenchmark: true)
+    let proteinViewModel: ProteinViewModel
     @StateObject var proteinDataSource = ProteinDataSource()
     @State var colorViewModel = ProteinColorViewModel()
     @State var visualizationViewModel = ProteinVisualizationViewModel()
@@ -25,7 +25,17 @@ struct BioBenchView: View {
     @State var statusViewModel = StatusViewModel()
     @State var selectionModel = SelectionModel()
     
+    @State private var resolutionViewModel: ResolutionViewModel
+    @State private var fpsViewModel: FPSCounterViewModel
+    
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    init() {
+        let proteinViewModel = ProteinViewModel(isBenchmark: true)
+        self.proteinViewModel = proteinViewModel
+        self._resolutionViewModel = State(initialValue: ResolutionViewModel(renderer: proteinViewModel.renderer))
+        self._fpsViewModel = State(initialValue: FPSCounterViewModel(renderer: proteinViewModel.renderer))
+    }
     
     var layout: AnyLayout {
         if horizontalSizeClass == .regular {
@@ -65,8 +75,10 @@ struct BioBenchView: View {
                             Spacer()
                             VStack(spacing: .zero) {
                                 Spacer()
-                                ResolutionView(viewModel: ResolutionViewModel(renderer: proteinViewModel.renderer))
-                                FPSCounterView(viewModel: FPSCounterViewModel(renderer: proteinViewModel.renderer))
+                                ResolutionView()
+                                    .environment(resolutionViewModel)
+                                FPSCounterView()
+                                    .environment(fpsViewModel)
                                     .padding()
                             }
                         }
@@ -116,13 +128,5 @@ struct BioBenchView: View {
                 .environment(benchmarkViewModel)
         }
         .background(.black)
-    }
-}
-
-// MARK: - Previews
-
-struct BioBenchView_Previews: PreviewProvider {
-    static var previews: some View {
-        BioBenchView()
     }
 }

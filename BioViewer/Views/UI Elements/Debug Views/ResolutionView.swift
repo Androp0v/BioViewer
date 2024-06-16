@@ -37,7 +37,7 @@ import SwiftUI
 
 @MainActor struct ResolutionView: View {
     
-    @State var viewModel: ResolutionViewModel
+    @Environment(ResolutionViewModel.self) var viewModel: ResolutionViewModel
     
     var resolutionString: String {
         guard let resolution = viewModel.resolution else {

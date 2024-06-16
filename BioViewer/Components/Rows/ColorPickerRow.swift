@@ -17,14 +17,18 @@ struct ColorPickerRow: View {
             #if targetEnvironment(macCatalyst)
             Text(title)
             Spacer()
-            ColorPicker("",
-                        selection: $selectedColor,
-                        supportsOpacity: false)
+            ColorPicker(
+                "",
+                selection: $selectedColor,
+                supportsOpacity: false
+            )
                 .frame(width: 96)
             #else
-            ColorPicker(title,
-                        selection: $selectedColor,
-                        supportsOpacity: false)
+            ColorPicker(
+                title,
+                selection: $selectedColor,
+                supportsOpacity: false
+            )
             #endif
         }
     }

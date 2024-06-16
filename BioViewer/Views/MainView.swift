@@ -9,16 +9,23 @@ import SwiftUI
 
 struct MainView: View {
     
-    let proteinViewModel = ProteinViewModel()
-    @State var colorViewModel = ProteinColorViewModel()
-    @State var visualizationViewModel = ProteinVisualizationViewModel()
+    @State var proteinViewModel: ProteinViewModel
+    @State var colorViewModel: ProteinColorViewModel
+    @State var visualizationViewModel: ProteinVisualizationViewModel
+    @State var statusViewModel: StatusViewModel
+    
     @State var shadowsViewModel = ProteinShadowsViewModel()
     @State var graphicsSettings = ProteinGraphicsSettings()
-    @State var statusViewModel = StatusViewModel()
     @State var selectionModel = SelectionModel()
     @State var isPresentingNews = false
             
-    init() {}
+    init() {
+        let proteinViewModel = ProteinViewModel()
+        self._proteinViewModel = State(initialValue: proteinViewModel)
+        self._colorViewModel = State(initialValue: proteinViewModel.colorViewModel)
+        self._visualizationViewModel = State(initialValue: proteinViewModel.visualizationViewModel)
+        self._statusViewModel = State(initialValue: proteinViewModel.statusViewModel)
+    }
 
     var body: some View {
         
@@ -35,7 +42,6 @@ struct MainView: View {
                     shadowsViewModel.proteinViewModel = proteinViewModel
                     graphicsSettings.proteinViewModel = proteinViewModel
                 }
-            
                 .sheet(
                     isPresented: $isPresentingNews,
                     onDismiss: {
@@ -62,7 +68,7 @@ struct MainView: View {
                 try? await FileImporter.importFromFileURL(
                     fileURL: fileURL,
                     proteinDataSource: proteinViewModel.dataSource,
-                    statusViewModel: statusViewModel,
+                    statusViewModel: proteinViewModel.statusViewModel,
                     fileInfo: nil
                 )
             }

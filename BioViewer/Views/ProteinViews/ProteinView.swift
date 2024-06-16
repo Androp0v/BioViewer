@@ -23,6 +23,8 @@ struct ProteinView: View {
     @Environment(StatusViewModel.self) var statusViewModel: StatusViewModel
     @Environment(SelectionModel.self) var selectionModel: SelectionModel
         
+    @State private var resolutionViewModel: ResolutionViewModel
+    @State private var fpsViewModel: FPSCounterViewModel
     @State private var showSidebar: Bool = UserDefaults.standard.bool(forKey: "showSidebar")
     @State private var showInspectorModal: Bool = false
     @State private var selectedSidebarSegment = 0
@@ -34,6 +36,13 @@ struct ProteinView: View {
     // UI constants
     private enum Constants {
         static let compactSequenceViewWidth: CGFloat = 32
+    }
+    
+    init(proteinViewModel: ProteinViewModel, renderer: ProteinRenderer) {
+        self.proteinViewModel = proteinViewModel
+        self.renderer = renderer
+        self.resolutionViewModel = ResolutionViewModel(renderer: renderer)
+        self.fpsViewModel = FPSCounterViewModel(renderer: renderer)
     }
 
     // MARK: - Body
@@ -67,8 +76,10 @@ struct ProteinView: View {
                         Spacer()
                         VStack(spacing: .zero) {
                             Spacer()
-                            ResolutionView(viewModel: ResolutionViewModel(renderer: renderer))
-                            FPSCounterView(viewModel: FPSCounterViewModel(renderer: renderer))
+                            ResolutionView()
+                                .environment(resolutionViewModel)
+                            FPSCounterView()
+                                .environment(fpsViewModel)
                                 .padding()
                         }
                     }

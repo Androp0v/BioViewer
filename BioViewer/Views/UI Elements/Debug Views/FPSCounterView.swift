@@ -58,7 +58,7 @@ import SwiftUI
 
 struct FPSCounterView: View {
     
-    @State var viewModel: FPSCounterViewModel
+    @Environment(FPSCounterViewModel.self) var viewModel: FPSCounterViewModel
     
     var body: some View {
         Text(viewModel.averageFPSString)
