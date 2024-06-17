@@ -27,8 +27,6 @@ class MetalScene {
     
     /// Whether the scene is playing (a configuration loop, or a rotation, for example). If true, overrides ```needsRedraw```.
     var isPlaying: Bool = false
-    /// Class used to animate changes in scene properties.
-    var animator: SceneAnimator?
     
     /// Struct with data passed to the GPU shader that can be modified between draw calls.
     private var frameData: FrameData
@@ -171,9 +169,6 @@ class MetalScene {
         // Pass cast shadows and depth cueing to FrameData
         self.frameData.has_shadows = self.hasShadows ? 1 : 0
         self.frameData.has_depth_cueing = self.hasDepthCueing ? 1 : 0
-            
-        // Create the animator
-        self.animator = SceneAnimator(scene: self)
     }
 
     // MARK: - Update scene

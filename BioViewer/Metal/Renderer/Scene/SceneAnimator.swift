@@ -35,9 +35,8 @@ struct ColorAnimation: RunningAnimation {
     let duration: Double
 }
 
-final class SceneAnimator {
+actor SceneAnimator {
     
-    weak var scene: MetalScene?
     weak var renderer: ProteinRenderer?
     
     var displayLink: PlatformDisplayLink?
@@ -45,19 +44,24 @@ final class SceneAnimator {
     var colorAnimation: ColorAnimation?
     var isBusy: Bool = false
     
-    init(scene: MetalScene) {
-        self.scene = scene
-        self.displayLink = PlatformDisplayLink {
-            self.updateAllAnimations()
+    init() {
+        Task {
+            await startDisplayLink()
         }
-        displayLink?.add(to: .main, forMode: .default)
     }
     
-    func animateRadiiChange(finalRadii: AtomRadii, duration: Double, colorBy: ProteinColorByOption, proteins: [Protein]) {
-        guard let scene = scene else { return }
+    func animateRadiiChange(
+        renderer: ProteinRenderer,
+        finalRadii: AtomRadii,
+        duration: Double,
+        colorBy: ProteinColorByOption,
+        proteins: [Protein]
+    ) async {
+        self.renderer = renderer
+        let initialAtomRadii = await renderer.getAtomRadii()
         radiiAnimation = RadiiAnimation(
             currentTime: CACurrentMediaTime(),
-            initialValue: scene.atom_radii,
+            initialValue: initialAtomRadii,
             finalValue: finalRadii,
             duration: duration, 
             colorBy: colorBy,
@@ -66,7 +70,13 @@ final class SceneAnimator {
         resumeDisplayLinkIfNeeded()
     }
     
-    func animatedFillColorChange(initialColors: FillColorInput, finalColors: FillColorInput, duration: Double) {
+    func animatedFillColorChange(
+        renderer: ProteinRenderer,
+        initialColors: FillColorInput,
+        finalColors: FillColorInput,
+        duration: Double
+    ) async {
+        self.renderer = renderer
         colorAnimation = ColorAnimation(
             currentTime: CACurrentMediaTime(),
             initialValue: initialColors,
@@ -77,6 +87,15 @@ final class SceneAnimator {
     }
     
     // MARK: - Private
+    
+    private func startDisplayLink() {
+        self.displayLink = PlatformDisplayLink {
+            Task {
+                await self.updateAllAnimations()
+            }
+        }
+        displayLink?.add(to: .main, forMode: .default)
+    }
     
     private func resumeDisplayLinkIfNeeded() {
         displayLink?.isPaused = false
@@ -98,19 +117,17 @@ final class SceneAnimator {
     
     // MARK: - Update animations
 
-    @objc private func updateAllAnimations() {
+    private func updateAllAnimations() async {
         guard !isBusy else { return }
         isBusy = true
         
-        Task { @MainActor in
-            if self.radiiAnimation != nil {
-                await self.updateRadiiAnimation()
-            }
-            if self.colorAnimation != nil {
-                self.updateColorAnimation()
-            }
-            self.isBusy = false
+        if self.radiiAnimation != nil {
+            await self.updateRadiiAnimation()
         }
+        if self.colorAnimation != nil {
+            await self.updateColorAnimation()
+        }
+        self.isBusy = false
     }
         
     // MARK: - Radii animation
@@ -119,9 +136,6 @@ final class SceneAnimator {
         
         self.radiiAnimation?.currentTime = CACurrentMediaTime()
 
-        guard let scene = scene else {
-            return
-        }
         guard let radiiAnimation = radiiAnimation else {
             return
         }
@@ -133,11 +147,11 @@ final class SceneAnimator {
         }
         
         let progress = getAnimationProgress(animation: &self.radiiAnimation!)
-                
-        scene.atom_radii = .interpolated(initial: initialRadii, final: finalRadii, progress: Float(progress))
+        let newRadii: AtomRadii = .interpolated(initial: initialRadii, final: finalRadii, progress: Float(progress))
         
+        await renderer?.setAtomRadii(newRadii)
         await renderer?.sceneAnimatorCallback(
-            atomRadii: scene.atom_radii,
+            atomRadii: newRadii,
             colorBy: radiiAnimation.colorBy,
             proteins: radiiAnimation.proteins
         )
@@ -150,32 +164,24 @@ final class SceneAnimator {
     
     // MARK: - Color animation
     
-    private func updateColorAnimation() {
+    private func updateColorAnimation() async {
         
         self.colorAnimation?.currentTime = CACurrentMediaTime()
-        
-        guard let scene = scene else {
-            return
-        }
-        guard let colorAnimation = colorAnimation else {
-            return
-        }
-        guard let initialFill = colorAnimation.initialValue as? FillColorInput else {
-            return
-        }
-        guard let finalFill = colorAnimation.finalValue as? FillColorInput else {
-            return
-        }
+
+        guard let renderer else { return }
+        guard let colorAnimation = colorAnimation else { return }
+        guard let initialFill = colorAnimation.initialValue as? FillColorInput else { return }
+        guard let finalFill = colorAnimation.finalValue as? FillColorInput else { return }
         
         let progress = getAnimationProgress(animation: &self.colorAnimation!)
-        
-        scene.colorFill = FillColorInputUtility.interpolateFillColorInput(
+        let newColorFill = FillColorInputUtility.interpolateFillColorInput(
             start: initialFill,
             end: finalFill,
             fraction: Float(progress)
         )
+        await renderer.setColorFill(newColorFill)
         if progress >= 1 {
-            scene.colorFill = finalFill
+            await renderer.setColorFill(finalFill)
             self.colorAnimation = nil
             pauseDisplayLinkIfNeeded()
         }

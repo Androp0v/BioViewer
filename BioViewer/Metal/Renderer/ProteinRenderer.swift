@@ -25,6 +25,8 @@ actor ProteinRenderer {
     
     /// The scene contains the high-level information about the rendering of the scene (cameras, lighting...)
     private(set) var scene = MetalScene()
+    /// The animator used to animate changes in the Scene.
+    let sceneAnimator = SceneAnimator()
     /// Resolution of the view
     var viewResolution: CGSize?
             
@@ -627,8 +629,9 @@ actor ProteinRenderer {
         scene.colorFill = colorFill
     }
     
-    func animateColorFillChange(to colorFill: FillColorInput) {
-        scene.animator?.animatedFillColorChange(
+    func animateColorFillChange(to colorFill: FillColorInput) async {
+        await sceneAnimator.animatedFillColorChange(
+            renderer: self,
             initialColors: scene.colorFill,
             finalColors: colorFill,
             duration: 0.15

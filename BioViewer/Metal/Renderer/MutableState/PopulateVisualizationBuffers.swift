@@ -11,10 +11,8 @@ import Foundation
 extension ProteinRenderer {
     
     func animatedFileDeletion(colorBy: ProteinColorByOption, proteins: [Protein]) async {
-        guard let animator = scene.animator else {
-            return
-        }
-        animator.animateRadiiChange(
+        await sceneAnimator.animateRadiiChange(
+            renderer: self,
             finalRadii: .zero,
             duration: 0.35,
             colorBy: colorBy,
@@ -33,7 +31,6 @@ extension ProteinRenderer {
         
         // FIXME: Avoid this hacky way of retrieving current models
         guard let protein = await dataSource.getFirstProtein(),
-              let animator = scene.animator,
               let proteinFile = await dataSource.getFirstFile(),
               let proteins = await dataSource.modelsForFile(file: proteinFile)
         else {
@@ -49,19 +46,20 @@ extension ProteinRenderer {
             remakeImpostorPipelineForVariant(variant: .solidSpheres)
             
             // Animate radii changes
-            animator.renderer = self
             if isInitialAnimation {
                 setAtomRadii(.zero)
             }
             if await visualizationViewModel.solidSpheresRadiusOption == .vanDerWaals {
-                await animator.animateRadiiChange(
+                await sceneAnimator.animateRadiiChange(
+                    renderer: self,
                     finalRadii: .scaledVanDerWaals(scale: visualizationViewModel.solidSpheresVDWScale),
                     duration: 0.35,
                     colorBy: colorBy,
                     proteins: proteins
                 )
             } else {
-                await animator.animateRadiiChange(
+                await sceneAnimator.animateRadiiChange(
+                    renderer: self,
                     finalRadii: .fixed(radius: visualizationViewModel.solidSpheresFixedAtomRadii),
                     duration: 0.35,
                     colorBy: colorBy,
@@ -89,16 +87,17 @@ extension ProteinRenderer {
             remakeImpostorPipelineForVariant(variant: .ballAndSticks)
             
             // Animate radii changes
-            animator.renderer = self
             if await visualizationViewModel.ballAndStickRadiusOption == .fixed {
-                await animator.animateRadiiChange(
+                await sceneAnimator.animateRadiiChange(
+                    renderer: self,
                     finalRadii: .fixed(radius: visualizationViewModel.ballAndSticksFixedAtomRadii),
                     duration: 0.35,
                     colorBy: colorBy,
                     proteins: proteins
                 )
             } else {
-                await animator.animateRadiiChange(
+                await sceneAnimator.animateRadiiChange(
+                    renderer: self,
                     finalRadii: .scaledVanDerWaals(scale: visualizationViewModel.ballAndSticksVDWScale),
                     duration: 0.35,
                     colorBy: colorBy,
