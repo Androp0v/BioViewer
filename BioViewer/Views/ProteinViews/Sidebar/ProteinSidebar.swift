@@ -90,6 +90,7 @@ struct ProteinSidebar: View {
                  */
             }
             .pickerStyle(SegmentedPickerStyle())
+            .labelsHidden()
             .padding(12)
         }
     }

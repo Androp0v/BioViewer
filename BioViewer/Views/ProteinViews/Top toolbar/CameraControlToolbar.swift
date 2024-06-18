@@ -27,6 +27,7 @@ struct CameraControlToolbar: View {
                     .foregroundColor(.accentColor).tag(1)
             }
             .pickerStyle(SegmentedPickerStyle())
+            .labelsHidden()
             .foregroundColor(.accentColor)
             .frame(width: 4 * TopToolbar.Constants.buttonSize)
             .disabled(config.autorotating)

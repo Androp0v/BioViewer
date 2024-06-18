@@ -19,6 +19,7 @@ struct ImportRowView: View {
                 parent.launchImportAction(action: action)
             },
             label: {
+                #if os(iOS)
                 HStack(spacing: 10) {
                     Image(systemName: imageName)
                         .frame(width: 32, height: 32, alignment: .center)
@@ -27,6 +28,14 @@ struct ImportRowView: View {
                 }
                 .font(.headline)
                 .foregroundColor(.white)
+                #elseif os(macOS)
+                HStack(spacing: 10) {
+                    Image(systemName: imageName)
+                        .frame(alignment: .center)
+                    Text(title)
+                        .frame(alignment: .leading)
+                }
+                #endif
             }
         )
     }

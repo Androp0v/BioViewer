@@ -20,11 +20,9 @@ import SwiftUI
     
     @State var rcsbImportViewModel = RCSBImportViewModel()
     
-    func showAlert(text: String) {
-        DispatchQueue.main.async {
-            self.alertText = text
-            self.showingAlert = true
-        }
+    @MainActor func showAlert(text: String) {
+        self.alertText = text
+        self.showingAlert = true
     }
     
     // MARK: - View body

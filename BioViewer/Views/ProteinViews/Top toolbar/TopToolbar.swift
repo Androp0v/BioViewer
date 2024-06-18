@@ -15,14 +15,14 @@ struct TopToolbar: View {
     
     @Environment(ToolbarConfig.self) var config: ToolbarConfig
     
-    #if targetEnvironment(macCatalyst)
+    #if targetEnvironment(macCatalyst) || os(macOS)
     let buttonStyle = PlainButtonStyle()
     #else
     let buttonStyle = DefaultButtonStyle()
     #endif
     
     struct Constants {
-        #if targetEnvironment(macCatalyst)
+        #if targetEnvironment(macCatalyst) || os(macOS)
         static let toolbarSize: CGFloat = 28
         static let buttonSize: CGFloat = 16
         static let spacing: CGFloat = 12
