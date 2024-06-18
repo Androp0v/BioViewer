@@ -11,8 +11,10 @@ import Metal
 extension ProteinRenderer {
     public func makeBufferFromArray<T>(array: [T]) -> MTLBuffer? {
         let arrayCopy = array
-        let buffer = device.makeBuffer(bytes: arrayCopy,
-                                       length: MemoryLayout<T>.stride * arrayCopy.count)
+        let buffer = device.makeBuffer(
+            bytes: arrayCopy,
+            length: MemoryLayout<T>.stride * arrayCopy.count
+        )
         return buffer
     }
 }

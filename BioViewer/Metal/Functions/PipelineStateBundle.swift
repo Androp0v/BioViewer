@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import Metal
+import Metal
 
 final class PipelineStateBundle {
 

@@ -32,7 +32,7 @@ half angle(half3 vector_A, half3 vector_B) {
 
 int getCellID(float x, float y, float z, float cellRadius, int cellsPerDimension){
     
-    int maxCellNumber = cellsPerDimension*cellsPerDimension*cellsPerDimension;
+    // int maxCellNumber = cellsPerDimension*cellsPerDimension*cellsPerDimension;
     
     int cellID = 0;
     cellID += cellsPerDimension*cellsPerDimension * int(cellsPerDimension * ((z+cellRadius)/(2*cellRadius)));

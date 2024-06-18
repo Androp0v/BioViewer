@@ -112,7 +112,7 @@ class ProteinMetalViewController: PlatformViewController {
             await self.selectionModel.hit(
                 at: location,
                 viewSize: self.view.frame.size,
-                camera: self.proteinViewModel.renderer.getCamera(),
+                cameraProjectionMatrix: self.proteinViewModel.renderer.getCameraProjectionMatrix(),
                 cameraPosition: self.proteinViewModel.renderer.getCameraPosition(),
                 rotationQuaternion: self.proteinViewModel.renderer.getUserRotationQuaternion(),
                 modelTranslationMatrix: self.proteinViewModel.renderer.getModelTranslationMatrix(),

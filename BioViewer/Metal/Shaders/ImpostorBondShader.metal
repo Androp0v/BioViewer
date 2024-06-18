@@ -54,7 +54,7 @@ vertex ImpostorBondVertexOut impostor_bond_vertex(const device BillboardVertex *
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;
     simd_float4x4 projectionMatrix = frameData.projectionMatrix;
     simd_float4x4 rotation_matrix = frameData.rotation_matrix;
-    simd_float4x4 inverse_rotation_matrix = frameData.inverse_rotation_matrix;
+    // simd_float4x4 inverse_rotation_matrix = frameData.inverse_rotation_matrix;
     
     // Rotate the model in world space
     float4 rotated_atom_centers = rotation_matrix * float4(vertex_buffer[vid].billboard_world_center.x,
@@ -108,8 +108,8 @@ fragment ImpostorBondFragmentOut impostor_bond_fragment(ImpostorBondVertexOut im
     ImpostorBondFragmentOut output;
     
     // Phong diffuse shading
-    half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
-    half reflectivity = 0.3;
+    // half3 sunRayDirection = half3(0.7071067812, 0.7071067812, 0);
+    // half reflectivity = 0.3;
     
     // Add base color
     half3 shadedColor = half3(frameData.bond_color.r, frameData.bond_color.g, frameData.bond_color.b);

@@ -27,7 +27,7 @@ kernel void create_impostor_bonds(const device RawBondStruct *bond_array [[ buff
     float3 atom_B = bond_array[i].atom_B;
     float3 cylinder_center = bond_array[i].cylinder_center;
     float bond_radius = bond_array[i].bond_radius;
-    float bond_radius_root = sqrt(bond_radius);
+    // float bond_radius_root = sqrt(bond_radius);
     
     float2 direction_B_to_A = normalize(atom_A.xy - atom_B.xy);
     float2 direction_A_to_B = normalize(atom_B.xy - atom_A.xy);

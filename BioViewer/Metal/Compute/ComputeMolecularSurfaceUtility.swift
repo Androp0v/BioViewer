@@ -38,8 +38,9 @@ class ComputeMolecularSurfaceUtility {
     }
     
     func createMolecularSurface() -> MTLBuffer? {
+        /*
         let neighbours = createNeighbourGrid()
-        /*guard let sdfBuffer = createSDFGrid() else {
+        guard let sdfBuffer = createSDFGrid() else {
             return nil
         }
         return debugCreatePointsFromSDFGrid(sdfBuffer: sdfBuffer)*/

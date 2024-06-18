@@ -88,13 +88,24 @@ struct ProteinSuggestionData: Decodable {
     }
     
     private func loadImages() async {
-        await withTaskGroup(of: Void.self) { group in
-            suggestionData?.sections?.forEach { section in
-                section.rowData.forEach { row in
+        await withTaskGroup(of: (String, Image?).self) { group in
+            for section in (suggestionData?.sections ?? []) {
+                for row in section.rowData {
                     guard row.pdbImage == nil else { return }
+                    let rcsbID = row.rcsbid
                     group.addTask {
-                        row.pdbImage = try? await RCSBFetch.fetchPDBImage(rcsbid: row.rcsbid)
-                        return
+                        let rowImage = try? await RCSBFetch.fetchPDBImage(rcsbid: rcsbID)
+                        return (rcsbID, rowImage)
+                    }
+                }
+            }
+            
+            for await (rcsbID, image) in group {
+                for section in (suggestionData?.sections ?? []) {
+                    for row in section.rowData {
+                        if row.rcsbid == rcsbID {
+                            row.pdbImage = image
+                        }
                     }
                 }
             }

@@ -30,7 +30,7 @@ vertex VertexOut basic_vertex(const device GeneratedVertex* vertex_buffer [[ buf
 
     // Initialize the returned VertexOut structure
     VertexOut normalized_vertex;
-    int verticesPerAtom = 162;
+    // int verticesPerAtom = 162;
 
     // Fetch the matrices
     simd_float4x4 model_view_matrix = frameData.model_view_matrix;

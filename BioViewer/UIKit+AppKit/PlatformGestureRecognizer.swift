@@ -7,7 +7,7 @@
 
 protocol PlatformPanGestureRecognizer {
     @MainActor var stateChanged: Bool { get }
-    func velocity(in view: PlatformView?) -> CGPoint
+    @MainActor func velocity(in view: PlatformView?) -> CGPoint
 }
 
 #if os(iOS)

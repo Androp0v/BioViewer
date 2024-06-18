@@ -98,7 +98,7 @@ import SwiftUI
             
             #if os(iOS)
             // Haptics
-            await mirrorImpact()
+            mirrorImpact()
             // Sound
             playShutterOpenSound()
             #endif
@@ -111,7 +111,7 @@ import SwiftUI
             
             try? await Task.sleep(for: .seconds(0.15))
             #if os(iOS)
-            await shutterCurtainImpact()
+            shutterCurtainImpact()
             #endif
         } else {
             // First shutter curtain goes down
@@ -123,7 +123,7 @@ import SwiftUI
             try? await Task.sleep(for: .seconds(0.15))
             #if os(iOS)
             // Haptics
-            await shutterCurtainImpact()
+            shutterCurtainImpact()
             // Sound
             playShutterOpenSound()
             #endif
@@ -143,7 +143,7 @@ import SwiftUI
         
         #if os(iOS)
         // Haptics
-        await shutterCurtainImpact()
+        shutterCurtainImpact()
         // Sound
         playShutterClosedSound()
         #endif
@@ -155,7 +155,7 @@ import SwiftUI
 
         try? await Task.sleep(for: .seconds(0.35))
         #if os(iOS)
-        await mirrorImpact()
+        mirrorImpact()
         #endif
         self.showFirstShutterCurtain = true
         self.showSecondShutterCurtain = false
